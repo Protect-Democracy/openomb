@@ -1,0 +1,16 @@
+# Editors
+.vscode
+*~
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# General
+log/
+*.log
+
+# Suggested to add gitignores from Github that are relevant to the
+# language(s) of your project.
+# https://github.com/github/gitignore
