@@ -1,0 +1,30 @@
+{
+  "name": "apportionments",
+  "version": "0.0.1",
+  "description": "Web application to make Office of Management and Budget (OMB) apportionment data more accessible.",
+  "type": "module",
+  "main": "src/index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Voteshield/apportionments.git"
+  },
+  "author": "Protect Democracy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Voteshield/apportionments/issues"
+  },
+  "homepage": "https://github.com/Voteshield/apportionments#readme",
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "vitest": "^1.3.1"
+  }
+}

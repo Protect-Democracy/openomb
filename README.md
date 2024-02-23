@@ -1,28 +1,34 @@
-# Github template
+# Apportionments
 
-This is a basic repo that can be used as a template for new projects, or simply use these parts in your projects as needed.
-
-## Using this template
-
-When creating a new repo, you can use this as a template.
-
-![Screenshot of Github new repository screen, choosing this template](./docs/images/using-template.png "Using this template")
-
-## Conventions
-
-- Update the `.gitignore` with the appropriate language [Github gitignore](https://github.com/github/gitignore).
-- Utilize a `src/` directory for code unless it doesn't make sense for your project.
-- See [docs/DOCUMENTATON.md](./docs/DOCUMENTATON.md) for guidelines on documentation.
-
-**============= _Remove text above and including here_ =================**
-
-# [Project name]
-
-[Top-level description of the project, it's purpose, basics on how it works, and why it is needed.]
+Web application to make [Office of Management and Budget (OMB) apportionment data](https://apportionment-public.max.gov/) more accessible.
 
 ## Usage
 
-[Describe how to use this project in detail.]
+### Data collection
+
+To scrape data from the OMB site, use the following command:
+
+```bash
+npm run collect-data
+```
+
+Use the following parameters:
+
+- `--no-database`
+- `--cache-time`
+- `--archive-location`
+
+Configure using the following environment variables:
+
+- `APPORTIONMENT_DB_URI`: Database URI to connect to attempt to load data into.
+
+### Web application
+
+(TODO, how to run web application)
+
+## Setup
+
+See [docs/DEVELOPMENT.md/](./docs/DEVELOPMENT.md).
 
 ## Contributing
 
