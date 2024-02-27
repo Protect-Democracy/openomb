@@ -15,13 +15,14 @@ The following is how you setup your development environment to work on this proj
 
 - Make sure [NodeJS](https://nodejs.org/en/download) is installed.
   - If on a Mac, using Homebrew: `brew install node`
+- Utilize the correct Node version with `nvm use`
 - Install dependencies: `npm install`
 
 ### Updates
 
 When pulling new code, you should do the following:
 
-- (instructions here)
+- Update dependencies: `npm install`
 
 ### Code styles and linting
 
@@ -32,6 +33,14 @@ See [docs/CODING_STYLES_LINTING.md](./CODING_STYLES_LINTING.md).
 When writing code, you will likely want to write some tests:
 
 - (instructions here)
+
+## Local development server
+
+To start a development server and open web browser:
+
+```bash
+npm run dev -- --open
+```
 
 ## Running tests
 

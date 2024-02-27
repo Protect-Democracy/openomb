@@ -9,7 +9,7 @@ Web application to make [Office of Management and Budget (OMB) apportionment dat
 To scrape data from the OMB site, use the following command:
 
 ```bash
-npm run collect-data
+npm run collect
 ```
 
 Use the following parameters:
@@ -20,11 +20,13 @@ Use the following parameters:
 
 Configure using the following environment variables:
 
-- `APPORTIONMENT_DB_URI`: Database URI to connect to attempt to load data into.
+- `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
 
 ### Web application
 
-(TODO, how to run web application)
+```bash
+npm run build && npm run preview
+```
 
 ## Setup
 

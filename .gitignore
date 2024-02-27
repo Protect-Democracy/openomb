@@ -12,9 +12,20 @@ log/
 *.log
 .cache*
 
-# Suggested to add gitignores from Github that are relevant to the
-# language(s) of your project.
-# https://github.com/github/gitignore
+# From SvelteKit
+##############
+.DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+
 
 # From: https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 ##############
@@ -148,3 +159,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+
