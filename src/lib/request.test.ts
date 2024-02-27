@@ -7,8 +7,8 @@ import type { Mock } from 'vitest';
 import { removeSync, ensureDirSync } from 'fs-extra/esm';
 
 // To test
-import { scraper, cacheKey } from './scrape';
-import type { ScraperData } from './scrape';
+import { request, cacheKey } from './request';
+import type { RequestData } from './request';
 
 // Cache place; TODO, make sure this happens without requiring
 // test to pass.
@@ -17,7 +17,7 @@ const testCacheDir = join(_dirname, '.cache-test');
 
 // Make fetch mockable; TODO: move to a helper or setup
 global.fetch = vi.fn();
-function mockFetch(data: ScraperData, response: object | undefined = undefined): Promise<object> {
+function mockFetch(data: RequestData, response: object | undefined = undefined): Promise<object> {
   response = response || { ok: true, status: 200, statusText: 'OK' };
   const dataType = typeof data === 'string' ? 'text' : 'json';
 
@@ -60,12 +60,12 @@ test('fetch() mocking', async () => {
   expect(textResponseData).toEqual(textData);
 });
 
-test('scraper() basic fetch', async () => {
+test('request() basic fetch', async () => {
   const url = 'https://apportionment-public.max.gov/';
   const data = 'test';
   (fetch as Mock).mockResolvedValue(mockFetch(data));
 
-  const scrape = await scraper(url, {}, { cacheDir: testCacheDir, expectedType: 'text' });
+  const scrape = await request(url, {}, { cacheDir: testCacheDir, expectedType: 'text' });
 
   expect(fetch).toHaveBeenCalledWith(url, {});
   expect(scrape.data).toEqual(data);
@@ -74,7 +74,7 @@ test('scraper() basic fetch', async () => {
   expect(scrape.meta.response.status).toEqual(200);
 });
 
-test('scraper() use cache', async () => {
+test('request() use cache', async () => {
   const url = 'https://apportionment-public.max.gov/';
   const data = 'test';
   (fetch as Mock).mockResolvedValue(mockFetch(data));
@@ -95,7 +95,7 @@ test('scraper() use cache', async () => {
   writeFileSync(cacheMeta, cacheMetaContents);
 
   // Make call
-  const scrape = await scraper(
+  const scrape = await request(
     url,
     {},
     {
@@ -112,7 +112,7 @@ test('scraper() use cache', async () => {
   expect(scrape.meta.response.status).toEqual(200);
 });
 
-test('scraper() expired cache', async () => {
+test('request() expired cache', async () => {
   const url = 'https://apportionment-public.max.gov/';
   const data = 'test';
   (fetch as Mock).mockResolvedValue(mockFetch(data));
@@ -133,7 +133,7 @@ test('scraper() expired cache', async () => {
   writeFileSync(cacheMeta, cacheMetaContents);
 
   // Make call
-  const scrape = await scraper(
+  const scrape = await request(
     url,
     {},
     {

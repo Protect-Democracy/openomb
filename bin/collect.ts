@@ -5,7 +5,7 @@
 // Dependencies
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
-import { scraper } from '../src/lib/collect/scrape';
+import { request } from '../src/lib/request';
 import { environment_variables, unique } from '../src/lib/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -35,7 +35,7 @@ async function cli(): Promise<void> {
  * Get list of all apportionment URL/files (JSON, Excel, at least one PDF).
  */
 async function apportionmentList(): Promise<string[]> {
-  const homepage = await scraper(env.baseUrl, {}, { expectedType: 'text' });
+  const homepage = await request(env.baseUrl, {}, { expectedType: 'text' });
 
   // Check response
   if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {

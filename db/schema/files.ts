@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { integer, pgTable, serial, index, varchar, timestamp } from 'drizzle-orm/pg-core';
+import { integer, pgTable, serial, index, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 // Table
 // {
@@ -19,13 +19,21 @@ import { integer, pgTable, serial, index, varchar, timestamp } from 'drizzle-orm
 export const files = pgTable(
   'files',
   {
+    // Fields from data
     fileId: serial('file_id').primaryKey(),
     fileName: varchar('file_name'),
     fiscalYear: integer('fiscal_year'),
     approvalTimestamp: timestamp('approval_timestamp'),
     folder: varchar('folder'),
     approverTitle: varchar('approver_title'),
-    fundsProvidedBy: varchar('funds_provided_by')
+    fundsProvidedBy: varchar('funds_provided_by'),
+    // Custom fields
+    excelUrl: varchar('excel_url'),
+    pdfUrl: varchar('pdf_url'),
+    sourceUrl: varchar('source_url').notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    modifiedAt: timestamp('modified_at').defaultNow(),
+    removed: boolean('removed').default(false)
   },
   (files) => {
     // Indexes.  We will likely need to search or group on all of these fields

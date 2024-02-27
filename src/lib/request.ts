@@ -1,14 +1,14 @@
 /**
- * Scraping and caching functions.
+ * Request and caching functions.
  */
 
 // Dependencies
 import { ensureDirSync } from 'fs-extra';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { environment_variables } from '../utilities';
+import { environment_variables } from './utilities';
 
-// Type for scraper options
-export type ScraperOptions = {
+// Type for request options
+export type RequestOptions = {
   expectedType?: 'json' | 'text' | 'blob' | 'arrayBuffer' | 'formData';
   baseUrl?: string;
   ttl?: number;
@@ -16,8 +16,8 @@ export type ScraperOptions = {
   cacheMissOnNot200?: boolean;
 };
 
-// Scraper meta type
-export type ScraperMeta = {
+// Request meta type
+export type RequestMeta = {
   cacheHit?: boolean;
   created?: number;
   expires?: number;
@@ -30,13 +30,13 @@ export type ScraperMeta = {
   };
 };
 
-// Scraper/HTTP response type
-export type ScraperData = string | object | Buffer | ArrayBuffer | JSON | null | undefined;
+// Request/HTTP response type
+export type RequestData = string | object | Buffer | ArrayBuffer | JSON | null | undefined;
 
-// Return type for scraper
-export type ScraperReturn = {
-  data: ScraperData;
-  meta: ScraperMeta;
+// Return type for request
+export type RequestReturn = {
+  data: RequestData;
+  meta: RequestMeta;
 };
 
 // Type for fetch() resource
@@ -48,11 +48,11 @@ export type FetchResource = string | URL;
  * We do this ourselves so that we can save the data to disk in a specific way
  * to zip up later and create an archive if needed.
  */
-async function scraper(
+async function request(
   fetchResource: FetchResource,
   fetchOptions: RequestInit = {},
-  options: ScraperOptions = {}
-): Promise<ScraperReturn> {
+  options: RequestOptions = {}
+): Promise<RequestReturn> {
   const env = environment_variables();
   options.expectedType = options.expectedType || 'json';
   options.baseUrl = options.baseUrl || env.baseUrl;
@@ -75,7 +75,7 @@ async function scraper(
   // Check if there is a TTL (0 means don't use cache)
   if (options.ttl) {
     // Check for meta file
-    const existingMeta: ScraperMeta =
+    const existingMeta: RequestMeta =
       existsSync(cachePath) && existsSync(cacheMeta)
         ? JSON.parse(readFileSync(cacheMeta).toString())
         : {};
@@ -85,11 +85,11 @@ async function scraper(
     const cacheIs200 =
       options.cacheMissOnNot200 && existingMeta.response && existingMeta.response.status === 200;
     if (!expired && cacheIs200) {
-      const data: ScraperData =
+      const data: RequestData =
         options.expectedType === 'json'
           ? JSON.parse(readFileSync(cachePath).toString())
           : readFileSync(cachePath, 'utf8');
-      const meta: ScraperMeta = {
+      const meta: RequestMeta = {
         cacheHit: true,
         ...existingMeta
       };
@@ -156,4 +156,4 @@ function responseForCache(response: Response) {
   };
 }
 
-export { scraper, cacheKey };
+export { request, cacheKey };
