@@ -4,17 +4,19 @@
 
 // Dependencies
 import { loadEnv } from 'vite';
-import { join as joinPath } from 'path';
+import { dirname, join as joinPath } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-// Dirname
-const __dirname = import.meta.dirname;
-const defaultCacheDir = joinPath(__dirname, '..', '..', '.cache', 'collection');
+// Directories (note that __dirname might actually be available globally)
+const _dirname = dirname(fileURLToPath(import.meta.url));
+const defaultCacheDir = joinPath(_dirname, '..', '..', '.cache', 'collection');
 
 // Expected types from environment variables
 type ApportionmentEnvironment = {
   baseUrl: string;
   cacheTtl: number;
   cacheDir: string;
+  dbUri: string;
 };
 
 /**
@@ -31,7 +33,8 @@ function environment_variables(): ApportionmentEnvironment {
     cacheTtl: env['APPORTIONMENTS_CACHE_TTL']
       ? parseInt(env['APPORTIONMENTS_CACHE_TTL'])
       : 1000 * 60 * 60 * 24 * 7,
-    cacheDir: env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir
+    cacheDir: env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
+    dbUri: env['APPORTIONMENTS_DB_URI'] || ''
   };
 }
 

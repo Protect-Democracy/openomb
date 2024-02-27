@@ -13,7 +13,9 @@
     "format": "prettier --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "collect": "tsx scripts/collect.ts"
+    "collect": "tsx bin/collect.ts",
+    "db:generate-migration": "drizzle-kit generate:pg",
+    "db:migrate": "tsx bin/migrate.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",
@@ -32,6 +34,7 @@
     "eslint-plugin-svelte": "^2.36.0-next.4",
     "fs-extra": "^11.2.0",
     "node-html-parser": "^6.1.12",
+    "pg": "^8.11.3",
     "prettier": "^3.1.1",
     "prettier-plugin-brace-style": "^0.5.0",
     "prettier-plugin-svelte": "^3.1.2",

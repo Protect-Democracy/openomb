@@ -12,8 +12,8 @@ import type { ScraperData } from './scrape';
 
 // Cache place; TODO, make sure this happens without requiring
 // test to pass.
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const testCacheDir = join(__dirname, '.cache-test');
+const _dirname = dirname(fileURLToPath(import.meta.url));
+const testCacheDir = join(_dirname, '.cache-test');
 
 // Make fetch mockable; TODO: move to a helper or setup
 global.fetch = vi.fn();

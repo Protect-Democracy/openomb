@@ -3,10 +3,7 @@
  */
 
 // Dependencies
-import { integer, pgEnum, pgTable, serial, index, varchar, timestamp } from 'drizzle-orm/pg-core';
-
-// Enums
-export const popularityEnum = pgEnum('popularity', ['unknown', 'known', 'popular']);
+import { integer, pgTable, serial, index, varchar, timestamp } from 'drizzle-orm/pg-core';
 
 // Table
 // {
@@ -19,7 +16,7 @@ export const popularityEnum = pgEnum('popularity', ['unknown', 'known', 'popular
 //   "FundsProvidedBy": "Funds Provided by Public Law N/A Carryover",
 // ...
 // }
-export const countries = pgTable(
+export const files = pgTable(
   'files',
   {
     fileId: serial('file_id').primaryKey(),

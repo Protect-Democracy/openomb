@@ -1,0 +1,110 @@
+{
+  "id": "50e55ea0-112e-4751-a0aa-70980e054993",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "files": {
+      "name": "files",
+      "schema": "",
+      "columns": {
+        "file_id": {
+          "name": "file_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "file_name": {
+          "name": "file_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fiscal_year": {
+          "name": "fiscal_year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "approval_timestamp": {
+          "name": "approval_timestamp",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "folder": {
+          "name": "folder",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "approver_title": {
+          "name": "approver_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "funds_provided_by": {
+          "name": "funds_provided_by",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "file_name_index": {
+          "name": "file_name_index",
+          "columns": [
+            "file_name"
+          ],
+          "isUnique": false
+        },
+        "fiscal_year_index": {
+          "name": "fiscal_year_index",
+          "columns": [
+            "fiscal_year"
+          ],
+          "isUnique": false
+        },
+        "approval_timestamp_index": {
+          "name": "approval_timestamp_index",
+          "columns": [
+            "approval_timestamp"
+          ],
+          "isUnique": false
+        },
+        "folder_index": {
+          "name": "folder_index",
+          "columns": [
+            "folder"
+          ],
+          "isUnique": false
+        },
+        "approver_title_index": {
+          "name": "approver_title_index",
+          "columns": [
+            "approver_title"
+          ],
+          "isUnique": false
+        },
+        "funds_provided_by_index": {
+          "name": "funds_provided_by_index",
+          "columns": [
+            "funds_provided_by"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
