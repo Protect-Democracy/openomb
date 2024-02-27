@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { integer, pgTable, serial, index, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { integer, pgTable, index, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 // Table
 // {
@@ -16,17 +16,18 @@ import { integer, pgTable, serial, index, varchar, timestamp, boolean } from 'dr
 //   "FundsProvidedBy": "Funds Provided by Public Law N/A Carryover",
 // ...
 // }
-export const files = pgTable(
+export const file = pgTable(
   'files',
   {
     // Fields from data
-    fileId: serial('file_id').primaryKey(),
+    fileId: varchar('file_id').primaryKey(),
     fileName: varchar('file_name'),
     fiscalYear: integer('fiscal_year'),
     approvalTimestamp: timestamp('approval_timestamp'),
     folder: varchar('folder'),
     approverTitle: varchar('approver_title'),
     fundsProvidedBy: varchar('funds_provided_by'),
+
     // Custom fields
     excelUrl: varchar('excel_url'),
     pdfUrl: varchar('pdf_url'),

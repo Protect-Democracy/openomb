@@ -23,6 +23,7 @@ The following is how you setup your development environment to work on this proj
 When pulling new code, you should do the following:
 
 - Update dependencies: `npm install`
+- Run any database migrations: `npm run db:migrate`
 
 ### Code styles and linting
 

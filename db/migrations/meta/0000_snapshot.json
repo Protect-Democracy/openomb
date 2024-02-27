@@ -1,5 +1,5 @@
 {
-  "id": "50e55ea0-112e-4751-a0aa-70980e054993",
+  "id": "19bdd754-3de9-4912-9747-df94c37b9a64",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -10,7 +10,7 @@
       "columns": {
         "file_id": {
           "name": "file_id",
-          "type": "serial",
+          "type": "varchar",
           "primaryKey": true,
           "notNull": true
         },
@@ -49,6 +49,45 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
+        },
+        "excel_url": {
+          "name": "excel_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pdf_url": {
+          "name": "pdf_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "removed": {
+          "name": "removed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {
@@ -97,6 +136,297 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "footnotes": {
+      "name": "footnotes",
+      "schema": "",
+      "columns": {
+        "file_id": {
+          "name": "file_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footnote_number": {
+          "name": "footnote_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "footnote_text": {
+          "name": "footnote_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "footnote_text_index": {
+          "name": "footnote_text_index",
+          "columns": [
+            "footnote_text"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "footnotes_file_id_files_file_id_fk": {
+          "name": "footnotes_file_id_files_file_id_fk",
+          "tableFrom": "footnotes",
+          "tableTo": "files",
+          "columnsFrom": [
+            "file_id"
+          ],
+          "columnsTo": [
+            "file_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "footnotes_file_id_footnote_number_pk": {
+          "name": "footnotes_file_id_footnote_number_pk",
+          "columns": [
+            "file_id",
+            "footnote_number"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "schedules": {
+      "name": "schedules",
+      "schema": "",
+      "columns": {
+        "file_id": {
+          "name": "file_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_index": {
+          "name": "schedule_index",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "budget_agency_title": {
+          "name": "budget_agency_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "budget_bureau_title": {
+          "name": "budget_bureau_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "account_title": {
+          "name": "account_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "allocation_agency_code": {
+          "name": "allocation_agency_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cgac_agency": {
+          "name": "cgac_agency",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "begin_poa": {
+          "name": "begin_poa",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "end_poa": {
+          "name": "end_poa",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "availability_type_code": {
+          "name": "availability_type_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cgac_acct": {
+          "name": "cgac_acct",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "allocation_subacct": {
+          "name": "allocation_subacct",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "iteration": {
+          "name": "iteration",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tafs_iteration_id": {
+          "name": "tafs_iteration_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "line_number": {
+          "name": "line_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "line_split": {
+          "name": "line_split",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "line_description": {
+          "name": "line_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "approved_amount": {
+          "name": "approved_amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footnote_number": {
+          "name": "footnote_number",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "modified_at": {
+          "name": "modified_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "budget_agency_title_index": {
+          "name": "budget_agency_title_index",
+          "columns": [
+            "budget_agency_title"
+          ],
+          "isUnique": false
+        },
+        "budget_bureau_title_index": {
+          "name": "budget_bureau_title_index",
+          "columns": [
+            "budget_bureau_title"
+          ],
+          "isUnique": false
+        },
+        "account_title_index": {
+          "name": "account_title_index",
+          "columns": [
+            "account_title"
+          ],
+          "isUnique": false
+        },
+        "allocation_agency_code_index": {
+          "name": "allocation_agency_code_index",
+          "columns": [
+            "allocation_agency_code"
+          ],
+          "isUnique": false
+        },
+        "cgac_agency_index": {
+          "name": "cgac_agency_index",
+          "columns": [
+            "cgac_agency"
+          ],
+          "isUnique": false
+        },
+        "approved_amount_index": {
+          "name": "approved_amount_index",
+          "columns": [
+            "approved_amount"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "schedules_file_id_files_file_id_fk": {
+          "name": "schedules_file_id_files_file_id_fk",
+          "tableFrom": "schedules",
+          "tableTo": "files",
+          "columnsFrom": [
+            "file_id"
+          ],
+          "columnsTo": [
+            "file_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "schedules_file_id_footnote_number_footnotes_file_id_footnote_number_fk": {
+          "name": "schedules_file_id_footnote_number_footnotes_file_id_footnote_number_fk",
+          "tableFrom": "schedules",
+          "tableTo": "footnotes",
+          "columnsFrom": [
+            "file_id",
+            "footnote_number"
+          ],
+          "columnsTo": [
+            "file_id",
+            "footnote_number"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "schedules_file_id_schedule_index_pk": {
+          "name": "schedules_file_id_schedule_index_pk",
+          "columns": [
+            "file_id",
+            "schedule_index"
+          ]
+        }
+      },
       "uniqueConstraints": {}
     }
   },
