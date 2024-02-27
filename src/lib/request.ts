@@ -7,9 +7,12 @@ import { ensureDirSync } from 'fs-extra';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { environment_variables } from './utilities';
 
+// Expected types
+export type ExpectedFetchTypes = 'json' | 'text' | 'blob';
+
 // Type for request options
 export type RequestOptions = {
-  expectedType?: 'json' | 'text' | 'blob' | 'arrayBuffer' | 'formData';
+  expectedType?: ExpectedFetchTypes;
   baseUrl?: string;
   ttl?: number;
   cacheDir?: string;
@@ -31,7 +34,7 @@ export type RequestMeta = {
 };
 
 // Request/HTTP response type
-export type RequestData = string | object | Buffer | ArrayBuffer | JSON | null | undefined;
+export type RequestData = string | object | Blob | null | undefined;
 
 // Return type for request
 export type RequestReturn = {
@@ -85,10 +88,7 @@ async function request(
     const cacheIs200 =
       options.cacheMissOnNot200 && existingMeta.response && existingMeta.response.status === 200;
     if (!expired && cacheIs200) {
-      const data: RequestData =
-        options.expectedType === 'json'
-          ? JSON.parse(readFileSync(cachePath).toString())
-          : readFileSync(cachePath, 'utf8');
+      const data: RequestData = readDataFromExpectedType(cachePath, options.expectedType);
       const meta: RequestMeta = {
         cacheHit: true,
         ...existingMeta
@@ -108,7 +108,7 @@ async function request(
     };
 
     // Save to cache
-    writeFileSync(cachePath, options.expectedType === 'json' ? JSON.stringify(data) : data);
+    writeDataFromExpectedType(cachePath, data, options.expectedType);
     writeFileSync(cacheMeta, JSON.stringify(meta));
 
     return { data, meta: { cacheHit: false, ...meta } };
@@ -125,6 +125,61 @@ async function request(
         response: responseForCache(response)
       }
     };
+  }
+}
+
+/**
+ * Read data from file based on expected type.
+ */
+function readDataFromExpectedType(path: string, expectedType: ExpectedFetchTypes): RequestData {
+  if (expectedType === 'json') {
+    return JSON.parse(readFileSync(path, 'utf-8'));
+  }
+  else if (expectedType === 'blob') {
+    return readFileSync(path, { encoding: 'binary' });
+  }
+  else {
+    return readFileSync(path, 'utf-8');
+  }
+}
+
+/**
+ * Write data based on expected type.
+ *
+ * TODO: Unsure how to handle typing here.
+ */
+async function writeDataFromExpectedType(
+  path: string,
+  data: RequestData,
+  expectedType: ExpectedFetchTypes
+): Promise<void> {
+  if (!data) {
+    writeFileSync(path, '');
+  }
+  else if (expectedType === 'json') {
+    writeFileSync(path, JSON.stringify(data));
+  }
+  else if (expectedType === 'blob' && data instanceof Blob) {
+    writeFileSync(path, Buffer.from(await data.arrayBuffer()));
+  }
+  else {
+    // @ts-expect-error: TODO
+    writeFileSync(path, data);
+  }
+}
+
+/**
+ * Check if URL has a 200 even if in cache.
+ */
+async function urlExists(url: string, options: RequestOptions = {}): Promise<boolean> {
+  try {
+    const response = await request(url, {}, { ...options, cacheMissOnNot200: true });
+    return response.meta.response.status === 200;
+  }
+  catch (error) {
+    // TODO: We probably only want to catch network errors here.
+    console.error(error);
+    return false;
   }
 }
 
@@ -156,4 +211,4 @@ function responseForCache(response: Response) {
   };
 }
 
-export { request, cacheKey };
+export { request, cacheKey, urlExists };

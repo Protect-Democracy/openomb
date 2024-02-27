@@ -6,6 +6,7 @@
 import { loadEnv } from 'vite';
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import moment from 'moment';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -46,4 +47,27 @@ function unique(array: any[] | undefined = undefined): any[] {
   return [...new Set(array)];
 }
 
-export { environment_variables, unique };
+/**
+ * Parse integer from string
+ */
+function parseIntegerFromString(value: string): number | null {
+  value = value.replace(/[^0-9.]+/g, '');
+  return value && value.match(/[0-9]+/) ? parseInt(value, 10) : null;
+}
+
+/**
+ * Parse timestamp from file API.
+ *
+ * Example: 2024-02-14-09.53.46.372578
+ *          2024-01-01-00.01.01.000001
+ */
+function parseTimestampFromString(timestamp: string, utc: boolean = true): Date | null {
+  const dateParse = utc ? moment.utc : moment;
+  const parsed =
+    timestamp && timestamp.match(/[0-9.-:]+/)
+      ? dateParse(timestamp, 'YYYY-MM-DD-HH.mm.ss.SSSSSS')
+      : null;
+  return parsed && parsed.isValid() ? parsed.toDate() : null;
+}
+
+export { environment_variables, unique, parseIntegerFromString, parseTimestampFromString };

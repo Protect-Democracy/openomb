@@ -6,6 +6,7 @@
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { request } from '../src/lib/request';
+import { loadFile } from '../src/lib/load-file';
 import { environment_variables, unique } from '../src/lib/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -28,7 +29,17 @@ async function cli(): Promise<void> {
   const apportionmentUrls = await apportionmentList();
 
   // Go through each URL and collect data
-  console.log(apportionmentUrls);
+  for (const url of apportionmentUrls) {
+    // Only match JSON
+    if (!url.match(/\.json$/)) {
+      continue;
+    }
+
+    console.log(`Collecting data from ${url}...`);
+    await loadFile(url);
+
+    sdfsdffd();
+  }
 }
 
 /**

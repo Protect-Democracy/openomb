@@ -44,7 +44,8 @@ export const file = pgTable(
       approvalTimestampIndex: index('approval_timestamp_index').on(files.approvalTimestamp),
       folderIndex: index('folder_index').on(files.folder),
       approverTitleIndex: index('approver_title_index').on(files.approverTitle),
-      fundsProvidedByIndex: index('funds_provided_by_index').on(files.fundsProvidedBy)
+      fundsProvidedByIndex: index('funds_provided_by_index').on(files.fundsProvidedBy),
+      removedIndex: index('removed_index').on(files.removed)
     };
   }
 );
