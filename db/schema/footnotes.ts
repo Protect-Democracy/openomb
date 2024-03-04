@@ -3,7 +3,17 @@
  */
 
 // Dependencies
-import { pgTable, index, varchar, timestamp, primaryKey, text } from 'drizzle-orm/pg-core';
+import {
+  pgTable,
+  index,
+  varchar,
+  timestamp,
+  primaryKey,
+  text,
+  integer,
+  foreignKey
+} from 'drizzle-orm/pg-core';
+import { schedule } from './schedules';
 import { file } from './files';
 
 // Table
@@ -20,11 +30,16 @@ import { file } from './files';
 //     }
 //   ]
 // }
+//
+// Note that the ideal would be to have a row for each footnote, but since
+// a schedule line could have more than one footnote, we layout it so that each
+// schedule line with footnotes is a row in the database.
 export const footnote = pgTable(
   'footnotes',
   {
     // Id.  Utilize the file ID and footnote Id.
     fileId: varchar('file_id').references(() => file.fileId),
+    scheduleIndex: integer('schedule_index'),
     footnoteNumber: varchar('footnote_number').notNull(),
 
     // Fields from data
@@ -37,10 +52,22 @@ export const footnote = pgTable(
   (footnotes) => {
     return {
       // Combined primary key
-      primaryKey: primaryKey({ columns: [footnotes.fileId, footnotes.footnoteNumber] }),
+      primaryKey: primaryKey({
+        columns: [footnotes.fileId, footnotes.scheduleIndex, footnotes.footnoteNumber]
+      }),
 
-      // Indexes.  We will likely need to search or group on all of these fields
-      footnoteText: index('footnote_text_index').on(footnotes.footnoteText)
+      // Foreign key reference to schedule
+      scheduleReference: foreignKey({
+        columns: [footnotes.fileId, footnotes.scheduleIndex],
+        foreignColumns: [schedule.fileId, schedule.scheduleIndex]
+      }),
+
+      // Indexes.
+      fileFootnoteIndex: index('file_footnote_index').on(footnotes.fileId, footnotes.footnoteNumber)
+      // TODO: It looks like Drizzle doesn't support full-text/GIN indexes
+      // which is what is appropriate here.
+      // https://github.com/drizzle-team/drizzle-orm/issues/247
+      //footnoteText: index('footnote_text_index').on(footnotes.footnoteText)
     };
   }
 );

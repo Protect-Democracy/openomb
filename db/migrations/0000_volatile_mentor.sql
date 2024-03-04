@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS "files" (
 	"excel_url" varchar,
 	"pdf_url" varchar,
 	"source_url" varchar NOT NULL,
+	"source_data" text,
 	"created_at" timestamp DEFAULT now(),
 	"modified_at" timestamp DEFAULT now(),
 	"removed" boolean DEFAULT false
@@ -16,11 +17,12 @@ CREATE TABLE IF NOT EXISTS "files" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "footnotes" (
 	"file_id" varchar,
+	"schedule_index" integer,
 	"footnote_number" varchar NOT NULL,
 	"footnote_text" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"modified_at" timestamp DEFAULT now(),
-	CONSTRAINT "footnotes_file_id_footnote_number_pk" PRIMARY KEY("file_id","footnote_number")
+	CONSTRAINT "footnotes_file_id_schedule_index_footnote_number_pk" PRIMARY KEY("file_id","schedule_index","footnote_number")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "schedules" (
@@ -31,18 +33,17 @@ CREATE TABLE IF NOT EXISTS "schedules" (
 	"account_title" varchar,
 	"allocation_agency_code" varchar,
 	"cgac_agency" varchar,
-	"begin_poa" varchar,
-	"end_poa" varchar,
+	"begin_poa" integer,
+	"end_poa" integer,
 	"availability_type_code" varchar,
 	"cgac_acct" varchar,
 	"allocation_subacct" varchar,
-	"iteration" varchar,
+	"iteration" integer,
 	"tafs_iteration_id" varchar,
 	"line_number" varchar,
 	"line_split" varchar,
 	"line_description" varchar,
-	"approved_amount" integer,
-	"footnote_number" varchar,
+	"approved_amount" bigint,
 	"created_at" timestamp DEFAULT now(),
 	"modified_at" timestamp DEFAULT now(),
 	CONSTRAINT "schedules_file_id_schedule_index_pk" PRIMARY KEY("file_id","schedule_index")
@@ -54,7 +55,8 @@ CREATE INDEX IF NOT EXISTS "approval_timestamp_index" ON "files" ("approval_time
 CREATE INDEX IF NOT EXISTS "folder_index" ON "files" ("folder");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "approver_title_index" ON "files" ("approver_title");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "funds_provided_by_index" ON "files" ("funds_provided_by");--> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "footnote_text_index" ON "footnotes" ("footnote_text");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "removed_index" ON "files" ("removed");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "file_footnote_index" ON "footnotes" ("file_id","footnote_number");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "budget_agency_title_index" ON "schedules" ("budget_agency_title");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "budget_bureau_title_index" ON "schedules" ("budget_bureau_title");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "account_title_index" ON "schedules" ("account_title");--> statement-breakpoint
@@ -68,13 +70,13 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "schedules" ADD CONSTRAINT "schedules_file_id_files_file_id_fk" FOREIGN KEY ("file_id") REFERENCES "files"("file_id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "footnotes" ADD CONSTRAINT "footnotes_file_id_schedule_index_schedules_file_id_schedule_index_fk" FOREIGN KEY ("file_id","schedule_index") REFERENCES "schedules"("file_id","schedule_index") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "schedules" ADD CONSTRAINT "schedules_file_id_footnote_number_footnotes_file_id_footnote_number_fk" FOREIGN KEY ("file_id","footnote_number") REFERENCES "footnotes"("file_id","footnote_number") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "schedules" ADD CONSTRAINT "schedules_file_id_files_file_id_fk" FOREIGN KEY ("file_id") REFERENCES "files"("file_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

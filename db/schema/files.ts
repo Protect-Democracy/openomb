@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { integer, pgTable, index, varchar, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { integer, pgTable, index, varchar, timestamp, boolean, text } from 'drizzle-orm/pg-core';
 
 // Table
 // {
@@ -32,6 +32,7 @@ export const file = pgTable(
     excelUrl: varchar('excel_url'),
     pdfUrl: varchar('pdf_url'),
     sourceUrl: varchar('source_url').notNull(),
+    sourceData: text('source_data'),
     createdAt: timestamp('created_at').defaultNow(),
     modifiedAt: timestamp('modified_at').defaultNow(),
     removed: boolean('removed').default(false)

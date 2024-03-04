@@ -5,8 +5,11 @@
 // Dependencies
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
+import { MultiProgressBars } from 'multi-progress-bars';
+import chalk from 'chalk';
+import { client } from '../db/connection';
 import { request } from '../src/lib/request';
-import { loadFile } from '../src/lib/load-file';
+import { loadJsonFile, loadPdfFile } from '../src/lib/load-file';
 import { environment_variables, unique } from '../src/lib/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -22,24 +25,44 @@ cli();
 async function cli(): Promise<void> {
   // Setup commander
   const program = new Command();
-
   program.version(packageJson.version).description('Collect OMB data').parse(process.argv);
+
+  // Setup progress bars
+  const progress = new MultiProgressBars({
+    initMessage: 'Collect OMB data',
+    anchor: 'bottom',
+    persist: true,
+    border: true
+  });
+  const jsonProgressMessage = 'Loading JSON files';
+  progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
+  const pdfProgressMessage = 'Loading PDF files';
+  progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
 
   // Get list of apportionment URLs
   const apportionmentUrls = await apportionmentList();
 
+  // Load JSON files
+  const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
+
   // Go through each URL and collect data
-  for (const url of apportionmentUrls) {
-    // Only match JSON
-    if (!url.match(/\.json$/)) {
-      continue;
-    }
-
-    console.log(`Collecting data from ${url}...`);
-    await loadFile(url);
-
-    sdfsdffd();
+  for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
+    await loadJsonFile(jsonUrls[urlIndex]);
+    progress.updateTask(jsonProgressMessage, { percentage: (urlIndex + 1) / jsonUrls.length });
   }
+  progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
+
+  // Load PDF files
+  const pdfUrls = apportionmentUrls.filter((url) => url.match(/\.pdf$/));
+
+  // Go through each URL and collect data
+  for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
+    await loadPdfFile(pdfUrls[urlIndex]);
+    progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+  }
+  progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
+
+  client.end();
 }
 
 /**

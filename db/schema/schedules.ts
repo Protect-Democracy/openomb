@@ -7,13 +7,12 @@ import {
   integer,
   pgTable,
   index,
+  bigint,
   varchar,
   timestamp,
-  primaryKey,
-  foreignKey
+  primaryKey
 } from 'drizzle-orm/pg-core';
 import { file } from './files';
-import { footnote } from './footnotes';
 
 // Table
 // {
@@ -41,6 +40,8 @@ import { footnote } from './footnotes';
 //     },
 //     ...
 // }
+//
+// See footnotes.ts for the how footnote data is stored.
 export const schedule = pgTable(
   'schedules',
   {
@@ -56,18 +57,17 @@ export const schedule = pgTable(
     accountTitle: varchar('account_title'),
     allocationAgencyCode: varchar('allocation_agency_code'),
     cgacAgency: varchar('cgac_agency'),
-    beginPoa: varchar('begin_poa'),
-    endPoa: varchar('end_poa'),
+    beginPoa: integer('begin_poa'),
+    endPoa: integer('end_poa'),
     availabilityTypeCode: varchar('availability_type_code'),
     cgacAcct: varchar('cgac_acct'),
     allocationSubacct: varchar('allocation_subacct'),
-    iteration: varchar('iteration'),
+    iteration: integer('iteration'),
     tafsIterationId: varchar('tafs_iteration_id'),
     lineNumber: varchar('line_number'),
     lineSplit: varchar('line_split'),
     lineDescription: varchar('line_description'),
-    approvedAmount: integer('approved_amount'),
-    footnoteNumber: varchar('footnote_number'),
+    approvedAmount: bigint('approved_amount', { mode: 'number' }),
 
     // Custom fields
     createdAt: timestamp('created_at').defaultNow(),
@@ -77,12 +77,6 @@ export const schedule = pgTable(
     return {
       // Combined primary key
       primaryKey: primaryKey({ columns: [schedules.fileId, schedules.scheduleIndex] }),
-
-      // Foreign key reference to footnote
-      userReference: foreignKey({
-        columns: [schedules.fileId, schedules.footnoteNumber],
-        foreignColumns: [footnote.fileId, footnote.footnoteNumber]
-      }),
 
       // Indexes.  We will likely need to search or group on all of these fields
       budgetAgencyTitleIndex: index('budget_agency_title_index').on(schedules.budgetAgencyTitle),

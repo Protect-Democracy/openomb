@@ -6,6 +6,7 @@
 import { loadEnv } from 'vite';
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import moment from 'moment';
 
 // Directories (note that __dirname might actually be available globally)
@@ -50,8 +51,8 @@ function unique(array: any[] | undefined = undefined): any[] {
 /**
  * Parse integer from string
  */
-function parseIntegerFromString(value: string): number | null {
-  value = value.replace(/[^0-9.]+/g, '');
+function parseIntegerFromString(value?: string): number | null {
+  value = value ? value.replace(/[^0-9.]+/g, '') : undefined;
   return value && value.match(/[0-9]+/) ? parseInt(value, 10) : null;
 }
 
@@ -61,7 +62,11 @@ function parseIntegerFromString(value: string): number | null {
  * Example: 2024-02-14-09.53.46.372578
  *          2024-01-01-00.01.01.000001
  */
-function parseTimestampFromString(timestamp: string, utc: boolean = true): Date | null {
+function parseTimestampFromString(timestamp?: string, utc: boolean = true): Date | null {
+  if (!timestamp) {
+    return null;
+  }
+
   const dateParse = utc ? moment.utc : moment;
   const parsed =
     timestamp && timestamp.match(/[0-9.-:]+/)
@@ -70,4 +75,11 @@ function parseTimestampFromString(timestamp: string, utc: boolean = true): Date 
   return parsed && parsed.isValid() ? parsed.toDate() : null;
 }
 
-export { environment_variables, unique, parseIntegerFromString, parseTimestampFromString };
+/**
+ * Make and MD5 hash from a string.
+ */
+function md5hash(string: string): string {
+  return createHash('md5').update(string).digest('hex');
+}
+
+export { environment_variables, unique, parseIntegerFromString, parseTimestampFromString, md5hash };

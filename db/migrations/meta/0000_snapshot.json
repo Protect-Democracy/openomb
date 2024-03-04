@@ -1,5 +1,5 @@
 {
-  "id": "19bdd754-3de9-4912-9747-df94c37b9a64",
+  "id": "45609f27-07e5-46ea-a66d-2700151db6ce",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -68,6 +68,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "source_data": {
+          "name": "source_data",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -132,6 +138,13 @@
             "funds_provided_by"
           ],
           "isUnique": false
+        },
+        "removed_index": {
+          "name": "removed_index",
+          "columns": [
+            "removed"
+          ],
+          "isUnique": false
         }
       },
       "foreignKeys": {},
@@ -145,6 +158,12 @@
         "file_id": {
           "name": "file_id",
           "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "schedule_index": {
+          "name": "schedule_index",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -176,10 +195,11 @@
         }
       },
       "indexes": {
-        "footnote_text_index": {
-          "name": "footnote_text_index",
+        "file_footnote_index": {
+          "name": "file_footnote_index",
           "columns": [
-            "footnote_text"
+            "file_id",
+            "footnote_number"
           ],
           "isUnique": false
         }
@@ -197,13 +217,29 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+        },
+        "footnotes_file_id_schedule_index_schedules_file_id_schedule_index_fk": {
+          "name": "footnotes_file_id_schedule_index_schedules_file_id_schedule_index_fk",
+          "tableFrom": "footnotes",
+          "tableTo": "schedules",
+          "columnsFrom": [
+            "file_id",
+            "schedule_index"
+          ],
+          "columnsTo": [
+            "file_id",
+            "schedule_index"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
-        "footnotes_file_id_footnote_number_pk": {
-          "name": "footnotes_file_id_footnote_number_pk",
+        "footnotes_file_id_schedule_index_footnote_number_pk": {
+          "name": "footnotes_file_id_schedule_index_footnote_number_pk",
           "columns": [
             "file_id",
+            "schedule_index",
             "footnote_number"
           ]
         }
@@ -259,13 +295,13 @@
         },
         "begin_poa": {
           "name": "begin_poa",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "end_poa": {
           "name": "end_poa",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -289,7 +325,7 @@
         },
         "iteration": {
           "name": "iteration",
-          "type": "varchar",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
@@ -319,13 +355,7 @@
         },
         "approved_amount": {
           "name": "approved_amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "footnote_number": {
-          "name": "footnote_number",
-          "type": "varchar",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": false
         },
@@ -398,21 +428,6 @@
           ],
           "columnsTo": [
             "file_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "schedules_file_id_footnote_number_footnotes_file_id_footnote_number_fk": {
-          "name": "schedules_file_id_footnote_number_footnotes_file_id_footnote_number_fk",
-          "tableFrom": "schedules",
-          "tableTo": "footnotes",
-          "columnsFrom": [
-            "file_id",
-            "footnote_number"
-          ],
-          "columnsTo": [
-            "file_id",
-            "footnote_number"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"

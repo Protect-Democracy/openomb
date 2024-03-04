@@ -12,15 +12,16 @@ To scrape data from the OMB site, use the following command:
 npm run collect
 ```
 
-Use the following parameters:
-
-- `--no-database`
-- `--cache-time`
-- `--archive-location`
-
 Configure using the following environment variables:
 
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
+
+**TODO**:
+
+- Handle removal of files (i.e. mark files as removed in the database).
+- Create an zip of the cache files after done to be archived on S3 likely.
+- Create a table that logs runs and have the collect function update it.
+- Create a minimal caching layer to that avoids direct queries when no data has changed. This should be trivial with the collect runs being logged.
 
 ### Web application
 
