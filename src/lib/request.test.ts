@@ -7,7 +7,7 @@ import type { Mock } from 'vitest';
 import { removeSync, ensureDirSync } from 'fs-extra/esm';
 
 // To test
-import { request, cacheKey } from './request';
+import { request, cacheKey, fetchWithRetries } from './request';
 import type { RequestData } from './request';
 
 // Cache place; TODO, make sure this happens without requiring
@@ -157,4 +157,40 @@ test('cacheKey()', () => {
   expect(cacheKey('https://example.com/test and other     things', 'https://example.com/')).toEqual(
     'test_and_other_things'
   );
+});
+
+test('fetchWithRetries()', async () => {
+  const url = 'https://example.com';
+
+  // JSON
+  const jsonData1 = { test: true, shouldRetry: true };
+  const responseBad = { ok: false, status: 404, statusText: '404' };
+  const jsonData2 = { test: true, shouldRetry: false };
+  const responseGood = { ok: true, status: 200, statusText: '200' };
+
+  // No retry
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
+  const response1 = await fetchWithRetries(url, {}, 0);
+  const responseData1 = await response1.json();
+  expect(fetch).toHaveBeenCalledWith(url);
+  expect(responseData1).toEqual(jsonData1);
+
+  // With retry
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData2, responseGood));
+  const response2 = await fetchWithRetries(url, {}, 3, 10);
+  const responseData2 = await response2.json();
+  expect(fetch).toHaveBeenCalledWith(url);
+  expect(responseData2).toEqual(jsonData2);
+
+  // With not enough retries
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
+  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
+  const response3 = await fetchWithRetries(url, {}, 3, 10);
+  const responseData3 = await response3.json();
+  expect(fetch).toHaveBeenCalledWith(url);
+  expect(responseData3).toEqual(jsonData1);
+  (fetch as Mock).mockClear();
 });
