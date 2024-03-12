@@ -6,8 +6,10 @@
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
+import { eq } from 'drizzle-orm';
 import chalk from 'chalk';
-import { client } from '../db/connection';
+import { client, db } from '../db/connection';
+import { collection } from '../db/schema/collections';
 import { request } from '../src/lib/request';
 import { loadJsonFile, loadPdfFile } from '../src/lib/load-file';
 import { environment_variables, unique } from '../src/lib/utilities';
@@ -27,6 +29,10 @@ async function cli(): Promise<void> {
   const program = new Command();
   program.version(packageJson.version).description('Collect OMB data').parse(process.argv);
 
+  // Create timestamp and id for this run
+  const start = new Date();
+  const collectionId = `omb-${start.toISOString()}`;
+
   // Setup progress bars
   const progress = new MultiProgressBars({
     initMessage: 'Collect OMB data',
@@ -38,6 +44,18 @@ async function cli(): Promise<void> {
   progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
   const pdfProgressMessage = 'Loading PDF files';
   progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
+
+  // Save start of collection
+  const collectionRecord = {
+    collectionId,
+    start,
+    url: env.baseUrl,
+    status: 'started',
+    createdAt: start,
+    modifiedAt: start
+  };
+  const collectionRows = await db.insert(collection).values(collectionRecord).returning();
+  const collectionRow = collectionRows[0];
 
   // Get list of apportionment URLs
   const apportionmentUrls = await apportionmentList();
@@ -61,6 +79,17 @@ async function cli(): Promise<void> {
     progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
   }
   progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
+
+  // Save end of collection
+  const complete = new Date();
+  await db
+    .update(collection)
+    .set({
+      complete,
+      status: 'completed',
+      modifiedAt: complete
+    })
+    .where(eq(collection.collectionId, collectionRow.collectionId));
 
   client.end();
 }
