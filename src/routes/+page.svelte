@@ -4,6 +4,10 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <title>Apportionments</title>
+</svelte:head>
+
 <h1>Apportionments</h1>
 
 <h2>Recent files</h2>
@@ -14,3 +18,5 @@
     </li>
   {/each}
 </ul>
+
+<a href="/styles">Styles example page</a>

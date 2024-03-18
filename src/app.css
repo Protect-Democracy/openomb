@@ -1,0 +1,43 @@
+/**
+ * App-level CSS.  Should focus on element-level styling and layout.
+ */
+
+/* Normalize/reset */
+@import 'modern-normalize/modern-normalize.css';
+
+/* Variables */
+:root {
+  --color-background: #f5f5f5;
+  --color-text: #333;
+  --color-background-inverse: #333;
+  --color-text-inverse: #f5f5f5;
+  --color-primary: #007bff;
+  --spacing: 1rem;
+  --line-height: 1.5;
+}
+
+/* Page */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: var(--line-height);
+}
+
+/* Elements */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+p {
+  margin-bottom: var(--spacing);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  text-align: left;
+}
