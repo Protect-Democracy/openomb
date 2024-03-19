@@ -289,11 +289,15 @@
     </p>
     <p>
       <label for="input__text3" class="error">Error</label>
-      <input id="input__text3" class="is-error" type="text" placeholder="Text Input" />
+      <input id="input__text3" aria-invalid="true" type="text" placeholder="Text Input" />
     </p>
     <p>
       <label for="input__text4" class="valid">Valid</label>
       <input id="input__text4" class="is-valid" type="text" placeholder="Text Input" />
+    </p>
+    <p>
+      <label for="input__text4">Disabled</label>
+      <input id="input__text4" type="text" placeholder="Text Input" disabled />
     </p>
   </fieldset>
   <p><a href="#top">[Top]</a></p>
@@ -302,6 +306,17 @@
     <p>
       <label for="select">Select</label>
       <select id="select">
+        <optgroup label="Option Group">
+          <option>Option One</option>
+          <option>Option Two</option>
+          <option>Option Three</option>
+        </optgroup>
+      </select>
+    </p>
+
+    <p>
+      <label for="select">Disabled</label>
+      <select id="select" disabled>
         <optgroup label="Option Group">
           <option>Option One</option>
           <option>Option Two</option>
@@ -327,6 +342,11 @@
       <li>
         <label for="checkbox3"
           ><input id="checkbox3" name="checkbox" type="checkbox" /> Choice C</label
+        >
+      </li>
+      <li>
+        <label for="checkbox4"
+          ><input id="checkbox4" name="checkbox" type="checkbox" disabled /> Disabled</label
         >
       </li>
     </ul>
@@ -358,6 +378,11 @@
     <p>
       <label for="textarea">Textarea</label>
       <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here"></textarea>
+    </p>
+    <p>
+      <label for="textarea">Disabled</label>
+      <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here" disabled
+      ></textarea>
     </p>
   </fieldset>
   <p><a href="#top">[Top]</a></p>
@@ -400,16 +425,16 @@
   <fieldset id="forms__action">
     <legend>Action buttons</legend>
     <p>
-      <input type="submit" value="<input type=submit>" />
-      <input type="button" value="<input type=button>" />
-      <input type="reset" value="<input type=reset>" />
-      <input type="submit" value="<input disabled>" disabled />
+      <input type="submit" value="Input submit" />
+      <input type="button" value="Input button" />
+      <input type="reset" value="Input reset" />
+      <input type="submit" value="Input disabled" disabled />
     </p>
     <p>
-      <button type="submit">&lt;button type=submit&gt;</button>
-      <button type="button">&lt;button type=button&gt;</button>
-      <button type="reset">&lt;button type=reset&gt;</button>
-      <button type="button" disabled>&lt;button disabled&gt;</button>
+      <button type="submit">Button submit</button>
+      <button type="button">Button button</button>
+      <button type="reset">Button reset</button>
+      <button type="button" disabled>Button disabled</button>
     </p>
   </fieldset>
 </form>
