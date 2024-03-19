@@ -18,7 +18,6 @@ Configure using the following environment variables:
 
 **TODO**:
 
-- Handle removal of files (i.e. mark files as removed in the database).
 - Create an zip of the cache files after done to be archived on S3 likely.
 - Create a minimal caching layer to avoid direct queries when no data has changed. This should be trivial with the collect runs being logged.
 
