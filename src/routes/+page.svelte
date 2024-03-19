@@ -19,4 +19,13 @@
   {/each}
 </ul>
 
+<h2>Recent removed</h2>
+<ul>
+  {#each data.recentRemoved as file}
+    <li>
+      <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
+    </li>
+  {/each}
+</ul>
+
 <a href="/styles">Styles example page</a>

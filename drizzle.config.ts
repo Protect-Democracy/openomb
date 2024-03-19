@@ -1,6 +1,6 @@
 // Dependencies
 import type { Config } from 'drizzle-kit';
-import { environment_variables } from './src/lib/utilities';
+import { environment_variables } from './server/utilities';
 
 // Constants
 const env = environment_variables();

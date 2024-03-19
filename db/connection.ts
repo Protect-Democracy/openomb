@@ -12,7 +12,7 @@ import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
-import { environment_variables } from '../src/lib/utilities';
+import { environment_variables } from '../server/utilities';
 
 // Constants
 const env = environment_variables();
