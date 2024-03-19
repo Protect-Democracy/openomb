@@ -19,24 +19,27 @@ type ApportionmentEnvironment = {
   cacheTtl: number;
   cacheDir: string;
   dbUri: string;
+  sentryDsn: string;
 };
 
 /**
  * Get APPORTIONMENT_* variables from the environment.
  *
- * TODO: This might not be good since Vite uses VITE_ without some
- * specific code/config.
+ * This utilizes vite functions, but given that this is meant
+ * for the server side, this is explicit.
  */
 function environment_variables(): ApportionmentEnvironment {
-  const env = loadEnv('dev', process.cwd(), 'APPORTIONMENTS_');
+  const appEnv = loadEnv('dev', process.cwd(), 'APPORTIONMENTS_');
+  const viteEnv = loadEnv('dev', process.cwd(), 'VITE_');
 
   return {
-    baseUrl: env['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
-    cacheTtl: env['APPORTIONMENTS_CACHE_TTL']
-      ? parseInt(env['APPORTIONMENTS_CACHE_TTL'])
+    baseUrl: appEnv['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
+    cacheTtl: appEnv['APPORTIONMENTS_CACHE_TTL']
+      ? parseInt(appEnv['APPORTIONMENTS_CACHE_TTL'])
       : 1000 * 60 * 60 * 24 * 15,
-    cacheDir: env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
-    dbUri: env['APPORTIONMENTS_DB_URI'] || ''
+    cacheDir: appEnv['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
+    dbUri: appEnv['APPORTIONMENTS_DB_URI'] || '',
+    sentryDsn: viteEnv['VITE_SENTRY_DSN'] || ''
   };
 }
 

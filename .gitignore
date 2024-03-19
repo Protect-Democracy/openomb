@@ -12,6 +12,10 @@ log/
 *.log
 .cache*
 
+# Sentry Config File
+.sentryclirc
+
+
 # From SvelteKit
 ##############
 .DS_Store
@@ -159,6 +163,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-
-

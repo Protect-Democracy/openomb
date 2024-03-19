@@ -2,6 +2,11 @@
 
 Web application to make [Office of Management and Budget (OMB) apportionment data](https://apportionment-public.max.gov/) more accessible.
 
+## TODO
+
+Sentry does not work with Svelte 5 yet. Specifically it breaks interactivity (i.e. click handlers) on all components and pages.
+https://github.com/getsentry/sentry-javascript/issues/10318
+
 ## Usage
 
 ### Data collection

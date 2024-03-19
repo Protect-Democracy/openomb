@@ -28,4 +28,6 @@
   {/each}
 </ul>
 
+<button on:click={() => console.log('clicked')}>Click me</button>
+
 <a href="/styles">Styles example page</a>
