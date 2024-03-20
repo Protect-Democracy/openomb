@@ -17,6 +17,8 @@ export type RequestOptions = {
   ttl?: number;
   cacheDir?: string;
   cacheMissOnNot200?: boolean;
+  retries?: number;
+  waitTime?: number;
 };
 
 // Request meta type
@@ -97,7 +99,12 @@ async function request(
     }
 
     // Make fetch request
-    const response = await fetch(fetchResource, fetchOptions);
+    const response = await fetchWithRetries(
+      fetchResource,
+      fetchOptions,
+      options.retries,
+      options.waitTime
+    );
     const data = await response[options.expectedType]();
 
     // Meta
@@ -115,7 +122,12 @@ async function request(
   }
   else {
     // Make fetch request and no save since TTL is nothing
-    const response = await fetch(fetchResource, fetchOptions);
+    const response = await fetchWithRetries(
+      fetchResource,
+      fetchOptions,
+      options.retries,
+      options.waitTime
+    );
     const data = await response[options.expectedType]();
 
     return {
@@ -126,6 +138,39 @@ async function request(
       }
     };
   }
+}
+
+/**
+ * Wrapper around fetch to allow for retries when not 200.
+ */
+async function fetchWithRetries(
+  fetchResource: FetchResource,
+  fetchOptions: RequestInit = {},
+  retries: number = 3,
+  waitTime: number = 1000
+): Promise<Response> {
+  // Check retries value
+  if (retries < 0) {
+    retries = 0;
+  }
+  if (retries > 0 && retries < 1) {
+    retries = 1;
+  }
+
+  let response;
+  for (let i = 0; i <= retries; i++) {
+    response = await fetch(fetchResource, fetchOptions);
+    if (response.status < 300) {
+      return response;
+    }
+
+    // Wait a bit before trying again, progressively getting longer
+    await new Promise((resolve) => setTimeout(resolve, waitTime * i));
+  }
+
+  // Unsure why, but Typescript seems to think response could be undefined here
+  // so making sure it is not.
+  return response || (await fetch(fetchResource, fetchOptions));
 }
 
 /**
@@ -211,4 +256,4 @@ function responseForCache(response: Response) {
   };
 }
 
-export { request, cacheKey, urlExists };
+export { request, cacheKey, urlExists, fetchWithRetries };

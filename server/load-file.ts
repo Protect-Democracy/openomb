@@ -4,16 +4,16 @@
 
 // Dependencies
 import { request, urlExists } from './request';
-import { file } from '../../db/schema/files';
-import { schedule } from '../../db/schema/schedules';
-import { footnote } from '../../db/schema/footnotes';
+import { file } from '../db/schema/files';
+import { schedule } from '../db/schema/schedules';
+import { footnote } from '../db/schema/footnotes';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
   environment_variables,
   md5hash
 } from './utilities';
-import { db } from '../../db/connection';
+import { db } from '../db/connection';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {
@@ -61,7 +61,7 @@ const env = environment_variables();
 /**
  * Load an apportionment file into the database.
  */
-async function loadJsonFile(jsonUrl: string): Promise<void> {
+async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> {
   // Get the file
   const fileResponse = await request(jsonUrl, {}, { expectedType: 'json' });
   const sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
@@ -105,7 +105,7 @@ async function loadJsonFile(jsonUrl: string): Promise<void> {
   };
 
   // Upsert file
-  await db
+  const savedFileRecords = await db
     .insert(file)
     .values(fileRecord)
     .onConflictDoUpdate({
@@ -196,6 +196,9 @@ async function loadJsonFile(jsonUrl: string): Promise<void> {
       }
     }
   }
+
+  // Return file record
+  return savedFileRecords[0];
 }
 
 /**
@@ -205,7 +208,7 @@ async function loadJsonFile(jsonUrl: string): Promise<void> {
  * we simply make a basic entry in the DB using data from
  * the URL.
  */
-async function loadPdfFile(pdfUrl: string): Promise<void> {
+async function loadPdfFile(pdfUrl: string): Promise<typeof file.$inferInsert> {
   // Get the file
   const fileResponse = await request(pdfUrl, {}, { expectedType: 'blob' });
 
@@ -262,7 +265,7 @@ async function loadPdfFile(pdfUrl: string): Promise<void> {
   };
 
   // Upsert file
-  await db
+  const records = await db
     .insert(file)
     .values(fileRecord)
     .onConflictDoUpdate({
@@ -271,6 +274,7 @@ async function loadPdfFile(pdfUrl: string): Promise<void> {
       set: (({ createdAt, ...o }) => o)(fileRecord)
     })
     .returning();
+  return records[0];
 }
 
 /**

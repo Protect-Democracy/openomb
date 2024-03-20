@@ -34,7 +34,7 @@ function environment_variables(): ApportionmentEnvironment {
     baseUrl: env['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
     cacheTtl: env['APPORTIONMENTS_CACHE_TTL']
       ? parseInt(env['APPORTIONMENTS_CACHE_TTL'])
-      : 1000 * 60 * 60 * 24 * 7,
+      : 1000 * 60 * 60 * 24 * 15,
     cacheDir: env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
     dbUri: env['APPORTIONMENTS_DB_URI'] || ''
   };

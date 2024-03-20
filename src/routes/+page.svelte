@@ -1,2 +1,31 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+</script>
+
+<svelte:head>
+  <title>Apportionments</title>
+</svelte:head>
+
+<h1>Apportionments</h1>
+
+<h2>Recent files</h2>
+<ul>
+  {#each data.recentFiles as file}
+    <li>
+      <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
+    </li>
+  {/each}
+</ul>
+
+<h2>Recent removed</h2>
+<ul>
+  {#each data.recentRemoved as file}
+    <li>
+      <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
+    </li>
+  {/each}
+</ul>
+
+<a href="/styles">Styles example page</a>

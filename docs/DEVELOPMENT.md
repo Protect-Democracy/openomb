@@ -13,10 +13,16 @@ To contribute code to this project, the general process is the following:
 
 The following is how you setup your development environment to work on this project:
 
-- Make sure [NodeJS](https://nodejs.org/en/download) is installed.
+- Install Postgres
+  - If on a Mac, a suggestion is [Postgres.app](https://postgresapp.com/).
+- Install [NodeJS](https://nodejs.org/en/download).
   - If on a Mac, using Homebrew: `brew install node`
-- Utilize the correct Node version with `nvm use`
+- (suggested) Install [nvm](https://github.com/nvm-sh/nvm)
+- Utilize the correct Node version
+  - (suggested) Utilize nvm: `nvm use`
 - Install dependencies: `npm install`
+- Configure (see below)
+- Run database setup: `npm run db:migrate`
 
 ### Updates
 
@@ -24,6 +30,12 @@ When pulling new code, you should do the following:
 
 - Update dependencies: `npm install`
 - Run any database migrations: `npm run db:migrate`
+
+### Configuration
+
+Utilize the following environment variables, optionally using a `.env` file:
+
+- `APPORTIONMENTS_DB_URI`: Database connection URI. This should be a Postgres URI, such as `postgres://user:pass@localhost:5444/database`.
 
 ### Code styles and linting
 
