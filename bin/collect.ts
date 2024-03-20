@@ -110,7 +110,9 @@ async function cli(): Promise<void> {
  * Get list of all apportionment URL/files (JSON, Excel, at least one PDF).
  */
 async function apportionmentList(): Promise<string[]> {
-  const homepage = await request(env.baseUrl, {}, { expectedType: 'text' });
+  // Set ttl to short so that it doesn't use cached version but still creates a
+  // file in the cache.
+  const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1 });
 
   // Check response
   if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
