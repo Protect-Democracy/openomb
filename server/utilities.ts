@@ -4,9 +4,11 @@
 
 // Dependencies
 import { loadEnv } from 'vite';
-import { dirname, join as joinPath } from 'node:path';
+import { dirname, join as joinPath, basename, resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
+import { createWriteStream, statSync } from 'node:fs';
+import archiver, { ArchiverError } from 'archiver';
 import moment from 'moment';
 
 // Directories (note that __dirname might actually be available globally)
@@ -82,4 +84,56 @@ function md5hash(string: string): string {
   return createHash('md5').update(string).digest('hex');
 }
 
-export { environment_variables, unique, parseIntegerFromString, parseTimestampFromString, md5hash };
+/**
+ * Zips the specified files and directories into a single archive file.
+ * @param sources An array of file and directory paths to be included in the archive.
+ * @param outputFilename The path of the output archive file.
+ * @returns A Promise that resolves when the zipping process is complete.
+ * @throws An error if there is an issue with the zipping process.
+ */
+async function zipFiles(sources: string[], outputFilename: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    const outputStream = createWriteStream(outputFilename);
+    const archive = archiver('zip', { zlib: { level: 9 } });
+
+    outputStream.on('close', () => {
+      resolve();
+    });
+
+    archive.on('error', (error: ArchiverError) => {
+      reject(error);
+    });
+
+    archive.on('warning', function (error: ArchiverError) {
+      if (error.code === 'ENOENT') {
+        console.warn(error);
+      }
+      else {
+        reject(error);
+      }
+    });
+
+    archive.pipe(outputStream);
+
+    sources.forEach((source) => {
+      const sourcePath = resolvePath(source);
+      if (statSync(sourcePath).isDirectory()) {
+        archive.directory(sourcePath, basename(sourcePath));
+      }
+      else {
+        archive.file(sourcePath, { name: basename(sourcePath) });
+      }
+    });
+
+    archive.finalize();
+  });
+}
+
+export {
+  environment_variables,
+  unique,
+  parseIntegerFromString,
+  parseTimestampFromString,
+  md5hash,
+  zipFiles
+};

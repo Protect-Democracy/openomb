@@ -3,8 +3,19 @@
  */
 
 // Dependencies
-import { expect, test } from 'vitest';
-import { unique, parseIntegerFromString, parseTimestampFromString, md5hash } from './utilities';
+import fs from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import * as unzipper from 'unzipper';
+import { expect, test, describe } from 'vitest';
+import {
+  unique,
+  parseIntegerFromString,
+  parseTimestampFromString,
+  md5hash,
+  zipFiles
+} from './utilities';
 
 test('unique()', () => {
   // Basics
@@ -50,4 +61,111 @@ test('md5hash()', () => {
   expect(md5hash('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')).toEqual(
     'd174ab98d277d9f5a5611c2c9f419d9f'
   );
+});
+
+describe('zipFiles()', () => {
+  interface TmpDirFixture {
+    tmpdir: string;
+  }
+
+  interface ZipFileListItem {
+    path: string;
+    type: string;
+    vars: object;
+  }
+  // Setup temp directory using os.tmpdir for each test
+  async function createTempDir() {
+    const tDir = os.tmpdir();
+    const tmpDir = path.join(tDir, `test-${Math.round(Math.random() * 1000000)}`);
+    return await fs.mkdtemp(tmpDir);
+  }
+
+  const writeFile = async (filename: string, content: string) => {
+    await fs.mkdir(path.dirname(filename), { recursive: true });
+    await fs.writeFile(filename, content);
+  };
+
+  // Function to get list of files in a zip archive
+  const zipFileList = async (zipFile: string): Promise<ZipFileListItem[]> => {
+    const zip = createReadStream(zipFile).pipe(unzipper.Parse({ forceStream: true }));
+    const fileList: ZipFileListItem[] = [];
+    for await (const entry of zip) {
+      fileList.push({
+        path: entry.path,
+        type: entry.type,
+        vars: entry.vars
+      });
+      entry.autodrain();
+    }
+
+    return fileList;
+  };
+
+  const tmpdirTest = test.extend<TmpDirFixture>({
+    // eslint-disable-next-line no-empty-pattern
+    tmpdir: async ({}, use) => {
+      const directory = await createTempDir();
+      await use(directory);
+      await fs.rm(directory, { recursive: true });
+    }
+  });
+
+  tmpdirTest('should zip files', async ({ tmpdir }) => {
+    const file1 = path.join(tmpdir, 'file1.txt');
+    const file2 = path.join(tmpdir, 'file2.txt');
+    const zipFile = path.join(tmpdir, 'test.zip');
+    await writeFile(file1, 'file1');
+    await writeFile(file2, 'file2');
+    await zipFiles([file1, file2], zipFile);
+
+    // Make sure files are there
+    const filesList = await fs.readdir(tmpdir);
+    expect(filesList).toContain('test.zip');
+    expect(filesList).toContain('file1.txt');
+    expect(filesList).toContain('file2.txt');
+
+    // Cursory check of files in zip
+    const zip = await fs.readFile(zipFile);
+    expect(zip).toMatch(/file1/);
+    expect(zip).toMatch(/file2/);
+
+    // Check list of files
+    const zippedFiles = await zipFileList(zipFile);
+    expect(zippedFiles).toHaveLength(2);
+    expect(zippedFiles[0].path).toEqual('file1.txt');
+    expect(zippedFiles[1].path).toEqual('file2.txt');
+  });
+
+  tmpdirTest('should zip directories recursively', async ({ tmpdir }) => {
+    const file1 = path.join(tmpdir, 'path1', 'file2.txt');
+    const file2 = path.join(tmpdir, 'path1', 'path1-sub1', 'file2.txt');
+    const file3 = path.join(tmpdir, 'path1', 'path1-sub1', 'path1-sub2', 'file3.txt');
+    const file4 = path.join(tmpdir, 'path2', 'path2-sub1', 'file4.txt');
+    const file5 = path.join(tmpdir, 'file5.txt');
+    const zipFile = path.join(tmpdir, 'test.zip');
+    await writeFile(file1, 'file1');
+    await writeFile(file2, 'file2');
+    await writeFile(file3, 'file3');
+    await writeFile(file4, 'file4');
+    await writeFile(file5, 'file4');
+    await zipFiles(
+      [path.join(tmpdir, 'path1'), path.join(tmpdir, 'path2', 'path2-sub1'), file5],
+      zipFile
+    );
+
+    // Check list of files
+    const zippedFiles = await zipFileList(zipFile);
+    const zippedFilePaths = zippedFiles.map((f) => f.path);
+    const expected = [
+      'file5.txt',
+      'path1/file2.txt',
+      'path1/path1-sub1/',
+      'path1/path1-sub1/file2.txt',
+      'path1/path1-sub1/path1-sub2/',
+      'path1/path1-sub1/path1-sub2/file3.txt',
+      'path2-sub1/file4.txt'
+    ];
+    expect(zippedFiles).toHaveLength(expected.length);
+    expect(zippedFilePaths.sort()).toEqual(expected.sort());
+  });
 });
