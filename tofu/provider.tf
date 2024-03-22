@@ -1,4 +1,7 @@
-# Terraform Remote State to S3
+# NOTE This project uses [OpenTofu](https://opentofu.org) instead of terraform
+# See also [tenv](https://github.com/tofuutils/tenv) for managing OpenTofu environments
+
+# OpenTofu Remote State to S3
 # Ref: https://developer.hashicorp.com/terraform/language/settings/backends/s3
 terraform {
   backend "s3" {

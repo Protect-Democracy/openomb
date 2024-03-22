@@ -1,3 +1,6 @@
+# NOTE This project uses [OpenTofu](https://opentofu.org) instead of terraform
+# See also [tenv](https://github.com/tofuutils/tenv) for managing OpenTofu environments
+
 # RDS Aurora Serverless v2 PostgreSQL
 # Adapted from https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster
 resource "aws_rds_cluster" "apportionments" {
