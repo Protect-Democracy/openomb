@@ -3,6 +3,7 @@
  */
 
 // Dependencies
+import { join as joinPath } from 'node:path';
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
@@ -13,7 +14,7 @@ import { collection } from '../db/schema/collections';
 import { file } from '../db/schema/files';
 import { request } from '../server/request';
 import { loadJsonFile, loadPdfFile } from '../server/load-file';
-import { environment_variables, unique } from '../server/utilities';
+import { environment_variables, unique, zipFiles, putS3File } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 
 // Constants
@@ -28,7 +29,13 @@ cli();
 async function cli(): Promise<void> {
   // Setup commander
   const program = new Command();
-  program.version(packageJson.version).description('Collect OMB data').parse(process.argv);
+  program
+    .version(packageJson.version)
+    .description('Collect OMB data')
+    .option('--no-collection', 'Do not do collection/scraping of data.')
+    .option('--no-archive', 'Do not zip and archive to S3.')
+    .parse(process.argv);
+  const options = program.opts();
 
   // Create timestamp and id for this run
   const start = new Date();
@@ -41,67 +48,92 @@ async function cli(): Promise<void> {
     persist: true,
     border: true
   });
-  const jsonProgressMessage = 'Loading JSON files';
-  progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
-  const pdfProgressMessage = 'Loading PDF files';
-  progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
 
-  // Save start of collection
-  const collectionRecord = {
-    collectionId,
-    start,
-    url: env.baseUrl,
-    status: 'started',
-    createdAt: start,
-    modifiedAt: start
-  };
-  const collectionRows = await db.insert(collection).values(collectionRecord).returning();
-  const collectionRow = collectionRows[0];
+  // Collection
+  if (options.collection) {
+    // Progress for collection parts
+    const jsonProgressMessage = 'Loading JSON files';
+    progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
+    const pdfProgressMessage = 'Loading PDF files';
+    progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
 
-  // Keep track of file ids to mark any as removed
-  const fileIds: string[] = [];
+    // Save start of collection
+    const collectionRecord = {
+      collectionId,
+      start,
+      url: env.baseUrl,
+      status: 'started',
+      createdAt: start,
+      modifiedAt: start
+    };
+    const collectionRows = await db.insert(collection).values(collectionRecord).returning();
+    const collectionRow = collectionRows[0];
 
-  // Get list of apportionment URLs
-  const apportionmentUrls = await apportionmentList();
+    // Keep track of file ids to mark any as removed
+    const fileIds: string[] = [];
 
-  // Load JSON files
-  const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
+    // Get list of apportionment URLs
+    const apportionmentUrls = await apportionmentList();
 
-  // Go through each URL and collect data
-  for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
-    const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
-    fileIds.push(fileRecord.fileId);
-    progress.updateTask(jsonProgressMessage, { percentage: (urlIndex + 1) / jsonUrls.length });
+    // Load JSON files
+    const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
+
+    // Go through each URL and collect data
+    for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
+      const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
+      fileIds.push(fileRecord.fileId);
+      progress.updateTask(jsonProgressMessage, { percentage: (urlIndex + 1) / jsonUrls.length });
+    }
+    progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
+
+    // Load PDF files
+    const pdfUrls = apportionmentUrls.filter((url) => url.match(/\.pdf$/));
+
+    // Go through each URL and collect data
+    for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
+      const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
+      fileIds.push(fileRecord.fileId);
+      progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+    }
+    progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
+
+    // Mark any files not in the list as removed
+    await db
+      .update(file)
+      .set({ removed: true, modifiedAt: new Date() })
+      .where(notInArray(file.fileId, fileIds));
+
+    // Save end of collection
+    const complete = new Date();
+    await db
+      .update(collection)
+      .set({
+        complete,
+        status: 'completed',
+        modifiedAt: complete
+      })
+      .where(eq(collection.collectionId, collectionRow.collectionId));
   }
-  progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
 
-  // Load PDF files
-  const pdfUrls = apportionmentUrls.filter((url) => url.match(/\.pdf$/));
+  if (options.archive) {
+    // Archive progress
+    const archiveProgressMessage = 'Archiving data';
+    progress.addTask(archiveProgressMessage, { type: 'indefinite', barTransformFn: chalk.yellow });
 
-  // Go through each URL and collect data
-  for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
-    const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
-    fileIds.push(fileRecord.fileId);
-    progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+    // Zip up the cache data
+    const archiveFileName = 'omb-2024-03-22-1711124002527.zip'; //`omb-${start.toISOString().split('T')[0]}-${+start}.zip`;
+    const archiveFilePath = joinPath(env.cacheDir, archiveFileName);
+    console.log(archiveFilePath);
+    //await zipFiles([env.collectionCacheDir], archiveFilePath);
+
+    // Put to S3
+    const s3Path = `collections/${archiveFileName}`;
+    await putS3File(archiveFilePath, s3Path);
+
+    progress.done(archiveProgressMessage, {
+      message: chalk.green(`Archived to s3://${env.archiveS3Bucket}/${s3Path}`)
+    });
   }
-  progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
-
-  // Mark any files not in the list as removed
-  await db
-    .update(file)
-    .set({ removed: true, modifiedAt: new Date() })
-    .where(notInArray(file.fileId, fileIds));
-
-  // Save end of collection
-  const complete = new Date();
-  await db
-    .update(collection)
-    .set({
-      complete,
-      status: 'completed',
-      modifiedAt: complete
-    })
-    .where(eq(collection.collectionId, collectionRow.collectionId));
 
   client.end();
 }

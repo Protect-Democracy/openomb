@@ -7,20 +7,46 @@ import { loadEnv } from 'vite';
 import { dirname, join as joinPath, basename, resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { createWriteStream, statSync } from 'node:fs';
+import { createWriteStream, createReadStream, statSync } from 'node:fs';
 import archiver, { ArchiverError } from 'archiver';
+import { S3Client, PutObjectCommand, ListBucketsCommand } from '@aws-sdk/client-s3';
+import type { PutObjectRequest } from '@aws-sdk/client-s3';
+import { fromSSO } from '@aws-sdk/credential-providers';
 import moment from 'moment';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
-const defaultCacheDir = joinPath(_dirname, '..', '..', '.cache', 'collection');
+const defaultCacheDir = joinPath(_dirname, '..', '.cache');
+const defaultCollectionCacheDir = joinPath(defaultCacheDir, 'collection');
+const s3AclOptions = [
+  'private',
+  'public-read',
+  'public-read-write',
+  'authenticated-read',
+  'aws-exec-read',
+  'bucket-owner-read',
+  'bucket-owner-full-control'
+];
 
 // Expected types from environment variables
 type ApportionmentEnvironment = {
   baseUrl: string;
   cacheTtl: number;
   cacheDir: string;
+  collectionCacheDir: string;
   dbUri: string;
+  archiveS3Bucket: string;
+  archiveS3Region: string;
+  archiveS3Acl: [
+    'private',
+    'public-read',
+    'public-read-write',
+    'authenticated-read',
+    'aws-exec-read',
+    'bucket-owner-read',
+    'bucket-owner-full-control'
+  ];
+  awsSso: boolean;
 };
 
 /**
@@ -38,7 +64,18 @@ function environment_variables(): ApportionmentEnvironment {
       ? parseInt(env['APPORTIONMENTS_CACHE_TTL'])
       : 1000 * 60 * 60 * 24 * 15,
     cacheDir: env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
-    dbUri: env['APPORTIONMENTS_DB_URI'] || ''
+    collectionCacheDir: env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
+    dbUri: env['APPORTIONMENTS_DB_URI'] || '',
+    archiveS3Bucket: env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
+    archiveS3Region: env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
+    archiveS3Acl:
+      env['APPORTIONMENTS_ARCHIVE_S3_ACL'] &&
+      s3AclOptions.includes(env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
+        ? env['APPORTIONMENTS_ARCHIVE_S3_ACL']
+        : 'public-read',
+    awsSso:
+      !!env['APPORTIONMENTS_AWS_SSO'] &&
+      env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false'
   };
 }
 
@@ -129,11 +166,42 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
   });
 }
 
+/**
+ * Puts a file to S3.
+ *
+ * @param file The path to the local source file.
+ * @param s3Path The path on the bucket to store the file.
+ * @param s3Bucket Optional name of bucket
+ */
+async function putS3File(
+  file: string,
+  s3Path: string,
+  s3Bucket: string | undefined = undefined
+): Promise<void> {
+  const env = environment_variables();
+
+  // Create client
+  const s3 = new S3Client({
+    region: env.archiveS3Region,
+    credentials: env.awsSso ? fromSSO() : undefined
+  });
+
+  // Put file parameters
+  const params: PutObjectRequest = {
+    Bucket: s3Bucket || env.archiveS3Bucket,
+    Key: s3Path,
+    Body: createReadStream(file),
+    ACL: env.archiveS3Acl
+  };
+  await s3.send(new PutObjectCommand(params));
+}
+
 export {
   environment_variables,
   unique,
   parseIntegerFromString,
   parseTimestampFromString,
   md5hash,
-  zipFiles
+  zipFiles,
+  putS3File
 };

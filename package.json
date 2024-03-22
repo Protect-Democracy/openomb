@@ -18,12 +18,15 @@
     "db:migrate": "tsx bin/migrate.ts"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "^3.537.0",
+    "@aws-sdk/credential-providers": "^3.535.0",
     "@playwright/test": "^1.28.1",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@types/eslint": "^8.56.0",
     "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.11.30",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "archiver": "^7.0.1",

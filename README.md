@@ -12,14 +12,18 @@ To scrape data from the OMB site, use the following command:
 npm run collect
 ```
 
+Options:
+
+- `--no-archive`: Use if you want to skip the archive (zip) and upload to S3 step.
+- `--no-collection`: Use if you want to skip the collection/scraping step.
+
 Configure using the following environment variables:
 
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
-
-**TODO**:
-
-- Create an zip of the cache files after done to be archived on S3 likely.
-- Create a minimal caching layer to avoid direct queries when no data has changed. This should be trivial with the collect runs being logged.
+- `APPORTIONMENTS_ARCHIVE_S3_REGION`: The AWS region code to use for the bucket to upload the archive to.
+- `APPORTIONMENTS_ARCHIVE_S3_BUCKET`: The AWS bucket to upload the archive to.
+- `APPORTIONMENTS_AWS_SSO`: Whether to try to use AWS SSO credentials for authentication.
+- `APPORTIONMENTS_ARCHIVE_S3_ACL`: ACL to set for the archive upload. Defaults to `public-read`, should be one of `'private' 'public-read', 'public-read-write', 'authenticated-read', 'aws-exec-read', 'bucket-owner-read', 'bucket-owner-full-control'`
 
 ### Web application
 

@@ -62,7 +62,7 @@ async function request(
   options.expectedType = options.expectedType || 'json';
   options.baseUrl = options.baseUrl || env.baseUrl;
   options.ttl = options.ttl || env.cacheTtl;
-  options.cacheDir = options.cacheDir || env.cacheDir;
+  options.cacheDir = options.cacheDir || env.collectionCacheDir;
   options.cacheMissOnNot200 = options.cacheMissOnNot200 === false ? false : true;
 
   // Make sure cache location exists
