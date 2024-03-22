@@ -1,3 +1,6 @@
+# NOTE This project uses [OpenTofu](https://opentofu.org) instead of terraform
+# See also [tenv](https://github.com/tofuutils/tenv) for managing OpenTofu environments
+
 # RDS Aurora Serverless v2 PostgreSQL
 # Adapted from https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster
 resource "aws_rds_cluster" "apportionments" {
@@ -58,7 +61,7 @@ resource "aws_s3_bucket_versioning" "apportionments_bucket" {
   }
 }
 
-# DynamoDB Table for terraform state
+# DynamoDB Table for tofu state
 resource "aws_dynamodb_table" "remotestate_table" {
   name         = var.tfstate_table_name
   hash_key     = "LockID"
