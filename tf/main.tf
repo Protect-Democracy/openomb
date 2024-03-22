@@ -58,7 +58,7 @@ resource "aws_s3_bucket_versioning" "apportionments_bucket" {
   }
 }
 
-# DynamoDB Table for terraform state
+# DynamoDB Table for tofu state
 resource "aws_dynamodb_table" "remotestate_table" {
   name         = var.tfstate_table_name
   hash_key     = "LockID"

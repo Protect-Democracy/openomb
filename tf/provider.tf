@@ -5,7 +5,7 @@ terraform {
     bucket         = "pd-apportionments-tfstate"
     dynamodb_table = "tfstate-lock"
     encrypt        = true
-    key            = "terraform.tfstate"
+    key            = "tofu.tfstate"
     region         = "us-west-2"
   }
 
