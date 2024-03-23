@@ -47,7 +47,15 @@ p {
   max-width: var(--copy-width-limit);
 }
 
+.text-container {
+  max-width: var(--copy-width-limit);
+}
+
 small {
+  font-size: var(--font-size-small);
+}
+
+.font-small {
   font-size: var(--font-size-small);
 }
 

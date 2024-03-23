@@ -8,8 +8,8 @@ import { dirname, join as joinPath, basename, resolve as resolvePath } from 'nod
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createWriteStream, createReadStream, statSync } from 'node:fs';
-import archiver, { ArchiverError } from 'archiver';
-import { S3Client, PutObjectCommand, ListBucketsCommand } from '@aws-sdk/client-s3';
+import archiver from 'archiver';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import type { PutObjectRequest } from '@aws-sdk/client-s3';
 import { fromSSO } from '@aws-sdk/credential-providers';
 import moment from 'moment';
@@ -137,11 +137,11 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
       resolve();
     });
 
-    archive.on('error', (error: ArchiverError) => {
+    archive.on('error', (error: archiver.ArchiverError) => {
       reject(error);
     });
 
-    archive.on('warning', function (error: ArchiverError) {
+    archive.on('warning', function (error: archiver.ArchiverError) {
       if (error.code === 'ENOENT') {
         console.warn(error);
       }
