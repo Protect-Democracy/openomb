@@ -25,7 +25,14 @@ export const migrationsDir = joinPath(_dirname, 'migrations');
 export const client = new pg.Client({
   connectionString: env.dbUri
 });
-await client.connect();
+let clientConnected = false;
 
 // Drizzle connection
 export const db = drizzle(client);
+
+export async function dbConnect() {
+  if (!clientConnected) {
+    await client.connect();
+    clientConnected = true;
+  }
+}

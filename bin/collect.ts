@@ -9,7 +9,7 @@ import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray } from 'drizzle-orm';
 import chalk from 'chalk';
-import { client, db } from '../db/connection';
+import { client, db, dbConnect } from '../db/connection';
 import { collection } from '../db/schema/collections';
 import { file } from '../db/schema/files';
 import { request } from '../server/request';
@@ -36,6 +36,9 @@ async function cli(): Promise<void> {
     .option('--no-archive', 'Do not zip and archive to S3.')
     .parse(process.argv);
   const options = program.opts();
+
+  // Connect to db
+  await dbConnect();
 
   // Create timestamp and id for this run
   const start = new Date();

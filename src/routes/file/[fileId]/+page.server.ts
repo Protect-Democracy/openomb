@@ -1,4 +1,4 @@
-import { db } from '$db/connection';
+import { db, dbConnect } from '$db/connection';
 import { file } from '$schema/files';
 import { schedule } from '$schema/schedules';
 import { footnote } from '$schema/footnotes';
@@ -8,6 +8,8 @@ import { error } from '@sveltejs/kit';
 import { uniqBy, groupBy } from 'lodash-es';
 
 export const load: PageServerData = async ({ params }) => {
+  await dbConnect();
+
   const files = await db.select().from(file).where(eq(file.fileId, params.fileId)).limit(1);
   const schedules = await db
     .select()

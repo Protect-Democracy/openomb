@@ -13,7 +13,7 @@ import {
   environment_variables,
   md5hash
 } from './utilities';
-import { db } from '../db/connection';
+import { db, dbConnect } from '../db/connection';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {
@@ -62,6 +62,8 @@ const env = environment_variables();
  * Load an apportionment file into the database.
  */
 async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> {
+  await dbConnect();
+
   // Get the file
   const fileResponse = await request(jsonUrl, {}, { expectedType: 'json' });
   const sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
@@ -209,6 +211,8 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> 
  * the URL.
  */
 async function loadPdfFile(pdfUrl: string): Promise<typeof file.$inferInsert> {
+  await dbConnect();
+
   // Get the file
   const fileResponse = await request(pdfUrl, {}, { expectedType: 'blob' });
 

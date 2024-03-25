@@ -1,4 +1,4 @@
-import { db } from '$db/connection';
+import { db, dbConnect } from '$db/connection';
 import { file } from '$schema/files';
 import { schedule } from '$schema/schedules';
 import { desc, eq, countDistinct, count } from 'drizzle-orm';
@@ -6,6 +6,8 @@ import { groupBy, map as _map } from 'lodash-es';
 import type { PageServerData } from './$types';
 
 export const load: PageServerData = async () => {
+  await dbConnect();
+
   return {
     recentFiles: await db.select().from(file).orderBy(desc(file.approvalTimestamp)).limit(20),
     recentRemoved: await db
