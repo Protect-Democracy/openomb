@@ -25,6 +25,9 @@
   <li><a href="/file/11297405">11297405 - 2nd Most schedule items</a></li>
   <li><a href="/file/11297388">11297388 - ~400 schedule items</a></li>
   <li><a href="/file/11316019">11316019 - ~100 schedule items</a></li>
+  <li><a href="/file/pdf-4e735d84cd39d97c04f83f737d61feae">PDF example</a></li>
+  <li><a href="/file/11195820">11195820 - Example with a 6180 line</a></li>
+  <li><a href="/file/11299636">11299636 - Example with a 6181 line</a></li>
 </ul>
 
 <h2>Recent files</h2>
