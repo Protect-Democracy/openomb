@@ -28,6 +28,7 @@
   <li><a href="/file/pdf-4e735d84cd39d97c04f83f737d61feae">PDF example</a></li>
   <li><a href="/file/11195820">11195820 - Example with a 6180 line</a></li>
   <li><a href="/file/11299636">11299636 - Example with a 6181 line</a></li>
+  <li><a href="/file/11209228">11209228 - Example with a 6180 line and an amount (only one)</a></li>
 </ul>
 
 <h2>Recent files</h2>
