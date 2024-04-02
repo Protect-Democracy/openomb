@@ -61,7 +61,7 @@
 
 <ul>
   {#each data.folders as folder}
-    <li>{folder.folder} ({folder.count})</li>
+    <li><a href="/folder/{folder.folderId}">{folder.folder}</a> ({folder.count})</li>
   {/each}
 </ul>
 

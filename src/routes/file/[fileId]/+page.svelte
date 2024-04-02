@@ -17,7 +17,7 @@
 
 <ul>
   <li>File ID: {file.fileId}</li>
-  <li>Folder: {file.folder}</li>
+  <li>Folder: <a href="/folder/{file.folderId}">{file.folder}</a></li>
   <li>Fiscal year: {file.fiscalYear}</li>
   <li>Approved: {file.approvalTimestamp}</li>
   <li>Approved: {file.approverTitle}</li>
@@ -54,9 +54,27 @@
     </h3>
 
     <ul>
-      <li>Agency: <strong>{tafsGroup.budgetAgencyTitle}</strong></li>
-      <li>Bureau: <strong>{tafsGroup.budgetBureauTitle}</strong></li>
-      <li>Account: <strong>{tafsGroup.accountTitle}</strong></li>
+      <li>
+        Agency: <strong
+          ><a href="/agency/{tafsGroup.budgetAgencyTitleId}">{tafsGroup.budgetAgencyTitle}</a
+          ></strong
+        >
+      </li>
+      <li>
+        Bureau: <strong
+          ><a href="/agency/{tafsGroup.budgetAgencyTitleId}/bureau/{tafsGroup.budgetBureauTitleId}"
+            >{tafsGroup.budgetBureauTitle}</a
+          ></strong
+        >
+      </li>
+      <li>
+        Account: <strong
+          ><a
+            href="/agency/{tafsGroup.budgetAgencyTitleId}/bureau/{tafsGroup.budgetBureauTitleId}/account/{tafsGroup.accountTitleId}"
+            >{tafsGroup.accountTitle}</a
+          ></strong
+        >
+      </li>
       <li>
         Iteration: <strong>{tafsGroup.iteration} - {tafsGroup.iterationDescription}</strong>
       </li>

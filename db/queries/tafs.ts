@@ -3,13 +3,11 @@
  */
 
 // Dependencies
-import { eq, desc, count, and } from 'drizzle-orm';
+import { groupBy, map as _map } from 'lodash-es';
+import { eq, count, and } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
-import { lines } from '../schema/lines';
-import { footnotes } from '../schema/footnotes';
-import { uniqBy } from 'lodash-es';
 
 /**
  * Get agencies for a specifc folder (file)
@@ -47,10 +45,27 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
     return null;
   }
 
+  // Get folders
+  const foldersFromAgency = await db
+    .selectDistinct({ folder: files.folder, folderId: files.folderId })
+    .from(files)
+    .innerJoin(tafs, eq(files.fileId, tafs.fileId))
+    .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId))
+    .orderBy(files.folder);
+
+  // Just some data sanity
+  if (!foldersFromAgency || foldersFromAgency.length === 0) {
+    throw new Error(`Agency "${budgetAgencyTitleId}" has not folder`);
+  }
+  else if (foldersFromAgency.length > 1) {
+    throw new Error(`Agency "${budgetAgencyTitleId}" has more than 1 folder`);
+  }
+
   return {
     budgetAgencyTitleId,
     budgetAgencyTitle: filesFromAgency[0].budgetAgencyTitle,
-    fileCount: filesFromAgency.length
+    fileCount: filesFromAgency.length,
+    folder: foldersFromAgency[0]
   };
 };
 
@@ -69,5 +84,168 @@ export const bureausByAgency = async function (budgetAgencyTitleId: string) {
     .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId))
     .groupBy(tafs.budgetBureauTitle, tafs.budgetBureauTitleId)
     .orderBy(tafs.budgetBureauTitle);
-  return [];
+};
+
+/**
+ * Bureau details.  Requires agency id as well.
+ */
+export const bureauDetails = async function (
+  budgetAgencyTitleId: string,
+  budgetBureauTitleId: string
+) {
+  await dbConnect();
+  const filesFromBureau = await db
+    .selectDistinct({
+      budgetBureauTitle: tafs.budgetBureauTitle,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      fileId: tafs.fileId
+    })
+    .from(tafs)
+    .where(
+      and(
+        eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),
+        eq(tafs.budgetBureauTitleId, budgetBureauTitleId)
+      )
+    );
+
+  // If none found
+  if (!filesFromBureau || filesFromBureau.length === 0) {
+    return null;
+  }
+
+  // Get agency details
+  const agency = await agencyDetails(budgetAgencyTitleId);
+  if (!agency) {
+    throw new Error(
+      `Unable to find Agency "${budgetAgencyTitleId}" when looking up Bureau "${budgetBureauTitleId}"`
+    );
+  }
+
+  return {
+    budgetBureauTitle: filesFromBureau[0].budgetBureauTitle,
+    budgetBureauTitleId: filesFromBureau[0].budgetBureauTitleId,
+    budgetAgencyTitle: filesFromBureau[0].budgetAgencyTitle,
+    budgetAgencyTitleId: filesFromBureau[0].budgetAgencyTitleId,
+    fileCount: filesFromBureau.length,
+    agency
+  };
+};
+
+/**
+ * Get accounts for a bureau (and agency).
+ */
+export const accountsByBureau = async function (
+  budgetAgencyTitleId: string,
+  budgetBureauTitleId: string
+) {
+  return db
+    .select({
+      accountTitle: tafs.accountTitle,
+      accountTitleId: tafs.accountTitleId,
+      fileCount: count(tafs.fileId)
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .where(
+      and(
+        eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),
+        eq(tafs.budgetBureauTitleId, budgetBureauTitleId)
+      )
+    )
+    .groupBy(tafs.accountTitle, tafs.accountTitleId)
+    .orderBy(tafs.accountTitle);
+};
+
+/**
+ * Account details given an account title ID.
+ */
+export const accountDetails = async function (
+  budgetAgencyTitleId: string,
+  budgetBureauTitleId: string,
+  accountTitleId: string
+) {
+  await dbConnect();
+  const filesFromAccount = await db
+    .selectDistinct({
+      accountTitle: tafs.accountTitle,
+      accountTitleId: tafs.accountTitleId,
+      fileId: tafs.fileId
+    })
+    .from(tafs)
+    .where(
+      and(
+        eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),
+        eq(tafs.budgetBureauTitleId, budgetBureauTitleId),
+        eq(tafs.accountTitleId, accountTitleId)
+      )
+    );
+
+  // If none found
+  if (!filesFromAccount || filesFromAccount.length === 0) {
+    return null;
+  }
+
+  // Get bureau details
+  const bureau = await bureauDetails(budgetAgencyTitleId, budgetBureauTitleId);
+  if (!bureau) {
+    throw new Error(
+      `Unable to find Bureau "${budgetBureauTitleId}" when looking up Account "${accountTitleId}"`
+    );
+  }
+
+  return {
+    accountTitle: filesFromAccount[0].accountTitle,
+    accountTitleId: filesFromAccount[0].accountTitleId,
+    fileCount: filesFromAccount.length,
+    bureau
+  };
+};
+
+/**
+ * Get TAFS by account title ID.
+ */
+export const tafsByAccount = async function (
+  budgetAgencyTitleId: string,
+  budgetBureauTitleId: string,
+  accountTitleId: string
+) {
+  await dbConnect();
+  const tafsRecords = await db
+    .select({
+      tafsId: tafs.tafsId,
+      iteration: tafs.iteration,
+      fiscalYear: tafs.fiscalYear,
+      tafsTableId: tafs.tafsTableId,
+      fileId: tafs.fileId
+    })
+    .from(tafs)
+    .where(
+      and(
+        eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),
+        eq(tafs.budgetBureauTitleId, budgetBureauTitleId),
+        eq(tafs.accountTitleId, accountTitleId)
+      )
+    )
+    .orderBy(tafs.tafsId, tafs.fiscalYear, tafs.iteration);
+
+  // Group by tafs Id, years, and iterations
+  return _map(groupBy(tafsRecords, 'tafsId'), (tafsSubRecords) => {
+    return {
+      tafsId: tafsSubRecords[0].tafsId,
+      years: _map(groupBy(tafsSubRecords, 'fiscalYear'), (fiscalYearRecords) => {
+        return {
+          fiscalYear: fiscalYearRecords[0].fiscalYear,
+          iterations: _map(groupBy(fiscalYearRecords, 'iteration'), (iterationRecords) => {
+            return {
+              iteration: iterationRecords[0].iteration,
+              fileId: iterationRecords[0].fileId,
+              tafsTableId: iterationRecords[0].tafsTableId
+            };
+          })
+        };
+      })
+    };
+  });
 };
