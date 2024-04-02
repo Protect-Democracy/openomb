@@ -10,15 +10,15 @@ import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray } from 'drizzle-orm';
 import chalk from 'chalk';
 import { client, db, dbConnect } from '../db/connection';
-import { collection } from '../db/schema/collections';
-import { file } from '../db/schema/files';
+import { collections } from '../db/schema/collections';
+import { files } from '../db/schema/files';
 import { request } from '../server/request';
 import { loadJsonFile, loadPdfFile } from '../server/load-file';
-import { environment_variables, unique, zipFiles, putS3File } from '../server/utilities';
+import { environmentVariables, unique, zipFiles, putS3File } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 
 // Constants
-const env = environment_variables();
+const env = environmentVariables();
 
 // Main
 cli();
@@ -69,7 +69,7 @@ async function cli(): Promise<void> {
       createdAt: start,
       modifiedAt: start
     };
-    const collectionRows = await db.insert(collection).values(collectionRecord).returning();
+    const collectionRows = await db.insert(collections).values(collectionRecord).returning();
     const collectionRow = collectionRows[0];
 
     // Keep track of file ids to mark any as removed
@@ -102,20 +102,20 @@ async function cli(): Promise<void> {
 
     // Mark any files not in the list as removed
     await db
-      .update(file)
+      .update(files)
       .set({ removed: true, modifiedAt: new Date() })
-      .where(notInArray(file.fileId, fileIds));
+      .where(notInArray(files.fileId, fileIds));
 
     // Save end of collection
     const complete = new Date();
     await db
-      .update(collection)
+      .update(collections)
       .set({
         complete,
         status: 'completed',
         modifiedAt: complete
       })
-      .where(eq(collection.collectionId, collectionRow.collectionId));
+      .where(eq(collections.collectionId, collectionRow.collectionId));
   }
 
   if (options.archive) {
@@ -124,10 +124,10 @@ async function cli(): Promise<void> {
     progress.addTask(archiveProgressMessage, { type: 'indefinite', barTransformFn: chalk.yellow });
 
     // Zip up the cache data
-    const archiveFileName = 'omb-2024-03-22-1711124002527.zip'; //`omb-${start.toISOString().split('T')[0]}-${+start}.zip`;
+    const archiveFileName = `omb-${start.toISOString().split('T')[0]}-${+start}.zip`;
     const archiveFilePath = joinPath(env.cacheDir, archiveFileName);
     console.log(archiveFilePath);
-    //await zipFiles([env.collectionCacheDir], archiveFilePath);
+    await zipFiles([env.collectionCacheDir], archiveFilePath);
 
     // Put to S3
     const s3Path = `collections/${archiveFileName}`;

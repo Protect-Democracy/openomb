@@ -1,9 +1,9 @@
 // Dependencies
 import type { Config } from 'drizzle-kit';
-import { environment_variables } from './server/utilities';
+import { environmentVariables } from './server/utilities';
 
 // Constants
-const env = environment_variables();
+const env = environmentVariables();
 
 export default {
   schema: './db/schema/*.ts',

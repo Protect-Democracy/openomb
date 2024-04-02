@@ -55,7 +55,7 @@ type ApportionmentEnvironment = {
  * TODO: This might not be good since Vite uses VITE_ without some
  * specific code/config.
  */
-function environment_variables(): ApportionmentEnvironment {
+function environmentVariables(): ApportionmentEnvironment {
   const env = loadEnv('dev', process.cwd(), 'APPORTIONMENTS_');
 
   return {
@@ -115,10 +115,39 @@ function parseTimestampFromString(timestamp?: string, utc: boolean = true): Date
 }
 
 /**
+ * Parse boolean from a string
+ */
+function parseBoolean(input?: string): boolean | null {
+  if (!input) {
+    return null;
+  }
+
+  if (input.trim().match(/^true|yes|1|y|x|on$/i)) {
+    return true;
+  }
+  else if (input.trim().match(/^false|no|0|n|off$/i)) {
+    return false;
+  }
+
+  return null;
+}
+
+/**
+ * Clean string
+ */
+function cleanString(input?: string): string | null {
+  if (!input) {
+    return null;
+  }
+
+  return input.trim() || null;
+}
+
+/**
  * Make and MD5 hash from a string.
  */
-function md5hash(string: string): string {
-  return createHash('md5').update(string).digest('hex');
+function md5hash(input: string): string {
+  return createHash('md5').update(input).digest('hex');
 }
 
 /**
@@ -178,7 +207,7 @@ async function putS3File(
   s3Path: string,
   s3Bucket: string | undefined = undefined
 ): Promise<void> {
-  const env = environment_variables();
+  const env = environmentVariables();
 
   // Create client
   const s3 = new S3Client({
@@ -197,11 +226,13 @@ async function putS3File(
 }
 
 export {
-  environment_variables,
+  environmentVariables,
   unique,
   parseIntegerFromString,
   parseTimestampFromString,
   md5hash,
   zipFiles,
-  putS3File
+  putS3File,
+  parseBoolean,
+  cleanString
 };

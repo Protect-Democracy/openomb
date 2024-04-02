@@ -14,7 +14,9 @@ import {
   parseIntegerFromString,
   parseTimestampFromString,
   md5hash,
-  zipFiles
+  zipFiles,
+  parseBoolean,
+  cleanString
 } from './utilities';
 
 test('unique()', () => {
@@ -61,6 +63,27 @@ test('md5hash()', () => {
   expect(md5hash('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')).toEqual(
     'd174ab98d277d9f5a5611c2c9f419d9f'
   );
+});
+
+test('parseBoolean()', () => {
+  expect(parseBoolean('')).toEqual(null);
+  expect(parseBoolean('true')).toEqual(true);
+  expect(parseBoolean('false')).toEqual(false);
+  expect(parseBoolean('1')).toEqual(true);
+  expect(parseBoolean('0')).toEqual(false);
+  expect(parseBoolean('on')).toEqual(true);
+  expect(parseBoolean('off')).toEqual(false);
+  expect(parseBoolean('yes')).toEqual(true);
+  expect(parseBoolean('no')).toEqual(false);
+  expect(parseBoolean('    no   ')).toEqual(false);
+  expect(parseBoolean('sa;dlkf')).toEqual(null);
+  expect(parseBoolean('5')).toEqual(null);
+});
+
+test('cleanString()', () => {
+  expect(cleanString('')).toEqual(null);
+  expect(cleanString('     ')).toEqual(null);
+  expect(cleanString('  fdssdf sdfdf   ')).toEqual('fdssdf sdfdf');
 });
 
 describe('zipFiles()', () => {
@@ -126,8 +149,8 @@ describe('zipFiles()', () => {
 
     // Cursory check of files in zip
     const zip = await fs.readFile(zipFile);
-    expect(zip).toMatch(/file1/);
-    expect(zip).toMatch(/file2/);
+    expect(zip).toString().match(/file1/);
+    expect(zip).toString().match(/file2/);
 
     // Check list of files
     const zippedFiles = await zipFileList(zipFile);

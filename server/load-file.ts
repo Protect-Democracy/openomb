@@ -3,15 +3,20 @@
  */
 
 // Dependencies
+import { eq } from 'drizzle-orm';
 import { request, urlExists } from './request';
-import { file } from '../db/schema/files';
-import { schedule } from '../db/schema/schedules';
-import { footnote } from '../db/schema/footnotes';
+import { files, computeFundsProvidedByParsed } from '../db/schema/files';
+import { lines, computeLineType } from '../db/schema/lines';
+import { footnotes } from '../db/schema/footnotes';
+import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '../db/schema/tafs';
+import { groupBy } from 'lodash-es';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
-  environment_variables,
-  md5hash
+  environmentVariables,
+  md5hash,
+  parseBoolean,
+  cleanString
 } from './utilities';
 import { db, dbConnect } from '../db/connection';
 
@@ -56,12 +61,12 @@ export type ApportionmentFileJson = {
 };
 
 // Constants
-const env = environment_variables();
+const env = environmentVariables();
 
 /**
  * Load an apportionment file into the database.
  */
-async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> {
+async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert> {
   await dbConnect();
 
   // Get the file
@@ -91,13 +96,13 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> 
 
   // Create file record
   const fileRecord = {
-    fileId: sourceData.FileId.toString().trim(),
-    fileName: sourceData.FileName.trim(),
+    fileId: cleanString(sourceData.FileId.toString()),
+    fileName: cleanString(sourceData.FileName),
     fiscalYear: parseIntegerFromString(sourceData.FiscalYear),
     approvalTimestamp: parseTimestampFromString(sourceData.ApprovalTimestamp),
     folder: formatFolder(sourceData.Folder),
-    approverTitle: sourceData.ApproverTitle?.trim() || null,
-    fundsProvidedBy: sourceData.FundsProvidedBy?.trim() || null,
+    approverTitle: cleanString(sourceData.ApproverTitle),
+    fundsProvidedBy: cleanString(sourceData.FundsProvidedBy),
     excelUrl: hasExcelUrl ? expectedExcelUrl : null,
     sourceUrl: jsonUrl,
     sourceData: JSON.stringify(sourceData),
@@ -105,67 +110,128 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> 
     modifiedAt: new Date(),
     removed: false
   };
+  fileRecord.fundsProvidedByParsed = computeFundsProvidedByParsed(fileRecord);
 
   // Upsert file
   const savedFileRecords = await db
-    .insert(file)
+    .insert(files)
     .values(fileRecord)
     .onConflictDoUpdate({
-      target: file.fileId,
+      target: files.fileId,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       set: (({ createdAt, ...o }) => o)(fileRecord)
     })
     .returning();
 
-  // Schedule data
+  // Remove all data for this file.
+  // TODO: Ideallly we could use transactions so that this could be undone
+  // if something happened downstream
+  await db.delete(footnotes).where(eq(footnotes.fileId, fileRecord.fileId));
+  await db.delete(lines).where(eq(lines.fileId, fileRecord.fileId));
+  await db.delete(tafs).where(eq(tafs.fileId, fileRecord.fileId));
+
+  // Go through the schedule data
   const scheduleRecords = sourceData.ScheduleData.map((d, di) => {
-    return {
-      fileId: sourceData.FileId.toString().trim(),
-      scheduleIndex: di,
+    const line = {
+      fileId: cleanString(sourceData.FileId.toString()),
+      fiscalYear: fileRecord.fiscalYear,
+      lineIndex: di,
       budgetAgencyTitle: formatBudgetAgency(d.BudgetAgencyTitle),
       budgetBureauTitle: formatBudgetBureau(d.BudgetBureauTitle),
-      accountTitle: d.AccountTitle.trim(),
-      allocationAgencyCode: d.AllocationAgencyCode?.trim(),
-      cgacAgency: d.CgacAgency?.trim() || null,
+      accountTitle: cleanString(d.AccountTitle),
+      allocationAgencyCode: cleanString(d.AllocationAgencyCode),
+      cgacAgency: cleanString(d.CgacAgency),
       beginPoa: parseIntegerFromString(d.BeginPoa),
       endPoa: parseIntegerFromString(d.EndPoa),
-      availabilityTypeCode: d.AvailabilityTypeCode?.trim() || null,
-      cgacAcct: d.CgacAcct?.trim() || null,
-      allocationSubacct: d.AllocationSubacct?.trim() || null,
+      availabilityTypeCode: parseBoolean(d.AvailabilityTypeCode),
+      cgacAcct: cleanString(d.CgacAcct),
+      allocationSubacct: cleanString(d.AllocationSubacct),
       iteration: parseIntegerFromString(d.Iteration),
       tafsIterationId: formatTafsIterationId(d.TafsIterationId),
-      lineNumber: d.LineNumber?.trim() || null,
-      lineSplit: d.LineSplit?.trim() || null,
-      lineDescription: d.LineDescription?.trim() || null,
+      lineNumber: cleanString(d.LineNumber),
+      lineSplit: cleanString(d.LineSplit),
+      lineDescription: cleanString(d.LineDescription),
       approvedAmount: d.ApprovedAmount || null,
+      footnoteNumbers: parseFootnotes(d.FootnoteNumber),
       createdAt: new Date(),
       modifiedAt: new Date()
     };
+    line.lineType = computeLineType(line);
+    // TafsId is needed for Table ID
+    line.tafsId = computeTafsId(line);
+    line.tafsTableId = computeTafsTableId(line);
+    line.accountId = computeAccountId(line);
+    return line;
   });
-  for (const scheduleRecord of scheduleRecords) {
-    await db
-      .insert(schedule)
-      .values(scheduleRecord)
-      .onConflictDoUpdate({
-        target: [schedule.fileId, schedule.scheduleIndex],
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        set: (({ createdAt, ...o }) => o)(scheduleRecord)
-      })
-      .returning();
-  }
 
-  // TODO: Need to delete any schedule data are no longer in the file
+  // Group by TAFS id
+  const tafsGroups = groupBy(scheduleRecords, 'tafsId');
+  for (const tafsId in tafsGroups) {
+    const schedulesData = tafsGroups[tafsId];
 
-  // Go through schedule data and add footnotes
-  for (const scheduleData of sourceData.ScheduleData) {
-    if (scheduleData.FootnoteNumber) {
-      // Footnotes can be in format A1,A2 or A1/A2
-      const splitChar = scheduleData.FootnoteNumber.includes(',') ? ',' : '/';
-      const footnotes = scheduleData.FootnoteNumber.split(splitChar).filter((f) => !!f);
-      for (let footnoteNumber of footnotes) {
-        footnoteNumber = footnoteNumber.trim();
+    // Get the rows for TAFS data
+    const rptCatLine = schedulesData.find((d) => d.lineNumber === 'RptCat') || {};
+    const adjAutLine = schedulesData.find((d) => d.lineNumber === 'AdjAut') || {};
+    const iterLine = schedulesData.find((d) => d.lineNumber === 'IterNo') || {};
 
-        // Find footnote text in source data
+    // Make TAFS record
+    const tafsRecord = {
+      fileId: fileRecord.fileId,
+      tafsId: schedulesData[0].tafsId,
+      iteration: schedulesData[0].iteration,
+      fiscalYear: schedulesData[0].fiscalYear,
+      tafsTableId: schedulesData[0].tafsTableId,
+      cgacAgency: schedulesData[0].cgacAgency,
+      cgacAcct: schedulesData[0].cgacAcct,
+      allocationAgencyCode: schedulesData[0].allocationAgencyCode,
+      allocationSubacct: schedulesData[0].allocationSubacct,
+      beginPoa: schedulesData[0].beginPoa,
+      endPoa: schedulesData[0].endPoa,
+      accountId: schedulesData[0].accountId,
+      budgetAgencyTitle: schedulesData[0].budgetAgencyTitle,
+      budgetBureauTitle: schedulesData[0].budgetBureauTitle,
+      accountTitle: schedulesData[0].accountTitle,
+      availabilityTypeCode: schedulesData[0].availabilityTypeCode,
+      rptCat: parseBoolean(rptCatLine.lineSplit),
+      adjAut: parseBoolean(adjAutLine.lineSplit),
+      iterationDescription: iterLine.lineDescription,
+      tafsIterationId: schedulesData[0].tafsIterationId,
+      createdAt: new Date(),
+      modifiedAt: new Date()
+    };
+
+    // Upsert tafs
+    await db.insert(tafs).values(tafsRecord);
+
+    // Filter out any lines that are just meta data
+    const linesData = schedulesData.filter(
+      (d) => !['IterNo', 'RptCat', 'AdjAut'].includes(d.lineNumber || '')
+    );
+
+    // Make line records
+    const lineRecords = linesData.map((d) => {
+      return {
+        tafsTableId: tafsRecord.tafsTableId,
+        lineIndex: d.lineIndex,
+        lineNumber: d.lineNumber,
+        lineSplit: d.lineSplit,
+        lineDescription: d.lineDescription,
+        approvedAmount: d.approvedAmount,
+        fileId: fileRecord.fileId,
+        lineType: d.lineType,
+        createdAt: new Date(),
+        modifiedAt: new Date()
+      };
+    });
+
+    // Insert line records
+    await db.insert(lines).values(lineRecords);
+
+    // Go through and look for footnotes
+    const footnoteRecords = [];
+    for (const scheduleData of schedulesData) {
+      for (const footnoteNumber of scheduleData.footnoteNumbers || []) {
+        // Find the footnote data from the source data
         const footnoteData = sourceData.FootnoteData.find(
           (f) => f.FootnoteNumber === footnoteNumber
         );
@@ -175,27 +241,20 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> 
           throw new Error(`Footnote ${footnoteNumber} not found in source data | URL: ${jsonUrl}`);
         }
 
-        if (footnoteData) {
-          // Make record and save
-          const footnoteRecord = {
-            fileId: sourceData.FileId.toString().trim(),
-            scheduleIndex: sourceData.ScheduleData.indexOf(scheduleData),
-            footnoteNumber: footnoteNumber,
-            footnoteText: footnoteData.FootnoteText.trim(),
-            createdAt: new Date(),
-            modifiedAt: new Date()
-          };
-          await db
-            .insert(footnote)
-            .values(footnoteRecord)
-            .onConflictDoUpdate({
-              target: [footnote.fileId, footnote.scheduleIndex, footnote.footnoteNumber],
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              set: (({ createdAt, ...o }) => o)(footnoteRecord)
-            })
-            .returning();
-        }
+        // Make record and save
+        footnoteRecords.push({
+          fileId: cleanString(fileRecord.fileId?.toString()),
+          lineIndex: scheduleData.lineIndex,
+          footnoteNumber: footnoteNumber,
+          footnoteText: cleanString(footnoteData.FootnoteText),
+          createdAt: new Date(),
+          modifiedAt: new Date()
+        });
       }
+    }
+
+    if (footnoteRecords.length > 0) {
+      await db.insert(footnotes).values(footnoteRecords);
     }
   }
 
@@ -210,7 +269,7 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof file.$inferInsert> 
  * we simply make a basic entry in the DB using data from
  * the URL.
  */
-async function loadPdfFile(pdfUrl: string): Promise<typeof file.$inferInsert> {
+async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
   await dbConnect();
 
   // Get the file
@@ -270,10 +329,10 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof file.$inferInsert> {
 
   // Upsert file
   const records = await db
-    .insert(file)
+    .insert(files)
     .values(fileRecord)
     .onConflictDoUpdate({
-      target: file.fileId,
+      target: files.fileId,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       set: (({ createdAt, ...o }) => o)(fileRecord)
     })
@@ -334,6 +393,20 @@ function formatTafsIterationId(tafsIterationId?: number | string | null): string
  */
 function excelUrl(jsonUrl: string): string {
   return jsonUrl.replace(/\/JSON\//, '/Excel/').replace(/\.json$/, '.xlsx');
+}
+
+/**
+ * Parse footnotes from schedule line
+ */
+function parseFootnotes(footnoteNumberInput?: string): string[] | null {
+  // Footnotes can be in format A1,A2 or A1/A2
+  footnoteNumberInput = footnoteNumberInput || '';
+  const splitChar = footnoteNumberInput.includes(',') ? ',' : '/';
+  const footnoteNumbers = footnoteNumberInput
+    .split(splitChar)
+    .filter((f) => !!f)
+    .map((f) => f.trim());
+  return footnoteNumbers.length > 0 ? footnoteNumbers : null;
 }
 
 export { loadJsonFile, loadPdfFile };

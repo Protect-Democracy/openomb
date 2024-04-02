@@ -5,7 +5,7 @@
 // Dependencies
 import { ensureDirSync } from 'fs-extra';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
-import { environment_variables } from './utilities';
+import { environmentVariables } from './utilities';
 
 // Expected types
 export type ExpectedFetchTypes = 'json' | 'text' | 'blob';
@@ -58,7 +58,7 @@ async function request(
   fetchOptions: RequestInit = {},
   options: RequestOptions = {}
 ): Promise<RequestReturn> {
-  const env = environment_variables();
+  const env = environmentVariables();
   options.expectedType = options.expectedType || 'json';
   options.baseUrl = options.baseUrl || env.baseUrl;
   options.ttl = options.ttl || env.cacheTtl;

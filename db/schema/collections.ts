@@ -6,7 +6,7 @@
 import { pgTable, index, varchar, timestamp, text } from 'drizzle-orm/pg-core';
 
 // Table
-export const collection = pgTable(
+export const collections = pgTable(
   'collections',
   {
     collectionId: varchar('collection_id').primaryKey(),
@@ -22,9 +22,9 @@ export const collection = pgTable(
   (collections) => {
     // Indexes.
     return {
-      startIndex: index('start_index').on(collections.start),
-      completeIndex: index('complete_index').on(collections.complete),
-      statusIndex: index('status_index').on(collections.status)
+      startIndex: index('co_start_index').on(collections.start),
+      completeIndex: index('co_complete_index').on(collections.complete),
+      statusIndex: index('co_status_index').on(collections.status)
     };
   }
 );
