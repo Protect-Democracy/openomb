@@ -6,8 +6,6 @@
   $: ({ file } = data);
   $: ({ tafs, footnotes } = file);
 
-  $: console.log(file);
-
   function isTotalRow(line: object): boolean {
     return line.lineNumber.match(/^(1920|6190)$/);
   }
