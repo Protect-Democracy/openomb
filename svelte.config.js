@@ -14,6 +14,7 @@ const config = {
     alias: {
       $db: 'db',
       $schema: 'db/schema',
+      $queries: 'db/queries',
       $lib: 'src/lib'
     }
   }

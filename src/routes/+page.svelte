@@ -33,7 +33,7 @@
 
 <h2>Recent files</h2>
 <ul>
-  {#each data.recentFiles as file}
+  {#each data.recentlyApproved as file}
     <li>
       <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
     </li>
@@ -45,7 +45,7 @@
 <p>(if there is any)</p>
 
 <ul>
-  {#each data.recentRemoved as file}
+  {#each data.recentlyRemoved as file}
     <li>
       <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
     </li>
@@ -71,10 +71,11 @@
 
 <ul>
   {#each data.approvers as approver}
-    <li>{approver.approver || 'null'} ({approver.count})</li>
+    <li>{approver.approverTitle || 'null'} ({approver.count})</li>
   {/each}
 </ul>
 
+<!--
 <h2>Folder, Agency, Bureau</h2>
 
 <p>A breakdown by Folder, Agency, and Bureau with a file count next to each one.</p>
@@ -104,6 +105,8 @@
     </li>
   {/each}
 </ul>
+
+-->
 
 <h2>Styles</h2>
 <a href="/styles">Page with many elements to help with global style development</a>

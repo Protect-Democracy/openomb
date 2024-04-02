@@ -1,20 +1,12 @@
 <script lang="ts">
-  import { filter as _filter, sortBy } from 'lodash-es';
   import type { PageData } from './$types';
   import { formatCurrency } from '$lib/formatters';
 
   export let data: PageData;
+  $: ({ file } = data);
+  $: ({ tafs, footnotes } = file);
 
-  function scheduleFindLine(schedules: object[], lineNumber: string): object {
-    return schedules.find((line: object) => line.lineNumber === lineNumber) || {};
-  }
-
-  function filterSortSchedules(schedules: object[]): object[] {
-    return sortBy(
-      _filter(schedules, (line: object) => line.lineNumber.match(/^[0-9]+$/)),
-      ['lineNumber', 'lineSplit']
-    );
-  }
+  $: console.log(file);
 
   function isTotalRow(line: object): boolean {
     return line.lineNumber.match(/^(1920|6190)$/);
@@ -26,74 +18,79 @@
 <h2>About file</h2>
 
 <ul>
-  <li>File ID: {data.file.fileId}</li>
-  <li>Folder: {data.file.folder}</li>
-  <li>Fiscal year: {data.file.fiscalYear}</li>
-  <li>Approved: {data.file.approvalTimestamp}</li>
-  <li>Approved: {data.file.approverTitle}</li>
-  <li>Funds provided by: {data.file.fundsProvidedBy}</li>
-  {#if data.file.pdfUrl}
+  <li>File ID: {file.fileId}</li>
+  <li>Folder: {file.folder}</li>
+  <li>Fiscal year: {file.fiscalYear}</li>
+  <li>Approved: {file.approvalTimestamp}</li>
+  <li>Approved: {file.approverTitle}</li>
+  <li>Funds provided by: {file.fundsProvidedBy}</li>
+  {#if file.pdfUrl}
     <li>
-      <a href={data.file.pdfUrl} target="_blank" rel="noopener noreferrer"
+      <a href={file.pdfUrl} target="_blank" rel="noopener noreferrer"
         >PDF file (apportionment-public.max.gov)</a
       >
     </li>
   {/if}
-  {#if data.file.excelUrl}
+  {#if file.excelUrl}
     <li>
-      <a href={data.file.excelUrl} target="_blank" rel="noopener noreferrer"
+      <a href={file.excelUrl} target="_blank" rel="noopener noreferrer"
         >Excel file (apportionment-public.max.gov)</a
       >
     </li>
   {/if}
-  {#if data.file.sourceUrl}
+  {#if file.sourceUrl}
     <li>
-      <a href={data.file.sourceUrl} target="_blank" rel="noopener noreferrer"
+      <a href={file.sourceUrl} target="_blank" rel="noopener noreferrer"
         >Source (apportionment-public.max.gov)</a
       >
     </li>
   {/if}
 </ul>
 
-<h2>Schedules</h2>
+<h2>Schedules (what to call this?)</h2>
 
-{#if data.schedules?.length}
-  {#each Object.entries(data.groupedSchedules) as [tafsId, tafsGroup]}
-    <h3>
-      <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>:
-      {tafsGroup[0].cgacAgency}-{tafsGroup[0].cgacAcct}
-      {tafsGroup[0].beginPoa}/{tafsGroup[0].endPoa}
-      ({tafsId})
+{#if tafs?.length}
+  {#each tafs as tafsGroup}
+    <h3 id="tafs_{tafsGroup.tafsTableId}">
+      <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {tafsGroup.tafsId}
     </h3>
 
     <ul>
-      <li>Agency: <strong>{tafsGroup[0].budgetAgencyTitle}</strong></li>
-      <li>Bureau: <strong>{tafsGroup[0].budgetBureauTitle}</strong></li>
-      <li>Account: <strong>{tafsGroup[0].accountTitle}</strong></li>
+      <li>Agency: <strong>{tafsGroup.budgetAgencyTitle}</strong></li>
+      <li>Bureau: <strong>{tafsGroup.budgetBureauTitle}</strong></li>
+      <li>Account: <strong>{tafsGroup.accountTitle}</strong></li>
       <li>
-        Iteration: <strong
-          >{tafsGroup[0].iteration} - {scheduleFindLine(tafsGroup, 'IterNo')
-            .lineDescription}</strong
-        >
+        Iteration: <strong>{tafsGroup.iteration} - {tafsGroup.iterationDescription}</strong>
       </li>
       <li>
-        Adjustment authority: <strong
-          >{scheduleFindLine(tafsGroup, 'AdjAut').lineDescription} - {scheduleFindLine(
-            tafsGroup,
-            'AdjAut'
-          ).lineSplit}</strong
-        >
+        Adjustment authority: <strong>{tafsGroup.adjAut}</strong>
       </li>
       <li>
-        Reporting categories: <strong
-          >{scheduleFindLine(tafsGroup, 'RptCat').lineDescription} - {scheduleFindLine(
-            tafsGroup,
-            'RptCat'
-          ).lineSplit}</strong
-        >
+        Reporting categories: <strong>{tafsGroup.rptCat}</strong>
       </li>
-      <li>CGAC account: <strong>{tafsGroup[0].cgacAcct}</strong></li>
-      <li>CGAC agency: <strong>{tafsGroup[0].cgacAgency}</strong></li>
+      <li>CGAC agency: <strong>{tafsGroup.cgacAgency}</strong></li>
+      <li>CGAC account: <strong>{tafsGroup.cgacAcct}</strong></li>
+      <li>Allocation agency code: <strong>{tafsGroup.allocationAgencyCode}</strong></li>
+      <li>Allocation sub-account: <strong>{tafsGroup.allocationSubacct}</strong></li>
+      <li>
+        <acronym title="Period of availability">POA</acronym> begin:
+        <strong>{tafsGroup.beginPoa}</strong>
+      </li>
+      <li>
+        <acronym title="Period of availability">POA</acronym> end:
+        <strong>{tafsGroup.endPoa}</strong>
+      </li>
+      <li>
+        Iterations:
+        {#each tafsGroup.iterations as iteration}
+          {#if iteration.iteration === tafsGroup.iteration}
+            <span>{iteration.iteration} (current)</span>,
+          {:else}
+            <a href="/file/{iteration.fileId}#tafs_{iteration.tafsTableId}">{iteration.iteration}</a
+            >,
+          {/if}
+        {/each}
+      </li>
     </ul>
 
     <table class="font-small">
@@ -101,9 +98,6 @@
         <tr>
           <th>Line #</th>
           <th>Split</th>
-          <th>Agency code</th>
-          <th>Sub-account</th>
-          <!-- <th>availabilityTypeCode</th> -->
           <th>Description</th>
           <th>Amount</th>
           <th>Footnotes</th>
@@ -111,19 +105,16 @@
       </thead>
 
       <tbody>
-        {#each filterSortSchedules(tafsGroup) as schedule}
-          <tr class:total={isTotalRow(schedule)}>
-            <td>{schedule.lineNumber}</td>
-            <td>{schedule.lineSplit}</td>
-            <td>{schedule.allocationAgencyCode}</td>
-            <td>{schedule.allocationSubacct}</td>
-            <!-- <td>{schedule.availabilityTypeCode}</td> -->
-            <td>{schedule.lineDescription}</td>
+        {#each tafsGroup.lines as line}
+          <tr class:total={isTotalRow(line)}>
+            <td>{line.lineNumber}</td>
+            <td>{line.lineSplit}</td>
+            <td>{line.lineDescription}</td>
             <td
-              >{#if schedule.approvedAmount}{formatCurrency(schedule.approvedAmount)}{/if}</td
+              >{#if line.approvedAmount}{formatCurrency(line.approvedAmount)}{/if}</td
             >
             <td>
-              {#each data.footnotes.filter((fn) => fn.scheduleIndex === schedule.scheduleIndex) as footnote}
+              {#each line.footnotes as footnote}
                 <a href="#footnote__{footnote.footnoteNumber}">{footnote.footnoteNumber}</a><br />
               {/each}
             </td>
@@ -138,14 +129,14 @@
 
 <h2>Footnotes</h2>
 
-{#if data.distinctFootnotes?.length}
+{#if footnotes.length}
   <table>
     <thead>
       <tr><th>Number</th><th>Text</th></tr>
     </thead>
 
     <tbody>
-      {#each data.distinctFootnotes as footnote}
+      {#each footnotes as footnote}
         <tr>
           <td id="footnote__{footnote.footnoteNumber}">{footnote.footnoteNumber}</td>
           <td><div class="text-container">{footnote.footnoteText}</div></td>

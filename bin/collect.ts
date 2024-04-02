@@ -126,7 +126,6 @@ async function cli(): Promise<void> {
     // Zip up the cache data
     const archiveFileName = `omb-${start.toISOString().split('T')[0]}-${+start}.zip`;
     const archiveFilePath = joinPath(env.cacheDir, archiveFileName);
-    console.log(archiveFilePath);
     await zipFiles([env.collectionCacheDir], archiveFilePath);
 
     // Put to S3

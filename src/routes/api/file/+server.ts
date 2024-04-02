@@ -2,25 +2,26 @@
 import { error } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 import { type RequestHandler } from '@sveltejs/kit';
-import { db } from '$db/connection.js';
-import { file } from '$schema/files.js';
+import { db, dbConnect } from '$db/connection.js';
+import { fileDetails } from '$queries/files';
 import { eq } from 'drizzle-orm';
 
 /**
  * Get a specific file by ID
  */
 export const GET: RequestHandler = async ({ url }) => {
+  await dbConnect();
   // File id
   const fileId = url.searchParams.get('fileId') || '';
 
   // Look for file.
   // TODO: Do we want to not include the sourceData unless requested?
-  const files = await db.select().from(file).where(eq(file.fileId, fileId)).limit(1);
+  const file = await fileDetails(fileId);
 
-  if (!files || files.length !== 1) {
+  if (!file) {
     // TODO: Respond with JSON
     error(404, 'Unable to find file');
   }
 
-  return json(files[0]);
+  return json(file);
 };
