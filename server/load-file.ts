@@ -16,7 +16,8 @@ import {
   environmentVariables,
   md5hash,
   parseBoolean,
-  cleanString
+  cleanString,
+  dbId
 } from './utilities';
 import { db, dbConnect } from '../db/connection';
 
@@ -101,7 +102,9 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
     fiscalYear: parseIntegerFromString(sourceData.FiscalYear),
     approvalTimestamp: parseTimestampFromString(sourceData.ApprovalTimestamp),
     folder: formatFolder(sourceData.Folder),
+    folderId: dbId(formatFolder(sourceData.Folder)),
     approverTitle: cleanString(sourceData.ApproverTitle),
+    approverTitleId: dbId(sourceData.ApproverTitle),
     fundsProvidedBy: cleanString(sourceData.FundsProvidedBy),
     excelUrl: hasExcelUrl ? expectedExcelUrl : null,
     sourceUrl: jsonUrl,
@@ -139,6 +142,9 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
       budgetAgencyTitle: formatBudgetAgency(d.BudgetAgencyTitle),
       budgetBureauTitle: formatBudgetBureau(d.BudgetBureauTitle),
       accountTitle: cleanString(d.AccountTitle),
+      budgetAgencyTitleId: dbId(formatBudgetAgency(d.BudgetAgencyTitle)),
+      budgetBureauTitleId: dbId(formatBudgetBureau(d.BudgetBureauTitle)),
+      accountTitleId: dbId(d.AccountTitle),
       allocationAgencyCode: cleanString(d.AllocationAgencyCode),
       cgacAgency: cleanString(d.CgacAgency),
       beginPoa: parseIntegerFromString(d.BeginPoa),
@@ -191,6 +197,9 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
       budgetAgencyTitle: schedulesData[0].budgetAgencyTitle,
       budgetBureauTitle: schedulesData[0].budgetBureauTitle,
       accountTitle: schedulesData[0].accountTitle,
+      budgetAgencyTitleId: schedulesData[0].budgetAgencyTitleId,
+      budgetBureauTitleId: schedulesData[0].budgetBureauTitleId,
+      accountTitleId: schedulesData[0].accountTitleId,
       availabilityTypeCode: schedulesData[0].availabilityTypeCode,
       rptCat: parseBoolean(rptCatLine.lineSplit),
       adjAut: parseBoolean(adjAutLine.lineSplit),

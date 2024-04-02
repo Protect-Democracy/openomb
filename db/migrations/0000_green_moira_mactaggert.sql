@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS "files" (
 	"folder" varchar,
 	"approver_title" varchar,
 	"funds_provided_by" varchar,
+	"folder_id" varchar,
+	"approver_title_id" varchar,
 	"funds_provided_by_parsed" varchar,
 	"excel_url" varchar,
 	"pdf_url" varchar,
@@ -71,6 +73,9 @@ CREATE TABLE IF NOT EXISTS "tafs" (
 	"budget_agency_title" varchar,
 	"budget_bureau_title" varchar,
 	"account_title" varchar,
+	"budget_agency_title_id" varchar,
+	"budget_bureau_title_id" varchar,
+	"account_title_id" varchar,
 	"availability_type_code" boolean,
 	"rpt_cat" boolean,
 	"adj_aut" boolean,
@@ -89,7 +94,9 @@ CREATE INDEX IF NOT EXISTS "file_file_name_index" ON "files" ("file_name");--> s
 CREATE INDEX IF NOT EXISTS "file_fiscal_year_index" ON "files" ("fiscal_year");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "file_approval_timestamp_index" ON "files" ("approval_timestamp");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "file_folder_index" ON "files" ("folder");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "file_folder_id_index" ON "files" ("folder_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "file_approver_title_index" ON "files" ("approver_title");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "file_approver_title_id_index" ON "files" ("approver_title_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "file_funds_provided_by_index" ON "files" ("funds_provided_by");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "file_funds_provided_by_parsed_index" ON "files" ("funds_provided_by_parsed");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "file_removed_index" ON "files" ("removed");--> statement-breakpoint
@@ -109,6 +116,9 @@ CREATE INDEX IF NOT EXISTS "tafs_budget_agency_title_index" ON "tafs" ("budget_a
 CREATE INDEX IF NOT EXISTS "tafs_budget_bureau_title_index" ON "tafs" ("budget_bureau_title");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "tafs_account_title_index" ON "tafs" ("account_title");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "tafs_iteration_description_index" ON "tafs" ("iteration_description");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "tafs_budget_agency_title_id_index" ON "tafs" ("budget_agency_title_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "tafs_budget_bureau_title_id_index" ON "tafs" ("budget_bureau_title_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "tafs_account_title_id_index" ON "tafs" ("account_title_id");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "tafs_rpt_cat_index" ON "tafs" ("rpt_cat");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "tafs_adj_aut_index" ON "tafs" ("adj_aut");--> statement-breakpoint
 CREATE INDEX IF NOT EXISTS "tafs_created_at_index" ON "tafs" ("created_at");--> statement-breakpoint

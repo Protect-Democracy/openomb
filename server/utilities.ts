@@ -144,6 +144,28 @@ function cleanString(input?: string): string | null {
 }
 
 /**
+ * Create database id from a string.
+ *
+ * For example: Account Title to account-title
+ */
+function dbId(input?: string | null): string | null {
+  if (!input || !input.trim()) {
+    return null;
+  }
+
+  const parsed = input
+    .toLowerCase()
+    .replace(/ /g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-/, '')
+    .replace(/-$/, '')
+    .trim();
+
+  return !parsed || parsed === '-' ? null : parsed;
+}
+
+/**
  * Make and MD5 hash from a string.
  */
 function md5hash(input: string): string {
@@ -234,5 +256,6 @@ export {
   zipFiles,
   putS3File,
   parseBoolean,
-  cleanString
+  cleanString,
+  dbId
 };

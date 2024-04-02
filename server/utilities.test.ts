@@ -16,7 +16,8 @@ import {
   md5hash,
   zipFiles,
   parseBoolean,
-  cleanString
+  cleanString,
+  dbId
 } from './utilities';
 
 test('unique()', () => {
@@ -84,6 +85,21 @@ test('cleanString()', () => {
   expect(cleanString('')).toEqual(null);
   expect(cleanString('     ')).toEqual(null);
   expect(cleanString('  fdssdf sdfdf   ')).toEqual('fdssdf sdfdf');
+});
+
+test('dbId()', () => {
+  expect(dbId('Account Title')).toEqual('account-title');
+  expect(dbId('    Account    Title   ')).toEqual('account-title');
+  expect(dbId('??+@#*%($)#    Account   ?????? Title   ')).toEqual('account-title');
+  expect(dbId('----Account-----Title - - - -- - ')).toEqual('account-title');
+  expect(dbId('Account-----Title 0004')).toEqual('account-title-0004');
+  expect(dbId('Account Title 0004')).toEqual('account-title-0004');
+  expect(dbId(undefined)).toEqual(null);
+  expect(dbId(null)).toEqual(null);
+  expect(dbId('')).toEqual(null);
+  expect(dbId('    ')).toEqual(null);
+  expect(dbId('----')).toEqual(null);
+  expect(dbId('??????')).toEqual(null);
 });
 
 describe('zipFiles()', () => {

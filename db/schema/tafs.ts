@@ -122,6 +122,13 @@ export const tafs = pgTable(
     budgetBureauTitle: varchar('budget_bureau_title'),
     accountTitle: varchar('account_title'),
 
+    // Ids for URLs and lookups.
+    budgetAgencyTitleId: varchar('budget_agency_title_id'),
+    budgetBureauTitleId: varchar('budget_bureau_title_id'),
+    // Note that we generally should use the tafsId to align
+    // with accounts, but just in case
+    accountTitleId: varchar('account_title_id'),
+
     // This notes when there is no period of availability
     availabilityTypeCode: boolean('availability_type_code'),
 
@@ -166,6 +173,13 @@ export const tafs = pgTable(
       iterationDescriptionIndex: index('tafs_iteration_description_index').on(
         tafs.iterationDescription
       ),
+      budgetAgencyTitleIdIndex: index('tafs_budget_agency_title_id_index').on(
+        tafs.budgetAgencyTitleId
+      ),
+      budgetBureauTitleIdIndex: index('tafs_budget_bureau_title_id_index').on(
+        tafs.budgetBureauTitleId
+      ),
+      accountTitleIdIndex: index('tafs_account_title_id_index').on(tafs.accountTitleId),
       rptCatIndex: index('tafs_rpt_cat_index').on(tafs.rptCat),
       adjAutIndex: index('tafs_adj_aut_index').on(tafs.adjAut),
       createdAtIndex: index('tafs_created_at_index').on(tafs.createdAt),

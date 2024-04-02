@@ -1,5 +1,5 @@
 {
-  "id": "9cf048dd-a38a-4a37-8835-0cd90905169d",
+  "id": "9ee5fdd1-82f1-47eb-9189-166724686a74",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -153,6 +153,18 @@
           "primaryKey": false,
           "notNull": false
         },
+        "folder_id": {
+          "name": "folder_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "approver_title_id": {
+          "name": "approver_title_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "funds_provided_by_parsed": {
           "name": "funds_provided_by_parsed",
           "type": "varchar",
@@ -234,10 +246,24 @@
           ],
           "isUnique": false
         },
+        "file_folder_id_index": {
+          "name": "file_folder_id_index",
+          "columns": [
+            "folder_id"
+          ],
+          "isUnique": false
+        },
         "file_approver_title_index": {
           "name": "file_approver_title_index",
           "columns": [
             "approver_title"
+          ],
+          "isUnique": false
+        },
+        "file_approver_title_id_index": {
+          "name": "file_approver_title_id_index",
+          "columns": [
+            "approver_title_id"
           ],
           "isUnique": false
         },
@@ -616,6 +642,24 @@
           "primaryKey": false,
           "notNull": false
         },
+        "budget_agency_title_id": {
+          "name": "budget_agency_title_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "budget_bureau_title_id": {
+          "name": "budget_bureau_title_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "account_title_id": {
+          "name": "account_title_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "availability_type_code": {
           "name": "availability_type_code",
           "type": "boolean",
@@ -722,6 +766,27 @@
           "name": "tafs_iteration_description_index",
           "columns": [
             "iteration_description"
+          ],
+          "isUnique": false
+        },
+        "tafs_budget_agency_title_id_index": {
+          "name": "tafs_budget_agency_title_id_index",
+          "columns": [
+            "budget_agency_title_id"
+          ],
+          "isUnique": false
+        },
+        "tafs_budget_bureau_title_id_index": {
+          "name": "tafs_budget_bureau_title_id_index",
+          "columns": [
+            "budget_bureau_title_id"
+          ],
+          "isUnique": false
+        },
+        "tafs_account_title_id_index": {
+          "name": "tafs_account_title_id_index",
+          "columns": [
+            "account_title_id"
           ],
           "isUnique": false
         },

@@ -127,9 +127,9 @@ export const folders = async function () {
   await dbConnect();
   return (
     (await db
-      .select({ folder: files.folder, count: count(files.fileId) })
+      .select({ folder: files.folder, folderId: files.folderId, count: count(files.fileId) })
       .from(files)
-      .groupBy(files.folder)
+      .groupBy(files.folder, files.folderId)
       .orderBy(files.folder)) || []
   );
 };
@@ -146,4 +146,26 @@ export const approvers = async function () {
       .groupBy(files.approverTitle)
       .orderBy(files.approverTitle)) || []
   );
+};
+
+/**
+ * Get details of a single folder.
+ */
+export const folderDetails = async function (folderId: string) {
+  await dbConnect();
+  const filesFromFolder = await db
+    .select({ folder: files.folder })
+    .from(files)
+    .where(eq(files.folderId, folderId));
+
+  // If none found
+  if (!filesFromFolder || filesFromFolder.length === 0) {
+    return null;
+  }
+
+  return {
+    folderId,
+    folder: filesFromFolder[0].folder,
+    fileCount: filesFromFolder.length
+  };
 };

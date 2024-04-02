@@ -28,6 +28,10 @@ export const files = pgTable(
     approverTitle: varchar('approver_title'),
     fundsProvidedBy: varchar('funds_provided_by'),
 
+    // Ids for slugs and lookups
+    folderId: varchar('folder_id'),
+    approverTitleId: varchar('approver_title_id'),
+
     // Parsed value
     fundsProvidedByParsed: varchar('funds_provided_by_parsed'),
 
@@ -47,7 +51,9 @@ export const files = pgTable(
       fiscalYearIndex: index('file_fiscal_year_index').on(files.fiscalYear),
       approvalTimestampIndex: index('file_approval_timestamp_index').on(files.approvalTimestamp),
       folderIndex: index('file_folder_index').on(files.folder),
+      folderIdIndex: index('file_folder_id_index').on(files.folderId),
       approverTitleIndex: index('file_approver_title_index').on(files.approverTitle),
+      approverTitleIdIndex: index('file_approver_title_id_index').on(files.approverTitleId),
       fundsProvidedByIndex: index('file_funds_provided_by_index').on(files.fundsProvidedBy),
       fundsProvidedByParsedIndex: index('file_funds_provided_by_parsed_index').on(
         files.fundsProvidedByParsed
