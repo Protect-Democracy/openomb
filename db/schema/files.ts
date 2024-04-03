@@ -4,6 +4,10 @@
 
 // Dependencies
 import { integer, pgTable, index, varchar, timestamp, boolean, text } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+import { tafs } from './tafs';
+import { lines } from './lines';
+import { footnotes } from './footnotes';
 
 // Table
 // {
@@ -87,3 +91,9 @@ export const computeFundsProvidedByParsed = (
     ? null
     : (filesRecord.fundsProvidedBy || '').replace(/funds\s+provided\s+by\s+/i, '').trim();
 };
+
+export const filesRelations = relations(files, ({ many }) => ({
+  tafs: many(tafs),
+  lines: many(lines),
+  footnotes: many(footnotes),
+}));

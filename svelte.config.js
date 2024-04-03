@@ -16,7 +16,8 @@ const config = {
       $schema: 'db/schema',
       $queries: 'db/queries',
       $lib: 'src/lib',
-      $assets: 'src/assets'
+      $assets: 'src/assets',
+      $components: 'src/components'
     },
 
     csp: {

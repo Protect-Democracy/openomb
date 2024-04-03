@@ -13,7 +13,9 @@ import {
   text,
   primaryKey
 } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import { files } from './files';
+import { lines } from './lines';
 
 // Table
 // {
@@ -298,3 +300,11 @@ export const computeTafs = (tafsRecord: typeof tafs.$inferSelect): ComputedTafs 
     tafsFormattedId: computeTafsFormattedId(tafsRecord)
   };
 };
+
+export const tafsRelations = relations(tafs, ({ one, many }) => ({
+  file: one(files, {
+    fields: [tafs.fileId],
+    references: [files.fileId],
+  }),
+  lines: many(lines),
+}));

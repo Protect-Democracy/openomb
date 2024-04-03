@@ -13,8 +13,10 @@ import {
   primaryKey,
   unique
 } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import { files } from './files';
 import { tafs } from './tafs';
+import { footnotes } from './footnotes';
 
 // Table
 // {
@@ -214,3 +216,15 @@ export const computeLineType = (linesRecord: typeof lines.$inferSelect): string 
 
   return 'other';
 };
+
+export const linesRelations = relations(lines, ({ one, many }) => ({
+  file: one(files, {
+    fields: [lines.fileId],
+    references: [files.fileId],
+  }),
+  tafs: one(tafs, {
+    fields: [lines.tafsTableId],
+    references: [tafs.tafsTableId],
+  }),
+  footnotes: many(footnotes),
+}));

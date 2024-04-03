@@ -13,6 +13,7 @@ import {
   integer,
   foreignKey
 } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import { lines } from './lines';
 import { files } from './files';
 
@@ -92,3 +93,14 @@ export const footnotes = pgTable(
     };
   }
 );
+
+export const footnotesRelations = relations(footnotes, ({ one }) => ({
+  file: one(files, {
+    fields: [footnotes.fileId],
+    references: [files.fileId],
+  }),
+  line: one(lines, {
+    fields: [footnotes.fileId, footnotes.lineIndex],
+    references: [lines.fileId, lines.lineIndex],
+  }),
+}));

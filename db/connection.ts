@@ -13,6 +13,12 @@ import { fileURLToPath } from 'node:url';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import pg from 'pg';
 import { environmentVariables } from '../server/utilities';
+// Schemas
+import * as files from './schema/files';
+import * as footnotes from './schema/footnotes';
+import * as lines from './schema/lines';
+import * as tafs from './schema/tafs';
+
 
 // Constants
 const env = environmentVariables();
@@ -28,7 +34,14 @@ export const client = new pg.Client({
 let clientConnected = false;
 
 // Drizzle connection
-export const db = drizzle(client);
+export const db = drizzle(client, {
+  schema: {
+    ...files,
+    ...footnotes,
+    ...lines,
+    ...tafs,
+  },
+});
 
 export async function dbConnect() {
   // TODO: This seems to cause issues with hot-reloading and the
