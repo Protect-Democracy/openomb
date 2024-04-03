@@ -3,6 +3,10 @@
   import '../app.css';
 </script>
 
+<div class="visually-hidden-focusable">
+  <a href="#main-content">Skip to main content</a>
+</div>
+
 <header>
   {#if !isProduction()}
     <div class="development">
@@ -20,7 +24,7 @@
   </nav>
 </header>
 
-<main>
+<main id="main-content">
   <slot />
 </main>
 

@@ -222,3 +222,31 @@ input[type='reset'][disabled]:hover {
   color: var(--color-gray-dark);
   cursor: not-allowed;
 }
+
+/* Utilities */
+
+/**
+ * Visually hidden
+ * See: https://github.com/twbs/bootstrap/blob/f68a47c8bfa60b568db8ada7130366dcfbe24276/scss/mixins/_visually-hidden.scss#L9
+ */
+.visually-hidden {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
