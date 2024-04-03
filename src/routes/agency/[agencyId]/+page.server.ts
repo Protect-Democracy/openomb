@@ -1,9 +1,9 @@
 import { dbConnect } from '$db/connection';
 import { agencyDetails, bureausByAgency } from '$queries/tafs';
-import type { PageServerData } from '../$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerData = async ({ params }) => {
+/** @type {import('./$types').PageLoad} */
+export async function load({ params }) {
   await dbConnect();
 
   const agency = await agencyDetails(params.agencyId);
@@ -16,4 +16,4 @@ export const load: PageServerData = async ({ params }) => {
     agency,
     bureausByAgency: await bureausByAgency(params.agencyId)
   };
-};
+}

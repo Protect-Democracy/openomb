@@ -1,10 +1,10 @@
 import { dbConnect } from '$db/connection';
 import { folderDetails } from '$queries/files';
 import { agenciesByFolder } from '$queries/tafs';
-import type { PageServerData } from '../$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerData = async ({ params }) => {
+/** @type {import('./$types').PageLoad} */
+export async function load({ params }) {
   await dbConnect();
 
   const folder = await folderDetails(params.folderId);
@@ -17,4 +17,4 @@ export const load: PageServerData = async ({ params }) => {
     folder,
     agenciesByFolder: await agenciesByFolder(params.folderId)
   };
-};
+}

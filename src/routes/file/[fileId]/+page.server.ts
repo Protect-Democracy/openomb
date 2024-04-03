@@ -1,9 +1,9 @@
 import { dbConnect } from '$db/connection';
 import { fileDetails } from '$queries/files';
-import type { PageServerData } from '../$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerData = async ({ params }) => {
+/** @type {import('./$types').PageLoad} */
+export async function load({ params }) {
   await dbConnect();
 
   const file = await fileDetails(params.fileId);
@@ -15,4 +15,4 @@ export const load: PageServerData = async ({ params }) => {
   return {
     file
   };
-};
+}

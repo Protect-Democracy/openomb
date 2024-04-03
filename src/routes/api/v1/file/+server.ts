@@ -1,15 +1,14 @@
 // Dependencies
 import { error } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
-import { type RequestHandler } from '@sveltejs/kit';
-import { db, dbConnect } from '$db/connection.js';
+import { dbConnect } from '$db/connection.js';
 import { fileDetails } from '$queries/files';
-import { eq } from 'drizzle-orm';
 
 /**
  * Get a specific file by ID
  */
-export const GET: RequestHandler = async ({ url }) => {
+/** @type {import('./$types').RequestHandler} */
+export async function GET({ url }) {
   await dbConnect();
   // File id
   const fileId = url.searchParams.get('fileId') || '';
@@ -24,4 +23,4 @@ export const GET: RequestHandler = async ({ url }) => {
   }
 
   return json(file);
-};
+}
