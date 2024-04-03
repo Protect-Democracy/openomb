@@ -31,6 +31,9 @@ let clientConnected = false;
 export const db = drizzle(client);
 
 export async function dbConnect() {
+  // TODO: This seems to cause issues with hot-reloading and the
+  // dev server.  A restart of the dev server should fix this,
+  // but this is less that ideal.
   if (!clientConnected) {
     await client.connect();
     clientConnected = true;

@@ -15,7 +15,23 @@ const config = {
       $db: 'db',
       $schema: 'db/schema',
       $queries: 'db/queries',
-      $lib: 'src/lib'
+      $lib: 'src/lib',
+      $assets: 'src/assets'
+    },
+
+    csp: {
+      directives: {
+        'script-src': ['self', 'https://browser.sentry-cdn.com'],
+        // Doesn't seem like SvelteKit will handle inline styles by adding
+        // a nonce like it does for JS, which is unfortunate.
+        'style-src': ['self', 'unsafe-inline'],
+        'font-src': ['self'],
+        'connect-src': ['self', '*.sentry.io'],
+        'img-src': ['self'],
+        'frame-src': ['self']
+        // TODO: Add report-uri to Sentry
+        // See: https://docs.sentry.io/product/security-policy-reporting/#content-security-policy
+      }
     }
   }
 };

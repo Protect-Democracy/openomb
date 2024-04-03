@@ -1,8 +1,17 @@
 <script lang="ts">
+  import { isProduction } from '$lib/utilities';
   import '../app.css';
 </script>
 
 <header>
+  {#if !isProduction()}
+    <div class="development">
+      <p>
+        You are currently viewing a <strong>development version</strong> of this site and it may be inaccurate.
+      </p>
+    </div>
+  {/if}
+
   <h1>Apportionments</h1>
 
   <nav>
@@ -42,5 +51,15 @@
     background-color: var(--color-background-inverse);
     color: var(--color-text-inverse);
     padding: calc(var(--spacing) * 3) var(--spacing);
+  }
+
+  .development {
+    padding: var(--spacing);
+    background: var(--color-highlight);
+  }
+
+  .development p {
+    margin: 0 auto;
+    text-align: center;
   }
 </style>
