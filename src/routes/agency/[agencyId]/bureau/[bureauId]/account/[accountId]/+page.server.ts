@@ -1,9 +1,9 @@
 import { dbConnect } from '$db/connection';
 import { accountDetails, tafsByAccount } from '$queries/tafs';
-import type { PageServerData } from '../$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerData = async ({ params }) => {
+/** @type {import('./$types').PageLoad} */
+export async function load({ params }) {
   await dbConnect();
 
   const account = await accountDetails(params.agencyId, params.bureauId, params.accountId);
@@ -16,4 +16,4 @@ export const load: PageServerData = async ({ params }) => {
     account,
     tafsByAccount: await tafsByAccount(params.agencyId, params.bureauId, params.accountId)
   };
-};
+}
