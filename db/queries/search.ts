@@ -68,6 +68,7 @@ function getLineResults() {
         db.select().from(footnoteResults).where(and(
           eq(footnoteResults.fileId, lines.fileId),
           eq(footnoteResults.lineIndex, lines.lineIndex),
+          ilike(footnoteResults.footnoteText, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
         ))
       ),
 
@@ -120,6 +121,7 @@ function getTafsResults() {
         db.select().from(lineResults).where(and(
           eq(lineResults.fileId, tafs.fileId),
           eq(lineResults.tafsTableId, tafs.tafsTableId),
+          ilike(lineResults.lineDescription, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
         )),
       ),
     ),
