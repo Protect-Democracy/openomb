@@ -19,7 +19,6 @@ import * as footnotes from './schema/footnotes';
 import * as lines from './schema/lines';
 import * as tafs from './schema/tafs';
 
-
 // Constants
 const env = environmentVariables();
 
@@ -28,27 +27,31 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
 // Client
-export const client = new pg.Client({
+export const pool = new pg.Pool({
   connectionString: env.dbUri
 });
-let clientConnected = false;
+let poolConnected = false;
 
 // Drizzle connection
-export const db = drizzle(client, {
+export const db = drizzle(pool, {
   schema: {
     ...files,
     ...footnotes,
     ...lines,
-    ...tafs,
-  },
+    ...tafs
+  }
 });
 
 export async function dbConnect() {
+  // TODO: The idea was that we could make it explicit to connect
+  // which might be useful for testing, but unsure if this is
+  // actually the case.
+  //
   // TODO: This seems to cause issues with hot-reloading and the
   // dev server.  A restart of the dev server should fix this,
   // but this is less that ideal.
-  if (!clientConnected) {
-    await client.connect();
-    clientConnected = true;
+  if (!poolConnected) {
+    await pool.connect();
+    poolConnected = true;
   }
 }
