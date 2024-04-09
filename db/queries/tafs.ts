@@ -10,6 +10,67 @@ import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 
 /**
+ * Distinct agencies with file counts
+ */
+export const agencies = async function () {
+  return db
+    .selectDistinctOn([tafs.budgetAgencyTitle], {
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      fileCount: count(tafs.fileId)
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId)
+    .orderBy(tafs.budgetAgencyTitle);
+}
+
+/**
+ * Distinct agencies with file counts and associated bureaus/accounts
+ */
+export const agenciesWithChildren = async function () {
+  const agencyResults = await agencies();
+
+  const bureauResults = await db
+    .selectDistinctOn([tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle], {
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      budgetBureauTitle: tafs.budgetBureauTitle,
+      fileCount: count(tafs.fileId)
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle)
+    .orderBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle);
+  const groupedBureaus = groupBy(bureauResults, 'budgetAgencyTitleId');
+
+  const accountResults = await db
+    .selectDistinctOn([tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle], {
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      accountTitleId: tafs.accountTitleId,
+      accountTitle: tafs.accountTitle,
+      fileCount: count(tafs.fileId)
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle)
+    .orderBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle);
+  const groupedAccounts = groupBy(accountResults, 'budgetAgencyTitleId');
+
+  return agencyResults.map((agency) => {
+    const groupedAgencyAccounts = groupBy(groupedAccounts[`${agency.budgetAgencyTitleId}`], 'budgetBureauTitleId');
+    return {
+      ...agency,
+      budgetBureaus: groupedBureaus[`${agency.budgetAgencyTitleId}`].map((bureau) => ({
+        ...bureau,
+        accounts: groupedAgencyAccounts[`${bureau.budgetBureauTitleId}`],
+      })),
+    };
+  });
+}
+
+/**
  * Get agencies for a specifc folder (file)
  */
 export const agenciesByFolder = async function (folderId: string) {

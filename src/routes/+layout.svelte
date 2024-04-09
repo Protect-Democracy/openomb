@@ -21,6 +21,7 @@
   <nav>
     <a href="/">Home</a>
     <a href="/search">Search</a>
+    <a href="/agency">Agency Accounts</a>
     <a href="/about">About</a>
   </nav>
 </header>

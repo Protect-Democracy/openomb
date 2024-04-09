@@ -15,24 +15,17 @@ export let data: PageData;
   <h2>Results</h2>
 
 
-  <nav class="pagination">
-    <small>Showing {data.results.length} of {data.resultCount} total results</small>
-    <UrlPagination url={$page.url} pageSize={data.pageSize} resultCount={data.resultCount} />
-  </nav>
+  {#if data.results?.length}
+    <UrlPagination url={$page.url} perPage={data.pageSize} total={data.resultCount} />
+  {/if}
 
 
   <Results results={data.results} />
 
-  <nav class="pagination">
-    <UrlPagination url={$page.url} pageSize={data.pageSize} resultCount={data.resultCount} />
-  </nav>
+  {#if data.results?.length}
+    <UrlPagination url={$page.url} perPage={data.pageSize} total={data.resultCount} />
+  {/if}
 </section>
 
 <style>
-  .pagination {
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    text-align: center;
-  }
 </style>

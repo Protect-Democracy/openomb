@@ -1,48 +1,80 @@
+<!--
+  Pagination using URL parameter
+
+  Params
+    - url: page URL object (with searchParams)
+    - perPage: items per page
+    - total: total number of items
+  Slots
+    None
+-->
+
 <script lang="ts">
+  import { writable } from 'svelte/store';
+  import { createPagination, melt } from '@melt-ui/svelte';
+  import { goto } from '$app/navigation';
+  import { formatNumber } from '$lib/formatters';
+
   export let url;
-  export let pageSize = 1;
-  export let resultCount = 0;
-  let pageIndex = 1;
+  export let perPage = 1;
+  export let total = 0;
 
-  let maxPages, prevQuery, nextQuery;
+  const pageStore = writable(Number(url?.searchParams.get('page')) || 1);
 
-  $: maxPages = Math.trunc(resultCount / pageSize) + 1;
-  $: pageIndex = Number(url.searchParams.get('page')) || 1;
+  const handlePageChange = ({ curr, next }) => {
+    const newQuery = new URLSearchParams(url?.searchParams.toString());
+    newQuery.set('page', next);
+    goto(`${url.pathname}?${newQuery.toString()}`, { noScroll: true });
+    return next;
+  };
 
-  $: {
-    prevQuery = new URLSearchParams(url.searchParams.toString());
-    prevQuery.set('page', pageIndex - 1);
-    nextQuery = new URLSearchParams(url.searchParams.toString());
-    nextQuery.set('page', pageIndex + 1);
-  }
+  const {
+    elements: { root, pageTrigger, prevButton, nextButton },
+    states: { range, pages },
+  } = createPagination({
+    page: pageStore,
+    count: total,
+    perPage,
+    defaultPage: 1,
+    siblingCount: 1,
+    onPageChange: handlePageChange,
+  });
 </script>
 
-<ul>
-  <li>
-    {#if pageIndex > 1}
-      <a href={url.pathname + '?' + prevQuery.toString()}>&#x276e; Prev</a>
-    {/if}
-  </li>
-
-  <li>Page {pageIndex}</li>
-
-  <li>
-    {#if pageIndex < maxPages}
-      <a href={url.pathname + '?' + nextQuery.toString()}>Next &#x276f;</a>
-    {/if}
-  </li>
-</ul>
+<nav
+  aria-label="pagination"
+  {...$root} use:root
+>
+  <p>
+    <small>Showing {formatNumber($range.start)} - {formatNumber($range.end)} of {formatNumber(total)} total results</small>
+  </p>
+  <div>
+    <button
+      {...$prevButton} use:prevButton>&#x276e;</button
+    >
+    {#each $pages as page (page.key)}
+      {#if page.type === 'ellipsis'}
+        <span>...</span>
+      {:else}
+        <button
+          {...$pageTrigger(page)} use:pageTrigger>{formatNumber(page.value)}</button
+        >
+      {/if}
+    {/each}
+    <button
+      {...$nextButton} use:nextButton>&#x276f;</button
+    >
+  </div>
+</nav>
 
 <style>
-  ul {
-    margin: var(--spacing-half);
-    padding: 0;
-    list-style: none;
-    display: flex;
+  nav {
+    text-align: center;
   }
 
-  li {
-    min-width: var(--spacing);
-    margin: 0 var(--spacing);
+  p {
+    margin: auto;
+    margin-bottom: var(--spacing-half);
   }
+
 </style>
