@@ -32,14 +32,15 @@ resource "aws_alb" "apportionments_app" {
   depends_on = [aws_internet_gateway.igw]
 }
 
-resource "aws_acm_certificate" "apportionments_app" {
-  domain_name = "apportionmentsforcats.com"
-  validation_method = "DNS"
-}
+# TODO: Use these commented sections once domain is settled. See below.
+#resource "aws_acm_certificate" "apportionments_app" {
+#  domain_name       = "apportionmentsforcats.com"
+#  validation_method = "DNS"
+#}
 
-output "domain_validations" {
-  value = aws_acm_certificate.apportionments_app.domain_validation_options
-}
+#output "domain_validations" {
+#  value = aws_acm_certificate.apportionments_app.domain_validation_options
+#}
 
 #resource "aws_alb_listener" "apportionments_app_https" {
 #  load_balancer_arn = aws_alb.apportionments_app.arn
@@ -53,19 +54,32 @@ output "domain_validations" {
 #  }
 #}
 
+#resource "aws_alb_listener" "apportionments_app_http" {
+#  load_balancer_arn = aws_alb.apportionments_app.arn
+#  port              = "80"
+#  protocol          = "HTTP"
+#
+#  default_action {
+#    type = "redirect"
+#
+#    redirect {
+#      port        = "443"
+#      protocol    = "HTTPS"
+#      status_code = "HTTP_301"
+#    }
+#  }
+#}
+
+# TODO: Change over the HTTPS versions above once domain is in place
+# For details, see: https://section411.com/2019/07/hello-world/
 resource "aws_alb_listener" "apportionments_app_http" {
   load_balancer_arn = aws_alb.apportionments_app.arn
-  port              = "80"
-  protocol          = "HTTP"
+  port = "80"
+  protocol = "HTTP"
 
   default_action {
-    type             = "redirect"
-
-    redirect {
-      port = "443"
-      protocol = "HTTPS"
-      status_code = "HTTP_301"
-    }
+    type = "forward"
+    target_group_arn = aws_lb_target_group.apportionments_app.arn
   }
 }
 

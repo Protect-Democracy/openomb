@@ -4,6 +4,11 @@ variable "region" {
   type        = string
 }
 
+variable "profile" {
+  description = "AWS profile name"
+  type        = string
+}
+
 variable "tfstate_table_name" {
   default     = "tfstate-lock"
   description = "DynamoDB table name for tf state lock"
@@ -74,7 +79,3 @@ variable "tfstate_key_name" {
 #  type        = string
 #}
 #
-#variable "profile" {
-#  description = "AWS profile name"
-#  type        = string
-#}

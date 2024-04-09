@@ -30,6 +30,7 @@ resource "aws_ecs_service" "apportionments_app" {
   }
 }
 
+# TODO: Switch the image below to the one we push in ecr.tf
 resource "aws_ecs_task_definition" "apportionments_app" {
   family = "apportionments-app"
 
