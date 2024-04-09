@@ -1,0 +1,6 @@
+**/tofu
+.git
+.github
+.gitignore
+.cache
+*.md
