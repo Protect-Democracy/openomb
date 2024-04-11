@@ -9,7 +9,7 @@ import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray } from 'drizzle-orm';
 import chalk from 'chalk';
-import { client, db, dbConnect } from '../db/connection';
+import { pool, db, dbConnect } from '../db/connection';
 import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import { request } from '../server/request';
@@ -137,7 +137,7 @@ async function cli(): Promise<void> {
     });
   }
 
-  client.end();
+  pool.end();
 }
 
 /**
