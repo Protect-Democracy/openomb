@@ -74,11 +74,11 @@ resource "aws_alb" "apportionments_app" {
 # For details, see: https://section411.com/2019/07/hello-world/
 resource "aws_alb_listener" "apportionments_app_http" {
   load_balancer_arn = aws_alb.apportionments_app.arn
-  port = "80"
-  protocol = "HTTP"
+  port              = "80"
+  protocol          = "HTTP"
 
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.apportionments_app.arn
   }
 }

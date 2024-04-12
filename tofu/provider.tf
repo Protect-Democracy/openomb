@@ -1,6 +1,5 @@
 provider "aws" {
-  region  = "us-west-2"
-  profile = "FullAdminApportionment"
+  region = "us-west-2"
 }
 
 terraform {
@@ -16,8 +15,7 @@ terraform {
 
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.16"
+      source = "hashicorp/aws"
     }
   }
 }

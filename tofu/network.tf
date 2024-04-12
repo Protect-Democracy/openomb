@@ -77,7 +77,7 @@ resource "aws_route_table_association" "private_b_subnet" {
 }
 
 resource "aws_eip" "nat" {
-  vpc = true
+  domain = "vpc"
 }
 
 resource "aws_internet_gateway" "igw" {
