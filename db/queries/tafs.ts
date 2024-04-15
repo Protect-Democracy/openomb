@@ -131,6 +131,24 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
 };
 
 /**
+ * Distinct bureaus with file counts
+ */
+export const bureaus = async function () {
+  return db
+    .select({
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      budgetBureauTitle: tafs.budgetBureauTitle,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      fileCount: count(tafs.fileId)
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId, tafs.budgetBureauTitle, tafs.budgetBureauTitleId)
+    .orderBy(tafs.budgetBureauTitle);
+}
+
+/**
  * Get bureaus for a specifc agency.
  */
 export const bureausByAgency = async function (budgetAgencyTitleId: string) {

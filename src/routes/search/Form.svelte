@@ -1,5 +1,8 @@
 <script lang="ts">
-  export let searchParams = new URLSearchParams('');
+  import SearchSelect from '$components/inputs/SearchSelect.svelte';
+
+  export let searchParams = new URLSearchParams();
+  export let agencyBureauOptions = [];
   export let yearOptions = [];
   export let lineOptions = [];
 </script>
@@ -24,13 +27,17 @@
     </div>
 
     <div class="field">
-      <label for="agency">Agency</label>
-      <input type="text" id="agency" name="agency" value={searchParams.get('agency')} />
-    </div>
-
-    <div class="field">
-      <label for="bureau">Bureau</label>
-      <input type="text" id="bureau" name="bureau" value={searchParams.get('bureau')} />
+      <label for="agencyBureau">Agency/Bureau</label>
+      <SearchSelect
+        id="agencyBureau"
+        name="agencyBureau"
+        options={agencyBureauOptions}
+        formatGroupLabel={(o) => o.budgetAgencyTitle}
+        formatGroupValue={(o) => o.budgetAgencyTitleId}
+        formatOptionLabel={(o) => o.budgetBureauTitle}
+        formatOptionValue={(o) => o.budgetBureauTitleId}
+        value={searchParams.get("agencyBureau") || ''}
+      />
     </div>
 
     <div class="field">
@@ -60,12 +67,13 @@
 
     <div class="field">
       <label for="lineNum">Has Line Number</label>
-      <select id="lineNum" name="lineNum" value={searchParams.get('lineNum')}>
-        <option></option>
-        {#each lineOptions as lineOption}
-          <option value={lineOption}>{lineOption}</option>
-        {/each}
-      </select>
+      <SearchSelect
+        id="lineNum"
+        name="lineNum"
+        options={lineOptions}
+        value={searchParams.get("lineNum") && JSON.parse(searchParams.get("lineNum")) || []}
+        multi
+      />
     </div>
 
     <div class="field">
