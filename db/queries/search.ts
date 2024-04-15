@@ -80,8 +80,8 @@ function getLineResults() {
     or(
       eq(sql.placeholder('lineNum'), ''),
       and(
-        eq(lines.lineNumber, sql.placeholder('lineNum')),
-        or(isNotNull(lines.approvedAmount), isNotNull(lines.lineDescription))
+        eq(lines.lineNumber, sql`any(string_to_array(${sql.placeholder('lineNum')}, ',')::varchar[])`),
+        or(isNotNull(lines.approvedAmount), isNotNull(lines.lineDescription)),
       ),
     ),
 
@@ -128,9 +128,15 @@ function getTafsResults() {
     // TAFS Filter
     ilike(tafs.tafsId, sql`concat('%', ${sql.placeholder('tafs')}::text, '%')`),
     // Agency Filter
-    ilike(tafs.budgetAgencyTitle, sql`concat('%', ${sql.placeholder('agency')}::text, '%')`),
+    or(
+      eq(sql.placeholder('agency'), ''),
+      eq(tafs.budgetAgencyTitleId, sql.placeholder('agency')),
+    ),
     // Bureau Filter
-    ilike(tafs.budgetBureauTitle, sql`concat('%', ${sql.placeholder('bureau')}::text, '%')`),
+    or (
+      eq(sql.placeholder('bureau'), ''),
+      eq(tafs.budgetBureauTitleId, sql.placeholder('bureau')),
+    ),
     // Account Filter
     ilike(tafs.accountTitle, sql`concat('%', ${sql.placeholder('account')}::text, '%')`),
 
@@ -241,15 +247,6 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
             }
           },
         }
-      },
-      footnotes: {
-        // Fetch associated relevant (file-wide) footnotes (is this relevant?)
-        where: exists(db.select().from(footnoteResults).where(and(
-          isNull(footnoteResults.lineIndex),
-          eq(footnoteResults.fileId,  sql`"files_footnotes"."file_id"`),
-          eq(footnoteResults.lineIndex,  sql`"files_footnotes"."line_index"`),
-          eq(footnoteResults.footnoteNumber,  sql`"files_footnotes"."footnote_number"`),
-        ))),
       },
     },
     offset: sql.placeholder('offset'),

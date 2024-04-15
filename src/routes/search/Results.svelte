@@ -49,27 +49,6 @@
           {/if}
         {/each}
       {/if}
-
-      {#if result.footnotes?.length}
-        <h5>Matching Footnotes</h5>
-
-        <table>
-          <thead>
-            <tr>
-              <td>Number</td>
-              <td>Text</td>
-            </tr>
-          </thead>
-          <tbody>
-            {#each result.footnotes as footnote}
-              <tr>
-                <td>{footnote.footnoteNumber}</td>
-                <td>{footnote.footnoteText}</td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      {/if}
     </div>
   {/each}
 {:else}

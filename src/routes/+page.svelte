@@ -1,14 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { siteName } from '$config';
 
   export let data: PageData;
 </script>
 
 <svelte:head>
-  <title>Apportionments</title>
+  <title>{siteName}</title>
 </svelte:head>
 
-<h1>Apportionments</h1>
+<h1>{siteName}</h1>
 
 <h2>Search</h2>
 

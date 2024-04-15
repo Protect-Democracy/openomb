@@ -1,26 +1,35 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { siteName } from '$config';
+  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
 
   export let data: PageData;
   $: ({ account, tafsByAccount } = data);
 </script>
 
-<p>
-  Folder: <a href="/folder/{account.bureau.agency.folder.folderId}"
-    >{account.bureau.agency.folder.folder}</a
-  ><br />
-  Agency:
-  <a href="/agency/{account.bureau.agency.budgetAgencyTitleId}"
-    >{account.bureau.agency.budgetAgencyTitle}</a
-  ><br />
-  Bureau:
-  <a
-    href="/agency/{account.bureau.agency.budgetAgencyTitleId}/bureau/{account.bureau
-      .budgetBureauTitleId}">{account.bureau.budgetBureauTitle}</a
-  >
-</p>
+<svelte:head>
+  <title>{account.accountTitle} Account ({account.bureau.agency.budgetAgencyTitle}) | {siteName}</title>
+</svelte:head>
 
-<h1>Bureau: {account.accountTitle}</h1>
+<Breadcrumbs>
+  <BreadcrumbItem>
+    <a href="/folder/{account.bureau.agency.folder.folderId}">{account.bureau.agency.folder.folder}</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem>
+    <a href="/agency/{account.bureau.agency.budgetAgencyTitleId}">{account.bureau.agency.budgetAgencyTitle}</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem>
+    <a href="/agency/{account.bureau.agency.budgetAgencyTitleId}/bureau/{account.bureau.budgetBureauTitleId}">
+      {account.bureau.budgetBureauTitle}
+    </a>
+  </BreadcrumbItem>
+  <BreadcrumbItem>
+    {account.accountTitle}
+  </BreadcrumbItem>
+</Breadcrumbs>
+
+<h1>{account.accountTitle} Account</h1>
 
 <p>There are {account.fileCount} files in this account.</p>
 
