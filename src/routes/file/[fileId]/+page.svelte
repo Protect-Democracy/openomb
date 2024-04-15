@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { formatCurrency } from '$lib/formatters';
-  import { siteName } from '$config'
+  import { siteName } from '$config';
 
   export let data: PageData;
   $: ({ file } = data);
@@ -11,10 +11,6 @@
     return line.lineNumber.match(/^(1920|6190)$/);
   }
 </script>
-
-<svelte:head>
-  <title>File {data.file.fileId} | {siteName}</title>
-</svelte:head>
 
 <h1>File: {data.file.fileId}</h1>
 

@@ -1,8 +1,13 @@
 import { secondsToZonedTime, isProduction } from '$lib/utilities.js';
+import { cacheHeadersHour, cacheHeadersMinute } from '$config';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ setHeaders }) {
-  const secondsForCache = secondsToZonedTime(5, 0, 'America/New_York');
+  const secondsForCache = secondsToZonedTime(
+    cacheHeadersHour,
+    cacheHeadersMinute,
+    'America/New_York'
+  );
   const revalidateSeconds = 60 * 60;
 
   // Common headers.

@@ -13,6 +13,10 @@ export async function load({ params }) {
   }
 
   return {
-    file
+    file,
+    pageMeta: {
+      title: 'Some Page',
+      description: 'Description of Some Page'
+    }
   };
 }
