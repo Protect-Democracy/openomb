@@ -84,7 +84,24 @@
   <slot />
 </main>
 
-<footer>Some footer content here.</footer>
+<footer>
+  <ul>
+    <li><a href="/about">About</a></li>
+    <li><a href="/developers">For developers</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+
+  <div>
+    <p>{siteName} is a project of</p>
+    <ul>
+      <li>
+        <a href="https://protectdemocracy.org/" target="_blank" rel="noopener noreferrer"
+          >Protect Democracy</a
+        >
+      </li>
+    </ul>
+  </div>
+</footer>
 
 <style>
   header {
