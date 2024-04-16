@@ -191,6 +191,17 @@ export const tafs = pgTable(
 );
 
 /**
+ * Define relation to Lines
+ */
+export const tafsRelations = relations(tafs, ({ one, many }) => ({
+  file: one(files, {
+    fields: [tafs.fileId],
+    references: [files.fileId]
+  }),
+  lines: many(lines)
+}));
+
+/**
  * From the values in the TAFS record, compute TAFS ID.
  *
  * IMPORTANT: Note that this is  used to populate the `tafs_id`
@@ -300,11 +311,3 @@ export const computeTafs = (tafsRecord: typeof tafs.$inferSelect): ComputedTafs 
     tafsFormattedId: computeTafsFormattedId(tafsRecord)
   };
 };
-
-export const tafsRelations = relations(tafs, ({ one, many }) => ({
-  file: one(files, {
-    fields: [tafs.fileId],
-    references: [files.fileId],
-  }),
-  lines: many(lines),
-}));
