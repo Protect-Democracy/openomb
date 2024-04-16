@@ -1,8 +1,5 @@
 /**
  * Queries centered around files.
- *
- * TODO: Update these so that they don't select the sourceData column.
- * See: https://orm.drizzle.team/docs/goodies#get-typed-table-columns
  */
 
 // Dependencies
@@ -10,7 +7,7 @@ import { eq, desc, asc, count, and } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
-import { uniqBy, flatten, orderBy } from 'lodash-es';
+import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
 
 /**
  * Get simple file record given file id
@@ -84,7 +81,7 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
     uniqBy(
       flatten(flatten(file.tafs.map((t) => t.lines)).map((l) => l.footnotes)),
       'footnoteNumber'
-    ),
+    ).map((f) => omit(f, 'lineIndex')),
     'footnoteNumber'
   );
 
@@ -134,7 +131,7 @@ export const folders = async function () {
   await dbConnect();
   return (
     (await db
-      .select({ folder: files.folder, folderId: files.folderId, count: count(files.fileId) })
+      .select({ folder: files.folder, folderId: files.folderId, fileCount: count(files.fileId) })
       .from(files)
       .groupBy(files.folder, files.folderId)
       .orderBy(files.folder)) || []

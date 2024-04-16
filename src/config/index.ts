@@ -9,6 +9,7 @@ export const siteDescription = 'Apportionments';
 export const siteKeywords = ['Apportionments'];
 export const cacheHeadersHour = 5;
 export const cacheHeadersMinute = 0;
+export const collectionTimezone = 'America/New_York';
 export const socialOgImgPath = '/og.png';
 export const socialOgImgWidth = 1200;
 export const socialOgImgHeight = 630;
