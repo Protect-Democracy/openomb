@@ -408,13 +408,13 @@ function excelUrl(jsonUrl: string): string {
  * Parse footnotes from schedule line
  */
 function parseFootnotes(footnoteNumberInput?: string): string[] | null {
-  // Footnotes can be in format A1,A2 or A1/A2
+  // Footnotes can be in format A1,A2 or A1/A2 or A1;A2 or A1; A3, A16,
+  // so we split on any non-alphanumeric character.
   footnoteNumberInput = footnoteNumberInput || '';
-  const splitChar = footnoteNumberInput.includes(',') ? ',' : '/';
   const footnoteNumbers = footnoteNumberInput
-    .split(splitChar)
+    .split(/[^a-z0-9]/gi)
     .filter((f) => !!f)
-    .map((f) => f.trim());
+    .map((f) => f.trim().toUpperCase());
   return footnoteNumbers.length > 0 ? footnoteNumbers : null;
 }
 
