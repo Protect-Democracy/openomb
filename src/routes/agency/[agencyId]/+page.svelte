@@ -1,15 +1,29 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { siteName } from '$config';
+  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
 
   export let data: PageData;
   $: ({ agency, bureausByAgency } = data);
 </script>
 
-<p>Folder: <a href="/folder/{agency.folder.folderId}">{agency.folder.folder}</a></p>
+<svelte:head>
+  <title>{agency.budgetAgencyTitle} | {siteName}</title>
+</svelte:head>
 
-<h1>Agency: {agency.budgetAgencyTitle}</h1>
+<Breadcrumbs>
+  <BreadcrumbItem>
+    <a href="/folder/{agency.folder.folderId}">{agency.folder.folder}</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem>
+    {agency.budgetAgencyTitle}
+  </BreadcrumbItem>
+</Breadcrumbs>
 
-<p>There are {agency.fileCount} files in this folder.</p>
+<h1>{agency.budgetAgencyTitle}</h1>
+
+<p>There are {agency.fileCount} files associated with this agency.</p>
 
 <h2>Bureaus</h2>
 

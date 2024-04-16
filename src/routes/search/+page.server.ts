@@ -5,6 +5,9 @@ import {
   fileCountByCriterion,
   filesByCriterion,
 } from '$queries/search';
+import {
+  bureaus,
+} from '$queries/tafs';
 import type { PageServerData } from '../$types';
 
 export const load: PageServerData = async ({ url }) => {
@@ -18,21 +21,22 @@ export const load: PageServerData = async ({ url }) => {
   if (url.searchParams && url.searchParams.get('term') != null) {
 
     // Get our arguments for our search queries
+    const agencyBureau = url.searchParams.get('agencyBureau').split(',');
     const searchArgs = {
       term: url.searchParams.get('term') || '',
       tafs: url.searchParams.get('tafs') || '',
-      agency: url.searchParams.get('agency') || '',
-      bureau: url.searchParams.get('bureau') || '',
+      bureau: agencyBureau?.pop() || '',
+      agency: agencyBureau?.pop() || '',
       account: url.searchParams.get('account') || '',
       approver: url.searchParams.get('approver') || '',
       year: Number(url.searchParams.get('year')) || 0,
-      lineNum: url.searchParams.get('lineNum') || '',
+      lineNum: url.searchParams.get('lineNum').replace(/\[|\]/g, '') || '',
       footnoteNum: url.searchParams.get('footnoteNum') || '',
     };
 
     // Execute prepared statements
-    resultCount = await fileCountByCriterion(searchArgs);
-    results = await filesByCriterion({
+    resultCount = fileCountByCriterion(searchArgs);
+    results = filesByCriterion({
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
       ...searchArgs,
@@ -40,11 +44,13 @@ export const load: PageServerData = async ({ url }) => {
   }
 
   return {
-      yearOptions: await yearOptions(),
-      lineOptions: await lineNumberOptions(),
-      resultCount: resultCount || 0,
+      // Return numeric options as numbers
+      yearOptions: (await yearOptions()).map(o => Number(o)),
+      lineOptions: (await lineNumberOptions()).map(o => Number(o)),
+      agencyBureauOptions: await bureaus(),
+      resultCount: resultCount,
       pageSize,
       pageIndex,
-      results: results || [],
+      results: results,
   };
 };

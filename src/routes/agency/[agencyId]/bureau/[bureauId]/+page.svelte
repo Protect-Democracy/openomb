@@ -1,19 +1,32 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { siteName } from '$config';
+  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
 
   export let data: PageData;
   $: ({ bureau, accountsByBureau } = data);
 </script>
 
-<p>
-  Folder: <a href="/folder/{bureau.agency.folder.folderId}">{bureau.agency.folder.folder}</a><br />
-  Agency:
-  <a href="/agency/{bureau.agency.budgetAgencyTitleId}">{bureau.agency.budgetAgencyTitle}</a>
-</p>
+<svelte:head>
+  <title>{bureau.budgetBureauTitle} Bureau ({bureau.agency.budgetAgencyTitle}) | {siteName}</title>
+</svelte:head>
 
-<h1>Bureau: {bureau.budgetBureauTitle}</h1>
+<Breadcrumbs>
+  <BreadcrumbItem>
+    <a href="/folder/{bureau.agency.folder.folderId}">{bureau.agency.folder.folder}</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem>
+    <a href="/agency/{bureau.agency.budgetAgencyTitleId}">{bureau.agency.budgetAgencyTitle}</a>
+  </BreadcrumbItem>
+  <BreadcrumbItem>
+    {bureau.budgetBureauTitle}
+  </BreadcrumbItem>
+</Breadcrumbs>
 
-<p>There are {bureau.fileCount} files in this folder.</p>
+<h1>{bureau.budgetBureauTitle} Bureau</h1>
+
+<p>There are {bureau.fileCount} files associated with this bureau.</p>
 
 <h2>Accounts</h2>
 

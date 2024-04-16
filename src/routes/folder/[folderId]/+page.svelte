@@ -1,9 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { siteName } from '$config';
 
   export let data: PageData;
   $: ({ folder, agenciesByFolder } = data);
 </script>
+
+<svelte:head>
+  <title>{folder.folder} Folder | {siteName}</title>
+</svelte:head>
+
 
 <h1>Folder: {folder.folder}</h1>
 

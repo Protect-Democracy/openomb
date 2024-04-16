@@ -17,7 +17,8 @@ const config = {
       $queries: 'db/queries',
       $lib: 'src/lib',
       $assets: 'src/assets',
-      $components: 'src/components'
+      $components: 'src/components',
+      $config: 'src/config'
     },
 
     csp: {

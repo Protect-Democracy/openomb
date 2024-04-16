@@ -1,10 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { siteName } from '$config';
   import DirectoryTree from '$components/navigation/DirectoryTree.svelte';
   import DirectoryTreeItem from '$components/navigation/DirectoryTreeItem.svelte';
 
   export let data: PageData;
 </script>
+
+<svelte:head>
+  <title>Agency Accounts | {siteName}</title>
+</svelte:head>
 
 <section class="agency-listing">
   <h1>Agency Account Directory</h1>
