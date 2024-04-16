@@ -3,11 +3,12 @@ resource "aws_ecs_cluster" "apportionments_app" {
 }
 
 resource "aws_ecs_service" "apportionments_app" {
-  name            = "apportionments-app"
-  task_definition = aws_ecs_task_definition.apportionments_app.arn
-  cluster         = aws_ecs_cluster.apportionments_app.id
-  launch_type     = "FARGATE"
-  desired_count   = 1
+  name                 = "apportionments-app"
+  task_definition      = aws_ecs_task_definition.apportionments_app.arn
+  cluster              = aws_ecs_cluster.apportionments_app.id
+  launch_type          = "FARGATE"
+  desired_count        = 1
+  force_new_deployment = true
 
   network_configuration {
     assign_public_ip = false
@@ -31,30 +32,30 @@ resource "aws_ecs_service" "apportionments_app" {
 }
 
 # TODO: Switch the image below to the one we push in ecr.tf
+# "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
 resource "aws_ecs_task_definition" "apportionments_app" {
   family = "apportionments-app"
 
-  container_definitions = <<EOF
-  [
+  container_definitions = jsonencode([
     {
-      "name": "apportionments-app",
-      "image": "ghcr.io/jimmysawczuk/sun-api:latest",
-      "portMappings": [
+      "name" : "apportionments-app",
+      "image" : "ghcr.io/jimmysawczuk/sun-api:latest",
+      "essential" : true,
+      "portMappings" : [
         {
-          "containerPort": 3000
+          "containerPort" : 3000
         }
       ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-region": "us-west-2",
-          "awslogs-group": "/ecs/apportionments-app",
-          "awslogs-stream-prefix": "ecs"
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${var.region}",
+          "awslogs-group" : "/ecs/apportionments-app",
+          "awslogs-stream-prefix" : "ecs"
         }
       }
     }
-  ]
-  EOF
+  ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
 

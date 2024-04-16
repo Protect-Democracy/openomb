@@ -27,6 +27,12 @@ variable "tfstate_key_name" {
   type        = string
 }
 
+variable "apportionments_repo" {
+  description = "Apportionments repository name"
+  type        = string
+  default     = "apportionments-repo"
+}
+
 #variable "vpc_cidr" {
 #  type        = string
 #  description = "CIDR block for the main VPC"

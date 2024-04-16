@@ -1,5 +1,18 @@
 resource "aws_ecr_repository" "ecr" {
-  name = "apportionments-repo"
+  name                 = var.apportionments_repo
+  image_tag_mutability = "IMMUTABLE"
+
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+output "ecr_repo" {
+  value = aws_ecr_repository.ecr.repository_url
 }
 
 #The ECR policy describes the management of images in the repo
@@ -14,12 +27,12 @@ locals {
     "rules" : [
       {
         "rulePriority" : 1,
-        "description" : "Expire images older than 14 days",
+        "description" : "Expire images older than 7 days",
         "selection" : {
           "tagStatus" : "any",
           "countType" : "sinceImagePushed",
           "countUnit" : "days",
-          "countNumber" : 14
+          "countNumber" : 7
         },
         "action" : {
           "type" : "expire"
