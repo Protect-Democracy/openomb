@@ -1,10 +1,44 @@
+# Networking
+# This looks like a lot, but it is required by terraform to set up other resources
+# VPC – A custom VPC for placing all application resources
+# Subnets – two public and two private subnets for various uses
+# Route tables – two route tables, one for the public network, one for the private
+# NAT – Addressing for private network
+# IGW – Internet gateway for public network
+# Routes – For both private and public networks
+# Security groups – Define the port-based access control for the network. See specific rules below.
+
+variable "public_a_cidr_block" {
+  description = "CIDR block for us-west-2a public subnet"
+  type        = string
+  default     = "10.0.1.0/25"
+}
+
+variable "public_b_cidr_block" {
+  description = "CIDR block for us-west-2b public subnet"
+  type        = string
+  default     = "10.0.1.128/25"
+}
+
+variable "private_a_cidr_block" {
+  description = "CIDR block for us-west-2a private subnet"
+  type        = string
+  default     = "10.0.2.0/25"
+}
+
+variable "private_b_cidr_block" {
+  description = "CIDR block for us-west-2b private subnet"
+  type        = string
+  default     = "10.0.2.128/25"
+}
+
 resource "aws_vpc" "app_vpc" {
   cidr_block = "10.0.0.0/16"
 }
 
 resource "aws_subnet" "public_a" {
   vpc_id            = aws_vpc.app_vpc.id
-  cidr_block        = "10.0.1.0/25"
+  cidr_block        = var.public_a_cidr_block
   availability_zone = "us-west-2a"
 
   tags = {
@@ -14,7 +48,7 @@ resource "aws_subnet" "public_a" {
 
 resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.app_vpc.id
-  cidr_block        = "10.0.2.0/25"
+  cidr_block        = var.private_a_cidr_block
   availability_zone = "us-west-2a"
 
   tags = {
@@ -24,7 +58,7 @@ resource "aws_subnet" "private_a" {
 
 resource "aws_subnet" "public_b" {
   vpc_id            = aws_vpc.app_vpc.id
-  cidr_block        = "10.0.1.128/25"
+  cidr_block        = var.public_b_cidr_block
   availability_zone = "us-west-2b"
 
   tags = {
@@ -34,7 +68,7 @@ resource "aws_subnet" "public_b" {
 
 resource "aws_subnet" "private_b" {
   vpc_id            = aws_vpc.app_vpc.id
-  cidr_block        = "10.0.2.128/25"
+  cidr_block        = var.private_b_cidr_block
   availability_zone = "us-west-2b"
 
   tags = {
@@ -142,6 +176,7 @@ resource "aws_security_group" "egress_all" {
   }
 }
 
+# TODO: Remove when implementing application
 resource "aws_security_group" "ingress_api" {
   name        = "ingress-api"
   description = "Allow ingress to API"
@@ -152,5 +187,20 @@ resource "aws_security_group" "ingress_api" {
     to_port     = 3000
     protocol    = "TCP"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Security group rule for accessing the Aurora RDS database
+# Allows access on port 5432 for traffic coming from the private subnet blocks
+resource "aws_security_group" "database" {
+  name        = "database"
+  description = "Allow ingress to database"
+  vpc_id      = aws_vpc.app_vpc.id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "TCP"
+    cidr_blocks = [var.private_a_cidr_block, var.private_b_cidr_block]
   }
 }
