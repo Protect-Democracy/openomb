@@ -6,13 +6,11 @@
  */
 
 // Dependencies
-import { eq, desc, count, and } from 'drizzle-orm';
+import { eq, desc, asc, count, and } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
-import { lines } from '../schema/lines';
-import { footnotes } from '../schema/footnotes';
-import { uniqBy } from 'lodash-es';
+import { uniqBy, flatten, orderBy } from 'lodash-es';
 
 /**
  * Get simple file record given file id
@@ -24,76 +22,77 @@ export const fileRecord = async function (fileId: string): Promise<typeof files.
 };
 
 /**
- * Get detailed record with tafs, lines, and footnotes
+ * Get detailed record with tafs, lines, and footnotes.
+ *
+ * Adds iterations to tafs data and a unique footnotes array to
+ * top-level object.
+ *
+ * @param fileId Id of the file
+ * @param includeSourceData Include source data with response
  */
-export const fileDetails = async function (fileId: string) {
+export const fileDetails = async function (fileId: string, includeSourceData: boolean = false) {
   await dbConnect();
 
   // Get file record
-  const fileRecords = await db.select().from(files).where(eq(files.fileId, fileId));
-  if (!fileRecords || fileRecords.length !== 1) {
+  const file = await db.query.files.findFirst({
+    where: eq(files.fileId, fileId),
+    columns: includeSourceData
+      ? undefined
+      : {
+          sourceData: false
+        },
+    with: {
+      tafs: {
+        orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)],
+        with: {
+          lines: {
+            orderBy: (lines, { asc }) => [asc(lines.lineNumber)],
+            with: {
+              footnotes: {
+                orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Check that we found something
+  if (!file) {
     return null;
   }
 
-  const fileRecord = fileRecords[0];
-
-  // Get tafs records
-  const tafsRecords = await db.select().from(tafs).where(eq(tafs.fileId, fileId));
-
-  // Get lines records
-  const linesRecords = await db
-    .select()
-    .from(lines)
-    .where(eq(lines.fileId, fileId))
-    .orderBy(lines.lineNumber, lines.lineSplit);
-
-  // Get footnote records
-  const footnotesRecords = await db
-    .select()
-    .from(footnotes)
-    .where(eq(footnotes.fileId, fileId))
-    .orderBy(footnotes.footnoteNumber);
-
-  // Combine lines and footnotes
-  const linesWithFootnotes = linesRecords.map((l) => {
-    const footnotes = footnotesRecords.filter((f) => f.lineIndex === l.lineIndex);
-    return {
-      ...l,
-      footnotes
-    };
-  });
-
-  // Combined lines to tafs
-  const tafsWithLines = tafsRecords.map((t) => {
-    const lines = linesWithFootnotes.filter((l) => l.tafsTableId === t.tafsTableId);
-    return {
-      ...t,
-      lines,
-      iterations: []
-    };
-  });
-
-  // Get iterations for each tafs
-  for (const tafsRecord of tafsWithLines) {
-    tafsRecord.iterations =
-      (await db
-        .select({
-          fileId: tafs.fileId,
-          tafsId: tafs.tafsId,
-          fiscalYear: tafs.fiscalYear,
-          iteration: tafs.iteration,
-          tafsTableId: tafs.tafsTableId
-        })
-        .from(tafs)
-        .where(and(eq(tafs.tafsId, tafsRecord.tafsId), eq(tafs.fiscalYear, tafsRecord.fiscalYear)))
-        .orderBy(tafs.iteration)) || [];
+  // Include references to iterations
+  const tafsWithIterations = file.tafs || [];
+  for (const t of tafsWithIterations) {
+    t.iterations = await db
+      .select({
+        fileId: tafs.fileId,
+        tafsId: tafs.tafsId,
+        fiscalYear: tafs.fiscalYear,
+        iteration: tafs.iteration,
+        tafsTableId: tafs.tafsTableId
+      })
+      .from(tafs)
+      .where(and(eq(tafs.tafsId, t.tafsId), eq(tafs.fiscalYear, t.fiscalYear)))
+      .orderBy(asc(tafs.iteration));
   }
 
-  // Combine all into files
+  // Pull out footnotes
+  const uniqFootnotes = orderBy(
+    uniqBy(
+      flatten(flatten(file.tafs.map((t) => t.lines)).map((l) => l.footnotes)),
+      'footnoteNumber'
+    ),
+    'footnoteNumber'
+  );
+
+  // Attach footnotes as a top level property
   return {
-    ...fileRecord,
-    tafs: tafsWithLines,
-    footnotes: uniqBy(footnotesRecords, 'footnoteNumber')
+    ...file,
+    tafs: tafsWithIterations,
+    footnotes: uniqFootnotes
   };
 };
 
@@ -102,7 +101,14 @@ export const fileDetails = async function (fileId: string) {
  */
 export const recentlyApproved = async function (limit: number = 20) {
   await dbConnect();
-  return (await db.select().from(files).orderBy(desc(files.approvalTimestamp)).limit(limit)) || [];
+
+  const recentFiles = await db.query.files.findMany({
+    columns: { sourceData: false },
+    orderBy: desc(files.approvalTimestamp),
+    limit: limit
+  });
+
+  return recentFiles || [];
 };
 
 /**
@@ -110,14 +116,15 @@ export const recentlyApproved = async function (limit: number = 20) {
  */
 export const recentlyRemoved = async function (limit: number = 20) {
   await dbConnect();
-  return (
-    (await db
-      .select()
-      .from(files)
-      .where(eq(files.removed, true))
-      .orderBy(desc(files.approvalTimestamp))
-      .limit(limit)) || []
-  );
+
+  const removedFiles = await db.query.files.findMany({
+    columns: { sourceData: false },
+    where: eq(files.removed, true),
+    orderBy: desc(files.approvalTimestamp),
+    limit: limit
+  });
+
+  return removedFiles || [];
 };
 
 /**

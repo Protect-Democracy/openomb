@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { formatCurrency } from '$lib/formatters';
-  import { siteName } from '$config';
 
   export let data: PageData;
   $: ({ file } = data);
