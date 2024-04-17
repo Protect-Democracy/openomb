@@ -13,6 +13,7 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test:integration": "playwright test",
+    "test:integration:ui": "playwright test --ui",
     "test:unit": "vitest",
     "collect": "tsx bin/collect.ts",
     "db:generate-migration": "drizzle-kit generate:pg",
