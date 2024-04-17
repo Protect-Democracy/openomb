@@ -17,8 +17,8 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest watch",
     "collect": "tsx bin/collect.ts",
-    "db:generate-migration": "drizzle-kit generate:pg",
-    "db:migrate": "tsx bin/migrate.ts"
+    "db:generate-migration": "dotenvx run -- drizzle-kit generate:pg",
+    "db:migrate": "dotenvx run -- tsx bin/migrate.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.537.0",

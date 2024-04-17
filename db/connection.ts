@@ -30,7 +30,8 @@ export const migrationsDir = joinPath(_dirname, 'migrations');
 export const pool = new pg.Pool({
   connectionString: env.dbUri
 });
-let poolConnected = false;
+export let poolConnected = false;
+export let poolClient: pg.PoolClient;
 
 // Drizzle connection
 export const db = drizzle(pool, {
@@ -51,7 +52,9 @@ export async function dbConnect() {
   // dev server.  A restart of the dev server should fix this,
   // but this is less that ideal.
   if (!poolConnected) {
-    await pool.connect();
+    poolClient = await pool.connect();
     poolConnected = true;
   }
+
+  return poolClient;
 }
