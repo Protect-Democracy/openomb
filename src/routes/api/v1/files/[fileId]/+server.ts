@@ -2,7 +2,7 @@
 import { error } from '@sveltejs/kit';
 import { dbConnect } from '$db/connection.js';
 import { fileDetails } from '$queries/files';
-import { cachedJson } from '$lib/responses';
+import { apiResponse } from '$lib/api';
 
 /**
  * Get a specific file by ID
@@ -22,7 +22,7 @@ export async function GET({ params, url }) {
     error(404, 'Unable to find file');
   }
 
-  return cachedJson({
+  return apiResponse({
     query: {
       sourceData
     },
