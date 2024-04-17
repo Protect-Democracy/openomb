@@ -1,0 +1,12 @@
+region = "us-west-2"
+#vpc_cidr = "10.0.0.0/16"
+#public_subnet_a          = "10.0.16.0/20"
+#public_subnet_b          = "10.0.32.0/20"
+#private_subnet_a         = "10.0.80.0/20"
+#private_subnet_b         = "10.0.112.0/20"
+#availability_zone_1      = "us-west-2a"
+#availability_zone_2      = "us-west-2b"
+#container_port           = 8081
+#shared_config_files      = ""
+#shared_credentials_files = ""
+#credential_profile       = ""
