@@ -13,7 +13,9 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test:integration": "playwright test",
-    "test:unit": "vitest",
+    "test:integration:ui": "playwright test --ui",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest watch",
     "collect": "tsx bin/collect.ts",
     "db:generate-migration": "drizzle-kit generate:pg",
     "db:migrate": "tsx bin/migrate.ts"
@@ -33,7 +35,7 @@
     "multi-progress-bars": "^5.0.3",
     "node-html-parser": "^6.1.12",
     "pg": "^8.11.3",
-    "svelte": "^5.0.0-next.100",
+    "svelte": "^5.0.0-next.106",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {

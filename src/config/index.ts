@@ -17,3 +17,14 @@ export const socialTwitterCard = 'summary_large_image';
 export const socialTwitterSite = '@protctdemocracy';
 export const socialTwitterCreator = '@protctdemocracy';
 export const socialTwitterImgPath = '/twitter.png';
+export const securityHeaders = {
+  // Security headers
+  // TODO: Add report-uri to Sentry
+  // See: https://docs.sentry.io/product/security-policy-reporting/#expect-ct
+  'Expect-CT': 'enforce, max-age=3600',
+  'Referrer-Policy': 'strict-origin',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubdomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'X-XSS-Protection': '1; mode=block'
+};

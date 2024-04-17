@@ -1,5 +1,5 @@
-import { secondsToZonedTime, isProduction, collectionTimezone } from '$lib/utilities.js';
-import { cacheHeadersHour, cacheHeadersMinute } from '$config';
+import { secondsToZonedTime, isProduction } from '$lib/utilities.js';
+import { cacheHeadersHour, cacheHeadersMinute, securityHeaders, collectionTimezone } from '$config';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ setHeaders }) {
@@ -25,14 +25,6 @@ export async function load({ setHeaders }) {
     // Cache headers
     'Cache-Control': `public, max-age=${isProduction() ? secondsForCache : 1}, stale-while-revalidate=${revalidateSeconds}`,
 
-    // Security headers
-    // TODO: Add report-uri to Sentry
-    // See: https://docs.sentry.io/product/security-policy-reporting/#expect-ct
-    'Expect-CT': 'enforce, max-age=3600',
-    'Referrer-Policy': 'strict-origin',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubdomains; preload',
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'SAMEORIGIN',
-    'X-XSS-Protection': '1; mode=block'
+    ...securityHeaders
   });
 }

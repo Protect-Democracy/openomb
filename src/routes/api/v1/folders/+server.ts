@@ -1,7 +1,7 @@
 // Dependencies
 import { dbConnect } from '$db/connection.js';
 import { folders } from '$queries/files';
-import { cachedJson } from '$lib/responses';
+import { apiResponse } from '$lib/api';
 
 /**
  * Get a specific file by ID
@@ -10,7 +10,7 @@ import { cachedJson } from '$lib/responses';
 export async function GET() {
   await dbConnect();
 
-  return cachedJson({
+  return apiResponse({
     query: {},
     results: await folders()
   });

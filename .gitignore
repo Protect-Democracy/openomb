@@ -12,6 +12,9 @@ log/
 *.log
 .cache*
 
+# Tests
+test-results
+
 # From SvelteKit
 ##############
 .DS_Store
