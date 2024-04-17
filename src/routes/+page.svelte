@@ -1,8 +1,13 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { siteName } from '$config';
+  import { onMount } from 'svelte';
 
   export let data: PageData;
+
+  onMount(() => {
+    throw new Error('testing');
+  });
 </script>
 
 <svelte:head>

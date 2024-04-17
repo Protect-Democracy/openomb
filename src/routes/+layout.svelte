@@ -17,6 +17,8 @@
   } from '$config';
   import favicon from '$assets/favicon/favicon.png';
   import '../app.css';
+
+  const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
 </script>
 
 <svelte:head>
@@ -55,6 +57,21 @@
     name="twitter:image"
     content="{deployedBaseUrl}{$page.data?.pageMeta?.twitterImgPath || socialTwitterImgPath}"
   />
+
+  {#if sentryScript}
+    <!-- Temporary use of Sentry browser integration -->
+    <script src={sentryScript} crossorigin="anonymous"></script>
+    <script nonce="SENTRY_SCRIPT_SETUP">
+      window.sentryOnLoad = function () {
+        Sentry.init({
+          // Unsure how to put Svelte variables in here
+          environment: window.location.hostname.match(/apportionment/)
+            ? 'production'
+            : 'development'
+        });
+      };
+    </script>
+  {/if}
 </svelte:head>
 
 <div class="visually-hidden-focusable">
