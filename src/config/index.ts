@@ -21,6 +21,8 @@ export const securityHeaders = {
   // Security headers
   // TODO: Add report-uri to Sentry
   // See: https://docs.sentry.io/product/security-policy-reporting/#expect-ct
+  //
+  // Note: CSP headers are configured in `svelte.config.js`
   'Expect-CT': 'enforce, max-age=3600',
   'Referrer-Policy': 'strict-origin',
   'Strict-Transport-Security': 'max-age=31536000; includeSubdomains; preload',

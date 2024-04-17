@@ -16,6 +16,10 @@ import { request } from '../server/request';
 import { loadJsonFile, loadPdfFile } from '../server/load-file';
 import { environmentVariables, unique, zipFiles, putS3File } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
+import { setupNodeSentry } from '../server/sentry';
+
+// Make sure Sentry is setup if DSN is provided
+setupNodeSentry();
 
 // Constants
 const env = environmentVariables();

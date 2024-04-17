@@ -3,7 +3,6 @@
  */
 
 // Dependencies
-import { loadEnv } from 'vite';
 import { dirname, join as joinPath, basename, resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
@@ -37,45 +36,49 @@ type ApportionmentEnvironment = {
   dbUri: string;
   archiveS3Bucket: string;
   archiveS3Region: string;
-  archiveS3Acl: [
-    'private',
-    'public-read',
-    'public-read-write',
-    'authenticated-read',
-    'aws-exec-read',
-    'bucket-owner-read',
+  archiveS3Acl:
+    'private' |
+    'public-read' |
+    'public-read-write' |
+    'authenticated-read' |
+    'aws-exec-read' |
+    'bucket-owner-read' |
     'bucket-owner-full-control'
-  ];
+  ;
   awsSso: boolean;
+  sentryDsn: string;
+  environment: string;
 };
 
 /**
- * Get APPORTIONMENT_* variables from the environment.
+ * Get APPORTIONMENT_* variables from the environment.  These are variables
+ * to use on the server-side processes only.
  *
  * TODO: This might not be good since Vite uses VITE_ without some
  * specific code/config.
  */
 function environmentVariables(): ApportionmentEnvironment {
-  const env = loadEnv('dev', process.cwd(), 'APPORTIONMENTS_');
-
+  // We use dotenvx to get our .env variables into the process
   return {
-    baseUrl: env['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
-    cacheTtl: env['APPORTIONMENTS_CACHE_TTL']
-      ? parseInt(env['APPORTIONMENTS_CACHE_TTL'])
+    baseUrl: process.env['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
+    cacheTtl: process.env['APPORTIONMENTS_CACHE_TTL']
+      ? parseInt(process.env['APPORTIONMENTS_CACHE_TTL'])
       : 1000 * 60 * 60 * 24 * 15,
-    cacheDir: env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
-    collectionCacheDir: env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
-    dbUri: env['APPORTIONMENTS_DB_URI'] || '',
-    archiveS3Bucket: env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
-    archiveS3Region: env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
+    cacheDir: process.env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
+    collectionCacheDir: process.env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
+    dbUri: process.env['APPORTIONMENTS_DB_URI'] || '',
+    archiveS3Bucket: process.env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
+    archiveS3Region: process.env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
     archiveS3Acl:
-      env['APPORTIONMENTS_ARCHIVE_S3_ACL'] &&
-      s3AclOptions.includes(env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
-        ? env['APPORTIONMENTS_ARCHIVE_S3_ACL']
+      process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] &&
+      s3AclOptions.includes(process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
+        ? process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl']
         : 'public-read',
     awsSso:
-      !!env['APPORTIONMENTS_AWS_SSO'] &&
-      env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false'
+      !!process.env['APPORTIONMENTS_AWS_SSO'] &&
+      process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false',
+    sentryDsn: process.env['APPORTIONMENTS_SENTRY_DSN'] || '',
+    environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development'
   };
 }
 
