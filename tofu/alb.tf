@@ -7,7 +7,7 @@ resource "aws_lb_target_group" "apportionments_app" {
 
   health_check {
     enabled = true
-    path    = "/about"
+    path    = "/api/v1/health"
   }
 
   depends_on = [aws_alb.apportionments_app]
