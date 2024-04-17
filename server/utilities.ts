@@ -47,10 +47,13 @@ type ApportionmentEnvironment = {
     'bucket-owner-full-control'
   ];
   awsSso: boolean;
+  sentryDsn: string;
+  environment: string;
 };
 
 /**
- * Get APPORTIONMENT_* variables from the environment.
+ * Get APPORTIONMENT_* variables from the environment.  These are variables
+ * to use on the server-side processes only.
  *
  * TODO: This might not be good since Vite uses VITE_ without some
  * specific code/config.
@@ -75,7 +78,9 @@ function environmentVariables(): ApportionmentEnvironment {
         : 'public-read',
     awsSso:
       !!env['APPORTIONMENTS_AWS_SSO'] &&
-      env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false'
+      env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false',
+    sentryDsn: env['APPORTIONMENTS_SENTRY_DSN'] || '',
+    environment: env['NODE_ENV'] === 'production' ? 'production' : 'development'
   };
 }
 
