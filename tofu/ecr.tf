@@ -1,6 +1,6 @@
 resource "aws_ecr_repository" "ecr" {
   name                 = var.apportionments_repo
-  image_tag_mutability = "IMMUTABLE"
+  image_tag_mutability = "MUTABLE"
 
   encryption_configuration {
     encryption_type = "AES256"
@@ -45,6 +45,8 @@ locals {
 #The commands below are used to build and push a docker image of the application in the app folder
 locals {
   docker_login_command = "aws ecr get-login-password --region ${var.region} --profile ${var.profile}| docker login --username AWS --password-stdin ${local.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+  # TODO: REMOVE buildx if it's not needed
+  #docker_build_command = "docker buildx build --platform linux/amd64,linux/arm64 -t ${aws_ecr_repository.ecr.name} .."
   docker_build_command = "docker build -t ${aws_ecr_repository.ecr.name} .."
   docker_tag_command   = "docker tag ${aws_ecr_repository.ecr.name}:latest ${local.account_id}.dkr.ecr.${var.region}.amazonaws.com/${aws_ecr_repository.ecr.name}:latest"
   docker_push_command  = "docker push ${local.account_id}.dkr.ecr.${var.region}.amazonaws.com/${aws_ecr_repository.ecr.name}:latest"

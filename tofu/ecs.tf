@@ -31,15 +31,13 @@ resource "aws_ecs_service" "apportionments_app" {
   }
 }
 
-# TODO: Switch the image below to the one we push in ecr.tf
-# "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
 resource "aws_ecs_task_definition" "apportionments_app" {
   family = "apportionments-app"
 
   container_definitions = jsonencode([
     {
       "name" : "apportionments-app",
-      "image" : "ghcr.io/jimmysawczuk/sun-api:latest",
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
       "essential" : true,
       "portMappings" : [
         {
