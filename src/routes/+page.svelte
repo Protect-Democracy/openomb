@@ -1,118 +1,98 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { siteName } from '$config';
-  import { onMount } from 'svelte';
+  import { formatNumber } from '$lib/formatters';
+  import SearchForm from './SearchForm.svelte';
+  import AgencyList from './AgencyList.svelte';
 
   export let data: PageData;
-
-  onMount(() => {
-    throw new Error('testing');
-  });
+  const currentYear = new Date().getFullYear();
 </script>
 
 <svelte:head>
   <title>{siteName}</title>
 </svelte:head>
 
-<h1>{siteName}</h1>
+<section class="summary">
+  <h1>Accessing apportionment data just got better.</h1>
+  <p>
+    Updated daily, {siteName} is the easiest way to find and view information on how federal money can
+    be spent.
+  </p>
 
-<h2>Search</h2>
+  <div class="search">
+    <SearchForm />
+  </div>
 
-<p>
-  A big search here. Do we want to have a more advanced search (not just a text box) here? Or we can
-  have a specific advanced search page? Given the focus of the site, seems like having as much
-  search functionality here makes sense.
-</p>
+  <div class="actions">
+    <a class="button" href="/search">More search options</a>
+    <a class="button alt" href="/about">About our process</a>
+  </div>
+</section>
 
-<h2>Examples</h2>
+<div class="accent-bg">
+  <section class="stats">
+    <div>
+      <h2>{formatNumber(data.fileStats?.updatedPastWeek)}</h2>
+      New apportionments<br />
+      added this week
+    </div>
+    <div>
+      <h2>{formatNumber(data.fileStats?.currentFiscalYear)}</h2>
+      Total apportionments<br />
+      for fiscal year {currentYear}
+    </div>
+  </section>
+</div>
 
-<ul>
-  <li><a href="/file/11221129">11221129 - Most schedule items</a></li>
-  <li><a href="/file/11297405">11297405 - 2nd Most schedule items</a></li>
-  <li><a href="/file/11297388">11297388 - ~400 schedule items</a></li>
-  <li><a href="/file/11316019">11316019 - ~100 schedule items</a></li>
-  <li><a href="/file/pdf-4e735d84cd39d97c04f83f737d61feae">PDF example</a></li>
-  <li><a href="/file/11195820">11195820 - Example with a 6180 line</a></li>
-  <li><a href="/file/11299636">11299636 - Example with a 6181 line</a></li>
-  <li><a href="/file/11209228">11209228 - Example with a 6180 line and an amount (only one)</a></li>
-</ul>
+<section class="agencies">
+  <AgencyList agencies={data.agencies} />
+</section>
 
-<h2>Recent files</h2>
-<ul>
-  {#each data.recentlyApproved as file}
-    <li>
-      <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
-    </li>
-  {/each}
-</ul>
+<style>
+  section {
+    width: var(--copy-width-limit);
+    margin: 0 auto var(--spacing-large);
+  }
 
-<h2>Recently removed</h2>
+  .summary {
+    text-align: center;
+  }
 
-<p>(if there is any)</p>
+  .search {
+    margin: var(--spacing-double) auto;
+    width: calc(var(--copy-width-limit) * 0.75);
+  }
 
-<ul>
-  {#each data.recentlyRemoved as file}
-    <li>
-      <a href="/file/{file.fileId}">{file.folder} - {file.fileId} - {file.approvalTimestamp}</a>
-    </li>
-  {/each}
-</ul>
+  .button.alt {
+    color: var(--color-text);
+    background-color: var(--color-gray-light);
+    margin-left: var(--spacing);
+  }
 
-<h2>Folders</h2>
+  .button.alt:hover {
+    background-color: var(--color-highlight);
+  }
 
-<p>
-  Is there a better name than folder? Maybe we make landing pages for each Folder to help with
-  exploration and SEO?
-</p>
+  .accent-bg {
+    background-color: var(--color-gray-light);
+  }
 
-<ul>
-  {#each data.folders as folder}
-    <li><a href="/folder/{folder.folderId}">{folder.folder}</a> ({folder.fileCount})</li>
-  {/each}
-</ul>
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding: var(--spacing-double) 0;
+  }
 
-<h2>Approvers</h2>
+  .stats h2 {
+    margin: 0;
+    padding: 0;
+  }
 
-<p>Each approver.</p>
-
-<ul>
-  {#each data.approvers as approver}
-    <li>{approver.approverTitle || 'null'} ({approver.count})</li>
-  {/each}
-</ul>
-
-<!--
-<h2>Folder, Agency, Bureau</h2>
-
-<p>A breakdown by Folder, Agency, and Bureau with a file count next to each one.</p>
-
-<ul>
-  {#each data.departmentAgencyBureau as folder}
-    <li>
-      {folder.folder}
-      {#if folder.rows.length}
-        <ul>
-          {#each folder.rows as agency}
-            <li>
-              {agency.agency}
-              {#if agency.rows.length}
-                <ul>
-                  {#each agency.rows as bureau}
-                    <li>
-                      {bureau.bureau} ({bureau.fileCount})
-                    </li>
-                  {/each}
-                </ul>
-              {/if}
-            </li>
-          {/each}
-        </ul>
-      {/if}
-    </li>
-  {/each}
-</ul>
-
--->
-
-<h2>Styles</h2>
-<a href="/styles">Page with many elements to help with global style development</a>
+  .agencies {
+    width: unset;
+    margin-left: var(--spacing-large);
+    margin-right: var(--spacing-large);
+  }
+</style>
