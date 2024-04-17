@@ -1,3 +1,5 @@
+# Note that this set of tests requires the build to run, so
+# the build is implicity tested here.
 name: Integration Tests
 
 on:
