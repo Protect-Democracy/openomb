@@ -1,6 +1,6 @@
 <script lang="ts">
   import { slice } from 'lodash-es';
-  import Accordion from '$components/Accordion/Accordion.svelte';
+  import Accordion from '$components/accordion/Accordion.svelte';
   export let columns = 2;
   export let agencies = [];
 
@@ -22,7 +22,10 @@
             </a>
             <svelte:fragment slot="content">
               {#each agency.budgetBureaus as bureau}
-                <a class="agency-bureau" href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}`}>
+                <a
+                  class="agency-bureau"
+                  href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}`}
+                >
                   {bureau.budgetBureauTitle} ({bureau.fileCount})
                 </a>
               {/each}
