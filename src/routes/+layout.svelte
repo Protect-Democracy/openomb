@@ -70,13 +70,16 @@
     </div>
   {/if}
 
-  <h1>Apportionments</h1>
+  <h1><a href="/">Apportionments</a></h1>
 
   <nav>
-    <a href="/">Home</a>
     <a href="/search">Search</a>
-    <a href="/agency">Agency Accounts</a>
+    <a href="/agency">Directory</a>
+    <a href="/faq">Apportionments FAQ</a>
     <a href="/about">About</a>
+    {#if !isProduction()}
+      <a href="/examples">Examples</a>
+    {/if}
   </nav>
 </header>
 
@@ -105,23 +108,31 @@
 
 <style>
   header {
-    background-color: var(--color-background-inverse);
-    color: var(--color-text-inverse);
-    padding: var(--spacing);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+    padding: var(--spacing) var(--spacing-large);
   }
 
   h1 {
-    padding: 0;
+    font-size: 1.25rem;
+    padding: var(--spacing) 0;
     margin: 0;
   }
 
-  nav a {
-    color: var(--color-text-inverse);
-    margin-right: var(--spacing);
+  h1 a {
+    color: var(--color-text);
   }
 
-  main {
-    padding: var(--spacing);
+  nav {
+    padding: var(--spacing) 0;
+  }
+
+  nav a {
+    color: var(--color-text);
+    margin-left: var(--spacing-double);
+    font-weight: 500;
   }
 
   footer {
@@ -133,6 +144,7 @@
   .development {
     padding: var(--spacing);
     background: var(--color-highlight);
+    width: 100%;
   }
 
   .development p {

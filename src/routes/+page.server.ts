@@ -1,14 +1,13 @@
 import { dbConnect } from '$db/connection';
-import { recentlyApproved, recentlyRemoved, folders, approvers } from '$queries/files';
+import { fileStats } from '$queries/files';
+import { agenciesWithChildren } from '$queries/tafs';
 
 /** @type {import('./$types').PageLoad} */
 export async function load() {
   await dbConnect();
 
   return {
-    recentlyRemoved: await recentlyRemoved(),
-    recentlyApproved: await recentlyApproved(),
-    folders: await folders(),
-    approvers: await approvers()
+    agencies: await agenciesWithChildren(),
+    fileStats: await fileStats(),
   };
 }

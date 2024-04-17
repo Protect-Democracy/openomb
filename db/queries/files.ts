@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, desc, asc, count, and } from 'drizzle-orm';
+import { eq, gt, desc, asc, count, and } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -123,6 +123,31 @@ export const recentlyRemoved = async function (limit: number = 20) {
 
   return removedFiles || [];
 };
+
+/**
+ * File statistics
+ */
+export const fileStats = async function () {
+  await dbConnect();
+
+  // Set date to start of week, get files modified since
+  const today = new Date();
+  const dateWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+  const thisWeek = db.select({ data: count(files.fileId) }).from(files).where(gt(files.modifiedAt, dateWeek));
+
+  // Set date to start of month, get files modified since
+  const dateMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const thisMonth = db.select({ data: count(files.fileId) }).from(files).where(gt(files.modifiedAt, dateMonth));
+
+  // Get files for the current fiscal year
+  const thisYear = db.select({ data: count(files.fileId) }).from(files).where(eq(files.fiscalYear, today.getFullYear()));
+
+  return {
+    updatedPastWeek: (await thisWeek)?.at(0)?.data,
+    updatedPastMonth: (await thisMonth)?.at(0)?.data,
+    currentFiscalYear: (await thisYear)?.at(0)?.data,
+  };
+}
 
 /**
  * Distinct folders with file counts

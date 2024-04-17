@@ -21,7 +21,7 @@ export const load: PageServerData = async ({ url }) => {
   if (url.searchParams && url.searchParams.get('term') != null) {
 
     // Get our arguments for our search queries
-    const agencyBureau = url.searchParams.get('agencyBureau').split(',');
+    const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
     const searchArgs = {
       term: url.searchParams.get('term') || '',
       tafs: url.searchParams.get('tafs') || '',
@@ -30,7 +30,7 @@ export const load: PageServerData = async ({ url }) => {
       account: url.searchParams.get('account') || '',
       approver: url.searchParams.get('approver') || '',
       year: Number(url.searchParams.get('year')) || 0,
-      lineNum: url.searchParams.get('lineNum').replace(/\[|\]/g, '') || '',
+      lineNum: url.searchParams.get('lineNum')?.replace(/\[|\]/g, '') || '',
       footnoteNum: url.searchParams.get('footnoteNum') || '',
     };
 
