@@ -9,7 +9,7 @@ import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray } from 'drizzle-orm';
 import chalk from 'chalk';
-import { pool, db, dbConnect } from '../db/connection';
+import { db, dbConnect } from '../db/connection';
 import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import { request } from '../server/request';
@@ -42,7 +42,7 @@ async function cli(): Promise<void> {
   const options = program.opts();
 
   // Connect to db
-  await dbConnect();
+  const poolClient = await dbConnect();
 
   // Create timestamp and id for this run
   const start = new Date();
@@ -141,7 +141,7 @@ async function cli(): Promise<void> {
     });
   }
 
-  pool.end();
+  poolClient.end();
 }
 
 /**
