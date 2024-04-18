@@ -33,14 +33,14 @@
 <div class="accent-bg">
   <section class="stats">
     <div>
-      <h2>{formatNumber(data.fileStats?.updatedPastWeek)}</h2>
+      <h2>{formatNumber(data.fileStats?.filesApprovedPastWeek)}</h2>
       New apportionments<br />
-      added this week
+      approved this week
     </div>
     <div>
-      <h2>{formatNumber(data.fileStats?.currentFiscalYear)}</h2>
+      <h2>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</h2>
       Total apportionments<br />
-      for fiscal year {currentYear}
+      approved this fiscal year {currentYear}
     </div>
   </section>
 </div>

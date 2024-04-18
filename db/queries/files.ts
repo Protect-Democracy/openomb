@@ -3,11 +3,12 @@
  */
 
 // Dependencies
-import { eq, gt, desc, asc, count, and } from 'drizzle-orm';
+import { eq, gt, gte, desc, asc, count, and } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
+import { subDays, subMonths, startOfDay } from 'date-fns';
 
 /**
  * Get simple file record given file id
@@ -129,25 +130,34 @@ export const recentlyRemoved = async function (limit: number = 20) {
  */
 export const fileStats = async function () {
   await dbConnect();
+  const now = new Date();
 
-  // Set date to start of week, get files modified since
-  const today = new Date();
-  const dateWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-  const thisWeek = db.select({ data: count(files.fileId) }).from(files).where(gt(files.modifiedAt, dateWeek));
+  // Set date to start of week, get files approved since
+  const weekAgo = startOfDay(subDays(new Date(), 7));
+  const filesApprovedPastWeek = db
+    .select({ fileCount: count(files.fileId) })
+    .from(files)
+    .where(gte(files.approvalTimestamp, weekAgo));
 
-  // Set date to start of month, get files modified since
-  const dateMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const thisMonth = db.select({ data: count(files.fileId) }).from(files).where(gt(files.modifiedAt, dateMonth));
+  // Set date to start of month, get files approved since
+  const dateMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const filesApprovedThisMonth = db
+    .select({ fileCount: count(files.fileId) })
+    .from(files)
+    .where(gte(files.approvalTimestamp, dateMonth));
 
   // Get files for the current fiscal year
-  const thisYear = db.select({ data: count(files.fileId) }).from(files).where(eq(files.fiscalYear, today.getFullYear()));
+  const filesCurrentFiscalYear = db
+    .select({ fileCount: count(files.fileId) })
+    .from(files)
+    .where(eq(files.fiscalYear, now.getFullYear()));
 
   return {
-    updatedPastWeek: (await thisWeek)?.at(0)?.data,
-    updatedPastMonth: (await thisMonth)?.at(0)?.data,
-    currentFiscalYear: (await thisYear)?.at(0)?.data,
+    filesApprovedPastWeek: (await filesApprovedPastWeek)?.at(0)?.fileCount,
+    filesApprovedThisMonth: (await filesApprovedThisMonth)?.at(0)?.fileCount,
+    filesCurrentFiscalYear: (await filesCurrentFiscalYear)?.at(0)?.fileCount
   };
-}
+};
 
 /**
  * Distinct folders with file counts
