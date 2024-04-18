@@ -34,17 +34,21 @@ type ApportionmentEnvironment = {
   cacheDir: string;
   collectionCacheDir: string;
   dbUri: string;
+  dbHost: string;
+  dbPort: string;
+  dbUser: string;
+  dbPassword: string;
+  dbName: string;
   archiveS3Bucket: string;
   archiveS3Region: string;
   archiveS3Acl:
-    'private' |
-    'public-read' |
-    'public-read-write' |
-    'authenticated-read' |
-    'aws-exec-read' |
-    'bucket-owner-read' |
-    'bucket-owner-full-control'
-  ;
+    | 'private'
+    | 'public-read'
+    | 'public-read-write'
+    | 'authenticated-read'
+    | 'aws-exec-read'
+    | 'bucket-owner-read'
+    | 'bucket-owner-full-control';
   awsSso: boolean;
   sentryDsn: string;
   environment: string;
@@ -65,14 +69,21 @@ function environmentVariables(): ApportionmentEnvironment {
       ? parseInt(process.env['APPORTIONMENTS_CACHE_TTL'])
       : 1000 * 60 * 60 * 24 * 15,
     cacheDir: process.env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
-    collectionCacheDir: process.env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
+    collectionCacheDir:
+      process.env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
     dbUri: process.env['APPORTIONMENTS_DB_URI'] || '',
+    // DB parts will be used if URI is not provided.
+    dbHost: process.env['APPORTIONMENTS_DB_HOST'] || '',
+    dbPort: process.env['APPORTIONMENTS_DB_PORT'] || '5436',
+    dbUser: process.env['APPORTIONMENTS_DB_USER'] || '',
+    dbPassword: process.env['APPORTIONMENTS_DB_PASSWORD'] || '',
+    dbName: process.env['APPORTIONMENTS_DB_NAME'] || '',
     archiveS3Bucket: process.env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
     archiveS3Region: process.env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
     archiveS3Acl:
       process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] &&
       s3AclOptions.includes(process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
-        ? process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl']
+        ? (process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl'])
         : 'public-read',
     awsSso:
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&

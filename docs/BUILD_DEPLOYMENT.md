@@ -31,6 +31,7 @@ node build/
 The following are environment variables that can be set:
 
 - `APPORTIONMENTS_DB_URI` - Needed for connection to database
+  - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
 - `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
 - `VITE_SENTRY_SCRIPT` - The `https://sentry...` script to load on the page.
 - `VITE_SENTRY_DSN` - (not used, see [ERROR_HANDLING.md](./ERROR_HANDLING.md))
@@ -59,6 +60,7 @@ npx dotenvx run -- npm run collect
 The following are environment variables that can be set:
 
 - `APPORTIONMENTS_DB_URI` - Needed for connection to database.
+  - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
 - `APPORTIONMENTS_ARCHIVE_S3_REGION` - S3 bucket region for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET` - S3 bucket name for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_ACL` - S3 bucket ACL for uploading the collection archive.

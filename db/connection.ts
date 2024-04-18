@@ -26,9 +26,12 @@ const env = environmentVariables();
 const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
-// Client
+// Client.  Support either uri or separate parts
+const connectionString = env.dbUri
+  ? env.dbUri
+  : `postgresql://${env.dbUser}:${env.dbPassword}@${env.dbHost}:${env.dbPort}/${env.dbName}`;
 export const pool = new pg.Pool({
-  connectionString: env.dbUri
+  connectionString
 });
 export let poolConnected = false;
 export let poolClient: pg.PoolClient;
