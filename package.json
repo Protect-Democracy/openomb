@@ -23,7 +23,7 @@
     "prepare": "husky || true"
   },
   "lint-staged": {
-    "*/**/*.{js,jsx,ts,tsx}": [
+    "*/**/*.{js,jsx,ts,tsx,svelte}": [
       "prettier --write",
       "eslint --fix",
       "eslint"
