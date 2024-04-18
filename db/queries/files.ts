@@ -8,7 +8,7 @@ import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
-import { subDays, subMonths, startOfDay } from 'date-fns';
+import { subDays, startOfWeek, startOfDay } from 'date-fns';
 
 /**
  * Get simple file record given file id
@@ -133,6 +133,13 @@ export const fileStats = async function () {
   const now = new Date();
 
   // Set date to start of week, get files approved since
+  const dateWeek = startOfWeek(new Date());
+  const filesApprovedThisWeek = db
+    .select({ fileCount: count(files.fileId) })
+    .from(files)
+    .where(gte(files.approvalTimestamp, dateWeek));
+
+  // Set date to week ago, get files approved since
   const weekAgo = startOfDay(subDays(new Date(), 7));
   const filesApprovedPastWeek = db
     .select({ fileCount: count(files.fileId) })
@@ -153,6 +160,7 @@ export const fileStats = async function () {
     .where(eq(files.fiscalYear, now.getFullYear()));
 
   return {
+    filesApprovedThisWeek: (await filesApprovedThisWeek)?.at(0)?.fileCount,
     filesApprovedPastWeek: (await filesApprovedPastWeek)?.at(0)?.fileCount,
     filesApprovedThisMonth: (await filesApprovedThisMonth)?.at(0)?.fileCount,
     filesCurrentFiscalYear: (await filesCurrentFiscalYear)?.at(0)?.fileCount

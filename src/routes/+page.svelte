@@ -32,16 +32,17 @@
 
 <div class="accent-bg">
   <section class="stats">
-    <div>
-      <h2>{formatNumber(data.fileStats?.filesApprovedPastWeek)}</h2>
-      New apportionments<br />
-      approved this week
-    </div>
-    <div>
-      <h2>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</h2>
-      Total apportionments<br />
-      approved this fiscal year {currentYear}
-    </div>
+    <h2 class="sr-only">Apportionment approval statistics</h2>
+
+    <p>
+      <strong>{formatNumber(data.fileStats?.filesApprovedThisWeek)}</strong>
+      New apportionments approved this week
+    </p>
+
+    <p>
+      <strong>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</strong>
+      Total apportionments approved this fiscal year {currentYear}
+    </p>
   </section>
 </div>
 
@@ -85,9 +86,13 @@
     padding: var(--spacing-double) 0;
   }
 
-  .stats h2 {
-    margin: 0;
-    padding: 0;
+  .stats p {
+    max-width: calc(var(--spacing) * 10);
+  }
+
+  .stats strong {
+    font-size: var(--font-size-large);
+    display: block;
   }
 
   .agencies {
