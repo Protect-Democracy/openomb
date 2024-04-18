@@ -26,15 +26,9 @@ const env = environmentVariables();
 const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
-// Client.  Support either uri or separate parts
-const possibleDbAuth = env.dbAuth
-  ? `${env.dbAuth.username}:${env.dbAuth.password}`
-  : `${env.dbUser}:${env.dbPassword}`;
-const connectionString = env.dbUri
-  ? env.dbUri
-  : `postgresql://${possibleDbAuth}@${env.dbHost}:${env.dbPort}/${env.dbName}`;
+// Client.
 export const pool = new pg.Pool({
-  connectionString
+  connectionString: dbConnectionString()
 });
 export let poolClient: pg.PoolClient;
 
@@ -61,4 +55,37 @@ export async function dbConnect() {
   }
 
   return poolClient;
+}
+
+export async function dbDisconnect() {
+  if (poolClient) {
+    poolClient.release();
+    poolClient.end();
+    poolClient = undefined;
+  }
+}
+
+function dbConnectionString() {
+  // If Uri is provided, use that
+  if (env.dbUri) {
+    return env.dbUri;
+  }
+
+  // Try to create authentication string using the _AUTHENTICATION
+  // value first if available.
+  let possibleDbAuth = '';
+  if (env.dbAuth && env.dbAuth.username) {
+    possibleDbAuth = `${env.dbAuth.username}:${env.dbAuth.password}@`;
+  }
+  else if (env.dbUser) {
+    possibleDbAuth = `${env.dbUser}:${env.dbPassword}@`;
+  }
+
+  // Try to create host and port
+  let hostPort = env.dbHost;
+  if (env.dbHost && env.dbPort) {
+    hostPort = `${env.dbHost}:${env.dbPort}`;
+  }
+
+  return `postgresql://${possibleDbAuth}${hostPort}/${env.dbName}`;
 }
