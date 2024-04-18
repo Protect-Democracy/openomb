@@ -39,6 +39,7 @@ type ApportionmentEnvironment = {
   dbUser: string;
   dbPassword: string;
   dbName: string;
+  dbAuth: { username: string; password: string } | null;
   archiveS3Bucket: string;
   archiveS3Region: string;
   archiveS3Acl:
@@ -78,6 +79,9 @@ function environmentVariables(): ApportionmentEnvironment {
     dbUser: process.env['APPORTIONMENTS_DB_USER'] || '',
     dbPassword: process.env['APPORTIONMENTS_DB_PASSWORD'] || '',
     dbName: process.env['APPORTIONMENTS_DB_NAME'] || '',
+    dbAuth: process.env['APPORTIONMENTS_DB_AUTH']
+      ? JSON.parse(process.env['APPORTIONMENTS_DB_AUTH'])
+      : null,
     archiveS3Bucket: process.env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
     archiveS3Region: process.env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
     archiveS3Acl:

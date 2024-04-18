@@ -32,6 +32,7 @@ The following are environment variables that can be set:
 
 - `APPORTIONMENTS_DB_URI` - Needed for connection to database
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
+  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTHENTICATION`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTHENTICATION='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
 - `VITE_SENTRY_SCRIPT` - The `https://sentry...` script to load on the page.
 - `VITE_SENTRY_DSN` - (not used, see [ERROR_HANDLING.md](./ERROR_HANDLING.md))
@@ -61,6 +62,7 @@ The following are environment variables that can be set:
 
 - `APPORTIONMENTS_DB_URI` - Needed for connection to database.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
+  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTHENTICATION`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTHENTICATION='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_ARCHIVE_S3_REGION` - S3 bucket region for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET` - S3 bucket name for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_ACL` - S3 bucket ACL for uploading the collection archive.
