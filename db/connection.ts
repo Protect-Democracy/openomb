@@ -27,9 +27,12 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
 // Client.  Support either uri or separate parts
+const possibleDbAuth = env.dbAuth
+  ? `${env.dbAuth.username}:${env.dbAuth.password}`
+  : `${env.dbUser}:${env.dbPassword}`;
 const connectionString = env.dbUri
   ? env.dbUri
-  : `postgresql://${env.dbUser}:${env.dbPassword}@${env.dbHost}:${env.dbPort}/${env.dbName}`;
+  : `postgresql://${possibleDbAuth}@${env.dbHost}:${env.dbPort}/${env.dbName}`;
 export const pool = new pg.Pool({
   connectionString
 });
