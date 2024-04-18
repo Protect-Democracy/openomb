@@ -36,3 +36,9 @@ Suggested VS Code configuration:
   "...": "..."
 }
 ```
+
+## Pre-commit formatting and linting
+
+When the project is installed via `npm install` it will install a Git pre-commit hook that will run Prettier and ESLint on staged files before committing.
+
+To manually make sure that husky is installed, run `npm run prepare`.
