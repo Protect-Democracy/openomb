@@ -33,7 +33,6 @@ const connectionString = env.dbUri
 export const pool = new pg.Pool({
   connectionString
 });
-export let poolConnected = false;
 export let poolClient: pg.PoolClient;
 
 // Drizzle connection
@@ -54,9 +53,8 @@ export async function dbConnect() {
   // TODO: This seems to cause issues with hot-reloading and the
   // dev server.  A restart of the dev server should fix this,
   // but this is less that ideal.
-  if (!poolConnected) {
+  if (!poolClient) {
     poolClient = await pool.connect();
-    poolConnected = true;
   }
 
   return poolClient;
