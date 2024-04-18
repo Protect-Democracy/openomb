@@ -9,5 +9,12 @@ export async function load() {
   return {
     agencies: await agenciesWithChildren(),
     fileStats: await fileStats(),
+
+    // Most of the defaults are good for the homepage
+    pageMeta: {
+      title: undefined,
+      description: undefined,
+      keywords: undefined
+    }
   };
 }

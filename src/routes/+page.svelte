@@ -9,10 +9,6 @@
   const currentYear = new Date().getFullYear();
 </script>
 
-<svelte:head>
-  <title>{siteName}</title>
-</svelte:head>
-
 <section class="summary">
   <h1>Accessing apportionment data just got better.</h1>
   <p>
@@ -22,11 +18,6 @@
 
   <div class="search">
     <SearchForm />
-  </div>
-
-  <div class="actions">
-    <a class="button" href="/search">More search options</a>
-    <a class="button alt" href="/about">About our process</a>
   </div>
 </section>
 
@@ -63,16 +54,6 @@
   .search {
     margin: var(--spacing-double) auto;
     width: calc(var(--copy-width-limit) * 0.75);
-  }
-
-  .button.alt {
-    color: var(--color-text);
-    background-color: var(--color-gray-light);
-    margin-left: var(--spacing);
-  }
-
-  .button.alt:hover {
-    background-color: var(--color-highlight);
   }
 
   .accent-bg {
