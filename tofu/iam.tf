@@ -18,6 +18,24 @@ data "aws_iam_policy_document" "ecs_task_assume_role" {
   }
 }
 
+data "aws_iam_policy_document" "ecs_secrets" {
+  statement {
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "kms:Decrypt",
+    ]
+    resources = [
+      aws_rds_cluster.apportionments.master_user_secret[0].secret_arn,
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ecs_secrets" {
+  name        = "ecs-secrets"
+  description = "A policy to give ECS access to Secrets Manager"
+  policy      = data.aws_iam_policy_document.ecs_secrets.json
+}
+
 data "aws_iam_policy" "ecs_task_execution_role" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
@@ -25,4 +43,9 @@ data "aws_iam_policy" "ecs_task_execution_role" {
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
   role       = aws_iam_role.apportionments_app_task_execution_role.name
   policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_secrets" {
+  role       = aws_iam_role.apportionments_app_task_execution_role.name
+  policy_arn = aws_iam_policy.ecs_secrets.arn
 }

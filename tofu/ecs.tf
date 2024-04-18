@@ -44,6 +44,26 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "containerPort" : 3000
         }
       ],
+      "environment" : [
+        {
+          "name" : "APPORTIONMENTS_DB_HOST",
+          "value" : "${aws_rds_cluster.apportionments.endpoint}"
+        },
+        {
+          "name" : "APPORTIONMENTS_DB_PORT",
+          "value" : "${tostring(aws_rds_cluster.apportionments.port)}"
+        },
+        {
+          "name" : "APPORTIONMENTS_DB_NAME",
+          "value" : "${aws_rds_cluster.apportionments.database_name}"
+        }
+      ],
+      "secrets" : [
+        {
+          "name" : "APPORTIONMENTS_DB_AUTH",
+          "valueFrom" : "${aws_rds_cluster.apportionments.master_user_secret[0].secret_arn}"
+        }
+      ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
