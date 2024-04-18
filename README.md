@@ -21,7 +21,7 @@ Configure using the following environment variables:
 
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
-  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTHENTICATION`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTHENTICATION='{"username":"name","password":"pass"}'`
+  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_ARCHIVE_S3_REGION`: The AWS region code to use for the bucket to upload the archive to.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET`: The AWS bucket to upload the archive to.
 - `APPORTIONMENTS_AWS_SSO`: Whether to try to use AWS SSO credentials for authentication.
@@ -43,7 +43,7 @@ Configure using the following environment variables:
 
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
-  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTHENTICATION`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTHENTICATION='{"username":"name","password":"pass"}'`
+  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
 
 ## Setup
 
