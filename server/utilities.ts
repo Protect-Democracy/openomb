@@ -68,7 +68,7 @@ function environmentVariables(): ApportionmentEnvironment {
     baseUrl: process.env['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
     cacheTtl: process.env['APPORTIONMENTS_CACHE_TTL']
       ? parseInt(process.env['APPORTIONMENTS_CACHE_TTL'])
-      : 1000 * 60 * 60 * 24 * 15,
+      : 1000 * 60 * 60 * 24 * 1,
     cacheDir: process.env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
     collectionCacheDir:
       process.env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
@@ -79,8 +79,8 @@ function environmentVariables(): ApportionmentEnvironment {
     dbUser: process.env['APPORTIONMENTS_DB_USER'] || '',
     dbPassword: process.env['APPORTIONMENTS_DB_PASSWORD'] || '',
     dbName: process.env['APPORTIONMENTS_DB_NAME'] || '',
-    dbAuth: process.env['APPORTIONMENTS_DB_AUTH']
-      ? JSON.parse(process.env['APPORTIONMENTS_DB_AUTH'])
+    dbAuth: process.env['APPORTIONMENTS_DB_AUTHENTICATION']
+      ? JSON.parse(process.env['APPORTIONMENTS_DB_AUTHENTICATION'])
       : null,
     archiveS3Bucket: process.env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
     archiveS3Region: process.env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
