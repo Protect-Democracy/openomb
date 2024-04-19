@@ -1,43 +1,10 @@
 /**
- * App-level CSS.  Should focus on element-level styling and layout.
+ * Elements.  i.e. things without classes or ids
  */
-
-/* Normalize/reset */
-@import 'modern-normalize/modern-normalize.css';
-
-/* Variables */
-:root {
-  --color-background: #f5f5f5;
-  --color-text: #333;
-  --color-background-inverse: #333;
-  --color-text-inverse: #f5f5f5;
-  --color-gray-light: #cdcdcd;
-  --color-gray-medium: #787878;
-  --color-gray-dark: #333;
-  --color-primary: #007bff;
-  --color-highlight: #ffcc00;
-  --color-accent: #ff6f61;
-  --color-error: #dc3545;
-  --spacing: 1rem;
-  --spacing-half: calc(var(--spacing) / 2);
-  --spacing-small: calc(var(--spacing) / 4);
-  --spacing-thin: calc(var(--spacing) / 10);
-  --spacing-double: calc(var(--spacing) * 2);
-  --spacing-large: calc(var(--spacing) * 4);
-  --line-height: 1.5;
-  --font-size-small: 0.8em;
-  --font-size-regular: 1rem;
-  --font-size-large: 1.75rem;
-  --font-size-xlarge: 2.5rem;
-  --font-weight-bold: bold;
-  --font-weight-regular: normal;
-  --copy-width-limit: 40em;
-  --border-radius: calc(var(--spacing) / 4);
-  --transition: 0.2s;
-}
 
 /* Page */
 body {
+  font-family: var(--font-family-copy);
   background-color: var(--color-background);
   color: var(--color-text);
   line-height: var(--line-height);
@@ -45,16 +12,16 @@ body {
 
 /* Elements */
 a {
-  color: var(--color-primary);
+  color: var(--color-link);
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 p {
   margin-bottom: var(--spacing);
-  max-width: var(--copy-width-limit);
-}
-
-.text-container {
   max-width: var(--copy-width-limit);
 }
 
@@ -74,39 +41,52 @@ caption {
 }
 
 h1,
+.h1,
 h2,
+.h2,
 h3,
+.h3,
 h4,
+.h4,
 h5,
-h6 {
+.h5,
+h6,
+.h6 {
+  font-family: var(--font-family-heading);
   padding-top: var(--spacing);
   margin-top: 0;
   margin-bottom: var(--spacing);
 }
 
-h1 {
+h1,
+.h1 {
   font-size: var(--font-size-xlarge);
 }
 
-h2 {
+h2,
+.h2 {
   font-size: var(--font-size-large);
 }
 
-h3 {
+h3,
+.h3 {
   font-size: 1.25rem;
 }
 
-h4 {
+h4,
+.h4 {
   font-size: 1.1rem;
   font-weight: bold;
 }
 
-h5 {
+h5,
+.h5 {
   font-size: 1rem;
   font-weight: bold;
 }
 
-h6 {
+h6,
+.h6 {
   font-size: 1rem;
   font-weight: normal;
 }
@@ -153,6 +133,9 @@ pre {
   border: var(--spacing-thin) solid var(--color-gray-medium);
   border-radius: var(--border-radius);
   padding: var(--spacing-small);
+  font-size: var(--font-size-small);
+  list-style: var(--line-height);
+  font-family: var(--font-family-monospace);
 }
 
 abbr {
@@ -174,6 +157,17 @@ fieldset {
   border-radius: var(--border-radius);
   padding: var(--spacing);
   margin-bottom: var(--spacing);
+}
+
+fieldset legend {
+  padding-inline: var(--spacing-half);
+  font-weight: var(--font-weight-bold);
+}
+
+label {
+  display: block;
+  margin-bottom: var(--spacing-half);
+  font-weight: var(--font-weight-normal);
 }
 
 input,
@@ -200,7 +194,9 @@ button,
 input[type='submit'],
 input[type='button'],
 input[type='reset'],
+[role='button'],
 a.button {
+  display: inline-block;
   background-color: var(--color-primary);
   border: none;
   border-radius: var(--border-radius);
@@ -215,6 +211,7 @@ button:hover,
 input[type='submit']:hover,
 input[type='button']:hover,
 input[type='reset']:hover,
+[role='button']:hover,
 a.button:hover {
   background-color: var(--color-highlight);
   color: var(--color-text);
@@ -224,74 +221,34 @@ button[disabled],
 input[type='submit'][disabled],
 input[type='button'][disabled],
 input[type='reset'][disabled],
+[role='button'][disabled],
 button[disabled]:hover,
 input[type='submit'][disabled]:hover,
 input[type='button'][disabled]:hover,
-input[type='reset'][disabled]:hover {
+input[type='reset'][disabled]:hover,
+[role='button'][disabled]:hover {
   background-color: var(--color-gray-light);
   color: var(--color-gray-dark);
   cursor: not-allowed;
 }
 
-/* Components and variants */
-
-button.like-text,
-input[type='submit'].like-text,
-input[type='button'].like-text,
-input[type='reset'].like-text,
-a.button.like-text {
-  background-color: inherit;
-  border: none;
-  border-radius: 0;
-  color: inherit;
-  cursor: pointer;
-  padding: 0;
-  transition: none;
-  display: inline;
-  text-align: left;
-  line-height: var(--line-height);
+/* Toggles */
+button[aria-pressed='false'],
+input[type='submit'][aria-pressed='false'],
+input[type='button'][aria-pressed='false'],
+input[type='reset'][aria-pressed='false'],
+[role='button'][aria-pressed='false'],
+a[aria-pressed='false'].button {
+  background-color: var(--color-gray-dark);
+  color: var(--color-text-inverse);
 }
 
-/* Utilities */
-
-/**
- * Visually hidden element that still has flow in the content
- * See: https://github.com/twbs/bootstrap/blob/f68a47c8bfa60b568db8ada7130366dcfbe24276/scss/mixins/_visually-hidden.scss#L9
- */
-.visually-hidden {
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-.visually-hidden-focusable:not(:focus):not(:focus-within) {
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-/**
- * Screenreaders only and will not affect flow of content at all.
- * See: https://tailwindcss.com/docs/screen-readers
- */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+button[aria-pressed='false']:hover,
+input[type='submit'][aria-pressed='false']:hover,
+input[type='button'][aria-pressed='false']:hover,
+input[type='reset'][aria-pressed='false']:hover,
+[role='button'][aria-pressed='false']:hover,
+a[aria-pressed='false'].button:hover {
+  background-color: var(--color-gray-light);
+  color: var(--color-text);
 }

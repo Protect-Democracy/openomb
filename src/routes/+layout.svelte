@@ -16,12 +16,14 @@
     socialTwitterImgPath
   } from '$config';
   import favicon from '$assets/favicon/favicon.png';
-  import '../app.css';
+  import '../styles/index.css';
 
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
 </script>
 
 <svelte:head>
+  <!-- Unsure why this throws an error since it works.  See: https://github.com/sveltejs/eslint-plugin-svelte/issues/652 -->
+  <!-- eslint-disable svelte/valid-compile -->
   <title>{$page.data?.pageMeta?.title ? `${$page.data?.pageMeta?.title} | ` : ''}{siteName}</title>
 
   <link rel="icon" href={favicon} />
@@ -57,6 +59,7 @@
     name="twitter:image"
     content="{deployedBaseUrl}{$page.data?.pageMeta?.twitterImgPath || socialTwitterImgPath}"
   />
+  <!-- eslint-enable svelte/valid-compile -->
 
   {#if sentryScript}
     <!-- Temporary use of Sentry browser integration -->
@@ -78,7 +81,7 @@
   <a href="#main-content">Skip to main content</a>
 </div>
 
-<header>
+<header class="page-container">
   {#if !isProduction()}
     <div class="development">
       <p>
@@ -104,7 +107,7 @@
   <slot />
 </main>
 
-<footer>
+<footer class="page-container">
   <ul>
     <li><a href="/about">About</a></li>
     <li><a href="/developers">For developers</a></li>
@@ -129,7 +132,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-content: center;
-    padding: var(--spacing) var(--spacing-large);
   }
 
   h1 {
@@ -155,7 +157,7 @@
   footer {
     background-color: var(--color-background-inverse);
     color: var(--color-text-inverse);
-    padding: calc(var(--spacing) * 3) var(--spacing);
+    padding: calc(var(--spacing) * 3) 0;
   }
 
   .development {

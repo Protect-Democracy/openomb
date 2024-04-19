@@ -1,92 +1,132 @@
-<h1>HTML elements to test styling</h1>
+<script lang="ts">
+  import placeholderImage from '$assets/placeholder-600.png';
 
-<p>
-  We don't need a 100% styling for all this as it was copy-pasted, but a good place to start to make
-  some basic styles. Also, this doesn't need to be in the end product, but it's also ok to keep it
-  if needed.
-</p>
+  const colorVariables = [
+    'color-background',
+    'color-text',
+    'color-text-muted',
+    'color-background-inverse',
+    'color-text-inverse',
+    'color-gray-light',
+    'color-gray-medium',
+    'color-gray-dark',
+    'color-primary',
+    'color-highlight',
+    'color-accent',
+    'color-error',
+    'color-secondary',
+    'color-text-secondary',
+    'color-background-accent',
+    'color-text-accent',
+    'color-link'
+  ];
+</script>
 
-<article id="text__headings">
-  <header>
-    <h1>Headings</h1>
-  </header>
-  <div>
-    <h1>Heading 1</h1>
-    <h2>Heading 2</h2>
-    <h3>Heading 3</h3>
-    <h4>Heading 4</h4>
-    <h5>Heading 5</h5>
-    <h6>Heading 6</h6>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+<div class="page-container">
+  <h1>Style guide</h1>
 
-<article id="text__paragraphs">
-  <header><h1>Paragraphs</h1></header>
-  <div>
+  <p>This is a very rough style guide to help see and describe global styles for this site.</p>
+
+  <h2 class="style-section">Typography</h2>
+
+  <p>Main content (i.e. copy) typography is defined with <code>var(--font-family-copy)</code></p>
+
+  <h3>Heading typography</h3>
+
+  <p>Heading font is defined with <code>var(--font-family-heading)</code></p>
+
+  <h2 class="style-section">Colors</h2>
+
+  {#each colorVariables as colorVariable}
+    <div
+      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
+    >
+      var(--{colorVariable})
+    </div>
+  {/each}
+
+  <h2 class="style-section">Headings</h2>
+
+  <h1>Heading 1</h1>
+  <h2>Heading 2</h2>
+  <h3>Heading 3</h3>
+  <h4>Heading 4</h4>
+  <h5>Heading 5</h5>
+  <h6>Heading 6</h6>
+
+  <p>
+    Note that the use of <code>h5</code> or <code>h6</code> should be avoided and usually mean that content
+    should be outlined differently.
+  </p>
+
+  <p>
+    Also note that the semantic heading should be used, and if it is important to have it look,
+    utilize the appropriate classes like <code>.h2</code>.
+  </p>
+
+  <h2 class="style-section">Paragraphs</h2>
+
+  <p>
+    A paragraph (from the Greek paragraphos, “to write beside” or “written beside”) is a
+    self-contained unit of a discourse in writing dealing with a particular point or idea. A
+    paragraph consists of one or more sentences. Though not required by the syntax of any language,
+    paragraphs are usually an expected part of formal writing, used to organize longer prose.
+  </p>
+
+  <h2 class="style-section">Blockquotes</h2>
+  <blockquote>
     <p>
-      A paragraph (from the Greek paragraphos, “to write beside” or “written beside”) is a
-      self-contained unit of a discourse in writing dealing with a particular point or idea. A
-      paragraph consists of one or more sentences. Though not required by the syntax of any
-      language, paragraphs are usually an expected part of formal writing, used to organize longer
-      prose.
+      A block quotation (also known as a long quotation or extract) is a quotation in a written
+      document, that is set off from the main text as a paragraph, or block of text.
     </p>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
 
-<article id="text__blockquotes">
-  <header><h1>Blockquotes</h1></header>
-  <div>
-    <blockquote>
-      <p>
-        A block quotation (also known as a long quotation or extract) is a quotation in a written
-        document, that is set off from the main text as a paragraph, or block of text.
-      </p>
-      <p>
-        It is typically distinguished visually using indentation and a different typeface or smaller
-        size quotation. It may or may not include a citation, usually placed at the bottom.
-      </p>
-      <cite><a href="#!">Said no one, ever.</a></cite>
-    </blockquote>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+    <p>
+      It is typically distinguished visually using indentation and a different typeface or smaller
+      size quotation. It may or may not include a citation, usually placed at the bottom.
+    </p>
+    <cite><a href="#!">Said no one, ever.</a></cite>
+  </blockquote>
 
-<article id="text__lists">
-  <header><h1>Lists</h1></header>
-  <div>
-    <h3>Definition list</h3>
-    <dl>
-      <dt>Definition List Title</dt>
-      <dd>This is a definition list division.</dd>
-    </dl>
-    <h3>Ordered List</h3>
-    <ol>
-      <li>List Item 1</li>
-      <li>List Item 2</li>
-      <li>List Item 3</li>
-    </ol>
-    <h3>Unordered List</h3>
-    <ul>
-      <li>List Item 1</li>
-      <li>List Item 2</li>
-      <li>List Item 3</li>
-    </ul>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+  <h2 class="style-section">Lists</h2>
+  <h3>Definition list</h3>
 
-<article id="text__hr">
-  <header><h1>Horizontal rules</h1></header>
-  <div>
-    <hr />
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+  <dl>
+    <dt>Definition List Title</dt>
+    <dd>This is a definition list division.</dd>
+  </dl>
 
-<article id="text__tables">
-  <header><h1>Tabular data</h1></header>
+  <h3>Ordered List</h3>
+
+  <ol>
+    <li>List Item 1</li>
+    <li>List Item 2</li>
+    <li>List Item 3</li>
+  </ol>
+
+  <h3>Unordered List</h3>
+
+  <ul>
+    <li>List Item 1</li>
+    <li>List Item 2</li>
+    <li>List Item 3</li>
+  </ul>
+
+  <h2 class="style-section">Horizontal rules</h2>
+
+  <p>
+    lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum
+    dolor sit amet vlorem ipsum dolor sit amet
+  </p>
+
+  <hr />
+
+  <p>
+    lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum
+    dolor sit amet vlorem ipsum dolor sit amet
+  </p>
+
+  <h2 class="style-section">Tabular data</h2>
+
   <table>
     <caption>Table Caption</caption>
     <thead>
@@ -138,303 +178,374 @@
       </tr>
     </tbody>
   </table>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
 
-<article id="text__code">
-  <header><h1>Code</h1></header>
-  <div>
-    <p><strong>Keyboard input:</strong> <kbd>Cmd</kbd></p>
-    <p><strong>Inline code:</strong> <code>&lt;div&gt;code&lt;/div&gt;</code></p>
-    <p>
-      <strong>Sample output:</strong> <samp>This is sample output from a computer program.</samp>
-    </p>
-    <h2>Pre-formatted text</h2>
-    <pre>P R E F O R M A T T E D T E X T
+  <h2 class="style-section">Buttons</h2>
+
+  <h3>Button elements</h3>
+
+  <button>Button</button>
+  <button class="secondary">Secondary</button>
+  <button disabled>Disabled</button>
+  <div role="button">role="button"</div>
+
+  <h3>Toggles</h3>
+
+  <p>
+    For accessible toggles, utilize <code>aria-pressed="true"</code> or
+    <code>aria-pressed="false"</code>.
+  </p>
+
+  <button aria-pressed="true">On</button>
+  <button aria-pressed="false">Off</button>
+
+  <h3>Modifiers</h3>
+
+  <p>
+    Generally, only use these modifiers if they really make sense and are consistent with semantics
+    and the visual system.
+  </p>
+
+  <button class="like-link">.like-link</button>
+  <button class="like-text">.like-text</button>
+
+  <h3>Link elements</h3>
+
+  <p>
+    Generally links should not be styled like buttons as button and link have different sematic
+    meaning and should be visually distinct from each other. But using <code
+      >a.button.like-link</code
+    > will look like a link but give spacing like button which can be helpful.
+  </p>
+
+  <a class="button" href="#buttons">a.button</a>
+  <a class="button like-link" href="#buttons">a.like-link</a>
+
+  <h2 class="style-section">Code</h2>
+
+  <p><strong>Keyboard input:</strong> <kbd>Cmd</kbd></p>
+  <p><strong>Inline code:</strong> <code>&lt;div&gt;code&lt;/div&gt;</code></p>
+  <p>
+    <strong>Sample output:</strong> <samp>This is sample output from a computer program.</samp>
+  </p>
+  <h3>Pre-formatted text</h3>
+
+  <pre>P R E F O R M A T T E D T E X T
 ! " # $ % &amp; ' ( ) * + , - . /
 0 1 2 3 4 5 6 7 8 9 : ; &lt; = &gt; ?
 @ A B C D E F G H I J K L M N O</pre>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
 
-<article id="text__inline">
-  <header><h1>Inline elements</h1></header>
-  <div>
-    <p><a href="#!">This is a text link</a>.</p>
-    <p><strong>Strong is used to indicate strong importance.</strong></p>
-    <p><em>This text has added emphasis.</em></p>
-    <p>
-      The <b>b element</b> is stylistically different text from normal text, without any special importance.
-    </p>
-    <p>The <i>i element</i> is text that is offset from the normal text.</p>
-    <p>
-      The <u>u element</u> is text with an unarticulated, though explicitly rendered, non-textual annotation.
-    </p>
-    <p><del>This text is deleted</del> and <ins>This text is inserted</ins>.</p>
-    <p><s>This text has a strikethrough</s>.</p>
-    <p>Superscript<sup>®</sup>.</p>
-    <p>Subscript for things like H<sub>2</sub>O.</p>
-    <p><small>This small text is small for for fine print, etc.</small></p>
-    <p>Abbreviation: <abbr title="HyperText Markup Language">HTML</abbr></p>
-    <p>
-      <q cite="https://developer.mozilla.org/en-US/docs/HTML/Element/q"
-        >This text is a short inline quotation.</q
-      >
-    </p>
-    <p><cite>This is a citation.</cite></p>
-    <p>The <dfn>dfn element</dfn> indicates a definition.</p>
-    <p>The <mark>mark element</mark> indicates a highlight.</p>
-    <p>The <var>variable element</var>, such as <var>x</var> = <var>y</var>.</p>
-    <p>The time element: <time datetime="2013-04-06T12:32+00:00">2 weeks ago</time></p>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+  <h2 class="style-section">Inline elements</h2>
 
-<article id="text__comments">
-  <header><h1>HTML Comments</h1></header>
-  <div>
-    <p>There is comment here: <!--This comment should not be displayed--></p>
-    <p>There is a comment spanning multiple tags and lines below here.</p>
-    <!--<p><a href="#!">This is a text link. But it should not be displayed in a comment</a>.</p>
-      <p><strong>Strong is used to indicate strong importance. But, it should not be displayed in a comment</strong></p>
-      <p><em>This text has added emphasis. But, it should not be displayed in a comment</em></p>-->
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
-
-<article id="embedded__images">
-  <header><h2>Images</h2></header>
-  <div>
-    <h3>No <code>&lt;figure&gt;</code> element</h3>
-    <p><img src="https://placehold.co/500x500/png" alt="Some alt text" /></p>
-    <h3>Wrapped in a <code>&lt;figure&gt;</code> element, no <code>&lt;figcaption&gt;</code></h3>
-    <figure><img src="https://placehold.co/500x500/png" alt="Some alt text" /></figure>
-    <h3>
-      Wrapped in a <code>&lt;figure&gt;</code> element, with a <code>&lt;figcaption&gt;</code>
-    </h3>
-    <figure>
-      <img src="https://placehold.co/500x500/png" alt="Some alt text" />
-      <figcaption>Here is a caption for this image.</figcaption>
-    </figure>
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
-
-<article id="embedded__canvas">
-  <header><h2>Canvas</h2></header>
-  <div><canvas>canvas</canvas></div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
-
-<article id="embedded__meter">
-  <header><h2>Meter</h2></header>
-  <div><meter value="2" min="0" max="10">2 out of 10</meter></div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
-
-<article id="embedded__progress">
-  <header><h2>Progress</h2></header>
-  <div><progress>progress</progress></div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
-
-<article id="embedded__svg">
-  <header><h2>Inline SVG</h2></header>
-  <div>
-    <svg width="100px" height="100px"
-      ><circle cx="100" cy="100" r="100" fill="#1fa3ec"></circle></svg
+  <p><a href="#!">This is a text link</a>.</p>
+  <p><strong>Strong is used to indicate strong importance.</strong></p>
+  <p><em>This text has added emphasis.</em></p>
+  <p>
+    The <b>b element</b> is stylistically different text from normal text, without any special importance.
+  </p>
+  <p>The <i>i element</i> is text that is offset from the normal text.</p>
+  <p>
+    The <u>u element</u> is text with an unarticulated, though explicitly rendered, non-textual annotation.
+  </p>
+  <p><del>This text is deleted</del> and <ins>This text is inserted</ins>.</p>
+  <p><s>This text has a strikethrough</s>.</p>
+  <p>Superscript<sup>®</sup>.</p>
+  <p>Subscript for things like H<sub>2</sub>O.</p>
+  <p><small>This small text is small for for fine print, etc.</small></p>
+  <p>Abbreviation: <abbr title="HyperText Markup Language">HTML</abbr></p>
+  <p>
+    <q cite="https://developer.mozilla.org/en-US/docs/HTML/Element/q"
+      >This text is a short inline quotation.</q
     >
-  </div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+  </p>
+  <p><cite>This is a citation.</cite></p>
+  <p>The <dfn>dfn element</dfn> indicates a definition.</p>
+  <p>The <mark>mark element</mark> indicates a highlight.</p>
+  <p>The <var>variable element</var>, such as <var>x</var> = <var>y</var>.</p>
+  <p>The time element: <time datetime="2013-04-06T12:32+00:00">2 weeks ago</time></p>
 
-<article id="embedded__iframe">
-  <header><h2>IFrame</h2></header>
-  <div><iframe src="/" height="300" title="Example"></iframe></div>
-  <footer><p><a href="#top">[Top]</a></p></footer>
-</article>
+  <h2 class="style-section">Images</h2>
 
-<header><h1>Form elements</h1></header>
-<form>
-  <fieldset id="forms__input">
-    <legend>Input fields</legend>
-    <p>
-      <label for="input__text">Text Input</label>
-      <input id="input__text" type="text" placeholder="Text Input" />
-    </p>
-    <p>
-      <label for="input__password">Password</label>
-      <input id="input__password" type="password" placeholder="Type your Password" />
-    </p>
-    <p>
-      <label for="input__webaddress">Web Address</label>
-      <input id="input__webaddress" type="url" placeholder="http://yoursite.com" />
-    </p>
-    <p>
-      <label for="input__emailaddress">Email Address</label>
-      <input id="input__emailaddress" type="email" placeholder="name@email.com" />
-    </p>
-    <p>
-      <label for="input__phone">Phone Number</label>
-      <input id="input__phone" type="tel" placeholder="(999) 999-9999" />
-    </p>
-    <p>
-      <label for="input__search">Search</label>
-      <input id="input__search" type="search" placeholder="Enter Search Term" />
-    </p>
-    <p>
-      <label for="input__text2">Number Input</label>
-      <input id="input__text2" type="number" placeholder="Enter a Number" />
-    </p>
-    <p>
-      <label for="input__text3" class="error">Error</label>
-      <input id="input__text3" aria-invalid="true" type="text" placeholder="Text Input" />
-    </p>
-    <p>
-      <label for="input__text4" class="valid">Valid</label>
-      <input id="input__text4" class="is-valid" type="text" placeholder="Text Input" />
-    </p>
-    <p>
-      <label for="input__text4">Disabled</label>
-      <input id="input__text4" type="text" placeholder="Text Input" disabled />
-    </p>
-  </fieldset>
-  <p><a href="#top">[Top]</a></p>
-  <fieldset id="forms__select">
-    <legend>Select menus</legend>
-    <p>
-      <label for="select">Select</label>
-      <select id="select">
-        <optgroup label="Option Group">
-          <option>Option One</option>
-          <option>Option Two</option>
-          <option>Option Three</option>
-        </optgroup>
-      </select>
-    </p>
+  <h3>No <code>&lt;figure&gt;</code> element</h3>
+  <p><img src={placeholderImage} alt="Some alt text" /></p>
 
-    <p>
-      <label for="select">Disabled</label>
-      <select id="select" disabled>
-        <optgroup label="Option Group">
-          <option>Option One</option>
-          <option>Option Two</option>
-          <option>Option Three</option>
-        </optgroup>
-      </select>
-    </p>
-  </fieldset>
-  <p><a href="#top">[Top]</a></p>
-  <fieldset id="forms__checkbox">
-    <legend>Checkboxes</legend>
-    <ul class="list list--bare">
-      <li>
-        <label for="checkbox1"
-          ><input id="checkbox1" name="checkbox" type="checkbox" checked /> Choice A</label
-        >
-      </li>
-      <li>
-        <label for="checkbox2"
-          ><input id="checkbox2" name="checkbox" type="checkbox" /> Choice B</label
-        >
-      </li>
-      <li>
-        <label for="checkbox3"
-          ><input id="checkbox3" name="checkbox" type="checkbox" /> Choice C</label
-        >
-      </li>
-      <li>
-        <label for="checkbox4"
-          ><input id="checkbox4" name="checkbox" type="checkbox" disabled /> Disabled</label
-        >
-      </li>
-    </ul>
-  </fieldset>
-  <p><a href="#top">[Top]</a></p>
-  <fieldset id="forms__radio">
-    <legend>Radio buttons</legend>
-    <ul class="list list--bare">
-      <li>
-        <label for="radio1"
-          ><input id="radio1" name="radio" type="radio" class="radio" checked /> Option 1</label
-        >
-      </li>
-      <li>
-        <label for="radio2"
-          ><input id="radio2" name="radio" type="radio" class="radio" /> Option 2</label
-        >
-      </li>
-      <li>
-        <label for="radio3"
-          ><input id="radio3" name="radio" type="radio" class="radio" /> Option 3</label
-        >
-      </li>
-    </ul>
-  </fieldset>
-  <p><a href="#top">[Top]</a></p>
-  <fieldset id="forms__textareas">
-    <legend>Textareas</legend>
-    <p>
-      <label for="textarea">Textarea</label>
-      <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here"></textarea>
-    </p>
-    <p>
-      <label for="textarea">Disabled</label>
-      <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here" disabled
-      ></textarea>
-    </p>
-  </fieldset>
-  <p><a href="#top">[Top]</a></p>
-  <fieldset id="forms__html5">
-    <legend>HTML5 inputs</legend>
-    <p>
-      <label for="ic">Color input</label>
-      <input type="color" id="ic" value="#000000" />
-    </p>
-    <p>
-      <label for="in">Number input</label>
-      <input type="number" id="in" min="0" max="10" value="5" />
-    </p>
-    <p>
-      <label for="ir">Range input</label>
-      <input type="range" id="ir" value="10" />
-    </p>
-    <p>
-      <label for="idd">Date input</label>
-      <input type="date" id="idd" value="1970-01-01" />
-    </p>
-    <p>
-      <label for="idm">Month input</label>
-      <input type="month" id="idm" value="1970-01" />
-    </p>
-    <p>
-      <label for="idw">Week input</label>
-      <input type="week" id="idw" value="1970-W01" />
-    </p>
-    <p>
-      <label for="idt">Datetime input</label>
-      <input type="datetime" id="idt" value="1970-01-01T00:00:00Z" />
-    </p>
-    <p>
-      <label for="idtl">Datetime-local input</label>
-      <input type="datetime-local" id="idtl" value="1970-01-01T00:00" />
-    </p>
-  </fieldset>
-  <p><a href="#top">[Top]</a></p>
-  <fieldset id="forms__action">
-    <legend>Action buttons</legend>
-    <p>
+  <h3>Wrapped in a <code>&lt;figure&gt;</code> element, no <code>&lt;figcaption&gt;</code></h3>
+  <figure><img src={placeholderImage} alt="Some alt text" /></figure>
+
+  <h3>
+    Wrapped in a <code>&lt;figure&gt;</code> element, with a <code>&lt;figcaption&gt;</code>
+  </h3>
+
+  <figure>
+    <img src={placeholderImage} alt="Some alt text" />
+    <figcaption>Here is a caption for this image.</figcaption>
+  </figure>
+
+  <h2 class="style-section">Meters and progress</h2>
+
+  <div><meter value="2" min="0" max="10">2 out of 10</meter></div>
+
+  <h3>Progress</h3>
+
+  <div><progress>progress</progress></div>
+
+  <h2 class="style-section">Form elements</h2>
+
+  <form>
+    <fieldset>
+      <legend>Inputs</legend>
+      <div class="form-item">
+        <label for="input__text">Text Input</label>
+        <p id="input__text-help" class="input-help">Some help text here</p>
+        <input
+          id="input__text"
+          aria-describedby="input__text-help"
+          type="text"
+          placeholder="Text Input"
+        />
+      </div>
+
+      <div class="form-item">
+        <label for="input__password">Password</label>
+        <p id="input__password-help" class="input-help">
+          Some longer help here. Some longer help here. Some longer help here. Some longer help here
+        </p>
+        <input id="input__password" type="password" placeholder="Type your Password" />
+      </div>
+
+      <div class="form-item">
+        <label for="input__webaddress">Web Address</label>
+        <input id="input__webaddress" type="url" placeholder="http://yoursite.com" />
+      </div>
+
+      <div class="form-item">
+        <label for="input__emailaddress">Email Address</label>
+        <input id="input__emailaddress" type="email" placeholder="name@email.com" />
+      </div>
+
+      <div class="form-item">
+        <label for="input__text2">Number Input</label>
+        <input id="input__text2" type="number" placeholder="Enter a Number" />
+      </div>
+
+      <div class="form-item">
+        <label for="input__text3" class="error">Error</label>
+        <input id="input__text3" aria-invalid="true" type="text" placeholder="Text Input" />
+      </div>
+
+      <div class="form-item">
+        <label for="input__text4" class="valid">Valid</label>
+        <input id="input__text4" class="is-valid" type="text" placeholder="Text Input" />
+      </div>
+
+      <div class="form-item">
+        <label for="input__text4">Disabled</label>
+        <input id="input__text4" type="text" placeholder="Text Input" disabled />
+      </div>
+
+      <div class="form-item">
+        <label for="ic">Color input</label>
+        <input type="color" id="ic" value="#000000" />
+      </div>
+
+      <div class="form-item">
+        <label for="in">Number input</label>
+        <input type="number" id="in" min="0" max="10" value="5" />
+      </div>
+
+      <div class="form-item">
+        <label for="ir">Range input</label>
+        <input type="range" id="ir" value="10" />
+      </div>
+
+      <div class="form-item">
+        <label for="idd">Date input</label>
+        <input type="date" id="idd" value="1970-01-01" />
+      </div>
+
+      <div class="form-item">
+        <label for="idm">Month input</label>
+        <input type="month" id="idm" value="1970-01" />
+      </div>
+
+      <div class="form-item">
+        <label for="idw">Week input</label>
+        <input type="week" id="idw" value="1970-W01" />
+      </div>
+
+      <div class="form-item">
+        <label for="idt">Datetime input</label>
+        <input type="datetime" id="idt" value="1970-01-01T00:00:00Z" />
+      </div>
+
+      <div class="form-item">
+        <label for="idtl">Datetime-local input</label>
+        <input type="datetime-local" id="idtl" value="1970-01-01T00:00" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Inline form items</legend>
+
+      <div class="form-item-inline">
+        <label for="input__phone">Phone Number</label>
+        <input id="input__phone" type="tel" placeholder="(999) 999-9999" />
+      </div>
+
+      <div class="form-item-inline">
+        <label for="input__search">Search</label>
+        <input id="input__search" type="search" placeholder="Enter Search Term" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Select menus</legend>
+
+      <div class="form-item">
+        <label for="select">Select</label>
+        <select id="select">
+          <optgroup label="Option Group">
+            <option>Option One</option>
+            <option>Option Two</option>
+            <option>Option Three</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="form-item">
+        <label for="select">Disabled</label>
+        <select id="select" disabled>
+          <optgroup label="Option Group">
+            <option>Option One</option>
+            <option>Option Two</option>
+            <option>Option Three</option>
+          </optgroup>
+        </select>
+      </div>
+    </fieldset>
+
+    <fieldset id="forms__checkbox">
+      <legend>Checkboxes</legend>
+
+      <fieldset class="checkboxes">
+        <legend>Choose any</legend>
+
+        <div class="checkbox">
+          <input id="checkbox1" name="checkbox" type="checkbox" checked />
+          <label for="checkbox1"> Choice A</label>
+        </div>
+
+        <div class="checkbox">
+          <input id="checkbox2" name="checkbox" type="checkbox" />
+          <label for="checkbox2"> Choice B</label>
+        </div>
+
+        <div class="checkbox">
+          <input id="checkbox3" name="checkbox" type="checkbox" />
+          <label for="checkbox3"> Choice C</label>
+        </div>
+
+        <div class="checkbox">
+          <input id="checkbox4" name="checkbox" type="checkbox" disabled />
+          <label for="checkbox4"> Disabled</label>
+        </div>
+      </fieldset>
+
+      <div id="checkboxes-inline-example" class="checkboxes-inline" role="group">
+        <label for="checkboxes-inline-example">Choose any inline</label>
+
+        <div class="checkbox">
+          <input id="checkbox-inline1" name="checkbox" type="checkbox" checked />
+          <label for="checkbox-inline1"> Choice A</label>
+        </div>
+
+        <div class="checkbox">
+          <input id="checkbox-inline2" name="checkbox" type="checkbox" />
+          <label for="checkbox-inline2">Choice B</label>
+        </div>
+
+        <div class="checkbox">
+          <input id="checkbox-inline3" name="checkbox" type="checkbox" />
+          <label for="checkbox-inline3"> Choice C</label>
+        </div>
+
+        <div class="checkbox">
+          <input id="checkbox-inline4" name="checkbox" type="checkbox" disabled />
+          <label for="checkbox-inline4"> Disabled</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="forms__radio">
+      <legend>Radio buttons</legend>
+
+      <fieldset class="radios">
+        <legend>Choose one</legend>
+
+        <div class="radio">
+          <input id="radio1" name="radio" type="radio" class="radio" checked />
+          <label for="radio1"> Option 1</label>
+        </div>
+
+        <div class="radio">
+          <input id="radio2" name="radio" type="radio" class="radio" />
+          <label for="radio2"> Option 2</label>
+        </div>
+
+        <div class="radio">
+          <input id="radio3" name="radio" type="radio" class="radio" />
+          <label for="radio3"> Option 3</label>
+        </div>
+      </fieldset>
+
+      <div id="radio-inline-example" role="group" class="radios-inline">
+        <label for="radio-inline-example">Choose one inline</label>
+
+        <div class="radio">
+          <input id="radio-inline1" name="radio" type="radio" class="radio" checked />
+          <label for="radio-inline1"> Option 1</label>
+        </div>
+
+        <div class="radio">
+          <input id="radio2-inline" name="radio" type="radio" class="radio" />
+          <label for="radio-inline2"> Option 2</label>
+        </div>
+
+        <div class="radio">
+          <input id="radio-inline3" name="radio" type="radio" class="radio" />
+          <label for="radio-inline3"> Option 3</label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset id="forms__textareas">
+      <legend>Textareas</legend>
+
+      <div class="form-item">
+        <label for="textarea">Textarea</label>
+        <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here"></textarea>
+      </div>
+
+      <div class="form-item">
+        <label for="textarea">Disabled</label>
+        <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here" disabled
+        ></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset id="forms__action">
+      <legend>Action buttons</legend>
+
       <input type="submit" value="Input submit" />
       <input type="button" value="Input button" />
       <input type="reset" value="Input reset" />
       <input type="submit" value="Input disabled" disabled />
-    </p>
-    <p>
-      <button type="submit">Button submit</button>
-      <button type="button">Button button</button>
-      <button type="reset">Button reset</button>
-      <button type="button" disabled>Button disabled</button>
-    </p>
-  </fieldset>
-</form>
+    </fieldset>
+  </form>
+</div>
+
+<style>
+  /** Making headings more distinct given how long this page is */
+  h2.style-section {
+    border-bottom: 3px solid var(--color-gray-dark);
+  }
+</style>

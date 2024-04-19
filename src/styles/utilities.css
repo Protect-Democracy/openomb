@@ -1,0 +1,48 @@
+/**
+ * Utilities
+ *
+ * These should generally all use !important as they are meant
+ * to override existing styles on an element.
+ */
+
+/**
+ * Visually hidden element that still has flow in the content
+ * See: https://github.com/twbs/bootstrap/blob/f68a47c8bfa60b568db8ada7130366dcfbe24276/scss/mixins/_visually-hidden.scss#L9
+ */
+.visually-hidden {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/**
+ * Screenreaders only and will not affect flow of content at all.
+ * See: https://tailwindcss.com/docs/screen-readers
+ */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border-width: 0 !important;
+}

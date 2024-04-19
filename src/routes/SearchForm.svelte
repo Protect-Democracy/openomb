@@ -12,7 +12,8 @@
 
   <div class="actions">
     <button type="submit">More search options</button>
-    <a class="button alt" href="/about">About our process</a>
+
+    <a class="button like-link" href="/about">About our process</a>
   </div>
 </form>
 
@@ -31,15 +32,5 @@
     position: absolute;
     left: var(--spacing-half);
     top: var(--spacing-half);
-  }
-
-  .button.alt {
-    color: var(--color-text);
-    background-color: var(--color-gray-light);
-    margin-left: var(--spacing);
-  }
-
-  .button.alt:hover {
-    background-color: var(--color-highlight);
   }
 </style>

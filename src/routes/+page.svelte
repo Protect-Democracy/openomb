@@ -9,20 +9,21 @@
   const currentYear = new Date().getFullYear();
 </script>
 
-<section class="summary">
+<section class="summary page-container">
   <h1>Accessing apportionment data just got better.</h1>
-  <p>
+
+  <p class="center-container">
     Updated daily, {siteName} is the easiest way to find and view information on how federal money can
     be spent.
   </p>
 
-  <div class="search">
+  <div class="search center-container">
     <SearchForm />
   </div>
 </section>
 
-<div class="accent-bg">
-  <section class="stats">
+<section class="stats full-container">
+  <div class="text-container center-container">
     <h2 class="sr-only">Apportionment approval statistics</h2>
 
     <p>
@@ -34,22 +35,20 @@
       <strong>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</strong>
       Total apportionments approved this fiscal year {currentYear}
     </p>
-  </section>
-</div>
+  </div>
+</section>
 
-<section class="agencies">
+<section class="agencies page-container">
   <h2>Find Apportionments by Agency and Bureau</h2>
+
   <AgencyList agencies={data.agencies} headerElement="h3" />
 </section>
 
 <style>
-  section {
-    width: var(--copy-width-limit);
-    margin: 0 auto var(--spacing-large);
-  }
-
   .summary {
     text-align: center;
+    margin-top: var(--spacing-double);
+    margin-bottom: var(--spacing-large);
   }
 
   .search {
@@ -57,11 +56,13 @@
     width: calc(var(--copy-width-limit) * 0.75);
   }
 
-  .accent-bg {
-    background-color: var(--color-gray-light);
+  .stats {
+    background-color: var(--color-background-accent);
+    color: var(--color-background-color);
+    margin-bottom: var(--spacing-large);
   }
 
-  .stats {
+  .stats > div {
     display: flex;
     justify-content: space-around;
     text-align: center;
@@ -78,8 +79,6 @@
   }
 
   .agencies {
-    width: unset;
-    margin-left: var(--spacing-large);
-    margin-right: var(--spacing-large);
+    margin-bottom: var(--spacing-large);
   }
 </style>

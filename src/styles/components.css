@@ -1,0 +1,152 @@
+/**
+ * Common components that are useful across multiple Svelte components.
+ */
+
+/* Containers */
+.page-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--page-width);
+  padding-left: var(--spacing);
+  padding-right: var(--spacing);
+}
+
+.full-container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing);
+  padding-right: var(--spacing);
+}
+
+.center-container {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-container {
+  max-width: var(--copy-width-limit);
+}
+
+/* Buttons */
+button.like-text,
+input[type='submit'].like-text,
+input[type='button'].like-text,
+input[type='reset'].like-text,
+a.button.like-text {
+  display: inline;
+  background-color: inherit;
+  border: none;
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition: none;
+  display: inline;
+  text-align: left;
+  line-height: var(--line-height);
+}
+
+/* Helpful for spacing */
+button.like-link,
+input[type='submit'].like-link,
+input[type='button'].like-link,
+input[type='reset'].like-link,
+a.button.like-link {
+  display: inline-block;
+  background-color: inherit;
+  color: var(--color-link);
+}
+
+button.secondary,
+input[type='submit'].secondary,
+input[type='button'].secondary,
+input[type='reset'].secondary,
+a.button.secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text-secondary);
+}
+
+/* Forms */
+
+/* Generic form item container */
+.form-item {
+  margin-bottom: var(--spacing);
+}
+
+.form-item label {
+  display: block;
+  margin-bottom: var(--spacing-half);
+}
+
+.input-help {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin: 0 var(--spacing-small) 0 0;
+}
+
+.form-item:has(.input-help) label {
+  margin-bottom: 0;
+}
+
+.form-item-inline {
+  display: inline-block;
+  margin-bottom: var(--spacing);
+  margin-right: var(--spacing);
+}
+
+.form-item-inline label {
+  display: inline-block;
+  margin-right: var(--spacing-half);
+}
+
+/* Radios and checkboxes, should be used in a fieldset with a legend if more than one */
+.checkbox input,
+.radio input {
+  display: inline-block;
+  margin-right: var(--spacing-half);
+}
+
+.checkbox label,
+.radio label {
+  display: inline-block;
+}
+
+fieldset.checkboxes,
+fieldset.radios {
+  margin-bottom: var(--spacing-half);
+  padding: 0;
+  border: none;
+}
+
+fieldset.checkboxes legend,
+fieldset.radios legend {
+  padding-left: 0;
+  display: block;
+  font-weight: var(--font-weight-normal);
+  margin-bottom: var(--spacing-half);
+}
+
+/* Legends can't be inline, so ok to use div[role="group] with a label inside that has for pointing at it */
+.checkboxes-inline,
+.radios-inline {
+  margin-bottom: var(--spacing-half);
+  padding: 0;
+  border: none;
+}
+
+.checkboxes-inline legend,
+.checkboxes-inline > label,
+.radios-inline legend,
+.radios-inline > label {
+  padding-left: 0;
+  display: inline-block;
+  font-weight: var(--font-weight-normal);
+  margin-bottom: var(--spacing-half);
+  margin-right: var(--spacing-half);
+}
+
+.checkboxes-inline .checkbox,
+.radios-inline .radio {
+  display: inline-block;
+  margin-right: var(--spacing);
+}
