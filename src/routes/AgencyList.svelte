@@ -47,7 +47,7 @@
     display: flex;
     flex-basis: 1fr;
     column-gap: var(--spacing);
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
 
   .agency-entry {

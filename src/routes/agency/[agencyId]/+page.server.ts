@@ -14,6 +14,9 @@ export async function load({ params }) {
 
   return {
     agency,
-    bureausByAgency: await bureausByAgency(params.agencyId)
+    bureausByAgency: await bureausByAgency(params.agencyId),
+    pageMeta: {
+      title: `Agency: ${agency.budgetAgencyTitle}`
+    }
   };
 }

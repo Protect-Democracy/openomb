@@ -14,6 +14,9 @@ export async function load({ params }) {
 
   return {
     account,
-    tafsByAccount: await tafsByAccount(params.agencyId, params.bureauId, params.accountId)
+    tafsByAccount: await tafsByAccount(params.agencyId, params.bureauId, params.accountId),
+    pageMeta: {
+      title: `Account: ${account.accountTitle} (Bureau: ${account.bureau.agency.budgetAgencyTitle})`
+    }
   };
 }

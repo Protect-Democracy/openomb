@@ -1,11 +1,8 @@
 <script lang="ts">
-  import { siteName } from '$config';
 </script>
 
-<svelte:head>
-  <title>About | {siteName}</title>
-</svelte:head>
+<div class="page-container">
+  <h1>About this site</h1>
 
-<h1>About this site</h1>
-
-<p>TODO.</p>
+  <p>TODO.</p>
+</div>

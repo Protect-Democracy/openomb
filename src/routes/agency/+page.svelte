@@ -1,17 +1,12 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { siteName } from '$config';
   import DirectoryTree from '$components/navigation/DirectoryTree.svelte';
   import DirectoryTreeItem from '$components/navigation/DirectoryTreeItem.svelte';
 
   export let data: PageData;
 </script>
 
-<svelte:head>
-  <title>Agency Accounts | {siteName}</title>
-</svelte:head>
-
-<section class="agency-listing">
+<section class="page-container">
   <h1>Agency Account Directory</h1>
 
   <DirectoryTree>
@@ -23,13 +18,17 @@
         <svelte:fragment slot="children">
           {#each agency.budgetBureaus as bureau}
             <DirectoryTreeItem>
-              <a href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}`}>
+              <a
+                href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}`}
+              >
                 {bureau.budgetBureauTitle}
               </a>
               <svelte:fragment slot="children">
                 {#each bureau.accounts as account}
                   <DirectoryTreeItem>
-                    <a href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}/account/${account.accountTitleId}`}>
+                    <a
+                      href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}/account/${account.accountTitleId}`}
+                    >
                       {account.accountTitle}
                     </a>
                   </DirectoryTreeItem>
@@ -42,7 +41,3 @@
     {/each}
   </DirectoryTree>
 </section>
-
-<style>
-
-</style>
