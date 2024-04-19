@@ -1,6 +1,12 @@
 <!--
   Accordion dropdown Element
 
+  NOTE: This element acts more like a Dropdown for a single
+  item, as opposed to a set of Dropdowns that open and close in
+  relation to each other.
+
+  TODO: Maybe rename as Dropdown.
+
   Params
     - id?: id of element (random default)
     - defaultOpen?: should accordion be open initially
@@ -10,7 +16,7 @@
 -->
 
 <script lang="ts">
-  import { createAccordion, melt } from '@melt-ui/svelte';
+  import { createAccordion } from '@melt-ui/svelte';
   import { slide } from 'svelte/transition';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
@@ -19,22 +25,25 @@
 
   const {
     elements: { content, item, trigger, root },
-    helpers: { isSelected },
+    helpers: { isSelected }
   } = createAccordion({
-    defaultValue: defaultOpen ? id : undefined,
+    defaultValue: defaultOpen ? id : undefined
   });
 </script>
 
 <div class="accordion" {...$root}>
   <div class="accordion-item" {...$item(id)} use:item>
-    <button class="heading" {...$trigger(id)} use:trigger>
-      <div>
-        <slot /><slot name="heading" />
+    <button class="like-text" {...$trigger(id)} use:trigger>
+      <div class="heading">
+        <slot />
+        <slot name="heading" />
       </div>
+
       <div class="icon" class:selected={$isSelected(id)}>
         <ChevronDown />
       </div>
     </button>
+
     {#if $isSelected(id)}
       <div class="content" {...$content(id)} use:content transition:slide>
         <slot name="content" />
@@ -44,23 +53,24 @@
 </div>
 
 <style>
-  button.heading {
-    background: none;
-    color: var(--color-text);
+  button {
     display: flex;
-    justify-content: space-between;
     width: 100%;
-    padding: var(--spacing);
+    justify-content: space-between;
+    padding: var(--spacing) var(--spacing-half);
   }
-  .heading .icon {
-    display: inline-block;
-    transition: .25s;
+
+  button .icon {
+    display: block;
+    transition: 0.25s;
+    margin-left: var(--spacing-half);
   }
-  .heading .icon.selected {
+
+  button .icon.selected {
     transform: rotate(180deg);
   }
 
   .content {
-    padding: 0 var(--spacing) var(--spacing);
+    padding: 0 var(--spacing-half) var(--spacing);
   }
 </style>

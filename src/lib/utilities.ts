@@ -5,7 +5,7 @@
 import { toDate, toZonedTime } from 'date-fns-tz';
 
 /**
- * Determine if production using NODE_ENV.
+ * Determine if production using NODE_ENV and vite.
  *
  * @see https://vitejs.dev/guide/env-and-mode.html#env-files
  *

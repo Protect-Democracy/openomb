@@ -26,8 +26,11 @@
   --spacing-large: calc(var(--spacing) * 4);
   --line-height: 1.5;
   --font-size-small: 0.8em;
+  --font-size-regular: 1rem;
   --font-size-large: 1.75rem;
   --font-size-xlarge: 2.5rem;
+  --font-weight-bold: bold;
+  --font-weight-regular: normal;
   --copy-width-limit: 40em;
   --border-radius: calc(var(--spacing) / 4);
   --transition: 0.2s;
@@ -203,6 +206,7 @@ a.button {
   border-radius: var(--border-radius);
   color: var(--color-text-inverse);
   cursor: pointer;
+  text-align: center;
   padding: var(--spacing-half) var(--spacing-double);
   transition: background-color var(--transition) ease;
 }
@@ -227,6 +231,25 @@ input[type='reset'][disabled]:hover {
   background-color: var(--color-gray-light);
   color: var(--color-gray-dark);
   cursor: not-allowed;
+}
+
+/* Components and variants */
+
+button.like-text,
+input[type='submit'].like-text,
+input[type='button'].like-text,
+input[type='reset'].like-text,
+a.button.like-text {
+  background-color: inherit;
+  border: none;
+  border-radius: 0;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition: none;
+  display: inline;
+  text-align: left;
+  line-height: var(--line-height);
 }
 
 /* Utilities */

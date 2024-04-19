@@ -38,7 +38,8 @@
 </div>
 
 <section class="agencies">
-  <AgencyList agencies={data.agencies} />
+  <h2>Find Apportionments by Agency and Bureau</h2>
+  <AgencyList agencies={data.agencies} headerElement="h3" />
 </section>
 
 <style>
