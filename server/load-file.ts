@@ -325,10 +325,11 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
   // Create file record
   const fileRecord = {
     fileId: `pdf-${md5hash(pdfUrl)}`,
-    fileName: fileName,
+    fileName: cleanString(fileName),
     fiscalYear: parseIntegerFromString(fiscalYear),
     approvalTimestamp: approvalDate,
-    folder: folder,
+    folder: formatFolder(folder),
+    folderId: dbId(formatFolder(folder)),
     sourceUrl: pdfUrl,
     pdfUrl: pdfUrl,
     createdAt: new Date(),
@@ -355,8 +356,10 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
  * Examples:
  *   National Aeronautics and Space Administration
  *   Department of Defense--Military Programs
+ *   Department of Homeland Security Apportionment
  */
 function formatFolder(folder: string): string {
+  folder = folder.replace(/\s+apportionments?$/i, '');
   const parts = folder.split('--');
   return parts.length === 2 ? `${parts[0].trim()} (${parts[1].trim()})` : folder.trim();
 }

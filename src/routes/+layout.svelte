@@ -156,6 +156,10 @@
     font-weight: 500;
   }
 
+  main {
+    min-height: 60vh;
+  }
+
   footer {
     background-color: var(--color-background-inverse);
     color: var(--color-text-inverse);

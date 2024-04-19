@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, gt, gte, desc, asc, count, and } from 'drizzle-orm';
+import { eq, gte, desc, asc, count, and, isNull } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -215,4 +215,24 @@ export const folderDetails = async function (folderId: string) {
     folder: filesFromFolder[0].folder,
     fileCount: filesFromFolder.length
   };
+};
+
+/**
+ * Get files without any tafs entries (i.e. not agencies)
+ */
+export const filesWithoutTafs = async function (folderId: string | undefined = undefined) {
+  await dbConnect();
+
+  const where = folderId
+    ? and(eq(files.folderId, folderId), isNull(tafs.fileId))
+    : isNull(tafs.fileId);
+
+  const foundFiles = await db
+    .select()
+    .from(files)
+    .leftJoin(tafs, eq(files.fileId, tafs.fileId))
+    .where(where)
+    .orderBy(desc(files.approvalTimestamp));
+
+  return foundFiles ? foundFiles.map((f) => f.files) : null;
 };

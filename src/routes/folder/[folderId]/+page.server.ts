@@ -1,5 +1,5 @@
 import { dbConnect } from '$db/connection';
-import { folderDetails } from '$queries/files';
+import { folderDetails, filesWithoutTafs } from '$queries/files';
 import { agenciesByFolder } from '$queries/tafs';
 import { error } from '@sveltejs/kit';
 
@@ -15,6 +15,10 @@ export async function load({ params }) {
 
   return {
     folder,
-    agenciesByFolder: await agenciesByFolder(params.folderId)
+    agenciesByFolder: await agenciesByFolder(params.folderId),
+    filesWithoutTafs: await filesWithoutTafs(folder.folderId),
+    pageMeta: {
+      title: `Folder: ${folder.folder}`
+    }
   };
 }
