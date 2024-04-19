@@ -258,56 +258,7 @@ export const computeAccountId = (tafsRecord: typeof tafs.$inferSelect): string =
 };
 
 /**
- * Consistent formatting of the TAFS ID.
- *
- * Examples:
- *  - 12-3510 2023/2024
- *  - 60-60-002-8051 /X
- *  - 69-0130 /2022
- *
- * Note that this not seem consistent in the Excel files and unsure what
- * this should be exactly.
- *
- * Have seen no years with the X in the middle and at the end
- *    - 080-X-1200
- *    - 60-60-002-8051 /X
- *
- * @param tafsRecord
- * @returns Formatted TAFS ID
+ * Export some types
  */
-export const computeTafsFormattedId = (tafsRecord: typeof tafs.$inferSelect): string => {
-  const account = [
-    tafsRecord.cgacAgency,
-    tafsRecord.cgacAcct,
-    tafsRecord.allocationAgencyCode,
-    tafsRecord.allocationSubacct
-  ]
-    .filter(Boolean)
-    .join('-');
-
-  const years =
-    tafs.beginPoa && tafs.endPoa && +tafs.beginPoa !== +tafs.endPoa
-      ? `${tafs.beginPoa}/${tafs.endPoa}`
-      : tafs.beginPoa
-        ? `/${tafs.beginPoa}`
-        : '/X';
-
-  return `${account} ${years}`;
-};
-
-export type ComputedTafs = {
-  tafsFormattedId: string;
-} & typeof tafs.$inferSelect;
-
-/**
- * To use with data queried from the database.
- *
- * @param tafsRecord
- * @returns Record with extra computed fields
- */
-export const computeTafs = (tafsRecord: typeof tafs.$inferSelect): ComputedTafs => {
-  return {
-    ...tafsRecord,
-    tafsFormattedId: computeTafsFormattedId(tafsRecord)
-  };
-};
+export type tafsSelect = typeof tafs.$inferSelect;
+export type tafsInsert = typeof tafs.$inferInsert;

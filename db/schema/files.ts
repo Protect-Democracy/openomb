@@ -92,8 +92,17 @@ export const computeFundsProvidedByParsed = (
     : (filesRecord.fundsProvidedBy || '').replace(/funds\s+provided\s+by\s+/i, '').trim();
 };
 
+/**
+ * Make relations to other tables
+ */
 export const filesRelations = relations(files, ({ many }) => ({
   tafs: many(tafs),
   lines: many(lines),
-  footnotes: many(footnotes),
+  footnotes: many(footnotes)
 }));
+
+/**
+ * Export some types
+ */
+export type filesSelect = typeof files.$inferSelect;
+export type filesInsert = typeof files.$inferInsert;
