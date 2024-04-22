@@ -10,6 +10,7 @@
     "build:collect": "vite build --config vite-collect.config.ts",
     "build:migrate": "vite build --config vite-migrate.config.ts",
     "build": "npm run build:web && npm run build:collect && npm run build:migrate",
+    "preview": "npm run preview:web",
     "preview:web": "dotenvx run -- vite preview",
     "preview:collect": "dotenvx run -- node build-collect/collect.js",
     "preview:migrate": "dotenvx run -- node build-migrate/migrate.js",
