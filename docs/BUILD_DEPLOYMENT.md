@@ -4,9 +4,12 @@
 
 ### Build
 
-To create a build:
+To create a build for the web application.
 
 ```bash
+npm run build:web
+
+# Or run the full build
 npm run build
 ```
 
@@ -15,7 +18,7 @@ npm run build
 To preview the build locally. Note that this will automatically run `dotenvx` to use any variables in a `.env*` file.
 
 ```bash
-npm run preview
+npm run preview:web
 ```
 
 ### Production application
@@ -68,6 +71,51 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_ARCHIVE_S3_ACL` - S3 bucket ACL for uploading the collection archive.
 - `APPORTIONMENTS_AWS_SSO` - Whether to use SSO for AWS auth.
 - `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
+
+### Build
+
+To build a `node`-friendly version of the collect command, utilize the following:
+
+```bash
+npm run build:collect
+
+# Or run the full build
+npm run build
+```
+
+### Deploy
+
+(todo)
+
+## Migrate
+
+The database migration command is handled through a Typescript script. It can be run with the following:
+
+```bash
+npm run db:migrate
+
+# Or to read .env files
+npx dotenvx run -- npm run db:migrate
+```
+
+### Configuration
+
+The following are environment variables that can be set:
+
+- `APPORTIONMENTS_DB_URI` - Needed for connection to database.
+  - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
+  - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
+
+### Build
+
+To build a `node`-friendly version of the collect command, utilize the following:
+
+```bash
+npm run build:migrate
+
+# Or run the full build
+npm run build
+```
 
 ### Deploy
 

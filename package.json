@@ -4,9 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "husky || true",
     "dev": "dotenvx run -- vite dev",
-    "build": "vite build",
-    "preview": "dotenvx run -- vite preview",
+    "build:web": "vite build",
+    "build:collect": "vite build --config vite-collect.config.ts",
+    "build:migrate": "vite build --config vite-migrate.config.ts",
+    "build": "npm run build:web && npm run build:collect && npm run build:migrate",
+    "preview:web": "dotenvx run -- vite preview",
+    "preview:collect": "dotenvx run -- node build-collect/collect.js",
+    "preview:migrate": "dotenvx run -- node build-migrate/migrate.js",
     "test": "npm run test:integration && npm run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -19,8 +25,7 @@
     "test:unit:watch": "vitest watch",
     "collect": "tsx bin/collect.ts",
     "db:generate-migration": "drizzle-kit generate:pg",
-    "db:migrate": "tsx bin/migrate.ts",
-    "prepare": "husky || true"
+    "db:migrate": "tsx bin/migrate.ts"
   },
   "lint-staged": {
     "*/**/*.{js,jsx,ts,tsx,svelte}": [
