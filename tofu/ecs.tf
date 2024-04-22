@@ -60,7 +60,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
       ],
       "secrets" : [
         {
-          "name" : "APPORTIONMENTS_DB_AUTH",
+          "name" : "APPORTIONMENTS_DB_AUTHENTICATION",
           "valueFrom" : "${aws_rds_cluster.apportionments.master_user_secret[0].secret_arn}"
         }
       ],
