@@ -13,6 +13,6 @@
 
 <style>
   svg {
-    width: var(--spacing);
+    width: 100%;
   }
 </style>

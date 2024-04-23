@@ -220,6 +220,7 @@
     top: 50%;
     right: var(--spacing-half);
     translate: 0 calc(-50% + 1px);
+    width: var(--spacing);
   }
 
   ul {

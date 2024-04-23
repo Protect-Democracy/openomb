@@ -16,7 +16,7 @@
       }}
     />
     <div class="icon">
-      <SearchIcon stroke="var(--color-gray-medium)" stroke-width="2" />
+      <SearchIcon stroke-width="3" />
     </div>
   </div>
 
@@ -35,7 +35,7 @@
   input {
     width: 100%;
     font-size: var(--font-size-large);
-    padding: calc(var(--spacing) * 1.25) var(--spacing);
+    padding: var(--spacing);
     text-align: center;
   }
 
@@ -46,7 +46,9 @@
 
   .search-wrapper .icon {
     position: absolute;
-    left: var(--spacing-half);
-    top: var(--spacing-half);
+    top: 50%;
+    left: var(--spacing);
+    translate: 0 calc(-50% + 1px);
+    width: calc(var(--spacing) * 1.75);
   }
 </style>

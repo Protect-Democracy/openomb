@@ -57,12 +57,14 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
+    align-items: flex-start;
     padding: calc(var(--spacing) * 1.25) var(--spacing) var(--spacing) 0;
   }
 
   button .icon {
     display: block;
     transition: 0.25s;
+    width: var(--spacing);
   }
 
   button .icon.selected {
