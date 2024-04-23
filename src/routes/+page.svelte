@@ -4,21 +4,30 @@
   import { formatNumber } from '$lib/formatters';
   import SearchForm from './SearchForm.svelte';
   import AgencyList from './AgencyList.svelte';
+  import graphIllustration from '$assets/graph-illustration.svg';
 
   export let data: PageData;
   const currentYear = new Date().getFullYear();
 </script>
 
-<section class="summary page-container">
-  <h1>Accessing apportionment data just got better.</h1>
+<section class="summary">
+  <div class="summary-inner page-container">
+    <div class="summary-text">
+      <h1>Accessing apportionment data just got better.</h1>
 
-  <p class="center-container">
-    Updated daily, {siteName} is the easiest way to find and view information on how federal money can
-    be spent.
-  </p>
+      <p class="center-container">
+        Updated daily, {siteName} is the easiest way to find and view information on how federal money
+        can be spent.
+      </p>
 
-  <div class="search center-container">
-    <SearchForm />
+      <div class="search center-container">
+        <SearchForm />
+      </div>
+    </div>
+
+    <div class="summary-visual">
+      <img src={graphIllustration} alt="Illustration of donut chart highlighting one slice." />
+    </div>
   </div>
 </section>
 
@@ -46,14 +55,28 @@
 
 <style>
   .summary {
-    text-align: center;
-    margin-top: var(--spacing-double);
-    margin-bottom: var(--spacing-large);
+    padding-top: var(--spacing-xlarge);
+    padding-bottom: var(--spacing-xlarge);
+    background-color: var(--color-background-alt);
+    color: var(--color-text-alt);
   }
 
-  .search {
-    margin: var(--spacing-double) auto;
-    width: calc(var(--copy-width-limit) * 0.75);
+  .summary-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .summary-text {
+    width: 50%;
+  }
+
+  .summary-text p {
+    font-size: 1.35rem;
+  }
+
+  .summary-visual {
+    padding: 0 var(--spacing);
   }
 
   .stats {

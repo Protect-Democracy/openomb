@@ -1,4 +1,9 @@
 <script lang="ts">
+  import '@fontsource/domine/';
+  import '@fontsource/domine/600.css';
+  import '@fontsource/ibm-plex-sans';
+  import '@fontsource/ibm-plex-sans/400.css';
+  import '@fontsource/ibm-plex-sans/600.css';
   import { page } from '$app/stores';
   import { isProduction } from '$lib/utilities';
   import {

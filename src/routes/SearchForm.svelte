@@ -11,7 +11,7 @@
   </div>
 
   <div class="actions">
-    <button type="submit">More search options</button>
+    <button type="submit">Search options</button>
 
     <a class="button like-link" href="/about">About our process</a>
   </div>
@@ -19,8 +19,10 @@
 
 <style>
   input {
-    padding-left: calc(var(--spacing) * 2);
     width: 100%;
+    font-size: var(--font-size-large);
+    padding: calc(var(--spacing) * 1.25) var(--spacing);
+    text-align: center;
   }
 
   .search-wrapper {

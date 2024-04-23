@@ -5,6 +5,9 @@
 /* Normalize/reset */
 @import 'modern-normalize/modern-normalize.css';
 
+/* Fonts */
+@import './fonts.css';
+
 /* Variables */
 @import './variables.css';
 

@@ -3,48 +3,92 @@
  */
 
 :root {
-  --color-background: #f5f5f5;
-  --color-text: #333;
-  --color-text-muted: #565656;
-  --color-background-inverse: #333;
-  --color-text-inverse: #f5f5f5;
-  --color-gray-light: #cdcdcd;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-lighter: #dbd4cb;
+  --color-gray-light: #c2bcb3;
   --color-gray-medium: #787878;
-  --color-gray-dark: #333;
-  --color-primary: #007bff;
-  --color-highlight: #ffcc00;
-  --color-accent: #ff6f61;
-  --color-error: #dc3545;
-  --color-secondary: #004533;
-  --color-text-secondary: var(--color-text-inverse);
-  --color-background-accent: var(--color-gray-light);
-  --color-text-accent: var(--color-text);
+  --color-gray-dark: #565656;
+  --color-gray-darker: #333333;
+
+  --color-green: #1da876;
+  --color-green-light: #26c690;
+  --color-green-dark: #059260;
+  --color-green-darker: #00724a;
+  --color-yellow: #fba62b;
+  --color-yellow-light: #ffca7c;
+  --color-yellow-dark: #d98307;
+  --color-yellow-darker: #aa6500;
+  --color-orange: #fb6e2b;
+  --color-orange-light: #ff8b53;
+  --color-orange-dark: #d94b07;
+  --color-orange-darker: #aa3700;
+  --color-blue: #2666a3;
+  --color-blue-lighter: #b3ddf4;
+  --color-blue-light: #699ac9;
+  --color-blue-dark: #0f4f8d;
+  --color-blue-darker: #083c6f;
+  --color-off-white: #f9f1e6;
+
+  --color-background: var(--color-white);
+  --color-text: var(--color-gray-darker);
+  --color-text-muted: var(--color-gray-medium);
+
+  --color-background-inverse: var(--color-gray-darker);
+  --color-text-inverse: var(--color-white);
+
+  --color-background-alt: var(--color-off-white);
+  --color-text-alt: var(--color-gray-darker);
+
+  --color-primary: var(--color-green-light);
+  --color-primary-muted: var(--color-green);
+  --color-primary-text: var(--color-white);
+
+  --color-secondary: var(--color-gray-light);
+  --color-secondary-muted: var(--color-gray-lighter);
+  --color-secondary-text: var(--color-text);
+
+  --color-highlight: var(--color-yellow-light);
+  --color-error: var(--color-orange-darker);
+  --color-disabled: var(--color-gray-lighter);
+
   --color-link: var(--color-primary);
 
-  --spacing: 1rem;
-  --spacing-half: calc(var(--spacing) / 2);
-  --spacing-small: calc(var(--spacing) / 4);
-  --spacing-thin: calc(var(--spacing) / 10);
-  --spacing-double: calc(var(--spacing) * 2);
-  --spacing-large: calc(var(--spacing) * 4);
+  --font-family-copy: 'IBM Plex Sans', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-copy-weight-normal: 400;
+  --font-copy-weight-bold: 600;
+
+  --font-family-heading: 'Domine', serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --font-heading-weight-normal: bold;
+  --font-heading-weight-bold: 600;
+
+  --font-family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 
   --line-height: 1.5;
+  --line-height-small: 1.2;
+  --base-font-size: 16px;
   --font-size-small: 0.8em;
   --font-size-regular: 1em;
-  --font-size-large: 1.75em;
-  --font-size-xlarge: 2.5em;
-  --font-weight-bold: bold;
-  --font-weight-normal: normal;
-  --font-family-copy: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-family-heading: serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
-  --font-family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  --font-size-large: 1.5em;
+  --font-size-xlarge: 2em;
+  --font-size-xxlarge: 2.875em;
 
   --copy-width-limit: 40em;
   --page-width: 75rem;
 
-  --border-radius: calc(var(--spacing) / 4);
+  --border-radius: calc(var(--spacing) * 2 / 3);
+  --border-weight: var(--spacing-thin);
 
   --transition: 0.2s;
+
+  --spacing: 1rem;
+  --spacing-half: calc(var(--spacing) / 2);
+  --spacing-small: calc(var(--spacing) / 4);
+  --spacing-line-height: calc(1rem * var(--line-height));
+  --spacing-thin: calc(var(--spacing) * 2 / 16);
+  --spacing-double: calc(var(--spacing) * 2);
+  --spacing-large: calc(var(--spacing) * 4);
+  --spacing-xlarge: calc(var(--spacing) * 5);
 }

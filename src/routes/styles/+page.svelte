@@ -1,23 +1,46 @@
 <script lang="ts">
   import placeholderImage from '$assets/placeholder-600.png';
 
-  const colorVariables = [
-    'color-background',
+  const primaryColors = [
+    'color-white',
+    'color-gray-lighter',
+    'color-gray-light',
+    'color-gray-medium',
+    'color-gray-dark',
+    'color-gray-darker',
+    'color-green',
+    'color-green-light',
+    'color-green-dark',
+    'color-green-darker',
+    'color-yellow',
+    'color-yellow-light',
+    'color-yellow-dark',
+    'color-yellow-darker',
+    'color-orange',
+    'color-orange-light',
+    'color-orange-dark',
+    'color-orange-darker',
+    'color-blue',
+    'color-blue-lighter',
+    'color-blue-light',
+    'color-blue-dark',
+    'color-blue-darker',
+    'color-background'
+  ];
+
+  const semanticColors = [
     'color-text',
     'color-text-muted',
     'color-background-inverse',
     'color-text-inverse',
-    'color-gray-light',
-    'color-gray-medium',
-    'color-gray-dark',
     'color-primary',
-    'color-highlight',
-    'color-accent',
-    'color-error',
+    'color-primary-muted',
+    'color-primary-text',
     'color-secondary',
-    'color-text-secondary',
-    'color-background-accent',
-    'color-text-accent',
+    'color-secondary-muted',
+    'color-secondary-text',
+    'color-highlight',
+    'color-error',
     'color-link'
   ];
 </script>
@@ -37,7 +60,22 @@
 
   <h2 class="style-section">Colors</h2>
 
-  {#each colorVariables as colorVariable}
+  <h3>Palette</h3>
+
+  The following are the primary palette colors. Avoid using these directly in CSS, instead try to
+  use the Semantic colors (see below).
+
+  {#each primaryColors as colorVariable}
+    <div
+      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
+    >
+      var(--{colorVariable})
+    </div>
+  {/each}
+
+  <h3>Semantic colors</h3>
+
+  {#each semanticColors as colorVariable}
     <div
       style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
     >

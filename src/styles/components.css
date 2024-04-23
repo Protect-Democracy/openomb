@@ -63,7 +63,7 @@ input[type='button'].secondary,
 input[type='reset'].secondary,
 a.button.secondary {
   background-color: var(--color-secondary);
-  color: var(--color-text-secondary);
+  color: var(--color-secondary-text);
 }
 
 /* Forms */
