@@ -38,6 +38,7 @@ async function cli(): Promise<void> {
     .description('Collect OMB data')
     .option('--no-collection', 'Do not do collection/scraping of data.')
     .option('--no-archive', 'Do not zip and archive to S3.')
+    .option('--show-progress', 'Show progress of collection.')
     .parse(process.argv);
   const options = program.opts();
 
@@ -49,20 +50,26 @@ async function cli(): Promise<void> {
   const collectionId = `omb-${start.toISOString()}`;
 
   // Setup progress bars
-  const progress = new MultiProgressBars({
-    initMessage: 'Collect OMB data',
-    anchor: 'bottom',
-    persist: true,
-    border: true
-  });
+  let progress;
+  if (options.showProgress) {
+    progress = new MultiProgressBars({
+      initMessage: 'Collect OMB data',
+      anchor: 'bottom',
+      persist: true,
+      border: true
+    });
+  }
 
   // Collection
   if (options.collection) {
-    // Progress for collection parts
     const jsonProgressMessage = 'Loading JSON files';
-    progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
     const pdfProgressMessage = 'Loading PDF files';
-    progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
+
+    // Progress for collection parts
+    if (options.showProgress) {
+      progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
+      progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
+    }
 
     // Save start of collection
     const collectionRecord = {
@@ -89,9 +96,14 @@ async function cli(): Promise<void> {
     for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
       const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
       fileIds.push(fileRecord.fileId);
-      progress.updateTask(jsonProgressMessage, { percentage: (urlIndex + 1) / jsonUrls.length });
+      if (options.showProgress) {
+        progress.updateTask(jsonProgressMessage, { percentage: (urlIndex + 1) / jsonUrls.length });
+      }
     }
-    progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
+
+    if (options.showProgress) {
+      progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
+    }
 
     // Load PDF files
     const pdfUrls = apportionmentUrls.filter((url) => url.match(/\.pdf$/));
@@ -100,9 +112,14 @@ async function cli(): Promise<void> {
     for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
       const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
       fileIds.push(fileRecord.fileId);
-      progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+      if (options.showProgress) {
+        progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+      }
     }
-    progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
+
+    if (options.showProgress) {
+      progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
+    }
 
     // Mark any files not in the list as removed
     await db
@@ -125,7 +142,12 @@ async function cli(): Promise<void> {
   if (options.archive) {
     // Archive progress
     const archiveProgressMessage = 'Archiving data';
-    progress.addTask(archiveProgressMessage, { type: 'indefinite', barTransformFn: chalk.yellow });
+    if (options.showProgress) {
+      progress.addTask(archiveProgressMessage, {
+        type: 'indefinite',
+        barTransformFn: chalk.yellow
+      });
+    }
 
     // Zip up the cache data
     const archiveFileName = `omb-${start.toISOString().split('T')[0]}-${+start}.zip`;
@@ -136,9 +158,11 @@ async function cli(): Promise<void> {
     const s3Path = `collections/${archiveFileName}`;
     await putS3File(archiveFilePath, s3Path);
 
-    progress.done(archiveProgressMessage, {
-      message: chalk.green(`Archived to s3://${env.archiveS3Bucket}/${s3Path}`)
-    });
+    if (options.showProgress) {
+      progress.done(archiveProgressMessage, {
+        message: chalk.green(`Archived to s3://${env.archiveS3Bucket}/${s3Path}`)
+      });
+    }
   }
 
   poolClient.end();
