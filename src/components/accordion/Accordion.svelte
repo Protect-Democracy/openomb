@@ -57,13 +57,12 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding: var(--spacing) var(--spacing-half);
+    padding: calc(var(--spacing) * 1.25) var(--spacing) var(--spacing) 0;
   }
 
   button .icon {
     display: block;
     transition: 0.25s;
-    margin-left: var(--spacing-half);
   }
 
   button .icon.selected {
@@ -71,6 +70,14 @@
   }
 
   .content {
-    padding: 0 var(--spacing-half) var(--spacing);
+    padding: 0 var(--spacing) var(--spacing);
+  }
+
+  [aria-expanded='true'] {
+    padding-bottom: var(--spacing-half);
+  }
+
+  [aria-expanded='true'] .heading {
+    color: var(--color-orange);
   }
 </style>

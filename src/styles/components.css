@@ -11,6 +11,14 @@
   padding-right: var(--spacing);
 }
 
+.page-container-small {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--page-width-small);
+  padding-left: var(--spacing);
+  padding-right: var(--spacing);
+}
+
 .full-container {
   margin-left: auto;
   margin-right: auto;
@@ -25,6 +33,13 @@
 
 .text-container {
   max-width: var(--copy-width-limit);
+}
+
+/* Text */
+.h2-alt {
+  font-family: var(--font-family-copy);
+  font-weight: var(--font-copy-weight-normal);
+  font-size: var(--font-size-xlarge);
 }
 
 /* Buttons */

@@ -4,6 +4,7 @@
   import '@fontsource/ibm-plex-sans';
   import '@fontsource/ibm-plex-sans/400.css';
   import '@fontsource/ibm-plex-sans/600.css';
+  import '@fontsource/ibm-plex-sans/700.css';
   import { page } from '$app/stores';
   import { isProduction } from '$lib/utilities';
   import {
@@ -86,33 +87,37 @@
   <a href="#main-content">Skip to main content</a>
 </div>
 
-<header class="page-container">
-  {#if !isProduction()}
-    <div class="development">
-      <p>
-        You are currently viewing a <strong>development version</strong> of this site and it may be inaccurate.
-      </p>
+{#if !isProduction()}
+  <div class="development">
+    <p>
+      You are currently viewing a <strong>development version</strong> of this site and it may be inaccurate.
+    </p>
+  </div>
+{/if}
+
+<header>
+  <div class="page-container">
+    <div class="header-inner">
+      <h1><a href="/">Apportionments</a></h1>
+
+      <nav>
+        <a href="/search">Search</a>
+        <a href="/agency">Directory</a>
+        <a href="/faq">Apportionments FAQ</a>
+        <a href="/about">About</a>
+        {#if !isProduction()}
+          <a href="/examples">Examples</a>
+        {/if}
+      </nav>
     </div>
-  {/if}
-
-  <h1><a href="/">Apportionments</a></h1>
-
-  <nav>
-    <a href="/search">Search</a>
-    <a href="/agency">Directory</a>
-    <a href="/faq">Apportionments FAQ</a>
-    <a href="/about">About</a>
-    {#if !isProduction()}
-      <a href="/examples">Examples</a>
-    {/if}
-  </nav>
+  </div>
 </header>
 
 <main id="main-content">
   <slot />
 </main>
 
-<footer class="full-container">
+<footer>
   <div class="page-container">
     <ul>
       <li><a href="/about">About</a></li>
@@ -135,15 +140,20 @@
 
 <style>
   header {
+    border-bottom: var(--border-weight) solid var(--color-black);
+  }
+
+  .header-inner {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
     align-content: center;
+    padding: var(--spacing-double) 0;
   }
 
   h1 {
     font-size: 1.25rem;
-    padding: var(--spacing) 0;
+    padding: 0;
     margin: 0;
   }
 
@@ -152,13 +162,13 @@
   }
 
   nav {
-    padding: var(--spacing) 0;
+    padding: 0;
   }
 
   nav a {
     color: var(--color-text);
     margin-left: var(--spacing-double);
-    font-weight: 500;
+    font-weight: var(--font-copy-weight-bolder);
   }
 
   main {
@@ -169,6 +179,7 @@
     background-color: var(--color-background-inverse);
     color: var(--color-text-inverse);
     padding: calc(var(--spacing) * 3) 0;
+    margin-top: var(--spacing-xlarge);
   }
 
   .development {
