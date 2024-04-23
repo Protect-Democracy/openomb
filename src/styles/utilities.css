@@ -46,3 +46,12 @@
   white-space: nowrap !important;
   border-width: 0 !important;
 }
+
+/* Basics */
+.font-copy {
+  font-family: var(--font-family-copy) !important;
+}
+
+.font-heading {
+  font-family: var(--font-family-heading) !important;
+}

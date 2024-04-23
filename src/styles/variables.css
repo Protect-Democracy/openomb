@@ -58,6 +58,7 @@
     'Apple Color Emoji', 'Segoe UI Emoji';
   --font-copy-weight-normal: 400;
   --font-copy-weight-bold: 600;
+  --font-copy-weight-bolder: 700;
 
   --font-family-heading: 'Domine', serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
@@ -75,11 +76,10 @@
   --font-size-xlarge: 2em;
   --font-size-xxlarge: 2.875em;
 
-  --copy-width-limit: 40em;
-  --page-width: 75rem;
-
   --border-radius: calc(var(--spacing) * 2 / 3);
+  --border-radius-small: calc(var(--spacing) * 1 / 3);
   --border-weight: var(--spacing-thin);
+  --border-weight-thin: calc(var(--spacing-thin) / 2);
 
   --transition: 0.2s;
 
@@ -91,4 +91,8 @@
   --spacing-double: calc(var(--spacing) * 2);
   --spacing-large: calc(var(--spacing) * 4);
   --spacing-xlarge: calc(var(--spacing) * 5);
+
+  --copy-width-limit: 40em;
+  --page-width: 75rem;
+  --page-width-small: 62rem;
 }

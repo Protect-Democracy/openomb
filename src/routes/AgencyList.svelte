@@ -51,15 +51,13 @@
   }
 
   .agency-entry {
-    margin-top: -1px;
-    border-top: 1px solid var(--color-gray-dark);
-    border-bottom: 1px solid var(--color-gray-dark);
+    border-bottom: var(--border-weight) solid var(--color-black);
   }
 
   .agency-heading {
-    color: var(--color-text);
     font-size: var(--font-size-regular);
     font-weight: var(--font-weight-bold);
+    font-family: var(--font-family-copy);
     margin: 0;
     padding: 0;
   }
