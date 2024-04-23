@@ -246,6 +246,7 @@ input[type='reset']:hover,
 a.button:hover {
   background-color: var(--color-primary-muted);
   color: var(--color-primary-text);
+  text-decoration: none;
 }
 
 button[disabled],

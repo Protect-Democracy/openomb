@@ -14,6 +14,11 @@ export const load: PageServerData = async ({ url }) => {
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
   let resultCount, results;
 
+  const startDateString = url.searchParams.get('approvedStart')
+    ? url.searchParams.get('approvedStart')
+    : '2020-01-01';
+  const endDateString = url.searchParams.get('approvedEnd');
+
   // Only perform our search once the form is submitted
   if (url.searchParams.toString().length) {
     // Get our arguments for our search queries
@@ -25,9 +30,9 @@ export const load: PageServerData = async ({ url }) => {
       agency: agencyBureau?.pop() || '',
       account: url.searchParams.get('account') || '',
       approver: url.searchParams.get('approver') || '',
-      year: url.searchParams.get('year') || 0,
-      approvedStart: url.searchParams.get('approvalStart') || '2000-01-01',
-      approvedEnd: url.searchParams.get('approvalEnd') || new Date(),
+      year: Number(url.searchParams.get('year')) || 0,
+      approvedStart: new Date(`${startDateString}T00:00:00`),
+      approvedEnd: endDateString ? new Date(`${endDateString}T23:59:59`) : new Date(),
       lineNum: url.searchParams.get('lineNum')?.replace(/\[|"|\]/g, '') || '',
       footnoteNum: url.searchParams.get('footnoteNum') || ''
     };
