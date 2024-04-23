@@ -23,7 +23,7 @@ export const agencies = async function () {
     .innerJoin(files, eq(tafs.fileId, files.fileId))
     .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId)
     .orderBy(tafs.budgetAgencyTitle);
-}
+};
 
 /**
  * Distinct agencies with file counts and associated bureaus/accounts
@@ -32,12 +32,15 @@ export const agenciesWithChildren = async function () {
   const agencyResults = await agencies();
 
   const bureauResults = await db
-    .selectDistinctOn([tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle], {
-      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      budgetBureauTitleId: tafs.budgetBureauTitleId,
-      budgetBureauTitle: tafs.budgetBureauTitle,
-      fileCount: count(tafs.fileId)
-    })
+    .selectDistinctOn(
+      [tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle],
+      {
+        budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+        budgetBureauTitleId: tafs.budgetBureauTitleId,
+        budgetBureauTitle: tafs.budgetBureauTitle,
+        fileCount: count(tafs.fileId)
+      }
+    )
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
     .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle)
@@ -45,30 +48,46 @@ export const agenciesWithChildren = async function () {
   const groupedBureaus = groupBy(bureauResults, 'budgetAgencyTitleId');
 
   const accountResults = await db
-    .selectDistinctOn([tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle], {
-      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      budgetBureauTitleId: tafs.budgetBureauTitleId,
-      accountTitleId: tafs.accountTitleId,
-      accountTitle: tafs.accountTitle,
-      fileCount: count(tafs.fileId)
-    })
+    .selectDistinctOn(
+      [tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle],
+      {
+        budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+        budgetBureauTitleId: tafs.budgetBureauTitleId,
+        accountTitleId: tafs.accountTitleId,
+        accountTitle: tafs.accountTitle,
+        fileCount: count(tafs.fileId)
+      }
+    )
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle)
-    .orderBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId, tafs.accountTitle);
+    .groupBy(
+      tafs.budgetAgencyTitleId,
+      tafs.budgetBureauTitleId,
+      tafs.accountTitleId,
+      tafs.accountTitle
+    )
+    .orderBy(
+      tafs.budgetAgencyTitleId,
+      tafs.budgetBureauTitleId,
+      tafs.accountTitleId,
+      tafs.accountTitle
+    );
   const groupedAccounts = groupBy(accountResults, 'budgetAgencyTitleId');
 
   return agencyResults.map((agency) => {
-    const groupedAgencyAccounts = groupBy(groupedAccounts[`${agency.budgetAgencyTitleId}`], 'budgetBureauTitleId');
+    const groupedAgencyAccounts = groupBy(
+      groupedAccounts[`${agency.budgetAgencyTitleId}`],
+      'budgetBureauTitleId'
+    );
     return {
       ...agency,
       budgetBureaus: groupedBureaus[`${agency.budgetAgencyTitleId}`].map((bureau) => ({
         ...bureau,
-        accounts: groupedAgencyAccounts[`${bureau.budgetBureauTitleId}`],
-      })),
+        accounts: groupedAgencyAccounts[`${bureau.budgetBureauTitleId}`]
+      }))
     };
   });
-}
+};
 
 /**
  * Get agencies for a specifc folder (file)
@@ -144,9 +163,14 @@ export const bureaus = async function () {
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId, tafs.budgetBureauTitle, tafs.budgetBureauTitleId)
+    .groupBy(
+      tafs.budgetAgencyTitle,
+      tafs.budgetAgencyTitleId,
+      tafs.budgetBureauTitle,
+      tafs.budgetBureauTitleId
+    )
     .orderBy(tafs.budgetBureauTitle);
-}
+};
 
 /**
  * Get bureaus for a specifc agency.

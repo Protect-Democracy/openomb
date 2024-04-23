@@ -7,7 +7,7 @@ import { cacheHeadersHour, cacheHeadersMinute, securityHeaders, collectionTimezo
  * Common response handler for JSON endpoints
  */
 export const apiResponse = function (
-  data: any,
+  data: unknown,
   status: number = 200,
   headers: { [key: string]: string } = {}
 ) {

@@ -10,7 +10,7 @@
 -->
 
 <script lang="ts">
-  import { melt, type TreeView } from '@melt-ui/svelte';
+  import { type TreeView } from '@melt-ui/svelte';
   import { getContext } from 'svelte';
   import PlusSquare from '$components/icons/PlusSquare.svelte';
   import MinusSquare from '$components/icons/MinusSquare.svelte';
@@ -18,26 +18,30 @@
 
   const {
     elements: { item, group },
-    helpers: { isExpanded, isSelected },
+    helpers: { isExpanded, isSelected }
   } = getContext<TreeView>('tree');
 
-  const itemId = (Math.random() + 1).toString(36).substring(7);;
+  const itemId = (Math.random() + 1).toString(36).substring(7);
   const hasChildren = !!$$slots.children;
 
   let iconDisplayProps = {};
-  $: iconDisplayProps = $isSelected(itemId) ? {
-    ['stroke-width']: 3,
-  } : {};
+  $: iconDisplayProps = $isSelected(itemId)
+    ? {
+        ['stroke-width']: 3
+      }
+    : {};
 </script>
 
 <li>
   <div class="item-title" class:selected={$isSelected(itemId)}>
     {#if hasChildren}
       <button
+        class="like-text"
         {...$item({
           id: itemId,
-          hasChildren,
-        })} use:item
+          hasChildren
+        })}
+        use:item
       >
         <!-- Add icon. -->
         <div class="item-icon">
@@ -47,9 +51,9 @@
             <PlusSquare {...iconDisplayProps} />
           {/if}
         </div>
-        <slot name="title" />
-        <slot />
       </button>
+      <slot name="title" />
+      <slot />
     {:else}
       <div class="item-icon">
         <ArrowDownRight {...iconDisplayProps} />
@@ -76,14 +80,10 @@
     height: var(--spacing);
   }
 
-  .item-title, button {
+  .item-title,
+  button {
     display: flex;
     align-items: center;
-  }
-
-  button {
-    background: none;
-    color: var(--color-text);
   }
 
   .selected button {

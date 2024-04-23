@@ -1,7 +1,7 @@
 ---
 name: Feature request 🏗️
 about: Use this template for adding both small and large feature request issues.
-title: "🏗️ <replace with a helpful title>"
+title: '🏗️ <replace with a helpful title>'
 labels: feature
 ---
 

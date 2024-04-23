@@ -11,13 +11,12 @@
 <script lang="ts">
   import { createTreeView } from '@melt-ui/svelte';
   import { setContext } from 'svelte';
-  import DirectoryTreeItem from '$components/navigation/DirectoryTreeItem.svelte';
 
   const treeContext = createTreeView();
   setContext('tree', treeContext);
 
   const {
-    elements: { tree },
+    elements: { tree }
   } = treeContext;
 </script>
 

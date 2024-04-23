@@ -220,11 +220,11 @@ export const computeLineType = (linesRecord: typeof lines.$inferSelect): string 
 export const linesRelations = relations(lines, ({ one, many }) => ({
   file: one(files, {
     fields: [lines.fileId],
-    references: [files.fileId],
+    references: [files.fileId]
   }),
   tafs: one(tafs, {
     fields: [lines.tafsTableId],
-    references: [tafs.tafsTableId],
+    references: [tafs.tafsTableId]
   }),
-  footnotes: many(footnotes),
+  footnotes: many(footnotes)
 }));

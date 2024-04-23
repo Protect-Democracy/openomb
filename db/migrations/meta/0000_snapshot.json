@@ -68,23 +68,17 @@
       "indexes": {
         "co_start_index": {
           "name": "co_start_index",
-          "columns": [
-            "start"
-          ],
+          "columns": ["start"],
           "isUnique": false
         },
         "co_complete_index": {
           "name": "co_complete_index",
-          "columns": [
-            "complete"
-          ],
+          "columns": ["complete"],
           "isUnique": false
         },
         "co_status_index": {
           "name": "co_status_index",
-          "columns": [
-            "status"
-          ],
+          "columns": ["status"],
           "isUnique": false
         }
       },
@@ -94,16 +88,12 @@
         "collections_start_unique": {
           "name": "collections_start_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "start"
-          ]
+          "columns": ["start"]
         },
         "collections_complete_unique": {
           "name": "collections_complete_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "complete"
-          ]
+          "columns": ["complete"]
         }
       }
     },
@@ -220,86 +210,62 @@
       "indexes": {
         "file_file_name_index": {
           "name": "file_file_name_index",
-          "columns": [
-            "file_name"
-          ],
+          "columns": ["file_name"],
           "isUnique": false
         },
         "file_fiscal_year_index": {
           "name": "file_fiscal_year_index",
-          "columns": [
-            "fiscal_year"
-          ],
+          "columns": ["fiscal_year"],
           "isUnique": false
         },
         "file_approval_timestamp_index": {
           "name": "file_approval_timestamp_index",
-          "columns": [
-            "approval_timestamp"
-          ],
+          "columns": ["approval_timestamp"],
           "isUnique": false
         },
         "file_folder_index": {
           "name": "file_folder_index",
-          "columns": [
-            "folder"
-          ],
+          "columns": ["folder"],
           "isUnique": false
         },
         "file_folder_id_index": {
           "name": "file_folder_id_index",
-          "columns": [
-            "folder_id"
-          ],
+          "columns": ["folder_id"],
           "isUnique": false
         },
         "file_approver_title_index": {
           "name": "file_approver_title_index",
-          "columns": [
-            "approver_title"
-          ],
+          "columns": ["approver_title"],
           "isUnique": false
         },
         "file_approver_title_id_index": {
           "name": "file_approver_title_id_index",
-          "columns": [
-            "approver_title_id"
-          ],
+          "columns": ["approver_title_id"],
           "isUnique": false
         },
         "file_funds_provided_by_index": {
           "name": "file_funds_provided_by_index",
-          "columns": [
-            "funds_provided_by"
-          ],
+          "columns": ["funds_provided_by"],
           "isUnique": false
         },
         "file_funds_provided_by_parsed_index": {
           "name": "file_funds_provided_by_parsed_index",
-          "columns": [
-            "funds_provided_by_parsed"
-          ],
+          "columns": ["funds_provided_by_parsed"],
           "isUnique": false
         },
         "file_removed_index": {
           "name": "file_removed_index",
-          "columns": [
-            "removed"
-          ],
+          "columns": ["removed"],
           "isUnique": false
         },
         "file_created_at_index": {
           "name": "file_created_at_index",
-          "columns": [
-            "created_at"
-          ],
+          "columns": ["created_at"],
           "isUnique": false
         },
         "file_modified_at_index": {
           "name": "file_modified_at_index",
-          "columns": [
-            "modified_at"
-          ],
+          "columns": ["modified_at"],
           "isUnique": false
         }
       },
@@ -353,10 +319,7 @@
       "indexes": {
         "fn_file_footnote_index": {
           "name": "fn_file_footnote_index",
-          "columns": [
-            "file_id",
-            "footnote_number"
-          ],
+          "columns": ["file_id", "footnote_number"],
           "isUnique": false
         }
       },
@@ -365,12 +328,8 @@
           "name": "footnotes_file_id_files_file_id_fk",
           "tableFrom": "footnotes",
           "tableTo": "files",
-          "columnsFrom": [
-            "file_id"
-          ],
-          "columnsTo": [
-            "file_id"
-          ],
+          "columnsFrom": ["file_id"],
+          "columnsTo": ["file_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -378,14 +337,8 @@
           "name": "footnotes_file_id_line_index_lines_file_id_line_index_fk",
           "tableFrom": "footnotes",
           "tableTo": "lines",
-          "columnsFrom": [
-            "file_id",
-            "line_index"
-          ],
-          "columnsTo": [
-            "file_id",
-            "line_index"
-          ],
+          "columnsFrom": ["file_id", "line_index"],
+          "columnsTo": ["file_id", "line_index"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -393,11 +346,7 @@
       "compositePrimaryKeys": {
         "footnotes_file_id_line_index_footnote_number_pk": {
           "name": "footnotes_file_id_line_index_footnote_number_pk",
-          "columns": [
-            "file_id",
-            "line_index",
-            "footnote_number"
-          ]
+          "columns": ["file_id", "line_index", "footnote_number"]
         }
       },
       "uniqueConstraints": {}
@@ -473,30 +422,22 @@
       "indexes": {
         "line_line_number_index": {
           "name": "line_line_number_index",
-          "columns": [
-            "line_number"
-          ],
+          "columns": ["line_number"],
           "isUnique": false
         },
         "line_line_split_index": {
           "name": "line_line_split_index",
-          "columns": [
-            "line_split"
-          ],
+          "columns": ["line_split"],
           "isUnique": false
         },
         "line_line_description_index": {
           "name": "line_line_description_index",
-          "columns": [
-            "line_description"
-          ],
+          "columns": ["line_description"],
           "isUnique": false
         },
         "line_approved_amount_index": {
           "name": "line_approved_amount_index",
-          "columns": [
-            "approved_amount"
-          ],
+          "columns": ["approved_amount"],
           "isUnique": false
         }
       },
@@ -505,12 +446,8 @@
           "name": "lines_tafs_table_id_tafs_tafs_table_id_fk",
           "tableFrom": "lines",
           "tableTo": "tafs",
-          "columnsFrom": [
-            "tafs_table_id"
-          ],
-          "columnsTo": [
-            "tafs_table_id"
-          ],
+          "columnsFrom": ["tafs_table_id"],
+          "columnsTo": ["tafs_table_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -518,12 +455,8 @@
           "name": "lines_file_id_files_file_id_fk",
           "tableFrom": "lines",
           "tableTo": "files",
-          "columnsFrom": [
-            "file_id"
-          ],
-          "columnsTo": [
-            "file_id"
-          ],
+          "columnsFrom": ["file_id"],
+          "columnsTo": ["file_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -531,20 +464,14 @@
       "compositePrimaryKeys": {
         "lines_tafs_table_id_line_index_pk": {
           "name": "lines_tafs_table_id_line_index_pk",
-          "columns": [
-            "tafs_table_id",
-            "line_index"
-          ]
+          "columns": ["tafs_table_id", "line_index"]
         }
       },
       "uniqueConstraints": {
         "lines_file_id_line_index_unique": {
           "name": "lines_file_id_line_index_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "file_id",
-            "line_index"
-          ]
+          "columns": ["file_id", "line_index"]
         }
       }
     },
@@ -708,114 +635,82 @@
       "indexes": {
         "tafs_cgac_agency_index": {
           "name": "tafs_cgac_agency_index",
-          "columns": [
-            "cgac_agency"
-          ],
+          "columns": ["cgac_agency"],
           "isUnique": false
         },
         "tafs_cgac_acct_index": {
           "name": "tafs_cgac_acct_index",
-          "columns": [
-            "cgac_acct"
-          ],
+          "columns": ["cgac_acct"],
           "isUnique": false
         },
         "tafs_allocation_agency_code_index": {
           "name": "tafs_allocation_agency_code_index",
-          "columns": [
-            "allocation_agency_code"
-          ],
+          "columns": ["allocation_agency_code"],
           "isUnique": false
         },
         "tafs_allocation_subacct_index": {
           "name": "tafs_allocation_subacct_index",
-          "columns": [
-            "allocation_subacct"
-          ],
+          "columns": ["allocation_subacct"],
           "isUnique": false
         },
         "tafs_account_id_index": {
           "name": "tafs_account_id_index",
-          "columns": [
-            "account_id"
-          ],
+          "columns": ["account_id"],
           "isUnique": false
         },
         "tafs_budget_agency_title_index": {
           "name": "tafs_budget_agency_title_index",
-          "columns": [
-            "budget_agency_title"
-          ],
+          "columns": ["budget_agency_title"],
           "isUnique": false
         },
         "tafs_budget_bureau_title_index": {
           "name": "tafs_budget_bureau_title_index",
-          "columns": [
-            "budget_bureau_title"
-          ],
+          "columns": ["budget_bureau_title"],
           "isUnique": false
         },
         "tafs_account_title_index": {
           "name": "tafs_account_title_index",
-          "columns": [
-            "account_title"
-          ],
+          "columns": ["account_title"],
           "isUnique": false
         },
         "tafs_iteration_description_index": {
           "name": "tafs_iteration_description_index",
-          "columns": [
-            "iteration_description"
-          ],
+          "columns": ["iteration_description"],
           "isUnique": false
         },
         "tafs_budget_agency_title_id_index": {
           "name": "tafs_budget_agency_title_id_index",
-          "columns": [
-            "budget_agency_title_id"
-          ],
+          "columns": ["budget_agency_title_id"],
           "isUnique": false
         },
         "tafs_budget_bureau_title_id_index": {
           "name": "tafs_budget_bureau_title_id_index",
-          "columns": [
-            "budget_bureau_title_id"
-          ],
+          "columns": ["budget_bureau_title_id"],
           "isUnique": false
         },
         "tafs_account_title_id_index": {
           "name": "tafs_account_title_id_index",
-          "columns": [
-            "account_title_id"
-          ],
+          "columns": ["account_title_id"],
           "isUnique": false
         },
         "tafs_rpt_cat_index": {
           "name": "tafs_rpt_cat_index",
-          "columns": [
-            "rpt_cat"
-          ],
+          "columns": ["rpt_cat"],
           "isUnique": false
         },
         "tafs_adj_aut_index": {
           "name": "tafs_adj_aut_index",
-          "columns": [
-            "adj_aut"
-          ],
+          "columns": ["adj_aut"],
           "isUnique": false
         },
         "tafs_created_at_index": {
           "name": "tafs_created_at_index",
-          "columns": [
-            "created_at"
-          ],
+          "columns": ["created_at"],
           "isUnique": false
         },
         "tafs_modified_at_index": {
           "name": "tafs_modified_at_index",
-          "columns": [
-            "modified_at"
-          ],
+          "columns": ["modified_at"],
           "isUnique": false
         }
       },
@@ -824,12 +719,8 @@
           "name": "tafs_file_id_files_file_id_fk",
           "tableFrom": "tafs",
           "tableTo": "files",
-          "columnsFrom": [
-            "file_id"
-          ],
-          "columnsTo": [
-            "file_id"
-          ],
+          "columnsFrom": ["file_id"],
+          "columnsTo": ["file_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -837,21 +728,14 @@
       "compositePrimaryKeys": {
         "tafs_file_id_tafs_id_iteration_fiscal_year_pk": {
           "name": "tafs_file_id_tafs_id_iteration_fiscal_year_pk",
-          "columns": [
-            "file_id",
-            "tafs_id",
-            "iteration",
-            "fiscal_year"
-          ]
+          "columns": ["file_id", "tafs_id", "iteration", "fiscal_year"]
         }
       },
       "uniqueConstraints": {
         "tafs_tafs_table_id_unique": {
           "name": "tafs_tafs_table_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "tafs_table_id"
-          ]
+          "columns": ["tafs_table_id"]
         }
       }
     }

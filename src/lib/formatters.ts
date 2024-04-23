@@ -22,6 +22,20 @@ export function formatCurrency(value: number): string {
 }
 
 /**
+
+ * Format a Date (or date string) into standard date format
+ * @param {Date | string} value
+ * @returns {string}
+ */
+export function formatDate(
+  value: Date | string,
+  format: 'full' | 'long' | 'medium' | 'short' = 'short'
+): string {
+  const date = typeof value === 'object' ? value : new Date(value);
+  return new Intl.DateTimeFormat('en-US', { dateStyle: format }).format(date);
+}
+
+/**
  * Format a file title
  *
  */

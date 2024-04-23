@@ -1,7 +1,7 @@
 ---
 name: Other issue 🤷🏿‍♀️
 about: Use this template for other issues.
-title: "🤷🏿‍♀️ <replace with a helpful title>"
+title: '🤷🏿‍♀️ <replace with a helpful title>'
 labels:
 ---
 
