@@ -1,7 +1,7 @@
 <script lang="ts">
   import placeholderImage from '$assets/placeholder-600.png';
 
-  const primaryColors = [
+  const paletteColors = [
     'color-white',
     'color-gray-lighter',
     'color-gray-light',
@@ -12,6 +12,10 @@
     'color-green-light',
     'color-green-dark',
     'color-green-darker',
+    'color-blue-lighter'
+  ];
+
+  const potentialColors = [
     'color-yellow',
     'color-yellow-light',
     'color-yellow-dark',
@@ -21,18 +25,19 @@
     'color-orange-dark',
     'color-orange-darker',
     'color-blue',
-    'color-blue-lighter',
     'color-blue-light',
     'color-blue-dark',
-    'color-blue-darker',
-    'color-background'
+    'color-blue-darker'
   ];
 
   const semanticColors = [
+    'color-background',
     'color-text',
     'color-text-muted',
     'color-background-inverse',
     'color-text-inverse',
+    'color-background-alt',
+    'color-text-alt',
     'color-primary',
     'color-primary-muted',
     'color-primary-text',
@@ -41,11 +46,12 @@
     'color-secondary-text',
     'color-highlight',
     'color-error',
+    'color-disabled',
     'color-link'
   ];
 </script>
 
-<div class="page-container">
+<div class="page-container content-container">
   <h1>Style guide</h1>
 
   <p>This is a very rough style guide to help see and describe global styles for this site.</p>
@@ -62,10 +68,24 @@
 
   <h3>Palette</h3>
 
-  The following are the primary palette colors. Avoid using these directly in CSS, instead try to
-  use the Semantic colors (see below).
+  <p>
+    The following are the primary palette colors. Avoid using these directly in CSS, instead try to
+    use the Semantic colors (see below).
+  </p>
 
-  {#each primaryColors as colorVariable}
+  {#each paletteColors as colorVariable}
+    <div
+      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
+    >
+      var(--{colorVariable})
+    </div>
+  {/each}
+
+  <h3>Potential palette colors</h3>
+
+  <p>Some potential, but unconfirmed palette colors</p>
+
+  {#each potentialColors as colorVariable}
     <div
       style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
     >
@@ -87,6 +107,7 @@
 
   <h1>Heading 1</h1>
   <h2>Heading 2</h2>
+  <h2 class="h2-alt">Heading 2 (alt)</h2>
   <h3>Heading 3</h3>
   <h4>Heading 4</h4>
   <h5>Heading 5</h5>
@@ -584,6 +605,7 @@
 <style>
   /** Making headings more distinct given how long this page is */
   h2.style-section {
+    padding-top: 4rem;
     border-bottom: 3px solid var(--color-gray-dark);
   }
 </style>

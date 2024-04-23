@@ -1,5 +1,7 @@
 /**
  * Elements.  i.e. things without classes or ids
+ *
+ * Note some exceptions to make things easier, i.e. .h* classes.
  */
 
 /* Page */
@@ -99,7 +101,7 @@ h6,
 blockquote {
   margin-left: var(--spacing);
   padding: var(--spacing);
-  border-left: var(--spacing-small) solid var(--color-accent);
+  border-left: var(--spacing-small) solid var(--color-primary);
 }
 
 blockquote > * {
