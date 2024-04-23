@@ -1,37 +1,35 @@
-import { db, dbConnect } from '$db/connection';
 import {
   yearOptions,
   lineNumberOptions,
   fileCountByCriterion,
   filesByCriterion,
+  type SearchParams
 } from '$queries/search';
-import {
-  bureaus,
-} from '$queries/tafs';
+import { bureaus } from '$queries/tafs';
+import { sortOptions } from '$config/search';
 import type { PageServerData } from '../$types';
 
 export const load: PageServerData = async ({ url }) => {
-  await dbConnect();
-
   const pageSize = 50;
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
   let resultCount, results;
 
   // Only perform our search once the form is submitted
-  if (url.searchParams && url.searchParams.get('term') != null) {
-
+  if (url.searchParams.toString().length) {
     // Get our arguments for our search queries
     const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-    const searchArgs = {
+    const searchArgs: SearchParams = {
       term: url.searchParams.get('term') || '',
       tafs: url.searchParams.get('tafs') || '',
       bureau: agencyBureau?.pop() || '',
       agency: agencyBureau?.pop() || '',
       account: url.searchParams.get('account') || '',
       approver: url.searchParams.get('approver') || '',
-      year: Number(url.searchParams.get('year')) || 0,
-      lineNum: url.searchParams.get('lineNum')?.replace(/\[|\]/g, '') || '',
-      footnoteNum: url.searchParams.get('footnoteNum') || '',
+      year: url.searchParams.get('year') || 0,
+      approvedStart: url.searchParams.get('approvalStart') || '2000-01-01',
+      approvedEnd: url.searchParams.get('approvalEnd') || new Date(),
+      lineNum: url.searchParams.get('lineNum')?.replace(/\[|"|\]/g, '') || '',
+      footnoteNum: url.searchParams.get('footnoteNum') || ''
     };
 
     // Execute prepared statements
@@ -39,18 +37,20 @@ export const load: PageServerData = async ({ url }) => {
     results = filesByCriterion({
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
-      ...searchArgs,
+      sort: url.searchParams.get('sort'),
+      ...searchArgs
     });
   }
 
   return {
-      // Return numeric options as numbers
-      yearOptions: (await yearOptions()).map(o => Number(o)),
-      lineOptions: (await lineNumberOptions()).map(o => Number(o)),
-      agencyBureauOptions: await bureaus(),
-      resultCount: resultCount,
-      pageSize,
-      pageIndex,
-      results: results,
+    // Return numeric options as numbers
+    yearOptions: await yearOptions(),
+    lineOptions: await lineNumberOptions(),
+    agencyBureauOptions: await bureaus(),
+    sortOptions,
+    resultCount: resultCount,
+    pageSize,
+    pageIndex,
+    results: results
   };
 };

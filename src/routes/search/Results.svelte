@@ -1,54 +1,45 @@
 <script lang="ts">
   export let results = [];
+  import { formatDate, formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
 </script>
 
 {#if results.length}
   {#each results as result}
     <div class="result">
-      <h3><a href={`/file/${result.fileId}`}>{result.fileName}</a></h3>
-        <p>
-          <strong>Approved By:</strong> {result.approverTitle}<br>
-          <strong>Approval Date:</strong> {result.approvalTimestamp}
-        </p>
+      <h3><a href={`/file/${result.fileId}`}>{formatFileTitle(result)}</a></h3>
+      <div class="tags">
+        <span class="tag">FY {result.fiscalYear}</span>
+      </div>
+      <p>
+        Approved {formatDate(result.approvalTimestamp, 'long')}
+      </p>
 
-      {#if result.tafs?.length}
-        <h4>Matching Accounts</h4>
-
-        {#each result.tafs as tafs}
+      {#each result.tafs as tafs}
+        <div class="result-taf">
+          <h4>
+            TAFS <a href={`/file/${result.fileId}#tafs_${tafs.tafsTableId}`}
+              >{formatTafsFormattedId(tafs)}</a
+            >
+          </h4>
+          <div class="tags">
+            <span class="tag">Iteration {tafs.iteration}</span>
+          </div>
           <p>
-            <strong>Budget Agency Title:</strong> <a href={`/agency/${tafs.budgetAgencyTitleId}`}>{tafs.budgetAgencyTitle}</a><br>
-            <strong>Budget Bureau Title:</strong> <a href={`/agency/${tafs.budgetAgencyTitleId}/bureau/${tafs.budgetBureauTitleId}`}>{tafs.budgetBureauTitle}</a><br>
-            <strong>TAFS:</strong> {tafs.tafsId}<br>
-            <strong>Account Title:</strong> <a href={`/agency/${tafs.budgetAgencyTitleId}/bureau/${tafs.budgetBureauTitleId}/account/${tafs.accountTitleId}`}>{tafs.accountTitle}</a>
+            <strong
+              ><a
+                href={`/agency/${tafs.budgetAgencyTitleId}/bureau/${tafs.budgetBureauTitleId}/account/${tafs.accountTitleId}`}
+                >{tafs.accountTitle}</a
+              ></strong
+            ><br />
+            <strong>
+              <a href={`/agency/${tafs.budgetAgencyTitleId}`}>{tafs.budgetAgencyTitle}</a> &middot;
+              <a href={`/agency/${tafs.budgetAgencyTitleId}/bureau/${tafs.budgetBureauTitleId}`}
+                >{tafs.budgetBureauTitle}</a
+              >
+            </strong>
           </p>
-
-          {#if tafs.lines?.length}
-            <h5>Relevant Lines</h5>
-            <table>
-              <thead>
-                <tr>
-                  <td>Line Number</td>
-                  <td>Line Description</td>
-                  <td>Footnotes</td>
-                </tr>
-              </thead>
-              <tbody>
-                {#each tafs.lines as line}
-                  <tr>
-                    <td>{line.lineNumber}</td>
-                    <td>{line.lineDescription}</td>
-                    <td>
-                      {#each line.footnotes as lineFootnote}
-                        <span title={lineFootnote.footnoteText}>{lineFootnote.footnoteNumber}</span>,{' '}
-                      {/each}
-                    </td>
-                  </tr>
-                {/each}
-              </tbody>
-            </table>
-          {/if}
-        {/each}
-      {/if}
+        </div>
+      {/each}
     </div>
   {/each}
 {:else}
@@ -57,8 +48,33 @@
 
 <style>
   .result {
-    margin: var(--spacing) 0;
-    padding: var(--spacing);
-    border: 1px solid var(--color-gray-medium);
+    margin: var(--spacing-double) 0;
+    border-bottom: 1px solid var(--color-gray-light);
+    padding-bottom: var(--spacing-double);
+  }
+
+  .result h3,
+  h4 {
+    margin: 0 0 var(--spacing-half);
+    padding: 0;
+  }
+
+  .result .tag {
+    border: 1px solid var(--color-gray-light);
+    padding: var(--spacing-small) var(--spacing-half);
+    border-radius: var(--border-radius);
+    display: inline-block;
+  }
+
+  .result .tags {
+    margin: var(--spacing-half) 0;
+  }
+
+  .result p {
+    margin: 0;
+  }
+
+  .result-taf {
+    margin-top: var(--spacing);
   }
 </style>

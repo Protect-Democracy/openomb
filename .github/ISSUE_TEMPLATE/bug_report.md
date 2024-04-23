@@ -1,7 +1,7 @@
 ---
 name: Bug report 🐞
 about: Use this template for adding bug report issues.
-title: "🐞 <replace with a helpful title>"
+title: '🐞 <replace with a helpful title>'
 labels: bug
 ---
 

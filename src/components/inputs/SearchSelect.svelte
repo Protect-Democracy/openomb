@@ -16,14 +16,11 @@
 -->
 
 <script lang="ts">
-  import { createCombobox, melt } from '@melt-ui/svelte';
+  import { createCombobox } from '@melt-ui/svelte';
   import { fly } from 'svelte/transition';
-  import { writable } from 'svelte/store'
   import { createEventDispatcher } from 'svelte';
   import { groupBy } from 'lodash-es';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
-  import ChevronUp from '$components/icons/ChevronUp.svelte';
-  import Check from '$components/icons/Check.svelte';
 
   export let options: string[];
   export let multi = false;
@@ -42,11 +39,15 @@
       return { value, label: '' };
     }
 
-    const defaultSelected = options.filter((o) =>
-        Array.isArray(value) ? value.includes(formatGroupOptionValue(o)) : formatGroupOptionValue(o) === value
-      ).map((o) => ({
+    const defaultSelected = options
+      .filter((o) =>
+        Array.isArray(value)
+          ? value.includes(formatGroupOptionValue(o))
+          : formatGroupOptionValue(o) === value
+      )
+      .map((o) => ({
         value: formatGroupOptionValue(o),
-        label: formatOptionLabel(o),
+        label: formatOptionLabel(o)
       }));
     return multi ? defaultSelected : defaultSelected?.[0];
   }
@@ -55,33 +56,37 @@
   const {
     elements: { menu, input, option, hiddenInput, group, groupLabel },
     states: { open, inputValue, touchedInput, selected },
-    helpers: { isSelected, isHighlighted },
+    helpers: { isSelected, isHighlighted }
   } = createCombobox({
     forceVisible: true,
     multiple: multi,
     defaultSelected: getDefaultSelection(),
-    onSelectedChange: ({ curr, next }) => {
+    onSelectedChange: ({ next }) => {
       dispatch('change', next);
       return next;
     },
-    onOpenChange: ({ curr, next }) => {
+    onOpenChange: ({ next }) => {
       if (!next) {
         inputValue.set(''); //Clear input when options are chosen & dialog is closed
       }
       return next;
-    },
+    }
   });
 
-  const groupedOptions = formatGroupLabel ? groupBy(options, formatGroupLabel) : {
-    'Options': options,
-  };
+  const groupedOptions = formatGroupLabel
+    ? groupBy(options, formatGroupLabel)
+    : {
+        Options: options
+      };
 
   $: filteredGroupOptions = $touchedInput
     ? Object.keys(groupedOptions).reduce((filteredGroupObject, groupName) => {
         const normalizedInput = $inputValue.toLowerCase();
         const filteredOptions = groupName.toLowerCase().includes(normalizedInput)
           ? groupedOptions[groupName]
-          : groupedOptions[groupName].filter((o) => formatOptionLabel(o).toLowerCase().includes(normalizedInput));
+          : groupedOptions[groupName].filter((o) =>
+              formatOptionLabel(o).toLowerCase().includes(normalizedInput)
+            );
         if (filteredOptions.length) {
           filteredGroupObject[groupName] = filteredOptions;
         }
@@ -109,51 +114,36 @@
   function formatGroupOptionValue(option) {
     // If we want our group value returned as well, return both
     if (formatGroupValue) {
-      return `${formatGroupValue(option)},${formatOptionValue(option)}`
+      return `${formatGroupValue(option)},${formatOptionValue(option)}`;
     }
     return formatOptionValue(option);
   }
 </script>
 
-
-
 <div class="search-select">
   <div class="input-wrapper">
-    <input
-      id={id || name}
-      {...$input} use:input
-      placeholder={placeholderText($selected)}
-    />
+    <input id={id || name} {...$input} use:input placeholder={placeholderText($selected)} />
     <div class="icon">
       <ChevronDown />
     </div>
   </div>
   <input {name} {...$hiddenInput} use:hiddenInput />
   {#if $open}
-    <ul
-      {...$menu} use:menu
-      transition:fly={{ duration: 150, y: -5 }}
-    >
+    <ul {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-      <div
-        tabindex="0"
-      >
+      <div tabindex="0">
         {#if multi && $selected && $selected.length}
           <div class="group" {...$group('selected')} use:group>
-            <div
-              class="group-label"
-              {...$groupLabel('selected')} use:groupLabel
-            >
-              Selected
-            </div>
+            <div class="group-label" {...$groupLabel('selected')} use:groupLabel>Selected</div>
             {#each $selected as selectedValue}
               <li
                 class:selected
                 class:highlighted={$isHighlighted(formatGroupOptionValue(selectedValue.value))}
                 {...$option({
                   value: selectedValue.value,
-                  label: selectedValue.label,
-                })} use:option
+                  label: selectedValue.label
+                })}
+                use:option
               >
                 {selectedValue.label}
               </li>
@@ -166,18 +156,16 @@
             class:highlighted={$isHighlighted('')}
             {...$option({
               value: '',
-              label: '',
-            })} use:option
+              label: ''
+            })}
+            use:option
           >
             {''}
           </li>
         {/if}
         {#each Object.keys(filteredGroupOptions) as groupName}
           <div class="group" {...$group(groupName)} use:group>
-            <div
-              class="group-label"
-              {...$groupLabel(groupName)} use:groupLabel
-            >
+            <div class="group-label" {...$groupLabel(groupName)} use:groupLabel>
               {groupName}
             </div>
             {#each filteredGroupOptions[groupName] as opt, index (index)}
@@ -186,17 +174,16 @@
                 class:highlighted={$isHighlighted(formatGroupOptionValue(opt))}
                 {...$option({
                   value: formatGroupOptionValue(opt),
-                  label: formatOptionLabel(opt),
-                })} use:option
+                  label: formatOptionLabel(opt)
+                })}
+                use:option
               >
                 {formatOptionLabel(opt)}
               </li>
             {/each}
           </div>
         {:else}
-          <li>
-            No results found
-          </li>
+          <li>No results found</li>
         {/each}
       </div>
     </ul>

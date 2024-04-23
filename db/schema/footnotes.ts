@@ -97,10 +97,10 @@ export const footnotes = pgTable(
 export const footnotesRelations = relations(footnotes, ({ one }) => ({
   file: one(files, {
     fields: [footnotes.fileId],
-    references: [files.fileId],
+    references: [files.fileId]
   }),
   line: one(lines, {
     fields: [footnotes.fileId, footnotes.lineIndex],
-    references: [lines.fileId, lines.lineIndex],
-  }),
+    references: [lines.fileId, lines.lineIndex]
+  })
 }));
