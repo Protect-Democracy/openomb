@@ -67,6 +67,24 @@
   <AgencyList agencies={data.agencies} headerElement="h3" />
 </section>
 
+<section class="learn">
+  <div class="page-container">
+    <h2 class="h2-alt">Learn More About Federal Apportionments</h2>
+
+    <div class="learn-items">
+      <a href="/faq#TODO"
+        >What do the different lines of information included in an apportionment mean?</a
+      >
+      <a href="/faq#TODO"
+        >How can I find the Treasury Appropriation Fund Symbol (TAFS) for a specific account?</a
+      >
+      <a href="/faq#TODO">Another FAQ question lorem ipsum dolor sit amet consectetur adipiscing?</a
+      >
+      <a href="/faq">Explore all apportionment FAQs</a>
+    </div>
+  </div>
+</section>
+
 <style>
   .intro {
     padding-top: var(--spacing-xlarge);
@@ -133,8 +151,34 @@
     color: var(--color-blue-lighter);
   }
 
+  .agencies {
+    margin-bottom: var(--spacing-xlarge);
+  }
+
   .agencies h2 {
     text-align: center;
     margin-bottom: var(--spacing-large);
+  }
+
+  .learn {
+    background-color: var(--color-blue-lighter);
+    border-top: var(--border-weight) solid var(--color-black);
+    padding: var(--spacing-xlarge) 0;
+  }
+
+  .learn h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-large);
+  }
+
+  .learn-items {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: var(--spacing-double);
+  }
+
+  .learn-items a {
+    color: var(--color-text);
   }
 </style>

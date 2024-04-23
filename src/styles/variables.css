@@ -79,7 +79,7 @@
   --border-radius: calc(var(--spacing) * 2 / 3);
   --border-radius-small: calc(var(--spacing) * 1 / 3);
   --border-weight: var(--spacing-thin);
-  --border-weight-thin: calc(var(--spacing-thin) / 2);
+  --border-weight-thin: calc(var(--spacing-thin) / 3);
 
   --transition: 0.2s;
 

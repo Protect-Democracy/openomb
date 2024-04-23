@@ -46,7 +46,7 @@
   .agency-list {
     display: flex;
     flex-basis: 1fr;
-    column-gap: var(--spacing);
+    column-gap: var(--spacing-double);
     justify-content: space-evenly;
   }
 

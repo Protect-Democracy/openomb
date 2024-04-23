@@ -3,6 +3,7 @@
  */
 
 /* Containers */
+
 .page-container {
   margin-left: auto;
   margin-right: auto;
@@ -24,6 +25,15 @@
   margin-right: auto;
   padding-left: var(--spacing);
   padding-right: var(--spacing);
+}
+
+/**
+ * On most pages, we want space below the nav and above the footer, but
+ * no on the landing page.
+ */
+.content-container {
+  padding-top: var(--spacing-large);
+  margin-bottom: var(--spacing-xlarge);
 }
 
 .center-container {

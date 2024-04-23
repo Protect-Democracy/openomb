@@ -22,6 +22,8 @@
     socialTwitterImgPath
   } from '$config';
   import favicon from '$assets/favicon/favicon.png';
+  import aafLogo from '$assets/logos/american-action-forum-logo.svg';
+  import pdLogo from '$assets/logos/pd-white-words-logo.svg';
   import '../styles/index.css';
 
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
@@ -118,23 +120,31 @@
 </main>
 
 <footer>
-  <div class="page-container">
-    <ul>
-      <li><a href="/about">About</a></li>
-      <li><a href="/developers">For developers</a></li>
-      <li><a href="/contact">Contact</a></li>
-    </ul>
-
-    <div>
-      <p>{siteName} is a project of</p>
+  <div class="links">
+    <div class="page-container">
       <ul>
-        <li>
-          <a href="https://protectdemocracy.org/" target="_blank" rel="noopener noreferrer"
-            >Protect Democracy</a
-          >
-        </li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/developers">For developers</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
+  </div>
+
+  <div class="attribution page-container">
+    <p class="center-container">{siteName} is a project of</p>
+
+    <ul>
+      <li>
+        <a href="https://www.americanactionforum.org/" target="_blank" rel="noopener noreferrer"
+          ><img src={aafLogo} alt="American Action Forum logo" /></a
+        >
+      </li>
+      <li>
+        <a href="https://protectdemocracy.org/" target="_blank" rel="noopener noreferrer"
+          ><img src={pdLogo} alt="Protect Democracy logo" /></a
+        >
+      </li>
+    </ul>
   </div>
 </footer>
 
@@ -178,8 +188,64 @@
   footer {
     background-color: var(--color-background-inverse);
     color: var(--color-text-inverse);
+    padding: 0;
+    margin: 0;
+  }
+
+  footer .links {
+    text-align: center;
     padding: calc(var(--spacing) * 3) 0;
-    margin-top: var(--spacing-xlarge);
+    border-bottom: var(--border-weight-thin) solid var(--color-text-inverse);
+  }
+
+  footer .links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-large);
+  }
+
+  footer .links li {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  footer .links a {
+    color: var(--color-text-inverse);
+    font-weight: var(--font-copy-weight-bold);
+  }
+
+  footer .attribution {
+    padding-top: var(--spacing-double);
+    padding-bottom: var(--spacing-large);
+    text-align: center;
+  }
+
+  footer .attribution p {
+    margin-bottom: var(--spacing-double);
+  }
+
+  footer .attribution ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-large);
+  }
+
+  footer .attribution li {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  footer .attribution a {
+    display: block;
+    max-width: 15rem;
   }
 
   .development {
