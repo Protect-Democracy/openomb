@@ -4,7 +4,7 @@ import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
 import { tafsSort, fileSort } from '$config/search';
-import { ilike, and, or, sql, eq, gte, lte, isNotNull, count, exists, not } from 'drizzle-orm';
+import { ilike, and, or, sql, eq, gte, lte, isNotNull, count, exists, not, asc } from 'drizzle-orm';
 
 export type SearchParams = {
   term: string;
@@ -298,20 +298,27 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
   const sortKey = searchParams.sort || 'approved_desc';
 
   if (tafsSort[sortKey]) {
-    // Sorting by tafs column
-    const sortedTafs = db
-      .select()
+    const column = sortKey.includes('account')
+      ? tafsResults.accountTitle
+      : sortKey.includes('bureau')
+        ? tafsResults.budgetBureauTitle
+        : tafsResults.budgetAgencyTitle;
+
+    // Get our paginated (limited) list of file ids based on tafs order
+    const paginatedFiles = db
+      .select({
+        fileId: sql`DISTINCT ${tafsResults.fileId}`.as('file_id'),
+        sortField: sql`FIRST_VALUE(${column})
+          OVER(
+            PARTITION BY ${tafsResults.fileId}
+            ORDER BY ${tafsSort[sortKey].sort(tafsResults).getSQL()}
+          )`.as('sort_field')
+      })
       .from(tafsResults)
       .where(
         exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId)))
       )
-      .orderBy(tafsSort[sortKey].sort(tafsResults))
-      .as('sorted_tafs');
-
-    // Get our paginated (limited) list of file ids based on tafs order
-    const paginatedFiles = db
-      .selectDistinctOn([sortedTafs.fileId])
-      .from(sortedTafs)
+      .orderBy((sortedTafs) => asc(sortedTafs.sortField))
       .offset(sql.placeholder('offset'))
       .limit(sql.placeholder('limit'))
       .as('paginated_files');
@@ -319,11 +326,14 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
     // Get our tafs results for the paginated files
     const searchStatement = db
       .select()
-      .from(sortedTafs)
-      .innerJoin(fileResults, eq(sortedTafs.fileId, fileResults.fileId))
+      .from(tafsResults)
+      .innerJoin(fileResults, eq(tafsResults.fileId, fileResults.fileId))
       .where(
-        exists(db.select().from(paginatedFiles).where(eq(sortedTafs.fileId, paginatedFiles.fileId)))
+        exists(
+          db.select().from(paginatedFiles).where(eq(tafsResults.fileId, paginatedFiles.fileId))
+        )
       )
+      .orderBy(tafsSort[sortKey].sort(tafsResults))
       .prepare(`search_results_file_${sortKey}`);
 
     const results = await searchStatement.execute(searchParams);
@@ -331,18 +341,18 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
     // Return an array of files containing grouped tafs
     const sortedFiles: Array<
       (typeof results)[0]['filtered_files'] & {
-        tafs: Array<(typeof results)[0]['sorted_tafs']>;
+        tafs: Array<(typeof results)[0]['filtered_tafs']>;
       }
     > = [];
     results.forEach((result) => {
       const file = sortedFiles.find((f) => f.fileId == result.filtered_files.fileId);
       if (file) {
-        file.tafs.push(result.sorted_tafs);
+        file.tafs.push(result.filtered_tafs);
       }
       else {
         sortedFiles.push({
           ...result.filtered_files,
-          tafs: [result.sorted_tafs]
+          tafs: [result.filtered_tafs]
         });
       }
     });
