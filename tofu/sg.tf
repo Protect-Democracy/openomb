@@ -55,9 +55,9 @@ resource "aws_security_group" "ingress_app" {
   vpc_id      = aws_vpc.app_vpc.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "TCP"
+    from_port = 3000
+    to_port   = 3000
+    protocol  = "TCP"
     #cidr_blocks = [var.private_a_cidr_block, var.private_b_cidr_block]
     cidr_blocks = ["0.0.0.0/0"]
   }
