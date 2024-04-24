@@ -238,6 +238,7 @@ a.button {
   padding: var(--spacing) var(--spacing-double);
   min-width: calc(17rem);
   transition: background-color var(--transition) ease;
+  margin: 0 var(--spacing-small) var(--spacing-small) 0;
 }
 
 button:hover,

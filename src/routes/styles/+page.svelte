@@ -257,6 +257,14 @@
   <button aria-pressed="true">On</button>
   <button aria-pressed="false">Off</button>
 
+  <h3>Variants</h3>
+
+  <p>Use these consistently when appropriate</p>
+
+  <button class="compact">.compact</button><br />
+  <button class="small">.small</button><br />
+  <button class="compact small">.compact.small</button><br />
+
   <h3>Modifiers</h3>
 
   <p>
@@ -264,8 +272,8 @@
     and the visual system.
   </p>
 
-  <button class="like-link">.like-link</button>
-  <button class="like-text">.like-text</button>
+  <button class="like-link">.like-link</button><br />
+  <button class="like-text">.like-text</button><br />
 
   <h3>Link elements</h3>
 
@@ -277,7 +285,7 @@
   </p>
 
   <a class="button" href="#buttons">a.button</a>
-  <a class="button like-link" href="#buttons">a.like-link</a>
+  <a class="button like-link" href="#buttons">a.button.like-link</a>
 
   <h2 class="style-section">Code</h2>
 
