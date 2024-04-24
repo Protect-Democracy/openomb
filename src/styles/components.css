@@ -57,6 +57,7 @@ button.like-text,
 input[type='submit'].like-text,
 input[type='button'].like-text,
 input[type='reset'].like-text,
+[role='button'].like-text,
 a.button.like-text {
   display: inline;
   background-color: inherit;
@@ -69,6 +70,7 @@ a.button.like-text {
   display: inline;
   text-align: left;
   line-height: var(--line-height);
+  min-width: auto;
 }
 
 /* Helpful for spacing */
@@ -76,6 +78,7 @@ button.like-link,
 input[type='submit'].like-link,
 input[type='button'].like-link,
 input[type='reset'].like-link,
+[role='button'].like-link,
 a.button.like-link {
   display: inline-block;
   background-color: inherit;
@@ -86,9 +89,42 @@ button.secondary,
 input[type='submit'].secondary,
 input[type='button'].secondary,
 input[type='reset'].secondary,
+[role='button'].secondary,
 a.button.secondary {
   background-color: var(--color-secondary);
   color: var(--color-secondary-text);
+}
+
+button.secondary:hover,
+input[type='submit'].secondary:hover,
+input[type='button'].secondary:hover,
+input[type='reset'].secondary:hover,
+[role='button'].secondary:hover,
+a.button.secondary:hover {
+  background-color: var(--color-secondary-muted);
+}
+
+button.small,
+input[type='submit'].small,
+input[type='button'].small,
+input[type='reset'].small,
+[role='button'].small,
+a.button.small {
+  font-weight: var(--font-copy-weight-normal);
+  font-size: var(--font-size-small);
+  padding: var(--spacing-half) var(--spacing);
+}
+
+button.compact,
+input[type='submit'].compact,
+input[type='button'].compact,
+input[type='reset'].compact,
+[role='button'].compact,
+a.button.compact {
+  font-weight: var(--font-copy-weight-normal);
+  min-width: auto;
+  padding: var(--spacing-small) var(--spacing-half);
+  border-radius: var(--border-radius-small);
 }
 
 /* Forms */

@@ -1,5 +1,7 @@
 /**
  * Elements.  i.e. things without classes or ids
+ *
+ * Note some exceptions to make things easier, i.e. .h* classes.
  */
 
 /* Page */
@@ -99,7 +101,7 @@ h6,
 blockquote {
   margin-left: var(--spacing);
   padding: var(--spacing);
-  border-left: var(--spacing-small) solid var(--color-accent);
+  border-left: var(--spacing-small) solid var(--color-primary);
 }
 
 blockquote > * {
@@ -236,6 +238,7 @@ a.button {
   padding: var(--spacing) var(--spacing-double);
   min-width: calc(17rem);
   transition: background-color var(--transition) ease;
+  margin: 0 var(--spacing-small) var(--spacing-small) 0;
 }
 
 button:hover,
@@ -246,6 +249,7 @@ input[type='reset']:hover,
 a.button:hover {
   background-color: var(--color-primary-muted);
   color: var(--color-primary-text);
+  text-decoration: none;
 }
 
 button[disabled],

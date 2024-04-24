@@ -1,10 +1,38 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { slide } from 'svelte/transition';
   import type { PageData } from './$types';
   import { formatCurrency, formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
 
   export let data: PageData;
   $: ({ file } = data);
   $: ({ tafs, footnotes } = file);
+
+  // Keep track of if footnote is expanded.  Default to true, and close onmount
+  let footnotesExpanded: Record<string, boolean> = {};
+  $: tafs.forEach((tafsGroup) => {
+    tafsGroup.lines.forEach((line) => {
+      footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`] =
+        footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`] === false ? false : true;
+    });
+  });
+
+  onMount(() => {
+    tafs.forEach((tafsGroup) => {
+      tafsGroup.lines.forEach((line) => {
+        footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`] = false;
+      });
+    });
+  });
+
+  function toggleFootnote(id: string, event: Event): void {
+    event?.preventDefault();
+    footnotesExpanded = {
+      ...footnotesExpanded,
+      [id]: !footnotesExpanded[id]
+    };
+    return;
+  }
 
   function isTotalRow(line: object): boolean {
     return line.lineNumber.match(/^(1920|6190)$/);
@@ -135,11 +163,36 @@
                 >{#if line.approvedAmount}{formatCurrency(line.approvedAmount)}{/if}</td
               >
               <td>
-                {#each line.footnotes as footnote}
-                  <a href="#footnote__{footnote.footnoteNumber}">{footnote.footnoteNumber}</a><br />
-                {/each}
+                {#if line.footnotes && line.footnotes.length > 0}
+                  <button
+                    class="compact small"
+                    aria-expanded={footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`]
+                      ? true
+                      : false}
+                    aria-controls="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
+                    on:click={(e) =>
+                      toggleFootnote(`${tafsGroup.tafsTableId}-${line.lineNumber}`, e)}
+                    >Footnotes</button
+                  >
+                {/if}
               </td>
             </tr>
+            {#if line.footnotes && line.footnotes.length > 0 && footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`]}
+              <tr
+                transition:slide={{}}
+                class="footnote-row"
+                id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
+              >
+                <th colspan="2" scope="row">Footnotes for line {line.lineNumber}:</th>
+                <td colspan="3">
+                  {#each line.footnotes as footnote}
+                    <p>
+                      <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
+                    </p>
+                  {/each}
+                </td>
+              </tr>
+            {/if}
           {/each}
         </tbody>
       </table>
@@ -150,8 +203,14 @@
 
   <h2>Footnotes</h2>
 
+  <p>
+    The following are all the footnotes associated with this file. Note that a footnote can be used
+    for multiple lines across multiple accounts. This is simply a reference for the information that
+    is already included above.
+  </p>
+
   {#if footnotes.length}
-    <table>
+    <table class="font-small">
       <thead>
         <tr><th>Number</th><th>Text</th></tr>
       </thead>
@@ -180,5 +239,9 @@
   tr.total {
     font-weight: bold;
     background-color: var(--color-gray-light);
+  }
+
+  .footnote-row {
+    vertical-align: top;
   }
 </style>

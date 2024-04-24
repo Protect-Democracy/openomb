@@ -5,7 +5,6 @@ import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
 import { tafsSort, fileSort } from '$config/search';
 import { ilike, and, or, sql, eq, gte, lte, isNotNull, count, exists, not } from 'drizzle-orm';
-import assert from 'assert';
 
 export type SearchParams = {
   term: string;
@@ -14,9 +13,9 @@ export type SearchParams = {
   bureau: string;
   account: string;
   approver: string;
-  approvedStart: Date | string;
-  approvedEnd: Date | string;
-  year: number | string;
+  approvedStart: Date;
+  approvedEnd: Date;
+  year: number;
   lineNum: string;
   footnoteNum: string;
 };
@@ -245,10 +244,6 @@ function getFileResults() {
  */
 export async function fileCountByCriterion(searchParams: SearchParams): Promise<number> {
   await dbConnect();
-  // Assertions
-  assert(searchParams.year !== '', 'year cannot be empty string');
-  assert(searchParams.approvedStart !== '', 'approvedStart cannot be empty string');
-  assert(searchParams.approvedEnd !== '', 'approvedEnd cannot be empty string');
 
   const fileResults = getFileResults();
   const tafsResults = getTafsResults();
@@ -270,10 +265,6 @@ export async function fileCountByCriterion(searchParams: SearchParams): Promise<
  */
 export async function tafsCountByCriterion(searchParams: SearchParams): Promise<number> {
   await dbConnect();
-  // Assertions
-  assert(searchParams.year !== '', 'year cannot be empty string');
-  assert(searchParams.approvedStart !== '', 'approvedStart cannot be empty string');
-  assert(searchParams.approvedEnd !== '', 'approvedEnd cannot be empty string');
 
   const tafsResults = getTafsResults();
   const fileResults = getFileResults();
@@ -296,10 +287,6 @@ export async function tafsCountByCriterion(searchParams: SearchParams): Promise<
  */
 export async function filesByCriterion(searchParams: SearchParams & PaginationParams) {
   await dbConnect();
-  // Assertions
-  assert(searchParams.year !== '', 'year cannot be empty string');
-  assert(searchParams.approvedStart !== '', 'approvedStart cannot be empty string');
-  assert(searchParams.approvedEnd !== '', 'approvedEnd cannot be empty string');
 
   // SQL partials for filtering
   const fileResults = getFileResults();
