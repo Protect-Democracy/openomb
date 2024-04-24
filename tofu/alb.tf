@@ -82,7 +82,3 @@ resource "aws_alb_listener" "apportionments_app_http" {
     target_group_arn = aws_lb_target_group.apportionments_app.arn
   }
 }
-
-output "alb_url" {
-  value = "http://${aws_alb.apportionments_app.dns_name}"
-}
