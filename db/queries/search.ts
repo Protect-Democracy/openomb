@@ -15,7 +15,7 @@ export type SearchParams = {
   approver: string;
   approvedStart: Date;
   approvedEnd: Date;
-  year: number;
+  year: string;
   lineNum: string;
   footnoteNum: string;
 };
@@ -52,7 +52,7 @@ function getFootnoteResults() {
             isNotNull(footnotes.footnoteText),
             ilike(
               footnotes.footnoteNumber,
-              sql`concat(${sql.placeholder('footnoteNum')}::text, '%')`
+              sql`any(string_to_array(concat(replace(${sql.placeholder('footnoteNum')}, ',', '%,'), '%'), ',')::varchar[])`
             )
           )
         )
@@ -220,7 +220,10 @@ function getFileResults() {
     .where(
       and(
         // Year Filter
-        or(eq(sql.placeholder('year'), 0), eq(files.fiscalYear, sql.placeholder('year'))),
+        or(
+          eq(sql.placeholder('year'), ''),
+          eq(files.fiscalYear, sql`any(string_to_array(${sql.placeholder('year')}, ',')::int[])`)
+        ),
         // Approved By Filter
         ilike(files.approverTitle, sql`concat('%', ${sql.placeholder('approver')}::text, '%')`),
         // Approval Date Filter

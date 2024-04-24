@@ -20,8 +20,6 @@
     newQuery.set('sort', event.target.value);
     goto(`${url.pathname}?${newQuery.toString()}`, { noScroll: true });
   }
-
-  console.log(data);
 </script>
 
 <svelte:head>

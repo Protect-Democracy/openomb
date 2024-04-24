@@ -31,7 +31,7 @@
     } else if (key === 'approver') {
       return `Approved by "${value}"`;
     } else if (key === 'year') {
-      return `Fiscal year ${value}`;
+      return `Fiscal year ${value.replace(/\[|"|\]/g, '')}`;
     } else if (key === 'approvedStart') {
       return `Approved after ${formatDate(value)}`;
     } else if (key === 'approvedEnd') {
@@ -39,7 +39,7 @@
     } else if (key === 'lineNum') {
       return `Lines ${value.replace(/\[|"|\]/g, '')}`;
     } else if (key === 'footnoteNum') {
-      return `Has Footnote ${value}`;
+      return `Has Footnote ${value.replace(/\[|"|\]/g, '')}`;
     }
 
     return false;
@@ -59,7 +59,7 @@
   <div class="filters">
     {#each url.searchParams.entries() as [key, value]}
       {#if value?.length && value !== '[]' && getFilterLabel(key, value)}
-        <button class="variant" on:click={() => removeFilter(key)}
+        <button class="small compact" on:click={() => removeFilter(key)}
           >{getFilterLabel(key, value)} (x)</button
         >
       {/if}
@@ -87,8 +87,5 @@
 
   .filters button {
     flex-grow: 0;
-    font-size: var(--font-size-small);
-    padding: var(--spacing-small) var(--spacing-half);
-    min-width: 0;
   }
 </style>
