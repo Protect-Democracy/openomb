@@ -78,12 +78,18 @@
   .item-icon {
     margin-right: var(--spacing-half);
     height: var(--spacing);
+    width: var(--spacing);
   }
 
   .item-title,
   button {
     display: flex;
     align-items: center;
+    min-width: 0;
+  }
+
+  [aria-expanded='true'] .item-icon {
+    color: var(--color-orange);
   }
 
   .selected button {

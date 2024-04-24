@@ -36,7 +36,7 @@
   // Get our option(s) that correspond to the provided value
   function getDefaultSelection() {
     if (!multi && !value) {
-      return { value, label: '' };
+      return { value, label: 'None' };
     }
 
     const defaultSelected = options
@@ -118,6 +118,24 @@
     }
     return formatOptionValue(option);
   }
+
+  // Our selected values do not properly clear on reset, so we need to
+  //  add an event to our hidden input
+  //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
+  function fixFormReset(el) {
+    const form = el.form;
+    if (!form) return;
+    const handleReset = () => {
+      // Set timeout is needed since `el.value` is only updated on the next frame
+      setTimeout(() => selected.set(multi ? [] : null));
+    };
+    form.addEventListener('reset', handleReset);
+    return {
+      destroy() {
+        form.removeEventListener('reset', handleReset);
+      }
+    };
+  }
 </script>
 
 <div class="search-select">
@@ -127,7 +145,7 @@
       <ChevronDown />
     </div>
   </div>
-  <input {name} {...$hiddenInput} use:hiddenInput />
+  <input {name} {...$hiddenInput} use:hiddenInput use:fixFormReset />
   {#if $open}
     <ul {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -156,11 +174,11 @@
             class:highlighted={$isHighlighted('')}
             {...$option({
               value: '',
-              label: ''
+              label: 'None'
             })}
             use:option
           >
-            {''}
+            None
           </li>
         {/if}
         {#each Object.keys(filteredGroupOptions) as groupName}
@@ -202,6 +220,7 @@
     top: 50%;
     right: var(--spacing-half);
     translate: 0 calc(-50% + 1px);
+    width: var(--spacing);
   }
 
   ul {
@@ -231,9 +250,9 @@
     padding: var(--spacing-half);
   }
   li.selected {
-    background-color: var(--color-gray-light);
+    background-color: var(--color-highlight);
   }
   li.highlighted {
-    background-color: var(--color-gray-light);
+    background-color: var(--color-highlight);
   }
 </style>

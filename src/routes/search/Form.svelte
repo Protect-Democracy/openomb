@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
 
   export let url;
@@ -88,12 +87,10 @@
   </div>
 
   <div class="field-col">
-    <input type="submit" value="Search" />
+    <button type="submit">Search</button>
   </div>
   <div class="field-col">
-    <button type="button" class="secondary" on:click={() => goto(url.pathname, { noScroll: true })}
-      >Reset</button
-    >
+    <button type="reset" class="secondary">Reset</button>
   </div>
 </form>
 
@@ -109,7 +106,6 @@
   }
 
   .field-col .field,
-  .field-col input[type='submit'],
   .field-col button {
     width: calc(100% - var(--spacing));
     margin-bottom: var(--spacing);
