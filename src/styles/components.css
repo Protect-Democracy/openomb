@@ -85,6 +85,15 @@ a.button.like-link {
   color: var(--color-link);
 }
 
+button.like-link:hover,
+input[type='submit'].like-link:hover,
+input[type='button'].like-link:hover,
+input[type='reset'].like-link:hover,
+[role='button'].like-link:hover,
+a.button.like-link:hover {
+  text-decoration: underline;
+}
+
 button.secondary,
 input[type='submit'].secondary,
 input[type='button'].secondary,
