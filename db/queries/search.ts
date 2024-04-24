@@ -294,11 +294,14 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
 
   const sortKey = searchParams.sort || 'approved_desc';
 
-  if (tafsSort[searchParams.sort]) {
+  if (tafsSort[sortKey]) {
     // Sorting by tafs column
     const sortedTafs = db
       .select()
       .from(tafsResults)
+      .where(
+        exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId)))
+      )
       .orderBy(tafsSort[sortKey].sort(tafsResults))
       .as('sorted_tafs');
 
@@ -306,7 +309,6 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
     const paginatedFiles = db
       .selectDistinctOn([sortedTafs.fileId])
       .from(sortedTafs)
-      .where(exists(db.select().from(fileResults).where(eq(sortedTafs.fileId, fileResults.fileId))))
       .offset(sql.placeholder('offset'))
       .limit(sql.placeholder('limit'))
       .as('paginated_files');
@@ -319,7 +321,7 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
       .where(
         exists(db.select().from(paginatedFiles).where(eq(sortedTafs.fileId, paginatedFiles.fileId)))
       )
-      .prepare(`search_results_tafs_${sortKey}`);
+      .prepare(`search_results_file_${sortKey}`);
 
     const results = await searchStatement.execute(searchParams);
 
@@ -381,6 +383,37 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
       limit: sql.placeholder('limit')
     })
     .prepare(`search_results_file_${sortKey}`);
+
+  return await searchStatement.execute(searchParams);
+}
+
+/**
+ * Get subset of tafs that match provided search criterion and
+ *  offset for pagination
+ */
+export async function tafsByCriterion(searchParams: SearchParams & PaginationParams) {
+  await dbConnect();
+
+  // SQL partials for filtering
+  const fileResults = getFileResults();
+  const tafsResults = getTafsResults();
+
+  const sortKey = searchParams.sort || 'approved_desc';
+
+  const sort = tafsSort[sortKey]
+    ? tafsSort[sortKey].sort(tafsResults)
+    : fileSort[sortKey].sort(fileResults);
+
+  // Sorting by file column
+  const searchStatement = db
+    .select()
+    .from(tafsResults)
+    .innerJoin(fileResults, eq(tafsResults.fileId, fileResults.fileId))
+    .where(exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId))))
+    .orderBy(sort)
+    .offset(sql.placeholder('offset'))
+    .limit(sql.placeholder('limit'))
+    .prepare(`search_results_tafs_${sortKey}`);
 
   return await searchStatement.execute(searchParams);
 }

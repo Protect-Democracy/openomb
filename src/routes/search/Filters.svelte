@@ -89,5 +89,6 @@
     flex-grow: 0;
     font-size: var(--font-size-small);
     padding: var(--spacing-small) var(--spacing-half);
+    min-width: 0;
   }
 </style>

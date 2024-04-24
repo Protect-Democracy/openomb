@@ -52,19 +52,21 @@
     </div>
     <div class="field">
       <label for="approvedDateRange">Approved Date Range</label>
-      <input
-        id="approvedDateRange"
-        name="approvedStart"
-        type="date"
-        value={url.searchParams.get('approvedStart')}
-      />
-      -
-      <input
-        id="approvedDateRange"
-        name="approvedEnd"
-        type="date"
-        value={url.searchParams.get('approvedEnd')}
-      />
+      <div class="date-fields">
+        <input
+          id="approvedDateRange"
+          name="approvedStart"
+          type="date"
+          value={url.searchParams.get('approvedStart')}
+        />
+        -
+        <input
+          id="approvedDateRange"
+          name="approvedEnd"
+          type="date"
+          value={url.searchParams.get('approvedEnd')}
+        />
+      </div>
     </div>
     <div class="field">
       <label for="lineNum">Has Line Number</label>
@@ -109,6 +111,15 @@
   .field-col button {
     width: calc(100% - var(--spacing));
     margin-bottom: var(--spacing);
+  }
+
+  .date-fields {
+    display: flex;
+    column-gap: var(--spacing-half);
+  }
+
+  .date-fields input {
+    min-width: 0;
   }
 
   label {

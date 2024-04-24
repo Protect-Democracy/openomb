@@ -65,6 +65,7 @@
     height: 100%;
     background-color: var(--color-background);
     z-index: 50;
+    overflow-y: auto;
   }
 
   .drawer h2 {
@@ -76,5 +77,7 @@
     position: absolute;
     right: var(--spacing);
     top: var(--spacing);
+    min-width: 0;
+    padding: var(--spacing-half) var(--spacing);
   }
 </style>
