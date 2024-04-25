@@ -29,4 +29,4 @@ jobs:
         with:
           aws_account_id: ${{ env.AWS_ACCOUNT_ID }}
           aws_region: ${{ env.AWS_REGION }}
-          aws_role_to_assume: 'github-actions-${{ github.event.repository.name }}'
+          aws_role_to_assume: 'github-actions-${{ github.event.repository.owner.name }}-${{ github.event.repository.name }}'
