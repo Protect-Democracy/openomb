@@ -1,6 +1,5 @@
 <script>
   import { page } from '$app/stores';
-  throw new Error('help');
 </script>
 
 <div class="page-container content-container">
