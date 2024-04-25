@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ecr" {
-  name                 = var.apportionments_repo
+  name                 = var.repo_name
   image_tag_mutability = "MUTABLE"
 
   encryption_configuration {
