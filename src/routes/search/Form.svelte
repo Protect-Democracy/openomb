@@ -1,5 +1,6 @@
 <script lang="ts">
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
+  import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
 
   export let url;
   export let agencyBureauOptions = [];
@@ -43,28 +44,31 @@
   <div class="field-col">
     <div class="field">
       <label for="year">Fiscal Year</label>
-      <select id="year" name="year" value={Number(url.searchParams.get('year'))}>
-        <option></option>
-        {#each yearOptions as yearOption}
-          <option value={yearOption}>{yearOption}</option>
-        {/each}
-      </select>
+      <CheckboxButtons
+        id="year"
+        name="year"
+        options={yearOptions}
+        value={url.searchParams.get('year') ? JSON.parse(url.searchParams.get('year')) : []}
+        multi
+      />
     </div>
     <div class="field">
       <label for="approvedDateRange">Approved Date Range</label>
-      <input
-        id="approvedDateRange"
-        name="approvedStart"
-        type="date"
-        value={url.searchParams.get('approvedStart')}
-      />
-      -
-      <input
-        id="approvedDateRange"
-        name="approvedEnd"
-        type="date"
-        value={url.searchParams.get('approvedEnd')}
-      />
+      <div class="date-fields">
+        <input
+          id="approvedDateRange"
+          name="approvedStart"
+          type="date"
+          value={url.searchParams.get('approvedStart')}
+        />
+        -
+        <input
+          id="approvedDateRange"
+          name="approvedEnd"
+          type="date"
+          value={url.searchParams.get('approvedEnd')}
+        />
+      </div>
     </div>
     <div class="field">
       <label for="lineNum">Has Line Number</label>
@@ -78,11 +82,15 @@
     </div>
     <div class="field">
       <label for="footnoteNum">Has Footnote</label>
-      <select id="footnoteNum" name="footnoteNum" value={url.searchParams.get('footnoteNum')}>
-        <option></option>
-        <option value="A">A</option>
-        <option value="B">B</option>
-      </select>
+      <CheckboxButtons
+        id="footnoteNum"
+        name="footnoteNum"
+        options={['A', 'B']}
+        value={url.searchParams.get('footnoteNum')
+          ? JSON.parse(url.searchParams.get('footnoteNum'))
+          : []}
+        multi
+      />
     </div>
   </div>
 
@@ -109,6 +117,15 @@
   .field-col button {
     width: calc(100% - var(--spacing));
     margin-bottom: var(--spacing);
+  }
+
+  .date-fields {
+    display: flex;
+    column-gap: var(--spacing-half);
+  }
+
+  .date-fields input {
+    min-width: 0;
   }
 
   label {

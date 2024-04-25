@@ -4,8 +4,8 @@
   import { goto } from '$app/navigation';
   import { formatNumber } from '$lib/formatters';
   import { siteName } from '$config';
-  import Form from './Form.svelte';
-  import Filters from './Filters.svelte';
+  import Form from '../Form.svelte';
+  import Filters from '../Filters.svelte';
   import Results from './Results.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
 
@@ -48,11 +48,13 @@
 
     <div class="results">
       <!-- Don't wait on search results to load page - show loading state instead -->
-      {#await Promise.all([data.resultCount, data.results])}
+      {#await Promise.all([data.resultCount, data.fileCount, data.results])}
         <p>Loading search results...</p>
-      {:then [resultCount, results]}
+      {:then [resultCount, fileCount, results]}
         <aside class="result-actions">
-          <strong>{formatNumber(resultCount)} Results</strong>
+          <span class="result-count">
+            {formatNumber(resultCount)} Results in {formatNumber(fileCount)} Files
+          </span>
           <div class="sort">
             <select
               name="sort"
@@ -100,5 +102,9 @@
     justify-content: space-between;
     align-items: center;
     margin: var(--spacing-double) 0;
+  }
+
+  .result-count {
+    font-weight: 700;
   }
 </style>

@@ -36,7 +36,7 @@
   <div class="item-title" class:selected={$isSelected(itemId)}>
     {#if hasChildren}
       <button
-        class="like-text"
+        class="like-text compact"
         {...$item({
           id: itemId,
           hasChildren
@@ -85,7 +85,6 @@
   button {
     display: flex;
     align-items: center;
-    min-width: 0;
   }
 
   [aria-expanded='true'] .item-icon {

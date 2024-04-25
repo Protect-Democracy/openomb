@@ -22,7 +22,7 @@
   import { groupBy } from 'lodash-es';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-  export let options: string[];
+  export let options: string[] | Record<string, unknown>[];
   export let multi = false;
   export let id;
   export let name;
@@ -33,10 +33,12 @@
   export let formatGroupLabel;
   export let formatGroupValue;
 
+  const emptyOption = { value: '', label: 'None' };
+
   // Get our option(s) that correspond to the provided value
   function getDefaultSelection() {
     if (!multi && !value) {
-      return { value, label: 'None' };
+      return emptyOption;
     }
 
     const defaultSelected = options
@@ -127,7 +129,7 @@
     if (!form) return;
     const handleReset = () => {
       // Set timeout is needed since `el.value` is only updated on the next frame
-      setTimeout(() => selected.set(multi ? [] : null));
+      setTimeout(() => selected.set(multi ? [] : emptyOption));
     };
     form.addEventListener('reset', handleReset);
     return {
@@ -172,13 +174,10 @@
           <li
             class:selected={$isSelected('')}
             class:highlighted={$isHighlighted('')}
-            {...$option({
-              value: '',
-              label: 'None'
-            })}
+            {...$option(emptyOption)}
             use:option
           >
-            None
+            {emptyOption.label}
           </li>
         {/if}
         {#each Object.keys(filteredGroupOptions) as groupName}

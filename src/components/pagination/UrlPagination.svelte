@@ -41,7 +41,7 @@
   });
 </script>
 
-{#if $pages.length > 1}
+{#if $pages.length > 1 && total > 0}
   <nav aria-label="pagination" {...$root} use:root>
     <div class="button-group">
       <button {...$prevButton} use:prevButton> &#x276e; </button>{#each $pages as page (page.key)}
@@ -59,11 +59,12 @@
 
 <style>
   .button-group button {
-    padding: var(--spacing);
+    padding: var(--spacing-half) var(--spacing);
     color: var(--color-text);
     background-color: var(--color-background);
     border: 1px solid var(--color-gray-dark);
     border-radius: 0;
+    min-width: 0;
   }
 
   .button-group button:hover,
