@@ -1,10 +1,10 @@
 name: Push to ECR
 
 on:
-  push:
-    branches: ['main']
-  release:
-    types: ['published']
+  #push:
+  #  branches: ['main']
+
+  workflow_dispatch:
 
 env:
   AWS_REGION: "us-west-2"
