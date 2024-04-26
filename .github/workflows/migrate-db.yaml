@@ -46,21 +46,24 @@ jobs:
         id: aws_task_def_arn
         run: |
           tofu output --raw migrate_task_definition_arn
-      - run: |
+      - name: Set task definition env
+        run: |
           echo "AWS_TASK_DEF_ARN=${{ steps.aws_task_def_arn.outputs.stdout }}" >> "$GITHUB_ENV"
 
       - name: Set cluster ARN
         id: aws_ecs_cluster_arn
         run: |
           tofu output --raw ecs_cluster_arn
-      - run: |
+      - name: Set cluster env
+        run: |
           echo "AWS_ECS_CLUSTER_ARN=${{ steps.aws_ecs_cluster_arn.outputs.stdout }}" >> "$GITHUB_ENV"
 
       - name: Set network config
         id: aws_run_task_network_config
         run: |
           tofu output --raw run_task_network_configuration_string
-      - run: |
+      - name: Set network config env 
+        run: |
           echo "AWS_NETWORK_CONFIG=${{ steps.aws_run_task_network_config.outputs.stdout }}" >> "$GITHUB_ENV"
 
       - name: Run ECS database migration task

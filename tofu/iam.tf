@@ -162,6 +162,41 @@ data "aws_iam_policy_document" "github_actions_db_migration" {
       "${aws_ecs_task_definition.apportionments_migrate.arn_without_revision}:*"
     ]
   }
+  statement {
+    actions   = ["s3:ListBucket"]
+    resources = ["${aws_s3_bucket.tfstate_bucket.arn}"]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    # TODO: Change this hardcoded value to dynamic
+    resources = ["${aws_s3_bucket.tfstate_bucket.arn}/tofu.tfstate"]
+  }
+
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.remotestate_table.id}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "github_actions_db_migration" {
