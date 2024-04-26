@@ -70,9 +70,11 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
         tafsId: tafs.tafsId,
         fiscalYear: tafs.fiscalYear,
         iteration: tafs.iteration,
-        tafsTableId: tafs.tafsTableId
+        tafsTableId: tafs.tafsTableId,
+        approvalTimestamp: files.approvalTimestamp
       })
       .from(tafs)
+      .leftJoin(files, eq(tafs.fileId, files.fileId))
       .where(and(eq(tafs.tafsId, t.tafsId), eq(tafs.fiscalYear, t.fiscalYear)))
       .orderBy(asc(tafs.iteration));
   }

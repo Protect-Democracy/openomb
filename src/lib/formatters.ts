@@ -2,6 +2,11 @@
 import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
 
+// Types
+interface FileWithTafs extends filesSelect {
+  tafs?: tafsSelect[];
+}
+
 /**
  * Format a number
  * @param {number} value
@@ -27,7 +32,7 @@ export function formatCurrency(value: number): string {
  * @returns {string}
  */
 export function formatDate(
-  value?: Date | string,
+  value?: Date | string | null,
   format: 'full' | 'long' | 'medium' | 'short' = 'short'
 ): string {
   if (!value) {
@@ -41,15 +46,25 @@ export function formatDate(
 /**
  * Format a date to ISO
  */
-export function formatDateISO(date?: Date | string): string {
+export function formatDateISO(date?: Date | string | null): string {
   return date ? new Date(date).toISOString() : '';
 }
 
 /**
  * Format a file title
- *
  */
-export function formatFileTitle(file: filesSelect) {
+export function formatFileTitle(file: FileWithTafs) {
+  const hasTafs = file?.tafs?.length && file?.tafs?.length > 0;
+  const accounts = hasTafs ? file?.tafs?.map((t) => t.accountTitle) : [];
+
+  // Has tafs accounts
+  if (hasTafs && accounts?.length && accounts?.length > 0) {
+    return accounts.length === 1
+      ? accounts[0]
+      : `${accounts[0]} and ${formatNumber(accounts.length - 1)} other account${accounts.length - 1 > 1 ? 's' : ''}`;
+  }
+
+  // No tafs information
   return `${file.folder} - ${file.fileId}`;
 }
 

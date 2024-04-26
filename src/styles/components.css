@@ -67,6 +67,36 @@ a.like-text {
   color: var(--color-text);
 }
 
+.font-small {
+  font-size: var(--font-size-small);
+}
+
+h1 > small {
+  font-size: 0.85rem;
+  font-weight: var(--font-copy-weight-normal);
+  font-family: var(--font-family-copy);
+  display: block;
+}
+
+/* Lists */
+ul.inline-list {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+ul.inline-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+ul.inline-list li + li::before {
+  content: ' > ';
+  margin-left: calc(--spacing-half);
+}
+
 /* Buttons */
 button.like-text,
 input[type='submit'].like-text,

@@ -1,6 +1,7 @@
 import { dbConnect } from '$db/connection';
 import { fileDetails } from '$queries/files';
 import { error } from '@sveltejs/kit';
+import { formatFileTitle } from '$lib/formatters';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
@@ -15,7 +16,8 @@ export async function load({ params }) {
   return {
     file,
     pageMeta: {
-      title: 'Some Page',
+      title: `${formatFileTitle(file)} | ${file.fileId}`,
+      // TODO
       description: 'Description of Some Page'
     }
   };
