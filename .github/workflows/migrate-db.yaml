@@ -43,7 +43,7 @@ jobs:
         run: tofu init
 
       - name: Test
-        run: echo "AWS_TASK_DEF_ARN='$(tofu output --raw migrate_task_definition_arn)'" >> $GITHUB_ENV
+        run: echo "AWS_TASK_DEF_ARN=$(tofu output --raw migrate_task_definition_arn)" >> "$GITHUB_OUTPUT"
 
       - name: Run ECS database migration task
         shell: bash
