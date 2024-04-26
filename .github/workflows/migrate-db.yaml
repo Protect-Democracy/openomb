@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: "us-west-2"
+  AWS_REGION: 'us-west-2'
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  tf_actions_working_dir: "tofu"
+  tf_actions_working_dir: 'tofu'
 
 jobs:
   deploy:

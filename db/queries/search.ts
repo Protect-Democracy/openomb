@@ -37,24 +37,20 @@ function getFootnoteResults() {
     .select()
     .from(footnotes)
     .where(
-      and(
-        // Content Search
-        or(
-          ilike(footnotes.footnoteText, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-
-          // Allow for footnote number override
-          not(eq(sql.placeholder('footnoteNum'), ''))
-        ),
-        // Footnote Number Filter
-        or(
-          eq(sql.placeholder('footnoteNum'), ''),
-          and(
-            isNotNull(footnotes.footnoteText),
-            ilike(
-              footnotes.footnoteNumber,
-              sql`any(string_to_array(concat(replace(${sql.placeholder('footnoteNum')}, ',', '%,'), '%'), ',')::varchar[])`
-            )
+      or(
+        // We match the footnote number
+        and(
+          not(eq(sql.placeholder('footnoteNum'), '')),
+          ilike(
+            footnotes.footnoteNumber,
+            sql`any(string_to_array(concat(replace(${sql.placeholder('footnoteNum')}, ',', '%,'), '%'), ',')::varchar[])`
           )
+        ),
+        // We don't need a specific number
+        and(
+          eq(sql.placeholder('footnoteNum'), ''),
+          // Search footnote content
+          ilike(footnotes.footnoteText, sql`concat('%', ${sql.placeholder('term')}::text, '%')`)
         )
       )
     )
@@ -75,57 +71,36 @@ function getLineResults() {
     .select()
     .from(lines)
     .where(
-      and(
-        // Content Search
-        or(
-          ilike(lines.lineDescription, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-
-          // Content Search on footnote
-          exists(
-            db
-              .select()
-              .from(footnoteResults)
-              .where(
-                and(
-                  eq(footnoteResults.fileId, lines.fileId),
-                  eq(footnoteResults.lineIndex, lines.lineIndex),
-                  ilike(
-                    footnoteResults.footnoteText,
-                    sql`concat('%', ${sql.placeholder('term')}::text, '%')`
-                  )
-                )
-              )
-          ),
-
-          // Allow for line number and footnote number override
+      or(
+        // We match the line number
+        and(
           not(eq(sql.placeholder('lineNum'), '')),
-          not(eq(sql.placeholder('footnoteNum'), ''))
-        ),
-        // Line Number Filter
-        or(
-          eq(sql.placeholder('lineNum'), ''),
-          and(
-            eq(
-              lines.lineNumber,
-              sql`any(string_to_array(${sql.placeholder('lineNum')}, ',')::varchar[])`
-            ),
-            or(isNotNull(lines.approvedAmount), isNotNull(lines.lineDescription))
+          eq(
+            lines.lineNumber,
+            sql`any(string_to_array(${sql.placeholder('lineNum')}, ',')::varchar[])`
           )
         ),
-
-        // If filtering on footnote number, must have footnote
-        or(
-          eq(sql.placeholder('footnoteNum'), ''),
-          exists(
-            db
-              .select()
-              .from(footnoteResults)
-              .where(
-                and(
-                  eq(footnoteResults.fileId, lines.fileId),
-                  eq(footnoteResults.lineIndex, lines.lineIndex)
+        // We don't need a specific line number
+        and(
+          eq(sql.placeholder('lineNum'), ''),
+          or(
+            // We have a footnote
+            exists(
+              db
+                .select()
+                .from(footnoteResults)
+                .where(
+                  and(
+                    eq(footnoteResults.fileId, lines.fileId),
+                    eq(footnoteResults.lineIndex, lines.lineIndex)
+                  )
                 )
-              )
+            ),
+            // We don't need a footnote and match on content
+            and(
+              eq(sql.placeholder('footnoteNum'), ''),
+              ilike(lines.lineDescription, sql`concat('%', ${sql.placeholder('term')}::text, '%')`)
+            )
           )
         )
       )
@@ -147,49 +122,20 @@ function getTafsResults() {
     .from(tafs)
     .where(
       and(
-        // Content Search
-        or(
-          ilike(tafs.accountTitle, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-          ilike(tafs.budgetAgencyTitle, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-          ilike(tafs.budgetBureauTitle, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-          ilike(tafs.cgacAcct, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-          ilike(tafs.cgacAgency, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-
-          // Content Search on lines/footnotes
-          exists(
-            db
-              .select()
-              .from(lineResults)
-              .where(
-                and(
-                  eq(lineResults.fileId, tafs.fileId),
-                  eq(lineResults.tafsTableId, tafs.tafsTableId),
-                  ilike(
-                    lineResults.lineDescription,
-                    sql`concat('%', ${sql.placeholder('term')}::text, '%')`
-                  )
-                )
-              )
-          )
-        ),
-        // TAFS Filter
+        // TAFS Specific filters
         ilike(tafs.tafsId, sql`concat('%', ${sql.placeholder('tafs')}::text, '%')`),
-        // Agency Filter
         or(
           eq(sql.placeholder('agency'), ''),
           eq(tafs.budgetAgencyTitleId, sql.placeholder('agency'))
         ),
-        // Bureau Filter
         or(
           eq(sql.placeholder('bureau'), ''),
           eq(tafs.budgetBureauTitleId, sql.placeholder('bureau'))
         ),
-        // Account Filter
         ilike(tafs.accountTitle, sql`concat('%', ${sql.placeholder('account')}::text, '%')`),
 
-        // If filtering on Line or Footnote, must have line
         or(
-          and(eq(sql.placeholder('lineNum'), ''), eq(sql.placeholder('footnoteNum'), '')),
+          // We have a line
           exists(
             db
               .select()
@@ -200,6 +146,23 @@ function getTafsResults() {
                   eq(lineResults.tafsTableId, tafs.tafsTableId)
                 )
               )
+          ),
+          // We don't need a line and match on content
+          and(
+            and(eq(sql.placeholder('lineNum'), ''), eq(sql.placeholder('footnoteNum'), '')),
+            or(
+              ilike(tafs.accountTitle, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
+              ilike(
+                tafs.budgetAgencyTitle,
+                sql`concat('%', ${sql.placeholder('term')}::text, '%')`
+              ),
+              ilike(
+                tafs.budgetBureauTitle,
+                sql`concat('%', ${sql.placeholder('term')}::text, '%')`
+              ),
+              ilike(tafs.cgacAcct, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
+              ilike(tafs.cgacAgency, sql`concat('%', ${sql.placeholder('term')}::text, '%')`)
+            )
           )
         )
       )
@@ -219,14 +182,12 @@ function getFileResults() {
     .from(files)
     .where(
       and(
-        // Year Filter
+        // File Specific filters
         or(
           eq(sql.placeholder('year'), ''),
           eq(files.fiscalYear, sql`any(string_to_array(${sql.placeholder('year')}, ',')::int[])`)
         ),
-        // Approved By Filter
         ilike(files.approverTitle, sql`concat('%', ${sql.placeholder('approver')}::text, '%')`),
-        // Approval Date Filter
         and(
           or(
             eq(sql.placeholder('approvedStart'), ''),
@@ -428,7 +389,10 @@ export async function tafsByCriterion(searchParams: SearchParams & PaginationPar
     .limit(sql.placeholder('limit'))
     .prepare(`search_results_tafs_${sortKey}`);
 
-  return await searchStatement.execute(searchParams);
+  return (await searchStatement.execute(searchParams)).map((result) => ({
+    ...result.filtered_tafs,
+    file: result.filtered_files
+  }));
 }
 
 /**

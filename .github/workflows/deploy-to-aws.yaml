@@ -13,9 +13,9 @@ on:
   workflow_dispatch:
 
 env:
-  AWS_REGION: "us-west-2"
+  AWS_REGION: 'us-west-2'
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_TASK_DEFINITION_FAMILY: "apportionments-app"
+  AWS_TASK_DEFINITION_FAMILY: 'apportionments-app'
   #AWS_ECS_SERVICE:
   #AWS_ECS_CLUSTER:
 
