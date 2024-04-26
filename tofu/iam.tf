@@ -85,6 +85,7 @@ resource "aws_iam_role" "github_actions" {
   assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
 }
 
+# Grants privileges needed to automate push to ECR and deployment to ECS for GitHub Actions
 data "aws_iam_policy_document" "github_actions" {
   statement {
     actions = [
@@ -136,7 +137,7 @@ data "aws_iam_policy_document" "github_actions" {
 
 resource "aws_iam_policy" "github_actions" {
   name        = "github-actions-${var.repo_name}"
-  description = "Grant Github Actions the ability to push to ${var.repo_name} from explosion/${var.repo_name}"
+  description = "Grant Github Actions the ability to push to ${var.repo_name}"
   policy      = data.aws_iam_policy_document.github_actions.json
 }
 
