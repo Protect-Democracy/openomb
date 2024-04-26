@@ -45,4 +45,4 @@ jobs:
       - name: Run ECS database migration task
         shell: bash
         run: |
-          aws ecs run-task --task-definition ${{ AWS_ECS_TASK_DEFINITION_ARN }} --cluster ${{ AWS_ECS_CLUSTER_ARN }} --network-configuration ${{ RUN_TASK_NETWORKING_CONFIGURATION }} --launch-type FARGATE
+          aws ecs run-task --task-definition ${{ secrets.AWS_ECS_TASK_DEFINITION_ARN }} --cluster ${{ secrets.AWS_ECS_CLUSTER_ARN }} --network-configuration ${{ secrets.RUN_TASK_NETWORKING_CONFIGURATION }} --launch-type FARGATE
