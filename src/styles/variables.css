@@ -82,6 +82,7 @@
   --border-weight-thin: calc(var(--spacing-thin) / 3);
 
   --transition: 0.2s;
+  --transition-fast: 0.1s;
 
   --spacing: 1rem;
   --spacing-half: calc(var(--spacing) / 2);

@@ -78,6 +78,10 @@ h1 > small {
   display: block;
 }
 
+.muted {
+  color: var(--color-text-muted);
+}
+
 /* Lists */
 ul.inline-list {
   display: inline-block;

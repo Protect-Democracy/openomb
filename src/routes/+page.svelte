@@ -3,7 +3,7 @@
   import { siteName } from '$config';
   import { formatNumber } from '$lib/formatters';
   import SearchForm from './SearchForm.svelte';
-  import AgencyList from './AgencyList.svelte';
+  import AgencyExplorer from '../components/agencies/AgencyExplorer.svelte';
   import graphIllustration from '$assets/graph-illustration.svg';
 
   export let data: PageData;
@@ -64,7 +64,11 @@
 <section class="agencies page-container-small">
   <h2 class="h2-alt">Find Apportionments by Agency and Bureau</h2>
 
-  <AgencyList agencies={data.agencies} headerElement="h3" />
+  <AgencyExplorer agencies={data.agencies} />
+
+  <div class="explore">
+    <a href="/explore">Explore more agencies</a>
+  </div>
 </section>
 
 <section class="learn">
@@ -158,6 +162,10 @@
   .agencies h2 {
     text-align: center;
     margin-bottom: var(--spacing-large);
+  }
+
+  .explore {
+    text-align: center;
   }
 
   .learn {

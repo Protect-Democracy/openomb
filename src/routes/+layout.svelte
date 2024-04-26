@@ -103,10 +103,10 @@
       <h1><a href="/">Apportionments</a></h1>
 
       <nav>
-        <a href="/search">Search</a>
-        <a href="/agency">Directory</a>
-        <a href="/faq">Apportionments FAQ</a>
-        <a href="/about">About</a>
+        <a class:active={$page.url.pathname === '/search'} href="/search">Search</a>
+        <a class:active={$page.url.pathname === '/explore'} href="/explore">Explore</a>
+        <a class:active={$page.url.pathname === '/faq'} href="/faq">FAQ</a>
+        <a class:active={$page.url.pathname === '/about'} href="/about">About</a>
         {#if !isProduction()}
           <a href="/examples">Examples</a>
         {/if}
@@ -179,6 +179,10 @@
     color: var(--color-text);
     margin-left: var(--spacing-double);
     font-weight: var(--font-copy-weight-bolder);
+  }
+
+  nav a.active {
+    text-decoration: underline;
   }
 
   main {

@@ -3,33 +3,43 @@
  */
 
 // Dependencies
-import { groupBy, map as _map } from 'lodash-es';
-import { eq, count, and, countDistinct } from 'drizzle-orm';
+import { groupBy, orderBy, map as _map } from 'lodash-es';
+import { eq, and, countDistinct, asc, max } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 
 /**
  * Distinct agencies with file counts
+ *
+ * @param {['approval', 'names']} orderBy - How to order results
  */
-export const agencies = async function () {
-  return db
-    .selectDistinctOn([tafs.budgetAgencyTitle], {
+export const agencies = async function (orderResultsBy: 'approval' | 'names' = 'names') {
+  const results = await db
+    .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      fileCount: count(tafs.fileId)
+      fileCount: countDistinct(tafs.fileId),
+      latestApprovalTimestamp: max(files.approvalTimestamp)
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
     .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId)
-    .orderBy(tafs.budgetAgencyTitle);
+    .orderBy(asc(tafs.budgetAgencyTitle));
+
+  // Have to manually order results
+  const orderByField = orderResultsBy === 'names' ? 'budgetAgencyTitle' : 'latestApprovalTimestamp';
+  const orderByDirection = orderResultsBy === 'names' ? 'asc' : 'desc';
+  return orderBy(results, [orderByField], [orderByDirection]);
 };
 
 /**
  * Distinct agencies with file counts and associated bureaus/accounts
  */
-export const agenciesWithChildren = async function () {
-  const agencyResults = await agencies();
+export const agenciesWithChildren = async function (
+  orderResultsBy: 'approval' | 'names' = 'names'
+) {
+  const agencyResults = await agencies(orderResultsBy);
 
   const bureauResults = await db
     .selectDistinctOn(
@@ -38,7 +48,7 @@ export const agenciesWithChildren = async function () {
         budgetAgencyTitleId: tafs.budgetAgencyTitleId,
         budgetBureauTitleId: tafs.budgetBureauTitleId,
         budgetBureauTitle: tafs.budgetBureauTitle,
-        fileCount: count(tafs.fileId)
+        fileCount: countDistinct(tafs.fileId)
       }
     )
     .from(tafs)
@@ -55,7 +65,7 @@ export const agenciesWithChildren = async function () {
         budgetBureauTitleId: tafs.budgetBureauTitleId,
         accountTitleId: tafs.accountTitleId,
         accountTitle: tafs.accountTitle,
-        fileCount: count(tafs.fileId)
+        fileCount: countDistinct(tafs.fileId)
       }
     )
     .from(tafs)

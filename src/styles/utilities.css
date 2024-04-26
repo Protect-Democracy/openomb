@@ -55,3 +55,10 @@
 .font-heading {
   font-family: var(--font-family-heading) !important;
 }
+
+/* Ol' trusty clearfix */
+.clearfix::after {
+  display: block;
+  clear: both;
+  content: '';
+}

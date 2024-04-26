@@ -10,7 +10,8 @@ export async function load() {
   return {
     agencies: agencyList,
     pageMeta: {
-      title: 'Agency accounts'
+      title: 'Explore apportionments',
+      description: 'Explore apportionments by agencies, bureaus, and accounts'
     }
   };
 }
