@@ -40,7 +40,7 @@ jobs:
 
       - name: Task defintion ARN
         run: |
-          echo "tofu output --raw migrate_task_definition_arn"
+          tofu output --raw migrate_task_definition_arn
           #echo "AWS_TASK_DEFINITION_ARN=$(tofu output --raw migrate_task_definition_arn)" >> $GITHUB_ENV
 
       - name: ECS cluster ARN
