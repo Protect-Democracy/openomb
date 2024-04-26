@@ -105,6 +105,33 @@ data "aws_iam_policy_document" "github_actions" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    actions = [
+      "ecs:DescribeTaskDefinition",
+      "ecs:RegisterTaskDefinition",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "ecs:UpdateService",
+      "ecs:DescribeServices",
+    ]
+    resources = [
+      "${aws_ecs_service.apportionments_app.id}"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
