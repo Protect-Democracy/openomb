@@ -42,6 +42,9 @@ jobs:
         id: init
         run: tofu init
 
+      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
+      # variables. Otherwise GitHub Actions would put the wrong output into the environment
+      # variables if i tried to do it directly.
       - name: Set task definition ARN
         id: aws_task_def_arn
         run: |
