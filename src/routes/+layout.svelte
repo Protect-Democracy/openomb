@@ -22,7 +22,6 @@
     socialTwitterImgPath
   } from '$config';
   import favicon from '$assets/favicon/favicon.png';
-  import aafLogo from '$assets/logos/american-action-forum-logo.svg';
   import pdLogo from '$assets/logos/pd-white-words-logo.svg';
   import '../styles/index.css';
 
@@ -134,11 +133,6 @@
     <p class="center-container">{siteName} is a project of</p>
 
     <ul>
-      <li>
-        <a href="https://www.americanactionforum.org/" target="_blank" rel="noopener noreferrer"
-          ><img src={aafLogo} alt="American Action Forum logo" /></a
-        >
-      </li>
       <li>
         <a href="https://protectdemocracy.org/" target="_blank" rel="noopener noreferrer"
           ><img src={pdLogo} alt="Protect Democracy logo" /></a
