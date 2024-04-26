@@ -42,18 +42,24 @@ jobs:
         id: init
         run: tofu init
 
-      - name: Set environment variables
+      - name: Set task definition ARN
         run: |
           {
             echo 'AWS_TASK_DEF_ARN<<EOF'
             tofu output --raw migrate_task_definition_arn
             echo EOF
           } >> "$GITHUB_ENV"
+
+      - name: Set cluster ARN
+        run: |
           {
             echo 'AWS_ECS_CLUSTER_ARN<<EOF'
             tofu output --raw ecs_cluster_arn
             echo EOF
           } >> "$GITHUB_ENV"
+
+      - name: Set network config
+        run: |
           {
             echo 'AWS_RUN_TASK_NETWORK_CONFIG<<EOF'
             tofu output --raw run_task_network_configuration_string
