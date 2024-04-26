@@ -1,8 +1,9 @@
 import {
   yearOptions,
   lineNumberOptions,
+  tafsCountByCriterion,
   fileCountByCriterion,
-  filesByCriterion,
+  tafsByCriterion,
   type SearchParams
 } from '$queries/search';
 import { bureaus } from '$queries/tafs';
@@ -12,7 +13,7 @@ import type { PageServerData } from '../$types';
 export const load: PageServerData = async ({ url }) => {
   const pageSize = 50;
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
-  let resultCount, results;
+  let resultCount, fileCount, results;
 
   const startDateString = url.searchParams.get('approvedStart')
     ? url.searchParams.get('approvedStart')
@@ -38,8 +39,9 @@ export const load: PageServerData = async ({ url }) => {
     };
 
     // Execute prepared statements
-    resultCount = fileCountByCriterion(searchArgs);
-    results = filesByCriterion({
+    resultCount = tafsCountByCriterion(searchArgs);
+    fileCount = fileCountByCriterion(searchArgs);
+    results = tafsByCriterion({
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
       sort: url.searchParams.get('sort'),
@@ -54,6 +56,7 @@ export const load: PageServerData = async ({ url }) => {
     agencyBureauOptions: await bureaus(),
     sortOptions,
     resultCount: resultCount,
+    fileCount: fileCount,
     pageSize,
     pageIndex,
     results: results

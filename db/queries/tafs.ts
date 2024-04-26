@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { groupBy, map as _map } from 'lodash-es';
+import { groupBy } from 'lodash-es';
 import { eq, count, and, countDistinct } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
@@ -315,9 +315,15 @@ export const tafsByAccount = async function (
   accountTitleId: string
 ) {
   await dbConnect();
-  const tafsRecords = await db
+  return await db
     .select({
       tafsId: tafs.tafsId,
+      cgacAgency: tafs.cgacAgency,
+      cgacAcct: tafs.cgacAcct,
+      allocationAgencyCode: tafs.allocationAgencyCode,
+      allocationSubacct: tafs.allocationSubacct,
+      beginPoa: tafs.beginPoa,
+      endPoa: tafs.endPoa,
       iteration: tafs.iteration,
       fiscalYear: tafs.fiscalYear,
       tafsTableId: tafs.tafsTableId,
@@ -332,23 +338,4 @@ export const tafsByAccount = async function (
       )
     )
     .orderBy(tafs.tafsId, tafs.fiscalYear, tafs.iteration);
-
-  // Group by tafs Id, years, and iterations
-  return _map(groupBy(tafsRecords, 'tafsId'), (tafsSubRecords) => {
-    return {
-      tafsId: tafsSubRecords[0].tafsId,
-      years: _map(groupBy(tafsSubRecords, 'fiscalYear'), (fiscalYearRecords) => {
-        return {
-          fiscalYear: fiscalYearRecords[0].fiscalYear,
-          iterations: _map(groupBy(fiscalYearRecords, 'iteration'), (iterationRecords) => {
-            return {
-              iteration: iterationRecords[0].iteration,
-              fileId: iterationRecords[0].fileId,
-              tafsTableId: iterationRecords[0].tafsTableId
-            };
-          })
-        };
-      })
-    };
-  });
 };
