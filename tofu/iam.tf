@@ -145,3 +145,32 @@ resource "aws_iam_role_policy_attachment" "github_actions" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_actions.arn
 }
+
+###################
+# GitHub Actions DB migration role
+###################
+
+resource "aws_iam_role" "github_actions_db_migration" {
+  name               = "github-actions-db-migration"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "github_actions_db_migration" {
+  statement {
+    actions = ["ecs:RunTask"]
+    resources = [
+      "${aws_ecs_task_definition.apportionments_migrate.arn_without_revision}:*"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "github_actions_db_migration" {
+  name        = "github-actions-db-migration"
+  description = "Grant Github Actions the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.github_actions_db_migration.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_db_migration" {
+  role       = aws_iam_role.github_actions_db_migration.name
+  policy_arn = aws_iam_policy.github_actions_db_migration.arn
+}
