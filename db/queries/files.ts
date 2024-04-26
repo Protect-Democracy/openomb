@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, gte, desc, asc, count, and, isNull, inArray } from 'drizzle-orm';
+import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -233,7 +233,11 @@ export const folders = async function () {
   await dbConnect();
   return (
     (await db
-      .select({ folder: files.folder, folderId: files.folderId, fileCount: count(files.fileId) })
+      .select({
+        folder: files.folder,
+        folderId: files.folderId,
+        fileCount: countDistinct(files.fileId)
+      })
       .from(files)
       .groupBy(files.folder, files.folderId)
       .orderBy(files.folder)) || []
@@ -247,7 +251,7 @@ export const approvers = async function () {
   await dbConnect();
   return (
     (await db
-      .select({ approverTitle: files.approverTitle, count: count(files.fileId) })
+      .select({ approverTitle: files.approverTitle, count: countDistinct(files.fileId) })
       .from(files)
       .groupBy(files.approverTitle)
       .orderBy(files.approverTitle)) || []

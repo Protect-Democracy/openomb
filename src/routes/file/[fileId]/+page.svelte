@@ -65,12 +65,12 @@
   <p class="font-small">
     Sources:
     {#if file.pdfUrl}
-      <a href={file.pdfUrl} target="_blank" rel="noopener noreferrer">PDF</a>,
+      <a href={file.pdfUrl} target="_blank" rel="noopener noreferrer">PDF</a>
     {/if}
     {#if file.excelUrl}
       <a href={file.excelUrl} target="_blank" rel="noopener noreferrer">Excel</a>,
     {/if}
-    {#if file.sourceUrl}
+    {#if file.sourceUrl && !file.pdfUrl}
       <a href={file.sourceUrl} target="_blank" rel="noopener noreferrer">JSON</a>
     {/if}
   </p>

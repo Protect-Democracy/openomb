@@ -4,7 +4,7 @@
 
 // Dependencies
 import { groupBy, map as _map } from 'lodash-es';
-import { eq, count, and } from 'drizzle-orm';
+import { eq, count, and, countDistinct } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -97,7 +97,7 @@ export const agenciesByFolder = async function (folderId: string) {
     .select({
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      fileCount: count(tafs.fileId)
+      fileCount: countDistinct(tafs.fileId)
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
@@ -159,7 +159,7 @@ export const bureaus = async function () {
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
       budgetBureauTitle: tafs.budgetBureauTitle,
       budgetBureauTitleId: tafs.budgetBureauTitleId,
-      fileCount: count(tafs.fileId)
+      fileCount: countDistinct(tafs.fileId)
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
@@ -180,7 +180,7 @@ export const bureausByAgency = async function (budgetAgencyTitleId: string) {
     .select({
       budgetBureauTitle: tafs.budgetBureauTitle,
       budgetBureauTitleId: tafs.budgetBureauTitleId,
-      fileCount: count(tafs.fileId)
+      fileCount: countDistinct(tafs.fileId)
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
@@ -247,7 +247,7 @@ export const accountsByBureau = async function (
     .select({
       accountTitle: tafs.accountTitle,
       accountTitleId: tafs.accountTitleId,
-      fileCount: count(tafs.fileId)
+      fileCount: countDistinct(tafs.fileId)
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
