@@ -42,6 +42,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-db-migration
           aws-region: ${{ env.AWS_REGION }}
+          unset-current-credentials: true
 
       - name: Task defintion ARN
         run: |
