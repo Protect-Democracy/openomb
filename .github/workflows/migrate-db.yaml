@@ -45,4 +45,7 @@ jobs:
       - name: Run ECS database migration task
         shell: bash
         run: |
-          aws ecs run-task --task-definition `tofu output --raw migrate_task_definition_arn` --cluster `tofu output --raw ecs_cluster_arn` --network-configuration `tofu output --raw run_task_network_configuration_string` --launch-type FARGATE
+          AWS_TASK_DEF_ARN=$(tofu output --raw migrate_task_definition_arn)
+          AWS_ECS_CLUSTER_ARN=$(tofu output --raw ecs_cluster_arn)
+          AWS_RUN_TASK_NETWORK_CONFIGURATION=$(tofu output --raw run_task_network_configuration_string)
+          aws ecs run-task --task-definition $AWS_TASK_DEF_ARN --cluster $AWS_ECS_CLUSTER_ARN --network-configuration $AWS_RUN_TASK_NETWORK_CONFIGURATION --launch-type FARGATE
