@@ -33,6 +33,21 @@ variable "apportionments_repo" {
   default     = "apportionments-repo"
 }
 
+####################
+# GitHub integration
+####################
+
+variable "repo_name" {
+  description = "Name of the ECR Repository"
+  type        = string
+}
+
+variable "organization" {
+  description = "Name of the Github Organization."
+  type        = string
+  default     = "Protect-Democracy"
+}
+
 #variable "vpc_cidr" {
 #  type        = string
 #  description = "CIDR block for the main VPC"

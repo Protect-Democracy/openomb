@@ -49,3 +49,71 @@ resource "aws_iam_role_policy_attachment" "ecs_secrets" {
   role       = aws_iam_role.apportionments_app_task_execution_role.name
   policy_arn = aws_iam_policy.ecs_secrets.arn
 }
+
+####################
+# OpenID for GitHub
+####################
+variable "openid_thumbprint" {
+  description = "OpenID thumbprint for AWS integration"
+  type        = string
+  default     = "1b511abead59c6ce207077c0bf0e0043b1382612"
+}
+
+resource "aws_iam_openid_connect_provider" "github" {
+  url             = "https://token.actions.githubusercontent.com"
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [var.openid_thumbprint]
+}
+
+data "aws_iam_policy_document" "github_actions_assume_role" {
+  statement {
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.github.arn]
+    }
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+      values   = ["repo:${var.organization}/${var.repo_name}:*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "github_actions" {
+  name               = "github-actions-${var.organization}-${var.repo_name}"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "github_actions" {
+  statement {
+    actions = [
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart",
+    ]
+    resources = [aws_ecr_repository.ecr.arn]
+  }
+
+  statement {
+    actions = [
+      "ecr:GetAuthorizationToken",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "github_actions" {
+  name        = "github-actions-${var.repo_name}"
+  description = "Grant Github Actions the ability to push to ${var.repo_name} from explosion/${var.repo_name}"
+  policy      = data.aws_iam_policy_document.github_actions.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions" {
+  role       = aws_iam_role.github_actions.name
+  policy_arn = aws_iam_policy.github_actions.arn
+}
