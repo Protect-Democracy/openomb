@@ -24,7 +24,6 @@ export async function load({ setHeaders }) {
   setHeaders({
     // Cache headers
     'Cache-Control': `public, max-age=${isProduction() ? secondsForCache : 1}, stale-while-revalidate=${revalidateSeconds}`,
-
     ...securityHeaders
   });
 }

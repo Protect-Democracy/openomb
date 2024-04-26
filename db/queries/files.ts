@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, gte, desc, asc, count, and, isNull } from 'drizzle-orm';
+import { eq, gte, desc, asc, count, and, isNull, inArray } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -102,6 +102,63 @@ export const recentlyApproved = async function (limit: number = 20) {
 
   const recentFiles = await db.query.files.findMany({
     columns: { sourceData: false },
+    orderBy: desc(files.approvalTimestamp),
+    limit: limit
+  });
+
+  return recentFiles || [];
+};
+
+/**
+ * Recently approved with tafs with optional filters.
+ */
+export const recentlyApprovedWithTafs = async function (
+  limit: number = 20,
+  filters?: { folderId?: string; agencyId?: string; bureauId?: string }
+) {
+  await dbConnect();
+
+  // Check that we have both agency and bureau if bureau provided
+  if (filters?.bureauId && !filters?.agencyId) {
+    throw new Error('Must provide both agency and bureau identifiers.');
+  }
+
+  // This doesn't seem like the best way to do this, i.e. with subqueries and IN, but doesn't seem like
+  // you can limit the top level findMany based on joined (with) where.  We could do a manualy query, but
+  // the findMany and with paradigm creates a preferred way and output.
+  const findFilesByTafsFiltersQuery = db
+    .selectDistinct({ fileId: tafs.fileId })
+    .from(tafs)
+    .where(
+      filters?.bureauId
+        ? and(
+            eq(tafs.budgetAgencyTitleId, filters?.agencyId || ''),
+            eq(tafs.budgetBureauTitleId, filters?.bureauId || '')
+          )
+        : eq(tafs.budgetAgencyTitleId, filters?.agencyId || '')
+    );
+
+  const tafsFilters = filters?.agencyId || filters?.bureauId;
+  const where =
+    filters?.folderId && tafsFilters
+      ? and(
+          eq(files.folderId, filters?.folderId),
+          inArray(files.fileId, findFilesByTafsFiltersQuery)
+        )
+      : filters?.folderId
+        ? eq(files.folderId, filters?.folderId)
+        : tafsFilters
+          ? inArray(files.fileId, findFilesByTafsFiltersQuery)
+          : undefined;
+
+  const recentFiles = await db.query.files.findMany({
+    columns: { sourceData: false },
+    where: where,
+    with: {
+      tafs: {
+        orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
+      }
+    },
     orderBy: desc(files.approvalTimestamp),
     limit: limit
   });

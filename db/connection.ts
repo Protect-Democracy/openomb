@@ -33,6 +33,7 @@ export const pool = new pg.Pool({
 export let poolClient: pg.PoolClient;
 
 // Drizzle connection
+// NOTE: Debug with { schema: ..., logger: true }
 export const db = drizzle(pool, {
   schema: {
     ...files,

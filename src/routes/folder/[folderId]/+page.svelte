@@ -1,43 +1,69 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { formatFileTitle } from '$lib/formatters';
+  import { formatNumber } from '$lib/formatters';
+  import FileListingSmall from '$components/files/FileListingSmall.svelte';
+  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
 
   export let data: PageData;
-  $: ({ folder, agenciesByFolder, filesWithoutTafs } = data);
+  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved } = data);
 </script>
 
 <div class="page-container">
+  <Breadcrumbs>
+    <BreadcrumbItem>
+      <a href="/folders">Folders</a>
+    </BreadcrumbItem>
+    <BreadcrumbItem>
+      Folder: {folder.folder}
+    </BreadcrumbItem>
+  </Breadcrumbs>
+</div>
+
+<div class="page-container content-container">
   <h1>Folder: {folder.folder}</h1>
 
-  <p>There are {folder.fileCount} files in this folder.</p>
+  <p>There are <strong>{formatNumber(folder.fileCount)}</strong> files in this folder.</p>
 
-  <h2>Agencies</h2>
+  <section class="page-section">
+    <h2>Agencies</h2>
 
-  {#if agenciesByFolder && agenciesByFolder.length}
-    <ul>
-      {#each agenciesByFolder as agency}
-        <li>
-          <a href="/agency/{agency.budgetAgencyTitleId}">{agency.budgetAgencyTitle}</a>
-          ({agency.fileCount})
-        </li>
-      {/each}
-    </ul>
-  {:else}
-    <p>We were unable to find any agencies in this folder.</p>
-  {/if}
+    {#if agenciesByFolder && agenciesByFolder.length}
+      <ul>
+        {#each agenciesByFolder as agency, aIndex}
+          <li>
+            <a href="/agency/{agency.budgetAgencyTitleId}">{agency.budgetAgencyTitle}</a>
+            ({formatNumber(agency.fileCount)}{aIndex === 0 ? ' files' : ''})
+          </li>
+        {/each}
+      </ul>
+    {:else}
+      <p>We were unable to find any agencies in this folder.</p>
+    {/if}
+  </section>
 
   {#if filesWithoutTafs && filesWithoutTafs.length}
-    <h2>Other files</h2>
+    <section class="page-section">
+      <h2>Other files</h2>
 
-    <p>
-      The following files do not have agency data attached to them. This is likely caused because
-      they were originally PDF files with limited data.
-    </p>
+      <p>
+        The following files do not have agency data attached to them. This is likely caused because
+        they were originally PDF files with limited data.
+      </p>
 
-    <ul>
       {#each filesWithoutTafs as file}
-        <li><a href="/file/{file.fileId}">{formatFileTitle(file)}</a></li>
+        <FileListingSmall {file} />
       {/each}
-    </ul>
+    </section>
   {/if}
+
+  <section class="page-section">
+    <h2>Recently approved files</h2>
+
+    <div class="recently-approved-files">
+      {#each recentlyApproved as file}
+        <FileListingSmall {file} />
+      {/each}
+    </div>
+  </section>
 </div>

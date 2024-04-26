@@ -1,5 +1,4 @@
 // Dependencies
-import { format } from 'date-fns';
 import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
 
@@ -28,11 +27,22 @@ export function formatCurrency(value: number): string {
  * @returns {string}
  */
 export function formatDate(
-  value: Date | string,
+  value?: Date | string,
   format: 'full' | 'long' | 'medium' | 'short' = 'short'
 ): string {
+  if (!value) {
+    return '';
+  }
+
   const date = typeof value === 'object' ? value : new Date(value);
   return new Intl.DateTimeFormat('en-US', { dateStyle: format }).format(date);
+}
+
+/**
+ * Format a date to ISO
+ */
+export function formatDateISO(date?: Date | string): string {
+  return date ? new Date(date).toISOString() : '';
 }
 
 /**
@@ -40,10 +50,7 @@ export function formatDate(
  *
  */
 export function formatFileTitle(file: filesSelect) {
-  const approval = file.approvalTimestamp
-    ? ` - ${format(file.approvalTimestamp, 'yyyy-MM-dd')}`
-    : '';
-  return `${file.folder} - ${file.fileId}${approval}`;
+  return `${file.folder} - ${file.fileId}`;
 }
 
 /**

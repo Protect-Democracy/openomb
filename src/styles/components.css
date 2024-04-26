@@ -27,6 +27,11 @@
   padding-right: var(--spacing);
 }
 
+/* Sections on a page level likely to have more space */
+.page-section {
+  margin-bottom: var(--spacing-double);
+}
+
 /**
  * On most pages, we want space below the nav and above the footer, but
  * no on the landing page.
@@ -50,6 +55,16 @@
   font-family: var(--font-family-copy);
   font-weight: var(--font-copy-weight-normal);
   font-size: var(--font-size-xlarge);
+}
+
+.h3-alt {
+  font-family: var(--font-family-copy);
+  font-weight: var(--font-copy-weight-normal);
+  font-size: var(--font-size-large);
+}
+
+a.like-text {
+  color: var(--color-text);
 }
 
 /* Buttons */

@@ -1,4 +1,5 @@
 import { dbConnect } from '$db/connection';
+import { recentlyApprovedWithTafs } from '$queries/files';
 import { agencyDetails, bureausByAgency } from '$queries/tafs';
 import { error } from '@sveltejs/kit';
 
@@ -15,6 +16,9 @@ export async function load({ params }) {
   return {
     agency,
     bureausByAgency: await bureausByAgency(params.agencyId),
+    recentlyApproved: await recentlyApprovedWithTafs(20, {
+      agencyId: params.agencyId
+    }),
     pageMeta: {
       title: `Agency: ${agency.budgetAgencyTitle}`
     }

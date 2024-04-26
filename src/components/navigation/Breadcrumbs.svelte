@@ -19,5 +19,7 @@
     list-style: none;
     display: flex;
     flex-wrap: wrap;
+    margin: var(--spacing) 0;
+    padding: 0;
   }
 </style>

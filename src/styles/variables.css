@@ -52,7 +52,7 @@
   --color-error: var(--color-orange-darker);
   --color-disabled: var(--color-gray-lighter);
 
-  --color-link: var(--color-primary);
+  --color-link: var(--color-green);
 
   --font-family-copy: 'IBM Plex Sans', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji';
