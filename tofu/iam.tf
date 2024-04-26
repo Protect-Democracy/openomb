@@ -85,6 +85,7 @@ resource "aws_iam_role" "github_actions" {
   assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
 }
 
+# Grants privileges needed to automate push to ECR and deployment to ECS for GitHub Actions
 data "aws_iam_policy_document" "github_actions" {
   statement {
     actions = [
@@ -105,15 +106,106 @@ data "aws_iam_policy_document" "github_actions" {
     ]
     resources = ["*"]
   }
+
+  statement {
+    actions = [
+      "ecs:DescribeTaskDefinition",
+      "ecs:RegisterTaskDefinition",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "ecs:UpdateService",
+      "ecs:DescribeServices",
+    ]
+    resources = [
+      "${aws_ecs_service.apportionments_app.id}"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
   name        = "github-actions-${var.repo_name}"
-  description = "Grant Github Actions the ability to push to ${var.repo_name} from explosion/${var.repo_name}"
+  description = "Grant Github Actions the ability to push to ${var.repo_name}"
   policy      = data.aws_iam_policy_document.github_actions.json
 }
 
 resource "aws_iam_role_policy_attachment" "github_actions" {
   role       = aws_iam_role.github_actions.name
   policy_arn = aws_iam_policy.github_actions.arn
+}
+
+###################
+# GitHub Actions DB migration role
+###################
+
+resource "aws_iam_role" "github_actions_db_migration" {
+  name               = "github-actions-db-migration"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "github_actions_db_migration" {
+  statement {
+    actions = ["ecs:RunTask"]
+    resources = [
+      "${aws_ecs_task_definition.apportionments_migrate.arn_without_revision}:*"
+    ]
+  }
+  statement {
+    actions   = ["s3:ListBucket"]
+    resources = ["${aws_s3_bucket.tfstate_bucket.arn}"]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    # TODO: Change this hardcoded value to dynamic
+    resources = ["${aws_s3_bucket.tfstate_bucket.arn}/tofu.tfstate"]
+  }
+
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.remotestate_table.id}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "github_actions_db_migration" {
+  name        = "github-actions-db-migration"
+  description = "Grant Github Actions the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.github_actions_db_migration.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_db_migration" {
+  role       = aws_iam_role.github_actions_db_migration.name
+  policy_arn = aws_iam_policy.github_actions_db_migration.arn
 }
