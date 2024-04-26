@@ -15,6 +15,9 @@ on:
 env:
   AWS_REGION: "us-west-2"
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_TASK_DEFINITION_FAMILY: "apportionments-app"
+  #AWS_ECS_SERVICE:
+  #AWS_ECS_CLUSTER:
 
 jobs:
   deploy:
@@ -62,3 +65,15 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.AWS_TASK_DEFINITION_FAMILY }} --query taskDefinition > task-definition.json
+
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          force-new-deployment: true
+          #service: ${{ env.AWS_ECS_SERVICE }}
+          #cluster: ${{ env.AWS_ECS_CLUSTER }}
