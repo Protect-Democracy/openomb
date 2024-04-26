@@ -59,7 +59,7 @@ jobs:
       - name: Set network config
         id: aws_run_task_network_config
         run: |
-          tofu output --raw run_task_network_configuration_string | stdout
+          tofu output --raw run_task_network_configuration_string
       - run: |
           echo "AWS_NETWORK_CONFIG=${{ steps.aws_run_task_network_config.outputs.stdout }}" >> "$GITHUB_ENV"
 
