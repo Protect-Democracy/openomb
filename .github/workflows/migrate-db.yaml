@@ -1,4 +1,4 @@
-name: Push to ECR
+name: Migrate database
 
 on:
   push:
