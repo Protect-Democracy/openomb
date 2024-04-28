@@ -14,13 +14,12 @@
           {agency.budgetAgencyTitle}
         </svelte:fragment>
 
-        <a
-          slot="title"
-          title="Go to agency: {agency.budgetAgencyTitle}"
-          href={`/agency/${agency.budgetAgencyTitleId}`}>Go</a
-        >
-
-        <small slot="hover" class="muted">Agency</small>
+        <small slot="hover">
+          <a
+            title="Go to agency: {agency.budgetAgencyTitle}"
+            href={`/agency/${agency.budgetAgencyTitleId}`}>Go to agency</a
+          >
+        </small>
 
         {#each agency.budgetBureaus as bureau}
           <AltDirectoryTreeItem level={2}>
@@ -28,15 +27,14 @@
               {bureau.budgetBureauTitle}
             </svelte:fragment>
 
-            <a
-              slot="title"
-              title="Go to bureau: {bureau.budgetBureauTitle}"
-              href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}`}
+            <small slot="hover">
+              <a
+                title="Go to bureau: {bureau.budgetBureauTitle}"
+                href={`/agency/${agency.budgetAgencyTitleId}/bureau/${bureau.budgetBureauTitleId}`}
+              >
+                Go to bureau
+              </a></small
             >
-              Go
-            </a>
-
-            <small slot="hover" class="muted">Bureau</small>
 
             {#each bureau.accounts as account}
               <AltDirectoryTreeItem level={3}>
@@ -59,4 +57,8 @@
 </div>
 
 <style>
+  small {
+    text-wrap: nowrap;
+    padding-left: var(--spacing-half);
+  }
 </style>
