@@ -4,6 +4,7 @@
   import { formatNumber } from '$lib/formatters';
   import SearchForm from './SearchForm.svelte';
   import AgencyExplorer from '../components/agencies/AgencyExplorer.svelte';
+  import TopRightArrow from '$components/icons/TopRightArrow.svelte';
   import graphIllustration from '$assets/graph-illustration.svg';
 
   export let data: PageData;
@@ -75,17 +76,29 @@
   <div class="page-container">
     <h2 class="h2-alt">Learn More About Federal Apportionments</h2>
 
-    <div class="learn-items">
-      <a href="/faq#TODO"
-        >What do the different lines of information included in an apportionment mean?</a
-      >
-      <a href="/faq#TODO"
-        >How can I find the Treasury Appropriation Fund Symbol (TAFS) for a specific account?</a
-      >
-      <a href="/faq#TODO">Another FAQ question lorem ipsum dolor sit amet consectetur adipiscing?</a
-      >
-      <a href="/faq">Explore all apportionment FAQs</a>
-    </div>
+    <ul class="learn-items">
+      <li>
+        <a href="/faq#TODO"
+          ><span><TopRightArrow /></span> What do the different lines of information included in an apportionment
+          mean?</a
+        >
+      </li>
+      <li>
+        <a href="/faq#TODO"
+          ><span><TopRightArrow /></span> How can I find the Treasury Appropriation Fund Symbol (TAFS)
+          for a specific account?</a
+        >
+      </li>
+      <li>
+        <a href="/faq#TODO"
+          ><span><TopRightArrow /></span> Another FAQ question lorem ipsum dolor sit amet consectetur
+          adipiscing?</a
+        >
+      </li>
+      <li>
+        <a href="/faq"><span><TopRightArrow /></span> Explore all apportionment FAQs</a>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -177,6 +190,7 @@
   .learn h2 {
     text-align: center;
     margin-bottom: var(--spacing-large);
+    padding-top: 0;
   }
 
   .learn-items {
@@ -184,9 +198,27 @@
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     gap: var(--spacing-double);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .learn-items li {
+    padding: 0;
+    margin: 0;
   }
 
   .learn-items a {
+    display: flex;
+    align-items: center;
+    align-items: flex-start;
+    gap: var(--spacing);
     color: var(--color-text);
+  }
+
+  .learn-items span {
+    min-width: var(--spacing-double);
+    max-width: var(--spacing-double);
+    color: var(--color-white);
   }
 </style>

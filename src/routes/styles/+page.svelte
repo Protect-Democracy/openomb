@@ -1,5 +1,5 @@
 <script lang="ts">
-  import placeholderImage from '$assets/placeholder-600.png';
+  import placeholderImage from '$assets/other/placeholder-600.png';
 
   const paletteColors = [
     'color-white',
