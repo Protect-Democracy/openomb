@@ -149,6 +149,10 @@
     opacity: 1;
   }
 
+  .hover-content:has(*:focus) {
+    opacity: 1;
+  }
+
   li.level-1 {
     border-bottom: var(--border-weight) solid var(--color-black);
     padding: var(--spacing) 0;
