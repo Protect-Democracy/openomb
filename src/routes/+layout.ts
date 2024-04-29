@@ -13,9 +13,10 @@ export async function load({ setHeaders }) {
   // Common headers.
   //
   // Note: These only apply to code routes and not assets or static files.
-  // Though it does look like the default headers for assets are reasonable
+  // It does look like the default headers for assets are reasonable
   // and they use hashes.  On the other hand, static files don't look to
-  // have any cache headers which is not great.
+  // have any cache headers which is not great, so it makes sense to
+  // host as much in src/ as possible as opposed to static/.
   //
   // Note: These specific headers cannot be set again otherwise an error
   // will be thrown.
