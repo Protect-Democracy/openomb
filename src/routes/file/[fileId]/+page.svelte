@@ -52,7 +52,9 @@
 
   <p>
     File approved on <strong>{formatDate(file.approvalTimestamp, 'medium')}</strong> by
-    <strong>{file.approverTitle}</strong>
+    <a href="/approver/{file.approverTitleId}" class="like-text"
+      ><strong>{file.approverTitle}</strong></a
+    >
     for fiscal year <strong>{file.fiscalYear}</strong>
     {#if file.fundsProvidedByParsed}
       provided by

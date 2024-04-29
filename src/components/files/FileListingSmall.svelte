@@ -42,7 +42,7 @@
     <a class="like-text" title="Folder" href="/folder/{file.folderId}">{file.folder}</a>
     {#if hasTafs}
       /
-      <a class="like-text" title="Agency" href="/agency/{agencies[0].title}">{agencies[0].title}</a
+      <a class="like-text" title="Agency" href="/agency/{agencies[0].id}">{agencies[0].title}</a
       >{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
       /
       <a class="like-text" title="Bureau" href="/agency/{agencies[0].id}/bureau/{bureaus[0].id}"

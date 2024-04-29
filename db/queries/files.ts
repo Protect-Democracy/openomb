@@ -116,7 +116,7 @@ export const recentlyApproved = async function (limit: number = 20) {
  */
 export const recentlyApprovedWithTafs = async function (
   limit: number = 20,
-  filters?: { folderId?: string; agencyId?: string; bureauId?: string }
+  filters?: { folderId?: string; approverId?: string; agencyId?: string; bureauId?: string }
 ) {
   await dbConnect();
 
@@ -141,17 +141,17 @@ export const recentlyApprovedWithTafs = async function (
     );
 
   const tafsFilters = filters?.agencyId || filters?.bureauId;
+  const whereClauses = [
+    tafsFilters ? inArray(files.fileId, findFilesByTafsFiltersQuery) : undefined,
+    filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,
+    filters?.approverId ? eq(files.approverTitleId, filters?.approverId) : undefined
+  ].filter((w) => w !== undefined);
   const where =
-    filters?.folderId && tafsFilters
-      ? and(
-          eq(files.folderId, filters?.folderId),
-          inArray(files.fileId, findFilesByTafsFiltersQuery)
-        )
-      : filters?.folderId
-        ? eq(files.folderId, filters?.folderId)
-        : tafsFilters
-          ? inArray(files.fileId, findFilesByTafsFiltersQuery)
-          : undefined;
+    whereClauses.length === 1
+      ? whereClauses[0]
+      : whereClauses.length > 1
+        ? and(...whereClauses)
+        : undefined;
 
   const recentFiles = await db.query.files.findMany({
     columns: { sourceData: false },
@@ -256,6 +256,29 @@ export const approvers = async function () {
       .groupBy(files.approverTitle)
       .orderBy(files.approverTitle)) || []
   );
+};
+
+/**
+ * Details for specific approver.
+ *
+ */
+export const approverDetails = async function (approverTitleId: string) {
+  await dbConnect();
+  const filesFromApprover = await db
+    .select({ approverTitle: files.approverTitle })
+    .from(files)
+    .where(eq(files.approverTitleId, approverTitleId));
+
+  // If none found
+  if (!filesFromApprover || filesFromApprover.length === 0) {
+    return null;
+  }
+
+  return {
+    approverTitleId,
+    approverTitle: filesFromApprover[0].approverTitle,
+    fileCount: filesFromApprover.length
+  };
 };
 
 /**
