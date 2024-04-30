@@ -10,6 +10,7 @@ import { bureaus } from '$queries/tafs';
 import { sortOptions } from '$config/search';
 import type { PageServerData } from '../$types';
 
+/** @type {import('./$types').PageLoad} */
 export const load: PageServerData = async ({ url }) => {
   const pageSize = 50;
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
@@ -42,9 +43,9 @@ export const load: PageServerData = async ({ url }) => {
     };
 
     // Execute prepared statements
-    resultCount = tafsCountByCriterion(searchArgs);
-    fileCount = fileCountByCriterion(searchArgs);
-    results = tafsByCriterion({
+    resultCount = await tafsCountByCriterion(searchArgs);
+    fileCount = await fileCountByCriterion(searchArgs);
+    results = await tafsByCriterion({
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
       sort: url.searchParams.get('sort'),
@@ -62,6 +63,9 @@ export const load: PageServerData = async ({ url }) => {
     fileCount: fileCount,
     pageSize,
     pageIndex,
-    results: results
+    results: results,
+    pageMeta: {
+      title: 'Search apportionments'
+    }
   };
 };

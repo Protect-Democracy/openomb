@@ -29,7 +29,8 @@ const config = {
           'self',
           'https://browser.sentry-cdn.com',
           'https://js.sentry-cdn.com',
-          'nonce-SENTRY_SCRIPT_SETUP'
+          'nonce-SENTRY_SCRIPT_SETUP',
+          'nonce-js-check-02934091'
         ],
         // Doesn't seem like SvelteKit will handle inline styles by adding
         // a nonce like it does for JS, which is unfortunate.

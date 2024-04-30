@@ -59,7 +59,7 @@
     "multi-progress-bars": "^5.0.3",
     "node-html-parser": "^6.1.12",
     "pg": "^8.11.3",
-    "svelte": "^5.0.0-next.106",
+    "svelte": "^5.0.0-next.119",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {
@@ -68,7 +68,7 @@
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-node": "^5.0.1",
     "@sveltejs/kit": "^2.0.0",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "@types/eslint": "^8.56.0",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",

@@ -62,3 +62,30 @@
   clear: both;
   content: '';
 }
+
+/* Progressive enhacement */
+.no-js .no-js-only-block {
+  display: block;
+}
+.no-js .no-js-only-inline {
+  display: block;
+}
+.has-js .no-js-only-block {
+  display: none;
+}
+.has-js .no-js-only-inline {
+  display: none;
+}
+
+.no-js .has-js-only-block {
+  display: none;
+}
+.no-js .has-js-only-inline {
+  display: none;
+}
+.has-js .has-js-only-block {
+  display: block;
+}
+.has-js .has-js-only-inline {
+  display: block;
+}

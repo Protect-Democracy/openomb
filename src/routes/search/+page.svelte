@@ -1,23 +1,17 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { formatNumber } from '$lib/formatters';
-  import { siteName } from '$config';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import Results from './Results.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
 
+  // Props
   export let data: PageData;
-
-  // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
-  // eslint-disable-next-line svelte/valid-compile
-  $: url = $page.url;
 
   // State
   let sortFormEl: HTMLFormElement;
-  let jsEnabled = false;
   // This seems annoying, but if we want the Sort form to be submittable without JS
   // we need to account for the values from the main Search form, as the GET action
   // on a form will remove existing query parameters.
@@ -36,10 +30,14 @@
     'footnoteNum'
   ];
 
-  // Mounting in browser
-  onMount(() => {
-    jsEnabled = true;
-  });
+  // Derived
+  // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
+  // eslint-disable-next-line svelte/valid-compile
+  $: url = $page.url;
+  $: ({ resultCount, fileCount, results } = data);
+  $: hasResults = resultCount && resultCount > 0;
+  $: hasSearchParams = url.searchParams.toString().length > 0;
+  $: hasSearched = hasSearchParams;
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
@@ -47,11 +45,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>Search | {siteName}</title>
-</svelte:head>
-
-<section class="page-container content-container" class:js-enabled={jsEnabled}>
+<section class="page-container content-container">
   <h1>Search apportionments</h1>
 
   <p class="search-description">
@@ -59,73 +53,85 @@
     accounts with files that match the search criteria.
   </p>
 
-  {#if !url.searchParams.toString().length}
-    <Form
-      {url}
-      agencyBureauOptions={data.agencyBureauOptions}
-      yearOptions={data.yearOptions}
-      lineOptions={data.lineOptions}
-    />
-  {:else}
-    <div class="result-filters">
-      <Filters
+  <div class="no-js-only-block">
+    <div class="search-form">
+      <Form
         {url}
         agencyBureauOptions={data.agencyBureauOptions}
         yearOptions={data.yearOptions}
         lineOptions={data.lineOptions}
       />
     </div>
+  </div>
 
+  <div class="has-js-only-block">
+    {#if hasSearched}
+      <div class="search-filters">
+        <Filters
+          {url}
+          agencyBureauOptions={data.agencyBureauOptions}
+          yearOptions={data.yearOptions}
+          lineOptions={data.lineOptions}
+        />
+      </div>
+    {:else}
+      <div class="search-form">
+        <Form
+          {url}
+          agencyBureauOptions={data.agencyBureauOptions}
+          yearOptions={data.yearOptions}
+          lineOptions={data.lineOptions}
+        />
+      </div>
+    {/if}
+  </div>
+
+  {#if hasResults}
     <div class="results">
-      <!-- Don't wait on search results to load page - show loading state instead -->
-      {#await Promise.all([data.resultCount, data.fileCount, data.results])}
-        <p>Loading search results...</p>
-      {:then [resultCount, fileCount, results]}
-        <aside class="result-actions">
-          <span class="result-count">
-            Results: <strong>{formatNumber(resultCount)} accounts</strong> in
-            <strong>{formatNumber(fileCount)} files</strong>
-          </span>
+      <aside class="result-actions">
+        <span class="result-count">
+          Results: <strong>{formatNumber(resultCount)} accounts</strong> in
+          <strong>{formatNumber(fileCount)} files</strong>
+        </span>
 
-          <div class="sort-action">
-            <form
-              action="{$page.url.pathname}{$page.url.search}"
-              method="get"
-              bind:this={sortFormEl}
+        <div class="sort-action">
+          <form action="{$page.url.pathname}{$page.url.search}" method="get" bind:this={sortFormEl}>
+            <label for="sort">Sort results</label>
+
+            <select
+              name="sort"
+              id="sort"
+              value={url.searchParams.get('sort') || 'approved_desc'}
+              on:change={updateSort}
             >
-              <label for="sort">Sort results</label>
-
-              <select
-                name="sort"
-                id="sort"
-                value={url.searchParams.get('sort') || 'approved_desc'}
-                on:change={updateSort}
-              >
-                {#each data.sortOptions as option}
-                  <option value={option.key}>{option.label}</option>
-                {/each}
-              </select>
-
-              {#each searchFormValues as value}
-                <input type="hidden" name={value} value={url.searchParams.get(value)} />
+              {#each data.sortOptions as option}
+                <option value={option.key}>{option.label}</option>
               {/each}
+            </select>
 
+            {#each searchFormValues as value}
+              <input type="hidden" name={value} value={url.searchParams.get(value)} />
+            {/each}
+
+            <div class="no-js-only-block">
               <button type="submit" class="small compact">Sort</button>
-            </form>
-          </div>
-        </aside>
-
-        <Results {results} />
-
-        <div class="pagination">
-          <UrlPagination {url} perPage={data.pageSize} total={resultCount} />
+            </div>
+          </form>
         </div>
-      {:catch error}
-        <p>
-          Error loading search results: {error.message}
-        </p>
-      {/await}
+      </aside>
+
+      <div class="pagination">
+        <UrlPagination url={$page.url} perPage={data.pageSize} total={resultCount} />
+      </div>
+
+      <Results {results} />
+
+      <div class="pagination">
+        <UrlPagination url={$page.url} perPage={data.pageSize} total={resultCount} />
+      </div>
     </div>
+  {:else if hasSearched}
+    <p><em>No results were found from your criteria. Please try refining and try again.</em></p>
   {/if}
 </section>
 
@@ -139,7 +145,7 @@
     text-align: center;
   }
 
-  .result-filters {
+  .search-filters {
     margin: var(--spacing) 0;
     padding: var(--spacing) 0;
     border-top: 1px solid var(--color-gray-light);
@@ -166,9 +172,5 @@
 
   .sort-action button {
     margin-left: var(--spacing);
-  }
-
-  .js-enabled .sort-action button {
-    display: none;
   }
 </style>
