@@ -103,12 +103,39 @@
     </div>
   {/each}
 
+  <h2 class="style-section">Containers</h2>
+
+  <ul>
+    <li>
+      Use <code>.page-container</code> for a container that will constrain the width while keeping some
+      padding for small screens. This makes sense to use multiple times on the page if you have elements
+      that might need to go across the whole page even on large screens.
+    </li>
+    <li>
+      Use <code>.page-container-small</code> for a similar container but with a smaller maximum width.
+    </li>
+    <li>
+      Use <code>.content-container</code> for the main content on the page; it provides some standard
+      top and bottom spacing. This is likely only necessary once on a page.
+    </li>
+    <li>
+      Use <code>.page-section</code> for <code>&lt;section&gt;</code> elements to add some standard bottom
+      spacing.
+    </li>
+    <li>
+      Use <code>.text-container</code> for a container that constrains the width based on the text size.
+    </li>
+    <li>Use <code>.center-container</code> to center a container horizontally.</li>
+  </ul>
+
   <h2 class="style-section">Headings</h2>
 
   <h1>Heading 1</h1>
+  <h1><small>A small element in a</small> Heading 1</h1>
   <h2>Heading 2</h2>
   <h2 class="h2-alt">Heading 2 (alt)</h2>
   <h3>Heading 3</h3>
+  <h2 class="h3-alt">Heading 3 (alt)</h2>
   <h4>Heading 4</h4>
   <h5>Heading 5</h5>
   <h6>Heading 6</h6>
@@ -165,6 +192,16 @@
   <h3>Unordered List</h3>
 
   <ul>
+    <li>List Item 1</li>
+    <li>List Item 2</li>
+    <li>List Item 3</li>
+  </ul>
+
+  <h3>Inline list</h3>
+
+  <p>A simple inline unordered list with <code>ul.inline-list</code>.</p>
+
+  <ul class="inline-list">
     <li>List Item 1</li>
     <li>List Item 2</li>
     <li>List Item 3</li>
@@ -329,6 +366,27 @@
   <p>The <mark>mark element</mark> indicates a highlight.</p>
   <p>The <var>variable element</var>, such as <var>x</var> = <var>y</var>.</p>
   <p>The time element: <time datetime="2013-04-06T12:32+00:00">2 weeks ago</time></p>
+
+  <h3>Text modifiers</h3>
+
+  <p>
+    <code>a.like-link</code>: <a class="like-text" href="#!">This is text that looks like a link</a>
+    and should be used mostly when there are a lot of links in a section, as links should be consistent
+    and visually distinct from text overall.
+  </p>
+
+  <p>
+    <code>.font-small</code>:
+    <span class="font-small"
+      >It is generally better to use the semantic <code>&lt;small&gt;</code>, but this can be useful
+      for larger sections of text that should be smaller</span
+    >.
+  </p>
+
+  <p>
+    <code>.muted</code>:
+    <span class="muted">muted content</span>.
+  </p>
 
   <h2 class="style-section">Images</h2>
 

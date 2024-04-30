@@ -97,8 +97,10 @@ ul.inline-list li {
 }
 
 ul.inline-list li + li::before {
-  content: ' > ';
-  margin-left: calc(--spacing-half);
+  content: ' · ';
+  font-weight: bold;
+  margin-right: var(--spacing-half);
+  margin-left: var(--spacing-half);
 }
 
 /* Buttons */

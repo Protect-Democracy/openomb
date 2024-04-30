@@ -38,18 +38,30 @@
     <a href="/file/{file.fileId}">{formatFileTitle(file)}</a>
   </svelte:element>
 
-  <div class="heirarchy">
-    <a class="like-text" title="Folder" href="/folder/{file.folderId}">{file.folder}</a>
+  <ul class="inline-list heirarchy">
+    <li>
+      <a class="like-text" title="Go to folder: {file.folder}" href="/folder/{file.folderId}"
+        >{file.folder}</a
+      >
+    </li>
     {#if hasTafs}
-      /
-      <a class="like-text" title="Agency" href="/agency/{agencies[0].id}">{agencies[0].title}</a
-      >{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
-      /
-      <a class="like-text" title="Bureau" href="/agency/{agencies[0].id}/bureau/{bureaus[0].id}"
-        >{bureaus[0].title}</a
-      >{bureaus.length > 1 ? ` + ${bureaus.length - 1}` : ''}
+      <li>
+        <a
+          class="like-text"
+          title="Go to agency: {agencies[0].title}"
+          href="/agency/{agencies[0].id}">{agencies[0].title}</a
+        >{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
+      </li>
+
+      <li>
+        <a
+          class="like-text"
+          title="Go to bureau: {bureaus[0].title}"
+          href="/agency/{agencies[0].id}/bureau/{bureaus[0].id}">{bureaus[0].title}</a
+        >{bureaus.length > 1 ? ` + ${bureaus.length - 1}` : ''}
+      </li>
     {/if}
-  </div>
+  </ul>
 
   <div class="published-date">
     Approved <strong
