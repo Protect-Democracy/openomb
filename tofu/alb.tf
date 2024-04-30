@@ -32,53 +32,44 @@ resource "aws_alb" "apportionments_app" {
   depends_on = [aws_internet_gateway.igw]
 }
 
-# TODO: Use these commented sections once domain is settled. See below.
-#resource "aws_acm_certificate" "apportionments_app" {
-#  domain_name       = "apportionmentsforcats.com"
-#  validation_method = "DNS"
-#}
+resource "aws_acm_certificate" "apportionments_app" {
+  domain_name       = "openomb.org"
+  validation_method = "DNS"
 
-#output "domain_validations" {
-#  value = aws_acm_certificate.apportionments_app.domain_validation_options
-#}
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
-#resource "aws_alb_listener" "apportionments_app_https" {
-#  load_balancer_arn = aws_alb.apportionments_app.arn
-#  port = "443"
-#  protocol = "HTTPS"
-#  certificate_arn = aws_acm_certificate.apportionments_app.arn
-#
-#  default_action {
-#    type = "forward"
-#    target_group_arn = aws_lb_target_group.apportionments_app.arn
-#  }
-#}
+resource "aws_acm_certificate_validation" "apportionments_app" {
+  certificate_arn         = aws_acm_certificate.apportionments_app.arn
+  validation_record_fqdns = [for record in aws_route53_record.apportionments : record.fqdn]
+}
 
-#resource "aws_alb_listener" "apportionments_app_http" {
-#  load_balancer_arn = aws_alb.apportionments_app.arn
-#  port              = "80"
-#  protocol          = "HTTP"
-#
-#  default_action {
-#    type = "redirect"
-#
-#    redirect {
-#      port        = "443"
-#      protocol    = "HTTPS"
-#      status_code = "HTTP_301"
-#    }
-#  }
-#}
+resource "aws_alb_listener" "apportionments_app_https" {
+  load_balancer_arn = aws_alb.apportionments_app.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate_validation.apportionments_app.certificate_arn
 
-# TODO: Change over the HTTPS versions above once domain is in place
-# For details, see: https://section411.com/2019/07/hello-world/
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.apportionments_app.arn
+  }
+}
+
 resource "aws_alb_listener" "apportionments_app_http" {
   load_balancer_arn = aws_alb.apportionments_app.arn
   port              = "80"
   protocol          = "HTTP"
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.apportionments_app.arn
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
