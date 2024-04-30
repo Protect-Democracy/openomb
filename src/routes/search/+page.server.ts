@@ -22,7 +22,10 @@ export const load: PageServerData = async ({ url }) => {
 
   // Only perform our search once the form is submitted
   if (url.searchParams.toString().length) {
-    // Get our arguments for our search queries
+    // Get our arguments for our search queries.
+    //
+    // Note: Make sure to update the values in search/+page.svelte if the arguments
+    // change.
     const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
     const searchArgs: SearchParams = {
       term: url.searchParams.get('term') || '',
