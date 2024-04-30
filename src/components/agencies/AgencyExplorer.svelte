@@ -4,6 +4,15 @@
   export let agencies = [];
 </script>
 
+<noscript>
+  <p class="font-small">
+    <strong>Please note:</strong> The agency listing below will not fully function without
+    JavaScript enabled. Either use it directly to get to a specific agency listing page, or utilize
+    the
+    <a href="/search">search page</a> to look for specific apportionments.
+  </p>
+</noscript>
+
 <div class="agency-list">
   <!-- TODO: Add expand-all and collapse-all buttons -->
 
