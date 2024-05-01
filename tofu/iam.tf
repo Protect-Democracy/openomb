@@ -173,8 +173,7 @@ data "aws_iam_policy_document" "github_actions_db_migration" {
       "s3:PutObject",
       "s3:DeleteObject",
     ]
-    # TODO: Change this hardcoded value to dynamic
-    resources = ["${aws_s3_bucket.tfstate_bucket.arn}/tofu.tfstate"]
+    resources = ["${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}"]
   }
 
   statement {
@@ -208,4 +207,73 @@ resource "aws_iam_policy" "github_actions_db_migration" {
 resource "aws_iam_role_policy_attachment" "github_actions_db_migration" {
   role       = aws_iam_role.github_actions_db_migration.name
   policy_arn = aws_iam_policy.github_actions_db_migration.arn
+}
+
+###################
+# GitHub Actions collect role
+###################
+
+resource "aws_iam_role" "github_actions_collect" {
+  name               = "github-actions-collect"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "github_actions_collect" {
+  statement {
+    actions = ["ecs:RunTask"]
+    resources = [
+      "${aws_ecs_task_definition.apportionments_collect.arn_without_revision}:*"
+    ]
+  }
+  statement {
+    actions = ["s3:ListBucket"]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}",
+      "${aws_s3_bucket.apportionments_bucket.arn}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}",
+      "${aws_s3_bucket.apportionments_bucket.arn}/*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.remotestate_table.id}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "github_actions_collect" {
+  name        = "github-actions-collect"
+  description = "Grant Github Actions the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.github_actions_collect.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_collect" {
+  role       = aws_iam_role.github_actions_collect.name
+  policy_arn = aws_iam_policy.github_actions_collect.arn
 }
