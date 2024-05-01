@@ -109,6 +109,14 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
         {
           "name" : "APPORTIONMENTS_DB_NAME",
           "value" : "${aws_rds_cluster.apportionments.database_name}"
+        },
+        {
+          "name" : "APPORTIONMENTS_ARCHIVE_S3_REGION",
+          "value" : "${var.region}"
+        },
+        {
+          "name" : "APPORTIONMENTS_ARCHIVE_S3_BUCKET",
+          "value" : "${aws_s3_bucket.apportionments_bucket.id}"
         }
       ],
       "secrets" : [
