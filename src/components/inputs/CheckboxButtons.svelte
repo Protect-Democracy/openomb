@@ -40,12 +40,16 @@
   //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
   function fixFormReset(el) {
     const form = el.form;
-    if (!form) return;
+    if (!form) {
+      return;
+    }
+
     const handleReset = () => {
       // Set timeout is needed since `el.value` is only updated on the next frame
       setTimeout(() => value.set(multi ? [] : ''));
     };
     form.addEventListener('reset', handleReset);
+
     return {
       destroy() {
         form.removeEventListener('reset', handleReset);
@@ -64,7 +68,7 @@
 <div {...$root} use:root class="toggle-group" aria-label={name}>
   {#each options as option}
     <button
-      class="compact toggle-item"
+      class="compact alt toggle-item"
       {...$item(`${formatOptionValue(option)}`)}
       use:item
       aria-label={formatOptionLabel(option)}

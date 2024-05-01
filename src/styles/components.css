@@ -142,6 +142,26 @@ a.button.alt:hover {
   background-color: var(--color-blue-light);
 }
 
+button[aria-pressed='false'].alt,
+input[type='submit'][aria-pressed='false'].alt,
+input[type='button'][aria-pressed='false'].alt,
+input[type='reset'][aria-pressed='false'].alt,
+[role='button'][aria-pressed='false'].alt,
+a[aria-pressed='false'].button.alt {
+  background-color: var(--color-blue-light);
+  color: var(--color-text-inverse);
+}
+
+button[aria-pressed='false'].alt:hover,
+input[type='submit'][aria-pressed='false'].alt:hover,
+input[type='button'][aria-pressed='false'].alt:hover,
+input[type='reset'][aria-pressed='false'].alt:hover,
+[role='button'][aria-pressed='false'].alt:hover,
+a[aria-pressed='false'].button.alt:hover {
+  background-color: var(--color-blue);
+  color: var(--color-text-inverse);
+}
+
 button.like-text,
 input[type='submit'].like-text,
 input[type='button'].like-text,

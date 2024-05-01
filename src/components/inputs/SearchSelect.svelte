@@ -63,6 +63,7 @@
     forceVisible: true,
     multiple: multi,
     defaultSelected: getDefaultSelection(),
+    ids: { label: id },
     onSelectedChange: ({ next }) => {
       dispatch('change', next);
       return next;
@@ -142,14 +143,19 @@
 
 <div class="search-select">
   <div class="input-wrapper">
-    <input id={id || name} {...$input} use:input placeholder={placeholderText($selected)} />
+    <input {...$input} use:input placeholder={placeholderText($selected)} {id} />
+
     <div class="icon">
       <ChevronDown />
     </div>
   </div>
+
   <input {name} {...$hiddenInput} use:hiddenInput use:fixFormReset />
+
   {#if $open}
     <ul {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
+      <!-- TODO: It's not valid HTML to use div's inside ul like this. -->
+
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
       <div tabindex="0">
         {#if multi && $selected && $selected.length}
@@ -170,6 +176,7 @@
             {/each}
           </div>
         {/if}
+
         {#if !multi}
           <li
             class:selected={$isSelected('')}
@@ -180,11 +187,13 @@
             {emptyOption.label}
           </li>
         {/if}
+
         {#each Object.keys(filteredGroupOptions) as groupName}
           <div class="group" {...$group(groupName)} use:group>
             <div class="group-label" {...$groupLabel(groupName)} use:groupLabel>
               {groupName}
             </div>
+
             {#each filteredGroupOptions[groupName] as opt, index (index)}
               <li
                 class:selected={$isSelected(formatGroupOptionValue(opt))}
@@ -200,7 +209,7 @@
             {/each}
           </div>
         {:else}
-          <li>No results found</li>
+          <li class="no-results"><em>No results found</em></li>
         {/each}
       </div>
     </ul>
@@ -211,24 +220,55 @@
   .input-wrapper {
     position: relative;
   }
+
   .input-wrapper input {
     width: 100%;
+    padding-right: var(--spacing-double);
   }
+
   .input-wrapper .icon {
     position: absolute;
     top: 50%;
-    right: var(--spacing-half);
+    right: var(--spacing);
     translate: 0 calc(-50% + 1px);
     width: var(--spacing);
   }
 
+  .input-wrapper input.is-open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
   ul {
     list-style: none;
-    max-height: calc(var(--spacing) * 10);
+    max-height: min(90vh, calc(var(--spacing) * 15));
     background-color: var(--color-background);
     overflow-y: scroll;
     margin: 0;
     padding: 0;
+    border-left: var(--border-weight) solid var(--color-text);
+    border-bottom: var(--border-weight) solid var(--color-text);
+    border-right: var(--border-weight) solid var(--color-text);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    font-size: var(--font-size-small);
+  }
+
+  .group {
+    padding: var(--spacing-thin) var(--spacing-half);
+  }
+
+  li {
+    cursor: pointer;
+    padding: var(--spacing-thin) var(--spacing-half);
+  }
+
+  li.selected {
+    background-color: var(--color-highlight);
+  }
+
+  li.highlighted {
+    background-color: var(--color-highlight);
   }
 
   .group {
@@ -236,22 +276,6 @@
   }
 
   .group-label {
-    font-weight: 700;
-    opacity: 0.75;
-    font-size: var(--font-size-small);
-    border-top: 2px solid var(--color-gray-medium);
-    padding: var(--spacing-half) 0 0;
-    text-align: center;
-  }
-
-  li {
-    cursor: pointer;
-    padding: var(--spacing-half);
-  }
-  li.selected {
-    background-color: var(--color-highlight);
-  }
-  li.highlighted {
-    background-color: var(--color-highlight);
+    font-weight: var(--font-copy-weight-bold);
   }
 </style>
