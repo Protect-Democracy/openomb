@@ -3,7 +3,6 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import { formatNumber } from '$lib/formatters';
-  import { siteName } from '$config';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import Results from './Results.svelte';
@@ -21,10 +20,6 @@
     goto(`${url.pathname}?${newQuery.toString()}`, { noScroll: true });
   }
 </script>
-
-<svelte:head>
-  <title>Search | {siteName}</title>
-</svelte:head>
 
 <section class="page-container">
   <h1>Search Apportionments</h1>

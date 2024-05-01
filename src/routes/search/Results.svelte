@@ -1,5 +1,5 @@
 <script lang="ts">
-  import TafsDisplay from '$components/blocks/TafsDisplay.svelte';
+  import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
   export let results = [];
 </script>
 

@@ -21,7 +21,13 @@ export async function load({ params }) {
       bureauId: params.bureauId
     }),
     pageMeta: {
-      title: `Bureau: ${bureau.budgetBureauTitle} (Agency: ${bureau.agency.budgetAgencyTitle})`
+      title: `Bureau: ${bureau.budgetBureauTitle} (Agency: ${bureau.agency.budgetAgencyTitle})`,
+      breadcrumbs: [
+        {
+          title: bureau.agency.budgetAgencyTitle,
+          url: `/agency/${bureau.agency.budgetAgencyTitleId}`
+        }
+      ]
     }
   };
 }

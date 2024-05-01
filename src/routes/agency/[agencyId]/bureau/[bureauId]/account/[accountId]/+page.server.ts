@@ -16,7 +16,17 @@ export async function load({ params }) {
     account,
     tafsByAccount: await tafsByAccount(params.agencyId, params.bureauId, params.accountId),
     pageMeta: {
-      title: `Account: ${account.accountTitle} (Bureau: ${account.bureau.agency.budgetAgencyTitle})`
+      title: `Account: ${account.accountTitle} (Bureau: ${account.bureau.agency.budgetAgencyTitle})`,
+      breadcrumbs: [
+        {
+          title: account.bureau.agency.budgetAgencyTitle,
+          url: `/agency/${account.bureau.agency.budgetAgencyTitleId}`
+        },
+        {
+          title: account.bureau.budgetBureauTitle,
+          url: `/agency/${account.bureau.agency.budgetAgencyTitleId}/bureau/${account.bureau.budgetBureauTitleId}`
+        }
+      ]
     }
   };
 }

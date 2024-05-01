@@ -59,6 +59,12 @@ export const load: PageServerData = async ({ url }) => {
     fileCount: fileCount,
     pageSize,
     pageIndex,
-    results: results
+    results: results,
+    pageMeta: {
+      title: 'Search apportionments',
+      description:
+        'Search apportionments by contents, tafs, bureau, fiscal year, footnotes, and more',
+      includeSearch: true
+    }
   };
 };

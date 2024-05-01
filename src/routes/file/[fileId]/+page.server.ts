@@ -2,6 +2,7 @@ import { dbConnect } from '$db/connection';
 import { fileDetails } from '$queries/files';
 import { error } from '@sveltejs/kit';
 import { formatFileTitle } from '$lib/formatters';
+import { fileSchema } from '$lib/schema';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
@@ -18,7 +19,10 @@ export async function load({ params }) {
     pageMeta: {
       title: `${formatFileTitle(file)} | ${file.fileId}`,
       // TODO
-      description: 'Description of Some Page'
+      description: 'Description of Some Page',
+
+      // Use a specific dataset schema for our file
+      schema: fileSchema(file)
     }
   };
 }

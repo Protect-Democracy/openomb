@@ -30,7 +30,7 @@ jobs:
       contents: read
 
     steps:
-      -  uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - uses: opentofu/setup-opentofu@v1
 
       - name: Configure AWS credentials
@@ -67,7 +67,7 @@ jobs:
         id: aws_run_task_network_config
         run: |
           tofu output --raw run_task_network_configuration_string
-      - name: Set network config env 
+      - name: Set network config env
         run: |
           echo "AWS_NETWORK_CONFIG=${{ steps.aws_run_task_network_config.outputs.stdout }}" >> "$GITHUB_ENV"
 

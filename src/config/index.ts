@@ -3,10 +3,11 @@
  */
 
 export const deployedBaseUrl = 'https://apportionments.protectdemocracy.org';
-export const siteName = 'Apportionments';
+export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';
-export const siteDescription = 'Apportionments';
-export const siteKeywords = ['Apportionments'];
+export const siteDescription = `${siteName} allows for easier searching and navigation of apportionments
+  published by the Office of Management and Budget`;
+export const siteKeywords = ['OMB', 'Apportionments', 'Office of Management and Budget'];
 export const cacheHeadersHour = 5;
 export const cacheHeadersMinute = 0;
 export const collectionTimezone = 'America/New_York';

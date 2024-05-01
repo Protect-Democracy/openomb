@@ -15,7 +15,8 @@ export async function load() {
     pageMeta: {
       title: undefined,
       description: undefined,
-      keywords: undefined
+      keywords: undefined,
+      includeSearch: true
     }
   };
 }
