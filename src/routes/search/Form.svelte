@@ -6,6 +6,10 @@
   export let agencyBureauOptions = [];
   export let yearOptions = [];
   export let lineOptions = [];
+
+  // TODO: It would be good to align this markup with the global styles,
+  // specifically the use of .form-item.  The global styles could be
+  // updated to reflect this, as they are not agreed upon yet.
 </script>
 
 <form method="get">
@@ -14,8 +18,9 @@
       <label for="term">Keyword</label>
       <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
     </div>
+
     <div class="field">
-      <label for="agencyBureau">Agency and Bureau</label>
+      <label for="agencyBureau">Agency and bureau</label>
       <SearchSelect
         id="agencyBureau"
         name="agencyBureau"
@@ -27,23 +32,27 @@
         value={url.searchParams.get('agencyBureau') || ''}
       />
     </div>
+
     <div class="field">
-      <label for="tafs">TAFS</label>
+      <label for="tafs"><acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym></label>
       <input type="text" id="tafs" name="tafs" value={url.searchParams.get('tafs')} />
     </div>
+
     <div class="field">
       <label for="account">Account</label>
       <input type="text" id="account" name="account" value={url.searchParams.get('account')} />
     </div>
+
     <div class="field">
-      <label for="approver">Approved By</label>
+      <label for="approver">Approved by</label>
       <input type="text" id="approver" name="approver" value={url.searchParams.get('approver')} />
     </div>
   </div>
 
   <div class="field-col">
     <div class="field">
-      <label for="year">Fiscal Year</label>
+      <label for="year">Fiscal year</label>
+
       <CheckboxButtons
         id="year"
         name="year"
@@ -52,8 +61,9 @@
         multi
       />
     </div>
+
     <div class="field">
-      <label for="approvedDateRange">Approved Date Range</label>
+      <label for="approvedDateRange">Approved date range</label>
       <div class="date-fields">
         <input
           id="approvedDateRange"
@@ -61,7 +71,11 @@
           type="date"
           value={url.searchParams.get('approvedStart')}
         />
-        -
+        <span class="date-through">
+          <span class="sr-only">Through</span>
+          <span role="img" aria-label="Dash symbol" aria-hidden="true">-</span>
+        </span>
+
         <input
           id="approvedDateRange"
           name="approvedEnd"
@@ -70,8 +84,10 @@
         />
       </div>
     </div>
+
     <div class="field">
-      <label for="lineNum">Has Line Number</label>
+      <label for="lineNum">Has line number</label>
+
       <SearchSelect
         id="lineNum"
         name="lineNum"
@@ -80,6 +96,7 @@
         multi
       />
     </div>
+
     <div class="field">
       <label for="footnoteNum">Has Footnote</label>
       <CheckboxButtons
@@ -97,6 +114,7 @@
   <div class="field-col">
     <button type="submit">Search</button>
   </div>
+
   <div class="field-col">
     <button type="reset" class="secondary">Reset</button>
   </div>
@@ -106,11 +124,12 @@
   form {
     display: flex;
     flex-wrap: wrap;
+    column-gap: var(--spacing);
   }
 
   .field-col {
-    flex: 0 0 50%;
-    padding: var(--spacing);
+    flex: 0 0 calc(50% - var(--spacing) / 2);
+    margin-bottom: var(--spacing);
   }
 
   .field-col .field,
@@ -126,6 +145,12 @@
 
   .date-fields input {
     min-width: 0;
+  }
+
+  .date-through {
+    font-weight: bold;
+    vertical-align: baseline;
+    margin-top: var(--spacing-half);
   }
 
   label {

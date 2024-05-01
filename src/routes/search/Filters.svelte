@@ -55,6 +55,14 @@
     <Drawer contentTitle="Search Apportionments">
       <svelte:fragment slot="trigger">Adjust Search</svelte:fragment>
 
+      <svelte:fragment slot="title">
+        <h2 class="h3-alt drawer-title">Search apportionments</h2>
+      </svelte:fragment>
+
+      <svelte:fragment slot="description"
+        ><p class="sr-only">Use the inputs below to search apportionments</p></svelte:fragment
+      >
+
       <svelte:fragment slot="content">
         <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} />
       </svelte:fragment>
@@ -104,5 +112,12 @@
     height: 0.9em;
     vertical-align: text-top;
     margin-left: var(--spacing-half);
+  }
+
+  .drawer-title {
+    text-align: center;
+    padding-left: var(--spacing-double);
+    padding-right: var(--spacing-double);
+    margin-bottom: var(--spacing-double);
   }
 </style>
