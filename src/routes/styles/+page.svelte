@@ -281,6 +281,7 @@
 
   <button>Button</button>
   <button class="secondary">Secondary</button>
+  <button class="alt">Alt</button>
   <button disabled>Disabled</button>
   <div role="button">role="button"</div>
 

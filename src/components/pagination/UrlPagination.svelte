@@ -1,6 +1,9 @@
 <!--
   Pagination using URL parameter
 
+  Note: Originally this was done with MeltUI's pagination
+  functionality but it let to weird behavior with stores.
+
   Params
     - url: page URL object (with searchParams)
     - perPage: items per page
@@ -10,80 +13,137 @@
 -->
 
 <script lang="ts">
-  import { writable } from 'svelte/store';
-  import { createPagination } from '@melt-ui/svelte';
-  import { goto } from '$app/navigation';
+  import { derived } from 'svelte/store';
+  import { page } from '$app/stores';
   import { formatNumber } from '$lib/formatters';
 
-  export let url;
-  export let perPage = 1;
+  // Constants
+  const itemId = (Math.random() + 1).toString(36).substring(7);
+
+  // Props
+  export let urlPageParam = 'page';
+  export let perPage = 50;
   export let total = 0;
+  export let pageBuffer = 2;
+  export let includeLabel = true;
 
-  const pageStore = writable(Number(url?.searchParams.get('page')) || 1);
+  // Stores
+  const url = derived(page, ($page) => $page.url);
 
-  const handlePageChange = ({ next }) => {
-    const newQuery = new URLSearchParams(url?.searchParams.toString());
-    newQuery.set('page', next);
-    goto(`${url.pathname}?${newQuery.toString()}`, { noScroll: true });
-    return next;
-  };
+  // Derived
+  $: currentPage = $url.searchParams.get(urlPageParam)
+    ? Number($url.searchParams.get(urlPageParam))
+    : 1;
+  $: pagesLength = Math.ceil(total / perPage);
+  $: pages = makePages(pagesLength, currentPage, pageBuffer);
 
-  const {
-    elements: { root, pageTrigger, prevButton, nextButton },
-    states: { pages }
-  } = createPagination({
-    page: pageStore,
-    count: total,
-    perPage,
-    defaultPage: 1,
-    siblingCount: 1,
-    onPageChange: handlePageChange
-  });
+  // Make pages
+  function makePages(
+    pagesLength: number,
+    currentPage: number,
+    pageBuffer: number
+  ): { value: number; type?: 'ellipsis' }[] {
+    if (pagesLength <= 1) {
+      return [{ value: 1 }];
+    }
+
+    pages = [];
+    for (let i = 1; i <= pagesLength; i++) {
+      // Only do:
+      // - a certain amount around the current page,
+      // - last and first,
+      if (
+        (i >= currentPage - pageBuffer && i <= currentPage + pageBuffer) ||
+        i === 1 ||
+        i === pagesLength
+      ) {
+        pages.push({ value: i });
+      }
+      // Add later ellipses
+      else if (i === currentPage + pageBuffer + 1) {
+        pages.push({ value: i, type: 'ellipsis' });
+      }
+      // Add early ellipses
+      else if (i === currentPage - pageBuffer - 1) {
+        pages.push({ value: i, type: 'ellipsis' });
+      }
+    }
+
+    return pages;
+  }
+
+  // Check if valid page
+  function isValidPage(pageNumber: number) {
+    return pageNumber > 0 && pageNumber <= pagesLength;
+  }
+
+  // Make url for a specific page
+  function getPageUrl(pageNumber: number) {
+    const newQuery = new URLSearchParams($url.searchParams.toString());
+    newQuery.set(urlPageParam, pageNumber.toString());
+    return `${$url.pathname}?${newQuery.toString()}`;
+  }
 </script>
 
-{#if $pages.length > 1 && total > 0}
-  <nav aria-label="pagination" {...$root} use:root>
+{#if pages.length > 1 && total > 0}
+  {#if includeLabel}
+    <label for="pagination-{itemId}"
+      >Showing results {formatNumber(currentPage * perPage - perPage + 1)} - {formatNumber(
+        Math.min(total, currentPage * perPage)
+      )}</label
+    >
+  {/if}
+  <nav id="pagination-{itemId}" aria-label="pagination">
     <div class="button-group">
-      <button {...$prevButton} use:prevButton> &#x276e; </button>{#each $pages as page (page.key)}
-        {#if page.type === 'ellipsis'}
-          <button disabled>...</button>
-        {:else if page.value !== 0}
-          <button {...$pageTrigger(page)} class:active={$pageStore === page.value} use:pageTrigger>
-            {formatNumber(page.value)}
-          </button>
+      <svelte:element
+        this={isValidPage(currentPage - 1) ? 'a' : 'span'}
+        class="button alt compact"
+        href={getPageUrl(currentPage - 1)}
+        aria-label="Previous"
+      >
+        &#x276e;
+      </svelte:element>
+
+      {#each pages as availablePage (availablePage.value)}
+        {#if availablePage.type === 'ellipsis'}
+          <span class="ellipsis">...</span>
+        {:else if availablePage.value !== 0}
+          <a
+            href={getPageUrl(availablePage.value)}
+            class="button alt compact"
+            class:active={availablePage.value === currentPage}
+            class:like-text={availablePage.value === currentPage}
+            aria-label={availablePage.value === currentPage
+              ? 'Current page'
+              : `Page ${formatNumber(availablePage.value)}`}
+          >
+            {formatNumber(availablePage.value)}
+          </a>
         {/if}
-      {/each}<button {...$nextButton} use:nextButton> &#x276f; </button>
+      {/each}
+      <svelte:element
+        this={isValidPage(currentPage + 1) ? 'a' : 'span'}
+        class="button alt compact"
+        href={getPageUrl(currentPage + 1)}
+        aria-label="Next"
+      >
+        &#x276f;
+      </svelte:element>
     </div>
   </nav>
 {/if}
 
 <style>
-  .button-group button {
-    padding: var(--spacing-half) var(--spacing);
-    color: var(--color-text);
-    background-color: var(--color-background);
-    border: 1px solid var(--color-gray-dark);
-    border-radius: 0;
-    min-width: 0;
+  span {
+    padding: 0 var(--spacing-half);
   }
 
-  .button-group button:hover,
-  .button-group button.active {
-    color: var(--color-text-inverse);
-    background-color: var(--color-background-inverse);
+  .ellipsis {
+    font-weight: bold;
+    padding: 0 var(--spacing);
   }
 
-  .button-group button + button {
-    margin-left: -1px;
-  }
-
-  .button-group button:first-child {
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
-  }
-
-  .button-group button:last-child {
-    border-bottom-right-radius: 5px;
-    border-top-right-radius: 5px;
+  a.active {
+    border: var(--border-weight) solid var(--color-text);
   }
 </style>

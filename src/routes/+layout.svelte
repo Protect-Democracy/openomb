@@ -5,6 +5,7 @@
   import '@fontsource/ibm-plex-sans/400.css';
   import '@fontsource/ibm-plex-sans/600.css';
   import '@fontsource/ibm-plex-sans/700.css';
+  import { derived } from 'svelte/store';
   import { page } from '$app/stores';
   import { isProduction } from '$lib/utilities';
   import {
@@ -26,45 +27,41 @@
   import '../styles/index.css';
 
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
+  const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
+  const url = derived(page, ($page) => $page.url);
 </script>
 
 <svelte:head>
   <!-- Unsure why this throws an error since it works.  See: https://github.com/sveltejs/eslint-plugin-svelte/issues/652 -->
   <!-- eslint-disable svelte/valid-compile -->
-  <title>{$page.data?.pageMeta?.title ? `${$page.data?.pageMeta?.title} | ` : ''}{siteName}</title>
+  <title>{$pageMeta.title ? `${$pageMeta.title} | ` : ''}{siteName}</title>
 
   <link rel="icon" href={favicon} />
 
-  <meta name="author" content={$page.data?.pageMeta?.author || siteAuthor} />
-  <meta name="description" content={$page.data?.pageMeta?.description || siteDescription} />
-  <meta name="keywords" content={($page.data?.pageMeta?.keywords || siteKeywords).join(',')} />
+  <meta name="author" content={$pageMeta.author || siteAuthor} />
+  <meta name="description" content={$pageMeta.description || siteDescription} />
+  <meta name="keywords" content={($pageMeta.keywords || siteKeywords).join(',')} />
 
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="{deployedBaseUrl}{$page.url.pathname}" />
-  <meta property="og:title" content={$page.data?.pageMeta?.title || siteName} />
-  <meta property="og:description" content={$page.data?.pageMeta?.description || siteDescription} />
+  <meta property="og:url" content="{deployedBaseUrl}{$url.pathname}" />
+  <meta property="og:title" content={$pageMeta.title || siteName} />
+  <meta property="og:description" content={$pageMeta.description || siteDescription} />
   <meta property="og:site_name" content={siteName} />
-  <meta
-    property="og:image"
-    content="{deployedBaseUrl}{$page.data?.pageMeta?.ogImgPath || socialOgImgPath}"
-  />
-  <meta
-    property="og:image:width"
-    content={($page.data?.pageMeta?.ogImgWidth || socialOgImgWidth).toString()}
-  />
+  <meta property="og:image" content="{deployedBaseUrl}{$pageMeta.ogImgPath || socialOgImgPath}" />
+  <meta property="og:image:width" content={($pageMeta.ogImgWidth || socialOgImgWidth).toString()} />
   <meta
     property="og:image:height"
-    content={($page.data?.pageMeta?.ogImgHeight || socialOgImgHeight).toString()}
+    content={($pageMeta.ogImgHeight || socialOgImgHeight).toString()}
   />
 
   <meta name="twitter:card" content={socialTwitterCard} />
   <meta name="twitter:site" content={socialTwitterSite} />
   <meta name="twitter:creator" content={socialTwitterCreator} />
-  <meta name="twitter:title" content={$page.data?.pageMeta?.title || siteName} />
-  <meta name="twitter:description" content={$page.data?.pageMeta?.description || siteDescription} />
+  <meta name="twitter:title" content={$pageMeta.title || siteName} />
+  <meta name="twitter:description" content={$pageMeta.description || siteDescription} />
   <meta
     name="twitter:image"
-    content="{deployedBaseUrl}{$page.data?.pageMeta?.twitterImgPath || socialTwitterImgPath}"
+    content="{deployedBaseUrl}{$pageMeta.twitterImgPath || socialTwitterImgPath}"
   />
   <!-- eslint-enable svelte/valid-compile -->
 
@@ -102,10 +99,10 @@
       <h1><a href="/">Apportionments</a></h1>
 
       <nav>
-        <a class:active={$page.url.pathname === '/search'} href="/search">Search</a>
-        <a class:active={$page.url.pathname === '/explore'} href="/explore">Explore</a>
-        <a class:active={$page.url.pathname === '/faq'} href="/faq">FAQ</a>
-        <a class:active={$page.url.pathname === '/about'} href="/about">About</a>
+        <a class:active={$url.pathname === '/search'} href="/search">Search</a>
+        <a class:active={$url.pathname === '/explore'} href="/explore">Explore</a>
+        <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
+        <a class:active={$url.pathname === '/about'} href="/about">About</a>
         {#if !isProduction()}
           <a href="/examples">Examples</a>
         {/if}

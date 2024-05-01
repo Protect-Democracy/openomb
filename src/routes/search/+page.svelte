@@ -1,17 +1,22 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { derived } from 'svelte/store';
   import { page } from '$app/stores';
   import { formatNumber } from '$lib/formatters';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
-  import Results from './Results.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
+  import TafsDisplay from '$components/blocks/TafsDisplay.svelte';
 
   // Props
   export let data: PageData;
 
+  // Stores
+  const url = derived(page, ($page) => $page.url);
+
   // State
   let sortFormEl: HTMLFormElement;
+
   // This seems annoying, but if we want the Sort form to be submittable without JS
   // we need to account for the values from the main Search form, as the GET action
   // on a form will remove existing query parameters.
@@ -33,10 +38,9 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: url = $page.url;
   $: ({ resultCount, fileCount, results } = data);
   $: hasResults = resultCount && resultCount > 0;
-  $: hasSearchParams = url.searchParams.toString().length > 0;
+  $: hasSearchParams = $url.searchParams.toString().length > 0;
   $: hasSearched = hasSearchParams;
 
   // A shortcut to quickly update data on sort change
@@ -56,7 +60,7 @@
   <div class="no-js-only-block">
     <div class="search-form">
       <Form
-        {url}
+        url={$url}
         agencyBureauOptions={data.agencyBureauOptions}
         yearOptions={data.yearOptions}
         lineOptions={data.lineOptions}
@@ -68,7 +72,7 @@
     {#if hasSearched}
       <div class="search-filters">
         <Filters
-          {url}
+          url={$url}
           agencyBureauOptions={data.agencyBureauOptions}
           yearOptions={data.yearOptions}
           lineOptions={data.lineOptions}
@@ -77,7 +81,7 @@
     {:else}
       <div class="search-form">
         <Form
-          {url}
+          url={$url}
           agencyBureauOptions={data.agencyBureauOptions}
           yearOptions={data.yearOptions}
           lineOptions={data.lineOptions}
@@ -95,22 +99,22 @@
         </span>
 
         <div class="sort-action">
-          <form action="{$page.url.pathname}{$page.url.search}" method="get" bind:this={sortFormEl}>
+          <form action={$url.pathname} method="get" bind:this={sortFormEl}>
             <label for="sort">Sort results</label>
 
             <select
               name="sort"
               id="sort"
-              value={url.searchParams.get('sort') || 'approved_desc'}
+              value={$url.searchParams.get('sort') || 'approved_desc'}
               on:change={updateSort}
             >
-              {#each data.sortOptions as option}
+              {#each data.sortOptions as option (option.key)}
                 <option value={option.key}>{option.label}</option>
               {/each}
             </select>
 
-            {#each searchFormValues as value}
-              <input type="hidden" name={value} value={url.searchParams.get(value)} />
+            {#each searchFormValues as value, index (index)}
+              <input type="hidden" name={value} value={$url.searchParams.get(value)} />
             {/each}
 
             <div class="no-js-only-block">
@@ -121,13 +125,15 @@
       </aside>
 
       <div class="pagination">
-        <UrlPagination url={$page.url} perPage={data.pageSize} total={resultCount} />
+        <UrlPagination perPage={data.pageSize} total={resultCount} />
       </div>
 
-      <Results {results} />
+      {#each results as result (result.tafsTableId)}
+        <TafsDisplay tafs={result} />
+      {/each}
 
       <div class="pagination">
-        <UrlPagination url={$page.url} perPage={data.pageSize} total={resultCount} />
+        <UrlPagination perPage={data.pageSize} total={resultCount} />
       </div>
     </div>
   {:else if hasSearched}

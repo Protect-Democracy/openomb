@@ -104,6 +104,44 @@ ul.inline-list li + li::before {
 }
 
 /* Buttons */
+button.secondary,
+input[type='submit'].secondary,
+input[type='button'].secondary,
+input[type='reset'].secondary,
+[role='button'].secondary,
+a.button.secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-text);
+}
+
+button.secondary:hover,
+input[type='submit'].secondary:hover,
+input[type='button'].secondary:hover,
+input[type='reset'].secondary:hover,
+[role='button'].secondary:hover,
+a.button.secondary:hover {
+  background-color: var(--color-secondary-muted);
+}
+
+button.alt,
+input[type='submit'].alt,
+input[type='button'].alt,
+input[type='reset'].alt,
+[role='button'].alt,
+a.button.alt {
+  background-color: var(--color-blue);
+  color: var(--color-text-inverse);
+}
+
+button.alt:hover,
+input[type='submit'].alt:hover,
+input[type='button'].alt:hover,
+input[type='reset'].alt:hover,
+[role='button'].alt:hover,
+a.button.alt:hover {
+  background-color: var(--color-blue-light);
+}
+
 button.like-text,
 input[type='submit'].like-text,
 input[type='button'].like-text,
@@ -143,25 +181,6 @@ input[type='reset'].like-link:hover,
 [role='button'].like-link:hover,
 a.button.like-link:hover {
   text-decoration: underline;
-}
-
-button.secondary,
-input[type='submit'].secondary,
-input[type='button'].secondary,
-input[type='reset'].secondary,
-[role='button'].secondary,
-a.button.secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-text);
-}
-
-button.secondary:hover,
-input[type='submit'].secondary:hover,
-input[type='button'].secondary:hover,
-input[type='reset'].secondary:hover,
-[role='button'].secondary:hover,
-a.button.secondary:hover {
-  background-color: var(--color-secondary-muted);
 }
 
 button.small,

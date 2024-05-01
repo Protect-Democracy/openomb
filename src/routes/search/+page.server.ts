@@ -59,11 +59,13 @@ export const load: PageServerData = async ({ url }) => {
     lineOptions: await lineNumberOptions(),
     agencyBureauOptions: await bureaus(),
     sortOptions,
-    resultCount: resultCount,
-    fileCount: fileCount,
+    resultCount,
+    fileCount,
     pageSize,
     pageIndex,
-    results: results,
+    results,
+    testData: Math.random(),
+    testArray: [{ a: Math.random(), b: Math.random(), c: { d: Math.random() } }],
     pageMeta: {
       title: 'Search apportionments'
     }
