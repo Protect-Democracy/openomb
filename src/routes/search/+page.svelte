@@ -57,7 +57,7 @@
     accounts with files that match the search criteria.
   </p>
 
-  <div class="no-js-only-block">
+  <div class="no-js-only-block" role="search">
     <div class="search-form">
       <Form
         url={$url}
@@ -68,7 +68,7 @@
     </div>
   </div>
 
-  <div class="has-js-only-block">
+  <div class="has-js-only-block" role="search">
     {#if hasSearched}
       <div class="search-filters">
         <Filters
@@ -94,12 +94,14 @@
     <div class="results">
       <aside class="result-actions">
         <div class="result-count">
-          <p>
+          <p role="status">
             Results: <strong>{formatNumber(resultCount)} accounts</strong> in
             <strong>{formatNumber(fileCount)} files</strong>.
           </p>
 
-          <UrlPagination perPage={data.pageSize} total={resultCount} includeLabel={false} />
+          <div class="font-small">
+            <UrlPagination perPage={data.pageSize} total={resultCount} includeLabel={false} />
+          </div>
         </div>
 
         <div class="sort-action">
@@ -137,7 +139,9 @@
       </div>
     </div>
   {:else if hasSearched}
-    <p><em>No results were found from your criteria. Please try refining and try again.</em></p>
+    <p class="no-results">
+      <em>No results were found from your criteria. Please try refining and try again.</em>
+    </p>
   {/if}
 </section>
 
@@ -178,5 +182,13 @@
 
   .sort-action button {
     margin-left: var(--spacing);
+  }
+
+  .no-results {
+    text-align: center;
+    padding-top: var(--spacing-large);
+    padding-bottom: var(--spacing-double);
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>

@@ -2,13 +2,17 @@
   import { goto } from '$app/navigation';
   import { formatDate } from '$lib/formatters';
   import Drawer from '$components/drawer/Drawer.svelte';
+  import XSymbol from '$components/icons/XSymbol.svelte';
   import Form from './Form.svelte';
 
-  export let url;
+  export let url: URL;
   export let agencyBureauOptions = [];
   export let yearOptions = [];
   export let lineOptions = [];
 
+  // It might make sense to just use links instead of buttons, but given
+  // that this filter version doesn't show up for non-js users,
+  // it's not really necessary.
   function removeFilter(filterParam: string) {
     const newParams = new URLSearchParams(url.searchParams.toString());
     newParams.delete(filterParam);
@@ -50,6 +54,7 @@
   <div class="search-toggle">
     <Drawer contentTitle="Search Apportionments">
       <svelte:fragment slot="trigger">Adjust Search</svelte:fragment>
+
       <svelte:fragment slot="content">
         <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} />
       </svelte:fragment>
@@ -59,9 +64,13 @@
   <div class="filters">
     {#each url.searchParams.entries() as [key, value]}
       {#if value?.length && value !== '[]' && getFilterLabel(key, value)}
-        <button class="small compact" on:click={() => removeFilter(key)}
-          >{getFilterLabel(key, value)} (x)</button
-        >
+        <button class="small compact alt" on:click={() => removeFilter(key)}>
+          <span class="sr-only"> Remove filter</span>
+          {getFilterLabel(key, value)}
+          <span class="icon">
+            <XSymbol />
+          </span>
+        </button>
       {/if}
     {/each}
   </div>
@@ -70,7 +79,7 @@
 <style>
   .bar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     column-gap: var(--spacing);
   }
 
@@ -87,5 +96,13 @@
 
   .filters button {
     flex-grow: 0;
+  }
+
+  .icon {
+    display: inline-block;
+    width: 0.9em;
+    height: 0.9em;
+    vertical-align: text-top;
+    margin-left: var(--spacing-half);
   }
 </style>
