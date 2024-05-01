@@ -140,7 +140,7 @@
 
   .ellipsis {
     font-weight: bold;
-    padding: 0 var(--spacing);
+    padding: 0 var(--spacing-half);
   }
 
   a.active {

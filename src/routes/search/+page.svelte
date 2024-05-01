@@ -93,10 +93,14 @@
   {#if hasResults}
     <div class="results">
       <aside class="result-actions">
-        <span class="result-count">
-          Results: <strong>{formatNumber(resultCount)} accounts</strong> in
-          <strong>{formatNumber(fileCount)} files</strong>
-        </span>
+        <div class="result-count">
+          <p>
+            Results: <strong>{formatNumber(resultCount)} accounts</strong> in
+            <strong>{formatNumber(fileCount)} files</strong>.
+          </p>
+
+          <UrlPagination perPage={data.pageSize} total={resultCount} includeLabel={false} />
+        </div>
 
         <div class="sort-action">
           <form action={$url.pathname} method="get" bind:this={sortFormEl}>
@@ -123,10 +127,6 @@
           </form>
         </div>
       </aside>
-
-      <div class="pagination">
-        <UrlPagination perPage={data.pageSize} total={resultCount} />
-      </div>
 
       {#each results as result (result.tafsTableId)}
         <TafsDisplay tafs={result} />
