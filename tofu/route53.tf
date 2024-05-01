@@ -4,7 +4,7 @@ resource "aws_route53_zone" "apportionments" {
 
 resource "aws_route53_record" "alias_route53_record" {
   zone_id = aws_route53_zone.apportionments.zone_id
-  name    = "openomb.org"
+  name    = aws_route53_zone.apportionments.name
   type    = "A"
 
   alias {
@@ -29,4 +29,29 @@ resource "aws_route53_record" "apportionments" {
   ttl             = 60
   type            = each.value.type
   zone_id         = aws_route53_zone.apportionments.zone_id
+}
+
+# Setup for forwarding support email to Google Group
+# Using service forwardemail.net for easy setup
+resource "aws_route53_record" "email_mx" {
+  zone_id = aws_route53_zone.apportionments.zone_id
+  name    = ""
+  type    = "MX"
+  ttl     = 3600
+
+  records = [
+    "10 mx1.forwardemail.net",
+    "10 mx2.forwardemail.net",
+  ]
+}
+
+resource "aws_route53_record" "email_txt" {
+  zone_id = aws_route53_zone.apportionments.zone_id
+  name    = ""
+  type    = "TXT"
+  ttl     = 3600
+
+  records = [
+    "forward-email=openomb@protectdemocracy.org",
+  ]
 }
