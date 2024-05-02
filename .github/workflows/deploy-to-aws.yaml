@@ -1,14 +1,14 @@
-name: Push to ECR
+name: Deploy to AWS
 
 on:
   push:
     branches: ['main']
-    paths:
-      - '!tofu/**'
-      - '!docs/**'
-      - '!*.md'
-      - '!.*'
-      - '!tests/**'
+    paths-ignore:
+      - 'tofu/**'
+      - 'docs/**'
+      - '*.md'
+      - '.*'
+      - 'tests/**'
 
   workflow_dispatch:
 

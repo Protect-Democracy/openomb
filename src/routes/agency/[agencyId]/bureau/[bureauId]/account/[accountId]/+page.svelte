@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-  import TafsDisplay from '$components/blocks/TafsDisplay.svelte';
+  import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
 
   export let data: PageData;
   $: ({ account, tafsByAccount } = data);
@@ -37,5 +37,5 @@
 
   <p>There are {account.fileCount} files in this account.</p>
 
-  <TafsDisplay groupByAccount hideAccountName tafs={tafsByAccount} />
+  <TafsDisplay groupByAccount hideAccountHeader tafs={tafsByAccount} />
 </div>

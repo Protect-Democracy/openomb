@@ -11,7 +11,8 @@ export async function load() {
     agencies: agencyList,
     pageMeta: {
       title: 'Explore apportionments',
-      description: 'Explore apportionments by agencies, bureaus, and accounts'
+      description: 'Explore apportionments by agencies, bureaus, and accounts',
+      includeSearch: true
     }
   };
 }

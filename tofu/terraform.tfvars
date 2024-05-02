@@ -1,5 +1,6 @@
-region    = "us-west-2"
-repo_name = "apportionments"
+region           = "us-west-2"
+repo_name        = "apportionments"
+tfstate_key_name = "tofu.tfstate"
 #vpc_cidr = "10.0.0.0/16"
 #public_subnet_a          = "10.0.16.0/20"
 #public_subnet_b          = "10.0.32.0/20"

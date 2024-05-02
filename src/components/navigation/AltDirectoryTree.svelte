@@ -10,13 +10,10 @@
 
 <script lang="ts">
   import { createTreeView } from '@melt-ui/svelte';
-  import { setContext, onMount } from 'svelte';
+  import { setContext, type Action } from 'svelte';
 
   // Props
   export let columns = 1;
-
-  // State
-  let listEl: HTMLUListElement;
 
   // Context
   const treeContext = createTreeView();
@@ -27,13 +24,9 @@
     elements: { tree }
   } = treeContext;
 
-  // Mounting
-  onMount(() => {
-    // CSS columns are what we want, but unfortunately they reflow
-    // the content when an item is expanded.  We work around this,
-    // by looking at all the top-level items to see which ones are
-    // at the top and then mark it in css.
-    const children = listEl.querySelectorAll(':scope > li');
+  // Action to adjust our element styles and force correct column breaks
+  const preventColumnShift: Action<HTMLUListElement> = (node) => {
+    const children = node.querySelectorAll(':scope > li');
     let lastTop = 0;
     [...children].forEach((item) => {
       if (item.offsetTop < lastTop) {
@@ -44,12 +37,18 @@
           '--webkit-break-before': 'column'
         });
       }
+      // Firefox does not support break-before in columns
+      // Prevent from breaking within column element at least
+      Object.assign(item.style, {
+        'break-inside': 'avoid-column',
+        '-webkit-column-break-inside': 'avoid-column'
+      });
       lastTop = item.offsetTop;
     });
-  });
+  };
 </script>
 
-<ul {...$tree} class={`columns-${columns}`} bind:this={listEl}>
+<ul {...$tree} class={`columns-${columns}`} use:preventColumnShift>
   <slot />
 </ul>
 

@@ -63,11 +63,12 @@ export const load: PageServerData = async ({ url }) => {
     fileCount,
     pageSize,
     pageIndex,
-    results,
-    testData: Math.random(),
-    testArray: [{ a: Math.random(), b: Math.random(), c: { d: Math.random() } }],
+    results: results,
     pageMeta: {
-      title: 'Search apportionments'
+      title: 'Search apportionments',
+      description:
+        'Search apportionments by contents, tafs, bureau, fiscal year, footnotes, and more',
+      includeSearch: true
     }
   };
 };

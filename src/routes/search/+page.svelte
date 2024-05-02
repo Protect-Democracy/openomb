@@ -6,7 +6,7 @@
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
-  import TafsDisplay from '$components/blocks/TafsDisplay.svelte';
+  import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
 
   // Props
   export let data: PageData;

@@ -8,6 +8,7 @@
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
   import { isProduction } from '$lib/utilities';
+  import { formatJsonLdScript, pageSchema } from '$lib/schema';
   import {
     siteName,
     siteAuthor,
@@ -54,6 +55,9 @@
     content={($pageMeta.ogImgHeight || socialOgImgHeight).toString()}
   />
 
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+  {@html formatJsonLdScript($page.data?.pageMeta?.schema || pageSchema($page.data?.pageMeta))}
+
   <meta name="twitter:card" content={socialTwitterCard} />
   <meta name="twitter:site" content={socialTwitterSite} />
   <meta name="twitter:creator" content={socialTwitterCreator} />
@@ -63,6 +67,7 @@
     name="twitter:image"
     content="{deployedBaseUrl}{$pageMeta.twitterImgPath || socialTwitterImgPath}"
   />
+
   <!-- eslint-enable svelte/valid-compile -->
 
   {#if sentryScript}
@@ -96,7 +101,7 @@
 <header>
   <div class="page-container">
     <div class="header-inner">
-      <h1><a href="/">Apportionments</a></h1>
+      <h1><a href="/">{siteName}</a></h1>
 
       <nav>
         <a class:active={$url.pathname === '/search'} href="/search">Search</a>
