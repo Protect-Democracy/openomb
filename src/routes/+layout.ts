@@ -8,7 +8,7 @@ export async function load({ setHeaders }) {
     cacheHeadersMinute,
     collectionTimezone
   );
-  const revalidateSeconds = 60 * 60;
+  const revalidateSeconds = 60 * 3;
 
   // Common headers.
   //

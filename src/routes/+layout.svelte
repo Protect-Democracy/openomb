@@ -30,6 +30,7 @@
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
+  const productionCheck = false; // !isProduction()
 </script>
 
 <svelte:head>
@@ -77,9 +78,7 @@
       window.sentryOnLoad = function () {
         Sentry.init({
           // Unsure how to put Svelte variables in here
-          environment: window.location.hostname.match(/apportionment/)
-            ? 'production'
-            : 'development'
+          environment: window.location.hostname.match(/omb/) ? 'production' : 'development'
         });
       };
     </script>
@@ -90,7 +89,7 @@
   <a href="#main-content">Skip to main content</a>
 </div>
 
-{#if !isProduction()}
+{#if !productionCheck}
   <div class="development">
     <p>
       You are currently viewing a <strong>development version</strong> of this site and it may be inaccurate.

@@ -37,7 +37,7 @@ const config = {
         'style-src': ['self', 'unsafe-inline'],
         'font-src': ['self'],
         'connect-src': ['self', 'https://*.sentry.io'],
-        'img-src': ['self'],
+        'img-src': ['self', 'data:'],
         'frame-src': ['self'],
         'worker-src': ['self']
         // TODO: Add report-uri to Sentry
