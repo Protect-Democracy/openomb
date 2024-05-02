@@ -49,10 +49,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Download task definition
+      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
+      # variables. Otherwise GitHub Actions would put the wrong output into the environment
+      # variables if i tried to do it directly.
+      - name: Get task definition file
+        id: task-definition-file
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.AWS_TASK_DEFINITION_FAMILY }} --query taskDefinition
+      - name: Set task definition output
         id: task-definition
         run: |
-          echo "TASK_DEF=$(aws ecs describe-task-definition --task-definition ${{ env.AWS_TASK_DEFINITION_FAMILY }} --query taskDefinition)" >> $GITHUB_OUTPUT
+          echo "TASK_DEF=${{ steps.task-definition-file.outputs.stdout}}" >> $GITHUB_OUTPUT
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
