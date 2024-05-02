@@ -83,5 +83,5 @@ jobs:
         with:
           task-definition: ${{ steps.task-def-with-image.outputs.task-definition }}
           force-new-deployment: true
-          #service: ${{ env.AWS_ECS_SERVICE }}
-          #cluster: ${{ env.AWS_ECS_CLUSTER }}
+          service: apportionments-app
+          cluster: apportionments-app
