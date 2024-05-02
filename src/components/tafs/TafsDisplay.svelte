@@ -28,7 +28,7 @@
   const tafsArray = Array.isArray(tafs) ? tafs : [tafs];
 </script>
 
-<div class="tafs-block">
+<article class="tafs-block">
   <!-- If grouping by account, display Account > TAFS Id > Fiscal Year > Iteration -->
   {#if groupByAccount}
     {@const tafsByAccount = groupBy(
@@ -155,7 +155,7 @@
       </div>
     {/each}
   {/if}
-</div>
+</article>
 
 <style>
   .tafs-group,
