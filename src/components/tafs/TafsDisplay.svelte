@@ -123,7 +123,7 @@
       </div>
     {/each}
   {:else}
-    {#each tafsArray as tafsEntry (tafsEntry.tafsId)}
+    {#each tafsArray as tafsEntry (tafsEntry.tafsTableId)}
       <div class="tafs-entry">
         <!-- If we aren't grouping by account, display full details -->
         <svelte:element this={headerElement} class="tafs-title">
