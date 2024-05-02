@@ -16,8 +16,8 @@ env:
   AWS_REGION: 'us-west-2'
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   AWS_TASK_DEFINITION_FAMILY: 'apportionments-app'
-  #AWS_ECS_SERVICE:
-  #AWS_ECS_CLUSTER:
+  AWS_ECS_SERVICE: 'apportionments-app'
+  AWS_ECS_CLUSTER: 'apportionments-app'
 
 jobs:
   deploy:
@@ -49,39 +49,31 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
-      # variables. Otherwise GitHub Actions would put the wrong output into the environment
-      # variables if i tried to do it directly.
-      - name: Get task definition file
-        id: task-definition-file
-        run: |
-          aws ecs describe-task-definition --task-definition arn:aws:ecs:${{ env.AWS_REGION }}:${{ env.AWS_ACCOUNT_ID }}:task-definition/${{ env.AWS_TASK_DEFINITION_FAMILY }} --query taskDefinition >> task-definition.json
-
-      - name: Build, tag, and push image to Amazon ECR
-        id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ github.event.repository.name }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker buildx build --load --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:$IMAGE_TAG
-          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:$IMAGE_TAG
-          echo "image=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
-          cat task-definition.json
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def-with-image
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          task-definition: task-definition.json
-          container-name: ${{ env.AWS_TASK_DEFINITION_FAMILY }}
-          image: ${{ steps.build-image.outputs.image }}
+          images: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
+          tags: |
+            # set latest tag for main branch
+            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.AWS_TASK_DEFINITION_FAMILY }} --query taskDefinition > task-definition.json
 
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def-with-image.outputs.task-definition }}
+          task-definition: task-definition.json
           force-new-deployment: true
-          service: apportionments-app
-          cluster: apportionments-app
+          service: ${{ env.AWS_ECS_SERVICE }}
+          cluster: ${{ env.AWS_ECS_CLUSTER }}
