@@ -56,11 +56,6 @@ jobs:
         id: task-definition-file
         run: |
           aws ecs describe-task-definition --task-definition arn:aws:ecs:${{ env.AWS_REGION }}:${{ env.AWS_ACCOUNT_ID }}:task-definition/${{ env.AWS_TASK_DEFINITION_FAMILY }} >> task-definition.json
-          cat task-definition.json
-      - name: Set task definition output
-        id: task-definition
-        run: |
-          echo "TASK_DEF=${{ steps.task-definition-file.outputs.stdout}}" >> $GITHUB_OUTPUT
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
@@ -73,12 +68,13 @@ jobs:
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:$IMAGE_TAG
           docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:$IMAGE_TAG
           echo "image=${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          cat task-definition.json
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def-with-image
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ steps.task-definition.outputs.TASK_DEF }}
+          task-definition: task-definition.json
           container-name: ${{ env.AWS_TASK_DEFINITION_FAMILY }}
           image: ${{ steps.build-image.outputs.image }}
 
