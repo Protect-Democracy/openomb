@@ -28,7 +28,7 @@
   const tafsArray = Array.isArray(tafs) ? tafs : [tafs];
 </script>
 
-<article class="tafs-block">
+<div class="tafs-block">
   <!-- If grouping by account, display Account > TAFS Id > Fiscal Year > Iteration -->
   {#if groupByAccount}
     {@const tafsByAccount = groupBy(
@@ -124,7 +124,7 @@
     {/each}
   {:else}
     {#each tafsArray as tafsEntry (tafsEntry.tafsTableId)}
-      <div class="tafs-entry">
+      <article class="tafs-entry">
         <!-- If we aren't grouping by account, display full details -->
         <svelte:element this={headerElement} class="tafs-title">
           <a href={`/file/${tafsEntry.fileId}#tafs_${tafsEntry.tafsTableId}`}
@@ -152,10 +152,10 @@
             >{tafsEntry.file ? formatFileTitle(tafsEntry.file) : tafsEntry.fileId}</a
           >
         </div>
-      </div>
+      </article>
     {/each}
   {/if}
-</article>
+</div>
 
 <style>
   .tafs-group,
