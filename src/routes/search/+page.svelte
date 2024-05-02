@@ -7,6 +7,7 @@
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
   import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
+  import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 
   // Props
   export let data: PageData;
@@ -130,13 +131,12 @@
         </div>
       </aside>
 
-      {#each results as result (result.tafsTableId)}
-        <TafsDisplay tafs={result} />
-      {/each}
+      <TafsDisplay tafs={results} />
 
       <div class="pagination">
         <UrlPagination perPage={data.pageSize} total={resultCount} />
       </div>
+      <ScrollToTop />
     </div>
   {:else if hasSearched}
     <p class="no-results">
@@ -190,5 +190,16 @@
     padding-bottom: var(--spacing-double);
     margin-left: auto;
     margin-right: auto;
+  }
+
+  @media (max-width: 768px) {
+    .result-actions {
+      flex-direction: column;
+      row-gap: var(--spacing);
+    }
+
+    .result-count {
+      align-self: flex-start;
+    }
   }
 </style>

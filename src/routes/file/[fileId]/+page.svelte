@@ -8,6 +8,7 @@
     formatTafsFormattedId,
     formatDate
   } from '$lib/formatters';
+  import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 
   export let data: PageData;
   $: ({ file } = data);
@@ -233,6 +234,7 @@
       <p><em>No footnotes available.</em></p>
     {/if}
   </section>
+  <ScrollToTop />
 </article>
 
 <style>

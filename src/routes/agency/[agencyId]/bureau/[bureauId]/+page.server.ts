@@ -24,6 +24,10 @@ export async function load({ params }) {
       title: `Bureau: ${bureau.budgetBureauTitle} (Agency: ${bureau.agency.budgetAgencyTitle})`,
       breadcrumbs: [
         {
+          title: bureau.agency.folder.folder,
+          url: `/folder/${bureau.agency.folder.folderId}`
+        },
+        {
           title: bureau.agency.budgetAgencyTitle,
           url: `/agency/${bureau.agency.budgetAgencyTitleId}`
         }

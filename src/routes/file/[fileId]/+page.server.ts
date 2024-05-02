@@ -19,7 +19,7 @@ export async function load({ params }) {
     pageMeta: {
       title: `${formatFileTitle(file)} | ${file.fileId}`,
       // TODO
-      description: 'Description of Some Page',
+      description: `Apportionment file ${formatFileTitle(file)} | ${file.fileId} retrieved from OMB public records`,
 
       // Use a specific dataset schema for our file
       schema: fileSchema(file)

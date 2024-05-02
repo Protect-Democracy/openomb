@@ -58,7 +58,7 @@
   />
 
   <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-  {@html formatJsonLdScript($page.data?.pageMeta?.schema || pageSchema($page.data?.pageMeta))}
+  {@html formatJsonLdScript($pageMeta?.schema || pageSchema($pageMeta))}
 
   <meta name="twitter:card" content={socialTwitterCard} />
   <meta name="twitter:site" content={socialTwitterSite} />
@@ -256,5 +256,11 @@
   .development p {
     margin: 0 auto;
     text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    nav a {
+      margin-left: var(--spacing);
+    }
   }
 </style>

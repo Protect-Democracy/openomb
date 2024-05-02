@@ -35,12 +35,12 @@ export function pageSchema(data: {
 }): WebPage {
   const schema: WebPage = {
     '@type': 'WebPage',
-    name: data.title || siteName,
-    description: data.description || siteDescription,
+    name: data?.title || siteName,
+    description: data?.description || siteDescription,
     provider: projectSchema()
   };
 
-  if (data.breadcrumbs?.length) {
+  if (data?.breadcrumbs?.length) {
     schema.breadcrumb = {
       '@type': 'BreadcrumbList',
       itemListElement: data.breadcrumbs?.map((b, index) => ({
@@ -53,7 +53,7 @@ export function pageSchema(data: {
     };
   }
 
-  if (data.includeSearch) {
+  if (data?.includeSearch) {
     schema.potentialAction = {
       '@type': 'SearchAction',
       target: {

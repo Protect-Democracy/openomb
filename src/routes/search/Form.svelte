@@ -194,4 +194,10 @@
       width: auto;
     }
   }
+
+  @media (max-width: 768px) {
+    .field-col button {
+      margin-bottom: 0;
+    }
+  }
 </style>

@@ -98,4 +98,10 @@
     height: 0.9em;
     vertical-align: text-top;
   }
+
+  @media (max-width: 768px) {
+    .drawer {
+      max-width: 100%;
+    }
+  }
 </style>

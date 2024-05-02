@@ -63,4 +63,10 @@
     columns: 2;
     gap: 0 var(--spacing-large);
   }
+
+  @media (max-width: 768px) {
+    ul.columns-2 {
+      columns: 1;
+    }
+  }
 </style>

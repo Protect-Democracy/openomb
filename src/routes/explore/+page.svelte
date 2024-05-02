@@ -1,6 +1,8 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import AgencyExplorer from '$components/agencies/AgencyExplorer.svelte';
+  import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+
   export let data: PageData;
 </script>
 
@@ -17,6 +19,7 @@
   </p>
 
   <AgencyExplorer agencies={data.agencies} />
+  <ScrollToTop />
 </section>
 
 <style>

@@ -120,4 +120,11 @@
     padding-right: var(--spacing-double);
     margin-bottom: var(--spacing-double);
   }
+
+  @media (max-width: 768px) {
+    .bar {
+      flex-direction: column;
+      row-gap: var(--spacing-half);
+    }
+  }
 </style>

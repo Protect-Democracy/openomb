@@ -19,6 +19,10 @@ export async function load({ params }) {
       title: `Account: ${account.accountTitle} (Bureau: ${account.bureau.agency.budgetAgencyTitle})`,
       breadcrumbs: [
         {
+          title: account.bureau.agency.folder.folder,
+          url: `/folder/${account.bureau.agency.folder.folderId}`
+        },
+        {
           title: account.bureau.agency.budgetAgencyTitle,
           url: `/agency/${account.bureau.agency.budgetAgencyTitleId}`
         },

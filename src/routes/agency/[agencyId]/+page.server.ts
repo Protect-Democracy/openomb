@@ -20,7 +20,13 @@ export async function load({ params }) {
       agencyId: params.agencyId
     }),
     pageMeta: {
-      title: `Agency: ${agency.budgetAgencyTitle}`
+      title: `Agency: ${agency.budgetAgencyTitle}`,
+      breadcrumbs: [
+        {
+          title: agency.folder.folder,
+          url: `/folder/${agency.folder.folderId}`
+        }
+      ]
     }
   };
 }

@@ -223,4 +223,27 @@
     max-width: var(--spacing-double);
     color: var(--color-white);
   }
+
+  @media (max-width: 768px) {
+    .intro-visual {
+      display: none;
+    }
+
+    .intro-text {
+      width: 100%;
+    }
+
+    .summary-inner {
+      flex-direction: column;
+    }
+
+    .summary-stats {
+      margin-top: var(--spacing-large);
+      text-align: center;
+    }
+
+    .learn-items {
+      grid-auto-flow: row;
+    }
+  }
 </style>
