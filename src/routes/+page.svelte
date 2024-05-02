@@ -14,11 +14,13 @@
 <section class="intro">
   <div class="intro-inner page-container">
     <div class="intro-text">
-      <h1>Accessing apportionment data just got better.</h1>
+      <h1>Accessing federal budget data made easier.</h1>
 
       <p class="center-container">
         Updated daily, {siteName} is the easiest way to find and view information on how federal money
-        can be spent.
+        can be spent. It is a searchable archive of the U.S. Office of Management and Budget&apos;s apportionments
+        &mdash; the legally binding plans that OMB uses to make budgetary resources available to federal
+        agencies.
       </p>
 
       <div class="search">
