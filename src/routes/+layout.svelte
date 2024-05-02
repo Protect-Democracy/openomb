@@ -30,6 +30,7 @@
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
+  // TODO: Update this when ready to not have development notice
   const productionCheck = false; // !isProduction()
 </script>
 
@@ -70,7 +71,6 @@
   />
 
   <!-- eslint-enable svelte/valid-compile -->
-
   {#if sentryScript}
     <!-- Temporary use of Sentry browser integration -->
     <script src={sentryScript} crossorigin="anonymous"></script>

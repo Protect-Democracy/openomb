@@ -149,7 +149,11 @@
   }
 </script>
 
-<div class="search-select" class:is-open={openProxy} class:has-selected={$selected}>
+<div
+  class="search-select"
+  class:is-open={openProxy}
+  class:has-selected={$selected && $selected.value}
+>
   <div class="input-wrapper">
     <!-- TODO: Having the value as the placeholder doesn't seem right. -->
     <input {...$input} use:input placeholder={placeholderText($selected)} {id} {name} />
@@ -240,7 +244,6 @@
     padding-right: var(--spacing-double);
   }
 
-  /* Don't think this is working */
   .has-selected .input-wrapper input::placeholder {
     color: var(--color-text);
   }

@@ -1,11 +1,30 @@
 import adapter from '@sveltejs/adapter-node';
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import svelte_preprocess from 'svelte-preprocess';
+import autoprefixer from 'autoprefixer';
+import postcssNesting from 'postcss-nesting';
+import postcssCustomMedia from 'postcss-custom-media';
+import { cspHashes } from '@vitejs/plugin-legacy';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://kit.svelte.dev/docs/integrations#preprocessors
-  // for more information about preprocessors
-  preprocess: vitePreprocess(),
+  // for more information about preprocessors.
+  //
+  // The default is to use the vite preprocessor:
+  // import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+  // preprocess: vitePreprocess(),
+  preprocess: [
+    svelte_preprocess({
+      // Unfortunately we have to add the postcss plugins here
+      // so that components will work, as well as in
+      // vite.config.ts so global imports can use it. :/
+      // TODO: Actually, maybe we don't need this here at all
+      // TODO: and just in the vite.config.ts file.
+      postcss: {
+        plugins: [postcssNesting(), postcssCustomMedia(), autoprefixer()]
+      }
+    })
+  ],
 
   kit: {
     // See https://kit.svelte.dev/docs/adapters for more information about adapters.
@@ -30,7 +49,8 @@ const config = {
           'https://browser.sentry-cdn.com',
           'https://js.sentry-cdn.com',
           'nonce-SENTRY_SCRIPT_SETUP',
-          'nonce-js-check-02934091'
+          'nonce-js-check-02934091',
+          ...cspHashes.map((hash) => `sha256-${hash}`)
         ],
         // Doesn't seem like SvelteKit will handle inline styles by adding
         // a nonce like it does for JS, which is unfortunate.
