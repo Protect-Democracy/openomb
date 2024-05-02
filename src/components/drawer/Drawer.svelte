@@ -2,6 +2,7 @@
   import { createDialog } from '@melt-ui/svelte';
   import { fade, fly } from 'svelte/transition';
   import XSymbol from '$components/icons/XSymbol.svelte';
+  import { setContext } from 'svelte';
 
   // Allow for easy title and description without slots
   export let contentTitle = '';
@@ -12,6 +13,13 @@
     states: { open }
   } = createDialog({
     forceVisible: true
+  });
+
+  // Context to allow for closing
+  setContext('drawer', {
+    close: () => {
+      open.set(false);
+    }
   });
 </script>
 

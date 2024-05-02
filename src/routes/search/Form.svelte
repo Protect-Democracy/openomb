@@ -1,18 +1,28 @@
 <script lang="ts">
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
   import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
+  import { getContext } from 'svelte';
 
   export let url;
   export let agencyBureauOptions = [];
   export let yearOptions = [];
   export let lineOptions = [];
 
+  const drawerContext = getContext('drawer');
+
+  // Submit handler
+  function submitHandler() {
+    if (drawerContext) {
+      drawerContext.close();
+    }
+  }
+
   // TODO: It would be good to align this markup with the global styles,
   // specifically the use of .form-item.  The global styles could be
   // updated to reflect this, as they are not agreed upon yet.
 </script>
 
-<form method="get">
+<form method="get" on:submit={submitHandler}>
   <div class="field-col">
     <div class="field">
       <label for="term">Keyword</label>
@@ -27,6 +37,8 @@
         <SearchSelect
           id="agencyBureau-input"
           name="agencyBureau-input"
+          hiddenId="agencyBureau"
+          hiddenName="agencyBureau"
           options={agencyBureauOptions}
           formatGroupLabel={(o) => o.budgetAgencyTitle}
           formatGroupValue={(o) => o.budgetAgencyTitleId}

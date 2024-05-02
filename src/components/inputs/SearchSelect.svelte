@@ -26,6 +26,8 @@
   export let multi = false;
   export let id;
   export let name;
+  export let hiddenId;
+  export let hiddenName;
   export let value;
 
   export let formatOptionLabel = (o) => o;
@@ -33,6 +35,7 @@
   export let formatGroupLabel;
   export let formatGroupValue;
 
+  // Constants
   const emptyOption = { value: '', label: 'None' };
 
   // Get our option(s) that correspond to the provided value
@@ -54,6 +57,7 @@
     return multi ? defaultSelected : defaultSelected?.[0];
   }
 
+  // Melt combobox
   const dispatch = createEventDispatcher();
   const {
     elements: { menu, input, option, hiddenInput, group, groupLabel },
@@ -76,7 +80,11 @@
     }
   });
 
-  const groupedOptions = formatGroupLabel
+  // Derived
+  // For some reason the store, $open, causes issues with sveltekit rendering,
+  // specifically it claims the $open store is undefined.
+  $: openProxy = typeof $open !== 'undefined' ? $open : false;
+  $: groupedOptions = formatGroupLabel
     ? groupBy(options, formatGroupLabel)
     : {
         Options: options
@@ -141,21 +149,25 @@
   }
 </script>
 
-<div class="search-select">
+<div class="search-select" class:is-open={openProxy} class:has-selected={$selected}>
   <div class="input-wrapper">
-    <input {...$input} use:input placeholder={placeholderText($selected)} {id} />
+    <!-- TODO: Having the value as the placeholder doesn't seem right. -->
+    <input {...$input} use:input placeholder={placeholderText($selected)} {id} {name} />
 
     <div class="icon">
       <ChevronDown />
     </div>
   </div>
 
-  <input {name} {...$hiddenInput} use:hiddenInput use:fixFormReset />
+  <input {...$hiddenInput} use:hiddenInput use:fixFormReset id={hiddenId} name={hiddenName} />
 
-  {#if $open}
-    <ul {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
-      <!-- TODO: It's not valid HTML to use div's inside ul like this. -->
+  {#if openProxy}
+    <ul class="search-select-menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
+      <!-- TODO: It's not valid HTML to use div's inside ul like this, but Melt UI uses this in example. -->
 
+      <!-- eslint-disable -->
+
+      <!-- This still gives an eslint issue -->
       <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
       <div tabindex="0">
         {#if multi && $selected && $selected.length}
@@ -212,6 +224,8 @@
           <li class="no-results"><em>No results found</em></li>
         {/each}
       </div>
+
+      <!-- eslint-enable -->
     </ul>
   {/if}
 </div>
@@ -226,15 +240,25 @@
     padding-right: var(--spacing-double);
   }
 
+  /* Don't think this is working */
+  .has-selected .input-wrapper input::placeholder {
+    color: var(--color-text);
+  }
+
   .input-wrapper .icon {
     position: absolute;
     top: 50%;
     right: var(--spacing);
     translate: 0 calc(-50% + 1px);
     width: var(--spacing);
+    transition: var(--transition);
   }
 
-  .input-wrapper input.is-open {
+  .is-open .input-wrapper .icon {
+    transform: rotate(180deg);
+  }
+
+  .is-open .input-wrapper input {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
@@ -252,6 +276,23 @@
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     font-size: var(--font-size-small);
+  }
+
+  ul[data-side='top'] {
+    border-bottom: none;
+    border-top: var(--border-weight) solid var(--color-text);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+  }
+
+  /* The ul gets taken out of the flow when the menu is open. */
+  :global(body:has(ul.search-select-menu[data-side='top'])) .is-open .input-wrapper input {
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
   .group {
@@ -277,5 +318,9 @@
 
   .group-label {
     font-weight: var(--font-copy-weight-bold);
+  }
+
+  .no-results {
+    padding: var(--spacing);
   }
 </style>
