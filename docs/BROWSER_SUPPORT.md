@@ -23,4 +23,6 @@ Some other notable PostCSS plugins:
 
 ## Javascript
 
-To help ensure our output CSS is compatible with our targeted browsers, we ....
+To help ensure our output CSS is compatible with our targeted browsers, we utilize the Vite [legacy-plugin](https://www.npmjs.com/package/@vitejs/plugin-legacy), which utilizes Babel and it's integration with Browserslist.
+
+Note that this is not ideal, as Svelte has a hard time dealing with some very old things, so we have to force a bit of modernness (see the `vite.config.js` file). This means that we don't have really full support for our targeted browsers. This is another reason to ensure that the site is usable without javascript.
