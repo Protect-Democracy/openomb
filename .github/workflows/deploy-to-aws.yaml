@@ -56,7 +56,7 @@ jobs:
         id: task-definition-file
         run: |
           aws ecs describe-task-definition --task-definition arn:aws:ecs:${{ env.AWS_REGION }}:${{ env.AWS_ACCOUNT_ID }}:task-definition/${{ env.AWS_TASK_DEFINITION_FAMILY }} >> task-definition.json
-          cat task-defintion.json
+          cat task-definition.json
       - name: Set task definition output
         id: task-definition
         run: |
