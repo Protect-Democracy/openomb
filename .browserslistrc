@@ -1,0 +1,5 @@
+# Browsers that we support. Generally we are trying to be overly
+# inclusive and assume a US audience.
+# https://browsersl.ist/
+
+> 0.02%, last 3 versions, Firefox ESR, not dead

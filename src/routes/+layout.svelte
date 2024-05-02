@@ -70,7 +70,6 @@
   />
 
   <!-- eslint-enable svelte/valid-compile -->
-
   {#if sentryScript}
     <!-- Temporary use of Sentry browser integration -->
     <script src={sentryScript} crossorigin="anonymous"></script>
