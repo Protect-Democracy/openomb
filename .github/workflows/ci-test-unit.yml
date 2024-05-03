@@ -1,3 +1,6 @@
+# Execute unit tests on any push or pull request merge to main branch
+# Excludes several files that do not affect the code
+
 name: Unit Tests
 
 on:

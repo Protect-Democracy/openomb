@@ -1,3 +1,7 @@
+# Migrates database schema when files change in the db/migrations folder
+# Runs after a deployment has successfully completed, but only if files in the db/migrations folder have changed
+# See `changes` job below for details
+
 name: Migrate database
 
 on:

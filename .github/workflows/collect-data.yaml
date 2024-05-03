@@ -1,6 +1,12 @@
+# Collects data from OMB website and saves the results to S3 and Aurora DB
+# Runs on a schedule (TODO)
+
 name: Collect data
 
 on:
+  #schedule:
+  #  # Every day at 5:30 UTC
+  #  - cron: '30 5 * * *'
   workflow_dispatch:
 
 env:
