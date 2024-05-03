@@ -64,7 +64,7 @@ jobs:
       - name: Set task definition ARN
         id: aws_task_def_arn
         run: |
-          tofu output --raw ${{ TOFU_TASK_DEFINITION_OUTPUT }}
+          tofu output --raw ${{ env.TOFU_TASK_DEFINITION_OUTPUT }}
       - name: Set task definition env
         run: |
           echo "AWS_TASK_DEF_ARN=${{ steps.aws_task_def_arn.outputs.stdout }}" >> "$GITHUB_ENV"
