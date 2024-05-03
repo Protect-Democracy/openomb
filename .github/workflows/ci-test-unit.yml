@@ -6,19 +6,18 @@ on:
     paths-ignore:
       - 'tofu/**'
       - 'docs/**'
-      - '*.md'
-      - '.*'
       - 'tests/**'
+      - '**/*.md'
+      - '**/.*'
 
   pull_request:
     branches: [main]
     paths-ignore:
       - 'tofu/**'
       - 'docs/**'
-      - '*.md'
-      - '.*'
       - 'tests/**'
-
+      - '**/*.md'
+      - '**/.*'
 
 jobs:
   test:
