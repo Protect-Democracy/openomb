@@ -23,8 +23,13 @@
     socialTwitterCreator,
     socialTwitterImgPath
   } from '$config';
-  import favicon from '$assets/favicon/favicon.png';
   import pdLogo from '$assets/logos/pd-white-words-logo.svg';
+  import favAppleTouch from '$assets/favicon/apple-touch-icon.png';
+  import fav16 from '$assets/favicon/favicon-16x16.png';
+  import fav32 from '$assets/favicon/favicon-32x32.png';
+  import favIco from '$assets/favicon/favicon.ico';
+  import favSafari from '$assets/favicon/safari-pinned-tab.svg';
+
   import '../styles/index.css';
 
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
@@ -39,11 +44,19 @@
   <!-- eslint-disable svelte/valid-compile -->
   <title>{$pageMeta.title ? `${$pageMeta.title} | ` : ''}{siteName}</title>
 
-  <link rel="icon" href={favicon} />
-
   <meta name="author" content={$pageMeta.author || siteAuthor} />
   <meta name="description" content={$pageMeta.description || siteDescription} />
   <meta name="keywords" content={($pageMeta.keywords || siteKeywords).join(',')} />
+
+  <link rel="icon" type="image/png" sizes="32x32" href={fav32} />
+  <link rel="icon" type="image/png" sizes="16x16" href={fav16} />
+  <link rel="apple-touch-icon" sizes="180x180" href={favAppleTouch} />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="mask-icon" href={favSafari} color="#5bbad5" />
+  <link rel="shortcut icon" href={favIco} />
+  <meta name="msapplication-TileColor" content="#ffc40d" />
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+  <meta name="theme-color" content="#ffffff" />
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="{deployedBaseUrl}{$url.pathname}" />
