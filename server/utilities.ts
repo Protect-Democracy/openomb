@@ -52,6 +52,7 @@ type ApportionmentEnvironment = {
     | 'bucket-owner-full-control';
   awsSso: boolean;
   sentryDsn: string;
+  sentryReportUri: string;
   environment: string;
 };
 
@@ -93,6 +94,7 @@ function environmentVariables(): ApportionmentEnvironment {
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&
       process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false',
     sentryDsn: process.env['APPORTIONMENTS_SENTRY_DSN'] || '',
+    sentryReportUri: process.env['APPORTIONMENTS_SENTRY_REPORT_URI'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development'
   };
 }

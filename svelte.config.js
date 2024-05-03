@@ -1,9 +1,46 @@
+// Note: This file has to be .js and not .ts.  This limits what can be imported
+// here.
+//
+// See: https://github.com/sveltejs/kit/pull/4031
 import adapter from '@sveltejs/adapter-node';
 import svelte_preprocess from 'svelte-preprocess';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 import postcssCustomMedia from 'postcss-custom-media';
 import { cspHashes } from '@vitejs/plugin-legacy';
+
+// Get report URI
+const sentryReportUri = process.env['APPORTIONMENTS_SENTRY_REPORT_URI'] || '';
+
+// Abstract out the csp directives in case we want to shift to a report only
+// strategy.
+// https://kit.svelte.dev/docs/configuration#csp
+const cspDirectives = {
+  'script-src': [
+    'self',
+    'https://browser.sentry-cdn.com',
+    'https://js.sentry-cdn.com',
+    'nonce-SENTRY_SCRIPT_SETUP',
+    'nonce-js-check-02934091',
+    ...cspHashes.map((hash) => `sha256-${hash}`)
+  ],
+  // Doesn't seem like SvelteKit will handle inline styles by adding
+  // a nonce like it does for JS, which is unfortunate.
+  'style-src': ['self', 'unsafe-inline'],
+  'font-src': ['self'],
+  'connect-src': ['self', 'https://*.sentry.io'],
+  'img-src': ['self', 'data:'],
+  'frame-src': ['self', 'https://www.youtube.com/embed/'],
+  'worker-src': ['self'],
+  // Note: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri
+  // https://docs.sentry.io/product/security-policy-reporting/#content-security-policy
+  //
+  // In theory we should add a `report-to` directive here, but then that requires a separate
+  // `Report-To` header.  SvelteKit does not support this automatically so we would have to put that
+  // header in another part of the application.  That coupled with the fact that report-uri is actually
+  // more supported (though deprecated) means we aren't going to do report-to  right now.
+  'report-uri': sentryReportUri ? [sentryReportUri] : undefined
+};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -43,26 +80,11 @@ const config = {
     },
 
     csp: {
-      directives: {
-        'script-src': [
-          'self',
-          'https://browser.sentry-cdn.com',
-          'https://js.sentry-cdn.com',
-          'nonce-SENTRY_SCRIPT_SETUP',
-          'nonce-js-check-02934091',
-          ...cspHashes.map((hash) => `sha256-${hash}`)
-        ],
-        // Doesn't seem like SvelteKit will handle inline styles by adding
-        // a nonce like it does for JS, which is unfortunate.
-        'style-src': ['self', 'unsafe-inline'],
-        'font-src': ['self'],
-        'connect-src': ['self', 'https://*.sentry.io'],
-        'img-src': ['self', 'data:'],
-        'frame-src': ['self'],
-        'worker-src': ['self']
-        // TODO: Add report-uri to Sentry
-        // See: https://docs.sentry.io/product/security-policy-reporting/#content-security-policy
-      }
+      // https://kit.svelte.dev/docs/configuration#csp
+      directives: cspDirectives
+      // A very broad way to turn this off and debug is to not use
+      // directives, and just use readOnly
+      // reportOnly: cspDirectives
     }
   }
 };
