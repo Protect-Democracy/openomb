@@ -8,6 +8,7 @@ import { eq, and, countDistinct, asc, max } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
+import { memoizeDataAsync } from '../../server/cache';
 
 /**
  * Distinct agencies with file counts
@@ -349,3 +350,6 @@ export const tafsByAccount = async function (
     )
     .orderBy(tafs.tafsId, tafs.fiscalYear, tafs.iteration);
 };
+
+// Memoized
+export const mAgenciesWithChildren = memoizeDataAsync(agenciesWithChildren);

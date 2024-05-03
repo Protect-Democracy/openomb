@@ -9,6 +9,7 @@ import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
 import { subDays, startOfWeek, startOfDay } from 'date-fns';
+import { memoizeDataAsync } from '../../server/cache';
 
 /**
  * Get simple file record given file id
@@ -322,3 +323,6 @@ export const filesWithoutTafs = async function (folderId: string | undefined = u
 
   return foundFiles ? foundFiles.map((f) => f.files) : null;
 };
+
+// Memoized
+export const mFileStats = memoizeDataAsync(fileStats);
