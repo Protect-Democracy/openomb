@@ -12,6 +12,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import type { PutObjectRequest } from '@aws-sdk/client-s3';
 import { fromSSO } from '@aws-sdk/credential-providers';
 import moment from 'moment';
+import packageJson from '../package.json' assert { type: 'json' };
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -55,6 +56,9 @@ type ApportionmentEnvironment = {
   sentryReportUri: string;
   environment: string;
 };
+
+// Export package.json
+export { packageJson };
 
 /**
  * Get APPORTIONMENT_* variables from the environment.  These are variables
