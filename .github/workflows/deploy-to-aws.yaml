@@ -19,7 +19,7 @@ jobs:
   deploy:
     # Only run this job if the unit tests succeeded or if it was manually triggered
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    name: Push to ECR
+    name: Deploy to AWS
     runs-on: ubuntu-latest
 
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
