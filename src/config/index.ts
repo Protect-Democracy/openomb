@@ -2,7 +2,7 @@
  * Config for the application that are valid on both server and client.
  */
 
-export const deployedBaseUrl = 'https://apportionments.protectdemocracy.org';
+export const deployedBaseUrl = 'https://openomb.org';
 export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';
 export const siteDescription = `${siteName} allows for easier searching and navigation of apportionments
