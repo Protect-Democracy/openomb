@@ -1,5 +1,23 @@
 # Build and deployment
 
+## Overall architecture and infrastructure
+
+This section provides a high-level overview of the architecuture and cloud infrastructure for this project.
+
+The web application is written primarily in Typescript to be run on Node.js. This includes three parts: the web application, a data collection script, and a database migration procedure. Each of those elements in detailed below individually and in their own sections of the code, respectively. The database is meant to be deployed to a PostgreSQL instance.
+
+Infrastructure management is handled with OpenTofu and all AWS infrastructure is maintained through IaC files. The application and its related services is designed to be deployed to Amazon Web Services, though may be able to be adapted to another cloud provider. See the `tofu` directory for details on how the infrastructure is configured.
+
+Testing, building, and deploying is handled through CI/CD managed with GitHub Actions workflows. See the [workflows files](https://github.com/Protect-Democracy/apportionments/tree/main/.github/workflows) for more details on how they work.
+
+Additional configuration is stored in GitHub secrets and AWS Secrets Manager secrets, including the following:
+
+- AWS Account ID (GitHub Secrets)
+- Sentry configuration variables (GitHub Secrets and AWS Secrets Manager)
+- Amazon RDS user credentials (AWS Secrets Manager)
+
+Secrets Manager secrets are used to configure sensitive values in the OpenTofu files. GitHub Secrets are used in the CI/CD Actions scripts.
+
 ## Web application
 
 ### Build

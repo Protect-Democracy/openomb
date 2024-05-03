@@ -3,16 +3,11 @@ resource "aws_ecs_cluster" "apportionments_app" {
 }
 
 resource "aws_ecs_service" "apportionments_app" {
-  name                 = "apportionments-app"
-  task_definition      = aws_ecs_task_definition.apportionments_app.arn
-  cluster              = aws_ecs_cluster.apportionments_app.id
-  launch_type          = "FARGATE"
-  desired_count        = 1
-  force_new_deployment = true
-
-  triggers = {
-    redeployment = plantimestamp()
-  }
+  name            = "apportionments-app"
+  task_definition = aws_ecs_task_definition.apportionments_app.arn
+  cluster         = aws_ecs_cluster.apportionments_app.id
+  launch_type     = "FARGATE"
+  desired_count   = 1
 
   network_configuration {
     assign_public_ip = false
@@ -60,6 +55,14 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         {
           "name" : "APPORTIONMENTS_DB_NAME",
           "value" : "${aws_rds_cluster.apportionments.database_name}"
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_DSN"]
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
         }
       ],
       "secrets" : [
