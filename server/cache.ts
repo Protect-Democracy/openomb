@@ -53,7 +53,7 @@ export const cache = new LRUCache(cacheOptions);
  * Default TTL for anything
  */
 export function defaultTtl() {
-  return 1000 * 60 * 60 * 1;
+  return env.environment === 'production' ? 1000 * 60 * 60 * 1 : 2000;
 }
 
 /**
