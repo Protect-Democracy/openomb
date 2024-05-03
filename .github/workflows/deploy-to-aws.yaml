@@ -1,11 +1,11 @@
+# Builds a new docker image, pushes image to ECR, and deploys new image to ECS
+# Runs when a new release is released
+
 name: Deploy to AWS
 
 on:
-  workflow_run:
-    # TODO: Change to integration tests?
-    workflows: ['Unit Tests']
-    types: [completed]
-    branches: [main]
+  release:
+    types: [released]
   workflow_dispatch:
 
 env:
@@ -17,8 +17,6 @@ env:
 
 jobs:
   deploy:
-    # Only run this job if the unit tests succeeded or if it was manually triggered
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     name: Deploy to AWS
     runs-on: ubuntu-latest
 
@@ -47,7 +45,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata tags for Docker
         env:
           IMAGE_TAG: ${{ github.sha }}
         id: meta
@@ -68,14 +66,5 @@ jobs:
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
 
-      - name: Download task definition
-        run: |
-          aws ecs describe-task-definition --task-definition ${{ env.AWS_TASK_DEFINITION_FAMILY }} --query taskDefinition > task-definition.json
-
       - name: Deploy to Amazon ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          force-new-deployment: true
-          service: ${{ env.AWS_ECS_SERVICE }}
-          cluster: ${{ env.AWS_ECS_CLUSTER }}
+        run: aws ecs update-service --service ${{ env.AWS_ECS_SERVICE }} --force-new-deployment

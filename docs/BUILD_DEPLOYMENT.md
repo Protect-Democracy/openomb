@@ -46,7 +46,7 @@ This means that any additional commands to run the project code must be prefixed
 
 ### Deploy
 
-(todo)
+Deployment is handled by GitHub Actions automatically on `release`. See the [GitHub Actions deployment workflow](https://github.com/Protect-Democracy/apportionments/blob/main/.github/workflows/deploy-to-aws.yaml) for more details.
 
 ## Collection
 
@@ -85,7 +85,7 @@ npm run build
 
 ### Deploy
 
-(todo)
+Deployment is handled by GitHub Actions automatically on a timed schedule. See the [GitHub Actions collect data workflow](https://github.com/Protect-Democracy/apportionments/blob/main/.github/workflows/collect-data.yaml) for more details.
 
 ## Migrate
 
@@ -119,4 +119,4 @@ npm run build
 
 ### Deploy
 
-(todo)
+Deployment is handled by GitHub Actions automatically on release after a successful deployment if changes are detected in the `db/migrations` directory. See the [GitHub Actions database migration workflow](https://github.com/Protect-Democracy/apportionments/blob/main/.github/workflows/migrate-db.yaml) for more details.
