@@ -1,15 +1,11 @@
 name: Deploy to AWS
 
 on:
-  push:
-    branches: ['main']
-    paths-ignore:
-      - 'tofu/**'
-      - 'docs/**'
-      - '*.md'
-      - '.*'
-      - 'tests/**'
-
+  workflow_run:
+    # TODO: Change to integration tests?
+    workflows: ['Unit Tests']
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -21,7 +17,9 @@ env:
 
 jobs:
   deploy:
-    name: Push to ECR
+    # Only run this job if the unit tests succeeded or if it was manually triggered
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    name: Deploy to AWS
     runs-on: ubuntu-latest
 
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.

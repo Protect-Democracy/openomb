@@ -1,11 +1,10 @@
 name: Migrate database
 
 on:
-  push:
-    branches: ['main']
-    paths:
-      - 'db/migrations/**'
-
+  workflow_run:
+    workflows: ['Deploy to AWS']
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -16,7 +15,22 @@ env:
   tf_actions_working_dir: 'tofu'
 
 jobs:
-  deploy:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      db: ${{ steps.filter.outputs.db }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            db:
+              - 'db/migrations/**'
+  migrate:
+    # Run if database files have changed or if workflow is triggered manually
+    needs: changes
+    if: ${{ (github.event.workflow_run.conclusion == 'success' && needs.changes.outputs.db == 'true') || github.event_name == 'workflow_dispatch' }}
     name: Migrate database
     runs-on: ubuntu-latest
 
@@ -50,7 +64,7 @@ jobs:
       - name: Set task definition ARN
         id: aws_task_def_arn
         run: |
-          tofu output --raw ${{ TOFU_TASK_DEFINITION_OUTPUT }}
+          tofu output --raw ${{ env.TOFU_TASK_DEFINITION_OUTPUT }}
       - name: Set task definition env
         run: |
           echo "AWS_TASK_DEF_ARN=${{ steps.aws_task_def_arn.outputs.stdout }}" >> "$GITHUB_ENV"
