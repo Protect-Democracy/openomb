@@ -25,7 +25,7 @@
   export let groupByFile = false;
   export let hideFileHeader = false;
 
-  const tafsArray = Array.isArray(tafs) ? tafs : [tafs];
+  $: tafsArray = Array.isArray(tafs) ? tafs : [tafs];
 </script>
 
 <div class="tafs-block">
@@ -35,7 +35,8 @@
       tafsArray,
       (t) => `${t.budgetAgencyTitleId}/${t.budgetBureauTitleId}/${t.accountTitleId}`
     )}
-    {#each Object.keys(tafsByAccount) as accountId}
+
+    {#each Object.keys(tafsByAccount) as accountId (accountId)}
       {@const tafsById = groupBy(tafsByAccount[accountId], (t) => t.tafsId)}
       <div class:tafs-group={!hideAccountHeader}>
         {#if !hideAccountHeader}
@@ -43,7 +44,7 @@
             {tafsByAccount[accountId][0].accountTitle}
           </svelte:element>
         {/if}
-        {#each Object.keys(tafsById) as tafsId}
+        {#each Object.keys(tafsById) as tafsId (tafsId)}
           {@const tafsByYear = groupBy(tafsById[tafsId], (t) => t.fiscalYear)}
           <div class="tafs-entry">
             <svelte:element
@@ -52,13 +53,15 @@
             >
               TAFS {formatTafsFormattedId(tafsById[tafsId][0])}
             </svelte:element>
-            {#each Object.keys(tafsByYear) as fiscalYear}
+
+            {#each Object.keys(tafsByYear) as fiscalYear (fiscalYear)}
               <div class="tafs-files">
                 <div class="fiscal-year">
                   FY {fiscalYear}
                 </div>
+
                 <div class="iterations">
-                  {#each orderBy(tafsByYear[fiscalYear], 'iteration', 'asc') as tafIteration}
+                  {#each orderBy(tafsByYear[fiscalYear], 'iteration', 'asc') as tafIteration (tafIteration.tafsTableId)}
                     <div>
                       <a href={`/file/${tafIteration.fileId}#tafs_${tafIteration.tafsTableId}`}
                         >Iteration {tafIteration.iteration}</a
@@ -75,7 +78,7 @@
     <!-- If grouping by file, display File > TAFS -->
   {:else if groupByFile}
     {@const tafsByFile = groupBy(tafsArray, (t) => t.fileId)}
-    {#each Object.keys(tafsByFile) as fileId}
+    {#each Object.keys(tafsByFile) as fileId (fileId)}
       <div class:tafs-group={!hideFileHeader}>
         {#if !hideFileHeader}
           <svelte:element this={headerElement} class="tafs-title">
@@ -84,7 +87,7 @@
             </a>
           </svelte:element>
         {/if}
-        {#each tafsByFile[fileId] as tafsEntry}
+        {#each tafsByFile[fileId] as tafsEntry (tafsEntry.tafsTableId)}
           <div class="tafs-entry">
             <!-- If we aren't grouping by account, display full details -->
             <svelte:element

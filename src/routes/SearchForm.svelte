@@ -1,31 +1,28 @@
 <script lang="ts">
+  import Spinner from '$components/icons/Spinner.svelte';
   import SearchIcon from '$components/icons/Search.svelte';
 
-  let searchTerm = '';
+  // State
+  let submitting = false;
 </script>
 
-<form method="GET" action="/search">
+<form method="GET" action="/search" on:submit={() => (submitting = true)}>
   <div class="search-wrapper">
-    <input
-      type="text"
-      id="term"
-      name="term"
-      placeholder="Search apportionments"
-      on:change={(e) => {
-        searchTerm = e.target.value;
-      }}
-    />
+    <input type="text" id="term" name="term" placeholder="Search apportionments" />
     <div class="icon">
       <SearchIcon stroke-width="3" />
     </div>
   </div>
 
   <div class="actions">
-    {#if searchTerm.length}
-      <button type="submit">Search options</button>
-    {:else}
-      <a class="button" href="/search">Search options</a>
-    {/if}
+    <button type="submit" disabled={submitting}>
+      {#if submitting}
+        <span class="button-icon"><Spinner /></span>
+        Loading
+      {:else}
+        Search options
+      {/if}
+    </button>
 
     <a class="button like-link" href="/about">About our process</a>
   </div>

@@ -1,21 +1,30 @@
 <script lang="ts">
+  import Spinner from '$components/icons/Spinner.svelte';
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
   import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
+  import { submitting } from './form-store';
   import { getContext } from 'svelte';
 
+  // Props
   export let url;
   export let agencyBureauOptions = [];
   export let yearOptions = [];
   export let lineOptions = [];
 
+  // Context
   const drawerContext = getContext('drawer');
 
   // Submit handler
   function submitHandler() {
+    submitting.set(true);
+
     if (drawerContext) {
       drawerContext.close();
     }
   }
+
+  // Derived
+  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 
   // TODO: It would be good to align this markup with the global styles,
   // specifically the use of .form-item.  The global styles could be
@@ -138,7 +147,14 @@
   </div>
 
   <div class="field-col">
-    <button type="submit">Search</button>
+    <button type="submit" disabled={submittingProxy}>
+      {#if submittingProxy}
+        <span class="button-icon"><Spinner /></span>
+        Loading
+      {:else}
+        Search
+      {/if}
+    </button>
   </div>
 
   <div class="field-col">

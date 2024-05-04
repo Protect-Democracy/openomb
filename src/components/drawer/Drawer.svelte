@@ -7,6 +7,7 @@
   // Allow for easy title and description without slots
   export let contentTitle = '';
   export let contentDescription = '';
+  export let triggerProps = {};
 
   const {
     elements: { trigger, overlay, content, title, description, close, portalled },
@@ -23,7 +24,7 @@
   });
 </script>
 
-<button {...$trigger} use:trigger>
+<button {...$trigger} use:trigger {...triggerProps}>
   <slot name="trigger" />
 </button>
 

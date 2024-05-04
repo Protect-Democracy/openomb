@@ -226,6 +226,23 @@ a.button.compact {
   border-radius: var(--border-radius-small);
 }
 
+.button-icon {
+  display: inline-block;
+  height: 1.1em;
+  width: 1.1em;
+  margin-left: -1.5em;
+  margin-right: var(--spacing-half);
+  vertical-align: text-top;
+}
+
+.compact .button-icon {
+  display: inline-block;
+  height: 1.1em;
+  width: 1.1em;
+  margin: 0;
+  vertical-align: sub;
+}
+
 /* Forms */
 
 /* Generic form item container */

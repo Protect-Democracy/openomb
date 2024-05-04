@@ -3,12 +3,19 @@
   import { formatDate } from '$lib/formatters';
   import Drawer from '$components/drawer/Drawer.svelte';
   import XSymbol from '$components/icons/XSymbol.svelte';
+  import Spinner from '$components/icons/Spinner.svelte';
+  import { submitting } from './form-store';
   import Form from './Form.svelte';
 
+  // Props
   export let url: URL;
   export let agencyBureauOptions = [];
   export let yearOptions = [];
   export let lineOptions = [];
+
+  // Derived
+  // eslint-disable-next-line svelte/valid-compile
+  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 
   // It might make sense to just use links instead of buttons, but given
   // that this filter version doesn't show up for non-js users,
@@ -52,8 +59,20 @@
 
 <div class="bar">
   <div class="search-toggle">
-    <Drawer contentTitle="Search Apportionments">
-      <svelte:fragment slot="trigger">Adjust Search</svelte:fragment>
+    <Drawer
+      contentTitle="Search Apportionments"
+      triggerProps={submittingProxy ? { disabled: true } : {}}
+    >
+      <svelte:fragment slot="trigger">
+        <span>
+          {#if submittingProxy}
+            <span class="button-icon"><Spinner /></span>
+            Loading
+          {:else}
+            Adjust Search
+          {/if}
+        </span>
+      </svelte:fragment>
 
       <svelte:fragment slot="title">
         <h2 class="h3-alt drawer-title">Search apportionments</h2>

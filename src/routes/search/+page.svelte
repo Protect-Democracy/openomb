@@ -7,6 +7,8 @@
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
   import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
+  import { submitting } from './form-store';
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 
   // Props
@@ -17,6 +19,22 @@
 
   // State
   let sortFormEl: HTMLFormElement;
+
+  // When we navigate on the client and JS enabled, we want to communicate
+  // that the form is being submitted.
+  beforeNavigate((navigation) => {
+    // TODO: Is there a better way to compare path so it's not hardcoded like this?
+    const from =
+      navigation?.from?.url.pathname === $url.pathname ? navigation?.from?.url.href : null;
+    const to = navigation?.from?.url.pathname === $url.pathname ? navigation?.to?.url.href : null;
+
+    if (from && to && from !== to) {
+      submitting.set(true);
+    }
+  });
+  afterNavigate(() => {
+    submitting.set(false);
+  });
 
   // This seems annoying, but if we want the Sort form to be submittable without JS
   // we need to account for the values from the main Search form, as the GET action
@@ -46,6 +64,9 @@
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
+    // For some reason this doesn't trigger the navigation
+    submitting.set(true);
+
     sortFormEl.submit();
   }
 </script>
@@ -136,6 +157,7 @@
       <div class="pagination">
         <UrlPagination perPage={data.pageSize} total={resultCount} />
       </div>
+
       <ScrollToTop />
     </div>
   {:else if hasSearched}

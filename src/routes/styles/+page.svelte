@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Spinner from '$components/icons/Spinner.svelte';
   import placeholderImage from '$assets/other/placeholder-600.png';
 
   const paletteColors = [
@@ -294,6 +295,33 @@
 
   <button aria-pressed="true">On</button>
   <button aria-pressed="false">Off</button>
+
+  <h3>Icons</h3>
+
+  <button disabled>
+    <span class="button-icon"><Spinner /></span>
+    Loading
+  </button> <br />
+
+  <button class="compact" disabled>
+    <span class="button-icon"><Spinner /></span>
+    Compact
+  </button> <br />
+
+  <button class="compact" disabled>
+    <span class="button-icon"><Spinner /></span>
+    <span class="sr-only">Compact with icon in it</span>
+  </button> <br />
+
+  <button class="compact small" disabled>
+    <span class="button-icon"><Spinner /></span>
+    Compact
+  </button> <br />
+
+  <button class="compact small alt" disabled>
+    <span class="button-icon"><Spinner /></span>
+    <span class="sr-only">Compact with icon in it</span>
+  </button>
 
   <h3>Variants</h3>
 
