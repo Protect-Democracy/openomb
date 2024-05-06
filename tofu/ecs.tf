@@ -141,6 +141,7 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
   ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
+  task_role_arn      = aws_iam_role.collect.arn
 
   # Minimum values for Fargate
   cpu                      = 1024
@@ -191,6 +192,7 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
   ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
+  task_role_arn      = aws_iam_role.db_migration.arn
 
   # Minimum values for Fargate
   cpu                      = 256
