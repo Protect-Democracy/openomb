@@ -12,7 +12,7 @@ on:
 env:
   AWS_REGION: 'us-west-2'
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_ROLE_TO_ASSUME: 'github-actions-collect'
+  AWS_ROLE_TO_ASSUME: 'apportionments-app-task-execution-role'
   TOFU_TASK_DEFINITION_OUTPUT: 'collect_task_definition_arn'
   tf_actions_working_dir: 'tofu'
 
