@@ -18,7 +18,7 @@ on:
 env:
   AWS_REGION: 'us-west-2'
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_ROLE_TO_ASSUME: 'github-actions-collect'
+  AWS_ROLE_TO_ASSUME: 'apportionments-app-task-execution-role'
   TOFU_TASK_DEFINITION_OUTPUT: 'collect_task_definition_arn'
   tf_actions_working_dir: 'tofu'
 
@@ -43,7 +43,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_ROLE_TO_ASSUME }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-${{ github.repository_owner }}-${{ github.event.repository.name }}
           aws-region: ${{ env.AWS_REGION }}
           unset-current-credentials: true
 

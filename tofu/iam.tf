@@ -150,12 +150,12 @@ resource "aws_iam_role_policy_attachment" "github_actions" {
 # GitHub Actions DB migration role
 ###################
 
-resource "aws_iam_role" "github_actions_db_migration" {
-  name               = "github-actions-db-migration"
+resource "aws_iam_role" "db_migration" {
+  name               = "db-migration"
   assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
 }
 
-data "aws_iam_policy_document" "github_actions_db_migration" {
+data "aws_iam_policy_document" "db_migration" {
   statement {
     actions = ["ecs:RunTask"]
     resources = [
@@ -198,27 +198,27 @@ data "aws_iam_policy_document" "github_actions_db_migration" {
   }
 }
 
-resource "aws_iam_policy" "github_actions_db_migration" {
-  name        = "github-actions-db-migration"
-  description = "Grant Github Actions the ability to run tasks on ECS"
-  policy      = data.aws_iam_policy_document.github_actions_db_migration.json
+resource "aws_iam_policy" "db_migration" {
+  name        = "db-migration"
+  description = "Grant the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.db_migration.json
 }
 
-resource "aws_iam_role_policy_attachment" "github_actions_db_migration" {
-  role       = aws_iam_role.github_actions_db_migration.name
-  policy_arn = aws_iam_policy.github_actions_db_migration.arn
+resource "aws_iam_role_policy_attachment" "db_migration" {
+  role       = aws_iam_role.db_migration.name
+  policy_arn = aws_iam_policy.db_migration.arn
 }
 
 ###################
 # GitHub Actions collect role
 ###################
 
-resource "aws_iam_role" "github_actions_collect" {
-  name               = "github-actions-collect"
+resource "aws_iam_role" "collect" {
+  name               = "collect"
   assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
 }
 
-data "aws_iam_policy_document" "github_actions_collect" {
+data "aws_iam_policy_document" "collect" {
   statement {
     actions = ["ecs:RunTask"]
     resources = [
@@ -267,13 +267,13 @@ data "aws_iam_policy_document" "github_actions_collect" {
   }
 }
 
-resource "aws_iam_policy" "github_actions_collect" {
-  name        = "github-actions-collect"
-  description = "Grant Github Actions the ability to run tasks on ECS"
-  policy      = data.aws_iam_policy_document.github_actions_collect.json
+resource "aws_iam_policy" "collect" {
+  name        = "collect"
+  description = "Grant the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.collect.json
 }
 
-resource "aws_iam_role_policy_attachment" "github_actions_collect" {
-  role       = aws_iam_role.github_actions_collect.name
-  policy_arn = aws_iam_policy.github_actions_collect.arn
+resource "aws_iam_role_policy_attachment" "collect" {
+  role       = aws_iam_role.collect.name
+  policy_arn = aws_iam_policy.collect.arn
 }
