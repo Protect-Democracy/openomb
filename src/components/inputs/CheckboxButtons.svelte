@@ -15,6 +15,7 @@
 
 <script lang="ts">
   import { createToggleGroup } from '@melt-ui/svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let options: string[] | Record<string, unknown>[];
   export let multi = false;
@@ -26,17 +27,22 @@
   export let formatOptionLabel = (o) => o;
   export let formatOptionValue = (o) => o;
 
+  const dispatch = createEventDispatcher();
   const {
     elements: { root, item },
     states: { value },
     helpers: { isPressed }
   } = createToggleGroup({
     type: multi ? 'multiple' : 'single',
-    defaultValue
+    defaultValue,
+    onValueChange: ({ next }) => {
+      dispatch('change', next);
+      return next;
+    }
   });
 
   // Our selected values do not properly clear on reset, so we need to
-  //  add an event to our hidden input
+  //  add an event to our form input(s)
   //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
   function fixFormReset(el) {
     const form = el.form;
@@ -58,23 +64,37 @@
   }
 </script>
 
-<input
-  id={id || name}
-  {name}
-  type="hidden"
-  value={multi ? JSON.stringify($value) : $value}
-  use:fixFormReset
-/>
-<div {...$root} use:root class="toggle-group" aria-label={name}>
+<div class="has-js-only-block">
+  <div {...$root} use:root class="toggle-group" aria-label={name}>
+    {#each options as option}
+      <button
+        class="compact alt toggle-item"
+        {...$item(`${formatOptionValue(option)}`)}
+        use:item
+        aria-label={formatOptionLabel(option)}
+        aria-pressed={$isPressed(`${formatOptionValue(option)}`)}
+      >
+        {formatOptionLabel(option)}
+      </button>
+    {/each}
+  </div>
+</div>
+
+<!-- No-js backup, but also used to track the value of our js form element -->
+<div class="no-js-only-block checkboxes-inline">
   {#each options as option}
-    <button
-      class="compact alt toggle-item"
-      {...$item(`${formatOptionValue(option)}`)}
-      use:item
-      aria-label={formatOptionLabel(option)}
-      aria-pressed={$isPressed(`${formatOptionValue(option)}`)}
-    >
-      {formatOptionLabel(option)}
-    </button>
+    <div class="checkbox">
+      <input
+        type="checkbox"
+        {name}
+        id={id || name}
+        value={formatOptionValue(option)}
+        checked={$value.includes(`${formatOptionValue(option)}`)}
+        use:fixFormReset
+      />
+      <label for={formatOptionValue(option)}>
+        {formatOptionLabel(option)}
+      </label>
+    </div>
   {/each}
 </div>
