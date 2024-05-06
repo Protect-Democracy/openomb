@@ -24,7 +24,12 @@
     elements: { tree }
   } = treeContext;
 
-  // Action to adjust our element styles and force correct column breaks
+  // Action to adjust our element styles and force correct column breaks.
+  //
+  // TODO: Given that this doesn't work in all browsers, and without
+  // it you get a weird movement of content, we may just need to embrace
+  // adding <div>s around <li>s to force a break.  Floats, flexbox, grid
+  // won't do what we want here.
   const preventColumnShift: Action<HTMLUListElement> = (node) => {
     const children = node.querySelectorAll(':scope > li');
     let lastTop = 0;
@@ -37,13 +42,17 @@
           '--webkit-break-before': 'column'
         });
       }
-      // Firefox does not support break-before in columns
-      // Prevent from breaking within column element at least
+      lastTop = item.offsetTop;
+    });
+
+    // Firefox does not support break-before in columns
+    // Prevent from breaking within column element at least.
+    // Make sure to do after we do our checks above.
+    [...children].forEach((item) => {
       Object.assign(item.style, {
         'break-inside': 'avoid-column',
         '-webkit-column-break-inside': 'avoid-column'
       });
-      lastTop = item.offsetTop;
     });
   };
 </script>
@@ -54,6 +63,7 @@
 
 <style>
   ul {
+    position: relative;
     list-style: none;
     margin: 0 0 var(--spacing-double) 0;
     padding: 0;

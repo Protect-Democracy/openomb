@@ -172,13 +172,17 @@ kbd,
 code,
 samp,
 pre {
-  background-color: var(--color-gray-light);
+  background-color: var(--color-gray-lighter);
   border: var(--border-weight-thin) solid var(--color-gray-medium);
   border-radius: var(--border-radius-small);
   padding: var(--spacing-small);
   font-size: var(--font-size-small);
   list-style: var(--line-height);
   font-family: var(--font-family-monospace);
+}
+
+pre {
+  padding: var(--spacing);
 }
 
 abbr {

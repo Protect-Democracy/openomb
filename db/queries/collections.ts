@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { desc, isNotNull } from 'drizzle-orm';
+import { desc, eq, isNotNull } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { collections } from '../schema/collections';
 
@@ -20,4 +20,16 @@ export const completed = async function () {
     .orderBy(desc(collections.complete));
 
   return found || [];
+};
+
+/**
+ * Last updated date of collections
+ */
+export const lastUpdated = async function () {
+  await dbConnect();
+
+  return await db.query.collections.findFirst({
+    where: eq(collections.status, 'completed'),
+    orderBy: desc(collections.complete)
+  });
 };
