@@ -1,6 +1,7 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
   import type { PageData } from './$types';
+  import { prefersReducedMotion } from '$lib/utilities';
   import {
     formatCurrency,
     formatFileTitle,
@@ -9,7 +10,13 @@
   } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 
+  // Props
   export let data: PageData;
+
+  // Constants
+  const transitionTime = 300;
+
+  // Derived
   $: ({ file } = data);
   $: ({ tafs, footnotes } = file);
 
@@ -27,6 +34,7 @@
     });
   });
 
+  // Methods
   function toggleFootnote(id: string, event: Event): void {
     event?.preventDefault();
     footnotesExpanded = {
@@ -179,15 +187,14 @@
                     {/if}
                   </td>
                 </tr>
+
                 {#if line.footnotes && line.footnotes.length > 0}
                   <tr
-                    transition:slide={{}}
-                    class="footnote-row"
-                    class:expanded={footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineIndex}`]}
+                    class="footnote-row no-js-only-table-row"
                     id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
                   >
-                    <th colspan="2" scope="row"
-                      >Footnotes for line {line.lineNumber}{line.lineSplit
+                    <th colspan="2" scope="row">
+                      Footnotes for line {line.lineNumber}{line.lineSplit
                         ? ` (${line.lineSplit})`
                         : ''}:</th
                     >
@@ -197,6 +204,35 @@
                           <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
                         </p>
                       {/each}
+                    </td>
+                  </tr>
+                {/if}
+
+                {#if line.footnotes && line.footnotes.length > 0 && footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineIndex}`]}
+                  <!-- TODO: TRs don't care about height and so slide() transition does not work on them.  Tried creating a custom transition that managed max-height, but that did not work.  Adding transition to inner elements here works, but its a bit jumpy with the tr thing.  -->
+                  <tr
+                    class="footnote-row has-js-only-table-row"
+                    id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
+                  >
+                    <th colspan="2" scope="row">
+                      <div
+                        transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}
+                      >
+                        Footnotes for line {line.lineNumber}{line.lineSplit
+                          ? ` (${line.lineSplit})`
+                          : ''}:
+                      </div></th
+                    >
+                    <td colspan="3">
+                      <div
+                        transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}
+                      >
+                        {#each line.footnotes as footnote}
+                          <p>
+                            <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
+                          </p>
+                        {/each}
+                      </div>
                     </td>
                   </tr>
                 {/if}
@@ -286,30 +322,5 @@
     p {
       margin-bottom: var(--spacing);
     }
-  }
-
-  :global(.has-js) {
-    /* TODO: Seems like there should be a better way to do this */
-    .footnote-row {
-      position: absolute;
-      transform: translateY(-100%);
-      z-index: -1000;
-      overflow: hidden;
-      transition: all 0.3s;
-      opacity: 0;
-      visibility: hidden;
-
-      &.expanded {
-        position: inherit;
-        transform: translateY(0);
-        z-index: inherit;
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-  }
-
-  :global(.no-js) {
-    display: table-row;
   }
 </style>

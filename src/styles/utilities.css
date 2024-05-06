@@ -67,25 +67,38 @@
 .no-js .no-js-only-block {
   display: block;
 }
-.no-js .no-js-only-inline {
-  display: block;
-}
-.has-js .no-js-only-block {
-  display: none;
-}
-.has-js .no-js-only-inline {
-  display: none;
-}
-
 .no-js .has-js-only-block {
   display: none;
 }
-.no-js .has-js-only-inline {
+.has-js .no-js-only-block {
   display: none;
 }
 .has-js .has-js-only-block {
   display: block;
 }
+
+.no-js .no-js-only-inline {
+  display: block;
+}
+.no-js .has-js-only-inline {
+  display: none;
+}
 .has-js .has-js-only-inline {
   display: block;
+}
+.has-js .no-js-only-inline {
+  display: none;
+}
+
+.no-js .no-js-only-table-row {
+  display: table-row;
+}
+.no-js .has-js-only-table-row {
+  display: none;
+}
+.has-js .has-js-only-table-row {
+  display: table-row;
+}
+.has-js .no-js-only-table-row {
+  display: none;
 }

@@ -4,7 +4,30 @@
  * Note some exceptions to make things easier, i.e. .h* classes.
  */
 
+/**
+ * Reduced motion preference.  It may make sense to have some mild
+ * transitions for things, but this is a good catch-all
+ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  * {
+    animation-delay: 0ms !important;
+    animation-duration: 1ms !important;
+    transition-duration: 0ms !important;
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Page */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-family-copy);
   font-weight: var(--font-copy-weight-normal);

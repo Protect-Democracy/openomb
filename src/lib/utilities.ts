@@ -51,3 +51,11 @@ export const secondsToZonedTime = function (
 
   return Math.max(diffSeconds, minimumSeconds);
 };
+
+/**
+ * Check if prefers reduced motion.  Might not run in browser.
+ *
+ * TODO: Ideally this is a store that changes if the preference changes.
+ */
+export const prefersReducedMotion =
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)')?.matches;
