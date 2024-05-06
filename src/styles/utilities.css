@@ -78,13 +78,13 @@
 }
 
 .no-js .no-js-only-inline {
-  display: block;
+  display: inline-block;
 }
 .no-js .has-js-only-inline {
   display: none;
 }
 .has-js .has-js-only-inline {
-  display: block;
+  display: inline-block;
 }
 .has-js .no-js-only-inline {
   display: none;
