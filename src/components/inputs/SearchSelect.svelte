@@ -19,15 +19,13 @@
   import { createCombobox } from '@melt-ui/svelte';
   import { fly } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
-  import { groupBy } from 'lodash-es';
+  import { groupBy, uniqBy } from 'lodash-es';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
   export let options: string[] | Record<string, unknown>[];
   export let multi = false;
   export let id;
   export let name;
-  export let hiddenId;
-  export let hiddenName;
   export let value;
 
   export let formatOptionLabel = (o) => o;
@@ -60,7 +58,7 @@
   // Melt combobox
   const dispatch = createEventDispatcher();
   const {
-    elements: { menu, input, option, hiddenInput, group, groupLabel },
+    elements: { menu, input, option, group, groupLabel },
     states: { open, inputValue, touchedInput, selected },
     helpers: { isSelected, isHighlighted }
   } = createCombobox({
@@ -85,7 +83,7 @@
   // specifically it claims the $open store is undefined.
   $: openProxy = typeof $open !== 'undefined' ? $open : false;
   $: groupedOptions = formatGroupLabel
-    ? groupBy(options, formatGroupLabel)
+    ? groupBy(uniqBy(options, formatGroupOptionValue), formatGroupLabel)
     : {
         Options: options
       };
@@ -131,7 +129,7 @@
   }
 
   // Our selected values do not properly clear on reset, so we need to
-  //  add an event to our hidden input
+  //  add an event to our form input(s)
   //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
   function fixFormReset(el) {
     const form = el.form;
@@ -149,89 +147,115 @@
   }
 </script>
 
-<div
-  class="search-select"
-  class:is-open={openProxy}
-  class:has-selected={$selected && $selected.value}
->
-  <div class="input-wrapper">
-    <!-- TODO: Having the value as the placeholder doesn't seem right. -->
-    <input {...$input} use:input placeholder={placeholderText($selected)} {id} {name} />
+<div class="has-js-only-block">
+  <div
+    class="search-select"
+    class:is-open={openProxy}
+    class:has-selected={$selected && $selected.value}
+  >
+    <div class="input-wrapper">
+      <!-- TODO: Having the value as the placeholder doesn't seem right. -->
+      <input
+        {...$input}
+        use:input
+        placeholder={placeholderText($selected)}
+        id={`${id || name}-input`}
+      />
 
-    <div class="icon">
-      <ChevronDown />
-    </div>
-  </div>
-
-  <input {...$hiddenInput} use:hiddenInput use:fixFormReset id={hiddenId} name={hiddenName} />
-
-  {#if openProxy}
-    <ul class="search-select-menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
-      <!-- TODO: It's not valid HTML to use div's inside ul like this, but Melt UI uses this in example. -->
-
-      <!-- eslint-disable -->
-
-      <!-- This still gives an eslint issue -->
-      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-      <div tabindex="0">
-        {#if multi && $selected && $selected.length}
-          <div class="group" {...$group('selected')} use:group>
-            <div class="group-label" {...$groupLabel('selected')} use:groupLabel>Selected</div>
-            {#each $selected as selectedValue}
-              <li
-                class:selected
-                class:highlighted={$isHighlighted(formatGroupOptionValue(selectedValue.value))}
-                {...$option({
-                  value: selectedValue.value,
-                  label: selectedValue.label
-                })}
-                use:option
-              >
-                {selectedValue.label}
-              </li>
-            {/each}
-          </div>
-        {/if}
-
-        {#if !multi}
-          <li
-            class:selected={$isSelected('')}
-            class:highlighted={$isHighlighted('')}
-            {...$option(emptyOption)}
-            use:option
-          >
-            {emptyOption.label}
-          </li>
-        {/if}
-
-        {#each Object.keys(filteredGroupOptions) as groupName}
-          <div class="group" {...$group(groupName)} use:group>
-            <div class="group-label" {...$groupLabel(groupName)} use:groupLabel>
-              {groupName}
-            </div>
-
-            {#each filteredGroupOptions[groupName] as opt, index (index)}
-              <li
-                class:selected={$isSelected(formatGroupOptionValue(opt))}
-                class:highlighted={$isHighlighted(formatGroupOptionValue(opt))}
-                {...$option({
-                  value: formatGroupOptionValue(opt),
-                  label: formatOptionLabel(opt)
-                })}
-                use:option
-              >
-                {formatOptionLabel(opt)}
-              </li>
-            {/each}
-          </div>
-        {:else}
-          <li class="no-results"><em>No results found</em></li>
-        {/each}
+      <div class="icon">
+        <ChevronDown />
       </div>
+    </div>
 
-      <!-- eslint-enable -->
-    </ul>
-  {/if}
+    {#if openProxy}
+      <ul class="search-select-menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
+        <!-- TODO: It's not valid HTML to use div's inside ul like this, but Melt UI uses this in example. -->
+
+        <!-- eslint-disable -->
+
+        <!-- This still gives an eslint issue -->
+        <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+        <div tabindex="0">
+          {#if multi && $selected && $selected.length}
+            <div class="group" {...$group('selected')} use:group>
+              <div class="group-label" {...$groupLabel('selected')} use:groupLabel>Selected</div>
+              {#each $selected as selectedValue}
+                <li
+                  class:selected
+                  class:highlighted={$isHighlighted(formatGroupOptionValue(selectedValue.value))}
+                  {...$option({
+                    value: selectedValue.value,
+                    label: selectedValue.label
+                  })}
+                  use:option
+                >
+                  {selectedValue.label}
+                </li>
+              {/each}
+            </div>
+          {/if}
+
+          {#if !multi}
+            <li
+              class:selected={$isSelected(emptyOption.value)}
+              class:highlighted={$isHighlighted(emptyOption.value)}
+              {...$option(emptyOption)}
+              use:option
+            >
+              {emptyOption.label}
+            </li>
+          {/if}
+
+          {#each Object.keys(filteredGroupOptions) as groupName}
+            <div class="group" {...$group(groupName)} use:group>
+              <div class="group-label" {...$groupLabel(groupName)} use:groupLabel>
+                {groupName}
+              </div>
+
+              {#each filteredGroupOptions[groupName] as opt (formatGroupOptionValue(opt))}
+                <li
+                  class:selected={$isSelected(formatGroupOptionValue(opt))}
+                  class:highlighted={$isHighlighted(formatGroupOptionValue(opt))}
+                  {...$option({
+                    value: formatGroupOptionValue(opt),
+                    label: formatOptionLabel(opt)
+                  })}
+                  use:option
+                >
+                  {formatOptionLabel(opt)}
+                </li>
+              {/each}
+            </div>
+          {:else}
+            <li class="no-results"><em>No results found</em></li>
+          {/each}
+        </div>
+
+        <!-- eslint-enable -->
+      </ul>
+    {/if}
+  </div>
+</div>
+
+<!-- No-js backup, but also used to track the value of our js form element -->
+<div class="no-js-only-block">
+  <select {name} id={id || name} multiple={multi} use:fixFormReset>
+    <option value={emptyOption.value} selected={$isSelected(emptyOption.value)}>
+      {emptyOption.label}
+    </option>
+    {#each Object.keys(filteredGroupOptions) as groupName}
+      <optgroup label={groupName}>
+        {#each filteredGroupOptions[groupName] as opt (formatGroupOptionValue(opt))}
+          <option
+            selected={$isSelected(formatGroupOptionValue(opt))}
+            value={formatGroupOptionValue(opt)}
+          >
+            {formatOptionLabel(opt)}
+          </option>
+        {/each}
+      </optgroup>
+    {/each}
+  </select>
 </div>
 
 <style>

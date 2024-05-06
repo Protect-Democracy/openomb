@@ -38,24 +38,19 @@
       <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
     </div>
 
-    <!-- TODO: We can turn this into a regular search for no-js, but the backend does not support that format yet. -->
-    <div class="has-js-only-block">
-      <div class="field">
-        <label for="agencyBureau-input">Agency and bureau</label>
+    <div class="field">
+      <label for="agencyBureau-input">Agency and bureau</label>
 
-        <SearchSelect
-          id="agencyBureau-input"
-          name="agencyBureau-input"
-          hiddenId="agencyBureau"
-          hiddenName="agencyBureau"
-          options={agencyBureauOptions}
-          formatGroupLabel={(o) => o.budgetAgencyTitle}
-          formatGroupValue={(o) => o.budgetAgencyTitleId}
-          formatOptionLabel={(o) => o.budgetBureauTitle}
-          formatOptionValue={(o) => o.budgetBureauTitleId}
-          value={url.searchParams.get('agencyBureau') || ''}
-        />
-      </div>
+      <SearchSelect
+        id="agencyBureau"
+        name="agencyBureau"
+        options={agencyBureauOptions}
+        formatGroupLabel={(o) => o.budgetAgencyTitle}
+        formatGroupValue={(o) => o.budgetAgencyTitleId}
+        formatOptionLabel={(o) => o.budgetBureauTitle}
+        formatOptionValue={(o) => o.budgetBureauTitleId}
+        value={url.searchParams.get('agencyBureau') || ''}
+      />
     </div>
 
     <div class="field">
@@ -75,19 +70,16 @@
   </div>
 
   <div class="field-col">
-    <!-- TODO: Turn this into checkboxes for no-js users and update backend to handle it. -->
-    <div class="has-js-only-block">
-      <div class="field">
-        <label for="year">Fiscal year</label>
+    <div class="field">
+      <label for="year">Fiscal year</label>
 
-        <CheckboxButtons
-          id="year"
-          name="year"
-          options={yearOptions}
-          value={url.searchParams.get('year') ? JSON.parse(url.searchParams.get('year')) : []}
-          multi
-        />
-      </div>
+      <CheckboxButtons
+        id="year"
+        name="year"
+        options={yearOptions}
+        value={url.searchParams.getAll('year')}
+        multi
+      />
     </div>
 
     <div class="field">
@@ -113,36 +105,28 @@
       </div>
     </div>
 
-    <!-- TODO: We can turn this into a regular search for no-js, but the backend does not support that format yet. -->
-    <div class="has-js-only-block">
-      <div class="field">
-        <label for="lineNum">Has line number</label>
+    <div class="field">
+      <label for="lineNum">Has line number</label>
 
-        <SearchSelect
-          id="lineNum"
-          name="lineNum"
-          options={lineOptions}
-          value={url.searchParams.get('lineNum') ? JSON.parse(url.searchParams.get('lineNum')) : []}
-          multi
-        />
-      </div>
+      <SearchSelect
+        id="lineNum"
+        name="lineNum"
+        options={lineOptions}
+        value={url.searchParams.getAll('lineNum')}
+        multi
+      />
     </div>
 
-    <!-- TODO: Turn this into checkboxes for no-js users and update backend to handle it. -->
-    <div class="has-js-only-block">
-      <div class="field">
-        <label for="footnoteNum">Has Footnote</label>
+    <div class="field">
+      <label for="footnoteNum">Has Footnote</label>
 
-        <CheckboxButtons
-          id="footnoteNum"
-          name="footnoteNum"
-          options={['A', 'B']}
-          value={url.searchParams.get('footnoteNum')
-            ? JSON.parse(url.searchParams.get('footnoteNum'))
-            : []}
-          multi
-        />
-      </div>
+      <CheckboxButtons
+        id="footnoteNum"
+        name="footnoteNum"
+        options={['A', 'B']}
+        value={url.searchParams.getAll('footnoteNum')}
+        multi
+      />
     </div>
   </div>
 

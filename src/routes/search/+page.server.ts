@@ -10,6 +10,11 @@ import { bureaus } from '$queries/tafs';
 import { sortOptions } from '$config/search';
 import type { PageServerData } from '../$types';
 
+function convertArrayToSqlString(params: string[]) {
+  // Our SQL expects an array of comma-separated values with no brackets or quotes
+  return JSON.stringify(params).replace(/\[|"|\]/g, '');
+}
+
 /** @type {import('./$types').PageLoad} */
 export const load: PageServerData = async ({ url }) => {
   const pageSize = 50;
@@ -35,11 +40,11 @@ export const load: PageServerData = async ({ url }) => {
       agency: agencyBureau?.pop() || '',
       account: url.searchParams.get('account') || '',
       approver: url.searchParams.get('approver') || '',
-      year: url.searchParams.get('year')?.replace(/\[|"|\]/g, '') || '',
+      year: convertArrayToSqlString(url.searchParams.getAll('year')),
       approvedStart: new Date(`${startDateString}T00:00:00`),
       approvedEnd: endDateString ? new Date(`${endDateString}T23:59:59`) : new Date(),
-      lineNum: url.searchParams.get('lineNum')?.replace(/\[|"|\]/g, '') || '',
-      footnoteNum: url.searchParams.get('footnoteNum')?.replace(/\[|"|\]/g, '') || ''
+      lineNum: convertArrayToSqlString(url.searchParams.getAll('lineNum')),
+      footnoteNum: convertArrayToSqlString(url.searchParams.getAll('footnoteNum'))
     };
 
     // Execute prepared statements

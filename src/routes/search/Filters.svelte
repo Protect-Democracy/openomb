@@ -20,9 +20,9 @@
   // It might make sense to just use links instead of buttons, but given
   // that this filter version doesn't show up for non-js users,
   // it's not really necessary.
-  function removeFilter(filterParam: string) {
+  function removeFilter(filterParam: string, filterValue: string) {
     const newParams = new URLSearchParams(url.searchParams.toString());
-    newParams.delete(filterParam);
+    newParams.delete(filterParam, filterValue);
     goto(`${url.pathname}?${newParams.toString()}`, { noScroll: true });
   }
 
@@ -42,15 +42,15 @@
     } else if (key === 'approver') {
       return `Approved by "${value}"`;
     } else if (key === 'year') {
-      return `Fiscal year ${value.replace(/\[|"|\]/g, '')}`;
+      return `Fiscal year ${value}`;
     } else if (key === 'approvedStart') {
       return `Approved after ${formatDate(value)}`;
     } else if (key === 'approvedEnd') {
       return `Approved before ${formatDate(value)}`;
     } else if (key === 'lineNum') {
-      return `Lines ${value.replace(/\[|"|\]/g, '')}`;
+      return `Line ${value}`;
     } else if (key === 'footnoteNum') {
-      return `Has Footnote ${value.replace(/\[|"|\]/g, '')}`;
+      return `Has Footnote ${value}`;
     }
 
     return false;
@@ -91,7 +91,7 @@
   <div class="filters">
     {#each url.searchParams.entries() as [key, value]}
       {#if value?.length && value !== '[]' && getFilterLabel(key, value)}
-        <button class="small compact alt" on:click={() => removeFilter(key)}>
+        <button class="small compact alt" on:click={() => removeFilter(key, value)}>
           <span class="sr-only"> Remove filter</span>
           {getFilterLabel(key, value)}
           <span class="icon">
