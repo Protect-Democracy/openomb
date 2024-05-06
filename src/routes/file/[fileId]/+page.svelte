@@ -164,35 +164,46 @@
                     >{#if line.approvedAmount}{formatCurrency(line.approvedAmount)}{/if}</td
                   >
                   <td>
+                    <span class="no-js-only-inline"><small>See footnotes below</small></span>
+
                     {#if line.footnotes && line.footnotes.length > 0}
-                      <button
-                        class="compact small"
-                        aria-expanded={footnotesExpanded[
-                          `${tafsGroup.tafsTableId}-${line.lineNumber}`
-                        ]
-                          ? true
-                          : false}
-                        aria-controls="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
-                        on:click={(e) =>
-                          toggleFootnote(`${tafsGroup.tafsTableId}-${line.lineNumber}`, e)}
-                        >Footnotes</button
-                      >
+                      <span class="has-js-only-inline">
+                        <button
+                          class="compact small"
+                          aria-expanded={footnotesExpanded[
+                            `${tafsGroup.tafsTableId}-${line.lineNumber}`
+                          ]
+                            ? true
+                            : false}
+                          aria-controls="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
+                          on:click={(e) =>
+                            toggleFootnote(`${tafsGroup.tafsTableId}-${line.lineNumber}`, e)}
+                          >Footnotes</button
+                        >
+                      </span>
                     {/if}
                   </td>
                 </tr>
-                {#if line.footnotes && line.footnotes.length > 0 && footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`]}
+                {#if line.footnotes && line.footnotes.length > 0}
                   <tr
                     transition:slide={{}}
                     class="footnote-row"
+                    class:expanded={footnotesExpanded[
+                      `${tafsGroup.tafsTableId}-${line.lineNumber}`
+                    ]}
                     id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
                   >
-                    <th colspan="2" scope="row">Footnotes for line {line.lineNumber}:</th>
+                    <th colspan="2" scope="row"
+                      ><span class="expandable">Footnotes for line {line.lineNumber}:</span></th
+                    >
                     <td colspan="3">
-                      {#each line.footnotes as footnote}
-                        <p>
-                          <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
-                        </p>
-                      {/each}
+                      <div class="expandable">
+                        {#each line.footnotes as footnote}
+                          <p>
+                            <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
+                          </p>
+                        {/each}
+                      </div>
                     </td>
                   </tr>
                 {/if}
@@ -234,6 +245,7 @@
       <p><em>No footnotes available.</em></p>
     {/if}
   </section>
+
   <ScrollToTop />
 </article>
 
@@ -273,5 +285,47 @@
 
   .footnote-row {
     vertical-align: top;
+
+    p {
+      margin-bottom: var(--spacing);
+    }
+  }
+
+  :global(.has-js) {
+    .footnote-row {
+      td,
+      th {
+        padding: 0;
+        display: none;
+      }
+
+      span.expandable {
+        display: inline-block;
+      }
+
+      .expandable {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0;
+        transition: max-height var(--transition) ease-in-out;
+      }
+
+      &.expanded {
+        td,
+        th {
+          display: table-cell;
+        }
+
+        .expandable {
+          max-height: 15rem;
+          overflow: visible;
+          padding: var(--spacing-half);
+        }
+      }
+    }
+  }
+
+  :global(.no-js) {
+    display: table-row;
   }
 </style>
