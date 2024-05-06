@@ -5,6 +5,7 @@
   import '@fontsource/ibm-plex-sans/400.css';
   import '@fontsource/ibm-plex-sans/600.css';
   import '@fontsource/ibm-plex-sans/700.css';
+  import { onMount } from 'svelte';
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
   import { isProduction } from '$lib/utilities';
@@ -21,7 +22,8 @@
     socialTwitterCard,
     socialTwitterSite,
     socialTwitterCreator,
-    socialTwitterImgPath
+    socialTwitterImgPath,
+    googleAnalyticsId
   } from '$config';
   import pdLogo from '$assets/logos/pd-white-words-logo.svg';
   import favAppleTouch from '$assets/favicon/apple-touch-icon.png';
@@ -30,13 +32,27 @@
   import favIco from '$assets/favicon/favicon.ico';
   import favSafari from '$assets/favicon/safari-pinned-tab.svg';
 
+  // Styles
   import '../styles/index.css';
 
+  // Constants
   const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
   // TODO: Update this when ready to not have development notice
   const productionCheck = false; // !isProduction()
+
+  // On Mount
+  onMount(() => {
+    if (googleAnalyticsId && typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', googleAnalyticsId);
+    }
+  });
 </script>
 
 <svelte:head>
@@ -95,6 +111,10 @@
         });
       };
     </script>
+  {/if}
+
+  {#if googleAnalyticsId}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5NJ2S21X5"></script>
   {/if}
 </svelte:head>
 

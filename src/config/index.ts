@@ -18,6 +18,7 @@ export const socialTwitterCard = 'summary_large_image';
 export const socialTwitterSite = '@protctdemocracy';
 export const socialTwitterCreator = '@protctdemocracy';
 export const socialTwitterImgPath = '/twitter.png';
+export const googleAnalyticsId = 'G-Y5NJ2S21X5';
 export const securityHeaders = {
   // Security headers
   // TODO: Add report-uri to Sentry

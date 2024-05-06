@@ -20,15 +20,16 @@ const cspDirectives = {
     'self',
     'https://browser.sentry-cdn.com',
     'https://js.sentry-cdn.com',
+    'https://www.googletagmanager.com',
     'nonce-SENTRY_SCRIPT_SETUP',
-    'nonce-js-check-02934091',
+    'nonce-PROGRESSIVE_JS_CHECK',
     ...cspHashes.map((hash) => `sha256-${hash}`)
   ],
   // Doesn't seem like SvelteKit will handle inline styles by adding
   // a nonce like it does for JS, which is unfortunate.
   'style-src': ['self', 'unsafe-inline'],
   'font-src': ['self'],
-  'connect-src': ['self', 'https://*.sentry.io'],
+  'connect-src': ['self', 'https://*.sentry.io', 'https://www.google-analytics.com/'],
   'img-src': ['self', 'data:'],
   'frame-src': ['self', 'https://www.youtube.com/embed/'],
   'worker-src': ['self'],
