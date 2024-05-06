@@ -52,8 +52,8 @@
 
     <div class="summary-stats">
       <p>
-        <strong>{formatNumber(data.fileStats?.filesApprovedThisWeek)}</strong>
-        New apportionments approved this week
+        <strong>{formatNumber(data.fileStats?.filesApprovedPastWeek)}</strong>
+        New apportionments approved in the last 7 days
       </p>
 
       <p>

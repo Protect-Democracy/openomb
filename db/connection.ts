@@ -18,6 +18,7 @@ import * as files from './schema/files';
 import * as footnotes from './schema/footnotes';
 import * as lines from './schema/lines';
 import * as tafs from './schema/tafs';
+import * as collections from './schema/collections';
 
 // Constants
 const env = environmentVariables();
@@ -39,7 +40,8 @@ export const db = drizzle(pool, {
     ...files,
     ...footnotes,
     ...lines,
-    ...tafs
+    ...tafs,
+    ...collections
   }
 });
 
