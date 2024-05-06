@@ -1,5 +1,5 @@
 /**
- * Tests for utilities.js.
+ * Tests for utilities.ts
  */
 
 // Dependencies

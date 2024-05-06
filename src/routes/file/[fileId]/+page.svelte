@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { slide } from 'svelte/transition';
   import type { PageData } from './$types';
   import {
@@ -14,20 +13,17 @@
   $: ({ file } = data);
   $: ({ tafs, footnotes } = file);
 
-  // Keep track of if footnote is expanded.  Default to true, and close onmount
+  // Keep track of if footnote is expanded.  Default to false
   let footnotesExpanded: Record<string, boolean> = {};
   $: tafs.forEach((tafsGroup) => {
     tafsGroup.lines.forEach((line) => {
-      footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`] =
-        footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`] === false ? false : true;
-    });
-  });
-
-  onMount(() => {
-    tafs.forEach((tafsGroup) => {
-      tafsGroup.lines.forEach((line) => {
-        footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineNumber}`] = false;
-      });
+      const id = `${tafsGroup.tafsTableId}-${line.lineIndex}`;
+      footnotesExpanded[id] =
+        footnotesExpanded[id] === undefined
+          ? false
+          : footnotesExpanded[id] === false
+            ? false
+            : true;
     });
   });
 
@@ -164,20 +160,19 @@
                     >{#if line.approvedAmount}{formatCurrency(line.approvedAmount)}{/if}</td
                   >
                   <td>
-                    <span class="no-js-only-inline"><small>See footnotes below</small></span>
-
                     {#if line.footnotes && line.footnotes.length > 0}
+                      <span class="no-js-only-inline"><small>See footnotes below</small></span>
                       <span class="has-js-only-inline">
                         <button
                           class="compact small"
                           aria-expanded={footnotesExpanded[
-                            `${tafsGroup.tafsTableId}-${line.lineNumber}`
+                            `${tafsGroup.tafsTableId}-${line.lineIndex}`
                           ]
                             ? true
                             : false}
-                          aria-controls="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
+                          aria-controls="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
                           on:click={(e) =>
-                            toggleFootnote(`${tafsGroup.tafsTableId}-${line.lineNumber}`, e)}
+                            toggleFootnote(`${tafsGroup.tafsTableId}-${line.lineIndex}`, e)}
                           >Footnotes</button
                         >
                       </span>
@@ -188,22 +183,20 @@
                   <tr
                     transition:slide={{}}
                     class="footnote-row"
-                    class:expanded={footnotesExpanded[
-                      `${tafsGroup.tafsTableId}-${line.lineNumber}`
-                    ]}
-                    id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineNumber}"
+                    class:expanded={footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineIndex}`]}
+                    id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
                   >
                     <th colspan="2" scope="row"
-                      ><span class="expandable">Footnotes for line {line.lineNumber}:</span></th
+                      >Footnotes for line {line.lineNumber}{line.lineSplit
+                        ? ` (${line.lineSplit})`
+                        : ''}:</th
                     >
                     <td colspan="3">
-                      <div class="expandable">
-                        {#each line.footnotes as footnote}
-                          <p>
-                            <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
-                          </p>
-                        {/each}
-                      </div>
+                      {#each line.footnotes as footnote}
+                        <p>
+                          <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
+                        </p>
+                      {/each}
                     </td>
                   </tr>
                 {/if}
@@ -286,41 +279,32 @@
   .footnote-row {
     vertical-align: top;
 
+    th {
+      max-width: 8em;
+    }
+
     p {
       margin-bottom: var(--spacing);
     }
   }
 
   :global(.has-js) {
+    /* TODO: Seems like there should be a better way to do this */
     .footnote-row {
-      td,
-      th {
-        padding: 0;
-        display: none;
-      }
-
-      span.expandable {
-        display: inline-block;
-      }
-
-      .expandable {
-        max-height: 0;
-        overflow: hidden;
-        padding: 0;
-        transition: max-height var(--transition) ease-in-out;
-      }
+      position: absolute;
+      transform: translateY(-100%);
+      z-index: -1000;
+      overflow: hidden;
+      transition: all 0.3s;
+      opacity: 0;
+      visibility: hidden;
 
       &.expanded {
-        td,
-        th {
-          display: table-cell;
-        }
-
-        .expandable {
-          max-height: 15rem;
-          overflow: visible;
-          padding: var(--spacing-half);
-        }
+        position: inherit;
+        transform: translateY(0);
+        z-index: inherit;
+        opacity: 1;
+        visibility: visible;
       }
     }
   }
