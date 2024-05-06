@@ -11,8 +11,8 @@ on:
   # We want this to align with the config in src/config/index.ts and have
   # it run a few hours before the header cache time (currently 5AM New_York).
   # 6AM UTC = 2AM EDT
-  schedule:
-    - cron: '0 6 * * *'
+  # schedule:
+  #   - cron: '0 6 * * *'
   workflow_dispatch:
 
 env:
