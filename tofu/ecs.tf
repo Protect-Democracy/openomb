@@ -120,6 +120,14 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
         {
           "name" : "APPORTIONMENTS_ARCHIVE_S3_BUCKET",
           "value" : "${aws_s3_bucket.apportionments_bucket.id}"
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_DSN"]
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
         }
       ],
       "secrets" : [
@@ -171,6 +179,14 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
         {
           "name" : "APPORTIONMENTS_DB_NAME",
           "value" : "${aws_rds_cluster.apportionments.database_name}"
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_DSN"]
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
         }
       ],
       "secrets" : [
