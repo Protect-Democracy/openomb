@@ -63,6 +63,10 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         {
           "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
           "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
+        },
+        {
+          "name" : "NODE_ENV",
+          "value" : "${var.node_env}"
         }
       ],
       "secrets" : [
@@ -128,6 +132,10 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
         {
           "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
           "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
+        },
+        {
+          "name" : "NODE_ENV",
+          "value" : "${var.node_env}"
         }
       ],
       "secrets" : [
@@ -187,6 +195,10 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
         {
           "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
           "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
+        },
+        {
+          "name" : "NODE_ENV",
+          "value" : "${var.node_env}"
         }
       ],
       "secrets" : [

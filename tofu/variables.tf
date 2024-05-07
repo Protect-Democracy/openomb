@@ -42,6 +42,12 @@ variable "apportionments_repo" {
   default     = "apportionments-repo"
 }
 
+variable "node_env" {
+  description = "Node environment to use with ECS tasks"
+  type        = string
+  default     = "production"
+}
+
 ####################
 # GitHub integration
 ####################
