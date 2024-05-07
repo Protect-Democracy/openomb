@@ -78,6 +78,14 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
       values   = ["repo:${var.organization}/${var.repo_name}:*"]
     }
   }
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ecs-tasks.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_role" "github_actions" {
@@ -163,8 +171,11 @@ data "aws_iam_policy_document" "db_migration" {
     ]
   }
   statement {
-    actions   = ["s3:ListBucket"]
-    resources = ["${aws_s3_bucket.tfstate_bucket.arn}"]
+    actions = ["s3:ListBucket"]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}",
+      "${aws_s3_bucket.apportionments_bucket.arn}"
+    ]
   }
 
   statement {
@@ -173,7 +184,10 @@ data "aws_iam_policy_document" "db_migration" {
       "s3:PutObject",
       "s3:DeleteObject",
     ]
-    resources = ["${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}"]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}",
+      "${aws_s3_bucket.apportionments_bucket.arn}/*"
+    ]
   }
 
   statement {
@@ -193,7 +207,8 @@ data "aws_iam_policy_document" "db_migration" {
       "iam:PassRole",
     ]
     resources = [
-      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.db_migration.arn}"
     ]
   }
 }
@@ -207,6 +222,16 @@ resource "aws_iam_policy" "db_migration" {
 resource "aws_iam_role_policy_attachment" "db_migration" {
   role       = aws_iam_role.db_migration.name
   policy_arn = aws_iam_policy.db_migration.arn
+}
+
+resource "aws_iam_role_policy_attachment" "db_migration_gha" {
+  role       = aws_iam_role.db_migration.name
+  policy_arn = aws_iam_policy.github_actions.arn
+}
+
+resource "aws_iam_role_policy_attachment" "db_migration_assume_role" {
+  role       = aws_iam_role.db_migration.name
+  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
 
 ###################
@@ -262,7 +287,8 @@ data "aws_iam_policy_document" "collect" {
       "iam:PassRole",
     ]
     resources = [
-      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.collect.arn}"
     ]
   }
 }
@@ -276,4 +302,14 @@ resource "aws_iam_policy" "collect" {
 resource "aws_iam_role_policy_attachment" "collect" {
   role       = aws_iam_role.collect.name
   policy_arn = aws_iam_policy.collect.arn
+}
+
+resource "aws_iam_role_policy_attachment" "collect_gha" {
+  role       = aws_iam_role.collect.name
+  policy_arn = aws_iam_policy.github_actions.arn
+}
+
+resource "aws_iam_role_policy_attachment" "collect_assume_role" {
+  role       = aws_iam_role.collect.name
+  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
