@@ -17,6 +17,7 @@ import { loadJsonFile, loadPdfFile } from '../server/load-file';
 import { environmentVariables, unique, zipFiles, putS3File } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 import { setupNodeSentry } from '../server/sentry';
+import { captureException } from '@sentry/node';
 
 // Make sure Sentry is setup if DSN is provided
 setupNodeSentry();
@@ -31,6 +32,9 @@ cli();
  * Main CLI function
  */
 async function cli(): Promise<void> {
+  // Need to test that Sentry is connected
+  captureException('Collecting OMB data');
+
   // Setup commander
   const program = new Command();
   program
