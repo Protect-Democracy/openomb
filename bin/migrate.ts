@@ -7,10 +7,8 @@
 // Dependencies
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Command } from 'commander';
-import { db, dbConnect } from '../db/connection';
+import { db, dbConnect, dbDisconnect } from '../db/connection';
 import packageJson from '../package.json' assert { type: 'json' };
-
-// Dependencies
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -29,7 +27,7 @@ async function cli(): Promise<void> {
     .parse(process.argv);
 
   // Connect to DB
-  const poolClient = await dbConnect();
+  await dbConnect();
 
   // Start
   console.log('Running migrations if necessary...');
@@ -42,7 +40,7 @@ async function cli(): Promise<void> {
   await migrate(db, { migrationsFolder: migrationsDir });
 
   // Close connection
-  await poolClient.end();
+  await dbDisconnect();
 
   // End
   console.log('Migrations completed.');

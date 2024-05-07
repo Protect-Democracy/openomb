@@ -55,6 +55,7 @@ export async function dbConnect() {
   // but this is less that ideal.
   if (!poolClient) {
     poolClient = await pool.connect();
+    console.info('Connected to database');
   }
 
   return poolClient;
@@ -62,9 +63,10 @@ export async function dbConnect() {
 
 export async function dbDisconnect() {
   if (poolClient) {
-    poolClient.release();
-    poolClient.end();
+    await poolClient.release();
+    await poolClient.end();
     poolClient = undefined;
+    console.info('Disconnected from database');
   }
 }
 

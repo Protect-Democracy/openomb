@@ -9,7 +9,7 @@ import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray } from 'drizzle-orm';
 import chalk from 'chalk';
-import { db, dbConnect } from '../db/connection';
+import { db, dbConnect, dbDisconnect } from '../db/connection';
 import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import { request } from '../server/request';
@@ -17,7 +17,6 @@ import { loadJsonFile, loadPdfFile } from '../server/load-file';
 import { environmentVariables, unique, zipFiles, putS3File } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 import { setupNodeSentry } from '../server/sentry';
-import { captureException } from '@sentry/node';
 
 // Make sure Sentry is setup if DSN is provided
 setupNodeSentry();
@@ -32,9 +31,6 @@ cli();
  * Main CLI function
  */
 async function cli(): Promise<void> {
-  // Need to test that Sentry is connected
-  captureException('Collecting OMB data');
-
   // Setup commander
   const program = new Command();
   program
@@ -47,7 +43,8 @@ async function cli(): Promise<void> {
   const options = program.opts();
 
   // Connect to db
-  const poolClient = await dbConnect();
+  console.info(`Started data collection - ${new Date()}`);
+  await dbConnect();
 
   // Create timestamp and id for this run
   const start = new Date();
@@ -169,7 +166,11 @@ async function cli(): Promise<void> {
     }
   }
 
-  poolClient.end();
+  // Close progress bar
+  progress.close();
+
+  await dbDisconnect();
+  console.info('Finished collection');
 }
 
 /**
