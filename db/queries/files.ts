@@ -324,5 +324,18 @@ export const filesWithoutTafs = async function (folderId: string | undefined = u
   return foundFiles ? foundFiles.map((f) => f.files) : null;
 };
 
+/**
+ * All files
+ */
+export const allFiles = async function () {
+  await dbConnect();
+  return await db
+    .select({ fileId: files.fileId, createdAt: files.createdAt })
+    .from(files)
+    .orderBy(desc(files.approvalTimestamp));
+};
+
 // Memoized
 export const mFileStats = memoizeDataAsync(fileStats);
+export const mFolders = memoizeDataAsync(folders);
+export const mAllFiles = memoizeDataAsync(allFiles);

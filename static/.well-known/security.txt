@@ -1,4 +1,0 @@
-Contact: mailto:security@openomb.org
-Expires: 2027-01-01T05:00:00.000Z
-Preferred-Languages: en
-Canonical: https://openomb.org/.well-known/security.txt
