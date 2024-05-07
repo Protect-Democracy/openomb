@@ -52,6 +52,13 @@ type ApportionmentEnvironment = {
     | 'bucket-owner-read'
     | 'bucket-owner-full-control';
   awsSso: boolean;
+  awsSsoProfile: string;
+  awsSsoFilepath: string;
+  awsSsoConfigFilepath: string;
+  awsSsoStartUrl: string;
+  awsSsoAccountId: string;
+  awsSsoRegion: string;
+  awsSsoRoleName: string;
   sentryDsn: string;
   sentryReportUri: string;
   environment: string;
@@ -94,12 +101,19 @@ function environmentVariables(): ApportionmentEnvironment {
       s3AclOptions.includes(process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
         ? (process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl'])
         : 'public-read',
+    sentryDsn: process.env['APPORTIONMENTS_SENTRY_DSN'] || '',
+    sentryReportUri: process.env['APPORTIONMENTS_SENTRY_REPORT_URI'] || '',
+    environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
     awsSso:
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&
       process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false',
-    sentryDsn: process.env['APPORTIONMENTS_SENTRY_DSN'] || '',
-    sentryReportUri: process.env['APPORTIONMENTS_SENTRY_REPORT_URI'] || '',
-    environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development'
+    awsSsoProfile: process.env['APPORTIONMENTS_AWS_SSO_PROFILE'] || '',
+    awsSsoFilepath: process.env['APPORTIONMENTS_AWS_SSO_FILEPATH'] || '',
+    awsSsoConfigFilepath: process.env['APPORTIONMENTS_AWS_SSO_CONFIG_FILEPATH'] || '',
+    awsSsoStartUrl: process.env['APPORTIONMENTS_AWS_SSO_START_URL'] || '',
+    awsSsoAccountId: process.env['APPORTIONMENTS_AWS_SSO_ACCOUNT_ID'] || '',
+    awsSsoRegion: process.env['APPORTIONMENTS_AWS_SSO_REGION'] || '',
+    awsSsoRoleName: process.env['APPORTIONMENTS_AWS_SSO_ROLE_NAME'] || ''
   };
 }
 
@@ -255,10 +269,21 @@ async function putS3File(
 ): Promise<void> {
   const env = environmentVariables();
 
+  // Sso credentials options
+  const ssoOptions = {
+    profile: env.awsSsoProfile || undefined,
+    filepath: env.awsSsoFilepath || undefined,
+    configFilepath: env.awsSsoConfigFilepath || undefined,
+    ssoStartUrl: env.awsSsoStartUrl || undefined,
+    ssoAccountId: env.awsSsoAccountId || undefined,
+    ssoRegion: env.awsSsoRegion || undefined,
+    ssoRoleName: env.awsSsoRoleName || undefined
+  };
+
   // Create client
   const s3 = new S3Client({
     region: env.archiveS3Region,
-    credentials: env.awsSso ? fromSSO() : undefined
+    credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
   });
 
   // Put file parameters

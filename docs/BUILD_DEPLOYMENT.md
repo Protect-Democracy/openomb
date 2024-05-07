@@ -55,6 +55,7 @@ The following are environment variables that can be set:
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
+- `APPORTIONMENTS_SENTRY_REPORT_URI` - The CSP header value from Sentry.
 - `VITE_SENTRY_SCRIPT` - The `https://sentry...` script to load on the page.
 - `VITE_SENTRY_DSN` - (not used, see [ERROR_HANDLING.md](./ERROR_HANDLING.md))
 
@@ -87,8 +88,16 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_ARCHIVE_S3_REGION` - S3 bucket region for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET` - S3 bucket name for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_ACL` - S3 bucket ACL for uploading the collection archive.
-- `APPORTIONMENTS_AWS_SSO` - Whether to use SSO for AWS auth.
 - `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
+- `APPORTIONMENTS_AWS_SSO` - Whether to use SSO for AWS auth; set to anything besides "false" to enable.
+  - For customizing how AWS SSO works, optionally use any of the following variables that align with the [JS SDK fromSSO parameters](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-credential-providers/Variable/fromSSO/).
+    - `APPORTIONMENTS_AWS_SSO_PROFILE`
+    - `APPORTIONMENTS_AWS_SSO_FILEPATH`
+    - `APPORTIONMENTS_AWS_SSO_CONFIG_FILEPATH`
+    - `APPORTIONMENTS_AWS_SSO_START_URL`
+    - `APPORTIONMENTS_AWS_SSO_ACCOUNT_ID`
+    - `APPORTIONMENTS_AWS_SSO_REGION`
+    - `APPORTIONMENTS_AWS_SSO_ROLE_NAME`
 
 ### Build
 
