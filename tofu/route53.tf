@@ -1,5 +1,9 @@
+###########################
+# Route 53
+###########################
+
 resource "aws_route53_zone" "apportionments" {
-  name = "openomb.org"
+  name = var.domain_name
 }
 
 resource "aws_route53_record" "alias_route53_record" {
@@ -16,7 +20,7 @@ resource "aws_route53_record" "alias_route53_record" {
 
 resource "aws_route53_record" "apportionments" {
   for_each = {
-    for dvo in aws_acm_certificate.apportionments_app.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.cert_us_west_2.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
