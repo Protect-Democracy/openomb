@@ -31,6 +31,11 @@ resource "aws_cloudfront_distribution" "cf_dist" {
     }
   }
 
+  logging_config {
+    bucket          = "${var.cloudfront_logs_bucket_name}.s3.amazonaws.com"
+    include_cookies = false
+  }
+
   restrictions {
     geo_restriction {
       restriction_type = "none"

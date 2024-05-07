@@ -48,6 +48,12 @@ variable "node_env" {
   default     = "production"
 }
 
+variable "cloudfront_logs_bucket_name" {
+  description = "Bucket name for cloudfront logs"
+  type        = string
+  default     = "pd-apportionments-logs"
+}
+
 ####################
 # GitHub integration
 ####################
