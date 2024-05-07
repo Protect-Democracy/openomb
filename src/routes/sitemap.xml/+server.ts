@@ -14,6 +14,15 @@ export async function GET() {
       <sitemap>
         <loc>${deployedBaseUrl}/sitemaps/folders.xml</loc>
       </sitemap>
+      <sitemap>
+        <loc>${deployedBaseUrl}/sitemaps/agencies.xml</loc>
+      </sitemap>
+      <sitemap>
+        <loc>${deployedBaseUrl}/sitemaps/bureaus.xml</loc>
+      </sitemap>
+      <sitemap>
+        <loc>${deployedBaseUrl}/sitemaps/accounts.xml</loc>
+      </sitemap>
 		</sitemapindex>`.trim(),
     {
       headers: {

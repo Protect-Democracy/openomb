@@ -248,6 +248,23 @@ export const bureauDetails = async function (
 };
 
 /**
+ * All accounts
+ */
+export const accounts = async function () {
+  return db
+    .selectDistinct({
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      budgetBureauTitle: tafs.budgetBureauTitle,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      accountTitle: tafs.accountTitle,
+      accountTitleId: tafs.accountTitleId
+    })
+    .from(tafs)
+    .orderBy(tafs.budgetAgencyTitle, tafs.budgetBureauTitle, tafs.accountTitle);
+};
+
+/**
  * Get accounts for a bureau (and agency).
  */
 export const accountsByBureau = async function (
@@ -353,3 +370,6 @@ export const tafsByAccount = async function (
 
 // Memoized
 export const mAgenciesWithChildren = memoizeDataAsync(agenciesWithChildren);
+export const mAgencies = memoizeDataAsync(agencies);
+export const mBureaus = memoizeDataAsync(bureaus);
+export const mAccounts = memoizeDataAsync(accounts);
