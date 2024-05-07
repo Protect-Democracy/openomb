@@ -1,3 +1,7 @@
+###########################
+# Application Load Balancer
+###########################
+
 resource "aws_lb_target_group" "apportionments_app" {
   name        = "apportionments-app"
   port        = 3000
@@ -30,20 +34,6 @@ resource "aws_alb" "apportionments_app" {
   ]
 
   depends_on = [aws_internet_gateway.igw]
-}
-
-resource "aws_acm_certificate" "apportionments_app" {
-  domain_name       = "openomb.org"
-  validation_method = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_acm_certificate_validation" "apportionments_app" {
-  certificate_arn         = aws_acm_certificate.apportionments_app.arn
-  validation_record_fqdns = [for record in aws_route53_record.apportionments : record.fqdn]
 }
 
 resource "aws_alb_listener" "apportionments_app_https" {
