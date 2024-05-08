@@ -151,6 +151,21 @@ data "aws_iam_policy_document" "github_actions" {
       "${aws_s3_bucket.apportionments_logs.arn}/*"
     ]
   }
+
+  statement {
+    actions = ["s3:ListBucket"]
+    resources = [
+      "${aws_s3_bucket.apportionments_bucket.arn}"
+    ]
+  }
+
+  statement {
+    actions = ["s3:GetObject"]
+    resources = [
+      "${aws_s3_bucket.apportionments_bucket.arn}/*"
+    ]
+  }
+
 }
 
 resource "aws_iam_policy" "github_actions" {
