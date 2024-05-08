@@ -2,6 +2,8 @@
 # Cloudfront
 ###########################
 
+# Following resource was useful in setting up Cloudfront with ALB
+# Ref: https://hands-on.cloud/cloudfront-terraform-examples/#h-integrating-cloudfront-with-alb-using-terraform
 resource "aws_cloudfront_distribution" "cf_dist" {
   enabled = true
   aliases = [var.domain_name]
