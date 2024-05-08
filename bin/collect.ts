@@ -164,7 +164,7 @@ async function cli(): Promise<void> {
     if (options.showProgress) {
       progress.addTask(archiveProgressMessage, {
         type: 'indefinite',
-        barTransformFn: chalk.yellow
+        barTransformFn: chalk.magenta
       });
     }
 
