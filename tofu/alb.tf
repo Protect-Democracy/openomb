@@ -36,11 +36,10 @@ resource "aws_alb" "apportionments_app" {
   depends_on = [aws_internet_gateway.igw]
 }
 
-resource "aws_alb_listener" "apportionments_app_https" {
+resource "aws_alb_listener" "apportionments_app_http" {
   load_balancer_arn = aws_alb.apportionments_app.arn
-  port              = "443"
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.apportionments_app.certificate_arn
+  port              = "80"
+  protocol          = "HTTP"
 
   default_action {
     type             = "forward"
@@ -48,18 +47,3 @@ resource "aws_alb_listener" "apportionments_app_https" {
   }
 }
 
-resource "aws_alb_listener" "apportionments_app_http" {
-  load_balancer_arn = aws_alb.apportionments_app.arn
-  port              = "80"
-  protocol          = "HTTP"
-
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
