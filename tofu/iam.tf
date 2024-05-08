@@ -141,6 +141,16 @@ data "aws_iam_policy_document" "github_actions" {
       "${aws_ecs_service.apportionments_app.id}"
     ]
   }
+
+  statement {
+    actions = [
+      "s3:*"
+    ]
+    resources = [
+      "${aws_s3_bucket.apportionments_logs.arn}",
+      "${aws_s3_bucket.apportionments_logs.arn}/*"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {

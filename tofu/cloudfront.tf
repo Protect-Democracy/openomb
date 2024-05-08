@@ -2,6 +2,8 @@
 # Cloudfront
 ###########################
 
+# Following resource was useful in setting up Cloudfront with ALB
+# Ref: https://hands-on.cloud/cloudfront-terraform-examples/#h-integrating-cloudfront-with-alb-using-terraform
 resource "aws_cloudfront_distribution" "cf_dist" {
   enabled = true
   aliases = [var.domain_name]
@@ -29,6 +31,11 @@ resource "aws_cloudfront_distribution" "cf_dist" {
         forward = "all"
       }
     }
+  }
+
+  logging_config {
+    bucket          = "${var.cloudfront_logs_bucket_name}.s3.amazonaws.com"
+    include_cookies = false
   }
 
   restrictions {
