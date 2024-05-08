@@ -14,7 +14,13 @@ import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import { request } from '../server/request';
 import { loadJsonFile, loadPdfFile } from '../server/load-file';
-import { environmentVariables, unique, zipFiles, putS3File } from '../server/utilities';
+import {
+  environmentVariables,
+  unique,
+  zipFiles,
+  putS3File,
+  listS3BucketObjects
+} from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 import { setupNodeSentry } from '../server/sentry';
 
@@ -45,6 +51,18 @@ async function cli(): Promise<void> {
   // Connect to db
   console.info(`Started data collection - ${new Date()}`);
   await dbConnect();
+
+  // If we are going to archive, let's check that we can connect to S3
+  if (options.archive) {
+    try {
+      await listS3BucketObjects();
+      console.info('Success testing connection to S3.');
+    }
+    catch (error) {
+      console.error('Failed testing connection to S3.');
+      throw error;
+    }
+  }
 
   // Create timestamp and id for this run
   const start = new Date();

@@ -8,8 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createWriteStream, createReadStream, statSync } from 'node:fs';
 import archiver from 'archiver';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import type { PutObjectRequest } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
+import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO } from '@aws-sdk/credential-providers';
 import moment from 'moment';
 import packageJson from '../package.json' assert { type: 'json' };
@@ -256,6 +256,38 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
 }
 
 /**
+ * Get all top-level objects in a bucket.
+ *
+ * @param bucket Bucket name, defaults to configuration value
+ */
+async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
+  const env = environmentVariables();
+
+  // Sso credentials options
+  const ssoOptions = {
+    profile: env.awsSsoProfile || undefined,
+    filepath: env.awsSsoFilepath || undefined,
+    configFilepath: env.awsSsoConfigFilepath || undefined,
+    ssoStartUrl: env.awsSsoStartUrl || undefined,
+    ssoAccountId: env.awsSsoAccountId || undefined,
+    ssoRegion: env.awsSsoRegion || undefined,
+    ssoRoleName: env.awsSsoRoleName || undefined
+  };
+
+  // Create client
+  const s3 = new S3Client({
+    region: env.archiveS3Region,
+    credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
+  });
+
+  // Put file parameters
+  const params: ListObjectsRequest = {
+    Bucket: s3Bucket || env.archiveS3Bucket
+  };
+  return await s3.send(new ListObjectsCommand(params));
+}
+
+/**
  * Puts a file to S3.
  *
  * @param file The path to the local source file.
@@ -304,6 +336,7 @@ export {
   md5hash,
   zipFiles,
   putS3File,
+  listS3BucketObjects,
   parseBoolean,
   cleanString,
   dbId
