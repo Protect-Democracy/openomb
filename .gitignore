@@ -198,3 +198,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+
+# Sentry Config File
+.sentryclirc

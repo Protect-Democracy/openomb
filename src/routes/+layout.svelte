@@ -36,7 +36,6 @@
   import '../styles/index.css';
 
   // Constants
-  const sentryScript = import.meta.env.VITE_SENTRY_SCRIPT;
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
   // TODO: Update this when ready to not have development notice
@@ -98,20 +97,6 @@
     name="twitter:image"
     content="{deployedBaseUrl}{$pageMeta.twitterImgPath || socialTwitterImgPath}"
   />
-
-  <!-- eslint-enable svelte/valid-compile -->
-  {#if sentryScript}
-    <!-- Temporary use of Sentry browser integration -->
-    <script src={sentryScript} crossorigin="anonymous"></script>
-    <script nonce="SENTRY_SCRIPT_SETUP">
-      window.sentryOnLoad = function () {
-        Sentry.init({
-          // Unsure how to put Svelte variables in here
-          environment: window.location.hostname.match(/omb/) ? 'production' : 'development'
-        });
-      };
-    </script>
-  {/if}
 
   {#if googleAnalyticsId}
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5NJ2S21X5"></script>

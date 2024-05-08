@@ -11,9 +11,14 @@ import { db, dbConnect, dbDisconnect } from '../db/connection';
 import packageJson from '../package.json' assert { type: 'json' };
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { setupTaskSentry, runMonitoredTask } from './sentry';
+
+// Make sure Sentry is setup if DSN is provided
+setupTaskSentry();
 
 // Main
-cli();
+// @todo this should let us monitor our migration job in sentry, but isn't working currently
+runMonitoredTask('db-migrations', cli);
 
 /**
  * Main CLI handler.

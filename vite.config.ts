@@ -1,3 +1,4 @@
+import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import autoprefixer from 'autoprefixer';
@@ -14,6 +15,12 @@ import legacy from '@vitejs/plugin-legacy';
 
 export default defineConfig({
   plugins: [
+    sentrySvelteKit({
+      sourceMapsUploadOptions: {
+        org: 'voteshield',
+        project: 'pd-apportionments-browser'
+      }
+    }),
     sveltekit(),
 
     // Use Babel-env to utilize browserslist for how to transpile.

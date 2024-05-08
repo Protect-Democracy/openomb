@@ -1,3 +1,5 @@
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
+
 /**
  * Server hooks
  */
@@ -9,11 +11,14 @@ import { environmentVariables } from '../server/utilities';
 // Environment variables
 const env = environmentVariables();
 
-// Only setup if there is the APPORTIONMENTS_SENTRY_DSN provided
-if (env.sentryDsn) {
+// Only setup if there is the VITE_SENTRY_DSN provided
+if (import.meta.env.VITE_SENTRY_DSN) {
   Sentry.init({
-    dsn: env.sentryDsn,
-    environment: env.environment
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: env.environment,
+    tracesSampleRate: 1,
+    profilesSampleRate: 1,
+    integrations: [nodeProfilingIntegration()]
   });
 }
 

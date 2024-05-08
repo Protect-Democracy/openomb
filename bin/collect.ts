@@ -22,16 +22,18 @@ import {
   listS3BucketObjects
 } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
-import { setupNodeSentry } from '../server/sentry';
+import { setupTaskSentry, runMonitoredCron } from './sentry';
 
 // Make sure Sentry is setup if DSN is provided
-setupNodeSentry();
+setupTaskSentry();
 
 // Constants
 const env = environmentVariables();
 
 // Main
-cli();
+// @todo if we want Sentry to monitor this as a cron, we just need to add a cron configuration
+//    (unsure if this will work, either remove for alternative or test once we have established!)
+runMonitoredCron('apportionment-collect', cli);
 
 /**
  * Main CLI function
