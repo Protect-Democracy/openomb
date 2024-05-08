@@ -17,6 +17,8 @@ The following is how you setup your development environment to work on this proj
   - If on a Mac, a suggestion is [Postgres.app](https://postgresapp.com/).
 - Install [NodeJS](https://nodejs.org/en/download).
   - If on a Mac, using Homebrew: `brew install node`
+- Install [OpenTofu](https://opentofu.org/docs/intro/install/)
+  - If on a Mac, using Homebrew: `brew install opentofu`
 - (suggested) Install [nvm](https://github.com/nvm-sh/nvm)
 - Utilize the correct Node version
   - (suggested) Utilize nvm: `nvm use`
