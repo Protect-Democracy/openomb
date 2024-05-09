@@ -65,12 +65,13 @@ resource "aws_rds_cluster" "apportionments" {
 }
 
 resource "aws_rds_cluster_instance" "apportionments" {
-  cluster_identifier   = aws_rds_cluster.apportionments.id
-  instance_class       = "db.serverless"
-  engine               = aws_rds_cluster.apportionments.engine
-  engine_version       = aws_rds_cluster.apportionments.engine_version
-  db_subnet_group_name = aws_db_subnet_group.apportionments.name
-  apply_immediately    = true
+  cluster_identifier           = aws_rds_cluster.apportionments.id
+  instance_class               = "db.serverless"
+  engine                       = aws_rds_cluster.apportionments.engine
+  engine_version               = aws_rds_cluster.apportionments.engine_version
+  db_subnet_group_name         = aws_db_subnet_group.apportionments.name
+  performance_insights_enabled = true
+  apply_immediately            = true
 }
 
 # These parameter group settings allow us to configure various options

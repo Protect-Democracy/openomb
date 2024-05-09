@@ -89,8 +89,8 @@ resource "aws_ecs_task_definition" "apportionments_app" {
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
 
   # Minimum values for Fargate
-  cpu                      = 256
-  memory                   = 512
+  cpu                      = 1024
+  memory                   = 2048
   requires_compatibilities = ["FARGATE"]
 
   network_mode = "awsvpc"
@@ -136,6 +136,10 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
         {
           "name" : "NODE_ENV",
           "value" : "${var.node_env}"
+        },
+        {
+          "name" : "APPORTIONMENTS_AWS_SSO_REGION",
+          "value" : "${var.region}"
         }
       ],
       "secrets" : [
