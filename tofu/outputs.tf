@@ -21,3 +21,7 @@ output "migrate_task_definition_arn" {
 output "run_task_network_configuration_string" {
   value = "awsvpcConfiguration={subnets=[${aws_subnet.private_a.id},${aws_subnet.private_b.id}],securityGroups=[${aws_security_group.egress_all.id},${aws_security_group.database.id}],assignPublicIp=DISABLED}"
 }
+
+output "cloudfront_distribution_id" {
+  value = aws_cloudfront_distribution.cf_dist.id
+}
