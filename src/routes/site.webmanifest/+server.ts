@@ -1,13 +1,14 @@
 // Dependencies
-import { apiResponse } from '$lib/api';
+import { json } from 'stream/consumers';
+import { siteName } from '$config';
 import favAndroid192 from '$assets/favicon/android-chrome-192x192.png';
 import favAndroid512 from '$assets/favicon/android-chrome-512x512.png';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET() {
-  return apiResponse({
-    name: '',
-    short_name: '',
+  return json({
+    name: siteName,
+    short_name: siteName,
     icons: [
       {
         src: favAndroid192,
