@@ -1,9 +1,7 @@
 // Dependencies
-import { error } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import { dbConnect } from '$db/connection.js';
 import { fileDetails } from '$queries/files';
-import { apiResponse } from '$lib/api';
-
 /**
  * Get a specific file by ID
  */
@@ -18,11 +16,11 @@ export async function GET({ params, url }) {
   const file = await fileDetails(params.fileId, sourceData);
 
   if (!file) {
-    // TODO: Respond with JSON
-    error(404, 'Unable to find file');
+    return json({ error: true, status: 404, message: `File not found` }, { status: 404 });
   }
 
-  return apiResponse({
+  return json({
+    status: 200,
     query: {
       sourceData
     },

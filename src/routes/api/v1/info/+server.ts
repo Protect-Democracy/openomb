@@ -1,6 +1,6 @@
 // Dependencies
+import { json } from '@sveltejs/kit';
 import { recentlyApproved } from '$db/queries/files';
-import { apiResponse } from '$lib/api';
 import { environmentVariables, packageJson } from '../../../../../server/utilities';
 
 // Environment variables
@@ -20,7 +20,7 @@ export async function GET() {
     database = false;
   }
 
-  return apiResponse({
+  return json({
     query: {},
     results: {
       health: 'ok',

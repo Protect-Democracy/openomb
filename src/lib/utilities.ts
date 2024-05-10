@@ -3,6 +3,8 @@
  */
 
 import { toDate, toZonedTime } from 'date-fns-tz';
+import { add as dateAdd } from 'date-fns';
+import { collectionHour, collectionMinute, collectionTimezone } from '$config';
 
 /**
  * Determine if production using NODE_ENV and vite.
@@ -59,3 +61,29 @@ export const secondsToZonedTime = function (
  */
 export const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)')?.matches;
+
+/**
+ * Get the hours and minutes for cache invalidation
+ */
+export function hoursAndMinutesForCacheInvalidation() {
+  return {
+    hour: collectionHour + 3,
+    minute: collectionMinute
+  };
+}
+
+/**
+ * Calculates how many seconds to when we expect new data to
+ * be in the system
+ */
+export function secondsToCacheInvalidation() {
+  const { hour, minute } = hoursAndMinutesForCacheInvalidation();
+  return secondsToZonedTime(hour, minute, collectionTimezone);
+}
+
+/**
+ * Output date for cache
+ */
+export function dateForCacheInvalidation() {
+  return dateAdd(new Date(), { seconds: secondsToCacheInvalidation() });
+}

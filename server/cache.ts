@@ -8,7 +8,7 @@
 // Dependencies
 import { LRUCache } from 'lru-cache';
 import { environmentVariables } from './utilities';
-import { secondsToCacheInvalidation } from '../src/lib/cache';
+import { secondsToCacheInvalidation } from '../src/lib/utilities';
 
 // Types
 type JSONStringifyable =

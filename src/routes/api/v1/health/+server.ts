@@ -1,16 +1,14 @@
 // Dependencies
-import { apiResponse } from '$lib/api';
+import { json } from '@sveltejs/kit';
 
 /**
  * Health endpoint
  */
 /** @type {import('./$types').RequestHandler} */
 export async function GET() {
-  // TODO: Do we want to test the database connection here?  Or maybe
-  // a separate API endpoint for that?
-  // await dbConnect();
+  // See /api/v1/info for more details
 
-  return apiResponse({
+  return json({
     query: {},
     results: {
       health: 'ok'

@@ -1,7 +1,8 @@
 // Dependencies
+
+import { json } from '@sveltejs/kit';
 import { dbConnect } from '$db/connection.js';
 import { folders } from '$queries/files';
-import { apiResponse } from '$lib/api';
 
 /**
  * Get a specific file by ID
@@ -10,7 +11,7 @@ import { apiResponse } from '$lib/api';
 export async function GET() {
   await dbConnect();
 
-  return apiResponse({
+  return json({
     query: {},
     results: await folders()
   });

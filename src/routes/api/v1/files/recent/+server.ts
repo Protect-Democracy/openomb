@@ -1,7 +1,7 @@
 // Dependencies
+import { json } from '@sveltejs/kit';
 import { dbConnect } from '$db/connection.js';
 import { recentlyApproved } from '$queries/files';
-import { apiResponse } from '$lib/api';
 
 /**
  * Get a specific file by ID
@@ -17,7 +17,7 @@ export async function GET({ url }) {
   // Get files
   const files = await recentlyApproved();
 
-  return apiResponse({
+  return json({
     query: {
       limit
     },

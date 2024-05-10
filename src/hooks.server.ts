@@ -4,9 +4,8 @@
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
-import { isProduction } from '$lib/utilities';
+import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
 import { cacheRevalidateSeconds, securityHeaders } from '$config';
-import { secondsToCacheInvalidation } from '$lib/cache';
 import * as Sentry from '@sentry/sveltekit';
 import { environmentVariables } from '../server/utilities';
 
@@ -34,8 +33,6 @@ export const handleError = Sentry.handleErrorWithSentry();
  *  are only adding our headers once per server request.
  */
 const addHeaders: Handle = async ({ event, resolve }) => {
-  const secondsForCache = secondsToCacheInvalidation();
-
   // Common headers.
   //
   // Note: These only apply to code routes and not assets or static files.
@@ -49,8 +46,12 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   //
   // Note: CSP headers are configured in `svelte.config.js`
   event.setHeaders({
-    // Cache headers
-    'Cache-Control': `public, max-age=${isProduction() ? secondsForCache : 1}, stale-while-revalidate=${isProduction() ? cacheRevalidateSeconds : 10}`,
+    // Cache headers.  Given that we know that we will be running the data collection
+    // process daily at a certain time, we can use Expires header.  Make sure not to set
+    // the max-age in Cache-Control as that will override Expires.
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
+    'Cache-Control': `public, stale-while-revalidate=${isProduction() ? cacheRevalidateSeconds : 10}`,
+    Expires: dateForCacheInvalidation().toUTCString(),
 
     // Security headers
     ...securityHeaders
