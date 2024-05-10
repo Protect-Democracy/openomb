@@ -14,6 +14,7 @@ env:
   AWS_TASK_DEFINITION_FAMILY: 'apportionments-app'
   AWS_ECS_SERVICE: 'apportionments-app'
   AWS_ECS_CLUSTER: 'apportionments-app'
+  tf_actions_working_dir: 'tofu'
 
 jobs:
   deploy:
@@ -46,6 +47,7 @@ jobs:
 
       - name: OpenTofu init
         id: init
+        working-directory: ${{ env.tf_actions_working_dir }}
         run: tofu init
 
       # NOTE: Needed to use the stdout output from the tofu commands to set the environment
@@ -53,9 +55,11 @@ jobs:
       # variables if i tried to do it directly.
       - name: Set Cloudfront ID
         id: aws_cloudfront_distribution_id
+        working-directory: ${{ env.tf_actions_working_dir }}
         run: |
           tofu output --raw cloudfront_distribution_id
       - name: Set Cloudfront ID env
+        working-directory: ${{ env.tf_actions_working_dir }}
         run: |
           echo "AWS_CLOUDFRONT_DISTRIBUTION_ID=${{ steps.aws_cloudfront_distribution_id.outputs.stdout }}" >> "$GITHUB_ENV"
 
