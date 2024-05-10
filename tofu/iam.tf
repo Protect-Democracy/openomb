@@ -166,6 +166,13 @@ data "aws_iam_policy_document" "github_actions" {
     ]
   }
 
+  statement {
+    actions = ["cloudfront:CreateInvalidation"]
+    resources = [
+      "${aws_cloudfront_distribution.cf_dist.arn}"
+    ]
+  }
+
 }
 
 resource "aws_iam_policy" "github_actions" {
