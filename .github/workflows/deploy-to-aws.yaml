@@ -83,6 +83,11 @@ jobs:
       run:
         working-directory: ${{ env.tf_actions_working_dir }}
 
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
