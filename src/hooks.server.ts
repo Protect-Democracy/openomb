@@ -1,14 +1,11 @@
+/**
+ * Server hooks
+ */
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
 import { secondsToZonedTime, isProduction } from '$lib/utilities.js';
 import { cacheHeadersHour, cacheHeadersMinute, securityHeaders, collectionTimezone } from '$config';
-
-/**
- * Server hooks
- */
-
-// Dependencies
 import * as Sentry from '@sentry/sveltekit';
 import { environmentVariables } from '../server/utilities';
 
@@ -30,6 +27,7 @@ export const handleError = Sentry.handleErrorWithSentry();
 
 /**
  * Hook to add universal headers to requests
+ *
  * Our layout load function has the potential to trigger more than once,
  *  especially when errors are thrown on our client pages.  This ensures we
  *  are only adding our headers once per server request.
@@ -41,6 +39,7 @@ const addHeaders: Handle = async ({ event, resolve }) => {
     collectionTimezone
   );
   const revalidateSeconds = 60 * 3;
+
   // Common headers.
   //
   // Note: These only apply to code routes and not assets or static files.
@@ -56,6 +55,8 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   event.setHeaders({
     // Cache headers
     'Cache-Control': `public, max-age=${isProduction() ? secondsForCache : 1}, stale-while-revalidate=${revalidateSeconds}`,
+
+    // Security headers
     ...securityHeaders
   });
   return await resolve(event);

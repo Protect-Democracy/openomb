@@ -38,6 +38,7 @@ When pulling new code, you should do the following:
 Utilize the following environment variables, optionally using a `.env` file:
 
 - `APPORTIONMENTS_DB_URI`: Database connection URI. This should be a Postgres URI, such as `postgres://user:pass@localhost:5444/database`.
+- (TODO) These options will change based on other things, see the README.md or BUILD_DEPLOYMENT.md
 
 ### Code styles and linting
 
