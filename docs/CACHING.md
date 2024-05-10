@@ -6,11 +6,11 @@ There are a few mechanisms for caching.
 
 Our current assumption is that the OMB data updates every 1-3 days or similar. That means we aim to collect data from OMB daily. This allows us to assume that we can cache a fair amount of the site between collection runs.
 
-Configuration on when the daily data cycle should be assumed new is with the following values in `src/config/index.ts`:
+Configuration on when the daily data cycle is happening is set here `src/config/index.ts` (though note it is actually set in the Github workflows):
 
 ```js
-export const cacheHeadersHour = 5;
-export const cacheHeadersMinute = 0;
+export const collectionHour = 2;
+export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
 ```
 

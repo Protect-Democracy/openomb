@@ -8,9 +8,10 @@ export const siteAuthor = 'Protect Democracy';
 export const siteDescription = `${siteName} allows for easier searching and navigation of apportionments
   published by the Office of Management and Budget`;
 export const siteKeywords = ['OMB', 'Apportionments', 'Office of Management and Budget'];
-export const cacheHeadersHour = 5;
-export const cacheHeadersMinute = 0;
+export const collectionHour = 2;
+export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
+export const cacheRevalidateSeconds = 60 * 3;
 export const socialOgImgPath = '/og.png';
 export const socialOgImgWidth = 1200;
 export const socialOgImgHeight = 630;

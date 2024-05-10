@@ -1,5 +1,5 @@
 /**
- * Methods for some basic, in-memory caching
+ * Methods for some basic, in-memory caching for the server
  *
  * Note that we are using LRU cache because it is highly used
  * and has some
@@ -8,8 +8,7 @@
 // Dependencies
 import { LRUCache } from 'lru-cache';
 import { environmentVariables } from './utilities';
-import { secondsToZonedTime } from '../src/lib/utilities';
-import { cacheHeadersHour, cacheHeadersMinute, collectionTimezone } from '../src/config';
+import { secondsToCacheInvalidation } from '../src/lib/cache';
 
 // Types
 type JSONStringifyable =
@@ -61,7 +60,7 @@ export function defaultTtl() {
  */
 export function defaultTtlData() {
   if (env.environment === 'production') {
-    return secondsToZonedTime(cacheHeadersHour, cacheHeadersMinute, collectionTimezone);
+    return secondsToCacheInvalidation() * 1000;
   }
 
   return 2000;

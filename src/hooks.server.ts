@@ -4,8 +4,9 @@
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
-import { secondsToZonedTime, isProduction } from '$lib/utilities.js';
-import { cacheHeadersHour, cacheHeadersMinute, securityHeaders, collectionTimezone } from '$config';
+import { isProduction } from '$lib/utilities';
+import { cacheRevalidateSeconds, securityHeaders } from '$config';
+import { secondsToCacheInvalidation } from '$lib/cache';
 import * as Sentry from '@sentry/sveltekit';
 import { environmentVariables } from '../server/utilities';
 
@@ -33,12 +34,7 @@ export const handleError = Sentry.handleErrorWithSentry();
  *  are only adding our headers once per server request.
  */
 const addHeaders: Handle = async ({ event, resolve }) => {
-  const secondsForCache = secondsToZonedTime(
-    cacheHeadersHour,
-    cacheHeadersMinute,
-    collectionTimezone
-  );
-  const revalidateSeconds = 60 * 3;
+  const secondsForCache = secondsToCacheInvalidation();
 
   // Common headers.
   //
@@ -54,7 +50,7 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   // Note: CSP headers are configured in `svelte.config.js`
   event.setHeaders({
     // Cache headers
-    'Cache-Control': `public, max-age=${isProduction() ? secondsForCache : 1}, stale-while-revalidate=${revalidateSeconds}`,
+    'Cache-Control': `public, max-age=${isProduction() ? secondsForCache : 1}, stale-while-revalidate=${isProduction() ? cacheRevalidateSeconds : 10}`,
 
     // Security headers
     ...securityHeaders
