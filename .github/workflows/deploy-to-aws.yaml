@@ -30,9 +30,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install OpenTofu
-        uses: opentofu/setup-opentofu@v1
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -44,24 +41,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-${{ github.repository_owner }}-${{ github.event.repository.name }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: OpenTofu init
-        id: init
-        working-directory: ${{ env.tf_actions_working_dir }}
-        run: tofu init
-
-      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
-      # variables. Otherwise GitHub Actions would put the wrong output into the environment
-      # variables if i tried to do it directly.
-      - name: Set Cloudfront ID
-        id: aws_cloudfront_distribution_id
-        working-directory: ${{ env.tf_actions_working_dir }}
-        run: |
-          tofu output --raw cloudfront_distribution_id
-      - name: Set Cloudfront ID env
-        working-directory: ${{ env.tf_actions_working_dir }}
-        run: |
-          echo "AWS_CLOUDFRONT_DISTRIBUTION_ID=${{ steps.aws_cloudfront_distribution_id.outputs.stdout }}" >> "$GITHUB_ENV"
+          unset-current-credentials: true
 
       - name: Login to AWS ECR
         id: login-ecr
@@ -93,6 +73,47 @@ jobs:
 
       - name: Deploy to Amazon ECS
         run: aws ecs update-service --cluster ${{ env.AWS_ECS_CLUSTER }} --service ${{ env.AWS_ECS_SERVICE }} --force-new-deployment
+
+  invalidate:
+    name: Invalidate Cloudfront
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials for Tofu
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+          unset-current-credentials: true
+
+      - name: Install OpenTofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: OpenTofu init
+        id: init
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: tofu init
+
+      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
+      # variables. Otherwise GitHub Actions would put the wrong output into the environment
+      # variables if i tried to do it directly.
+      - name: Set Cloudfront ID
+        id: aws_cloudfront_distribution_id
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: |
+          tofu output --raw cloudfront_distribution_id
+      - name: Set Cloudfront ID env
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: |
+          echo "AWS_CLOUDFRONT_DISTRIBUTION_ID=${{ steps.aws_cloudfront_distribution_id.outputs.stdout }}" >> "$GITHUB_ENV"
 
       - name: Invalidate Cloudfront
         run: aws cloudfront create-invalidation --distribution-id ${{ env.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
