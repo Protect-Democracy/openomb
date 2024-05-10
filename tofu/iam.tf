@@ -155,6 +155,7 @@ data "aws_iam_policy_document" "github_actions" {
   statement {
     actions = ["s3:ListBucket"]
     resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}",
       "${aws_s3_bucket.apportionments_bucket.arn}"
     ]
   }
@@ -162,7 +163,8 @@ data "aws_iam_policy_document" "github_actions" {
   statement {
     actions = ["s3:GetObject"]
     resources = [
-      "${aws_s3_bucket.apportionments_bucket.arn}/*"
+      "${aws_s3_bucket.apportionments_bucket.arn}/*",
+      "${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}"
     ]
   }
 
@@ -202,6 +204,7 @@ data "aws_iam_policy_document" "db_migration" {
       "${aws_ecs_task_definition.apportionments_migrate.arn_without_revision}:*"
     ]
   }
+
   statement {
     actions = ["s3:ListBucket"]
     resources = [
