@@ -14,6 +14,7 @@ env:
   AWS_TASK_DEFINITION_FAMILY: 'apportionments-app'
   AWS_ECS_SERVICE: 'apportionments-app'
   AWS_ECS_CLUSTER: 'apportionments-app'
+  AWS_CF_ROLE_TO_ASSUME: 'collect'
   tf_actions_working_dir: 'tofu'
 
 jobs:
@@ -95,7 +96,7 @@ jobs:
       - name: Configure AWS credentials for Tofu
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_ROLE_TO_ASSUME }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_CF_ROLE_TO_ASSUME }}
           aws-region: ${{ env.AWS_REGION }}
           unset-current-credentials: true
 
