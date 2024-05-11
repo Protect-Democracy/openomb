@@ -1,11 +1,8 @@
 /**
- * Server hooks
+ * Sentry initialization needs to come before anything else
+ * https://docs.sentry.io/platforms/javascript/guides/sveltekit/migration/v7-to-v8/#updated-sdk-initialization
  */
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
-import { sequence } from '@sveltejs/kit/hooks';
-import type { Handle } from '@sveltejs/kit';
-import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
-import { cacheRevalidateSeconds, securityHeaders } from '$config';
 import * as Sentry from '@sentry/sveltekit';
 import { environmentVariables } from '../server/utilities';
 
@@ -22,6 +19,15 @@ if (import.meta.env.VITE_SENTRY_DSN) {
     integrations: [nodeProfilingIntegration()]
   });
 }
+
+/**
+ * Now we can set up our server hooks
+ */
+// Dependencies
+import { sequence } from '@sveltejs/kit/hooks';
+import type { Handle } from '@sveltejs/kit';
+import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
+import { cacheRevalidateSeconds, securityHeaders } from '$config';
 
 export const handleError = Sentry.handleErrorWithSentry();
 

@@ -11,14 +11,14 @@ import { db, dbConnect, dbDisconnect } from '../db/connection';
 import packageJson from '../package.json' assert { type: 'json' };
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { setupTaskSentry, runMonitoredTask } from './sentry';
+import { setupCustomSentry, createTransaction, createSpan } from '../server/sentry-custom';
 
 // Make sure Sentry is setup if DSN is provided
-setupTaskSentry();
+setupCustomSentry();
 
 // Main
 // @todo this should let us monitor our migration job in sentry, but isn't working currently
-runMonitoredTask('db-migrations', cli);
+createTransaction('db-migrations', cli);
 
 /**
  * Main CLI handler.
@@ -32,7 +32,7 @@ async function cli(): Promise<void> {
     .parse(process.argv);
 
   // Connect to DB
-  await dbConnect();
+  await createSpan({ name: 'pg-pool.connect', op: 'db' }, dbConnect);
 
   // Start
   console.log('Running migrations if necessary...');
@@ -42,10 +42,12 @@ async function cli(): Promise<void> {
   const migrationsDir = joinPath(_dirname, '..', 'db', 'migrations');
 
   // This will run migrations on the database, skipping the ones already applied
-  await migrate(db, { migrationsFolder: migrationsDir });
+  await createSpan({ name: 'migrate', op: 'db.transaction' }, () =>
+    migrate(db, { migrationsFolder: migrationsDir })
+  );
 
   // Close connection
-  await dbDisconnect();
+  await createSpan({ name: 'pg-pool.disconnect', op: 'db' }, dbDisconnect);
 
   // End
   console.log('Migrations completed.');

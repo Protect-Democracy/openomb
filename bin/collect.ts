@@ -22,18 +22,21 @@ import {
   listS3BucketObjects
 } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
-import { setupTaskSentry, runMonitoredCron } from './sentry';
+import {
+  setupCustomSentry,
+  createTransaction,
+  createSpan,
+  createQuerySpan
+} from '../server/sentry-custom';
 
 // Make sure Sentry is setup if DSN is provided
-setupTaskSentry();
+setupCustomSentry();
 
 // Constants
 const env = environmentVariables();
 
 // Main
-// @todo if we want Sentry to monitor this as a cron, we just need to add a cron configuration
-//    (unsure if this will work, either remove for alternative or test once we have established!)
-runMonitoredCron('apportionment-collect', cli);
+createTransaction('apportionment-collect', cli);
 
 /**
  * Main CLI function
@@ -52,7 +55,7 @@ async function cli(): Promise<void> {
 
   // Connect to db
   console.info(`Started data collection - ${new Date()}`);
-  await dbConnect();
+  await createSpan({ name: 'pg-pool.connect', op: 'db' }, dbConnect);
 
   // If we are going to archive, let's check that we can connect to S3
   if (options.archive) {
@@ -101,7 +104,9 @@ async function cli(): Promise<void> {
       createdAt: start,
       modifiedAt: start
     };
-    const collectionRows = await db.insert(collections).values(collectionRecord).returning();
+    const collectionRows = await createQuerySpan(
+      db.insert(collections).values(collectionRecord).returning()
+    );
     const collectionRow = collectionRows[0];
 
     // Keep track of file ids to mark any as removed
@@ -114,13 +119,17 @@ async function cli(): Promise<void> {
     const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
 
     // Go through each URL and collect data
-    for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
-      const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
-      fileIds.push(fileRecord.fileId);
-      if (options.showProgress) {
-        progress.updateTask(jsonProgressMessage, { percentage: (urlIndex + 1) / jsonUrls.length });
+    await createSpan('loadJsonFile[]', async () => {
+      for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
+        const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
+        fileIds.push(fileRecord.fileId);
+        if (options.showProgress) {
+          progress.updateTask(jsonProgressMessage, {
+            percentage: (urlIndex + 1) / jsonUrls.length
+          });
+        }
       }
-    }
+    });
 
     if (options.showProgress) {
       progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
@@ -130,34 +139,40 @@ async function cli(): Promise<void> {
     const pdfUrls = apportionmentUrls.filter((url) => url.match(/\.pdf$/));
 
     // Go through each URL and collect data
-    for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
-      const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
-      fileIds.push(fileRecord.fileId);
-      if (options.showProgress) {
-        progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+    await createSpan('loadPdfFile[]', async () => {
+      for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
+        const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
+        fileIds.push(fileRecord.fileId);
+        if (options.showProgress) {
+          progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+        }
       }
-    }
+    });
 
     if (options.showProgress) {
       progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
     }
 
     // Mark any files not in the list as removed
-    await db
-      .update(files)
-      .set({ removed: true, modifiedAt: new Date() })
-      .where(notInArray(files.fileId, fileIds));
+    await createQuerySpan(
+      db
+        .update(files)
+        .set({ removed: true, modifiedAt: new Date() })
+        .where(notInArray(files.fileId, fileIds))
+    );
 
     // Save end of collection
     const complete = new Date();
-    await db
-      .update(collections)
-      .set({
-        complete,
-        status: 'completed',
-        modifiedAt: complete
-      })
-      .where(eq(collections.collectionId, collectionRow.collectionId));
+    await createQuerySpan(
+      db
+        .update(collections)
+        .set({
+          complete,
+          status: 'completed',
+          modifiedAt: complete
+        })
+        .where(eq(collections.collectionId, collectionRow.collectionId))
+    );
   }
 
   if (options.archive) {
@@ -189,7 +204,7 @@ async function cli(): Promise<void> {
   // Close progress bar
   progress.close();
 
-  await dbDisconnect();
+  await createSpan({ name: 'pg-pool.disconnect', op: 'db' }, dbDisconnect);
   console.info('Finished collection');
 }
 
@@ -197,24 +212,26 @@ async function cli(): Promise<void> {
  * Get list of all apportionment URL/files (JSON, Excel, at least one PDF).
  */
 async function apportionmentList(): Promise<string[]> {
-  // Set ttl to short so that it doesn't use cached version but still creates a
-  // file in the cache.
-  const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1 });
+  return createSpan('apportionmentList', async () => {
+    // Set ttl to short so that it doesn't use cached version but still creates a
+    // file in the cache.
+    const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1 });
 
-  // Check response
-  if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
-    throw new Error(
-      `Homepage response was not valid | OK: ${homepage.meta.response.ok} | Status: ${homepage.meta.response.status}`
-    );
-  }
+    // Check response
+    if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
+      throw new Error(
+        `Homepage response was not valid | OK: ${homepage.meta.response.ok} | Status: ${homepage.meta.response.status}`
+      );
+    }
 
-  // Get links in the section
-  const parsedHtml = htmlParser(homepage.data.toString());
-  let links = parsedHtml.querySelectorAll('#hierarchy a').map((a) => a.getAttribute('href'));
+    // Get links in the section
+    const parsedHtml = htmlParser(homepage.data.toString());
+    let links = parsedHtml.querySelectorAll('#hierarchy a').map((a) => a.getAttribute('href'));
 
-  // Add domain/url to relative links
-  links = links.map((link) => (link ? `${env.baseUrl}${link.replace(/^\//, '')}` : ''));
-  links = links.filter((link) => !!link);
+    // Add domain/url to relative links
+    links = links.map((link) => (link ? `${env.baseUrl}${link.replace(/^\//, '')}` : ''));
+    links = links.filter((link) => !!link);
 
-  return unique(links);
+    return unique(links);
+  });
 }

@@ -57,12 +57,8 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
-          "name" : "APPORTIONMENTS_SENTRY_DSN",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_DSN"]
-        },
-        {
-          "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
+          "name" : "APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI"]
         },
         {
           "name" : "NODE_ENV",
@@ -126,12 +122,8 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
           "value" : "${aws_s3_bucket.apportionments_bucket.id}"
         },
         {
-          "name" : "APPORTIONMENTS_SENTRY_DSN",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_DSN"]
-        },
-        {
-          "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
+          "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_NODE_DSN"]
         },
         {
           "name" : "NODE_ENV",
@@ -193,12 +185,8 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
-          "name" : "APPORTIONMENTS_SENTRY_DSN",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_DSN"]
-        },
-        {
-          "name" : "APPORTIONMENTS_SENTRY_REPORT_URI",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_REPORT_URI"]
+          "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_NODE_DSN"]
         },
         {
           "name" : "NODE_ENV",
