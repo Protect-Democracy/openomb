@@ -61,7 +61,7 @@
     "multi-progress-bars": "^5.0.3",
     "node-html-parser": "^6.1.12",
     "pg": "^8.11.3",
-    "svelte": "^5.0.0-next.126",
+    "svelte": "^5.0.0-next.131",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {
@@ -70,7 +70,7 @@
     "@sentry/rollup-plugin": "^2.16.1",
     "@sveltejs/adapter-auto": "^3.2.0",
     "@sveltejs/adapter-node": "^5.0.1",
-    "@sveltejs/kit": "^2.5.7",
+    "@sveltejs/kit": "^2.5.8",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "@types/eslint": "^8.56.0",
     "@types/fs-extra": "^11.0.4",

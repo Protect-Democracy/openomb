@@ -5,43 +5,30 @@
 <div class="page-container content-container">
   <h1>About {siteName}</h1>
 
-  <!-- https://protectdemocracy.org/work/using-ombs-apportionment-website-resources-for-congress/ -->
-
   <p>
     {siteName} is the easiest way to find and view information on how federal money can be spent. It
     is a searchable archive of the U.S. Office of Management and Budget&apos;s apportionments &mdash;
     the legally binding plans that OMB uses to make budgetary resources available to federal agencies.
   </p>
 
-  <p>
-    {siteName} houses all of OMB&apos;s public apportionments from fiscal year 2022 to the present.
-  </p>
+  <p>OpenOMB houses all of OMB’s public apportionments from fiscal year 2022 to the present.</p>
 
   <p>
-    In the <a
-      href="https://www.congress.gov/bill/117th-congress/house-bill/2617"
+    In the Consolidated Appropriations Act of 2023, Congress made permanent the requirement that OMB
+    post its apportionments on a public website within two business days of OMB’s approval of an
+    apportionment. OMB makes apportionments available at <a
+      href="https://apportionment-public.max.gov/"
       target="_blank"
-      rel="noopener noreferrer">Consolidated Appropriations Act of 2023</a
-    >, Congress made permanent the requirement that OMB post its apportionments on a public website
-    within two business days of OMB&apos;s approval of an apportionment. OMB makes apportionments
-    available at
-    <a href="https://apportionment-public.max.gov" target="_blank" rel="noopener noreferrer"
-      >apportionment-public.max.gov</a
+      rel="noopener noreferrer">apportionment-public.max.gov</a
     >.
   </p>
 
   <p>
-    Drawing on the data files from that site, OpenOMB.org makes OMB&apos;s apportionments searchable
-    and easier to navigate.
+    Drawing on the JSON files from that site, OpenOMB makes OMB’s apportionments searchable and
+    easier to navigate.
   </p>
 
-  <p>
-    OpenOMB is maintained by <a
-      href="https://protectdemocracy.org/"
-      target="_blank"
-      rel="noopener noreferrer">Protect Democracy</a
-    >, a nonpartisan nonprofit.
-  </p>
+  <p>OpenOMB.org is maintained by Protect Democracy, a nonpartisan nonprofit.</p>
 </div>
 
 <style>

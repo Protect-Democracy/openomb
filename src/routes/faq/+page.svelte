@@ -150,19 +150,13 @@
     }
   ];
 
-  // Derived
-
-  // TODO: Using $page and url and getting hash seemed to have
+  // TODO: We want to get the hash to be able to expand a FAQ when loading
+  // the page. Using $page and url and getting hash seemed to have
   // messed with navigation in general.
-  const faqHash = 'unknown';
 
+  // Derived
   $: faqs.forEach((f) => {
-    expanded[f.id] =
-      typeof expanded[f.id] === 'boolean'
-        ? expanded[f.id]
-        : faqHash
-          ? faqHash && f.id === faqHash
-          : false;
+    expanded[f.id] = expanded[f.id] || false;
   });
 
   // Toggle
@@ -245,12 +239,14 @@
       border-bottom: var(--border-weight) solid var(--color-text);
       margin-bottom: var(--spacing-double);
     }
+  }
 
-    :global(iframe) {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      margin-bottom: var(--spacing);
-    }
+  /* NOTE: Cannot do global in nested selector
+  /* https://github.com/sveltejs/svelte/issues/10540 */
+  .faqs :global(iframe) {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-bottom: var(--spacing);
   }
 
   .icon {
