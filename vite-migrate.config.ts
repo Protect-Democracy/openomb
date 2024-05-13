@@ -5,6 +5,7 @@
  */
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
+import { sentryRollupPlugin } from '@sentry/rollup-plugin';
 
 import packageJson from './package.json';
 
@@ -21,7 +22,18 @@ export default defineConfig({
     outDir: 'build-migrate',
     ssr: resolve(__dirname, 'bin', 'migrate.ts'),
     rollupOptions: {
-      external: dependencies
+      external: dependencies,
+      output: {
+        sourcemap: true
+      },
+      plugins: [
+        // Put the Sentry rollup plugin after all other plugins
+        sentryRollupPlugin({
+          org: 'voteshield',
+          project: 'pd-apportionments-browser',
+          authToken: process.env.SENTRY_AUTH_TOKEN
+        })
+      ]
     }
   }
 });

@@ -5,9 +5,15 @@
 export const deployedBaseUrl = 'https://openomb.org';
 export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';
-export const siteDescription = `${siteName} allows for easier searching and navigation of apportionments
-  published by the Office of Management and Budget`;
-export const siteKeywords = ['OMB', 'Apportionments', 'Office of Management and Budget'];
+export const siteDescription = `OpenOMB is the easiest way to find apportionments issued by the U.S. Office of Management and Budget. Apportionments are legally binding plans that make funds available to federal agencies.`;
+export const siteKeywords = [
+  'OMB',
+  'apportionments',
+  'Office of Management and Budget',
+  'budget',
+  'budget execution',
+  'federal budget'
+];
 export const collectionHour = 2;
 export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
@@ -22,9 +28,6 @@ export const socialTwitterImgPath = '/twitter.png';
 export const googleAnalyticsId = 'G-Y5NJ2S21X5';
 export const securityHeaders = {
   // Security headers
-  // TODO: Add report-uri to Sentry
-  // See: https://docs.sentry.io/product/security-policy-reporting/#expect-ct
-  //
   // Note: CSP headers are configured in `svelte.config.js`
   'Expect-CT': 'enforce, max-age=3600',
   'Referrer-Policy': 'strict-origin',

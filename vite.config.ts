@@ -6,21 +6,24 @@ import postcssNesting from 'postcss-nesting';
 import postcssCustomMedia from 'postcss-custom-media';
 import legacy from '@vitejs/plugin-legacy';
 
-// TODO: Sentry's support for Svelte 5 is not complete.
-// https://github.com/getsentry/sentry-javascript/issues/10318
-//
-// import { sentrySvelteKit } from '@sentry/sveltekit';
-//
-// plugins: [sentrySvelteKit(), sveltekit()],
-
 export default defineConfig({
   plugins: [
+    // Sentry configuration
+    // Uses v8+ https://docs.sentry.io/platforms/javascript/guides/sveltekit/migration/v7-to-v8/#breaking-sentrysveltekit-changes
+    // Must be before sveltkit plugin
     sentrySvelteKit({
       sourceMapsUploadOptions: {
         org: 'voteshield',
-        project: 'pd-apportionments-browser'
+        project: 'pd-apportionments-browser',
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        sourcemaps: {
+          assets: ['./build/*/**/*'],
+          ignore: ['**/build/client/**/*'],
+          filesToDeleteAfterUpload: ['./build/**/*.map']
+        }
       }
     }),
+
     sveltekit(),
 
     // Use Babel-env to utilize browserslist for how to transpile.

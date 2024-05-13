@@ -4,11 +4,47 @@
 
 // Dependencies
 import { groupBy, orderBy } from 'lodash-es';
-import { eq, and, countDistinct, asc, max } from 'drizzle-orm';
+import { eq, and, countDistinct, asc, max, count, avg } from 'drizzle-orm';
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { memoizeDataAsync } from '../../server/cache';
+
+/**
+ * TAFS statistics
+ */
+export const tafsStats = async function () {
+  // Total number of accounts
+  const totalAccounts = await db.select({ count: count() }).from(
+    db
+      .selectDistinct({
+        budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+        budgetBureauTitleId: tafs.budgetBureauTitleId,
+        accountId: tafs.accountId
+      })
+      .from(tafs)
+      .as('accounts')
+  );
+
+  // Average iterations
+  const maxIterations = db
+    .select({
+      tafsId: tafs.tafsId,
+      fiscalYear: tafs.fiscalYear,
+      maxIteration: max(tafs.iteration).as('maxIteration')
+    })
+    .from(tafs)
+    .groupBy(tafs.tafsId, tafs.fiscalYear)
+    .as('maxIterations');
+  const averageIterations = await db
+    .select({ avg: avg(maxIterations.maxIteration) })
+    .from(maxIterations);
+
+  return {
+    totalAccounts: totalAccounts[0].count,
+    averageIterations: averageIterations[0].avg
+  };
+};
 
 /**
  * Distinct agencies with file counts

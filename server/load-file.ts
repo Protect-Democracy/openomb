@@ -67,6 +67,7 @@ const env = environmentVariables();
 /**
  * Load an apportionment file into the database.
  */
+// @todo - figure out how to get around sentry data limits to profile this (separate into transactions?)
 async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert> {
   await dbConnect();
 

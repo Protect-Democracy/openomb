@@ -14,13 +14,12 @@
 <section class="intro">
   <div class="intro-inner page-container">
     <div class="intro-text">
-      <h1>Accessing federal budget data made easier.</h1>
+      <h1>Finding apportionments just got easier.</h1>
 
       <p class="center-container">
-        Updated daily, {siteName} is the easiest way to find and view information on how federal money
-        can be spent. It is a searchable archive of the U.S. Office of Management and Budget&apos;s apportionments
-        &mdash; the legally binding plans that OMB uses to make budgetary resources available to federal
-        agencies.
+        Updated daily, {siteName} is the easiest way to find apportionments issued by the U.S. Office
+        of Management and Budget. Apportionments are legally binding plans that make budgetary resources
+        available to federal agencies.
       </p>
 
       <div class="search">
@@ -38,13 +37,12 @@
   <div class="summary-inner page-container">
     <div class="summary-text">
       <h2 class="h3">
-        Information about federal spending shouldn&apos;t be a challenge to find. So we built a
-        website that makes it easy.
+        It shouldn&apos;t be hard to track the funds available to federal agencies.
       </h2>
 
       <p>
-        Short about us blurb quisque tempus velit eget porta tempus. Nam dignissim tempor purus eu
-        malesuada. Vestibulum eros dui, tincidunt at.
+        {siteName} makes that information easy to find, with. It is a searchable archive of OMB&apos;s
+        apportionments from fiscal year 2022 to the present.
       </p>
 
       <a href="/about">More about us</a>
@@ -60,12 +58,22 @@
         <strong>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</strong>
         Total apportionments approved for fiscal year {currentYear}
       </p>
+
+      <p>
+        <strong>{formatNumber(data.tafsStats?.totalAccounts)}</strong>
+        Total accounts tracked on {siteName}
+      </p>
+
+      <p>
+        <strong>{formatNumber(data.tafsStats?.averageIterations)}</strong>
+        Average number of iterations per apportionment
+      </p>
     </div>
   </div>
 </section>
 
 <section class="agencies page-container-small">
-  <h2 class="h2-alt">Find Apportionments by Agency and Bureau</h2>
+  <h2 class="h2-alt">Explore Agencies with the Newest Apportionments</h2>
 
   <AgencyExplorer agencies={data.agencies} />
 
@@ -76,29 +84,32 @@
 
 <section class="learn">
   <div class="page-container">
-    <h2 class="h2-alt">Learn More About Federal Apportionments</h2>
+    <h2 class="h2-alt">Learn More About Apportionments</h2>
 
     <ul class="learn-items">
       <li>
-        <a href="/faq#TODO"
-          ><span><TopRightArrow /></span> What do the different lines of information included in an apportionment
-          mean?</a
+        <a href="/faq#faq-what-is-apportionment"
+          ><span class="faq-icon"><TopRightArrow /></span> What is an apportionment?</a
         >
       </li>
       <li>
-        <a href="/faq#TODO"
-          ><span><TopRightArrow /></span> How can I find the Treasury Appropriation Fund Symbol (TAFS)
-          for a specific account?</a
+        <a href="/faq#faq-how-to-find-apportionments"
+          ><span class="faq-icon"><TopRightArrow /></span> How can I find the funds I’m looking for?</a
         >
       </li>
       <li>
-        <a href="/faq#TODO"
-          ><span><TopRightArrow /></span> Another FAQ question lorem ipsum dolor sit amet consectetur
-          adipiscing?</a
+        <a href="/faq#faq-read-an-apportionment"
+          ><span class="faq-icon"><TopRightArrow /></span> How do I read an apportionment?</a
         >
       </li>
       <li>
-        <a href="/faq"><span><TopRightArrow /></span> Explore all apportionment FAQs</a>
+        <a href="/faq">
+          <span class="faq-icon"><TopRightArrow /></span>
+          <span>
+            Explore all apportionment
+            <acronym title="Frequently Asked Questions">FAQs</acronym>
+          </span>
+        </a>
       </li>
     </ul>
   </div>
@@ -155,12 +166,13 @@
   .summary-stats {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: var(--spacing-double);
   }
 
   .summary-stats p {
-    width: 50%;
+    width: calc(50% - var(--spacing-double));
   }
 
   .summary-stats strong {
@@ -218,7 +230,7 @@
     color: var(--color-text);
   }
 
-  .learn-items span {
+  .learn-items .faq-icon {
     min-width: var(--spacing-double);
     max-width: var(--spacing-double);
     color: var(--color-white);

@@ -59,8 +59,8 @@ type ApportionmentEnvironment = {
   awsSsoAccountId: string;
   awsSsoRegion: string;
   awsSsoRoleName: string;
-  sentryDsn: string;
-  sentryReportUri: string;
+  sentryNodeDsn: string;
+  sentrySvelteReportUri: string;
   environment: string;
 };
 
@@ -101,8 +101,8 @@ function environmentVariables(): ApportionmentEnvironment {
       s3AclOptions.includes(process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
         ? (process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl'])
         : 'public-read',
-    sentryDsn: process.env['APPORTIONMENTS_SENTRY_DSN'] || '',
-    sentryReportUri: process.env['APPORTIONMENTS_SENTRY_REPORT_URI'] || '',
+    sentryNodeDsn: process.env['APPORTIONMENTS_SENTRY_NODE_DSN'] || '',
+    sentrySvelteReportUri: process.env['APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
     awsSso:
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&

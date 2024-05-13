@@ -29,6 +29,9 @@ npm run build:web
 
 # Or run the full build
 npm run build
+
+# To read .env files (locally send source code to sentry if auth token is set)
+npx dotenvx run -- npm run build:web
 ```
 
 ### Preview application
@@ -54,10 +57,10 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_DB_URI` - Needed for connection to database
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
-- `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
-- `APPORTIONMENTS_SENTRY_REPORT_URI` - The CSP header value from Sentry.
-- `VITE_SENTRY_SCRIPT` - The `https://sentry...` script to load on the page.
-- `VITE_SENTRY_DSN` - (not used, see [ERROR_HANDLING.md](./ERROR_HANDLING.md))
+- `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI` - The CSP header value from Sentry.
+- `VITE_SENTRY_DSN` - Sentry DSN for Sveltekit application
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
+  - This variable is specific to the build process and is not needed in our actual container environment
 
 This project uses [@dotenvx/dotenvx](https://dotenvx.com/docs) to parse our `.env` files.
 
@@ -88,7 +91,6 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_ARCHIVE_S3_REGION` - S3 bucket region for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET` - S3 bucket name for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_ACL` - S3 bucket ACL for uploading the collection archive.
-- `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node process.
 - `APPORTIONMENTS_AWS_SSO` - Whether to use SSO for AWS auth; set to anything besides "false" to enable.
   - For customizing how AWS SSO works, optionally use any of the following variables that align with the [JS SDK fromSSO parameters](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-credential-providers/Variable/fromSSO/).
     - `APPORTIONMENTS_AWS_SSO_PROFILE`
@@ -98,6 +100,9 @@ The following are environment variables that can be set:
     - `APPORTIONMENTS_AWS_SSO_ACCOUNT_ID`
     - `APPORTIONMENTS_AWS_SSO_REGION`
     - `APPORTIONMENTS_AWS_SSO_ROLE_NAME`
+- `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
+  - This variable is specific to the build process and is not needed in our actual container environment
 
 ### Build
 
@@ -108,6 +113,9 @@ npm run build:collect
 
 # Or run the full build
 npm run build
+
+# To read .env files (locally send source code to sentry if auth token is set)
+npx dotenvx run -- npm run build:collect
 ```
 
 ### Deploy
@@ -132,6 +140,9 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_DB_URI` - Needed for connection to database.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
+- `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
+  - This variable is specific to the build process and is not needed in our actual container environment
 
 ### Build
 
@@ -142,6 +153,9 @@ npm run build:migrate
 
 # Or run the full build
 npm run build
+
+# To read .env files (locally send source code to sentry if auth token is set)
+npx dotenvx run -- npm run build:migrate
 ```
 
 ### Deploy

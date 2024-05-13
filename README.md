@@ -22,8 +22,7 @@ Configure using the following environment variables:
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
-- `APPORTIONMENTS_SENTRY_DSN` - Sentry DSN for node task reporting.
-- `APPORTIONMENTS_SENTRY_REPORT_URI` - The CSP header value from Sentry.
+- `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node task reporting.
 - `APPORTIONMENTS_ARCHIVE_S3_REGION`: The AWS region code to use for the bucket to upload the archive to.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET`: The AWS bucket to upload the archive to.
 - `APPORTIONMENTS_ARCHIVE_S3_ACL`: ACL to set for the archive upload. Defaults to `public-read`, should be one of `'private' 'public-read', 'public-read-write', 'authenticated-read', 'aws-exec-read', 'bucket-owner-read', 'bucket-owner-full-control'`
@@ -54,7 +53,8 @@ Configure using the following environment variables:
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
-  - `VITE_SENTRY_DSN`: Sentry DSN for browser application reporting
+  - `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI`: The CSP header value from Sentry.
+  - `VITE_SENTRY_DSN`: Sentry DSN for the Sveltekit application
 
 ## Setup
 

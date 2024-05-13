@@ -60,7 +60,8 @@
   $: ({ count, files, searchParams } = data);
   $: hasResults = count && count > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
-  $: hasSearched = hasSearchParams;
+  // TODO: Maybe be more specific about how we determine if search has been done.
+  $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
@@ -75,8 +76,8 @@
   <h1>Search apportionments</h1>
 
   <p class="search-description">
-    Apportionment files are a collection of accounts. Use the search on this page to search for
-    accounts with files that match the search criteria.
+    Apportionments are done at the account level. The best way to find an apportionment is to know
+    the name or number (TAS or TAFS) of the account being apportioned. <!-- TODO: Link to FAW on how to find an account -->
   </p>
 
   <div class="no-js-only-block" role="search">
