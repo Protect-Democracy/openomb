@@ -6,10 +6,10 @@
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
-  import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
   import { submitting } from './form-store';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+  import FileListingSmall from '$components/files/FileListingSmall.svelte';
 
   // Props
   export let data: PageData;
@@ -57,8 +57,8 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ resultCount, fileCount, results } = data);
-  $: hasResults = resultCount && resultCount > 0;
+  $: ({ count, files, searchParams } = data);
+  $: hasResults = count && count > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   $: hasSearched = hasSearchParams;
 
@@ -117,12 +117,11 @@
       <aside class="result-actions">
         <div class="result-count">
           <p role="status">
-            Results: <strong>{formatNumber(resultCount)} accounts</strong> in
-            <strong>{formatNumber(fileCount)} files</strong>.
+            Results: <strong>{formatNumber(count)} files</strong>.
           </p>
 
           <div class="font-small">
-            <UrlPagination perPage={data.pageSize} total={resultCount} includeLabel={false} />
+            <UrlPagination perPage={data.pageSize} total={count} includeLabel={false} />
           </div>
         </div>
 
@@ -152,10 +151,14 @@
         </div>
       </aside>
 
-      <TafsDisplay tafs={results} />
+      <div class="result-list">
+        {#each files as file}
+          <FileListingSmall {file} highlightParams={searchParams} />
+        {/each}
+      </div>
 
       <div class="pagination">
-        <UrlPagination perPage={data.pageSize} total={resultCount} />
+        <UrlPagination perPage={data.pageSize} total={count} />
       </div>
 
       <ScrollToTop />

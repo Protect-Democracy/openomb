@@ -4,7 +4,23 @@ import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
 import { tafsSort, fileSort } from '$config/search';
-import { ilike, and, or, sql, eq, gte, lte, isNotNull, count, exists, not, asc } from 'drizzle-orm';
+import {
+  ilike,
+  and,
+  or,
+  sql,
+  eq,
+  gte,
+  lte,
+  isNotNull,
+  count,
+  exists,
+  not,
+  asc,
+  desc,
+  inArray
+} from 'drizzle-orm';
+import type { PgColumn } from 'drizzle-orm/pg-core';
 
 export type SearchParams = {
   term: string;
@@ -419,4 +435,184 @@ export async function lineNumberOptions() {
     .where(isNotNull(lines.lineNumber));
 
   return lineNumberOptions.map((v) => v.data);
+}
+
+export async function fileSearchTest(searchParams: SearchParams & PaginationParams) {
+  // {
+  //   term: '',
+  //   tafs: '',
+  //   bureau: '',
+  //   agency: '',
+  //   account: '',
+  //   approver: '',
+  //   year: '',
+  //   approvedStart: 2020-01-01T05:00:00.000Z,
+  //   approvedEnd: 2024-05-08T19:45:22.257Z,
+  //   lineNum: '',
+  //   footnoteNum: ''
+  // }
+
+  await dbConnect();
+
+  // Format
+  const years = (searchParams.year ? searchParams.year.split(',') : []).map((v) => parseInt(v));
+  const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : []).map((v) =>
+    v.trim()
+  );
+  const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : []).map(
+    (v) => v.trim()
+  );
+  const formattedSearchParams = {
+    ...searchParams,
+    years,
+    lineNumbers,
+    footnoteNumbers
+  };
+
+  // Collect filters
+  const where = [];
+
+  // General search term
+  where.push(
+    searchParams.term
+      ? or(
+          ilike(tafs.accountTitle, `%${searchParams.term}%`),
+          ilike(tafs.budgetAgencyTitle, `%${searchParams.term}%`),
+          ilike(tafs.budgetBureauTitle, `%${searchParams.term}%`),
+          // This is very expensive, even once indexes have been added,
+          // but the subquery seems ot be efficient
+          //ilike(lines.lineDescription, `%${searchParams.term}%`)
+          inArray(
+            files.fileId,
+            db
+              .selectDistinct({ fileId: lines.fileId })
+              .from(lines)
+              .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
+          )
+        )
+      : undefined
+  );
+
+  // Other search terms
+  where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);
+  where.push(
+    searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
+  );
+  where.push(
+    searchParams.approver ? ilike(files.approverTitle, `%${searchParams.approver}%`) : undefined
+  );
+
+  // Identifiers
+  where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
+  where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
+  where.push(lineNumbers?.length > 0 ? inArray(lines.lineNumber, lineNumbers) : undefined);
+  where.push(
+    footnoteNumbers?.length > 0 ? inArray(footnotes.footnoteNumber, footnoteNumbers) : undefined
+  );
+
+  // Specific values
+  where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
+  where.push(years?.length > 0 ? inArray(files.fiscalYear, years) : undefined);
+  where.push(
+    searchParams.approvedStart
+      ? gte(files.approvalTimestamp, searchParams.approvedStart)
+      : undefined
+  );
+  where.push(
+    searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
+  );
+
+  // Complete AND wheres
+  const filteredWhere = where.filter((v) => !!v);
+  const finalWhere =
+    filteredWhere.length > 1
+      ? and(...filteredWhere)
+      : filteredWhere.length === 1
+        ? filteredWhere[0]
+        : undefined;
+
+  // Order.  We need to include the field in the query for distinctness
+  let order = [desc(files.approvalTimestamp)];
+  const orderFields: { orderField: PgColumn; orderFieldSecondary?: PgColumn } = {
+    orderField: files.approvalTimestamp
+  };
+  if (searchParams.sort === 'account_asc') {
+    order = [asc(tafs.accountTitle), desc(files.approvalTimestamp)];
+    orderFields.orderField = tafs.accountTitle;
+    orderFields.orderFieldSecondary = files.approvalTimestamp;
+  }
+  else if (searchParams.sort === 'bureau_asc') {
+    order = [asc(tafs.budgetBureauTitle), desc(files.approvalTimestamp)];
+    orderFields.orderField = tafs.budgetBureauTitle;
+    orderFields.orderFieldSecondary = files.approvalTimestamp;
+  }
+  else if (searchParams.sort === 'agency_asc') {
+    order = [asc(tafs.budgetAgencyTitle), desc(files.approvalTimestamp)];
+    orderFields.orderField = tafs.budgetAgencyTitle;
+    orderFields.orderFieldSecondary = files.approvalTimestamp;
+  }
+
+  console.log(`TEST ---`);
+
+  const fullStart = +new Date();
+  const countSubquery = db
+    .selectDistinct({
+      fileId: files.fileId,
+      ...orderFields
+    })
+    .from(files)
+    .innerJoin(tafs, eq(files.fileId, tafs.fileId))
+    .leftJoin(lines, eq(files.fileId, lines.fileId))
+    .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    .where(finalWhere)
+    .as('countSubquery');
+  const fullCount = await db.select({ count: count() }).from(countSubquery);
+  const fullEnd = +new Date();
+  console.log(`TEST --- FULL (${fullCount[0].count}) ${fullEnd - fullStart}ms`);
+
+  // Specific ids
+  const pagedStart = +new Date();
+  const limitedIds = await db
+    .selectDistinct({
+      fileId: files.fileId,
+      ...orderFields
+    })
+    .from(files)
+    .innerJoin(tafs, eq(files.fileId, tafs.fileId))
+    .leftJoin(lines, eq(files.fileId, lines.fileId))
+    .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    .where(finalWhere)
+    .orderBy(...order)
+    .offset(searchParams.offset)
+    .limit(searchParams.limit);
+
+  const pagedEnd = +new Date();
+  console.log(`TEST --- PAGED ${pagedEnd - pagedStart}ms`);
+
+  const detailsStart = +new Date();
+  // Details.  Is there a better way to do this
+  const fileDetails = [];
+  for (const limitedId of limitedIds) {
+    const details = await db.query.files.findFirst({
+      columns: {
+        sourceData: false
+      },
+      where: eq(files.fileId, limitedId.fileId),
+      with: {
+        tafs: {
+          orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
+        }
+      }
+    });
+    fileDetails.push(details);
+  }
+
+  const detailsEnd = +new Date();
+  console.log(`TEST --- DETAILS ${detailsEnd - detailsStart}ms`);
+
+  return {
+    files: fileDetails,
+    count: fullCount[0].count,
+    formattedSearchParams
+  };
 }

@@ -1,4 +1,5 @@
 // Dependencies
+import { uniqBy, orderBy, filter } from 'lodash-es';
 import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
 
@@ -53,12 +54,22 @@ export function formatDateISO(date?: Date | string | null): string {
 /**
  * Format a file title
  */
-export function formatFileTitle(file: FileWithTafs) {
+export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): string | null {
   const hasTafs = file?.tafs?.length && file?.tafs?.length > 0;
-  const accounts = hasTafs ? file?.tafs?.map((t) => t.accountTitle) : [];
+  let accounts = hasTafs
+    ? uniqBy(
+        file?.tafs?.map((t) => t.accountTitle),
+        (a) => a
+      )
+    : [];
 
   // Has tafs accounts
   if (hasTafs && accounts?.length && accounts?.length > 0) {
+    if (highlightTerms) {
+      // Highlight accounts and make sure highlight ones are first
+      accounts = highlightOrder(accounts.map((a) => highlight(a, highlightTerms)));
+    }
+
     return accounts.length === 1
       ? accounts[0]
       : `${accounts[0]} and ${formatNumber(accounts.length - 1)} other account${accounts.length - 1 > 1 ? 's' : ''}`;
@@ -67,6 +78,35 @@ export function formatFileTitle(file: FileWithTafs) {
   // No tafs information
   return `${file.folder} - ${file.fileId}`;
 }
+
+/**
+ * Highlight part of a string based on a set of search terms
+ */
+export const highlight = function (text?: string | null, terms?: string[]): string {
+  terms = terms ? terms : [];
+  terms = filter(terms);
+
+  if (!terms || terms.length < 1 || !text) {
+    return text || '';
+  }
+
+  const regex = new RegExp(typeof terms === 'string' ? terms : terms.join('|'), 'gi');
+  return text.replace(regex, '<mark>$&</mark>');
+};
+
+/**
+ * Order array of strings by set of search terms
+ */
+export const highlightOrder = function (input?: string[], terms?: string[]): string[] {
+  terms = terms ? terms : [];
+
+  if (!terms || terms.length < 1 || !input) {
+    return input || [];
+  }
+
+  const regex = new RegExp(typeof terms === 'string' ? terms : terms.join('|'), 'gi');
+  return orderBy(input, (a) => (a.match(regex) ? 0 : 1));
+};
 
 /**
  * Consistent formatting of the TAFS ID.

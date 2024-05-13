@@ -1,5 +1,5 @@
 // Dependencies
-import { json } from 'stream/consumers';
+import { json } from '@sveltejs/kit';
 import { siteName } from '$config';
 import favAndroid192 from '$assets/favicon/android-chrome-192x192.png';
 import favAndroid512 from '$assets/favicon/android-chrome-512x512.png';

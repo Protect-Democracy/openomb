@@ -1,8 +1,15 @@
 <script lang="ts">
-  import { formatFileTitle, formatDate, formatDateISO } from '$lib/formatters';
+  import {
+    formatFileTitle,
+    formatDate,
+    formatDateISO,
+    highlight,
+    formatTafsFormattedId
+  } from '$lib/formatters';
   import { uniqBy } from 'lodash-es';
   import type { filesSelect } from '$db/schema/files';
   import type { tafsSelect } from '$db/schema/tafs';
+  import type { SearchParams } from '$db/queries/search';
 
   // Types
   interface File extends filesSelect {
@@ -13,6 +20,10 @@
   export let headerElement = 'h3';
   export let headerClasses = 'h3-alt';
   export let file: File;
+  export let highlightParams: SearchParams;
+
+  // Constants
+  const tafsLimit = 3;
 
   // Derived
   let hasTafs: boolean;
@@ -23,28 +34,37 @@
         'id'
       )
     : [];
-  hasTafs;
   $: bureaus = hasTafs
     ? uniqBy(
         file?.tafs?.map((t) => ({ id: t.budgetBureauTitleId, title: t.budgetBureauTitle })),
         'id'
       )
     : [];
-  hasTafs;
+  $: tafs = hasTafs
+    ? uniqBy(
+        file?.tafs?.map((t) => ({ id: t.tafsId, title: formatTafsFormattedId(t) })),
+        'id'
+      )
+    : [];
 </script>
 
 <article class="file-listing-small">
   <svelte:element this={headerElement} class="listing-heading {headerClasses}">
-    <a href="/file/{file.fileId}">{formatFileTitle(file)}</a>
+    <small>File ID: {file.fileId}</small>
+    <a href="/file/{file.fileId}">
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      {@html formatFileTitle(file, [highlightParams?.term, highlightParams?.account])}</a
+    >
   </svelte:element>
 
   <ul class="inline-list heirarchy">
-    <li>
-      <a class="like-text" title="Go to folder: {file.folder}" href="/folder/{file.folderId}"
-        >{file.folder}</a
-      >
-    </li>
-    {#if hasTafs}
+    {#if !hasTafs}
+      <li>
+        <a class="like-text" title="Go to folder: {file.folder}" href="/folder/{file.folderId}"
+          >{file.folder}</a
+        >
+      </li>
+    {:else}
       <li>
         <a
           class="like-text"
@@ -69,15 +89,34 @@
         >{formatDate(file.approvalTimestamp, 'medium')}</time
       ></strong
     >
-    for fiscal year <strong>{file.fiscalYear}</strong>.
+    for fiscal year
+    <strong>
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      {@html highlight(
+        file.fiscalYear?.toString(),
+        highlightParams.years.map((y) => (y ? y.toString() : ''))
+      )}</strong
+    >.
   </div>
 
-  <small class="file-id">File ID: {file.fileId}</small>
+  {#if hasTafs}
+    <div class="tafs">
+      <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>:
+      {#each tafs as taf, ti (taf.id)}
+        {#if ti < tafsLimit}
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+          <span>{@html highlight(taf.title, [highlightParams.tafs])}</span
+          >{#if ti < tafsLimit - 1 && tafs.length - 1 !== ti}<span>,&nbsp;</span>
+          {/if}
+        {/if}
+      {/each}
+    </div>
+  {/if}
 </article>
 
 <style>
   .file-listing-small {
-    margin-bottom: var(--spacing);
+    margin-bottom: var(--spacing-double);
   }
 
   .listing-heading {
