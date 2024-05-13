@@ -10,7 +10,7 @@ import postcssCustomMedia from 'postcss-custom-media';
 import { cspHashes } from '@vitejs/plugin-legacy';
 
 // Get report URI
-const sentryReportUri = process.env['APPORTIONMENTS_SENTRY_REPORT_URI'] || '';
+const sentrySvelteReportUri = process.env['APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI'] || '';
 
 // Abstract out the csp directives in case we want to shift to a report only
 // strategy.
@@ -43,7 +43,7 @@ const cspDirectives = {
   // `Report-To` header.  SvelteKit does not support this automatically so we would have to put that
   // header in another part of the application.  That coupled with the fact that report-uri is actually
   // more supported (though deprecated) means we aren't going to do report-to  right now.
-  'report-uri': sentryReportUri ? [sentryReportUri] : undefined
+  'report-uri': sentrySvelteReportUri ? [sentrySvelteReportUri] : undefined
 };
 
 /** @type {import('@sveltejs/kit').Config} */
