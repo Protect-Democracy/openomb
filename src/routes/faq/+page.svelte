@@ -2,6 +2,7 @@
   /**
    * Inspiration from: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
    */
+  import { page } from '$app/stores';
   import { slide } from 'svelte/transition';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
@@ -150,13 +151,21 @@
     }
   ];
 
-  // TODO: We want to get the hash to be able to expand a FAQ when loading
-  // the page. Using $page and url and getting hash seemed to have
-  // messed with navigation in general.
+  // TODO: Setup hash handling when expanding.  Probably need
+  // to use a store to handle the double "inputs" of the URL
+  // and tapping/clicking.
 
   // Derived
+  // eslint-disable-next-line svelte/valid-compile
+  $: hash = $page.url.hash;
+  $: faqHash = (hash || '').replace(/#faq-/, '');
   $: faqs.forEach((f) => {
-    expanded[f.id] = expanded[f.id] || false;
+    expanded[f.id] =
+      typeof expanded[f.id] === 'boolean'
+        ? expanded[f.id]
+        : faqHash && f.id === faqHash
+          ? true
+          : false;
   });
 
   // Toggle
@@ -177,13 +186,13 @@
   <div class="text-container">
     <div class="has-js-only-block">
       <dl class="faqs">
-        {#each faqs as faq, fi (faq.id)}
+        {#each faqs as faq (faq.id)}
           <dt id="faq-{faq.id}">
             <button
               type="button"
               class="like-text"
-              aria-expanded={expanded[fi] ? 'true' : 'false'}
-              aria-controls="faq-{fi}"
+              aria-expanded={expanded[faq.id] ? 'true' : 'false'}
+              aria-controls="faq-{faq.id}"
               on:click|preventDefault={() => toggleExpanded(faq.id)}
             >
               {faq.question} <span class="icon"><ChevronDown /></span></button
