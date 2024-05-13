@@ -93,7 +93,7 @@
         >
       </li>
       <li>
-        <a href="/faq#faq-how-to-find-funds"
+        <a href="/faq#faq-how-to-find-apportionments"
           ><span class="faq-icon"><TopRightArrow /></span> How can I find the funds I’m looking for?</a
         >
       </li>

@@ -42,11 +42,11 @@
         <p>Congress created the apportionment power to ensure agencies spend within the limits of the law. It is meant to be a purely ministerial tool.</p>
 
         <p>Funds may be apportioned in several ways:
-          <ul>
+          <ol>
             <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as "Category A" apportionment. 31 U.S.C. § 1512(b)(1)(A).</li>
             <li>By agency activities, functions, or projects. This is known as a "Category B" apportionment. 31 U.S.C. § 1512(b)(1)(B).</li>
             <li>By time and project. This is known as a "Category AB" apportionment. 31 U.S.C. § 1512(b)(1)(C).</li>
-          </ul>
+          </ol>
         </p>
 
         <p>Apportionments are legally binding on an agency because they carry the force of the Antideficiency Act. Officials who fail to follow an apportionment may violate that law and expose themselves to administrative or criminal penalties, which include a fine of up to $5,000 and a prison term of up to two years. 31 U.S.C. § 1519.</p>
@@ -64,11 +64,11 @@
 
         <p>Funds in the application of budgetary resources section may be apportioned in several different ways:
 
-          <ul>
+          <ol>
             <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as “Category A” apportionment.</li>
             <li>By agency activities, functions, or projects. This is known as a “Category B” apportionment.</li>
             <li>By time and project. This is known as a “Category AB” apportionment.</li>
-          </ul>
+          </ol>
         </p>
 
         <p>Apportionments are complex documents. But in Oct. 2022, three experts hosted a training and broke down how to read them. Watch the training below or go <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=1450" target="_blank" rel="noopener noreferrer">directly to the video</a>.</p>
@@ -83,6 +83,70 @@
         ></iframe>
 
         <p>For more information on the line numbers in an apportionment, consult OMB Circular A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the “OMB Footnotes” column in apportionments, consult the next FAQ </p>
+      `
+    },
+    {
+      id: 'apportionment-footnote',
+      question: 'What is an apportionment footnote?',
+      answer: `
+        <p>Apportionment footnotes provide further information about, or establish further legal requirements related to the use of, the resources in a given line or set of lines in an apportionment.</p>
+
+        <p>There are two kinds of footnotes:
+
+          <ol>
+            <li>“A” footnotes are legally binding and establish further requirements related to, or conditions on the availability of, the apportioned funds. An “A” footnote might, for instance, require an agency to submit a spend plan to OMB for its approval before the agency may spend certain funds. (Spend plans detail how an agency will use the funds OMB is apportioning.)</li>
+            <li>“B” footnotes appear in the budgetary resources section of the apportionment (its top half, lines 1xxx) and merely provide background information about a given line item or set of line items. A “B” footnote might, for instance, identify in greater detail the sources of the funds in a given line.</li>
+          </ol>
+        </p>
+
+        <p>If footnotes appear on lines 1920 or 6190, they apply to all the lines in the 1xxx and 6xxx sections, respectively.</p>
+
+        <p>For more information on apportionment footnotes, consult this <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=2670" target="_blank" rel="noopener noreferrer">expert training from Oct. 2022</a>.</p>
+      `
+    },
+    {
+      id: 'who-apportions-funds',
+      question: 'Who may apportion funds?',
+      answer: `
+        <p>The Antideficiency Act gives the president the power to apportion funds. 31 U.S.C. § 1513(b). The president has delegated that power to the OMB director, who has <a href="https://www.federalregister.gov/documents/2022/04/01/2022-06873/delegation-of-apportionment-authority" target="_blank" rel="noopener noreferrer">delegated it, in turn, to OMB’s deputy associate directors</a>.</p>
+      `
+    },
+    {
+      id: 'how-to-find-apportionments',
+      question: 'How do I find apportionments for the funds I care about?',
+      answer: `
+        <p>Apportionments are done at the account level. The best and easiest way to find an apportionment is thus to know the name or number of the relevant appropriation or fund account. Once you have this information, you can enter it into our search tool and navigate to the right apportionment.</p>
+
+        <p>TODO</p>
+      `
+    },
+    {
+      id: 'what-is-tas-tafs',
+      question: 'What is a TAS? What is a TAFS?',
+      answer: `
+        <p>TODO</p>
+      `
+    },
+    {
+      id: 'agency-has-spent',
+      question:
+        'Apportionments show what an agency can spend at a given time. Where can I find out what an agency has spent?',
+      answer: `
+        <p>TODO</p>
+      `
+    },
+    {
+      id: 'learn-more',
+      question: 'I want to learn more about apportionments. What resources should I consult?',
+      answer: `
+        <p>TODO</p>
+      `
+    },
+    {
+      id: 'laws-govern-apportionments',
+      question: 'What laws govern apportionments? ',
+      answer: `
+        <p>TODO</p>
       `
     }
   ];
