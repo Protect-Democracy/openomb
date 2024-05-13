@@ -143,13 +143,21 @@
       <ul>
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
-        <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
   </div>
 
   <div class="attribution page-container">
-    <p class="center-container">{siteName} is a project of</p>
+    <p class="center-container">
+      This website is not affiliated with the White House Office of Management and Budget (OMB) or
+      any agency of the U.S. government. {siteName} is a searchable archive maintained by
+      <a
+        href="https://protectdemocracy.org/"
+        class="like-text"
+        target="_blank"
+        rel="noopener noreferrer">Protect Democracy</a
+      >.
+    </p>
 
     <ul>
       <li>
@@ -239,10 +247,15 @@
     padding-top: var(--spacing-double);
     padding-bottom: var(--spacing-large);
     text-align: center;
+    font-size: var(--font-size-small);
   }
 
   footer .attribution p {
     margin-bottom: var(--spacing-double);
+  }
+
+  footer .attribution a.like-text {
+    color: var(--color-text-inverse);
   }
 
   footer .attribution ul {
@@ -260,7 +273,7 @@
     padding: 0;
   }
 
-  footer .attribution a {
+  footer .attribution li a {
     display: block;
     max-width: 15rem;
   }
