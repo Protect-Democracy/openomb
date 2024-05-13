@@ -261,6 +261,7 @@
   .icon {
     margin-left: var(--spacing);
     display: inline-block;
+    min-width: 1em;
     width: 1em;
     height: 1em;
     margin-top: var(--spacing-small);
