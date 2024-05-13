@@ -2,7 +2,6 @@
   /**
    * Inspiration from: https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/
    */
-  import { page } from '$app/stores';
   import { slide } from 'svelte/transition';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
@@ -152,9 +151,11 @@
   ];
 
   // Derived
-  // eslint-disable-next-line svelte/valid-compile
-  $: ({ url } = $page);
-  $: faqHash = (url.hash || '').replace(/#faq-/g, '');
+
+  // TODO: Using $page and url and getting hash seemed to have
+  // messed with navigation in general.
+  const faqHash = 'unknown';
+
   $: faqs.forEach((f) => {
     expanded[f.id] =
       typeof expanded[f.id] === 'boolean'
