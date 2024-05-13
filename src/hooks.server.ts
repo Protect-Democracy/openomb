@@ -65,5 +65,9 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   return await resolve(event);
 };
 
+// Sentry handle.  Note that the Nonce needs to be added to
+// svelte.config.js as well.
+const sentryHandle = Sentry.sentryHandle({ fetchProxyScriptNonce: 'SENTRY_PROXY_SCRIPT' });
+
 // Add our handlers to each request
-export const handle = sequence(Sentry.sentryHandle(), addHeaders);
+export const handle = sequence(sentryHandle, addHeaders);

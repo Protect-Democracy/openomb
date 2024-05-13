@@ -22,9 +22,6 @@ export const socialTwitterImgPath = '/twitter.png';
 export const googleAnalyticsId = 'G-Y5NJ2S21X5';
 export const securityHeaders = {
   // Security headers
-  // TODO: Add report-uri to Sentry
-  // See: https://docs.sentry.io/product/security-policy-reporting/#expect-ct
-  //
   // Note: CSP headers are configured in `svelte.config.js`
   'Expect-CT': 'enforce, max-age=3600',
   'Referrer-Policy': 'strict-origin',
