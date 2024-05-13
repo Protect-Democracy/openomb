@@ -7,18 +7,19 @@
 </script>
 
 <section class="page-container content-container">
-  <h1>Explore apportionments</h1>
+  <h1>Explore Apportionments by Agency</h1>
 
   <p>
-    Apportionments are organized by Folder, Agency, and Bureau, and each apportionment file can have
-    a number of accounts and TAFS in them. The listing below allows you to start from the Agency
-    level and drill down to get to the group of apportionments you are looking for. Also try <a
-      href="/search">searching for apportionments</a
+    Apportionments are made at the account level, but those accounts are for particular agencies and
+    bureaus. The listing below allows you to start from the agency level and drill down from there
+    to find the apportionment you are looking for. Also try <a href="/search"
+      >searching for apportionments</a
     >
     or <a href="/folders">to explore by folders</a>.
   </p>
 
   <AgencyExplorer agencies={data.agencies} />
+
   <ScrollToTop />
 </section>
 

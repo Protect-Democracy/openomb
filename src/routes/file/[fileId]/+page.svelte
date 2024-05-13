@@ -60,12 +60,12 @@
     <a href="/approver/{file.approverTitleId}" class="like-text"
       ><strong>{file.approverTitle}</strong></a
     >
-    for fiscal year <strong>{file.fiscalYear}</strong>
+    for fiscal year <strong>{file.fiscalYear}</strong>.
     {#if file.fundsProvidedByParsed}
-      provided by
-      <strong>{file.fundsProvidedByParsed}</strong>
+      Funds provided by
+      <strong>{file.fundsProvidedByParsed}</strong>.
     {/if}
-    filed under folder
+    Filed under folder
     <a href="/folder/{file.folderId}">{file.folder}</a>.
   </p>
 
@@ -218,9 +218,15 @@
                       <div
                         transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}
                       >
-                        Footnotes for line {line.lineNumber}{line.lineSplit
-                          ? ` (${line.lineSplit})`
-                          : ''}:
+                        {#if line.lineNumber === '6190'}
+                          Footnotes for all <em>6xxx</em> lines:
+                        {:else if line.lineNumber === '1920'}
+                          Footnotes for all <em>1xxx</em> lines:
+                        {:else}
+                          Footnotes for line {line.lineNumber}{line.lineSplit
+                            ? ` (${line.lineSplit})`
+                            : ''}:
+                        {/if}
                       </div></th
                     >
                     <td colspan="3">
@@ -250,9 +256,12 @@
     <h2>Footnotes</h2>
 
     <p>
-      The following are all the footnotes associated with this file. Note that a footnote can be
-      used for multiple lines across multiple accounts. This is simply a reference for the
-      information that is already included above.
+      Footnotes provide further information about, or establish further legal requirements related
+      to the use of, the funds in a given line or set of lines in an apportionment. If footnotes
+      appear on lines <em>1920</em> or <em>6190</em>, they apply to all the lines in the
+      <em>1xxx</em>
+      and <em>6xxx</em> sections, respectively. The following are all the footnotes associated with this
+      file.
     </p>
 
     {#if footnotes.length}
