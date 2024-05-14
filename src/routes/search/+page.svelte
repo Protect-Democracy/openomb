@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
-  import { formatNumber } from '$lib/formatters';
+  import { formatNumber, highlight } from '$lib/formatters';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
@@ -57,11 +57,18 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ count, files, searchParams } = data);
+  $: ({ count, files, searchParams, accounts } = data);
   $: hasResults = count && count > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
   $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
+
+  $: formattedAccounts =
+    accounts?.map((account) => ({
+      id: account.accountTitleId,
+      title: account.accountTitle,
+      highlightedTitle: highlight(account.accountTitle, [searchParams.term])
+    })) || [];
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
@@ -114,6 +121,24 @@
   </div>
 
   {#if hasResults}
+    <h2>Accounts</h2>
+
+    <div class="account-results">
+      {#each formattedAccounts as account, ai}
+        {#if ai < 10}
+          <a
+            href="/agency/administrative-conference-of-the-united-states/bureau/administrative-conference-of-the-united-states/account/administrative-conference-of-the-us-salaries-and-expenses"
+            class="account-result"
+          >
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html account.highlightedTitle}
+          </a>
+        {/if}
+      {/each}
+    </div>
+
+    <h2>Files</h2>
+
     <div class="results">
       <aside class="result-actions">
         <div class="result-count">
@@ -193,7 +218,7 @@
     justify-content: space-between;
     align-items: center;
     align-items: baseline;
-    margin: var(--spacing-double) 0 var(--spacing-large) 0;
+    margin: 0 0 var(--spacing-large) 0;
   }
 
   .sort-action form {
@@ -216,6 +241,21 @@
     padding-bottom: var(--spacing-double);
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .account-results {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .account-result {
+    display: block;
+    padding: 0 2rem 2rem 0;
+    width: 33.333%;
+  }
+
+  .page-container :global(.file-listing-small) {
+    margin-bottom: var(--spacing-large);
   }
 
   @media (max-width: 768px) {

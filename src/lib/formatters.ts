@@ -1,5 +1,5 @@
 // Dependencies
-import { uniqBy, orderBy, filter } from 'lodash-es';
+import { uniqBy, orderBy, filter, sumBy } from 'lodash-es';
 import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
 
@@ -80,35 +80,6 @@ export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): 
 }
 
 /**
- * Highlight part of a string based on a set of search terms
- */
-export const highlight = function (text?: string | null, terms?: string[]): string {
-  terms = terms ? terms : [];
-  terms = filter(terms);
-
-  if (!terms || terms.length < 1 || !text) {
-    return text || '';
-  }
-
-  const regex = new RegExp(typeof terms === 'string' ? terms : terms.join('|'), 'gi');
-  return text.replace(regex, '<mark>$&</mark>');
-};
-
-/**
- * Order array of strings by set of search terms
- */
-export const highlightOrder = function (input?: string[], terms?: string[]): string[] {
-  terms = terms ? terms : [];
-
-  if (!terms || terms.length < 1 || !input) {
-    return input || [];
-  }
-
-  const regex = new RegExp(typeof terms === 'string' ? terms : terms.join('|'), 'gi');
-  return orderBy(input, (a) => (a.match(regex) ? 0 : 1));
-};
-
-/**
  * Consistent formatting of the TAFS ID.
  *
  * Examples:
@@ -144,4 +115,70 @@ export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
         : '/X';
 
   return `${account} ${years}`;
+};
+
+/**
+ * Highlight part of a string based on a set of search terms
+ */
+export const highlight = function (text?: string | null, terms?: string[], trim?: number): string {
+  terms = terms ? terms : [];
+  terms = filter(terms);
+
+  if (!terms || terms.length < 1 || !text) {
+    return text || '';
+  }
+
+  if (!trim) {
+    const regex = new RegExp(terms.join('|'), 'gi');
+    return text.replace(regex, '<mark>$&</mark>');
+  }
+  else {
+    // This is pretty hacky.  Ideally we could make this kind of like Google results and have multiple
+    // highlights for each search, but for now, just make a single highlight.
+    const wordLength = Math.round(sumBy(terms, (t) => t.length) / terms.length);
+    const padding = Math.round(trim - wordLength / 2);
+    const regex = new RegExp(
+      `(\\S*.{0,${padding}})?(${terms.join('|')})(.{0,${padding}}\\S*)?`,
+      'i'
+    );
+    const parts = text.match(regex);
+    if (!parts) {
+      return text.substring(0, trim) + (text.length > trim ? '...' : '');
+    }
+    return `${parts?.[1] ? '...' + parts?.[1] : ''}<mark>${parts?.[2]}</mark>${parts?.[3] ? parts?.[3] + '...' : ''}`;
+  }
+};
+
+/**
+ * Has highlight
+ */
+export const hasHighlight = function (text?: string): boolean {
+  return text?.includes('<mark>') || false;
+};
+
+/**
+ * Order array of strings by set of search terms
+ */
+export const highlightOrder = function (
+  input?: string[] | object[],
+  // TODO:
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  accessor?: string | Function
+): string[] | object[] {
+  // Handle no input
+  if (!input) {
+    return [];
+  }
+
+  return orderBy(
+    input,
+    [
+      (t) => {
+        const value = accessor ? (typeof accessor === 'function' ? accessor(t) : t[accessor]) : t;
+        return typeof value === 'string' && value.includes('<mark>') ? 0 : 1;
+      },
+      (t, ti) => ti
+    ],
+    ['asc', 'asc']
+  );
 };

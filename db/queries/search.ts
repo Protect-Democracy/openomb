@@ -1,3 +1,4 @@
+// Dependencies
 import { db, dbConnect } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -437,7 +438,10 @@ export async function lineNumberOptions() {
   return lineNumberOptions.map((v) => v.data);
 }
 
-export async function fileSearchTest(searchParams: SearchParams & PaginationParams) {
+export type FormattedSearchParams = SearchParams &
+  PaginationParams & { years: number[]; lineNumbers: string[]; footnoteNumbers: string[] };
+
+function formatSearchParams(searchParams: SearchParams & PaginationParams): FormattedSearchParams {
   // {
   //   term: '',
   //   tafs: '',
@@ -452,23 +456,27 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
   //   footnoteNum: ''
   // }
 
-  await dbConnect();
-
   // Format
-  const years = (searchParams.year ? searchParams.year.split(',') : []).map((v) => parseInt(v));
-  const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : []).map((v) =>
-    v.trim()
-  );
-  const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : []).map(
-    (v) => v.trim()
-  );
-  const formattedSearchParams = {
+  const years = (searchParams.year ? searchParams.year.split(',') : [])
+    .map((v) => parseInt(v))
+    .filter((t) => !!t);
+  const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
+    .map((v) => v.trim())
+    .filter((t) => !!t);
+  const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
+    .map((v) => v.trim())
+    .filter((t) => !!t);
+  const formattedSearchParams: SearchParams &
+    PaginationParams & { years: number[]; lineNumbers: string[]; footnoteNumbers: string[] } = {
     ...searchParams,
     years,
     lineNumbers,
     footnoteNumbers
   };
+  return formattedSearchParams;
+}
 
+function fileSearchWhere(searchParams: FormattedSearchParams) {
   // Collect filters
   const where = [];
 
@@ -488,6 +496,13 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
               .selectDistinct({ fileId: lines.fileId })
               .from(lines)
               .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
+          ),
+          inArray(
+            files.fileId,
+            db
+              .selectDistinct({ fileId: footnotes.fileId })
+              .from(footnotes)
+              .where(ilike(footnotes.footnoteText, `%${searchParams.term}%`))
           )
         )
       : undefined
@@ -505,14 +520,22 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
   // Identifiers
   where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
   where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
-  where.push(lineNumbers?.length > 0 ? inArray(lines.lineNumber, lineNumbers) : undefined);
   where.push(
-    footnoteNumbers?.length > 0 ? inArray(footnotes.footnoteNumber, footnoteNumbers) : undefined
+    searchParams.lineNumbers?.length > 0
+      ? inArray(lines.lineNumber, searchParams.lineNumbers)
+      : undefined
+  );
+  where.push(
+    searchParams.footnoteNumbers?.length > 0
+      ? inArray(footnotes.footnoteNumber, searchParams.footnoteNumbers)
+      : undefined
   );
 
   // Specific values
   where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
-  where.push(years?.length > 0 ? inArray(files.fiscalYear, years) : undefined);
+  where.push(
+    searchParams.years?.length > 0 ? inArray(files.fiscalYear, searchParams.years) : undefined
+  );
   where.push(
     searchParams.approvedStart
       ? gte(files.approvalTimestamp, searchParams.approvedStart)
@@ -530,6 +553,49 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
       : filteredWhere.length === 1
         ? filteredWhere[0]
         : undefined;
+  return finalWhere;
+}
+
+export async function accountSearchTest(searchParams: SearchParams & PaginationParams) {
+  // Format
+  const formattedSearchParams = formatSearchParams(searchParams);
+
+  // Collect filters
+  const finalWhere = fileSearchWhere(formattedSearchParams);
+
+  // Find accounts
+  const startTime = Date.now();
+  const allAccounts = await db
+    .selectDistinct({
+      accountTitle: tafs.accountTitle,
+      accountTitleId: tafs.accountTitleId
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .where(finalWhere)
+    .groupBy(tafs.accountTitle, tafs.accountTitleId)
+    .orderBy(asc(tafs.accountTitle));
+
+  console.log(`TEST --- ACCOUNTS ${Date.now() - startTime}ms`);
+
+  return {
+    accounts: allAccounts
+  };
+}
+
+export async function fileSearchTest(searchParams: SearchParams & PaginationParams) {
+  await dbConnect();
+
+  // Format
+  const formattedSearchParams = formatSearchParams(searchParams);
+
+  // Filters that will search line numbers
+  const searchHasLines = !!formattedSearchParams.term || !!formattedSearchParams.lineNumbers.length;
+  const searchHasFootnotes =
+    !!formattedSearchParams.term || !!formattedSearchParams.footnoteNumbers.length;
+
+  // Collect filters
+  const finalWhere = fileSearchWhere(formattedSearchParams);
 
   // Order.  We need to include the field in the query for distinctness
   let order = [desc(files.approvalTimestamp)];
@@ -591,6 +657,23 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
 
   const detailsStart = +new Date();
   // Details.  Is there a better way to do this
+  const detailsWith = {
+    tafs: {
+      orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
+    }
+  };
+  if (searchHasLines) {
+    detailsWith.tafs.with = {
+      lines: {
+        orderBy: (lines, { asc }) => [asc(lines.lineNumber)]
+      }
+    };
+  }
+  if (searchHasFootnotes) {
+    detailsWith.footnotes = {
+      orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
+    };
+  }
   const fileDetails = [];
   for (const limitedId of limitedIds) {
     const details = await db.query.files.findFirst({
@@ -598,11 +681,7 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
         sourceData: false
       },
       where: eq(files.fileId, limitedId.fileId),
-      with: {
-        tafs: {
-          orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
-        }
-      }
+      with: detailsWith
     });
     fileDetails.push(details);
   }

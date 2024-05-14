@@ -1,4 +1,4 @@
-import { yearOptions, lineNumberOptions, fileSearchTest } from '$queries/search';
+import { yearOptions, lineNumberOptions, fileSearchTest, accountSearchTest } from '$queries/search';
 import { bureaus } from '$queries/tafs';
 import { sortOptions } from '$config/search';
 import type { PageServerData } from '../$types';
@@ -13,6 +13,7 @@ export const load: PageServerData = async ({ url }) => {
   const pageSize = 50;
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
   let searchResults;
+  let accountResults;
   let searchArgs;
 
   const startDateString = url.searchParams.get('approvedStart')
@@ -41,12 +42,15 @@ export const load: PageServerData = async ({ url }) => {
       footnoteNum: convertArrayToSqlString(url.searchParams.getAll('footnoteNum'))
     };
 
-    searchResults = await fileSearchTest({
+    const pagedSearchArgs = {
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
       sort: url.searchParams.get('sort'),
       ...searchArgs
-    });
+    };
+
+    searchResults = await fileSearchTest(pagedSearchArgs);
+    accountResults = await accountSearchTest(pagedSearchArgs);
   }
 
   // Get our options
@@ -62,6 +66,7 @@ export const load: PageServerData = async ({ url }) => {
     sortOptions,
     count: searchResults?.count,
     files: searchResults?.files,
+    accounts: accountResults?.accounts,
     pageSize,
     pageIndex,
     pageMeta: {
