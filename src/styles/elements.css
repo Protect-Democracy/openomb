@@ -185,6 +185,11 @@ pre {
   padding: var(--spacing);
 }
 
+mark {
+  background-color: var(--color-highlight);
+  color: var(--color-text);
+}
+
 abbr {
   cursor: help;
 }

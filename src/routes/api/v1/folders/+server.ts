@@ -1,5 +1,4 @@
 // Dependencies
-
 import { json } from '@sveltejs/kit';
 import { dbConnect } from '$db/connection.js';
 import { folders } from '$queries/files';

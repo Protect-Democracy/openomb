@@ -71,7 +71,10 @@ a.like-text {
   font-size: var(--font-size-small);
 }
 
-h1 > small {
+h1 > small,
+h2 > small,
+h3 > small,
+h4 > small {
   font-size: 0.85rem;
   font-weight: var(--font-copy-weight-normal);
   font-family: var(--font-family-copy);

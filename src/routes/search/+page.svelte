@@ -60,8 +60,7 @@
   $: ({ resultCount, fileCount, results } = data);
   $: hasResults = resultCount && resultCount > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
-  // TODO: Maybe be more specific about how we determine if search has been done.
-  $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
+  $: hasSearched = hasSearchParams;
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
