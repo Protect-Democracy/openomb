@@ -15,12 +15,7 @@ export default defineConfig({
       sourceMapsUploadOptions: {
         org: 'voteshield',
         project: 'pd-apportionments-browser',
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        sourcemaps: {
-          assets: ['./build/*/**/*'],
-          ignore: ['**/build/client/**/*'],
-          filesToDeleteAfterUpload: ['./build/**/*.map']
-        }
+        authToken: process.env.SENTRY_AUTH_TOKEN
       }
     }),
 

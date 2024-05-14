@@ -23,9 +23,6 @@ const cspDirectives = {
     'https://www.googletagmanager.com',
     'nonce-SENTRY_SCRIPT_SETUP',
     'nonce-PROGRESSIVE_JS_CHECK',
-    // This particular script is managed by Sentry and this values is
-    // set in hooks.server.ts
-    'nonce-SENTRY_PROXY_SCRIPT',
     ...cspHashes.map((hash) => `sha256-${hash}`)
   ],
   // Doesn't seem like SvelteKit will handle inline styles by adding

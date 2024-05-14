@@ -4,16 +4,15 @@
 
 import { toDate, toZonedTime } from 'date-fns-tz';
 import { add as dateAdd } from 'date-fns';
+import env from '$lib/environment';
 import { collectionHour, collectionMinute, collectionTimezone } from '$config';
 
 /**
- * Determine if production using NODE_ENV and vite.
- *
- * @see https://vitejs.dev/guide/env-and-mode.html#env-files
+ * Determine if production using environment
  *
  * @returns True if in production
  */
-export const isProduction = (): boolean => import.meta.env.PROD;
+export const isProduction = (): boolean => env.environment == 'production';
 
 /**
  * Get seconds to the next specific time in a timezone.

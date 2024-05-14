@@ -69,10 +69,13 @@ export { packageJson };
 
 /**
  * Get APPORTIONMENT_* variables from the environment.  These are variables
- * to use on the server-side processes only.
+ * to use on the server-side node processes only.
  *
- * TODO: This might not be good since Vite uses VITE_ without some
- * specific code/config.
+ * Our sveltekit application environment variables belong in /src/lib/environment.ts
+ *
+ * TODO: At some point, look into moving our server logic into /lib/server/* to prevent accidental
+ *  client side usage.  We could then move this to /lib/server/environment and utilize sveltekit
+ *  patterns across all files (would require building our scripts as sveltekit library modules)
  */
 function environmentVariables(): ApportionmentEnvironment {
   // We use dotenvx to get our .env variables into the process
@@ -102,7 +105,6 @@ function environmentVariables(): ApportionmentEnvironment {
         ? (process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl'])
         : 'public-read',
     sentryNodeDsn: process.env['APPORTIONMENTS_SENTRY_NODE_DSN'] || '',
-    sentrySvelteReportUri: process.env['APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
     awsSso:
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&

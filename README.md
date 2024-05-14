@@ -54,7 +54,7 @@ Configure using the following environment variables:
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
   - `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI`: The CSP header value from Sentry.
-  - `VITE_SENTRY_DSN`: Sentry DSN for the Sveltekit application
+  - `PUBLIC_SENTRY_SVELTE_DSN`: Sentry DSN for the Sveltekit application
 
 ## Setup
 

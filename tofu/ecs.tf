@@ -61,6 +61,14 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI"]
         },
         {
+          "name" : "PUBLIC_SENTRY_SVELTE_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["PUBLIC_SENTRY_SVELTE_DSN"]
+        },
+        {
+          "name" : "PUBLIC_NODE_ENV",
+          "value" : "${var.node_env}"
+        },
+        {
           "name" : "NODE_ENV",
           "value" : "${var.node_env}"
         }
