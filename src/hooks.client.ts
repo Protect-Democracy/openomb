@@ -10,7 +10,8 @@ if (env.sentrySvelteDsn) {
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1,
     profilesSampleRate: 1,
-    integrations: [Sentry.replayIntegration(), Sentry.browserProfilingIntegration()]
+    integrations: [Sentry.replayIntegration(), Sentry.browserProfilingIntegration()],
+    debug: true
   });
 }
 
