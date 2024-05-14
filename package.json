@@ -87,7 +87,7 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "postcss-custom-media": "^10.0.4",
-    "postcss-nesting": "^12.1.2",
+    "postcss-nesting": "^12.1.4",
     "prettier": "^3.1.1",
     "prettier-plugin-brace-style": "^0.5.0",
     "prettier-plugin-svelte": "^3.2.3",
