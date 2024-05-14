@@ -13,8 +13,7 @@ if (env.sentrySvelteDsn) {
     environment: env.environment,
     tracesSampleRate: 1,
     profilesSampleRate: 1,
-    integrations: [nodeProfilingIntegration()],
-    debug: true
+    integrations: [nodeProfilingIntegration()]
   });
 }
 
