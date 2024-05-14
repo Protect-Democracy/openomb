@@ -1,11 +1,4 @@
-import {
-  yearOptions,
-  lineNumberOptions,
-  tafsCountByCriterion,
-  fileCountByCriterion,
-  tafsByCriterion,
-  type SearchParams
-} from '$queries/search';
+import { yearOptions, lineNumberOptions, fileSearchTest, accountSearchTest } from '$queries/search';
 import { bureaus } from '$queries/tafs';
 import { sortOptions } from '$config/search';
 import type { PageServerData } from '../$types';
@@ -19,7 +12,9 @@ function convertArrayToSqlString(params: string[]) {
 export const load: PageServerData = async ({ url }) => {
   const pageSize = 50;
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
-  let resultCount, fileCount, results;
+  let searchResults;
+  let accountResults;
+  let searchArgs;
 
   const startDateString = url.searchParams.get('approvedStart')
     ? url.searchParams.get('approvedStart')
@@ -33,7 +28,7 @@ export const load: PageServerData = async ({ url }) => {
     // Note: Make sure to update the values in search/+page.svelte if the arguments
     // change.
     const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-    const searchArgs: SearchParams = {
+    searchArgs = {
       term: url.searchParams.get('term') || '',
       tafs: url.searchParams.get('tafs') || '',
       bureau: agencyBureau?.pop() || '',
@@ -47,28 +42,33 @@ export const load: PageServerData = async ({ url }) => {
       footnoteNum: convertArrayToSqlString(url.searchParams.getAll('footnoteNum'))
     };
 
-    // Execute prepared statements
-    resultCount = await tafsCountByCriterion(searchArgs);
-    fileCount = await fileCountByCriterion(searchArgs);
-    results = await tafsByCriterion({
+    const pagedSearchArgs = {
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
       sort: url.searchParams.get('sort'),
       ...searchArgs
-    });
+    };
+
+    searchResults = await fileSearchTest(pagedSearchArgs);
+    accountResults = await accountSearchTest(pagedSearchArgs);
   }
 
+  // Get our options
+  const allYearOptions = await yearOptions();
+  const lineOptions = await lineNumberOptions();
+  const agencyBureauOptions = await bureaus();
+
   return {
-    // Return numeric options as numbers
-    yearOptions: await yearOptions(),
-    lineOptions: await lineNumberOptions(),
-    agencyBureauOptions: await bureaus(),
+    searchParams: searchResults?.formattedSearchParams,
+    yearOptions: allYearOptions,
+    lineOptions,
+    agencyBureauOptions,
     sortOptions,
-    resultCount,
-    fileCount,
+    count: searchResults?.count,
+    files: searchResults?.files,
+    accounts: accountResults?.accounts,
     pageSize,
     pageIndex,
-    results: results,
     pageMeta: {
       title: 'Search apportionments',
       description:

@@ -564,19 +564,19 @@ export async function accountSearchTest(searchParams: SearchParams & PaginationP
   const finalWhere = fileSearchWhere(formattedSearchParams);
 
   // Find accounts
-  const startTime = Date.now();
   const allAccounts = await db
     .selectDistinct({
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      budgetBureauTitle: tafs.budgetBureauTitle,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
       accountTitle: tafs.accountTitle,
       accountTitleId: tafs.accountTitleId
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
     .where(finalWhere)
-    .groupBy(tafs.accountTitle, tafs.accountTitleId)
     .orderBy(asc(tafs.accountTitle));
-
-  console.log(`TEST --- ACCOUNTS ${Date.now() - startTime}ms`);
 
   return {
     accounts: allAccounts
@@ -618,9 +618,6 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     orderFields.orderFieldSecondary = files.approvalTimestamp;
   }
 
-  console.log(`TEST ---`);
-
-  const fullStart = +new Date();
   const countSubquery = db
     .selectDistinct({
       fileId: files.fileId,
@@ -633,11 +630,8 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     .where(finalWhere)
     .as('countSubquery');
   const fullCount = await db.select({ count: count() }).from(countSubquery);
-  const fullEnd = +new Date();
-  console.log(`TEST --- FULL (${fullCount[0].count}) ${fullEnd - fullStart}ms`);
 
   // Specific ids
-  const pagedStart = +new Date();
   const limitedIds = await db
     .selectDistinct({
       fileId: files.fileId,
@@ -652,10 +646,6 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     .offset(searchParams.offset)
     .limit(searchParams.limit);
 
-  const pagedEnd = +new Date();
-  console.log(`TEST --- PAGED ${pagedEnd - pagedStart}ms`);
-
-  const detailsStart = +new Date();
   // Details.  Is there a better way to do this
   const detailsWith = {
     tafs: {
@@ -685,9 +675,6 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     });
     fileDetails.push(details);
   }
-
-  const detailsEnd = +new Date();
-  console.log(`TEST --- DETAILS ${detailsEnd - detailsStart}ms`);
 
   return {
     files: fileDetails,
