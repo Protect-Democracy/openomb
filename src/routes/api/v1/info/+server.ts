@@ -1,10 +1,8 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
 import { recentlyApproved } from '$db/queries/files';
-import { environmentVariables, packageJson } from '../../../../../server/utilities';
-
-// Environment variables
-const env = environmentVariables();
+import { packageJson } from '../../../../../server/utilities';
+import env from '$lib/environment';
 
 /**
  * Health endpoint
@@ -24,7 +22,7 @@ export async function GET() {
     query: {},
     results: {
       health: 'ok',
-      sentry: !!env.sentryDsn,
+      sentry: !!env.sentrySvelteDsn,
       database,
       environment: env.environment,
       version: packageJson?.version

@@ -4,15 +4,12 @@
  */
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import * as Sentry from '@sentry/sveltekit';
-import { environmentVariables } from '../server/utilities';
+import env from '$lib/environment';
 
-// Environment variables
-const env = environmentVariables();
-
-// Only setup if there is the VITE_SENTRY_DSN provided
-if (import.meta.env.VITE_SENTRY_DSN) {
+// Only setup if there is a Sentry DSN provided
+if (env.sentrySvelteDsn) {
   Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
+    dsn: env.sentrySvelteDsn,
     environment: env.environment,
     tracesSampleRate: 1,
     profilesSampleRate: 1,
@@ -59,15 +56,20 @@ const addHeaders: Handle = async ({ event, resolve }) => {
     'Cache-Control': `public, stale-while-revalidate=${isProduction() ? cacheRevalidateSeconds : 10}`,
     Expires: dateForCacheInvalidation().toUTCString(),
 
+    // Sentry profiling header
+    // https://docs.sentry.io/platforms/javascript/guides/sveltekit/profiling/#step-2-add-document-policy-js-profiling-header
+    'Document-Policy': 'js-profiling',
+
     // Security headers
     ...securityHeaders
   });
   return await resolve(event);
 };
 
-// Sentry handle.  Note that the Nonce needs to be added to
-// svelte.config.js as well.
-const sentryHandle = Sentry.sentryHandle({ fetchProxyScriptNonce: 'SENTRY_PROXY_SCRIPT' });
+// Sentry handle
+// With our current version of svelte, we shouldn't need the fetch proxy script
+//   - https://github.com/getsentry/sentry-javascript/pull/9969
+const sentryHandle = Sentry.sentryHandle({ injectFetchProxyScript: false });
 
 // Add our handlers to each request
 export const handle = sequence(sentryHandle, addHeaders);

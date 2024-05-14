@@ -58,7 +58,8 @@ The following are environment variables that can be set:
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI` - The CSP header value from Sentry.
-- `VITE_SENTRY_DSN` - Sentry DSN for Sveltekit application
+- `PUBLIC_SENTRY_SVELTE_DSN` - Sentry DSN for Sveltekit application
+- `PUBLIC_NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
 - `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
   - This variable is specific to the build process and is not needed in our actual container environment
 
@@ -101,6 +102,7 @@ The following are environment variables that can be set:
     - `APPORTIONMENTS_AWS_SSO_REGION`
     - `APPORTIONMENTS_AWS_SSO_ROLE_NAME`
 - `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
+- `NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
 - `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
   - This variable is specific to the build process and is not needed in our actual container environment
 
@@ -141,6 +143,7 @@ The following are environment variables that can be set:
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
+- `NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
 - `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
   - This variable is specific to the build process and is not needed in our actual container environment
 

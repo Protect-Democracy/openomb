@@ -7,7 +7,7 @@ We want to make sure we are seeing what errors happen in the application. We uti
 The following are relevant environment variables:
 
 - `APPORTIONMENTS_SENTRY_NODE_DSN`: Sentry DSN that applies to the `collect` and `migrate` processes. If this value is not present then Sentry will not be initialized.
-- `VITE_SENTRY_DSN`: Sentry DSN that applies to the Sveltekit application (server and client). If this value is not present then Sentry will not be initialized.
+- `PUBLIC_SENTRY_SVELTE_DSN`: Sentry DSN that applies to the Sveltekit application (server and client). If this value is not present then Sentry will not be initialized.
 - `APPORTIONMENTS_SENTRY_SVELTE_REQUEST_URI`: The CSP header value from Sentry. (may be optional for development environment)
 - `SENTRY_AUTH_TOKEN`: Authentication token for Sentry. If this is provided to a build process, the source code maps will also be built and provided to Sentry.
 

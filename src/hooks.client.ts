@@ -1,20 +1,16 @@
 import * as Sentry from '@sentry/sveltekit';
-import { isProduction } from '$lib/utilities';
+import env from '$lib/environment';
 
-// Only setup Sentry if VITE_SENTRY_DSN is defined
-if (import.meta.env.VITE_SENTRY_DSN) {
+// Only setup if there is a Sentry DSN provided
+if (env.sentrySvelteDsn) {
   Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: isProduction() ? 'production' : 'development',
+    dsn: env.sentrySvelteDsn,
+    environment: env.environment,
     tracesSampleRate: 1,
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1,
     profilesSampleRate: 1,
-    integrations: [
-      Sentry.replayIntegration(),
-      Sentry.browserProfilingIntegration(),
-      Sentry.browserTracingIntegration()
-    ]
+    integrations: [Sentry.replayIntegration(), Sentry.browserProfilingIntegration()]
   });
 }
 
