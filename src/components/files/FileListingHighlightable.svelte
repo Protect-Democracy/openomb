@@ -138,7 +138,8 @@
       ></strong
     >
     for fiscal year
-    <strong>{file.fiscalYear?.toString()}</strong>.
+    <strong>{file.fiscalYear?.toString()}</strong>{#if file.approverTitle}
+      &nbsp;approved by {file.approverTitle}{/if}.
   </div>
 
   {#if hasTafs}

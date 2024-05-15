@@ -236,7 +236,9 @@ export async function fileCountByCriterion(searchParams: SearchParams): Promise<
     .where(exists(db.select().from(tafsResults).where(eq(tafsResults.fileId, fileResults.fileId))))
     .prepare('search_count_files');
 
+  console.time('SEARCH fileCountByCriterion');
   const results = await countQuery.execute(searchParams);
+  console.timeEnd('SEARCH fileCountByCriterion');
 
   return results && results.length ? results[0].count : 0;
 }
@@ -257,7 +259,9 @@ export async function tafsCountByCriterion(searchParams: SearchParams): Promise<
     .where(exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId))))
     .prepare('search_count_tafs');
 
+  console.time('SEARCH tafsCountByCriterion');
   const results = await countQuery.execute(searchParams);
+  console.timeEnd('SEARCH tafsCountByCriterion');
 
   return results && results.length ? results[0].count : 0;
 }
@@ -375,7 +379,11 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
     })
     .prepare(`search_results_file_${sortKey}`);
 
-  return await searchStatement.execute(searchParams);
+  console.time('SEARCH filesByCriterion');
+  const results = await searchStatement.execute(searchParams);
+  console.timeEnd('SEARCH filesByCriterion');
+
+  return results;
 }
 
 /**
@@ -406,10 +414,14 @@ export async function tafsByCriterion(searchParams: SearchParams & PaginationPar
     .limit(sql.placeholder('limit'))
     .prepare(`search_results_tafs_${sortKey}`);
 
-  return (await searchStatement.execute(searchParams)).map((result) => ({
+  console.time('SEARCH tafsByCriterion');
+  const results = (await searchStatement.execute(searchParams)).map((result) => ({
     ...result.filtered_tafs,
     file: result.filtered_files
   }));
+  console.timeEnd('SEARCH tafsByCriterion');
+
+  return results;
 }
 
 /**
@@ -476,7 +488,7 @@ function formatSearchParams(searchParams: SearchParams & PaginationParams): Form
   return formattedSearchParams;
 }
 
-function fileSearchWhere(searchParams: FormattedSearchParams) {
+function generalSearchFilters(searchParams: FormattedSearchParams, mainTable: string = 'files') {
   // Collect filters
   const where = [];
 
@@ -487,23 +499,46 @@ function fileSearchWhere(searchParams: FormattedSearchParams) {
           ilike(tafs.accountTitle, `%${searchParams.term}%`),
           ilike(tafs.budgetAgencyTitle, `%${searchParams.term}%`),
           ilike(tafs.budgetBureauTitle, `%${searchParams.term}%`),
-          // This is very expensive, even once indexes have been added,
+          // The ilike directly is very expensive, even once indexes have been added,
           // but the subquery seems ot be efficient
           //ilike(lines.lineDescription, `%${searchParams.term}%`)
-          inArray(
-            files.fileId,
-            db
-              .selectDistinct({ fileId: lines.fileId })
-              .from(lines)
-              .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
-          ),
-          inArray(
-            files.fileId,
-            db
-              .selectDistinct({ fileId: footnotes.fileId })
-              .from(footnotes)
-              .where(ilike(footnotes.footnoteText, `%${searchParams.term}%`))
-          )
+          mainTable === 'tafs'
+            ? inArray(
+                tafs.tafsTableId,
+                db
+                  .selectDistinct({ tafsTableId: lines.tafsTableId })
+                  .from(lines)
+                  .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
+              )
+            : inArray(
+                files.fileId,
+                db
+                  .selectDistinct({ fileId: lines.fileId })
+                  .from(lines)
+                  .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
+              ),
+          mainTable === 'tafs'
+            ? inArray(
+                tafs.tafsTableId,
+                db
+                  .selectDistinct({ tafsTableId: lines.tafsTableId })
+                  .from(lines)
+                  .innerJoin(
+                    footnotes,
+                    and(
+                      eq(lines.fileId, footnotes.fileId),
+                      eq(lines.lineIndex, footnotes.lineIndex)
+                    )
+                  )
+                  .where(ilike(footnotes.footnoteText, `%${searchParams.term}%`))
+              )
+            : inArray(
+                files.fileId,
+                db
+                  .selectDistinct({ fileId: footnotes.fileId })
+                  .from(footnotes)
+                  .where(ilike(footnotes.footnoteText, `%${searchParams.term}%`))
+              )
         )
       : undefined
   );
@@ -525,10 +560,41 @@ function fileSearchWhere(searchParams: FormattedSearchParams) {
       ? inArray(lines.lineNumber, searchParams.lineNumbers)
       : undefined
   );
+
+  // Joining footnotes in our search is expensive, so we do a subquery
+  const footnoteNumberFilters = (searchParams.footnoteNumbers || []).map((n) =>
+    ilike(footnotes.footnoteNumber, `${n}%`)
+  );
   where.push(
-    searchParams.footnoteNumbers?.length > 0
-      ? inArray(footnotes.footnoteNumber, searchParams.footnoteNumbers)
-      : undefined
+    searchParams.footnoteNumbers?.length > 1 && mainTable === 'tafs'
+      ? inArray(
+          tafs.tafsTableId,
+          db
+            .selectDistinct({ tafsTableId: lines.tafsTableId })
+            .from(lines)
+            .innerJoin(
+              footnotes,
+              and(eq(lines.fileId, footnotes.fileId), eq(lines.lineIndex, footnotes.lineIndex))
+            )
+            .where(
+              footnoteNumberFilters.length > 1
+                ? or(...footnoteNumberFilters)
+                : footnoteNumberFilters[0]
+            )
+        )
+      : mainTable === 'files'
+        ? inArray(
+            files.fileId,
+            db
+              .selectDistinct({ fileId: footnotes.fileId })
+              .from(footnotes)
+              .where(
+                footnoteNumberFilters.length > 1
+                  ? or(...footnoteNumberFilters)
+                  : footnoteNumberFilters[0]
+              )
+          )
+        : undefined
   );
 
   // Specific values
@@ -561,9 +627,10 @@ export async function accountSearchTest(searchParams: SearchParams & PaginationP
   const formattedSearchParams = formatSearchParams(searchParams);
 
   // Collect filters
-  const finalWhere = fileSearchWhere(formattedSearchParams);
+  const finalWhere = generalSearchFilters(formattedSearchParams, 'tafs');
 
   // Find accounts
+  console.time('TEST - ACCOUNT SEARCH QUERY');
   const allAccounts = await db
     .selectDistinct({
       budgetAgencyTitle: tafs.budgetAgencyTitle,
@@ -575,8 +642,10 @@ export async function accountSearchTest(searchParams: SearchParams & PaginationP
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .leftJoin(lines, eq(files.fileId, lines.fileId))
     .where(finalWhere)
     .orderBy(asc(tafs.accountTitle));
+  console.timeEnd('TEST - ACCOUNT SEARCH QUERY');
 
   return {
     accounts: allAccounts
@@ -585,6 +654,7 @@ export async function accountSearchTest(searchParams: SearchParams & PaginationP
 
 export async function fileSearchTest(searchParams: SearchParams & PaginationParams) {
   await dbConnect();
+  console.log('-----------------');
 
   // Format
   const formattedSearchParams = formatSearchParams(searchParams);
@@ -595,7 +665,7 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     !!formattedSearchParams.term || !!formattedSearchParams.footnoteNumbers.length;
 
   // Collect filters
-  const finalWhere = fileSearchWhere(formattedSearchParams);
+  const finalWhere = generalSearchFilters(formattedSearchParams);
 
   // Order.  We need to include the field in the query for distinctness
   let order = [desc(files.approvalTimestamp)];
@@ -618,35 +688,39 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     orderFields.orderFieldSecondary = files.approvalTimestamp;
   }
 
+  console.time('TEST - ALL FILES QUERY');
   const countSubquery = db
     .selectDistinct({
       fileId: files.fileId,
       ...orderFields
     })
     .from(files)
-    .innerJoin(tafs, eq(files.fileId, tafs.fileId))
+    .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .leftJoin(lines, eq(files.fileId, lines.fileId))
-    .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(finalWhere)
     .as('countSubquery');
   const fullCount = await db.select({ count: count() }).from(countSubquery);
+  console.timeEnd('TEST - ALL FILES QUERY');
 
   // Specific ids
+  console.time('TEST - PAGED FILES QUERY');
   const limitedIds = await db
     .selectDistinct({
       fileId: files.fileId,
       ...orderFields
     })
     .from(files)
-    .innerJoin(tafs, eq(files.fileId, tafs.fileId))
+    .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .leftJoin(lines, eq(files.fileId, lines.fileId))
     .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(finalWhere)
     .orderBy(...order)
     .offset(searchParams.offset)
     .limit(searchParams.limit);
+  console.timeEnd('TEST - PAGED FILES QUERY');
 
   // Details.  Is there a better way to do this
+  console.time('TEST - FILE DETAILS QUERY');
   const detailsWith = {
     tafs: {
       orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
@@ -675,6 +749,7 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     });
     fileDetails.push(details);
   }
+  console.timeEnd('TEST - FILE DETAILS QUERY');
 
   return {
     files: fileDetails,
