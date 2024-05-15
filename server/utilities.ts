@@ -277,16 +277,30 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
   };
 
   // Create client
+  console.info(
+    env.awsSso
+      ? 'Utilizing AWS fromSSO credentials method'
+      : 'Utilizing AWS default credentials method'
+  );
   const s3 = new S3Client({
     region: env.archiveS3Region,
     credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
   });
 
   // Put file parameters
-  const params: ListObjectsRequest = {
-    Bucket: s3Bucket || env.archiveS3Bucket
-  };
-  return await s3.send(new ListObjectsCommand(params));
+  try {
+    const params: ListObjectsRequest = {
+      Bucket: s3Bucket || env.archiveS3Bucket
+    };
+    return await s3.send(new ListObjectsCommand(params));
+  }
+  catch (error) {
+    // Catch errors because the stack trace for these don't
+    // reference back to these lines
+    throw new Error(
+      `Unable to list objects on S3 bucket "${s3Bucket || env.archiveS3Bucket}": ${error?.message || error}`
+    );
+  }
 }
 
 /**
@@ -315,19 +329,33 @@ async function putS3File(
   };
 
   // Create client
+  console.info(
+    env.awsSso
+      ? 'Utilizing AWS fromSSO credentials method'
+      : 'Utilizing AWS default credentials method'
+  );
   const s3 = new S3Client({
     region: env.archiveS3Region,
     credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
   });
 
   // Put file parameters
-  const params: PutObjectRequest = {
-    Bucket: s3Bucket || env.archiveS3Bucket,
-    Key: s3Path,
-    Body: createReadStream(file),
-    ACL: env.archiveS3Acl
-  };
-  await s3.send(new PutObjectCommand(params));
+  try {
+    const params: PutObjectRequest = {
+      Bucket: s3Bucket || env.archiveS3Bucket,
+      Key: s3Path,
+      Body: createReadStream(file),
+      ACL: env.archiveS3Acl
+    };
+    await s3.send(new PutObjectCommand(params));
+  }
+  catch (error) {
+    // Catch errors because the stack trace for these don't
+    // reference back to these lines
+    throw new Error(
+      `Unable to put object to S3 path "${s3Bucket || env.archiveS3Bucket}/${s3Path}": ${error?.message || error}`
+    );
+  }
 }
 
 export {

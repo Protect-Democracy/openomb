@@ -3,7 +3,8 @@
  */
 
 // Dependencies
-import { join as joinPath } from 'node:path';
+import { join as joinPath, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
@@ -34,6 +35,7 @@ setupCustomSentry();
 
 // Constants
 const env = environmentVariables();
+const _dirname = dirname(fileURLToPath(import.meta.url));
 
 // Main
 createTransaction('apportionment-collect', cli);
@@ -61,11 +63,21 @@ async function cli(): Promise<void> {
   if (options.archive) {
     try {
       await listS3BucketObjects();
-      console.info('Success testing connection to S3.');
+      console.info('Success listing S3 bucket.');
     }
     catch (error) {
-      console.error('Failed testing connection to S3.');
-      throw error;
+      throw new Error(`Failed listing S3 bucket: ${error?.message || error}`);
+    }
+
+    try {
+      await putS3File(
+        joinPath(_dirname, '..', 'tests', 'data', 'test-file.txt'),
+        `test/test-file-${+new Date()}.txt`
+      );
+      console.info('Success testing put to S3.');
+    }
+    catch (error) {
+      throw new Error(`Failed testing put to S3: ${error?.message || error}`);
     }
   }
 
