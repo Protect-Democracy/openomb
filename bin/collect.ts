@@ -88,6 +88,9 @@ async function cli(): Promise<void> {
   // Setup progress bars
   let progress;
   if (options.showProgress) {
+    // TODO: Move away from MultiProgressBars. It takes over the console object and
+    // doesn't give it back until progress.close() is called.  This is bad in general,
+    // but specifically means that console.info() is not available and will through an error.
     progress = new MultiProgressBars({
       initMessage: 'Collect OMB data',
       anchor: 'bottom',

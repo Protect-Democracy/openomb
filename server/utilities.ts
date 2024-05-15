@@ -277,7 +277,7 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
   };
 
   // Create client
-  console.info(
+  console.log(
     env.awsSso
       ? 'Utilizing AWS fromSSO credentials method'
       : 'Utilizing AWS default credentials method'
@@ -329,7 +329,7 @@ async function putS3File(
   };
 
   // Create client
-  console.info(
+  console.log(
     env.awsSso
       ? 'Utilizing AWS fromSSO credentials method'
       : 'Utilizing AWS default credentials method'
