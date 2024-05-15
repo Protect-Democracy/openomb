@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
-import { eq, notInArray } from 'drizzle-orm';
+import { eq, notInArray, sql } from 'drizzle-orm';
 import chalk from 'chalk';
 import { db, dbConnect, dbDisconnect } from '../db/connection';
 import { collections } from '../db/schema/collections';
@@ -185,6 +185,11 @@ async function cli(): Promise<void> {
         })
         .where(eq(collections.collectionId, collectionRow.collectionId))
     );
+
+    // Now finally let's make sure everything is as efficient as possible
+    for (const table of ['files', 'tafs', 'lines', 'footnotes', 'collections']) {
+      await db.execute(sql`vacuum analyze ${table}`);
+    }
   }
 
   if (options.archive) {
