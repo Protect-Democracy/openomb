@@ -188,7 +188,7 @@ async function cli(): Promise<void> {
 
     // Now finally let's make sure everything is as efficient as possible
     for (const table of ['files', 'tafs', 'lines', 'footnotes', 'collections']) {
-      await db.execute(sql`vacuum analyze ${table}`);
+      await db.execute(sql.raw(`vacuum analyze ${table}`));
     }
   }
 
