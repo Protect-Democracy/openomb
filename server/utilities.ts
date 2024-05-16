@@ -311,7 +311,7 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
  * @param s3Bucket Optional name of bucket
  */
 async function putS3File(
-  file: string,
+  file: string | ReadableStream | Buffer,
   s3Path: string,
   s3Bucket: string | undefined = undefined
 ): Promise<void> {
@@ -344,7 +344,7 @@ async function putS3File(
     const params: PutObjectRequest = {
       Bucket: s3Bucket || env.archiveS3Bucket,
       Key: s3Path,
-      Body: createReadStream(file),
+      Body: typeof file === 'string' ? createReadStream(file) : file,
       ACL: env.archiveS3Acl
     };
     await s3.send(new PutObjectCommand(params));

@@ -3,8 +3,7 @@
  */
 
 // Dependencies
-import { join as joinPath, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join as joinPath } from 'node:path';
 import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
@@ -35,8 +34,9 @@ setupCustomSentry();
 
 // Constants
 const env = environmentVariables();
-const _dirname = dirname(fileURLToPath(import.meta.url));
-const testFile = joinPath(_dirname, 'test-file.txt');
+
+// Set up readable stream for testing S3 write access
+const testFileStream = Buffer.from('TEST DATA');
 
 // Main
 createTransaction('apportionment-collect', cli);
@@ -71,7 +71,7 @@ async function cli(): Promise<void> {
     }
 
     try {
-      await putS3File(testFile, `test/test-file-${+new Date()}.txt`);
+      await putS3File(testFileStream, `test/test-file-${+new Date()}.txt`);
       console.info('Success testing put to S3.');
     }
     catch (error) {
