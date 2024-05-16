@@ -7,11 +7,13 @@
 
   <p>
     {siteName} is the easiest way to find and view information on how federal money can be spent. It
-    is a searchable archive of the U.S. Office of Management and Budget&apos;s apportionments &mdash;
+    is a searchable database of the U.S. Office of Management and Budget&apos;s apportionments &mdash;
     the legally binding plans that OMB uses to make budgetary resources available to federal agencies.
   </p>
 
-  <p>OpenOMB houses all of OMB’s public apportionments from fiscal year 2022 to the present.</p>
+  <p>
+    OpenOMB houses all of OMB&apos;s public apportionments from fiscal year 2022 to the present.
+  </p>
 
   <p>
     In the Consolidated Appropriations Act of 2023, Congress made permanent the requirement that OMB
@@ -24,11 +26,24 @@
   </p>
 
   <p>
-    Drawing on the JSON files from that site, OpenOMB makes OMB’s apportionments searchable and
-    easier to navigate.
+    Drawing on the data files from that site, this site makes OMB&apos;s apportionments searchable
+    and easier to navigate.
   </p>
 
-  <p>OpenOMB.org is maintained by Protect Democracy, a nonpartisan nonprofit.</p>
+  <p>
+    For all inquiries, please reach us at <a href="mailto:contact@openomb.org"
+      >contact@openomb.org</a
+    >.
+  </p>
+
+  <p>
+    OpenOMB.org is maintained by <a
+      href="https://protectdemocracy.org/"
+      target="_blank"
+      rel="noopener noreferrer">Protect Democracy</a
+    >, a nonpartisan nonprofit. This website is not affiliated with the U.S. Office of Management
+    and Budget or any agency of the U.S. government.
+  </p>
 </div>
 
 <style>

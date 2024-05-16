@@ -41,8 +41,8 @@
       </h2>
 
       <p>
-        {siteName} makes that information easy to find, with. It is a searchable archive of OMB&apos;s
-        apportionments from fiscal year 2022 to the present.
+        {siteName} makes that information easy to find, with a searchable database of OMB&apos;s apportionments
+        from fiscal year 2022 to the present.
       </p>
 
       <a href="/about">More about us</a>
@@ -94,7 +94,8 @@
       </li>
       <li>
         <a href="/faq#faq-how-to-find-apportionments"
-          ><span class="faq-icon"><TopRightArrow /></span> How can I find the funds I’m looking for?</a
+          ><span class="faq-icon"><TopRightArrow /></span> How can I find the funds I&apos;m looking
+          for?</a
         >
       </li>
       <li>

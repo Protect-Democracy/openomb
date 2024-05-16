@@ -15,7 +15,7 @@
   export let data: PageData;
 
   // Constants
-  const accountLimit = 12;
+  const accountLimit = 10;
 
   // Stores
   const url = derived(page, ($page) => $page.url);
@@ -139,6 +139,7 @@
             {#if accounts.length > accountLimit}
               Showing first {formatNumber(accountLimit)}.
             {/if}
+            <small><em>Still to implement pagination and sorting.</em></small>
           </p>
         </div>
       </aside>
@@ -324,13 +325,19 @@
   .account-list {
     display: flex;
     flex-wrap: wrap;
+    gap: var(--spacing-double);
+    margin-bottom: var(--spacing-double);
   }
 
   .account-listing {
-    padding: 0 var(--spacing-double) var(--spacing-double) 0;
-    width: 33.333%;
+    width: calc(50% - var(--spacing-double));
+    border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
+    padding-right: var(--spacing);
+    padding-bottom: var(--spacing);
 
     .account-link {
+      /* TODO: Use a variable here */
+      font-size: 1.15rem;
       display: block;
     }
   }

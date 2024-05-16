@@ -75,11 +75,6 @@
 <section class="page-container content-container">
   <h1>Search apportionments</h1>
 
-  <p class="search-description">
-    Apportionments are done at the account level. The best way to find an apportionment is to know
-    the name or number (TAS or TAFS) of the account being apportioned. <!-- TODO: Link to FAW on how to find an account -->
-  </p>
-
   <div class="no-js-only-block" role="search">
     <div class="search-form">
       <Form
@@ -169,10 +164,6 @@
 </section>
 
 <style>
-  .search-description {
-    margin-bottom: var(--spacing-double);
-  }
-
   .pagination {
     margin: var(--spacing-double) auto;
     text-align: center;

@@ -117,14 +117,99 @@
       answer: `
         <p>Apportionments are done at the account level. The best and easiest way to find an apportionment is thus to know the name or number of the relevant appropriation or fund account. Once you have this information, you can enter it into our search tool and navigate to the right apportionment.</p>
 
-        <p>TODO</p>
+        <p>Here’s how to find an account name and number:
+
+          <ol>
+            <li>Begin with the relevant appropriations act.</li>
+            <li>The unnumbered paragraph headings in an appropriations act correspond to an account set up in the Treasury for a particular agency and bureau. These headings typically serve as the name of the account.
+
+              <ol>
+                <li>Take, for example, the <a href="https://www.congress.gov/117/plaws/publ103/PLAW-117publ103.pdf#page=396" target="_blank" rel="noopener noreferrer">“Health Care Systems” appropriation</a> in the Consolidated Appropriations Act of 2022. That appropriation is for the Health Resources and Services Administration (the bureau) within the Department of Health and Human Services (the agency). </li>
+                <li>“Health Care Systems” is the unnumbered paragraph heading. It denotes an account set up in the Treasury called “Health Care Systems.”</li>
+              </ol>
+            </li>
+
+            <li>To verify that you have the correct account name and to find the corresponding account number, download the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department’s Federal Account Symbols and Titles (FAST) Book Part II</a>.</li>
+            <li>After opening the FAST Book, search for the account name you have identified. It should appear in the “Title” column of the spreadsheet.
+
+              <ol>
+                <li>Searching “Health Care Systems” brings us to the “Health Care Systems” account in the FAST Book’s Title column.</li>
+              </ol>
+            </li>
+
+            <li>To the left of that column, you will notice columns with unique identifier codes. Column A contains agency identifier codes. Column B contains the code for a particular account within the agency.
+              <ol>
+                <li>For “Health Care Systems,” 075 identifies the Department of Health and Human Services and 0357 identifies Health Care Systems as an account in the Health Resources and Services Administration.</li>
+              </ol>
+            </li>
+
+            <li>Column D—TAS, or Treasury Account Symbol—combines the codes in Columns A and B to form the unique code for the account.
+              <ol>
+                <li>For Health Care Systems, this is 075 0357.</li>
+              </ol>
+            </li>
+
+            <li>At this point, you can enter into our search tool either the account name or the TAS. If you enter the TAS, be sure to hyphenate the numbers (e.g. 075-0357) to return the correct results.
+            </li>
+
+            <li>However, it is important to know that a single TAS often has multiple sub-accounts.
+              <ol>
+                <li>Searching 075-0357, for instance, returns five results: 075-0357 /X; 075-0357 /2024; 075-0357 /2023; 075-0357 /2022; and 075-0357 2020/2022.</li>
+              </ol>
+            </li>
+
+            <li>These sub-accounts are denoted by a TAFS, or Treasury Appropriation Fund Symbol. Whereas a Treasury Account Symbol refers to any account in the Treasury, a TAFS is a TAS specifically with budget authority—that is, authority provided by statute to enter into financial obligations, such as by making payments, borrowing money, or contracting. Moreover, a TAFS contains an additional piece of information: the period of availability for the funding. This period may be annual, or a single fiscal year; multi-year, or multiple fiscal years; or no-year, which means the funds are available until they are expended. No-year accounts are denoted by an X.
+              <ol>
+                <li>For the Health Care Systems account, we see several kinds of TAFS. 075-0357 /X is a no-year account. 075-0357 2020/2022 was a multi-year account with funds available from fiscal year 2020-2022. And 075-0357 /2024 is an annual account with funding available only for fiscal year 2024.</li>
+              </ol>
+            </li>
+
+            <li>Apportionments are done specifically at the TAFS level. However, if you are unsure whether the account you are searching for is an annual, multi-year, or no-year account, you are better off searching for the TAS—composed of the three-digit agency identifier code and the four digit account-specific code (e.g. 075 0357).</li>
+          </ol>
+
+        </p>
       `
     },
     {
       id: 'what-is-tas-tafs',
       question: 'What is a TAS? What is a TAFS?',
       answer: `
+        <p>A TAS is a Treasury Account Symbol. A TAFS is a Treasury Appropriation Fund Symbol. A TAS generically describes any account in the Treasury. A TAFS is a particular kind of account, namely one with budget authority— authority provided by statute to enter into financial obligations, such as by making payments, borrowing money, or contracting.</p>
+
         <p>TODO</p>
+
+        <p>TODO</p>
+
+        <p>A TAS is composed of a three-digit agency identifier code and a four-digit account-specific code.
+
+            <ul>
+              <li>The TAS for the Health Care Systems appropriation account is 075 0357. 075 identifies the Department of Health and Human Services as the agency and 0357 identifies Health Care Systems as an account in HHS’s Health Resources and Services Administration.</li>
+            </ul>
+        </p>
+
+        <p>A TAFS is composed of the three-digit agency identifier code, the four-digit account-specific code, and an additional piece of information: the period of availability of the funding. This period may be annual, or a single fiscal year; multi-year, or multiple fiscal years; or no-year, which means the funds are available until they are expended. No-year accounts are denoted by an X.
+
+            <ul>
+              <li>For the Health Care Systems account, we see several kinds of TAFS. 075-0357 /X is a no-year account. 075-0357 2020/2022 was a multi-year account with funds available from fiscal year 2020-2022. And 075-0357 /2024 is an annual account with funding available only for fiscal year 2024.</li>
+            </ul>
+        </p>
+
+        <p>A list of every TAS can be found in the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department’s Federal Account Symbols and Titles (FAST) Book Part II</a>.</p>
+
+        <p>Search Tips:
+
+            <ul>
+              <li>When entering a TAS into our search tool, be sure to hyphenate the three-digit agency identifier code and four-digit unique account code as follows: 075-0357.</li>
+              <li>When entering a TAFS into the search tool, follow these written conventions:
+
+                <ul>
+                  <li>For no-year accounts: 075-0357 /X</li>
+                  <li>For multi-year accounts: 075-0357 2020/2022</li>
+                  <li>For annual accounts: 075-0357 /2024</li>
+                </ul>
+              </li>
+            </ul>
+        </p>
       `
     },
     {
@@ -132,21 +217,70 @@
       question:
         'Apportionments show what an agency can spend at a given time. Where can I find out what an agency has spent?',
       answer: `
-        <p>TODO</p>
+        <p>The report on budget execution and budgetary resources—also known as an SF-133—shows what an agency has spent. <a href="https://portal.max.gov/portal/document/SF133/Budget/FACTS%20II%20-%20SF%20133%20Report%20on%20Budget%20Execution%20and%20Budgetary%20Resources.html" target="_blank" rel="noopener noreferrer">OMB publishes SF-133s</a>.</p>
+
+        <p>For information on how to read an SF-133, see this explainer by Ed Martin, a former official at the Department of Health and Human Services who worked on budget execution there for over 30 years:</p>
+
+        <iframe
+          src="https://www.youtube.com/embed/GDwjkdf2z5E"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
       `
     },
     {
       id: 'learn-more',
       question: 'I want to learn more about apportionments. What resources should I consult?',
       answer: `
-        <p>TODO</p>
+        <p>In Oct. 2022, three experts led a <a href="https://www.youtube.com/watch?v=XEDz8Wg2wx0&t=6465s" target="_blank" rel="noopener noreferrer">training on how to read apportionments</a> and the law governing them.</p>
+
+        <p>After working on budget execution at the Department of Health and Human Services for over 30 years, Ed Martin created a more detailed series of video explainers on apportionments:
+
+            <ul>
+              <li><a href="https://www.youtube.com/watch?v=23LQErvq4PE" target="_blank" rel="noopener noreferrer">Module 1</a> defines an apportionment, explains why we apportion, and lays out the basic rules of apportionment. </li>
+              <li><a href="https://www.youtube.com/watch?v=Uhkik94uS1g" target="_blank" rel="noopener noreferrer">Module 2</a> covers the apportionment form, the Standard Form (SF) 132. </li>
+              <li><a href="https://www.youtube.com/watch?v=fUcCIZQep6U" target="_blank" rel="noopener noreferrer">Module 3</a> examines the rest of the apportionment and the circumstances in which an apportionment is not necessary. </li>
+            </ul>
+        </p>
+
+        <p>An array of government resources also offer further information about apportionments. </p>
+
+        <p>OMB Circular No. A-11 is the manual behind the federal budget, offering guidance to agencies on budget preparation, submission, and execution. Sections 120, 123, 124 of A-11 concern apportionments.
+
+          <ul>
+            <li>Section 120 covers the apportionment process.</li>
+            <li>Section 123 covers apportionments under continuing resolutions.</li>
+            <li>Section 124 covers agency operations in the absence of appropriations.</li>
+            <li>Appendix F covers the format of the Standard Form (SF) 132 (the apportionment form) and SF 133 (the report on budget execution and budgetary resources)</li>
+          </ul>
+        </p>
+
+        <p>OMB updates Circular A-11 annually. One may find the most up-to-date version here: <a href="https://www.whitehouse.gov/omb/information-for-agencies/circulars/" target="_blank" rel="noopener noreferrer">https://www.whitehouse.gov/omb/information-for-agencies/circulars/</a></p>
       `
     },
     {
       id: 'laws-govern-apportionments',
-      question: 'What laws govern apportionments? ',
+      question: 'What laws govern apportionments?',
       answer: `
-        <p>TODO</p>
+        <p>Congress created the apportionment power in the Antideficiency Act to ensure federal agencies spend within the limits of the law. Failing to follow an apportionment may violate the Antideficiency Act and result in administrative or criminal penalties for the violating official.</p>
+
+        <p>The Antideficiency Act sections relevant to apportionments may be found <a href="https://www.law.cornell.edu/uscode/text/31/subtitle-II/chapter-15/subchapter-II" target="_blank" rel="noopener noreferrer">here</a> and below:
+
+          <ul>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1511" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1511</a>: What is apportioned?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1512" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1512</a>: How should amounts be apportioned?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1513" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1513</a>: Who controls apportionments? When must apportionments be approved?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1514" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1514</a>: What are the requirements for a funds control system?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1515" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1515</a>: When can deficiency apportionments be requested? When can they be approved?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1516" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1516</a>: Which appropriations are exempt from apportionment?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1517" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1517</a>: What happens if an agency obligates or expends in excess of an apportionment?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1518" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1518</a>: What are the administrative penalties for exceeding an apportionment or administrative subdivision of funds?</li>
+            <li><a href="https://www.law.cornell.edu/uscode/text/31/1519" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1519</a>: What are the criminal penalties for exceeding an apportionment or administrative subdivision of funds?</li>
+          </ul>
+        </p>
       `
     }
   ];

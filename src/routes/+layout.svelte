@@ -150,7 +150,7 @@
   <div class="attribution page-container">
     <p class="center-container">
       This website is not affiliated with the White House Office of Management and Budget (OMB) or
-      any agency of the U.S. government. {siteName} is a searchable archive maintained by
+      any agency of the U.S. government. {siteName} is a searchable database maintained by
       <a
         href="https://protectdemocracy.org/"
         class="like-text"
