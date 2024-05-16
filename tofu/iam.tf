@@ -40,6 +40,25 @@ data "aws_iam_policy" "ecs_task_execution_role" {
   arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_iam_policy" "pass_role" {
+  name        = "pass-role"
+  description = "A policy to give ECS access to PassRole"
+  policy      = data.aws_iam_policy_document.pass_role.json
+}
+
+data "aws_iam_policy_document" "pass_role" {
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.db_migration.arn}",
+      "${aws_iam_role.collect.arn}"
+    ]
+  }
+}
+
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
   role       = aws_iam_role.apportionments_app_task_execution_role.name
   policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
@@ -48,6 +67,11 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
 resource "aws_iam_role_policy_attachment" "ecs_secrets" {
   role       = aws_iam_role.apportionments_app_task_execution_role.name
   policy_arn = aws_iam_policy.ecs_secrets.arn
+}
+
+resource "aws_iam_role_policy_attachment" "pass_role" {
+  role       = aws_iam_role.apportionments_app_task_execution_role.name
+  policy_arn = aws_iam_policy.pass_role.arn
 }
 
 ####################
@@ -128,7 +152,9 @@ data "aws_iam_policy_document" "github_actions" {
       "iam:PassRole",
     ]
     resources = [
-      "${aws_iam_role.apportionments_app_task_execution_role.arn}"
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.db_migration.arn}",
+      "${aws_iam_role.collect.arn}"
     ]
   }
 
