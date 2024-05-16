@@ -100,8 +100,8 @@ function environmentVariables(): ApportionmentEnvironment {
     sentryNodeDsn: process.env['APPORTIONMENTS_SENTRY_NODE_DSN'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
     awsEcs:
-      !!process.env['APPORTIONMENTS_AWS_SSO'] &&
-      process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false'
+      !!process.env['APPORTIONMENTS_AWS_ECS'] &&
+      process.env['APPORTIONMENTS_AWS_ECS'].toLocaleLowerCase() !== 'false'
   };
 }
 
