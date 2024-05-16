@@ -36,6 +36,7 @@ setupCustomSentry();
 // Constants
 const env = environmentVariables();
 const _dirname = dirname(fileURLToPath(import.meta.url));
+const testFile = joinPath(_dirname, 'test-file.txt');
 
 // Main
 createTransaction('apportionment-collect', cli);
@@ -70,10 +71,7 @@ async function cli(): Promise<void> {
     }
 
     try {
-      await putS3File(
-        joinPath(_dirname, '..', 'tests', 'data', 'test-file.txt'),
-        `test/test-file-${+new Date()}.txt`
-      );
+      await putS3File(testFile, `test/test-file-${+new Date()}.txt`);
       console.info('Success testing put to S3.');
     }
     catch (error) {
