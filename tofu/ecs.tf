@@ -142,6 +142,18 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
           "value" : "true"
         },
         {
+          "name" : "APPORTIONMENTS_AWS_SSO_START_URL",
+          "value" : "${var.sso_start_url}"
+        },
+        {
+          "name" : "APPORTIONMENTS_AWS_SSO_ACCOUNT_ID",
+          "value" : "${data.aws_caller_identity.current.account_id}"
+        },
+        {
+          "name" : "APPORTIONMENTS_AWS_SSO_ROLE_NAME",
+          "value" : "${aws_iam_role.collect.name}"
+        },
+        {
           "name" : "APPORTIONMENTS_AWS_SSO_REGION",
           "value" : "${var.region}"
         }

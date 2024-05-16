@@ -54,6 +54,12 @@ variable "cloudfront_logs_bucket_name" {
   default     = "pd-apportionments-logs"
 }
 
+variable "sso_start_url" {
+  description = "Start url for AWS SSO configuration"
+  type        = string
+  default     = "https://voteshield-land.awsapps.com/start"
+}
+
 ####################
 # GitHub integration
 ####################
