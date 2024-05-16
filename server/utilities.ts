@@ -277,6 +277,13 @@ function getS3Client() {
     ssoRoleName: env.awsSsoRoleName || undefined
   };
 
+  // Credential mechanism
+  const credentials = env.awsSso
+    ? fromSSO(ssoOptions)
+    : env.awsContainerMetadata
+      ? fromContainerMetadata()
+      : undefined;
+
   // For debugging
   console.log(
     env.awsSso
@@ -285,15 +292,14 @@ function getS3Client() {
         ? 'Utilizing AWS fromContainerMetadata credentials method'
         : 'Utilizing AWS default credentials method'
   );
+  console.log('Credentials:', credentials);
 
   // Create client
   const s3 = new S3Client({
+    // TODO: Don't leave this in here
+    logger: console,
     region: env.archiveS3Region,
-    credentials: env.awsSso
-      ? fromSSO(ssoOptions)
-      : env.awsContainerMetadata
-        ? fromContainerMetadata()
-        : undefined
+    credentials
   });
 
   return s3;
