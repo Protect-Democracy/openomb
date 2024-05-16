@@ -10,7 +10,7 @@ import { createWriteStream, createReadStream, statSync } from 'node:fs';
 import archiver from 'archiver';
 import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
 import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
-import { fromSSO } from '@aws-sdk/credential-providers';
+import { fromContainerMetadata } from '@aws-sdk/credential-providers';
 import moment from 'moment';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -51,14 +51,7 @@ type ApportionmentEnvironment = {
     | 'aws-exec-read'
     | 'bucket-owner-read'
     | 'bucket-owner-full-control';
-  awsSso: boolean;
-  awsSsoProfile: string;
-  awsSsoFilepath: string;
-  awsSsoConfigFilepath: string;
-  awsSsoStartUrl: string;
-  awsSsoAccountId: string;
-  awsSsoRegion: string;
-  awsSsoRoleName: string;
+  awsEcs: boolean;
   sentryNodeDsn: string;
   sentrySvelteReportUri: string;
   environment: string;
@@ -106,16 +99,9 @@ function environmentVariables(): ApportionmentEnvironment {
         : 'public-read',
     sentryNodeDsn: process.env['APPORTIONMENTS_SENTRY_NODE_DSN'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
-    awsSso:
+    awsEcs:
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&
-      process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false',
-    awsSsoProfile: process.env['APPORTIONMENTS_AWS_SSO_PROFILE'] || '',
-    awsSsoFilepath: process.env['APPORTIONMENTS_AWS_SSO_FILEPATH'] || '',
-    awsSsoConfigFilepath: process.env['APPORTIONMENTS_AWS_SSO_CONFIG_FILEPATH'] || '',
-    awsSsoStartUrl: process.env['APPORTIONMENTS_AWS_SSO_START_URL'] || '',
-    awsSsoAccountId: process.env['APPORTIONMENTS_AWS_SSO_ACCOUNT_ID'] || '',
-    awsSsoRegion: process.env['APPORTIONMENTS_AWS_SSO_REGION'] || '',
-    awsSsoRoleName: process.env['APPORTIONMENTS_AWS_SSO_ROLE_NAME'] || ''
+      process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false'
   };
 }
 
@@ -265,26 +251,15 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
 async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
   const env = environmentVariables();
 
-  // Sso credentials options
-  const ssoOptions = {
-    profile: env.awsSsoProfile || undefined,
-    filepath: env.awsSsoFilepath || undefined,
-    configFilepath: env.awsSsoConfigFilepath || undefined,
-    ssoStartUrl: env.awsSsoStartUrl || undefined,
-    ssoAccountId: env.awsSsoAccountId || undefined,
-    ssoRegion: env.awsSsoRegion || undefined,
-    ssoRoleName: env.awsSsoRoleName || undefined
-  };
-
   // Create client
   console.log(
-    env.awsSso
-      ? 'Utilizing AWS fromSSO credentials method'
+    env.awsEcs
+      ? 'Utilizing AWS fromContainerMetadata credentials method'
       : 'Utilizing AWS default credentials method'
   );
   const s3 = new S3Client({
     region: env.archiveS3Region,
-    credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
+    credentials: env.awsEcs ? fromContainerMetadata() : undefined
   });
 
   // Put file parameters
@@ -317,26 +292,15 @@ async function putS3File(
 ): Promise<void> {
   const env = environmentVariables();
 
-  // Sso credentials options
-  const ssoOptions = {
-    profile: env.awsSsoProfile || undefined,
-    filepath: env.awsSsoFilepath || undefined,
-    configFilepath: env.awsSsoConfigFilepath || undefined,
-    ssoStartUrl: env.awsSsoStartUrl || undefined,
-    ssoAccountId: env.awsSsoAccountId || undefined,
-    ssoRegion: env.awsSsoRegion || undefined,
-    ssoRoleName: env.awsSsoRoleName || undefined
-  };
-
   // Create client
   console.log(
-    env.awsSso
-      ? 'Utilizing AWS fromSSO credentials method'
+    env.awsEcs
+      ? 'Utilizing AWS fromContainerMetadata credentials method'
       : 'Utilizing AWS default credentials method'
   );
   const s3 = new S3Client({
     region: env.archiveS3Region,
-    credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
+    credentials: env.awsEcs ? fromContainerMetadata() : undefined
   });
 
   // Put file parameters
