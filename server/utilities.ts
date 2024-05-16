@@ -61,7 +61,6 @@ type ApportionmentEnvironment = {
   awsSsoRoleName: string;
   awsContainerMetadata: boolean;
   sentryNodeDsn: string;
-  sentrySvelteReportUri: string;
   environment: string;
 };
 
