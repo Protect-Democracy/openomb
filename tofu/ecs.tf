@@ -138,6 +138,10 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
           "value" : "${var.node_env}"
         },
         {
+          "name" : "APPORTIONMENTS_AWS_SSO",
+          "value" : "true"
+        },
+        {
           "name" : "APPORTIONMENTS_AWS_SSO_REGION",
           "value" : "${var.region}"
         }
