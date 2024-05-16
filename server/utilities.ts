@@ -10,7 +10,7 @@ import { createWriteStream, createReadStream, statSync } from 'node:fs';
 import archiver from 'archiver';
 import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
 import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
-import { fromSSO } from '@aws-sdk/credential-providers';
+import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import moment from 'moment';
 import packageJson from '../package.json' assert { type: 'json' };
 
@@ -59,6 +59,7 @@ type ApportionmentEnvironment = {
   awsSsoAccountId: string;
   awsSsoRegion: string;
   awsSsoRoleName: string;
+  awsContainerMetadata: boolean;
   sentryNodeDsn: string;
   sentrySvelteReportUri: string;
   environment: string;
@@ -115,7 +116,10 @@ function environmentVariables(): ApportionmentEnvironment {
     awsSsoStartUrl: process.env['APPORTIONMENTS_AWS_SSO_START_URL'] || '',
     awsSsoAccountId: process.env['APPORTIONMENTS_AWS_SSO_ACCOUNT_ID'] || '',
     awsSsoRegion: process.env['APPORTIONMENTS_AWS_SSO_REGION'] || '',
-    awsSsoRoleName: process.env['APPORTIONMENTS_AWS_SSO_ROLE_NAME'] || ''
+    awsSsoRoleName: process.env['APPORTIONMENTS_AWS_SSO_ROLE_NAME'] || '',
+    awsContainerMetadata:
+      !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
+      process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false'
   };
 }
 
@@ -258,14 +262,12 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
 }
 
 /**
- * Get all top-level objects in a bucket.
- *
- * @param bucket Bucket name, defaults to configuration value
+ * Get an S3 client.
  */
-async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
+function getS3Client() {
   const env = environmentVariables();
 
-  // Sso credentials options
+  // Sso credentials options if needed
   const ssoOptions = {
     profile: env.awsSsoProfile || undefined,
     filepath: env.awsSsoFilepath || undefined,
@@ -276,16 +278,36 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
     ssoRoleName: env.awsSsoRoleName || undefined
   };
 
-  // Create client
+  // For debugging
   console.log(
     env.awsSso
       ? 'Utilizing AWS fromSSO credentials method'
-      : 'Utilizing AWS default credentials method'
+      : env.awsContainerMetadata
+        ? 'Utilizing AWS fromContainerMetadata credentials method'
+        : 'Utilizing AWS default credentials method'
   );
+
+  // Create client
   const s3 = new S3Client({
     region: env.archiveS3Region,
-    credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
+    credentials: env.awsSso
+      ? fromSSO(ssoOptions)
+      : env.awsContainerMetadata
+        ? fromContainerMetadata()
+        : undefined
   });
+
+  return s3;
+}
+
+/**
+ * Get all top-level objects in a bucket.
+ *
+ * @param bucket Bucket name, defaults to configuration value
+ */
+async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
+  const env = environmentVariables();
+  const s3 = getS3Client();
 
   // Put file parameters
   try {
@@ -316,28 +338,7 @@ async function putS3File(
   s3Bucket: string | undefined = undefined
 ): Promise<void> {
   const env = environmentVariables();
-
-  // Sso credentials options
-  const ssoOptions = {
-    profile: env.awsSsoProfile || undefined,
-    filepath: env.awsSsoFilepath || undefined,
-    configFilepath: env.awsSsoConfigFilepath || undefined,
-    ssoStartUrl: env.awsSsoStartUrl || undefined,
-    ssoAccountId: env.awsSsoAccountId || undefined,
-    ssoRegion: env.awsSsoRegion || undefined,
-    ssoRoleName: env.awsSsoRoleName || undefined
-  };
-
-  // Create client
-  console.log(
-    env.awsSso
-      ? 'Utilizing AWS fromSSO credentials method'
-      : 'Utilizing AWS default credentials method'
-  );
-  const s3 = new S3Client({
-    region: env.archiveS3Region,
-    credentials: env.awsSso ? fromSSO(ssoOptions) : undefined
-  });
+  const s3 = getS3Client();
 
   // Put file parameters
   try {
@@ -365,6 +366,7 @@ export {
   parseTimestampFromString,
   md5hash,
   zipFiles,
+  getS3Client,
   putS3File,
   listS3BucketObjects,
   parseBoolean,
