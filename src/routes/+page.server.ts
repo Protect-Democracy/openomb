@@ -1,12 +1,9 @@
-import { dbConnect } from '$db/connection';
 import { mFileStats } from '$queries/files';
 import { mAgenciesWithChildren, tafsStats } from '$queries/tafs';
 import { take } from 'lodash-es';
 
 /** @type {import('./$types').PageLoad} */
 export async function load() {
-  await dbConnect();
-
   return {
     agencies: take(await mAgenciesWithChildren('approval'), 12),
     fileStats: await mFileStats(),

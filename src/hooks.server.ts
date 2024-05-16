@@ -25,6 +25,10 @@ import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
 import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
 import { cacheRevalidateSeconds, securityHeaders } from '$config';
+import { overrideDrizzleTracer } from '$db/connection';
+
+// Override our drizzle tracing so that we see queries
+overrideDrizzleTracer();
 
 export const handleError = Sentry.handleErrorWithSentry();
 

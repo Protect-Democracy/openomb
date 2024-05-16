@@ -74,23 +74,14 @@ await createTransaction('main-task', async () => {
 })
 ```
 
-To capture drizzle queries and have them show up as expected, queries will need to be wrapped individually:
+To capture drizzle queries and have them show up as expected, we can currently override the Drizzle tracer.
+
+**NOTE**: We should not need to do this if the postgres integration for sentry/opentelemetry is working correctly. We will want to test any upgrades and ensure our queries are not being reported twice if this begins to work.
 
 ```ts
-import {
-  createTransaction,
-  createQuerySpan
-} from '../server/sentry-custom';
+import { overrideDrizzleTracer } from '../db/connection';
 
-await createTransaction('db-process', async () => {
-  dbConnect();
-
-  await createQuerySpan(
-    db.select().from(...)
-  );
-
-  dbDisconnect();
-});
+overrideDrizzleTracer();
 ```
 
 Our transaction and default (non-query) span wrappers also optionally accept a span configuration as the first parameter.
@@ -107,13 +98,11 @@ Useful options:
 
 await createTransaction('db-process', async () => {
 
-  await createSpan({ name: 'pg-pool.connect', op: 'db' }, dbConnect);
+  const poolClient = await createSpan({ name: 'pg-pool.connect', op: 'db' }, dbConnect);
 
-  await createQuerySpan(
-    db.select().from(...)
-  );
+  await db.select().from(...);
 
-  await createSpan({ name: 'pg-pool.disconnect', op: 'db' }, dbDisconnect);
+  poolClient.release();
 
 });
 

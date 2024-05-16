@@ -5,7 +5,7 @@
 // Dependencies
 import { groupBy, orderBy } from 'lodash-es';
 import { eq, and, countDistinct, asc, max, count, avg } from 'drizzle-orm';
-import { db, dbConnect } from '../connection';
+import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { memoizeDataAsync } from '../../server/cache';
@@ -157,7 +157,6 @@ export const agenciesByFolder = async function (folderId: string) {
  * Get details for an agency
  */
 export const agencyDetails = async function (budgetAgencyTitleId: string) {
-  await dbConnect();
   const filesFromAgency = await db
     .selectDistinct({
       budgetAgencyTitle: tafs.budgetAgencyTitle,
@@ -243,7 +242,6 @@ export const bureauDetails = async function (
   budgetAgencyTitleId: string,
   budgetBureauTitleId: string
 ) {
-  await dbConnect();
   const filesFromBureau = await db
     .selectDistinct({
       budgetBureauTitle: tafs.budgetBureauTitle,
@@ -333,7 +331,6 @@ export const accountDetails = async function (
   budgetBureauTitleId: string,
   accountTitleId: string
 ) {
-  await dbConnect();
   const filesFromAccount = await db
     .selectDistinct({
       accountTitle: tafs.accountTitle,
@@ -378,7 +375,6 @@ export const tafsByAccount = async function (
   budgetBureauTitleId: string,
   accountTitleId: string
 ) {
-  await dbConnect();
   return await db
     .select({
       tafsId: tafs.tafsId,

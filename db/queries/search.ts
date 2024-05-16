@@ -1,5 +1,5 @@
 // Dependencies
-import { db, dbConnect } from '../connection';
+import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
@@ -224,8 +224,6 @@ function getFileResults() {
  * Get number of files overall based on the provided search criterion
  */
 export async function fileCountByCriterion(searchParams: SearchParams): Promise<number> {
-  await dbConnect();
-
   const fileResults = getFileResults();
   const tafsResults = getTafsResults();
 
@@ -247,8 +245,6 @@ export async function fileCountByCriterion(searchParams: SearchParams): Promise<
  * Get number of files overall based on the provided search criterion
  */
 export async function tafsCountByCriterion(searchParams: SearchParams): Promise<number> {
-  await dbConnect();
-
   const tafsResults = getTafsResults();
   const fileResults = getFileResults();
 
@@ -271,8 +267,6 @@ export async function tafsCountByCriterion(searchParams: SearchParams): Promise<
  *  offset for pagination
  */
 export async function filesByCriterion(searchParams: SearchParams & PaginationParams) {
-  await dbConnect();
-
   // SQL partials for filtering
   const fileResults = getFileResults();
   const tafsResults = getTafsResults();
@@ -391,8 +385,6 @@ export async function filesByCriterion(searchParams: SearchParams & PaginationPa
  *  offset for pagination
  */
 export async function tafsByCriterion(searchParams: SearchParams & PaginationParams) {
-  await dbConnect();
-
   // SQL partials for filtering
   const fileResults = getFileResults();
   const tafsResults = getTafsResults();
@@ -428,7 +420,6 @@ export async function tafsByCriterion(searchParams: SearchParams & PaginationPar
  * Get all existing fiscal year values
  */
 export async function yearOptions() {
-  await dbConnect();
   const yearOptions = await db
     .selectDistinct({ data: files.fiscalYear })
     .from(files)
@@ -441,7 +432,6 @@ export async function yearOptions() {
  * Get all existing line number values
  */
 export async function lineNumberOptions() {
-  await dbConnect();
   const lineNumberOptions = await db
     .selectDistinct({ data: lines.lineNumber })
     .from(lines)
@@ -653,7 +643,6 @@ export async function accountSearchTest(searchParams: SearchParams & PaginationP
 }
 
 export async function fileSearchTest(searchParams: SearchParams & PaginationParams) {
-  await dbConnect();
   console.log('-----------------');
 
   // Format

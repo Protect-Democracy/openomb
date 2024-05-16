@@ -9,7 +9,7 @@ import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray, sql } from 'drizzle-orm';
 import chalk from 'chalk';
-import { db, dbConnect, dbDisconnect } from '../db/connection';
+import { db } from '../db/connection';
 import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import { request } from '../server/request';
@@ -22,12 +22,7 @@ import {
   listS3BucketObjects
 } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
-import {
-  setupCustomSentry,
-  createTransaction,
-  createSpan,
-  createQuerySpan
-} from '../server/sentry-custom';
+import { setupCustomSentry, createTransaction, createSpan } from '../server/sentry-custom';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();
@@ -56,9 +51,7 @@ async function cli(): Promise<void> {
     .parse(process.argv);
   const options = program.opts();
 
-  // Connect to db
   console.info(`Started data collection - ${new Date()}`);
-  await createSpan({ name: 'pg-pool.connect', op: 'db' }, dbConnect);
 
   // If we are going to archive, let's check that we can connect to S3
   if (options.archive) {
@@ -117,9 +110,7 @@ async function cli(): Promise<void> {
       createdAt: start,
       modifiedAt: start
     };
-    const collectionRows = await createQuerySpan(
-      db.insert(collections).values(collectionRecord).returning()
-    );
+    const collectionRows = await db.insert(collections).values(collectionRecord).returning();
     const collectionRow = collectionRows[0];
 
     // Keep track of file ids to mark any as removed
@@ -167,25 +158,21 @@ async function cli(): Promise<void> {
     }
 
     // Mark any files not in the list as removed
-    await createQuerySpan(
-      db
-        .update(files)
-        .set({ removed: true, modifiedAt: new Date() })
-        .where(notInArray(files.fileId, fileIds))
-    );
+    await db
+      .update(files)
+      .set({ removed: true, modifiedAt: new Date() })
+      .where(notInArray(files.fileId, fileIds));
 
     // Save end of collection
     const complete = new Date();
-    await createQuerySpan(
-      db
-        .update(collections)
-        .set({
-          complete,
-          status: 'completed',
-          modifiedAt: complete
-        })
-        .where(eq(collections.collectionId, collectionRow.collectionId))
-    );
+    await db
+      .update(collections)
+      .set({
+        complete,
+        status: 'completed',
+        modifiedAt: complete
+      })
+      .where(eq(collections.collectionId, collectionRow.collectionId));
 
     // Now finally let's make sure everything is as efficient as possible
     for (const table of ['files', 'tafs', 'lines', 'footnotes', 'collections']) {
@@ -222,7 +209,6 @@ async function cli(): Promise<void> {
   // Close progress bar
   progress.close();
 
-  await createSpan({ name: 'pg-pool.disconnect', op: 'db' }, dbDisconnect);
   console.info('Finished collection');
 }
 

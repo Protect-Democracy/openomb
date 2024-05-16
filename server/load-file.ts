@@ -19,7 +19,7 @@ import {
   cleanString,
   dbId
 } from './utilities';
-import { db, dbConnect } from '../db/connection';
+import { db } from '../db/connection';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {
@@ -69,8 +69,6 @@ const env = environmentVariables();
  */
 // @todo - figure out how to get around sentry data limits to profile this (separate into transactions?)
 async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert> {
-  await dbConnect();
-
   // Get the file
   const fileResponse = await request(jsonUrl, {}, { expectedType: 'json' });
   const sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
@@ -280,8 +278,6 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
  * the URL.
  */
 async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
-  await dbConnect();
-
   // Get the file
   const fileResponse = await request(pdfUrl, {}, { expectedType: 'blob' });
 

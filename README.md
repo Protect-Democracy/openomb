@@ -16,6 +16,7 @@ Options:
 
 - `--no-archive`: Use if you want to skip the archive (zip) and upload to S3 step.
 - `--no-collection`: Use if you want to skip the collection/scraping step.
+- `--show-progress`: Show progress of the file collection process
 
 Configure using the following environment variables:
 

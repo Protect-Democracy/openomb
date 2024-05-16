@@ -7,7 +7,7 @@
 // Dependencies
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Command } from 'commander';
-import { db, dbConnect, dbDisconnect } from '../db/connection';
+import { overrideDrizzleTracer, db } from '../db/connection';
 import packageJson from '../package.json' assert { type: 'json' };
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +15,8 @@ import { setupCustomSentry, createTransaction, createSpan } from '../server/sent
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();
+// Override our drizzle tracing so that we see queries
+overrideDrizzleTracer();
 
 // Main
 // @todo this should let us monitor our migration job in sentry, but isn't working currently
@@ -31,9 +33,6 @@ async function cli(): Promise<void> {
     .description('Perform any database migrations.')
     .parse(process.argv);
 
-  // Connect to DB
-  await createSpan({ name: 'pg-pool.connect', op: 'db' }, dbConnect);
-
   // Start
   console.log('Running migrations if necessary...');
 
@@ -45,9 +44,6 @@ async function cli(): Promise<void> {
   await createSpan({ name: 'migrate', op: 'db.transaction' }, () =>
     migrate(db, { migrationsFolder: migrationsDir })
   );
-
-  // Close connection
-  await createSpan({ name: 'pg-pool.disconnect', op: 'db' }, dbDisconnect);
 
   // End
   console.log('Migrations completed.');

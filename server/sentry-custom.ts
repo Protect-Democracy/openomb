@@ -9,7 +9,6 @@ import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import type { MonitorConfig, StartSpanOptions } from '@sentry/types';
 import { environmentVariables } from './utilities';
-import { Query } from 'drizzle-orm';
 
 // Environment variables
 const env = environmentVariables();
@@ -85,32 +84,6 @@ export async function createSpan<T>(opts: SpanOptions, observe: ObservedFunction
         ...getSpanOptions(opts)
       },
       (span) => observe(span)
-    );
-  });
-}
-
-/**
- * Manual implementation wrapper to create a postgres query span
- *  https://docs.sentry.io/product/performance/queries/#span-eligibility
- *  This span will automatically become a child of the current active parent
- */
-interface DrizzleQuery<T> extends Promise<T> {
-  toSQL: () => Query;
-}
-export async function createQuerySpan<T>(query: DrizzleQuery<T>) {
-  return Sentry.withActiveSpan(Sentry.getActiveSpan() || null, async () => {
-    return await Sentry.startSpan(
-      {
-        name: query.toSQL().sql,
-        op: 'db.query',
-        attributes: {
-          'db.system': 'postgresql',
-          'server.address': env.dbHost,
-          'db.name': env.dbName,
-          'server.port': env.dbPort
-        }
-      },
-      () => query
     );
   });
 }

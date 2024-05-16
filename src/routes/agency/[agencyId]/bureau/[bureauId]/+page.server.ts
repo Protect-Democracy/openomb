@@ -1,12 +1,9 @@
-import { dbConnect } from '$db/connection';
 import { recentlyApprovedWithTafs } from '$queries/files';
 import { bureauDetails, accountsByBureau } from '$queries/tafs';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
-  await dbConnect();
-
   const bureau = await bureauDetails(params.agencyId, params.bureauId);
 
   if (!bureau) {

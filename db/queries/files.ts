@@ -4,7 +4,7 @@
 
 // Dependencies
 import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray } from 'drizzle-orm';
-import { db, dbConnect } from '../connection';
+import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
@@ -15,7 +15,6 @@ import { memoizeDataAsync } from '../../server/cache';
  * Get simple file record given file id
  */
 export const fileRecord = async function (fileId: string): Promise<typeof files.$inferSelect> {
-  await dbConnect();
   const found = await db.select().from(files).where(eq(files.fileId, fileId));
   return found?.[0] || null;
 };
@@ -30,8 +29,6 @@ export const fileRecord = async function (fileId: string): Promise<typeof files.
  * @param includeSourceData Include source data with response
  */
 export const fileDetails = async function (fileId: string, includeSourceData: boolean = false) {
-  await dbConnect();
-
   // Get file record
   const file = await db.query.files.findFirst({
     where: eq(files.fileId, fileId),
@@ -101,8 +98,6 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
  * Recently approved.
  */
 export const recentlyApproved = async function (limit: number = 20) {
-  await dbConnect();
-
   const recentFiles = await db.query.files.findMany({
     columns: { sourceData: false },
     orderBy: desc(files.approvalTimestamp),
@@ -119,8 +114,6 @@ export const recentlyApprovedWithTafs = async function (
   limit: number = 20,
   filters?: { folderId?: string; approverId?: string; agencyId?: string; bureauId?: string }
 ) {
-  await dbConnect();
-
   // Check that we have both agency and bureau if bureau provided
   if (filters?.bureauId && !filters?.agencyId) {
     throw new Error('Must provide both agency and bureau identifiers.');
@@ -173,8 +166,6 @@ export const recentlyApprovedWithTafs = async function (
  * Recently removed.
  */
 export const recentlyRemoved = async function (limit: number = 20) {
-  await dbConnect();
-
   const removedFiles = await db.query.files.findMany({
     columns: { sourceData: false },
     where: eq(files.removed, true),
@@ -189,7 +180,6 @@ export const recentlyRemoved = async function (limit: number = 20) {
  * File statistics
  */
 export const fileStats = async function () {
-  await dbConnect();
   const now = new Date();
 
   // Set date to start of week, get files approved since
@@ -231,7 +221,6 @@ export const fileStats = async function () {
  * Distinct folders with file counts
  */
 export const folders = async function () {
-  await dbConnect();
   return (
     (await db
       .select({
@@ -249,7 +238,6 @@ export const folders = async function () {
  * Distinct approvers with file counts
  */
 export const approvers = async function () {
-  await dbConnect();
   return (
     (await db
       .select({ approverTitle: files.approverTitle, count: countDistinct(files.fileId) })
@@ -264,7 +252,6 @@ export const approvers = async function () {
  *
  */
 export const approverDetails = async function (approverTitleId: string) {
-  await dbConnect();
   const filesFromApprover = await db
     .select({ approverTitle: files.approverTitle })
     .from(files)
@@ -286,7 +273,6 @@ export const approverDetails = async function (approverTitleId: string) {
  * Get details of a single folder.
  */
 export const folderDetails = async function (folderId: string) {
-  await dbConnect();
   const filesFromFolder = await db
     .select({ folder: files.folder })
     .from(files)
@@ -308,8 +294,6 @@ export const folderDetails = async function (folderId: string) {
  * Get files without any tafs entries (i.e. not agencies)
  */
 export const filesWithoutTafs = async function (folderId: string | undefined = undefined) {
-  await dbConnect();
-
   const where = folderId
     ? and(eq(files.folderId, folderId), isNull(tafs.fileId))
     : isNull(tafs.fileId);
@@ -328,7 +312,6 @@ export const filesWithoutTafs = async function (folderId: string | undefined = u
  * All files
  */
 export const allFiles = async function () {
-  await dbConnect();
   return await db
     .select({ fileId: files.fileId, createdAt: files.createdAt })
     .from(files)

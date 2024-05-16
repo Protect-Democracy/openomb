@@ -1,4 +1,3 @@
-import { dbConnect } from '$db/connection';
 import { fileDetails } from '$queries/files';
 import { error } from '@sveltejs/kit';
 import { formatFileTitle } from '$lib/formatters';
@@ -6,8 +5,6 @@ import { fileSchema } from '$lib/schema';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
-  await dbConnect();
-
   const file = await fileDetails(params.fileId);
 
   if (!file) {

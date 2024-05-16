@@ -1,6 +1,5 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
-import { dbConnect } from '$db/connection.js';
 import { recentlyApproved } from '$queries/files';
 
 /**
@@ -8,8 +7,6 @@ import { recentlyApproved } from '$queries/files';
  */
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
-  await dbConnect();
-
   // Any query parameters
   let limit = parseInt(url.searchParams.get('limit') || '50');
   limit = Math.min(limit, 1000);

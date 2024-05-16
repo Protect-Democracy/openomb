@@ -1,12 +1,9 @@
-import { dbConnect } from '$db/connection';
 import { folderDetails, filesWithoutTafs, recentlyApprovedWithTafs } from '$queries/files';
 import { agenciesByFolder } from '$queries/tafs';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
-  await dbConnect();
-
   const folder = await folderDetails(params.folderId);
 
   if (!folder) {

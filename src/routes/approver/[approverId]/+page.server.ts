@@ -1,11 +1,8 @@
-import { dbConnect } from '$db/connection';
 import { recentlyApprovedWithTafs, approverDetails } from '$queries/files';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
-  await dbConnect();
-
   const approver = await approverDetails(params.approverId);
 
   if (!approver) {

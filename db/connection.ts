@@ -11,6 +11,8 @@
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { tracer } from 'drizzle-orm/tracing';
+import { startSpan } from '@sentry/node';
 import pg from 'pg';
 import { environmentVariables } from '../server/utilities';
 // Schemas
@@ -28,10 +30,9 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
 // Client.
-export const pool = new pg.Pool({
+const pool = new pg.Pool({
   connectionString: dbConnectionString()
 });
-export let poolClient: pg.PoolClient;
 
 // Drizzle connection
 // NOTE: Debug with { schema: ..., logger: true }
@@ -44,30 +45,47 @@ export const db = drizzle(pool, {
     ...collections
   }
 });
+console.info('Database connected');
 
-export async function dbConnect() {
-  // TODO: The idea was that we could make it explicit to connect
-  // which might be useful for testing, but unsure if this is
-  // actually the case.
-  //
-  // TODO: This seems to cause issues with hot-reloading and the
-  // dev server.  A restart of the dev server should fix this,
-  // but this is less that ideal.
-  if (!poolClient) {
-    poolClient = await pool.connect();
-    console.info('Connected to database');
-  }
+/**
+ * This allows us to tap into drizzle's tracer
+ *  implementation and track our own queries.
+ *
+ * @todo - We can hopefully remove this if opentelemetry fixes
+ *  their own pgsql implementation
+ */
+export function overrideDrizzleTracer() {
+  let query;
+  tracer.startActiveSpan = (name, fn) => {
+    // Drizzle prepares queries, then executes them.
+    //    We need to get the SQL from the prepared query
+    if (name == 'drizzle.prepareQuery') {
+      const prepared = fn();
+      query = prepared.query.sql;
+      return prepared;
+    }
 
-  return poolClient;
-}
+    // When we execute, we will use the sql to name our span tracking
+    //   the actual query performance
+    if (name == 'drizzle.execute') {
+      return startSpan(
+        {
+          name: query || name,
+          op: 'db.sql.execute',
+          attributes: {
+            'db.system': 'postgresql',
+            'db.namespace': env.dbName,
+            'server.port': env.dbPort,
+            'server.address': env.dbHost
+          }
+        },
+        async (span) => await fn(span)
+      );
+    }
 
-export async function dbDisconnect() {
-  if (poolClient) {
-    await poolClient.release();
-    await poolClient.end();
-    poolClient = undefined;
-    console.info('Disconnected from database');
-  }
+    // Other events don't need tracked right now
+    return fn();
+  };
 }
 
 function dbConnectionString() {
