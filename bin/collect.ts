@@ -230,7 +230,7 @@ async function cli(): Promise<void> {
  * Get list of all apportionment URL/files (JSON, Excel, at least one PDF).
  */
 async function apportionmentList(): Promise<string[]> {
-  return createSpan('apportionmentList', async () => {
+  return await createSpan('apportionmentList', async () => {
     // Set ttl to short so that it doesn't use cached version but still creates a
     // file in the cache.
     const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1 });

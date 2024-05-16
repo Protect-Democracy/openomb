@@ -43,7 +43,7 @@ type ApportionmentEnvironment = {
   dbAuth: { username: string; password: string } | null;
   archiveS3Bucket: string;
   archiveS3Region: string;
-  archiveS3Acl:
+  archiveS3Acl?:
     | 'private'
     | 'public-read'
     | 'public-read-write'
@@ -103,7 +103,7 @@ function environmentVariables(): ApportionmentEnvironment {
       process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] &&
       s3AclOptions.includes(process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
         ? (process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl'])
-        : 'public-read',
+        : undefined,
     sentryNodeDsn: process.env['APPORTIONMENTS_SENTRY_NODE_DSN'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
     awsSso:
