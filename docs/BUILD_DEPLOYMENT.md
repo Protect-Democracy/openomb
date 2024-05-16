@@ -92,7 +92,7 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_ARCHIVE_S3_REGION` - S3 bucket region for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_BUCKET` - S3 bucket name for uploading the collection archive.
 - `APPORTIONMENTS_ARCHIVE_S3_ACL` - S3 bucket ACL for uploading the collection archive.
-- `APPORTIONMENTS_AWS_SSO` - Whether to use SSO for AWS auth; set to anything besides "false" to enable.
+- `APPORTIONMENTS_AWS_SSO` - (optional) Whether to use SSO for AWS auth; set to anything besides "false" to enable.
   - For customizing how AWS SSO works, optionally use any of the following variables that align with the [JS SDK fromSSO parameters](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/Package/-aws-sdk-credential-providers/Variable/fromSSO/).
     - `APPORTIONMENTS_AWS_SSO_PROFILE`
     - `APPORTIONMENTS_AWS_SSO_FILEPATH`
@@ -101,6 +101,7 @@ The following are environment variables that can be set:
     - `APPORTIONMENTS_AWS_SSO_ACCOUNT_ID`
     - `APPORTIONMENTS_AWS_SSO_REGION`
     - `APPORTIONMENTS_AWS_SSO_ROLE_NAME`
+- `APPORTIONMENTS_AWS_CONTAINER_METADATA` - (optional) Whether to use container metadata method for AWS credentials.
 - `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
 - `NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
 - `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
