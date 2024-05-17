@@ -10,6 +10,9 @@ permissions:
     contents: read
     issues: write
 
+env:
+  AWS_REGION: 'us-west-2'
+
 jobs:
   update-infrastructure:
     runs-on: ubuntu-latest
