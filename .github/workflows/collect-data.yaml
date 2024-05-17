@@ -1,5 +1,5 @@
 # Collects data from OMB website and saves the results to S3 and Aurora DB
-# Runs on a schedule (TODO)
+# Runs on a schedule (see below)
 
 name: Collect data
 
