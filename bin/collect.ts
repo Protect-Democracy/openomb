@@ -206,8 +206,8 @@ async function cli(): Promise<void> {
     }
   }
 
-  // Close progress bar
-  progress.close();
+  // Close any progress bar
+  progress?.close();
 
   console.info('Finished collection');
 }
