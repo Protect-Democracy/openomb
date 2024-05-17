@@ -374,3 +374,19 @@ resource "aws_iam_role_policy_attachment" "collect_assume_role" {
   role       = aws_iam_role.collect.name
   policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
+
+###################
+# GitHub Actions update infrastructure role
+###################
+
+resource "aws_iam_role" "update_infrastructure" {
+  name               = "update-infrastructure"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "update_infrastructure_administrator_access" {
+  role = aws_iam_role.update_infrastructure.name
+  # Give this role Administrator level access because it will need to be
+  # able to manipulate many aspects of infrastructure via tofu commands
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}

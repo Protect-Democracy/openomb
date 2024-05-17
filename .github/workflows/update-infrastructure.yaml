@@ -1,0 +1,58 @@
+#.github/workflows/update-infrastructure.yaml
+name: OpenTofu Update Infrastructure on PROD
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+
+permissions:
+    contents: read
+    issues: write
+
+jobs:
+  update-infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Git Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/update-infrastructure
+          aws-region: ${{ env.AWS_REGION }}
+          unset-current-credentials: true
+
+      - name: Login to AWS ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Install OpenTofu
+        uses: opentofu/setup-opentofu@v1
+
+      - name: OpenTofu init
+        id: init
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: tofu init
+
+      - name: OpenTofu plan
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: |
+          tofu plan
+
+      - uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          #TODO approvers: 
+          minimum-approvals: 1
+          issue-title: "Deploying v1.0.0 to prod"
+          issue-body: "Review the terraform plan, then approve or deny the deployment of v1.0.0 to prod."
+          exclude-workflow-initiator-as-approver: false
+
+      - name: OpenTofu apply
+        run: |
+          tofu apply
+
