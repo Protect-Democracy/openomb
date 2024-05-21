@@ -333,3 +333,21 @@ fieldset.radios legend {
   display: inline-block;
   margin-right: var(--spacing);
 }
+
+/* Tags */
+.tag {
+  display: inline-block;
+  background-color: var(--color-gray-lighter);
+  color: var(--color-text);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-normal);
+  padding: var(--spacing-tiny) var(--spacing-small);
+  margin: 0 var(--spacing-small) var(--spacing-small) 0;
+  line-height: var(--line-height);
+}
+
+.tag.alt {
+  background-color: var(--color-alt);
+  color: var(--color-alt-text);
+}

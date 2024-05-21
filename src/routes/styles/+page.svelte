@@ -353,6 +353,16 @@
   <a class="button" href="#buttons">a.button</a>
   <a class="button like-link" href="#buttons">a.button.like-link</a>
 
+  <h2 class="style-section">Tags</h2>
+
+  <p>
+    Note that tags are mostly a visual indication and not really meant to be interactive and better
+    to use buttons for that.
+  </p>
+
+  <span class="tag">Default</span>
+  <span class="tag alt">Default</span>
+
   <h2 class="style-section">Code</h2>
 
   <p><strong>Keyboard input:</strong> <kbd>Cmd</kbd></p>

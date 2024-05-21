@@ -104,6 +104,7 @@
   --spacing: 1rem;
   /* Sorry about these names */
   --spacing-half: calc(var(--spacing) / 2);
+  --spacing-tiny: calc(var(--spacing) / 6);
   --spacing-small: calc(var(--spacing) / 4);
   --spacing-smallish: calc(var(--spacing) * 2 / 3);
   --spacing-line-height: calc(1rem * var(--line-height));

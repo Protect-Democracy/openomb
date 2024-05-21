@@ -180,8 +180,8 @@
   .search-filters {
     margin: var(--spacing) 0;
     padding: var(--spacing) 0;
-    border-top: 1px solid var(--color-gray-light);
-    border-bottom: 1px solid var(--color-gray-light);
+    border-top: var(--border-weight) solid var(--color-gray-light);
+    border-bottom: var(--border-weight) solid var(--color-gray-light);
   }
 
   .result-actions {

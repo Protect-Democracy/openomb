@@ -31,8 +31,8 @@
 
   <div>
     <ul class="inline-list fy-iteration">
-      <li><acronym title="Fiscal Year">FY</acronym> {tafs.fiscalYear}</li>
-      <li>Iteration {tafs.iteration}</li>
+      <li><span class="tag"><acronym title="Fiscal Year">FY</acronym> {tafs.fiscalYear}</span></li>
+      <li><span class="tag">Iteration {tafs.iteration}</span></li>
     </ul>
   </div>
 
@@ -85,11 +85,6 @@
 
   .fy-iteration {
     display: block;
-
-    li {
-      padding: var(--spacing-half);
-      border: var(--border-weight-thin) solid var(--color-gray-light);
-    }
 
     li::before {
       content: '';

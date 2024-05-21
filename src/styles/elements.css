@@ -177,7 +177,7 @@ pre {
   border-radius: var(--border-radius-small);
   padding: var(--spacing-small);
   font-size: var(--font-size-small);
-  list-style: var(--line-height);
+  line-height: var(--line-height);
   font-family: var(--font-family-monospace);
 }
 
