@@ -115,6 +115,7 @@ input[type='reset'].secondary,
 a.button.secondary {
   background-color: var(--color-secondary);
   color: var(--color-secondary-text);
+  border-color: var(--color-secondary-border);
 }
 
 button.secondary:hover,
@@ -123,7 +124,9 @@ input[type='button'].secondary:hover,
 input[type='reset'].secondary:hover,
 [role='button'].secondary:hover,
 a.button.secondary:hover {
-  background-color: var(--color-secondary-muted);
+  background-color: var(--color-secondary-hover);
+  color: var(--color-secondary-hover-text);
+  border-color: var(--color-secondary-hover-border);
 }
 
 button.alt,
@@ -206,17 +209,6 @@ a.button.like-link:hover {
   text-decoration: underline;
 }
 
-button.small,
-input[type='submit'].small,
-input[type='button'].small,
-input[type='reset'].small,
-[role='button'].small,
-a.button.small {
-  font-weight: var(--font-copy-weight-normal);
-  font-size: var(--font-size-small);
-  padding: var(--spacing-half) var(--spacing);
-}
-
 button.compact,
 input[type='submit'].compact,
 input[type='button'].compact,
@@ -225,8 +217,18 @@ input[type='reset'].compact,
 a.button.compact {
   font-weight: var(--font-copy-weight-normal);
   min-width: auto;
-  padding: var(--spacing-small) var(--spacing-half);
-  border-radius: var(--border-radius-small);
+  padding: calc(var(--spacing-smallish) - var(--border-weight)) var(--spacing);
+}
+
+button.small,
+input[type='submit'].small,
+input[type='button'].small,
+input[type='reset'].small,
+[role='button'].small,
+a.button.small {
+  font-weight: var(--font-copy-weight-normal);
+  font-size: var(--font-size-small);
+  padding: calc(var(--spacing-half) - var(--border-weight)) var(--spacing-half);
 }
 
 .button-icon {

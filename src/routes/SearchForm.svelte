@@ -34,6 +34,7 @@
     font-size: var(--font-size-large);
     padding: var(--spacing);
     text-align: center;
+    border-width: var(--border-weight);
   }
 
   .search-wrapper {

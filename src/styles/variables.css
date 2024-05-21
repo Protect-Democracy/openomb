@@ -41,12 +41,23 @@
   --color-text-alt: var(--color-gray-darker);
 
   --color-primary: var(--color-green-light);
-  --color-primary-muted: var(--color-green);
-  --color-primary-text: var(--color-white);
+  --color-primary-text: var(--color-text-inverse);
+  --color-primary-hover: var(--color-green);
+  --color-primary-hover-text: var(--color-text-inverse);
 
-  --color-secondary: var(--color-gray-light);
-  --color-secondary-muted: var(--color-gray-lighter);
-  --color-secondary-text: var(--color-text);
+  --color-secondary: var(--color-background);
+  --color-secondary-text: var(--color-primary);
+  --color-secondary-border: var(--color-primary);
+  --color-secondary-hover: var(--color-primary);
+  --color-secondary-hover-text: var(--color-text-inverse);
+  --color-secondary-hover-border: transparent;
+
+  --color-toggle-on: var(--color-gray-dark);
+  --color-toggle-on-text: var(--color-text-inverse);
+  --color-toggle-off: var(--color-blue-lighter);
+  --color-toggle-off-text: var(--color-text);
+  --color-toggle-hover: var(--color-gray-medium);
+  --color-toggle-hover-text: var(--color-text-inverse);
 
   --color-highlight: var(--color-yellow-light);
   --color-error: var(--color-orange-darker);
@@ -85,8 +96,10 @@
   --transition-fast: 0.1s;
 
   --spacing: 1rem;
+  /* Sorry about these names */
   --spacing-half: calc(var(--spacing) / 2);
   --spacing-small: calc(var(--spacing) / 4);
+  --spacing-smallish: calc(var(--spacing) * 2 / 3);
   --spacing-line-height: calc(1rem * var(--line-height));
   --spacing-thin: calc(var(--spacing) * 2 / 16);
   --spacing-double: calc(var(--spacing) * 2);

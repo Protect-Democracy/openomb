@@ -68,7 +68,7 @@
   <div {...$root} use:root class="toggle-group" aria-label={name}>
     {#each options as option}
       <button
-        class="compact alt toggle-item"
+        class="compact toggle-item"
         {...$item(`${formatOptionValue(option)}`)}
         use:item
         aria-label={formatOptionLabel(option)}
@@ -98,3 +98,9 @@
     </div>
   {/each}
 </div>
+
+<style>
+  button {
+    margin-right: var(--spacing-smallish);
+  }
+</style>

@@ -233,8 +233,9 @@ select {
   font-family: var(--font-family-copy);
   border: var(--border-weight-thin) solid var(--color-black);
   border-radius: var(--border-radius);
-  padding: calc(var(--spacing) * 2 / 3) var(--spacing);
+  padding: var(--spacing-smallish) var(--spacing);
   min-width: 15rem;
+  line-height: var(--line-height-small);
 }
 
 input[type='checkbox'],
@@ -242,6 +243,7 @@ input[type='radio'] {
   display: inline-block;
   margin-right: var(--spacing-half);
   min-width: auto;
+  line-height: var(--line-height-small);
 }
 
 input::placeholder,
@@ -270,15 +272,15 @@ input[type='reset'],
 [role='button'],
 a.button {
   display: inline-block;
-  line-height: var(--line-height);
+  line-height: var(--line-height-small);
   background-color: var(--color-primary);
-  border: none;
+  border: var(--border-weight) solid transparent;
   border-radius: var(--border-radius);
   color: var(--color-primary-text);
   cursor: pointer;
   text-align: center;
   font-weight: var(--font-copy-weight-bold);
-  padding: var(--spacing) var(--spacing-double);
+  padding: calc(var(--spacing) - var(--border-weight)) var(--spacing-double);
   min-width: calc(17rem);
   transition: background-color var(--transition) ease;
   margin: 0 var(--spacing-small) var(--spacing-small) 0;
@@ -290,8 +292,8 @@ input[type='button']:hover,
 input[type='reset']:hover,
 [role='button']:hover,
 a.button:hover {
-  background-color: var(--color-primary-muted);
-  color: var(--color-primary-text);
+  background-color: var(--color-primary-hover);
+  color: var(--color-primary-hover-text);
   text-decoration: none;
 }
 
@@ -311,14 +313,24 @@ input[type='reset'][disabled]:hover,
 }
 
 /* Toggles */
+button[aria-pressed='true'],
+input[type='submit'][aria-pressed='true'],
+input[type='button'][aria-pressed='true'],
+input[type='reset'][aria-pressed='true'],
+[role='button'][aria-pressed='true'],
+a[aria-pressed='true'].button {
+  background-color: var(--color-toggle-on);
+  color: var(--color-toggle-on-text);
+}
+
 button[aria-pressed='false'],
 input[type='submit'][aria-pressed='false'],
 input[type='button'][aria-pressed='false'],
 input[type='reset'][aria-pressed='false'],
 [role='button'][aria-pressed='false'],
 a[aria-pressed='false'].button {
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-text);
+  background-color: var(--color-toggle-off);
+  color: var(--color-toggle-off-text);
 }
 
 button[aria-pressed='false']:hover,
@@ -327,6 +339,6 @@ input[type='button'][aria-pressed='false']:hover,
 input[type='reset'][aria-pressed='false']:hover,
 [role='button'][aria-pressed='false']:hover,
 a[aria-pressed='false'].button:hover {
-  background-color: var(--color-secondary-muted);
-  color: var(--color-secondary-text);
+  background-color: var(--color-toggle-hover);
+  color: var(--color-toggle-hover-text);
 }
