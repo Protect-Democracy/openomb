@@ -135,8 +135,8 @@ input[type='button'].alt,
 input[type='reset'].alt,
 [role='button'].alt,
 a.button.alt {
-  background-color: var(--color-blue);
-  color: var(--color-text-inverse);
+  background-color: var(--color-alt);
+  color: var(--color-alt-text);
 }
 
 button.alt:hover,
@@ -145,7 +145,8 @@ input[type='button'].alt:hover,
 input[type='reset'].alt:hover,
 [role='button'].alt:hover,
 a.button.alt:hover {
-  background-color: var(--color-blue-light);
+  background-color: var(--color-alt-hover);
+  color: var(--color-alt-hover-text);
 }
 
 button[aria-pressed='false'].alt,
