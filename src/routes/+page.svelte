@@ -3,7 +3,7 @@
   import { siteName } from '$config';
   import { formatNumber } from '$lib/formatters';
   import SearchForm from './SearchForm.svelte';
-  import AgencyExplorer from '../components/agencies/AgencyExplorer.svelte';
+  import RecentFiles from './RecentFiles.svelte';
   import TopRightArrow from '$components/icons/TopRightArrow.svelte';
   import graphIllustration from '$assets/graph-illustration.svg';
 
@@ -72,13 +72,13 @@
   </div>
 </section>
 
-<section class="agencies page-container-small">
-  <h2 class="h2-alt">Explore Agencies with the Newest Apportionments</h2>
+<section class="recently-approved-files page-container-small">
+  <h2 class="h2-alt">Recently Approved Apportionments</h2>
 
-  <AgencyExplorer agencies={data.agencies} />
+  <RecentFiles files={data.recentFiles} />
 
   <div class="explore">
-    <a href="/explore">Explore more agencies</a>
+    <a class="button" href="/explore">Explore apportionments by agency</a>
   </div>
 </section>
 
@@ -183,16 +183,17 @@
     color: var(--color-blue-lighter);
   }
 
-  .agencies {
+  .recently-approved-files {
     margin-bottom: var(--spacing-xlarge);
   }
 
-  .agencies h2 {
+  .recently-approved-files h2 {
     text-align: center;
     margin-bottom: var(--spacing-large);
   }
 
   .explore {
+    margin-top: var(--spacing-large);
     text-align: center;
   }
 
