@@ -73,7 +73,9 @@
 </script>
 
 <section class="page-container content-container">
-  <h1>Search Apportionments</h1>
+  <h1>
+    {#if hasSearched}Search Results{:else}Search Apportionments{/if}
+  </h1>
 
   <div class="no-js-only-block" role="search">
     <div class="search-form">

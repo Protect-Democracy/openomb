@@ -71,7 +71,7 @@ export const load: PageServerData = async ({ url }) => {
     pageIndex,
     results: results,
     pageMeta: {
-      title: 'Search apportionments',
+      title: resultCount > 0 ? 'Search results' : 'Search apportionments',
       description:
         'Search apportionments by contents, tafs, bureau, fiscal year, footnotes, and more',
       includeSearch: true
