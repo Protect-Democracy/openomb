@@ -15,10 +15,11 @@
         <SearchIcon stroke-width="3" />
       </div>
     </div>
+
     <button type="submit" disabled={submitting}>
       {#if submitting}
         <span class="button-icon"><Spinner /></span>
-        Loading
+        <span class="sr-only">Loading</span>
       {:else}
         Go
       {/if}
@@ -62,6 +63,10 @@
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     margin: 0;
+  }
+
+  .button-icon {
+    margin-left: 0;
   }
 
   .search-wrapper {
