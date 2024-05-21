@@ -113,7 +113,7 @@
   --spacing-large: calc(var(--spacing) * 4);
   --spacing-xlarge: calc(var(--spacing) * 5);
 
-  --copy-width-limit: 40em;
+  --copy-width-limit: 50em;
   --page-width: 75rem;
   --page-width-small: 62rem;
 }
