@@ -255,7 +255,7 @@ a.button.compact {
 
 .form-item label {
   display: block;
-  margin-bottom: var(--spacing-half);
+  margin-bottom: var(--spacing-small);
 }
 
 .input-help {

@@ -210,7 +210,7 @@ iframe {
 }
 
 fieldset {
-  border: var(--spacing-thin) solid var(--color-gray-light);
+  border: var(--border-weight-thin) solid var(--color-gray-light);
   border-radius: var(--border-radius);
   padding: var(--spacing);
   margin-bottom: var(--spacing);
@@ -223,17 +223,17 @@ fieldset legend {
 
 label {
   display: block;
-  margin-bottom: var(--spacing-half);
-  font-weight: var(--font-weight-normal);
+  margin-bottom: var(--spacing-small);
+  font-weight: var(--font-copy-weight-bold);
 }
 
 input,
 textarea,
 select {
   font-family: var(--font-family-copy);
-  border: var(--border-weight) solid var(--color-black);
+  border: var(--border-weight-thin) solid var(--color-black);
   border-radius: var(--border-radius);
-  padding: var(--spacing-half) var(--spacing);
+  padding: calc(var(--spacing) * 2 / 3) var(--spacing);
   min-width: 15rem;
 }
 
