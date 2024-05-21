@@ -42,7 +42,12 @@
       }}
     >
       <div class="drawer-innder page-container">
-        <button {...$close} use:close aria-label="Close" class="small compact close-button">
+        <button
+          {...$close}
+          use:close
+          aria-label="Close"
+          class="small compact like-text close-button"
+        >
           <span class="icon"><XSymbol /></span>
         </button>
 
@@ -91,6 +96,8 @@
     position: absolute;
     right: var(--spacing);
     top: var(--spacing);
+    color: var(--color-gray-dark);
+    font-weight: var(--font-copy-weight-bolder);
   }
 
   .icon {

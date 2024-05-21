@@ -122,10 +122,6 @@
             in
             <strong>{formatNumber(fileCount)} files</strong>.
           </p>
-
-          <div class="font-small">
-            <UrlPagination perPage={data.pageSize} total={resultCount} includeLabel={false} />
-          </div>
         </div>
 
         <div class="sort-action">

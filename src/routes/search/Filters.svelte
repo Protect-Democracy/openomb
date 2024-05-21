@@ -59,7 +59,7 @@
 
 <div class="bar">
   <div class="search-toggle">
-    <Drawer contentTitle="Search Apportionments" triggerProps={{ disabled: !!submittingProxy }}>
+    <Drawer contentTitle="Refine Results" triggerProps={{ disabled: !!submittingProxy }}>
       <svelte:fragment slot="trigger">
         <span>
           {#if submittingProxy}
@@ -72,7 +72,7 @@
       </svelte:fragment>
 
       <svelte:fragment slot="title">
-        <h2 class="h3-alt drawer-title">Search apportionments</h2>
+        <h2 class="h3-alt drawer-title">Refine Results</h2>
       </svelte:fragment>
 
       <svelte:fragment slot="description"
