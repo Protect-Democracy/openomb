@@ -97,7 +97,7 @@
     <div class="button-group">
       <svelte:element
         this={isValidPage(currentPage - 1) ? 'a' : 'span'}
-        class="button alt compact"
+        class="page-link-like"
         href={getPageUrl(currentPage - 1)}
         aria-label="Previous"
       >
@@ -110,7 +110,7 @@
         {:else if availablePage.value !== 0}
           <a
             href={getPageUrl(availablePage.value)}
-            class="button alt compact"
+            class="page-link-like"
             class:active={availablePage.value === currentPage}
             class:like-text={availablePage.value === currentPage}
             aria-label={availablePage.value === currentPage
@@ -123,7 +123,7 @@
       {/each}
       <svelte:element
         this={isValidPage(currentPage + 1) ? 'a' : 'span'}
-        class="button alt compact"
+        class="page-link-like"
         href={getPageUrl(currentPage + 1)}
         aria-label="Next"
       >
@@ -134,7 +134,11 @@
 {/if}
 
 <style>
-  span {
+  label {
+    font-weight: normal;
+  }
+
+  .page-link-like {
     padding: 0 var(--spacing-half);
   }
 
@@ -144,6 +148,8 @@
   }
 
   a.active {
-    border: var(--border-weight) solid var(--color-text);
+    color: var(--color-text);
+    font-weight: var(--font-copy-weight-bolder);
+    text-decoration: underline;
   }
 </style>
