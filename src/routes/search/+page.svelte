@@ -6,7 +6,7 @@
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
-  import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
+  import TafsDisplayItem from '$components/tafs/TafsDisplayItem.svelte';
   import { submitting } from './form-store';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
@@ -148,7 +148,9 @@
         </div>
       </aside>
 
-      <TafsDisplay tafs={results} />
+      {#each results as result (result.tafsTableId)}
+        <TafsDisplayItem tafs={result} />
+      {/each}
 
       <div class="pagination">
         <UrlPagination perPage={data.pageSize} total={resultCount} />

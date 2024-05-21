@@ -1,9 +1,9 @@
 import {
   yearOptions,
   lineNumberOptions,
-  tafsCountByCriterion,
-  fileCountByCriterion,
-  tafsByCriterion,
+  mTafsSearchFullFileCount,
+  mTafsSearchFullCount,
+  mTafsSearchPaged,
   type SearchParams
 } from '$queries/search';
 import { bureaus } from '$queries/tafs';
@@ -46,16 +46,17 @@ export const load: PageServerData = async ({ url }) => {
       lineNum: convertArrayToSqlString(url.searchParams.getAll('lineNum')),
       footnoteNum: convertArrayToSqlString(url.searchParams.getAll('footnoteNum'))
     };
-
-    // Execute prepared statements
-    resultCount = await tafsCountByCriterion(searchArgs);
-    fileCount = await fileCountByCriterion(searchArgs);
-    results = await tafsByCriterion({
+    const pagedSearchArgs = {
       offset: (pageIndex - 1) * pageSize,
       limit: pageSize,
       sort: url.searchParams.get('sort'),
       ...searchArgs
-    });
+    };
+
+    // Execute queries.  Important to memoize counts, less so for search.
+    resultCount = await mTafsSearchFullCount(searchArgs);
+    fileCount = await mTafsSearchFullFileCount(searchArgs);
+    results = await mTafsSearchPaged(pagedSearchArgs);
   }
 
   return {

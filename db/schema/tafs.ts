@@ -14,8 +14,8 @@ import {
   primaryKey
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { files } from './files';
-import { lines } from './lines';
+import { files, type filesSelect } from './files';
+import { lines, type linesSelect } from './lines';
 
 // Table
 // {
@@ -262,3 +262,7 @@ export const computeAccountId = (tafsRecord: typeof tafs.$inferSelect): string =
  */
 export type tafsSelect = typeof tafs.$inferSelect;
 export type tafsInsert = typeof tafs.$inferInsert;
+export interface tafsDetails extends tafsSelect {
+  file?: filesSelect;
+  lines?: linesSelect[];
+}

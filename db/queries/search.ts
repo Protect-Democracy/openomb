@@ -1,28 +1,14 @@
 // Dependencies
+import { ilike, and, or, eq, gte, lte, isNotNull, count, asc, desc, inArray } from 'drizzle-orm';
+import type { PgColumn } from 'drizzle-orm/pg-core';
 import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
-import { tafsSort, fileSort } from '$config/search';
-import {
-  ilike,
-  and,
-  or,
-  sql,
-  eq,
-  gte,
-  lte,
-  isNotNull,
-  count,
-  exists,
-  not,
-  asc,
-  desc,
-  inArray
-} from 'drizzle-orm';
-import type { PgColumn } from 'drizzle-orm/pg-core';
+import { memoizeDataAsync } from '../../server/cache';
 
+// Types
 export type SearchParams = {
   term: string;
   tafs: string;
@@ -43,378 +29,16 @@ export type PaginationParams = {
   sort: string;
 };
 
-/**
- * Return only footnotes that are relevant to search criterion
- *  - Footnote number overrides content search
- * These filters need to remain consistent between calls (and cannot
- *    conditionally add criterion) in order to leverage prepared statements
- */
-function getFootnoteResults() {
-  return db
-    .select()
-    .from(footnotes)
-    .where(
-      or(
-        // We match the footnote number
-        and(
-          not(eq(sql.placeholder('footnoteNum'), '')),
-          ilike(
-            footnotes.footnoteNumber,
-            sql`any(string_to_array(concat(replace(${sql.placeholder('footnoteNum')}, ',', '%,'), '%'), ',')::varchar[])`
-          )
-        ),
-        // We don't need a specific number
-        and(
-          eq(sql.placeholder('footnoteNum'), ''),
-          // Search footnote content
-          ilike(footnotes.footnoteText, sql`concat('%', ${sql.placeholder('term')}::text, '%')`)
-        )
-      )
-    )
-    .as('filtered_footnotes');
-}
+export type SearchPaginationParams = SearchParams & PaginationParams;
 
-/**
- * Return only lines that are relevant to search criterion
- *  - Line number and footnote number override content search
- *  - Line number does not override footnote number (and vice versa)
- * These filters need to remain consistent between calls (and cannot
- *    conditionally add criterion) in order to leverage prepared statements
- */
-function getLineResults() {
-  const footnoteResults = getFootnoteResults();
+export type FormattedSearchParamsFields = {
+  years: number[];
+  lineNumbers: string[];
+  footnoteNumbers: string[];
+};
 
-  return db
-    .select()
-    .from(lines)
-    .where(
-      or(
-        // We match the line number
-        and(
-          not(eq(sql.placeholder('lineNum'), '')),
-          eq(
-            lines.lineNumber,
-            sql`any(string_to_array(${sql.placeholder('lineNum')}, ',')::varchar[])`
-          )
-        ),
-        // We don't need a specific line number
-        and(
-          eq(sql.placeholder('lineNum'), ''),
-          or(
-            // We have a footnote
-            exists(
-              db
-                .select()
-                .from(footnoteResults)
-                .where(
-                  and(
-                    eq(footnoteResults.fileId, lines.fileId),
-                    eq(footnoteResults.lineIndex, lines.lineIndex)
-                  )
-                )
-            ),
-            // We don't need a footnote and match on content
-            and(
-              eq(sql.placeholder('footnoteNum'), ''),
-              ilike(lines.lineDescription, sql`concat('%', ${sql.placeholder('term')}::text, '%')`)
-            )
-          )
-        )
-      )
-    )
-    .as('filtered_lines');
-}
-
-/**
- * Return only TAFS that are relevant to search criterion
- * - Some content must match content search (if provided)
- * These filters need to remain consistent between calls (and cannot
- *    conditionally add criterion) in order to leverage prepared statements
- */
-function getTafsResults() {
-  const lineResults = getLineResults();
-
-  return db
-    .select()
-    .from(tafs)
-    .where(
-      and(
-        // TAFS Specific filters
-        ilike(tafs.tafsId, sql`concat('%', ${sql.placeholder('tafs')}::text, '%')`),
-        or(
-          eq(sql.placeholder('agency'), ''),
-          eq(tafs.budgetAgencyTitleId, sql.placeholder('agency'))
-        ),
-        or(
-          eq(sql.placeholder('bureau'), ''),
-          eq(tafs.budgetBureauTitleId, sql.placeholder('bureau'))
-        ),
-        ilike(tafs.accountTitle, sql`concat('%', ${sql.placeholder('account')}::text, '%')`),
-
-        or(
-          // We have a line
-          exists(
-            db
-              .select()
-              .from(lineResults)
-              .where(
-                and(
-                  eq(lineResults.fileId, tafs.fileId),
-                  eq(lineResults.tafsTableId, tafs.tafsTableId)
-                )
-              )
-          ),
-          // We don't need a line and match on content
-          and(
-            and(eq(sql.placeholder('lineNum'), ''), eq(sql.placeholder('footnoteNum'), '')),
-            or(
-              ilike(tafs.accountTitle, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-              ilike(
-                tafs.budgetAgencyTitle,
-                sql`concat('%', ${sql.placeholder('term')}::text, '%')`
-              ),
-              ilike(
-                tafs.budgetBureauTitle,
-                sql`concat('%', ${sql.placeholder('term')}::text, '%')`
-              ),
-              ilike(tafs.cgacAcct, sql`concat('%', ${sql.placeholder('term')}::text, '%')`),
-              ilike(tafs.cgacAgency, sql`concat('%', ${sql.placeholder('term')}::text, '%')`)
-            )
-          )
-        )
-      )
-    )
-    .as('filtered_tafs');
-}
-
-/**
- * Return only files that are relevant to search criterion
- * - Some content must match content search (if provided)
- * These filters need to remain consistent between calls (and cannot
- *    conditionally add criterion) in order to leverage prepared statements
- */
-function getFileResults() {
-  return db
-    .select()
-    .from(files)
-    .where(
-      and(
-        // File Specific filters
-        or(
-          eq(sql.placeholder('year'), ''),
-          eq(files.fiscalYear, sql`any(string_to_array(${sql.placeholder('year')}, ',')::int[])`)
-        ),
-        ilike(files.approverTitle, sql`concat('%', ${sql.placeholder('approver')}::text, '%')`),
-        and(
-          or(
-            eq(sql.placeholder('approvedStart'), ''),
-            gte(files.approvalTimestamp, sql.placeholder('approvedStart'))
-          ),
-          or(
-            eq(sql.placeholder('approvedEnd'), ''),
-            lte(files.approvalTimestamp, sql.placeholder('approvedEnd'))
-          )
-        )
-      )
-    )
-    .as('filtered_files');
-}
-
-/**
- * Get number of files overall based on the provided search criterion
- */
-export async function fileCountByCriterion(searchParams: SearchParams): Promise<number> {
-  const fileResults = getFileResults();
-  const tafsResults = getTafsResults();
-
-  // Prepared statement to get result count
-  const countQuery = db
-    .select({ count: count() })
-    .from(fileResults)
-    .where(exists(db.select().from(tafsResults).where(eq(tafsResults.fileId, fileResults.fileId))))
-    .prepare('search_count_files');
-
-  console.time('SEARCH fileCountByCriterion');
-  const results = await countQuery.execute(searchParams);
-  console.timeEnd('SEARCH fileCountByCriterion');
-
-  return results && results.length ? results[0].count : 0;
-}
-
-/**
- * Get number of files overall based on the provided search criterion
- */
-export async function tafsCountByCriterion(searchParams: SearchParams): Promise<number> {
-  const tafsResults = getTafsResults();
-  const fileResults = getFileResults();
-
-  // Prepared statement to get result count
-  const countQuery = db
-    .select({ count: count() })
-    .from(tafsResults)
-    .where(exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId))))
-    .prepare('search_count_tafs');
-
-  console.time('SEARCH tafsCountByCriterion');
-  const results = await countQuery.execute(searchParams);
-  console.timeEnd('SEARCH tafsCountByCriterion');
-
-  return results && results.length ? results[0].count : 0;
-}
-
-/**
- * Get subset of files that match provided search criterion and
- *  offset for pagination
- */
-export async function filesByCriterion(searchParams: SearchParams & PaginationParams) {
-  // SQL partials for filtering
-  const fileResults = getFileResults();
-  const tafsResults = getTafsResults();
-
-  const sortKey = searchParams.sort || 'approved_desc';
-
-  if (tafsSort[sortKey]) {
-    const column = sortKey.includes('account')
-      ? tafsResults.accountTitle
-      : sortKey.includes('bureau')
-        ? tafsResults.budgetBureauTitle
-        : tafsResults.budgetAgencyTitle;
-
-    // Get our paginated (limited) list of file ids based on tafs order
-    const paginatedFiles = db
-      .select({
-        fileId: sql`DISTINCT ${tafsResults.fileId}`.as('file_id'),
-        sortField: sql`FIRST_VALUE(${column})
-          OVER(
-            PARTITION BY ${tafsResults.fileId}
-            ORDER BY ${tafsSort[sortKey].sort(tafsResults).getSQL()}
-          )`.as('sort_field')
-      })
-      .from(tafsResults)
-      .where(
-        exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId)))
-      )
-      .orderBy((sortedTafs) => asc(sortedTafs.sortField))
-      .offset(sql.placeholder('offset'))
-      .limit(sql.placeholder('limit'))
-      .as('paginated_files');
-
-    // Get our tafs results for the paginated files
-    const searchStatement = db
-      .select()
-      .from(tafsResults)
-      .innerJoin(fileResults, eq(tafsResults.fileId, fileResults.fileId))
-      .where(
-        exists(
-          db.select().from(paginatedFiles).where(eq(tafsResults.fileId, paginatedFiles.fileId))
-        )
-      )
-      .orderBy(tafsSort[sortKey].sort(tafsResults))
-      .prepare(`search_results_file_${sortKey}`);
-
-    const results = await searchStatement.execute(searchParams);
-
-    // Return an array of files containing grouped tafs
-    const sortedFiles: Array<
-      (typeof results)[0]['filtered_files'] & {
-        tafs: Array<(typeof results)[0]['filtered_tafs']>;
-      }
-    > = [];
-    results.forEach((result) => {
-      const file = sortedFiles.find((f) => f.fileId == result.filtered_files.fileId);
-      if (file) {
-        file.tafs.push(result.filtered_tafs);
-      }
-      else {
-        sortedFiles.push({
-          ...result.filtered_files,
-          tafs: [result.filtered_tafs]
-        });
-      }
-    });
-    return sortedFiles;
-  }
-
-  // Sorting by file column
-  // Prepared Statement to perform search
-  const searchStatement = db.query.files
-    .findMany({
-      columns: {
-        fileId: true,
-        folder: true,
-        fileName: true,
-        approverTitle: true,
-        approvalTimestamp: true,
-        fiscalYear: true
-      },
-      where: and(
-        exists(db.select().from(fileResults).where(eq(files.fileId, fileResults.fileId))),
-        exists(db.select().from(tafsResults).where(eq(tafsResults.fileId, files.fileId)))
-      ),
-      orderBy: fileSort[sortKey].sort(files),
-      with: {
-        tafs: {
-          // Fetch associated relevant tafs and lines (with footnotes)
-          where: exists(
-            db
-              .select()
-              .from(tafsResults)
-              .where(
-                and(
-                  eq(tafsResults.fileId, sql`"files_tafs"."file_id"`),
-                  eq(tafsResults.tafsTableId, sql`"files_tafs"."tafs_table_id"`)
-                )
-              )
-          )
-        }
-      },
-      offset: sql.placeholder('offset'),
-      limit: sql.placeholder('limit')
-    })
-    .prepare(`search_results_file_${sortKey}`);
-
-  console.time('SEARCH filesByCriterion');
-  const results = await searchStatement.execute(searchParams);
-  console.timeEnd('SEARCH filesByCriterion');
-
-  return results;
-}
-
-/**
- * Get subset of tafs that match provided search criterion and
- *  offset for pagination
- */
-export async function tafsByCriterion(searchParams: SearchParams & PaginationParams) {
-  // SQL partials for filtering
-  const fileResults = getFileResults();
-  const tafsResults = getTafsResults();
-
-  const sortKey = searchParams.sort || 'approved_desc';
-
-  const sort = tafsSort[sortKey]
-    ? tafsSort[sortKey].sort(tafsResults)
-    : fileSort[sortKey].sort(fileResults);
-
-  // Sorting by file column
-  const searchStatement = db
-    .select()
-    .from(tafsResults)
-    .innerJoin(fileResults, eq(tafsResults.fileId, fileResults.fileId))
-    .where(exists(db.select().from(fileResults).where(eq(tafsResults.fileId, fileResults.fileId))))
-    .orderBy(sort)
-    .offset(sql.placeholder('offset'))
-    .limit(sql.placeholder('limit'))
-    .prepare(`search_results_tafs_${sortKey}`);
-
-  console.time('SEARCH tafsByCriterion');
-  const results = (await searchStatement.execute(searchParams)).map((result) => ({
-    ...result.filtered_tafs,
-    file: result.filtered_files
-  }));
-  console.timeEnd('SEARCH tafsByCriterion');
-
-  return results;
-}
+export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
+export type FormattedSearchPaginationParams = SearchPaginationParams & FormattedSearchParamsFields;
 
 /**
  * Get all existing fiscal year values
@@ -428,6 +52,8 @@ export async function yearOptions() {
   return yearOptions.map((v) => v.data);
 }
 
+export const mYearOptions = memoizeDataAsync(yearOptions);
+
 /**
  * Get all existing line number values
  */
@@ -440,24 +66,17 @@ export async function lineNumberOptions() {
   return lineNumberOptions.map((v) => v.data);
 }
 
-export type FormattedSearchParams = SearchParams &
-  PaginationParams & { years: number[]; lineNumbers: string[]; footnoteNumbers: string[] };
+export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
 
-function formatSearchParams(searchParams: SearchParams & PaginationParams): FormattedSearchParams {
-  // {
-  //   term: '',
-  //   tafs: '',
-  //   bureau: '',
-  //   agency: '',
-  //   account: '',
-  //   approver: '',
-  //   year: '',
-  //   approvedStart: 2020-01-01T05:00:00.000Z,
-  //   approvedEnd: 2024-05-08T19:45:22.257Z,
-  //   lineNum: '',
-  //   footnoteNum: ''
-  // }
-
+/**
+ * Format the search parameters to make it easier to turn into query.
+ *
+ * @param searchParams Search params (optionally including pagination)
+ * @returns
+ */
+function formatSearchParams(
+  searchParams: SearchPaginationParams | SearchParams
+): FormattedSearchParams {
   // Format
   const years = (searchParams.year ? searchParams.year.split(',') : [])
     .map((v) => parseInt(v))
@@ -468,17 +87,29 @@ function formatSearchParams(searchParams: SearchParams & PaginationParams): Form
   const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
-  const formattedSearchParams: SearchParams &
-    PaginationParams & { years: number[]; lineNumbers: string[]; footnoteNumbers: string[] } = {
+
+  const formattedSearchParams: FormattedSearchParams | FormattedSearchPaginationParams = {
     ...searchParams,
     years,
     lineNumbers,
     footnoteNumbers
   };
+
   return formattedSearchParams;
 }
 
-function generalSearchFilters(searchParams: FormattedSearchParams, mainTable: string = 'files') {
+/**
+ * Create the set of WHERE clauses to use for searching.  Adjusts slightly
+ * depending on the primary table that is being searched.
+ *
+ * @param searchParams Search (and optionally pagination) parameters
+ * @param mainTable Should be tafs or files.
+ * @returns
+ */
+function generalSearchFilters(
+  searchParams: FormattedSearchParams | FormattedSearchPaginationParams,
+  mainTable: 'files' | 'tafs' = 'files'
+) {
   // Collect filters
   const where = [];
 
@@ -612,6 +243,191 @@ function generalSearchFilters(searchParams: FormattedSearchParams, mainTable: st
   return finalWhere;
 }
 
+/**
+ * Given the search options, create options needed for searching
+ * such as the where clause.
+ *
+ * @param searchParams Search pagination options
+ * @returns
+ */
+export async function tafsSearchSetup(searchParams: SearchPaginationParams | SearchParams) {
+  const formattedSearchParams = formatSearchParams(searchParams);
+  const searchHasLines = !!formattedSearchParams.term || !!formattedSearchParams.lineNumbers.length;
+  const searchHasFootnotes =
+    !!formattedSearchParams.term || !!formattedSearchParams.footnoteNumbers.length;
+
+  // Where
+  const finalWhere = generalSearchFilters(formattedSearchParams, 'tafs');
+
+  // Order.  We need to include the field in the query for distinctness if we are
+  // ordering
+  let order = [desc(files.approvalTimestamp)];
+  const orderFields: { orderField: PgColumn; orderFieldSecondary?: PgColumn } = {
+    orderField: files.approvalTimestamp
+  };
+  // TODO: Unsure why this throws the type issue
+  if (searchParams?.sort) {
+    if (searchParams.sort === 'account_asc') {
+      order = [asc(tafs.accountTitle), desc(files.approvalTimestamp)];
+      orderFields.orderField = tafs.accountTitle;
+      orderFields.orderFieldSecondary = files.approvalTimestamp;
+    }
+    else if (searchParams.sort === 'bureau_asc') {
+      order = [asc(tafs.budgetBureauTitle), desc(files.approvalTimestamp)];
+      orderFields.orderField = tafs.budgetBureauTitle;
+      orderFields.orderFieldSecondary = files.approvalTimestamp;
+    }
+    else if (searchParams.sort === 'agency_asc') {
+      order = [asc(tafs.budgetAgencyTitle), desc(files.approvalTimestamp)];
+      orderFields.orderField = tafs.budgetAgencyTitle;
+      orderFields.orderFieldSecondary = files.approvalTimestamp;
+    }
+  }
+
+  return {
+    searchParams: formattedSearchParams,
+    hasLines: searchHasLines,
+    hasFootnotes: searchHasFootnotes,
+    where: finalWhere,
+    order,
+    orderFields
+  };
+}
+
+export const mTafsSearchSetup = memoizeDataAsync(tafsSearchSetup);
+
+/**
+ * Determine full count of tafs search.  Return just query so to be used
+ * asynchronously if needed.  See tafsSearchFullCount() for direct results.
+ *
+ * @param searchParams Search parameters (don't include pagination parameters
+ *   as this will allow for better caching)
+ * @returns
+ */
+export async function tafsSearchFullCountQuery(searchParams: SearchParams) {
+  const { where } = await tafsSearchSetup(searchParams);
+
+  const countSubquery = db
+    .selectDistinct({
+      tafsTableId: tafs.tafsTableId
+    })
+    .from(tafs)
+    .leftJoin(files, eq(tafs.fileId, files.fileId))
+    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    .where(where)
+    .as('countSubquery');
+
+  return db.select({ count: count() }).from(countSubquery);
+}
+
+export const mTafsSearchFullCountQuery = memoizeDataAsync(tafsSearchFullCountQuery);
+
+/**
+ * Determine full count of tafs search.
+ *
+ * @param searchParams Search parameters (don't include pagination parameters
+ *   as this will allow for better caching)
+ * @returns
+ */
+export async function tafsSearchFullCount(searchParams: SearchParams) {
+  console.time('tafsSearchFullCount');
+  const fullCount = await tafsSearchFullCountQuery(searchParams);
+  console.timeEnd('tafsSearchFullCount');
+
+  return fullCount[0].count || 0;
+}
+
+export const mTafsSearchFullCount = memoizeDataAsync(tafsSearchFullCount);
+
+/**
+ * Determine full count of files for tafs search.  Return just query so to be used
+ * asynchronously if needed.  See tafsSearchFullCount() for direct results.
+ *
+ * @param searchParams Search parameters (don't include pagination parameters
+ *   as this will allow for better caching)
+ * @returns
+ */
+export async function tafsSearchFullFileCountQuery(searchParams: SearchParams) {
+  const { where } = await tafsSearchSetup(searchParams);
+
+  const countSubquery = db
+    .selectDistinct({
+      fileId: tafs.fileId
+    })
+    .from(tafs)
+    .leftJoin(files, eq(tafs.fileId, files.fileId))
+    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    .where(where)
+    .as('countSubquery');
+
+  return db.select({ count: count() }).from(countSubquery);
+}
+
+export const mTafsSearchFullFileCountQuery = memoizeDataAsync(tafsSearchFullFileCountQuery);
+
+/**
+ * Determine full count of files in tafs search.
+ *
+ * @param searchParams Search parameters (don't include pagination parameters
+ *   as this will allow for better caching)
+ * @returns
+ */
+export async function tafsSearchFullFileCount(searchParams: SearchParams) {
+  console.time('tafsSearchFullFileCount');
+  const fullCount = await tafsSearchFullFileCountQuery(searchParams);
+  console.timeEnd('tafsSearchFullFileCount');
+
+  return fullCount[0].count || 0;
+}
+
+export const mTafsSearchFullFileCount = memoizeDataAsync(tafsSearchFullFileCount);
+
+/**
+ * Get the detailed search results for a search and page.
+ *
+ * @param searchParams Search and pagination options
+ * @returns
+ */
+export async function tafsSearchPaged(searchParams: SearchParams & PaginationParams) {
+  const { where, order, orderFields } = await tafsSearchSetup(searchParams);
+
+  // Specific ids
+  console.time('tafsSearchPaged');
+  const pagedResults = await db
+    .selectDistinct({
+      tafsTableId: tafs.tafsTableId,
+      ...orderFields
+    })
+    .from(tafs)
+    .leftJoin(files, eq(tafs.fileId, files.fileId))
+    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    .leftJoin(footnotes, eq(tafs.fileId, footnotes.fileId))
+    .where(where)
+    .orderBy(...order)
+    .offset(searchParams.offset)
+    .limit(searchParams.limit);
+  console.timeEnd('tafsSearchPaged');
+
+  // Details.
+  console.time('tafsSearchPaged DETAILS');
+  const tafsDetails = [];
+  for (const pagedResult of pagedResults) {
+    const details = await db.query.tafs.findFirst({
+      where: eq(tafs.tafsTableId, pagedResult.tafsTableId?.toString() || ''),
+      with: {
+        file: true
+      }
+    });
+
+    tafsDetails.push(details);
+  }
+  console.timeEnd('tafsSearchPaged DETAILS');
+
+  return tafsDetails;
+}
+
+export const mTafsSearchPaged = memoizeDataAsync(tafsSearchPaged);
+
 export async function accountSearchTest(searchParams: SearchParams & PaginationParams) {
   // Format
   const formattedSearchParams = formatSearchParams(searchParams);
@@ -678,6 +494,8 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
   }
 
   console.time('TEST - ALL FILES QUERY');
+  // TODO: This should be memoized since if someone is paging
+  // through results, there's no reason to run this query again.
   const countSubquery = db
     .selectDistinct({
       fileId: files.fileId,

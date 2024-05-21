@@ -228,3 +228,9 @@ export const linesRelations = relations(lines, ({ one, many }) => ({
   }),
   footnotes: many(footnotes)
 }));
+
+/**
+ * Export some types
+ */
+export type linesSelect = typeof lines.$inferSelect;
+export type linesInsert = typeof lines.$inferInsert;
