@@ -73,7 +73,7 @@
 </script>
 
 <section class="page-container content-container">
-  <h1>Search apportionments</h1>
+  <h1>Search Apportionments</h1>
 
   <div class="no-js-only-block" role="search">
     <div class="search-form">
@@ -113,7 +113,11 @@
       <aside class="result-actions">
         <div class="result-count">
           <p role="status">
-            Results: <strong>{formatNumber(resultCount)} accounts</strong> in
+            Results: <strong
+              >{formatNumber(resultCount)}
+              <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym></strong
+            >
+            in
             <strong>{formatNumber(fileCount)} files</strong>.
           </p>
 
