@@ -11,6 +11,7 @@
   <div class="search-wrapper">
     <div class="search-input">
       <input type="text" id="term" name="term" placeholder="Search apportionments" />
+
       <div class="icon">
         <SearchIcon stroke-width="3" />
       </div>
@@ -28,7 +29,7 @@
 
   <div class="actions">
     <a class="button compact like-link" href="/search">
-      <span class="icon"><TopRightArrowIcon /></span> Or try using the advanced search.
+      <span class="inline-icon"><TopRightArrowIcon /></span> Or try using the advanced search.
     </a>
   </div>
 </form>
@@ -36,7 +37,7 @@
 <style>
   input {
     width: 100%;
-    font-size: var(--font-size-large);
+    font-size: var(--font-size-medium);
     padding: var(--spacing);
     text-align: center;
     border-width: var(--border-weight);
@@ -58,6 +59,7 @@
   }
 
   .search-wrapper button {
+    font-size: var(--font-size-medium);
     padding: var(--spacing) var(--spacing-double);
     min-width: auto;
     border-bottom-left-radius: 0;
@@ -81,7 +83,7 @@
     font-weight: var(--font-copy-weight-bold);
   }
 
-  .actions .icon {
+  .actions .inline-icon {
     width: var(--spacing-double);
     height: var(--spacing-double);
     color: var(--color-text-inverse);

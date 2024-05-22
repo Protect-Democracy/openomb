@@ -13,8 +13,8 @@ interface FileWithTafs extends filesSelect {
  * @param {number} value
  * @returns {string}
  */
-export function formatNumber(value: number): string {
-  return new Intl.NumberFormat('en-US').format(value);
+export function formatNumber(value: number, options?: Intl.NumberFormatOptions): string {
+  return new Intl.NumberFormat('en-US', options).format(value);
 }
 
 /**

@@ -65,7 +65,9 @@
       </p>
 
       <p>
-        <strong>{formatNumber(data.tafsStats?.averageIterations)}</strong>
+        <strong
+          >{formatNumber(data.tafsStats?.averageIterations, { maximumFractionDigits: 1 })}</strong
+        >
         Average number of iterations per apportionment
       </p>
     </div>
@@ -132,10 +134,6 @@
 
   .intro-text {
     width: 50%;
-  }
-
-  .intro-text p {
-    font-size: 1.35rem;
   }
 
   .intro-visual {

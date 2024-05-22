@@ -368,3 +368,19 @@ fieldset.radios legend {
     }
   }
 }
+
+/* Icons */
+.inline-icon {
+  display: inline-block;
+  width: var(--icon-size-inline);
+  margin-right: var(--spacing-half);
+  vertical-align: middle;
+}
+
+.inline-icon-square {
+  display: inline-block;
+  width: var(--icon-size-inline);
+  height: var(--icon-size-inline);
+  margin-right: var(--spacing-half);
+  vertical-align: middle;
+}
