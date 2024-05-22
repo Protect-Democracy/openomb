@@ -70,7 +70,7 @@ const env = environmentVariables();
 // @todo - figure out how to get around sentry data limits to profile this (separate into transactions?)
 async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert> {
   // Get the file
-  const fileResponse = await request(jsonUrl, {}, { expectedType: 'json' });
+  const fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries: 5 });
   const sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
 
   // Check response
@@ -279,7 +279,7 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
  */
 async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
   // Get the file
-  const fileResponse = await request(pdfUrl, {}, { expectedType: 'blob' });
+  const fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries: 5 });
 
   // Check response
   if (

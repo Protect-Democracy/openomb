@@ -219,7 +219,7 @@ async function apportionmentList(): Promise<string[]> {
   return await createSpan('apportionmentList', async () => {
     // Set ttl to short so that it doesn't use cached version but still creates a
     // file in the cache.
-    const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1 });
+    const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1, retries: 5 });
 
     // Check response
     if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
