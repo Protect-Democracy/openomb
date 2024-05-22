@@ -13,7 +13,8 @@
     'color-green-light',
     'color-green-dark',
     'color-green-darker',
-    'color-blue-lighter'
+    'color-blue-lighter',
+    'color-blue-lightest'
   ];
 
   const potentialColors = [

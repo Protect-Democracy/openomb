@@ -14,6 +14,7 @@ export const siteKeywords = [
   'budget execution',
   'federal budget'
 ];
+export const contactEmail = 'contact@openomb.org';
 export const collectionHour = 2;
 export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';

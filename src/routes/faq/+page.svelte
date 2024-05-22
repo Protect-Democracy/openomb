@@ -4,6 +4,7 @@
    */
   import { page } from '$app/stores';
   import { slide } from 'svelte/transition';
+  import { contactEmail } from '$config';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
   // State
@@ -313,7 +314,7 @@
 
   <p>
     If your question is not addressed here, please reach out to us at <a
-      href="mailto:contact@openomb.org">contact@openomb.org</a
+      href="mailto:{contactEmail}">{contactEmail}</a
     >.
   </p>
 

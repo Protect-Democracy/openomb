@@ -56,6 +56,8 @@ body {
 a {
   color: var(--color-link);
   text-decoration: none;
+  transition-property: color, background-color;
+  transition-duration: var(--transition);
 }
 
 a:hover {
@@ -287,8 +289,9 @@ a.button {
   font-weight: var(--font-copy-weight-bold);
   padding: calc(var(--spacing) - var(--border-weight)) var(--spacing-double);
   min-width: calc(17rem);
-  transition: background-color var(--transition) ease;
   margin: 0 var(--spacing-small) var(--spacing-small) 0;
+  transition-property: color, background-color, border-color;
+  transition-duration: var(--transition);
 }
 
 button:hover,

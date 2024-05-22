@@ -24,6 +24,7 @@
   --color-orange-dark: #d94b07;
   --color-orange-darker: #aa3700;
   --color-blue: #2666a3;
+  --color-blue-lightest: #f0faff;
   --color-blue-lighter: #b3ddf4;
   --color-blue-light: #699ac9;
   --color-blue-dark: #0f4f8d;
@@ -70,6 +71,7 @@
   --color-disabled: var(--color-gray-lighter);
 
   --color-link: var(--color-green);
+  --color-link-inverse: var(--color-green-light);
 
   --font-family-copy: 'IBM Plex Sans', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji';
@@ -83,6 +85,11 @@
   --font-heading-weight-bold: 600;
 
   --font-family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  --font-family-heading-alt: var(--font-family-copy);
+  --font-heading-alt-letter-spacing: -0.2px;
+  --font-family-heading-alt-weight-normal: var(--font-copy-weight-normal);
+  --font-family-heading-alt-weight-bold: var(--font-copy-weight-bold);
 
   --line-height: 1.5;
   --line-height-small: 1.2;
@@ -99,7 +106,7 @@
   --border-weight: var(--spacing-thin);
   --border-weight-thin: calc(var(--spacing-thin) / 2);
 
-  --transition: 0.2s;
+  --transition: 0.3s;
   --transition-fast: 0.1s;
 
   --spacing: 1rem;
@@ -111,6 +118,7 @@
   --spacing-line-height: calc(1rem * var(--line-height));
   --spacing-thin: calc(var(--spacing) * 2 / 16);
   --spacing-double: calc(var(--spacing) * 2);
+  --spacing-triple: calc(var(--spacing) * 3);
   --spacing-large: calc(var(--spacing) * 4);
   --spacing-xlarge: calc(var(--spacing) * 5);
 

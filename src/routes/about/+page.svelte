@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { siteName } from '$config';
+  import { siteName, contactEmail } from '$config';
 </script>
 
 <div class="page-container content-container">
@@ -31,9 +31,7 @@
   </p>
 
   <p>
-    For all inquiries, please reach us at <a href="mailto:contact@openomb.org"
-      >contact@openomb.org</a
-    >.
+    For all inquiries, please reach us at <a href="mailto:{contactEmail}">{contactEmail}</a>.
   </p>
 
   <p>

@@ -52,14 +52,16 @@
 
 /* Text */
 .h2-alt {
-  font-family: var(--font-family-copy);
-  font-weight: var(--font-copy-weight-normal);
+  font-family: var(--font-family-heading-alt);
+  font-weight: var(--font-family-heading-alt-weight-normal);
+  letter-spacing: var(--font-heading-alt-letter-spacing);
   font-size: var(--font-size-xlarge);
 }
 
 .h3-alt {
-  font-family: var(--font-family-copy);
-  font-weight: var(--font-copy-weight-normal);
+  font-family: var(--font-family-heading-alt);
+  font-weight: var(--font-family-heading-alt-weight-normal);
+  letter-spacing: var(--font-heading-alt-letter-spacing);
   font-size: var(--font-size-large);
 }
 

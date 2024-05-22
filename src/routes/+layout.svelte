@@ -15,6 +15,7 @@
     siteAuthor,
     siteDescription,
     siteKeywords,
+    contactEmail,
     deployedBaseUrl,
     socialOgImgPath,
     socialOgImgWidth,
@@ -143,6 +144,7 @@
       <ul>
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
+        <li><a href="mailto:{contactEmail}">Contact</a></li>
       </ul>
     </div>
   </div>

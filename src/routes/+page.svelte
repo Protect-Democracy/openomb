@@ -94,17 +94,20 @@
           ><span class="faq-icon"><TopRightArrow /></span> What is an apportionment?</a
         >
       </li>
+
       <li>
         <a href="/faq#faq-how-to-find-apportionments"
           ><span class="faq-icon"><TopRightArrow /></span> How can I find the funds I&apos;m looking
           for?</a
         >
       </li>
+
       <li>
         <a href="/faq#faq-read-an-apportionment"
           ><span class="faq-icon"><TopRightArrow /></span> How do I read an apportionment?</a
         >
       </li>
+
       <li>
         <a href="/faq">
           <span class="faq-icon"><TopRightArrow /></span>
@@ -152,6 +155,10 @@
     padding-top: 0;
   }
 
+  .summary a {
+    color: var(--color-link-inverse);
+  }
+
   .summary-inner {
     display: flex;
     align-items: flex-start;
@@ -159,7 +166,7 @@
 
   .summary-text {
     max-width: 23rem;
-    margin-right: calc(var(--spacing) * 3);
+    margin-right: var(--spacing-large);
   }
 
   .summary-stats {
@@ -167,18 +174,21 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: var(--spacing-double);
+    gap: var(--spacing-triple);
   }
 
   .summary-stats p {
     width: calc(50% - var(--spacing-double));
+    margin-bottom: 0;
   }
 
   .summary-stats strong {
     font-family: var(--font-family-heading);
-    font-size: var(--font-size-xlarge);
+    font-size: var(--font-size-xxlarge);
     display: block;
     color: var(--color-blue-lighter);
+    /* To help ensure it aligns with the section to the left */
+    line-height: 1.01;
   }
 
   .recently-approved-files {
@@ -196,7 +206,7 @@
   }
 
   .learn {
-    background-color: var(--color-blue-lighter);
+    background-color: var(--color-blue-lightest);
     border-top: var(--border-weight) solid var(--color-black);
     padding: var(--spacing-xlarge) 0;
   }
@@ -205,6 +215,8 @@
     text-align: center;
     margin-bottom: var(--spacing-large);
     padding-top: 0;
+    /* Slightly more consistent spacing */
+    line-height: 1.01;
   }
 
   .learn-items {
@@ -228,9 +240,11 @@
     align-items: flex-start;
     gap: var(--spacing);
     color: var(--color-text);
+    font-size: var(--font-size-medium);
   }
 
   .learn-items .faq-icon {
+    display: inline-block;
     min-width: var(--spacing-double);
     max-width: var(--spacing-double);
     color: var(--color-white);
@@ -252,6 +266,10 @@
     .summary-stats {
       margin-top: var(--spacing-large);
       text-align: center;
+    }
+
+    .summary-text {
+      max-width: none;
     }
 
     .learn-items {
