@@ -160,6 +160,7 @@ test('cacheKey()', () => {
 });
 
 test('fetchWithRetries()', async () => {
+  // Note that this doesn't test if a fetch just fails with a network issue.
   const url = 'https://example.com';
 
   // JSON

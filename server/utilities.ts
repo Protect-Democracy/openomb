@@ -296,8 +296,6 @@ function getS3Client() {
 
   // Create client
   const s3 = new S3Client({
-    // TODO: Don't leave this in here
-    logger: console,
     region: env.archiveS3Region,
     credentials
   });

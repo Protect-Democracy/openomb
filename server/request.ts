@@ -5,6 +5,7 @@
 // Dependencies
 import { ensureDirSync } from 'fs-extra';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { setContext } from '@sentry/node';
 import { environmentVariables } from './utilities';
 
 // Expected types
@@ -158,8 +159,17 @@ async function fetchWithRetries(
   }
 
   let response;
-  for (let i = 0; i <= retries; i++) {
-    response = await fetch(fetchResource, fetchOptions);
+
+  // We want to fetch up to retries + 1 times, so loop through retries amount of times (as
+  // there is a final attempt afterwards to fetch.
+  for (let i = 1; i <= retries; i++) {
+    try {
+      response = await fetch(fetchResource, fetchOptions);
+    }
+    catch (error) {
+      console.error(`fetchWithRetries failure [Attempt ${i}] (${error}) for "${fetchResource}"`);
+    }
+
     if (response.status < 300) {
       return response;
     }
@@ -168,9 +178,27 @@ async function fetchWithRetries(
     await new Promise((resolve) => setTimeout(resolve, waitTime * i));
   }
 
-  // Unsure why, but Typescript seems to think response could be undefined here
-  // so making sure it is not.
-  return response || (await fetch(fetchResource, fetchOptions));
+  try {
+    // Unsure why, but Typescript seems to think response could be undefined here
+    // so making sure it is not.
+    return response || (await fetch(fetchResource, fetchOptions));
+  }
+  catch (error) {
+    // This is a critical error for scraping, so let's make sure we get some
+    // good info.
+    const newError = new Error(
+      `fetchWithRetries failure on final attempt [${retries + 1}] (${error}) for "${fetchResource}"`
+    );
+
+    setContext('tags', { fetch: fetchResource.toString() });
+    setContext('extra', {
+      fetchResource: fetchResource,
+      fetchOptions: fetchOptions,
+      originalError: error
+    });
+
+    throw newError;
+  }
 }
 
 /**
