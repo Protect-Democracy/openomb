@@ -57,7 +57,7 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ resultCount, fileCount, results } = data);
+  $: ({ resultCount, fileCount, results, resultsStart, resultsEnd } = data);
   $: hasResults = resultCount && resultCount > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
@@ -67,7 +67,6 @@
   function updateSort() {
     // For some reason this doesn't trigger the navigation
     submitting.set(true);
-
     sortFormEl.submit();
   }
 </script>
@@ -115,10 +114,11 @@
       <aside class="result-actions">
         <div class="result-count">
           <p role="status">
-            Results: <strong
-              >{formatNumber(resultCount)}
-              <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym></strong
-            >
+            Results {formatNumber(resultsStart)}-{formatNumber(resultsEnd)} of
+            <strong>
+              {formatNumber(resultCount)}
+              <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>
+            </strong>
             in
             <strong>{formatNumber(fileCount)} files</strong>.
           </p>

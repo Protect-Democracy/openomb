@@ -8,7 +8,6 @@ import {
 } from '$queries/search';
 import { bureaus } from '$queries/tafs';
 import { sortOptions } from '$config/search';
-import type { PageServerData } from '../$types';
 
 function convertArrayToSqlString(params: string[]) {
   // Our SQL expects an array of comma-separated values with no brackets or quotes
@@ -16,15 +15,17 @@ function convertArrayToSqlString(params: string[]) {
 }
 
 /** @type {import('./$types').PageLoad} */
-export const load: PageServerData = async ({ url }) => {
+export const load = async ({ url }) => {
+  // Shortcuts
+  const u = (p: string) => url.searchParams.get(p);
+  const ua = (p: string) => url.searchParams.getAll(p);
+
+  // Paging values
   const pageSize = 50;
   const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
-  let resultCount, fileCount, results;
 
-  const startDateString = url.searchParams.get('approvedStart')
-    ? url.searchParams.get('approvedStart')
-    : '2020-01-01';
-  const endDateString = url.searchParams.get('approvedEnd');
+  // Values we will only get when a search is done
+  let resultCount, fileCount, results, resultsStart, resultsEnd;
 
   // Only perform our search once the form is submitted
   if (url.searchParams.toString().length) {
@@ -32,19 +33,19 @@ export const load: PageServerData = async ({ url }) => {
     //
     // Note: Make sure to update the values in search/+page.svelte if the arguments
     // change.
-    const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
+    const agencyBureau = u('agencyBureau')?.split(',');
     const searchArgs: SearchParams = {
-      term: url.searchParams.get('term') || '',
-      tafs: url.searchParams.get('tafs') || '',
+      term: u('term') || '',
+      tafs: u('tafs') || '',
       bureau: agencyBureau?.pop() || '',
       agency: agencyBureau?.pop() || '',
-      account: url.searchParams.get('account') || '',
-      approver: url.searchParams.get('approver') || '',
+      account: u('account') || '',
+      approver: u('approver') || '',
       year: convertArrayToSqlString(url.searchParams.getAll('year')),
-      approvedStart: new Date(`${startDateString}T00:00:00`),
-      approvedEnd: endDateString ? new Date(`${endDateString}T23:59:59`) : new Date(),
-      lineNum: convertArrayToSqlString(url.searchParams.getAll('lineNum')),
-      footnoteNum: convertArrayToSqlString(url.searchParams.getAll('footnoteNum'))
+      approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
+      approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
+      lineNum: convertArrayToSqlString(ua('lineNum')),
+      footnoteNum: convertArrayToSqlString(ua('footnoteNum'))
     };
     const pagedSearchArgs = {
       offset: (pageIndex - 1) * pageSize,
@@ -57,6 +58,10 @@ export const load: PageServerData = async ({ url }) => {
     resultCount = await mTafsSearchFullCount(searchArgs);
     fileCount = await mTafsSearchFullFileCount(searchArgs);
     results = await mTafsSearchPaged(pagedSearchArgs);
+
+    // Determine result numbers
+    resultsStart = pageIndex * pageSize - pageSize + 1;
+    resultsEnd = Math.min(resultCount, pageIndex * pageSize);
   }
 
   return {
@@ -65,15 +70,17 @@ export const load: PageServerData = async ({ url }) => {
     lineOptions: await lineNumberOptions(),
     agencyBureauOptions: await bureaus(),
     sortOptions,
-    resultCount,
-    fileCount,
     pageSize,
     pageIndex,
+    resultCount,
+    fileCount,
     results: results,
+    resultsStart,
+    resultsEnd,
     pageMeta: {
       title: resultCount > 0 ? 'Search results' : 'Search apportionments',
       description:
-        'Search apportionments by contents, tafs, bureau, fiscal year, footnotes, and more',
+        'Search apportionments by contents, TAFS, bureau, fiscal year, footnotes, and more',
       includeSearch: true
     }
   };

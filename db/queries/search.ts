@@ -16,8 +16,8 @@ export type SearchParams = {
   bureau: string;
   account: string;
   approver: string;
-  approvedStart: Date;
-  approvedEnd: Date;
+  approvedStart?: Date;
+  approvedEnd?: Date;
   year: string;
   lineNum: string;
   footnoteNum: string;
