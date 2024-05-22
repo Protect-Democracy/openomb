@@ -70,11 +70,13 @@ p {
 
 small {
   font-size: var(--font-size-small);
+  line-height: var(--line-height);
 }
 
 figcaption,
 caption {
   font-size: var(--font-size-small);
+  line-height: var(--line-height);
   margin-bottom: var(--spacing-half);
   text-align: left;
 }
@@ -190,8 +192,11 @@ mark {
   color: var(--color-text);
 }
 
-abbr {
+abbr,
+acronym {
   cursor: help;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--color-gray-medium);
 }
 
 img {

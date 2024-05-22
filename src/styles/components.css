@@ -230,6 +230,7 @@ a.button.small {
   font-weight: var(--font-copy-weight-normal);
   font-size: var(--font-size-small);
   padding: calc(var(--spacing-half) - var(--border-weight)) var(--spacing-half);
+  border-radius: var(--border-radius-small);
 }
 
 .button-icon {
@@ -350,4 +351,20 @@ fieldset.radios legend {
 .tag.alt {
   background-color: var(--color-alt);
   color: var(--color-alt-text);
+}
+
+/* "responsive" table containers */
+.responsive-table {
+  display: block;
+  overflow-x: auto;
+
+  @media (max-width: 768px) {
+    & {
+      overflow-x: scroll;
+    }
+
+    table {
+      width: 758px;
+    }
+  }
 }
