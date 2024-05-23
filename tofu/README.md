@@ -15,7 +15,8 @@ The following is a simple guide to get you started with OpenTofu and the Apporti
 1. Navigate to the `tofu` directory in the Apportionments project.
 2. Log in to the AWS CLI using your profile, e.g. `aws sso login --profile my-apportionments-profile`
 3. Set your `AWS_PROFILE` in your shell, e.g. `export AWS_PROFILE=my-apportionments-profile`
-4. Initialize OpenTofu in from the tofu folder: `tofu init`
+4. Set your profile for OpenTofu as well using the `TF_VAR_profile` environment variable, e.g. `export TF_VAR_profile=my-apportionments-profile`
+5. Initialize OpenTofu in from the tofu folder: `tofu init`
 
 After running these commands, you should be ready to use OpenTofu regularly. Note, you will need to update your SSO login periodically as the credentials expire after a short time (several hours).
 
