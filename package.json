@@ -39,7 +39,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.537.0",
+    "@aws-sdk/client-s3": "^3.577.0",
     "@aws-sdk/credential-providers": "^3.535.0",
     "@dotenvx/dotenvx": "^0.34.0",
     "@fontsource/domine": "^5.0.19",
