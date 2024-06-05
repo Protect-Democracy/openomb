@@ -16,7 +16,7 @@ resource "aws_cloudwatch_event_rule" "ecs_task_failures" {
       containers = {
         exitCode = [
           {
-            "anything-but": 0
+            "anything-but" : 0
           }
         ]
       }
