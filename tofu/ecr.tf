@@ -27,12 +27,11 @@ locals {
     "rules" : [
       {
         "rulePriority" : 1,
-        "description" : "Expire images older than 7 days",
+        "description" : "Expire any additional images",
         "selection" : {
           "tagStatus" : "any",
-          "countType" : "sinceImagePushed",
-          "countUnit" : "days",
-          "countNumber" : 7
+          "countType" : "imageCountMoreThan",
+          "countNumber" : 3
         },
         "action" : {
           "type" : "expire"
