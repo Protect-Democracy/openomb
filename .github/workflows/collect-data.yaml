@@ -22,6 +22,11 @@ env:
   TOFU_TASK_DEFINITION_OUTPUT: 'collect_task_definition_arn'
   tf_actions_working_dir: 'tofu'
 
+# Cancel existing executions when new commits are pushed onto the branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   collect:
     name: Collect data

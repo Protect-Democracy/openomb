@@ -18,6 +18,11 @@ env:
   TOFU_TASK_DEFINITION_OUTPUT: 'migrate_task_definition_arn'
   tf_actions_working_dir: 'tofu'
 
+# Cancel existing executions when new commits are pushed onto the branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   changes:
     runs-on: ubuntu-latest
