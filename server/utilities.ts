@@ -292,7 +292,6 @@ function getS3Client() {
         ? 'Utilizing AWS fromContainerMetadata credentials method'
         : 'Utilizing AWS default credentials method'
   );
-  console.log('Credentials:', credentials);
 
   // Create client
   const s3 = new S3Client({

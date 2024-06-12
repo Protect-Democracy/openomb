@@ -102,8 +102,8 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
     approvalTimestamp: parseTimestampFromString(sourceData.ApprovalTimestamp),
     folder: formatFolder(sourceData.Folder),
     folderId: dbId(formatFolder(sourceData.Folder)),
-    approverTitle: cleanString(sourceData.ApproverTitle),
-    approverTitleId: dbId(sourceData.ApproverTitle),
+    approverTitle: formatApproverTitle(sourceData.ApproverTitle),
+    approverTitleId: dbId(formatApproverTitle(sourceData.ApproverTitle)),
     fundsProvidedBy: cleanString(sourceData.FundsProvidedBy),
     excelUrl: hasExcelUrl ? expectedExcelUrl : null,
     sourceUrl: jsonUrl,
@@ -359,6 +359,25 @@ function formatFolder(folder: string): string {
   folder = folder.replace(/\s+apportionments?$/i, '');
   const parts = folder.split('--');
   return parts.length === 2 ? `${parts[0].trim()} (${parts[1].trim()})` : folder.trim();
+}
+
+/**
+ * Folder approver title
+ *
+ * Examples:
+ *   Acting Deputy Asso Director for National Security Programs
+ *   Acting Deputy Associate Director for National Security Programs
+ *   Acting Deputy Asso Director for Transportation, Homeland, Justice and Service Programs
+ *   Deputy Asso Director for Transportation, Homeland, Justice and Service Programs
+ *   for Deputy Asso Director for Transportation, Homeland, Justice and Service Programs
+ */
+function formatApproverTitle(approverTitle: string | null | undefined): string | null {
+  if (!approverTitle) {
+    return null;
+  }
+
+  approverTitle = approverTitle.replace(/\s+asso\s+/i, ' Associate ').trim();
+  return approverTitle.trim();
 }
 
 /**
