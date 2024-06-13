@@ -59,23 +59,20 @@
 
 <div class="bar">
   <div class="search-toggle">
-    <Drawer
-      contentTitle="Search Apportionments"
-      triggerProps={submittingProxy ? { disabled: true } : {}}
-    >
+    <Drawer contentTitle="Refine Results" triggerProps={{ disabled: !!submittingProxy }}>
       <svelte:fragment slot="trigger">
         <span>
           {#if submittingProxy}
             <span class="button-icon"><Spinner /></span>
             Loading
           {:else}
-            Adjust Search
+            Refine results
           {/if}
         </span>
       </svelte:fragment>
 
       <svelte:fragment slot="title">
-        <h2 class="h3-alt drawer-title">Search apportionments</h2>
+        <h2 class="h3-alt drawer-title">Refine Results</h2>
       </svelte:fragment>
 
       <svelte:fragment slot="description"
@@ -91,7 +88,7 @@
   <div class="filters">
     {#each url.searchParams.entries() as [key, value]}
       {#if value?.length && value !== '[]' && getFilterLabel(key, value)}
-        <button class="small compact alt" on:click={() => removeFilter(key, value)}>
+        <button class="alt" on:click={() => removeFilter(key, value)}>
           <span class="sr-only"> Remove filter</span>
           {getFilterLabel(key, value)}
           <span class="icon">
@@ -123,6 +120,7 @@
 
   .filters button {
     flex-grow: 0;
+    min-width: auto;
   }
 
   .icon {

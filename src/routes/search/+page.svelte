@@ -2,17 +2,20 @@
   import type { PageData } from './$types';
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
-  import { formatNumber } from '$lib/formatters';
+  import { formatNumber, highlight, highlightOrder } from '$lib/formatters';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
-  import TafsDisplayItem from '$components/tafs/TafsDisplayItem.svelte';
   import { submitting } from './form-store';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
 
   // Props
   export let data: PageData;
+
+  // Constants
+  const accountLimit = 10;
 
   // Stores
   const url = derived(page, ($page) => $page.url);
@@ -57,47 +60,37 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ resultCount, fileCount, results, resultsStart, resultsEnd } = data);
-  $: hasResults = resultCount && resultCount > 0;
+  $: ({ count: fileCount, files, searchParams, accounts, pageSize: filePageSize } = data);
+  $: hasFileResults = fileCount && fileCount > 0;
+  $: hasAccountResults = accounts && accounts.length > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
   $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
+  $: currentFilesPage = $url.searchParams.get('page') ? Number($url.searchParams.get('page')) : 1;
+  $: formattedAccounts = highlightOrder(
+    accounts?.map((account) => ({
+      ...account,
+      highlightedAccountTitle: highlight(account.accountTitle, [searchParams.term]),
+      highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, [searchParams.term]),
+      highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, [searchParams.term])
+    })) || [],
+    'highlightedAccountTitle'
+  );
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
     // For some reason this doesn't trigger the navigation
     submitting.set(true);
+
     sortFormEl.submit();
   }
 </script>
 
-<section class="page-container content-container">
-  <h1>
-    {#if hasSearched}Search Results{:else}Search Apportionments{/if}
-  </h1>
+<div class="content-container">
+  <div class="page-container">
+    <h1>Search Apportionments</h1>
 
-  <div class="no-js-only-block" role="search">
-    <div class="search-form">
-      <Form
-        url={$url}
-        agencyBureauOptions={data.agencyBureauOptions}
-        yearOptions={data.yearOptions}
-        lineOptions={data.lineOptions}
-      />
-    </div>
-  </div>
-
-  <div class="has-js-only-block" role="search">
-    {#if hasSearched}
-      <div class="search-filters">
-        <Filters
-          url={$url}
-          agencyBureauOptions={data.agencyBureauOptions}
-          yearOptions={data.yearOptions}
-          lineOptions={data.lineOptions}
-        />
-      </div>
-    {:else}
+    <div class="no-js-only-block" role="search">
       <div class="search-form">
         <Form
           url={$url}
@@ -106,66 +99,162 @@
           lineOptions={data.lineOptions}
         />
       </div>
-    {/if}
+    </div>
+
+    <div class="has-js-only-block" role="search">
+      {#if hasSearched}
+        <div class="search-filters">
+          <Filters
+            url={$url}
+            agencyBureauOptions={data.agencyBureauOptions}
+            yearOptions={data.yearOptions}
+            lineOptions={data.lineOptions}
+          />
+        </div>
+      {:else}
+        <div class="search-form">
+          <Form
+            url={$url}
+            agencyBureauOptions={data.agencyBureauOptions}
+            yearOptions={data.yearOptions}
+            lineOptions={data.lineOptions}
+          />
+        </div>
+      {/if}
+    </div>
   </div>
 
-  {#if hasResults}
-    <div class="results">
-      <aside class="result-actions">
-        <div class="result-count">
+  <section class="account-results">
+    {#if hasAccountResults}
+      <div class="page-container">
+        <h2>Accounts</h2>
+      </div>
+
+      <aside class="result-actions-wrapper">
+        <div class="result-actions page-container">
           <p role="status">
-            Results {formatNumber(resultsStart)}-{formatNumber(resultsEnd)} of
-            <strong>
-              {formatNumber(resultCount)}
-              <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>
-            </strong>
-            in
-            <strong>{formatNumber(fileCount)} files</strong>.
+            Found <strong>{formatNumber(accounts?.length || 0)} accounts</strong>.
+            {#if accounts?.length && accounts?.length > accountLimit}
+              Showing first {formatNumber(accountLimit)}.
+            {/if}
+            <small><em>Still to implement pagination and sorting.</em></small>
           </p>
-        </div>
-
-        <div class="sort-action">
-          <form action={$url.pathname} method="get" bind:this={sortFormEl}>
-            <label for="sort">Sort results</label>
-
-            <select
-              name="sort"
-              id="sort"
-              value={$url.searchParams.get('sort') || 'approved_desc'}
-              on:change={updateSort}
-            >
-              {#each data.sortOptions as option (option.key)}
-                <option value={option.key}>{option.label}</option>
-              {/each}
-            </select>
-
-            {#each searchFormValues as value, index (index)}
-              <input type="hidden" name={value} value={$url.searchParams.get(value)} />
-            {/each}
-
-            <div class="no-js-only-block">
-              <button type="submit" class="small compact">Sort</button>
-            </div>
-          </form>
         </div>
       </aside>
 
-      {#each results as result (result.tafsTableId)}
-        <TafsDisplayItem tafs={result} />
-      {/each}
+      <div class="account-list page-container">
+        {#each formattedAccounts as account, ai}
+          {#if ai < accountLimit}
+            <article class="account-listing">
+              <a
+                href="/agency/{account.budgetAgencyTitleId}/bureau/{account.budgetBureauTitleId}/account/{account.accountTitleId}"
+                class="account-link"
+              >
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html account.highlightedAccountTitle}
+              </a>
 
-      <div class="pagination">
-        <UrlPagination perPage={data.pageSize} total={resultCount} />
+              <ul class="inline-list font-small">
+                <li>
+                  <a
+                    class="like-text"
+                    title="Go to agency: {account.budgetAgencyTitle}"
+                    href="/agency/{account.budgetAgencyTitleId}"
+                  >
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                    {@html account.highlightedBudgetAgencyTitle || account.budgetAgencyTitle}</a
+                  >
+                </li>
+
+                <li>
+                  <a
+                    class="like-text"
+                    title="Go to bureau: {account.budgetBureauTitle}"
+                    href="/agency/{account.budgetAgencyTitleId}/bureau/{account.budgetBureauTitleId}"
+                  >
+                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                    {@html account.highlightedBudgetBureauTitle || account.budgetAgencyTitle}</a
+                  >
+                </li>
+              </ul>
+            </article>
+          {/if}
+        {/each}
+      </div>
+    {:else if hasSearched}
+      <div class="page-container">
+        <p class="no-results">
+          <em>No accounts were found from your criteria. Please try refining and try again.</em>
+        </p>
+      </div>
+    {/if}
+  </section>
+
+  <section class="file-results">
+    {#if hasFileResults}
+      <div class="page-container">
+        <h2>Files</h2>
       </div>
 
-      <ScrollToTop />
-    </div>
-  {:else if hasSearched}
-    <p class="no-results">
-      <em>No results were found from your criteria. Please try refining and try again.</em>
-    </p>
-  {/if}
-</section>
+      <aside class="result-actions-wrapper">
+        <div class="result-actions page-container">
+          <div class="result-count">
+            <p role="status">
+              Results
+              {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
+                Math.min(fileCount || 0, currentFilesPage * filePageSize)
+              )}
+              of <strong>{formatNumber(fileCount || 0)} files</strong>
+            </p>
+          </div>
+
+          <div class="sort-action">
+            <form action={$url.pathname} method="get" bind:this={sortFormEl}>
+              <label for="sort">Sort results</label>
+
+              <select
+                name="sort"
+                id="sort"
+                value={$url.searchParams.get('sort') || 'approved_desc'}
+                on:change={updateSort}
+              >
+                {#each data.sortOptions as option (option.key)}
+                  <option value={option.key}>{option.label}</option>
+                {/each}
+              </select>
+
+              {#each searchFormValues as value, index (index)}
+                <input type="hidden" name={value} value={$url.searchParams.get(value)} />
+              {/each}
+
+              <div class="no-js-only-block">
+                <button type="submit" class="small compact">Sort</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </aside>
+
+      <div class="file-list page-container">
+        {#each files as file}
+          <FileListingHighlightable {file} highlightParams={searchParams} />
+        {/each}
+      </div>
+
+      <div class="pagination page-container">
+        <UrlPagination perPage={filePageSize} total={fileCount} />
+      </div>
+    {:else if hasSearched}
+      <div class="page-container">
+        <p class="no-results">
+          <em>No files were found from your criteria. Please try refining and try again.</em>
+        </p>
+      </div>
+    {/if}
+  </section>
+
+  <ScrollToTop />
+</div>
 
 <style>
   .pagination {
@@ -176,8 +265,15 @@
   .search-filters {
     margin: var(--spacing) 0;
     padding: var(--spacing) 0;
-    border-top: var(--border-weight) solid var(--color-gray-light);
-    border-bottom: var(--border-weight) solid var(--color-gray-light);
+    border-top: 1px solid var(--color-gray-light);
+    border-bottom: 1px solid var(--color-gray-light);
+  }
+
+  .result-actions-wrapper {
+    background-color: var(--color-background-alt);
+    padding-top: var(--spacing);
+    padding-bottom: var(--spacing);
+    margin-bottom: var(--spacing-double);
   }
 
   .result-actions {
@@ -185,7 +281,11 @@
     justify-content: space-between;
     align-items: center;
     align-items: baseline;
-    margin: var(--spacing-double) 0 var(--spacing-large) 0;
+  }
+
+  .result-count {
+    display: flex;
+    gap: var(--spacing);
   }
 
   .sort-action form {
@@ -208,6 +308,36 @@
     padding-bottom: var(--spacing-double);
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .account-results {
+    margin-bottom: var(--spacing-double);
+  }
+
+  .account-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-double);
+    margin-bottom: var(--spacing-double);
+  }
+
+  .account-listing {
+    width: calc(50% - var(--spacing-double));
+    border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
+    padding-right: var(--spacing);
+    padding-bottom: var(--spacing);
+
+    .account-link {
+      /* TODO: Use a variable here */
+      font-size: 1.15rem;
+      display: block;
+    }
+  }
+
+  .page-container :global(.file-listing-small) {
+    border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
+    padding-bottom: var(--spacing);
+    margin-bottom: var(--spacing-double);
   }
 
   @media (max-width: 768px) {

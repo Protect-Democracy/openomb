@@ -167,6 +167,10 @@
     margin-bottom: var(--spacing);
   }
 
+  .field {
+    min-height: calc(var(--spacing) * 4.3);
+  }
+
   .date-fields {
     display: flex;
     column-gap: var(--spacing-half);
@@ -182,12 +186,6 @@
     margin-top: var(--spacing-half);
   }
 
-  label {
-    font-weight: 700;
-    font-size: var(--font-size-small);
-    margin-bottom: var(--spacing-small);
-  }
-
   input[type='text'] {
     width: 100%;
   }
@@ -195,6 +193,7 @@
   @media (max-width: 1280px) {
     .field {
       width: auto;
+      min-height: auto;
     }
   }
 

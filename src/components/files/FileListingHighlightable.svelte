@@ -20,7 +20,7 @@
 
   // Props
   export let headerElement = 'h3';
-  export let headerClasses = 'h3-alt';
+  export let headerClasses = '';
   export let file: File;
   export let highlightParams: SearchParams;
 
@@ -32,6 +32,7 @@
   let hasTafs: boolean;
   $: hasTafs = file.tafs && file.tafs.length > 0 ? true : false;
   $: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
+  $: highlightedApproverTitle = highlight(file.approverTitle, [highlightParams?.approver]);
   $: agencies = highlightOrder(
     uniqBy(
       file?.tafs?.map((t) => ({
@@ -91,72 +92,96 @@
 </script>
 
 <article class="file-listing-small">
-  <svelte:element this={headerElement} class="listing-heading {headerClasses}">
-    <small>File ID: {file.fileId}</small>
-    <a href="/file/{file.fileId}">
-      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-      {@html formatFileTitle(file, [highlightParams?.term, highlightParams?.account])}</a
-    >
-  </svelte:element>
+  <div class="heading">
+    <svelte:element this={headerElement} class="main-heading {headerClasses}">
+      <a href="/file/{file.fileId}">
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html formatFileTitle(file, [highlightParams?.term, highlightParams?.account])}</a
+      >
+    </svelte:element>
 
-  <ul class="inline-list heirarchy">
-    {#if !hasTafs}
-      <li>
-        <a class="like-text" title="Go to folder: {file.folder}" href="/folder/{file.folderId}"
-          >{file.folder}</a
-        >
-      </li>
-    {:else}
-      <li>
-        <a
-          class="like-text"
-          title="Go to agency: {agencies[0].title}"
-          href="/agency/{agencies[0].id}"
-        >
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html agencies[0].highlightedTitle || agencies[0].title}</a
-        >{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
-      </li>
-
-      <li>
-        <a
-          class="like-text"
-          title="Go to bureau: {bureaus[0].title}"
-          href="/agency/{agencies[0].id}/bureau/{bureaus[0].id}"
-        >
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          {@html bureaus[0].highlightedTitle || bureaus[0].title}</a
-        >{bureaus.length > 1 ? ` + ${bureaus.length - 1}` : ''}
-      </li>
-    {/if}
-  </ul>
-
-  <div class="published-date">
-    Approved <strong
-      ><time datetime={formatDateISO(file.approvalTimestamp)}
-        >{formatDate(file.approvalTimestamp, 'medium')}</time
-      ></strong
-    >
-    for fiscal year
-    <strong>{file.fiscalYear?.toString()}</strong>{#if file.approverTitle}
-      &nbsp;approved by {file.approverTitle}{/if}.
+    <div class="sub-heading">
+      <ul class="inline-list">
+        {#if hasTafs}
+          <li>
+            <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>:
+            {#each tafs as taf, ti (taf.id)}
+              {#if ti < tafsLimit}
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                <span
+                  ><!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                  {@html taf.highlightedTitle || taf.title}</span
+                >{#if ti < tafsLimit - 1 && tafs.length - 1 !== ti}<span>,&nbsp;</span>
+                {/if}
+              {/if}
+            {/each}
+            {#if tafs.length > tafsLimit}
+              <span>and {tafs.length - tafsLimit} more</span>
+            {/if}
+          </li>
+        {/if}
+        <li>File {file.fileId}</li>
+      </ul>
+    </div>
   </div>
 
-  {#if hasTafs}
-    <section class="tafs">
-      <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>:
-      {#each tafs as taf, ti (taf.id)}
-        {#if ti < tafsLimit}
-          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-          <span
-            ><!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html taf.highlightedTitle || taf.title}</span
-          >{#if ti < tafsLimit - 1 && tafs.length - 1 !== ti}<span>,&nbsp;</span>
-          {/if}
+  <div class="file-meta">
+    <div class="tags">
+      <ul class="no-list">
+        <li>
+          <span class="tag"><acronym title="Fiscal Year">FY</acronym> {file.fiscalYear}</span>
+        </li>
+        <li>
+          <span class="tag">
+            Approved <time datetime={formatDateISO(file.approvalTimestamp)}
+              >{formatDate(file.approvalTimestamp, 'medium')}</time
+            >
+          </span>
+        </li>
+        {#if file.approverTitle}
+          <li>
+            <span class="tag">
+              By
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html highlightedApproverTitle || file.approverTitle}
+            </span>
+          </li>
         {/if}
-      {/each}
-    </section>
-  {/if}
+      </ul>
+    </div>
+
+    <ul class="inline-list heirarchy">
+      {#if !hasTafs}
+        <li>
+          <a class="like-text" title="Go to folder: {file.folder}" href="/folder/{file.folderId}"
+            >{file.folder}</a
+          >
+        </li>
+      {:else}
+        <li>
+          <a
+            class="like-text"
+            title="Go to agency: {agencies[0].title}"
+            href="/agency/{agencies[0].id}"
+          >
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html agencies[0].highlightedTitle || agencies[0].title}</a
+          >{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
+        </li>
+
+        <li>
+          <a
+            class="like-text"
+            title="Go to bureau: {bureaus[0].title}"
+            href="/agency/{agencies[0].id}/bureau/{bureaus[0].id}"
+          >
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html bureaus[0].highlightedTitle || bureaus[0].title}</a
+          >{bureaus.length > 1 ? ` + ${bureaus.length - 1}` : ''}
+        </li>
+      {/if}
+    </ul>
+  </div>
 
   {#if allLines?.length > 0 && hasHighlightedLines}
     <section class="lines font-small text-container">
@@ -194,17 +219,26 @@
 </article>
 
 <style>
-  .file-listing-small {
-    margin-bottom: var(--spacing-double);
+  .heading {
+    margin-bottom: var(--spacing-half);
   }
 
-  .listing-heading {
+  .main-heading {
     padding-top: 0;
     margin-bottom: 0;
   }
 
-  .tafs {
+  .sub-heading {
+    font-weight: var(--font-copy-weight-bold);
+  }
+
+  .file-meta {
     margin-bottom: var(--spacing);
+  }
+
+  .tags ul {
+    display: flex;
+    gap: var(--spacing-half);
   }
 
   .footnotes,
