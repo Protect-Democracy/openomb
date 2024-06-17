@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
-  import { formatNumber, highlight, highlightOrder } from '$lib/formatters';
+  import { formatNumber } from '$lib/formatters';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
@@ -10,6 +10,7 @@
   import { afterNavigate, beforeNavigate } from '$app/navigation';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import AccountListingHiglightable from '$components/accounts/AccountListingHiglightable.svelte';
 
   // Props
   export let data: PageData;
@@ -42,7 +43,7 @@
   // This seems annoying, but if we want the Sort form to be submittable without JS
   // we need to account for the values from the main Search form, as the GET action
   // on a form will remove existing query parameters.
-  const searchFormValues = [
+  const searchFormParams = [
     'agencyBureau',
     'term',
     'tafs',
@@ -60,28 +61,19 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ count: fileCount, files, searchParams, accounts, pageSize: filePageSize } = data);
+  $: ({ searchParams, files, fileCount, filePageSize, accounts } = data);
   $: hasFileResults = fileCount && fileCount > 0;
   $: hasAccountResults = accounts && accounts.length > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
   $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
   $: currentFilesPage = $url.searchParams.get('page') ? Number($url.searchParams.get('page')) : 1;
-  $: formattedAccounts = highlightOrder(
-    accounts?.map((account) => ({
-      ...account,
-      highlightedAccountTitle: highlight(account.accountTitle, [searchParams.term]),
-      highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, [searchParams.term]),
-      highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, [searchParams.term])
-    })) || [],
-    'highlightedAccountTitle'
-  );
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
-    // For some reason this doesn't trigger the navigation
+    // For some reason the submit doesn't trigger the navigation,
+    // so do manually here.
     submitting.set(true);
-
     sortFormEl.submit();
   }
 </script>
@@ -143,46 +135,14 @@
       </aside>
 
       <div class="account-list page-container">
-        {#each formattedAccounts as account, ai}
-          {#if ai < accountLimit}
-            <article class="account-listing">
-              <a
-                href="/agency/{account.budgetAgencyTitleId}/bureau/{account.budgetBureauTitleId}/account/{account.accountTitleId}"
-                class="account-link"
-              >
-                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                {@html account.highlightedAccountTitle}
-              </a>
-
-              <ul class="inline-list font-small">
-                <li>
-                  <a
-                    class="like-text"
-                    title="Go to agency: {account.budgetAgencyTitle}"
-                    href="/agency/{account.budgetAgencyTitleId}"
-                  >
-                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                    {@html account.highlightedBudgetAgencyTitle || account.budgetAgencyTitle}</a
-                  >
-                </li>
-
-                <li>
-                  <a
-                    class="like-text"
-                    title="Go to bureau: {account.budgetBureauTitle}"
-                    href="/agency/{account.budgetAgencyTitleId}/bureau/{account.budgetBureauTitleId}"
-                  >
-                    <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                    {@html account.highlightedBudgetBureauTitle || account.budgetAgencyTitle}</a
-                  >
-                </li>
-              </ul>
-            </article>
-          {/if}
+        {#each accounts as account (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}`)}
+          <AccountListingHiglightable {account} highlightParams={searchParams} />
         {/each}
       </div>
     {:else if hasSearched}
       <div class="page-container">
+        <h2>Accounts</h2>
+
         <p class="no-results">
           <em>No accounts were found from your criteria. Please try refining and try again.</em>
         </p>
@@ -223,8 +183,10 @@
                 {/each}
               </select>
 
-              {#each searchFormValues as value, index (index)}
-                <input type="hidden" name={value} value={$url.searchParams.get(value)} />
+              {#each searchFormParams as param, index (index)}
+                {#each $url.searchParams.getAll(param) as value}
+                  <input type="hidden" name={param} {value} />
+                {/each}
               {/each}
 
               <div class="no-js-only-block">
@@ -246,6 +208,8 @@
       </div>
     {:else if hasSearched}
       <div class="page-container">
+        <h2>Files</h2>
+
         <p class="no-results">
           <em>No files were found from your criteria. Please try refining and try again.</em>
         </p>
@@ -321,17 +285,11 @@
     margin-bottom: var(--spacing-double);
   }
 
-  .account-listing {
+  .account-list > :global(article) {
     width: calc(50% - var(--spacing-double));
     border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
     padding-right: var(--spacing);
     padding-bottom: var(--spacing);
-
-    .account-link {
-      /* TODO: Use a variable here */
-      font-size: 1.15rem;
-      display: block;
-    }
   }
 
   .page-container :global(.file-listing-small) {
