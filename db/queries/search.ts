@@ -1,6 +1,20 @@
 // Dependencies
-import { ilike, and, or, eq, gte, lte, isNotNull, count, asc, desc, inArray } from 'drizzle-orm';
-import type { PgColumn } from 'drizzle-orm/pg-core';
+import {
+  ilike,
+  and,
+  or,
+  eq,
+  gte,
+  lte,
+  isNotNull,
+  count,
+  asc,
+  desc,
+  inArray,
+  sql,
+  SQL
+} from 'drizzle-orm';
+import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -9,6 +23,10 @@ import { footnotes } from '../schema/footnotes';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types
+export type ColumnObject = {
+  [key: string]: PgColumn | SelectedFields | SQL;
+};
+
 export type SearchParams = {
   term: string;
   tafs: string;
@@ -209,7 +227,7 @@ function generalSearchFilters(
                 : footnoteNumberFilters[0]
             )
         )
-      : mainTable === 'files'
+      : searchParams.footnoteNumbers?.length > 1 && mainTable === 'files'
         ? inArray(
             files.fileId,
             db
@@ -268,37 +286,28 @@ export async function searchSetup(
   // Where
   const finalWhere = generalSearchFilters(formattedSearchParams, mainTable);
 
-  // Order.  We need to include the field in the query for distinctness if we are
-  // ordering
+  // File order parameters.  Since we are grouping, we need to  order
+  // by aggregate values.  Default is just to order by approval.
   let order = [desc(files.approvalTimestamp)];
-  const orderFields: { orderField: PgColumn; orderFieldSecondary?: PgColumn } = {
-    orderField: files.approvalTimestamp
-  };
   // TODO: Unsure why this throws the type issue
-  if (searchParams?.sort) {
-    if (searchParams.sort === 'account_asc') {
-      order = [asc(tafs.accountTitle), desc(files.approvalTimestamp)];
-      orderFields.orderField = tafs.accountTitle;
-      orderFields.orderFieldSecondary = files.approvalTimestamp;
-    }
-    else if (searchParams.sort === 'bureau_asc') {
-      order = [asc(tafs.budgetBureauTitle), desc(files.approvalTimestamp)];
-      orderFields.orderField = tafs.budgetBureauTitle;
-      orderFields.orderFieldSecondary = files.approvalTimestamp;
-    }
-    else if (searchParams.sort === 'agency_asc') {
-      order = [asc(tafs.budgetAgencyTitle), desc(files.approvalTimestamp)];
-      orderFields.orderField = tafs.budgetAgencyTitle;
-      orderFields.orderFieldSecondary = files.approvalTimestamp;
-    }
+  if (searchParams?.sort === 'account_asc') {
+    const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
+    order = [asc(aggField), desc(files.approvalTimestamp)];
+  }
+  else if (searchParams?.sort === 'bureau_asc') {
+    const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
+    order = [asc(aggField), desc(files.approvalTimestamp)];
+  }
+  else if (searchParams?.sort === 'agency_asc') {
+    const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
+    order = [asc(aggField), desc(files.approvalTimestamp)];
   }
 
   // Account ordering
-  const accountOrder = [asc(tafs.accountTitle), desc(files.approvalTimestamp)];
-  const accountOrderFields: { orderField: PgColumn; orderFieldSecondary?: PgColumn } = {
-    orderField: files.approvalTimestamp,
-    orderFieldSecondary: tafs.accountTitle
-  };
+  const accountOrder = [
+    sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
+    sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
+  ];
 
   return {
     searchParams: formattedSearchParams,
@@ -306,9 +315,7 @@ export async function searchSetup(
     hasFootnotes: searchHasFootnotes,
     where: finalWhere,
     order,
-    orderFields,
-    accountOrder,
-    accountOrderFields
+    accountOrder
   };
 }
 
@@ -453,18 +460,18 @@ export const mTafsSearchPaged = memoizeDataAsync(tafsSearchPaged);
  * @param searchParams
  * @returns
  */
-export async function accountSearchFullCountQuery(searchParams: SearchPaginationParams) {
+export async function accountSearchFullCountQuery(searchParams: SearchParams) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
     .selectDistinct({
-      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      budgetBureauTitleId: tafs.budgetBureauTitleId,
-      accountTitleId: tafs.accountTitleId
+      fullAccountTitleId: sql`CONCAT(${tafs.budgetAgencyTitleId}, ${tafs.budgetBureauTitleId}, ${tafs.accountTitleId})`
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
     .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    // Explicitly not joining footnotes and searching via subquery (see where)
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
     .as('countSubquery');
 
@@ -482,7 +489,7 @@ export const mAccountSearchFullCountQuery = memoizeDataAsync(accountSearchFullCo
  */
 export async function accountSearchFullCount(searchParams: SearchParams) {
   console.time('accountSearchFullCount');
-  const fullCount = await tafsSearchFullFileCountQuery(searchParams);
+  const fullCount = await accountSearchFullCountQuery(searchParams);
   console.timeEnd('accountSearchFullCount');
 
   return fullCount[0].count || 0;
@@ -497,32 +504,39 @@ export const mAccountSearchFullCount = memoizeDataAsync(accountSearchFullCount);
  * @returns
  */
 export async function accountSearchPaged(searchParams: SearchPaginationParams) {
-  const { where, accountOrder, accountOrderFields } = await searchSetup(searchParams, 'tafs');
+  const { where, accountOrder } = await searchSetup(searchParams, 'tafs');
 
-  // Find accounts
+  // Find accounts.  We want to get a distinct list of accounts while
+  // still searching many fields across multiple tables and also be able
+  // to order and offset.  We're limited by having a sort as those fields
+  // need to appear in a DISTINCT or in a GROUP BY
   console.time('accountSearchPaged');
+  // Subquery to filter the accounts
   const allAccounts = await db
-    .selectDistinct({
-      budgetAgencyTitle: tafs.budgetAgencyTitle,
+    .select({
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      budgetBureauTitle: tafs.budgetBureauTitle,
       budgetBureauTitleId: tafs.budgetBureauTitleId,
-      accountTitle: tafs.accountTitle,
       accountTitleId: tafs.accountTitleId,
-      ...accountOrderFields
+      // There is at least one account that has the same ID
+      // but different title (mismatching case); this should be
+      // fixed in the data, but just to make sure
+      budgetAgencyTitle: sql`(array_agg(${tafs.budgetAgencyTitle} ORDER BY ${tafs.budgetAgencyTitle}))[1]`,
+      budgetBureauTitle: sql`(array_agg(${tafs.budgetBureauTitle} ORDER BY ${tafs.budgetBureauTitle}))[1]`,
+      accountTitle: sql`(array_agg(${tafs.accountTitle} ORDER BY ${tafs.accountTitle}))[1]`
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .leftJoin(lines, eq(files.fileId, lines.fileId))
+    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    // Explicitly not joining footnotes and searching via subquery (see where)
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
+    .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId)
     .orderBy(...accountOrder)
     .offset(searchParams.accountOffset || 0)
     .limit(searchParams.accountLimit || 10);
   console.timeEnd('accountSearchPaged');
 
-  return {
-    accounts: allAccounts
-  };
+  return allAccounts;
 }
 
 export const mAccountSearchPaged = memoizeDataAsync(accountSearchPaged);
@@ -543,7 +557,8 @@ export async function fileSearchFullCountQuery(searchParams: SearchPaginationPar
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .leftJoin(lines, eq(files.fileId, lines.fileId))
-    .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    // Explicitly not joining footnotes and searching via subquery (see where)
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
     .as('countSubquery');
 
@@ -575,23 +590,31 @@ export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
  * @returns
  */
 export async function fileSearchPaged(searchParams: SearchPaginationParams) {
-  const { where, order, orderFields, hasLines, hasFootnotes } = await searchSetup(
-    searchParams,
-    'files'
-  );
+  const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
 
-  // Specific ids
+  // The meat of the query is that we want to find a set of distinct File IDs
+  // but we want to order by an arbitrary set of fields.  We could use a DISTINCT
+  // but then the ORDER BY has to be included in the select which makes the distinct
+  // part different.  A GROUP BY and Window function have similar limitations.
+  //
+  // A subquery method to get the distinct list of File IDs could work but gets complicated
+  // when we want to order on fields on TAFS or other one-to-many tables that
+  // will cause more than one row to be returned for each File ID.
+  //
+  //
   console.time('fileSearchPaged');
   const limitedIds = await db
-    .selectDistinct({
-      fileId: files.fileId,
-      ...orderFields
+    .select({
+      fileId: files.fileId
     })
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .leftJoin(lines, eq(files.fileId, lines.fileId))
-    .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    // Explicitly not joining footnotes and searching via subquery (see where),
+    // but if we need to order by or select from footnotes we need to join
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
+    .groupBy(files.fileId)
     .orderBy(...order)
     .offset(searchParams.offset)
     .limit(searchParams.limit);
@@ -601,7 +624,9 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
   console.time('fileSearchPaged-details');
   const detailsWith = {
     tafs: {
-      orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
+      // Specifically when ordering by account, we want the account
+      // titles to be in alphabetical order.
+      orderBy: (tafs, { asc }) => [asc(tafs.accountTitle)]
     }
   };
   if (hasLines) {

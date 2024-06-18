@@ -9,12 +9,17 @@
   export let highlightParams: SearchParams;
 
   // Derived
-  $: highlightedAccount = {
-    ...account,
-    highlightedAccountTitle: highlight(account.accountTitle, [highlightParams.term]),
-    highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, [highlightParams.term]),
-    highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, [highlightParams.term])
-  };
+  $: highlightedAccount = account
+    ? {
+        ...account,
+        highlightedAccountTitle: highlight(account.accountTitle, [
+          highlightParams.term,
+          highlightParams.account
+        ]),
+        highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, [highlightParams.term]),
+        highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, [highlightParams.term])
+      }
+    : {};
 </script>
 
 <article class="account-listing">
@@ -54,3 +59,11 @@
     </li>
   </ul>
 </article>
+
+<style>
+  .main-heading {
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+</style>

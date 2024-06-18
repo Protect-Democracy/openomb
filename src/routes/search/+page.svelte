@@ -15,9 +15,6 @@
   // Props
   export let data: PageData;
 
-  // Constants
-  const accountLimit = 10;
-
   // Stores
   const url = derived(page, ($page) => $page.url);
 
@@ -61,13 +58,17 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ searchParams, files, fileCount, filePageSize, accounts } = data);
+  $: ({ searchParams, files, fileCount, filePageSize, accounts, accountCount, accountPageSize } =
+    data);
   $: hasFileResults = fileCount && fileCount > 0;
   $: hasAccountResults = accounts && accounts.length > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
   $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
   $: currentFilesPage = $url.searchParams.get('page') ? Number($url.searchParams.get('page')) : 1;
+  $: currentAccountsPage = $url.searchParams.get('account-page')
+    ? Number($url.searchParams.get('account-page'))
+    : 1;
 
   // A shortcut to quickly update data on sort change
   function updateSort() {
@@ -116,7 +117,7 @@
     </div>
   </div>
 
-  <section class="account-results">
+  <section class="account-results" id="account-results">
     {#if hasAccountResults}
       <div class="page-container">
         <h2>Accounts</h2>
@@ -125,19 +126,31 @@
       <aside class="result-actions-wrapper">
         <div class="result-actions page-container">
           <p role="status">
-            Found <strong>{formatNumber(accounts?.length || 0)} accounts</strong>.
-            {#if accounts?.length && accounts?.length > accountLimit}
-              Showing first {formatNumber(accountLimit)}.
-            {/if}
-            <small><em>Still to implement pagination and sorting.</em></small>
+            Results
+            {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
+              Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
+            )}
+            of <strong>{formatNumber(accountCount || 0)} accounts</strong>
           </p>
         </div>
       </aside>
 
       <div class="account-list page-container">
-        {#each accounts as account (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}`)}
+        <!-- There are technically accounts that have the same name with different casing,
+         so the id's are the same, but the name is different.  Ideally this is fixed in
+         data and/or the query, but for now we'll just use the index as well. -->
+        {#each accounts as account, ai (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}-${ai}`)}
           <AccountListingHiglightable {account} highlightParams={searchParams} />
         {/each}
+      </div>
+
+      <div class="pagination page-container">
+        <UrlPagination
+          perPage={accountPageSize}
+          total={accountCount}
+          anchor="account-results"
+          urlPageParam="account-page"
+        />
       </div>
     {:else if hasSearched}
       <div class="page-container">
@@ -150,7 +163,7 @@
     {/if}
   </section>
 
-  <section class="file-results">
+  <section class="file-results" id="file-results">
     {#if hasFileResults}
       <div class="page-container">
         <h2>Files</h2>
@@ -204,7 +217,12 @@
       </div>
 
       <div class="pagination page-container">
-        <UrlPagination perPage={filePageSize} total={fileCount} />
+        <UrlPagination
+          perPage={filePageSize}
+          total={fileCount}
+          anchor="file-results"
+          urlPageParam="page"
+        />
       </div>
     {:else if hasSearched}
       <div class="page-container">
@@ -289,7 +307,7 @@
     width: calc(50% - var(--spacing-double));
     border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
     padding-right: var(--spacing);
-    padding-bottom: var(--spacing);
+    padding-bottom: var(--spacing-double);
   }
 
   .page-container :global(.file-listing-small) {
