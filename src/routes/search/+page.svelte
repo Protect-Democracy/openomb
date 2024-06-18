@@ -120,7 +120,10 @@
   <section class="account-results" id="account-results">
     {#if hasAccountResults}
       <div class="page-container">
-        <h2>Accounts</h2>
+        <div class="heading-links">
+          <h2>Accounts</h2>
+          <a href="#file-results">Go to File results</a>
+        </div>
       </div>
 
       <aside class="result-actions-wrapper">
@@ -166,7 +169,10 @@
   <section class="file-results" id="file-results">
     {#if hasFileResults}
       <div class="page-container">
-        <h2>Files</h2>
+        <div class="heading-links">
+          <h2>Files</h2>
+          <a href="#account-results">Go to Account results</a>
+        </div>
       </div>
 
       <aside class="result-actions-wrapper">
@@ -249,6 +255,18 @@
     padding: var(--spacing) 0;
     border-top: 1px solid var(--color-gray-light);
     border-bottom: 1px solid var(--color-gray-light);
+  }
+
+  .heading-links {
+    display: flex;
+    justify-content: start;
+    align-items: baseline;
+
+    a {
+      font-size: var(--font-size-small);
+      display: inline-block;
+      margin-left: var(--spacing-double);
+    }
   }
 
   .result-actions-wrapper {
