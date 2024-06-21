@@ -1,6 +1,21 @@
 // Dependencies
-import { ilike, and, or, eq, gte, lte, isNotNull, count, asc, desc, inArray } from 'drizzle-orm';
-import type { PgColumn } from 'drizzle-orm/pg-core';
+import {
+  ilike,
+  and,
+  or,
+  eq,
+  gte,
+  lte,
+  isNotNull,
+  count,
+  countDistinct,
+  asc,
+  desc,
+  inArray,
+  sql,
+  SQL
+} from 'drizzle-orm';
+import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -9,6 +24,10 @@ import { footnotes } from '../schema/footnotes';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types
+export type ColumnObject = {
+  [key: string]: PgColumn | SelectedFields | SQL;
+};
+
 export type SearchParams = {
   term: string;
   tafs: string;
@@ -29,7 +48,13 @@ export type PaginationParams = {
   sort: string;
 };
 
-export type SearchPaginationParams = SearchParams & PaginationParams;
+export type AccountPaginationParams = {
+  accountOffset?: number;
+  accountLimit?: number;
+  accountSort?: string;
+};
+
+export type SearchPaginationParams = SearchParams & PaginationParams & AccountPaginationParams;
 
 export type FormattedSearchParamsFields = {
   years: number[];
@@ -74,7 +99,7 @@ export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
  * @param searchParams Search params (optionally including pagination)
  * @returns
  */
-function formatSearchParams(
+export function formatSearchParams(
   searchParams: SearchPaginationParams | SearchParams
 ): FormattedSearchParams {
   // Format
@@ -203,7 +228,7 @@ function generalSearchFilters(
                 : footnoteNumberFilters[0]
             )
         )
-      : mainTable === 'files'
+      : searchParams.footnoteNumbers?.length > 1 && mainTable === 'files'
         ? inArray(
             files.fileId,
             db
@@ -250,38 +275,54 @@ function generalSearchFilters(
  * @param searchParams Search pagination options
  * @returns
  */
-export async function tafsSearchSetup(searchParams: SearchPaginationParams | SearchParams) {
+export async function searchSetup(
+  searchParams: SearchPaginationParams | SearchParams,
+  mainTable: 'files' | 'tafs' = 'files'
+) {
   const formattedSearchParams = formatSearchParams(searchParams);
   const searchHasLines = !!formattedSearchParams.term || !!formattedSearchParams.lineNumbers.length;
   const searchHasFootnotes =
     !!formattedSearchParams.term || !!formattedSearchParams.footnoteNumbers.length;
 
   // Where
-  const finalWhere = generalSearchFilters(formattedSearchParams, 'tafs');
+  const finalWhere = generalSearchFilters(formattedSearchParams, mainTable);
 
-  // Order.  We need to include the field in the query for distinctness if we are
-  // ordering
+  // File order parameters.  Since we are grouping, we need to  order
+  // by aggregate values.  Default is just to order by approval.
   let order = [desc(files.approvalTimestamp)];
-  const orderFields: { orderField: PgColumn; orderFieldSecondary?: PgColumn } = {
-    orderField: files.approvalTimestamp
-  };
   // TODO: Unsure why this throws the type issue
-  if (searchParams?.sort) {
-    if (searchParams.sort === 'account_asc') {
-      order = [asc(tafs.accountTitle), desc(files.approvalTimestamp)];
-      orderFields.orderField = tafs.accountTitle;
-      orderFields.orderFieldSecondary = files.approvalTimestamp;
-    }
-    else if (searchParams.sort === 'bureau_asc') {
-      order = [asc(tafs.budgetBureauTitle), desc(files.approvalTimestamp)];
-      orderFields.orderField = tafs.budgetBureauTitle;
-      orderFields.orderFieldSecondary = files.approvalTimestamp;
-    }
-    else if (searchParams.sort === 'agency_asc') {
-      order = [asc(tafs.budgetAgencyTitle), desc(files.approvalTimestamp)];
-      orderFields.orderField = tafs.budgetAgencyTitle;
-      orderFields.orderFieldSecondary = files.approvalTimestamp;
-    }
+  if (searchParams?.sort === 'approved_asc') {
+    order = [asc(files.approvalTimestamp)];
+  }
+  if (searchParams?.sort === 'account_asc') {
+    const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
+    order = [asc(aggField), desc(files.approvalTimestamp)];
+  }
+  else if (searchParams?.sort === 'bureau_asc') {
+    const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
+    order = [asc(aggField), desc(files.approvalTimestamp)];
+  }
+  else if (searchParams?.sort === 'agency_asc') {
+    const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
+    order = [asc(aggField), desc(files.approvalTimestamp)];
+  }
+
+  // Account ordering
+  let accountOrder = [
+    sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
+    sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
+  ];
+  if (searchParams?.accountSort === 'account_desc') {
+    accountOrder = [
+      sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
+      sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
+    ];
+  }
+  else if (searchParams?.accountSort === 'file_count_desc') {
+    accountOrder = [
+      desc(countDistinct(tafs.fileId)),
+      sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`
+    ];
   }
 
   return {
@@ -290,11 +331,11 @@ export async function tafsSearchSetup(searchParams: SearchPaginationParams | Sea
     hasFootnotes: searchHasFootnotes,
     where: finalWhere,
     order,
-    orderFields
+    accountOrder
   };
 }
 
-export const mTafsSearchSetup = memoizeDataAsync(tafsSearchSetup);
+export const mSearchSetup = memoizeDataAsync(searchSetup);
 
 /**
  * Determine full count of tafs search.  Return just query so to be used
@@ -305,7 +346,7 @@ export const mTafsSearchSetup = memoizeDataAsync(tafsSearchSetup);
  * @returns
  */
 export async function tafsSearchFullCountQuery(searchParams: SearchParams) {
-  const { where } = await tafsSearchSetup(searchParams);
+  const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
     .selectDistinct({
@@ -348,7 +389,7 @@ export const mTafsSearchFullCount = memoizeDataAsync(tafsSearchFullCount);
  * @returns
  */
 export async function tafsSearchFullFileCountQuery(searchParams: SearchParams) {
-  const { where } = await tafsSearchSetup(searchParams);
+  const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
     .selectDistinct({
@@ -389,7 +430,7 @@ export const mTafsSearchFullFileCount = memoizeDataAsync(tafsSearchFullFileCount
  * @returns
  */
 export async function tafsSearchPaged(searchParams: SearchParams & PaginationParams) {
-  const { where, order, orderFields } = await tafsSearchSetup(searchParams);
+  const { where, order, orderFields } = await searchSetup(searchParams, 'tafs');
 
   // Specific ids
   console.time('tafsSearchPaged');
@@ -428,119 +469,190 @@ export async function tafsSearchPaged(searchParams: SearchParams & PaginationPar
 
 export const mTafsSearchPaged = memoizeDataAsync(tafsSearchPaged);
 
-export async function accountSearchTest(searchParams: SearchParams & PaginationParams) {
-  // Format
-  const formattedSearchParams = formatSearchParams(searchParams);
+/**
+ * Find full count of accounts for a search; just query version for possible
+ * asynchronous usage.
+ *
+ * @param searchParams
+ * @returns
+ */
+export async function accountSearchFullCountQuery(searchParams: SearchParams) {
+  const { where } = await searchSetup(searchParams, 'tafs');
 
-  // Collect filters
-  const finalWhere = generalSearchFilters(formattedSearchParams, 'tafs');
-
-  // Find accounts
-  console.time('TEST - ACCOUNT SEARCH QUERY');
-  const allAccounts = await db
+  const countSubquery = db
     .selectDistinct({
-      budgetAgencyTitle: tafs.budgetAgencyTitle,
-      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      budgetBureauTitle: tafs.budgetBureauTitle,
-      budgetBureauTitleId: tafs.budgetBureauTitleId,
-      accountTitle: tafs.accountTitle,
-      accountTitleId: tafs.accountTitleId
+      fullAccountTitleId: sql`CONCAT(${tafs.budgetAgencyTitleId}, ${tafs.budgetBureauTitleId}, ${tafs.accountTitleId})`
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .leftJoin(lines, eq(files.fileId, lines.fileId))
-    .where(finalWhere)
-    .orderBy(asc(tafs.accountTitle));
-  console.timeEnd('TEST - ACCOUNT SEARCH QUERY');
+    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    // Explicitly not joining footnotes and searching via subquery (see where)
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    .where(where)
+    .as('countSubquery');
 
-  return {
-    accounts: allAccounts
-  };
+  return db.select({ count: count() }).from(countSubquery);
 }
 
-export async function fileSearchTest(searchParams: SearchParams & PaginationParams) {
-  console.log('-----------------');
+export const mAccountSearchFullCountQuery = memoizeDataAsync(accountSearchFullCountQuery);
 
-  // Format
-  const formattedSearchParams = formatSearchParams(searchParams);
+/**
+ * Determine full count of files in tafs search.
+ *
+ * @param searchParams Search parameters (don't include pagination parameters
+ *   as this will allow for better caching)
+ * @returns
+ */
+export async function accountSearchFullCount(searchParams: SearchParams) {
+  console.time('accountSearchFullCount');
+  const fullCount = await accountSearchFullCountQuery(searchParams);
+  console.timeEnd('accountSearchFullCount');
 
-  // Filters that will search line numbers
-  const searchHasLines = !!formattedSearchParams.term || !!formattedSearchParams.lineNumbers.length;
-  const searchHasFootnotes =
-    !!formattedSearchParams.term || !!formattedSearchParams.footnoteNumbers.length;
+  return fullCount[0].count || 0;
+}
 
-  // Collect filters
-  const finalWhere = generalSearchFilters(formattedSearchParams);
+export const mAccountSearchFullCount = memoizeDataAsync(accountSearchFullCount);
 
-  // Order.  We need to include the field in the query for distinctness
-  let order = [desc(files.approvalTimestamp)];
-  const orderFields: { orderField: PgColumn; orderFieldSecondary?: PgColumn } = {
-    orderField: files.approvalTimestamp
-  };
-  if (searchParams.sort === 'account_asc') {
-    order = [asc(tafs.accountTitle), desc(files.approvalTimestamp)];
-    orderFields.orderField = tafs.accountTitle;
-    orderFields.orderFieldSecondary = files.approvalTimestamp;
-  }
-  else if (searchParams.sort === 'bureau_asc') {
-    order = [asc(tafs.budgetBureauTitle), desc(files.approvalTimestamp)];
-    orderFields.orderField = tafs.budgetBureauTitle;
-    orderFields.orderFieldSecondary = files.approvalTimestamp;
-  }
-  else if (searchParams.sort === 'agency_asc') {
-    order = [asc(tafs.budgetAgencyTitle), desc(files.approvalTimestamp)];
-    orderFields.orderField = tafs.budgetAgencyTitle;
-    orderFields.orderFieldSecondary = files.approvalTimestamp;
-  }
+/**
+ * Find relevant accounts from a general search.
+ *
+ * @param searchParams
+ * @returns
+ */
+export async function accountSearchPaged(searchParams: SearchPaginationParams) {
+  const { where, accountOrder } = await searchSetup(searchParams, 'tafs');
 
-  console.time('TEST - ALL FILES QUERY');
-  // TODO: This should be memoized since if someone is paging
-  // through results, there's no reason to run this query again.
+  // Find accounts.  We want to get a distinct list of accounts while
+  // still searching many fields across multiple tables and also be able
+  // to order and offset.  We're limited by having a sort as those fields
+  // need to appear in a DISTINCT or in a GROUP BY
+  console.time('accountSearchPaged');
+  // Subquery to filter the accounts
+  const allAccounts = await db
+    .select({
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      accountTitleId: tafs.accountTitleId,
+      // There is at least one account that has the same ID
+      // but different title (mismatching case); this should be
+      // fixed in the data, but just to make sure
+      budgetAgencyTitle: sql`(array_agg(${tafs.budgetAgencyTitle} ORDER BY ${tafs.budgetAgencyTitle}))[1]`,
+      budgetBureauTitle: sql`(array_agg(${tafs.budgetBureauTitle} ORDER BY ${tafs.budgetBureauTitle}))[1]`,
+      accountTitle: sql`(array_agg(${tafs.accountTitle} ORDER BY ${tafs.accountTitle}))[1]`
+    })
+    .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
+    // Explicitly not joining footnotes and searching via subquery (see where)
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    .where(where)
+    .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId)
+    .orderBy(...accountOrder)
+    .offset(searchParams.accountOffset || 0)
+    .limit(searchParams.accountLimit || 10);
+  console.timeEnd('accountSearchPaged');
+
+  return allAccounts;
+}
+
+export const mAccountSearchPaged = memoizeDataAsync(accountSearchPaged);
+
+/**
+ * Query for full count of a file search, separated for asynchronous usage.
+ *
+ * @param searchParams
+ * @returns
+ */
+export async function fileSearchFullCountQuery(searchParams: SearchPaginationParams) {
+  const { where } = await searchSetup(searchParams, 'files');
+
   const countSubquery = db
     .selectDistinct({
-      fileId: files.fileId,
-      ...orderFields
+      fileId: files.fileId
     })
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .leftJoin(lines, eq(files.fileId, lines.fileId))
-    .where(finalWhere)
+    // Explicitly not joining footnotes and searching via subquery (see where)
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    .where(where)
     .as('countSubquery');
-  const fullCount = await db.select({ count: count() }).from(countSubquery);
-  console.timeEnd('TEST - ALL FILES QUERY');
 
-  // Specific ids
-  console.time('TEST - PAGED FILES QUERY');
+  return db.select({ count: count() }).from(countSubquery);
+}
+
+export const mFileSearchFullCountQuery = memoizeDataAsync(fileSearchFullCountQuery);
+
+/**
+ * Perform full count of a file search.
+ *
+ * @param searchParams
+ * @returns
+ */
+export async function fileSearchFullCount(searchParams: SearchPaginationParams) {
+  console.time('fileSearchFullCount');
+  const fullCount = await fileSearchFullCountQuery(searchParams);
+  console.timeEnd('fileSearchFullCount');
+
+  return fullCount[0].count || 0;
+}
+
+export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
+
+/**
+ * Search files with common search parameters for a specific page.
+ *
+ * @param searchParams
+ * @returns
+ */
+export async function fileSearchPaged(searchParams: SearchPaginationParams) {
+  const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
+
+  // The meat of the query is that we want to find a set of distinct File IDs
+  // but we want to order by an arbitrary set of fields.  We could use a DISTINCT
+  // but then the ORDER BY has to be included in the select which makes the distinct
+  // part different.  A GROUP BY and Window function have similar limitations.
+  //
+  // A subquery method to get the distinct list of File IDs could work but gets complicated
+  // when we want to order on fields on TAFS or other one-to-many tables that
+  // will cause more than one row to be returned for each File ID.
+  //
+  //
+  console.time('fileSearchPaged');
   const limitedIds = await db
-    .selectDistinct({
-      fileId: files.fileId,
-      ...orderFields
+    .select({
+      fileId: files.fileId
     })
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .leftJoin(lines, eq(files.fileId, lines.fileId))
-    .leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
-    .where(finalWhere)
+    // Explicitly not joining footnotes and searching via subquery (see where),
+    // but if we need to order by or select from footnotes we need to join
+    //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
+    .where(where)
+    .groupBy(files.fileId)
     .orderBy(...order)
     .offset(searchParams.offset)
     .limit(searchParams.limit);
-  console.timeEnd('TEST - PAGED FILES QUERY');
+  console.timeEnd('fileSearchPaged');
 
   // Details.  Is there a better way to do this
-  console.time('TEST - FILE DETAILS QUERY');
+  console.time('fileSearchPaged-details');
   const detailsWith = {
     tafs: {
-      orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
+      // Specifically when ordering by account, we want the account
+      // titles to be in alphabetical order.
+      orderBy: (tafs, { asc }) => [asc(tafs.accountTitle)]
     }
   };
-  if (searchHasLines) {
+  if (hasLines) {
     detailsWith.tafs.with = {
       lines: {
         orderBy: (lines, { asc }) => [asc(lines.lineNumber)]
       }
     };
   }
-  if (searchHasFootnotes) {
+  if (hasFootnotes) {
     detailsWith.footnotes = {
       orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
     };
@@ -556,11 +668,9 @@ export async function fileSearchTest(searchParams: SearchParams & PaginationPara
     });
     fileDetails.push(details);
   }
-  console.timeEnd('TEST - FILE DETAILS QUERY');
+  console.timeEnd('fileSearchPaged-details');
 
-  return {
-    files: fileDetails,
-    count: fullCount[0].count,
-    formattedSearchParams
-  };
+  return fileDetails;
 }
+
+export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);

@@ -1,31 +1,30 @@
 import {
   yearOptions,
   lineNumberOptions,
-  mTafsSearchFullFileCount,
-  mTafsSearchFullCount,
-  mTafsSearchPaged,
-  type SearchParams
+  formatSearchParams,
+  mFileSearchPaged,
+  mFileSearchFullCount,
+  mAccountSearchPaged,
+  mAccountSearchFullCount
 } from '$queries/search';
 import { bureaus } from '$queries/tafs';
-import { sortOptions } from '$config/search';
-
-function convertArrayToSqlString(params: string[]) {
-  // Our SQL expects an array of comma-separated values with no brackets or quotes
-  return JSON.stringify(params).replace(/\[|"|\]/g, '');
-}
 
 /** @type {import('./$types').PageLoad} */
-export const load = async ({ url }) => {
+export const load = async ({ url, cookies }) => {
   // Shortcuts
   const u = (p: string) => url.searchParams.get(p);
-  const ua = (p: string) => url.searchParams.getAll(p);
+  const h = (p: string) => url.searchParams.has(p);
+  const ga = (p: string) => url.searchParams.getAll(p);
+  const jsEnabled = !!cookies.get('jsEnabled');
 
   // Paging values
-  const pageSize = 50;
-  const pageIndex = url.searchParams.has('page') ? Number(url.searchParams.get('page')) : 1;
+  const filePageSize = 50;
+  const filePageIndex = h('page') ? Number(u('page')) : 1;
+  const accountPageSize = 10;
+  const accountPageIndex = h('accountPage') ? Number(u('accountPage')) : 1;
 
   // Values we will only get when a search is done
-  let resultCount, fileCount, results, resultsStart, resultsEnd;
+  let formattedSearchParams, fileCount, fileResults, accountCount, accountResults;
 
   // Only perform our search once the form is submitted
   if (url.searchParams.toString().length) {
@@ -33,54 +32,68 @@ export const load = async ({ url }) => {
     //
     // Note: Make sure to update the values in search/+page.svelte if the arguments
     // change.
-    const agencyBureau = u('agencyBureau')?.split(',');
-    const searchArgs: SearchParams = {
+    const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
+    const searchArgs = {
       term: u('term') || '',
       tafs: u('tafs') || '',
       bureau: agencyBureau?.pop() || '',
       agency: agencyBureau?.pop() || '',
       account: u('account') || '',
       approver: u('approver') || '',
-      year: convertArrayToSqlString(url.searchParams.getAll('year')),
+      year: ga('year').join(','),
       approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
       approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-      lineNum: convertArrayToSqlString(ua('lineNum')),
-      footnoteNum: convertArrayToSqlString(ua('footnoteNum'))
+      lineNum: ga('lineNum').join(','),
+      footnoteNum: ga('footnoteNum').join(',')
     };
     const pagedSearchArgs = {
-      offset: (pageIndex - 1) * pageSize,
-      limit: pageSize,
-      sort: url.searchParams.get('sort'),
+      offset: (filePageIndex - 1) * filePageSize,
+      limit: filePageSize,
+      sort: u('sort'),
+      accountOffset: (accountPageIndex - 1) * accountPageSize,
+      accountLimit: accountPageSize,
+      accountSort: u('accountSort'),
       ...searchArgs
     };
 
-    // Execute queries.  Important to memoize counts, less so for search.
-    resultCount = await mTafsSearchFullCount(searchArgs);
-    fileCount = await mTafsSearchFullFileCount(searchArgs);
-    results = await mTafsSearchPaged(pagedSearchArgs);
+    // Formatted search params
+    formattedSearchParams = formatSearchParams(pagedSearchArgs);
 
-    // Determine result numbers
-    resultsStart = pageIndex * pageSize - pageSize + 1;
-    resultsEnd = Math.min(resultCount, pageIndex * pageSize);
+    // Execute queries.  Important to memoize counts, less so for search.
+    fileResults = await mFileSearchPaged(pagedSearchArgs);
+    fileCount = jsEnabled
+      ? mFileSearchFullCount(searchArgs)
+      : await mFileSearchFullCount(searchArgs);
+    accountResults = await mAccountSearchPaged(pagedSearchArgs);
+    accountCount = jsEnabled
+      ? mAccountSearchFullCount(searchArgs)
+      : await mAccountSearchFullCount(searchArgs);
   }
 
   return {
-    // Return numeric options as numbers
+    // Options/params
+    searchParams: formattedSearchParams,
     yearOptions: await yearOptions(),
     lineOptions: await lineNumberOptions(),
     agencyBureauOptions: await bureaus(),
-    sortOptions,
-    pageSize,
-    pageIndex,
-    resultCount,
-    fileCount,
-    results: results,
-    resultsStart,
-    resultsEnd,
+
+    // Files
+    files: fileResults,
+    fileCount: fileCount || 0,
+    filePageSize,
+    filePageIndex,
+
+    // Accounts
+    accounts: accountResults,
+    accountCount: accountCount || 0,
+    accountPageSize,
+    accountPageIndex,
+
+    // Page info
     pageMeta: {
-      title: resultCount > 0 ? 'Search results' : 'Search apportionments',
+      title: fileCount && fileCount > 0 ? 'Search results' : 'Search apportionments',
       description:
-        'Search apportionments by contents, TAFS, bureau, fiscal year, footnotes, and more',
+        'Search apportionments by contents, tafs, bureau, fiscal year, footnotes, and more',
       includeSearch: true
     }
   };

@@ -108,6 +108,19 @@ ul.inline-list li + li::before {
   margin-left: var(--spacing-half);
 }
 
+ul.no-list {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+ul.no-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
 /* Buttons */
 button.secondary,
 input[type='submit'].secondary,

@@ -26,6 +26,7 @@
   export let total = 0;
   export let pageBuffer = 2;
   export let includeLabel = true;
+  export let anchor = '';
 
   // Stores
   const url = derived(page, ($page) => $page.url);
@@ -81,7 +82,7 @@
   function getPageUrl(pageNumber: number) {
     const newQuery = new URLSearchParams($url.searchParams.toString());
     newQuery.set(urlPageParam, pageNumber.toString());
-    return `${$url.pathname}?${newQuery.toString()}`;
+    return `${$url.pathname}?${newQuery.toString()}${anchor ? '#' + anchor : ''}`;
   }
 </script>
 

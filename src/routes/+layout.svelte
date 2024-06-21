@@ -7,8 +7,9 @@
   import '@fontsource/ibm-plex-sans/700.css';
   import { onMount } from 'svelte';
   import { derived } from 'svelte/store';
+  import { addDays } from 'date-fns';
   import { page } from '$app/stores';
-  import { isProduction } from '$lib/utilities';
+  import { isProduction, setCookie } from '$lib/utilities';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
   import {
     siteName,
@@ -44,6 +45,7 @@
 
   // On Mount
   onMount(() => {
+    // Google Analytics setup
     if (googleAnalyticsId && typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () {
@@ -53,6 +55,10 @@
       window.gtag('config', googleAnalyticsId);
     }
   });
+
+  // Set cookie that JS is enabled which is useful
+  // if the server needs to know if JS is enabled.
+  setCookie('jsEnabled', 'true', { expires: addDays(new Date(), 30) });
 </script>
 
 <svelte:head>

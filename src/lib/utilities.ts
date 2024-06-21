@@ -62,6 +62,48 @@ export const prefersReducedMotion =
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)')?.matches;
 
 /**
+ * Client-side set cookie method with options
+ */
+export function setCookie(
+  name: string,
+  value: string,
+  options: Record<string, Date | string> = {}
+) {
+  // If not client side
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  // Default options
+  options = {
+    path: '/',
+    ...options,
+    expires: options.expires instanceof Date ? options.expires.toUTCString() : options.expires
+  };
+
+  // Value
+  let updatedCookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+  // Options
+  for (const [key, value] of Object.entries(options)) {
+    updatedCookie = value ? `${updatedCookie}; ${key}=${value}` : updatedCookie;
+  }
+
+  document.cookie = updatedCookie;
+}
+
+/**
+ * Make a value into a Promise or just pass through if Promise
+ */
+export function makePromise<T>(value: T | Promise<T>): Promise<T> {
+  return value instanceof Promise
+    ? value
+    : new Promise((resolve) => {
+        resolve(value);
+      });
+}
+
+/**
  * Get the hours and minutes for cache invalidation
  */
 export function hoursAndMinutesForCacheInvalidation() {
