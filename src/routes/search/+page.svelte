@@ -195,12 +195,28 @@
       </div>
 
       <div class="pagination page-container">
-        <UrlPagination
-          perPage={accountPageSize}
-          total={accountCount}
-          anchor="account-results"
-          urlPageParam="accountPage"
-        />
+        {#if accountCount instanceof Promise}
+          {#await accountCount}
+            <p class="muted center-container">
+              <span class="inline-icon"><Spinner /></span>
+              Loading paging...
+            </p>
+          {:then accountCount}
+            <UrlPagination
+              perPage={accountPageSize}
+              total={accountCount}
+              anchor="account-results"
+              urlPageParam="accountPage"
+            />
+          {/await}
+        {:else if (accountCount || 0) > 0}
+          <UrlPagination
+            perPage={accountPageSize}
+            total={accountCount}
+            anchor="account-results"
+            urlPageParam="accountPage"
+          />
+        {/if}
       </div>
     {:else if hasSearched}
       <div class="page-container">
@@ -291,12 +307,28 @@
       </div>
 
       <div class="pagination page-container">
-        <UrlPagination
-          perPage={filePageSize}
-          total={fileCount}
-          anchor="file-results"
-          urlPageParam="page"
-        />
+        {#if fileCount instanceof Promise}
+          {#await fileCount}
+            <p class="muted center-container">
+              <span class="inline-icon"><Spinner /></span>
+              Loading paging...
+            </p>
+          {:then fileCount}
+            <UrlPagination
+              perPage={filePageSize}
+              total={fileCount}
+              anchor="file-results"
+              urlPageParam="page"
+            />
+          {/await}
+        {:else if (fileCount || 0) > 0}
+          <UrlPagination
+            perPage={filePageSize}
+            total={fileCount}
+            anchor="file-results"
+            urlPageParam="page"
+          />
+        {/if}
       </div>
     {:else if hasSearched}
       <div class="page-container">

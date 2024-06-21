@@ -24,15 +24,7 @@ export const load = async ({ url, cookies }) => {
   const accountPageIndex = h('accountPage') ? Number(u('accountPage')) : 1;
 
   // Values we will only get when a search is done
-  let formattedSearchParams,
-    fileCount,
-    fileResults,
-    fileResultsStart,
-    fileResultsEnd,
-    accountCount,
-    accountResults,
-    accountResultsStart,
-    accountResultsEnd;
+  let formattedSearchParams, fileCount, fileResults, accountCount, accountResults;
 
   // Only perform our search once the form is submitted
   if (url.searchParams.toString().length) {
@@ -76,12 +68,6 @@ export const load = async ({ url, cookies }) => {
     accountCount = jsEnabled
       ? mAccountSearchFullCount(searchArgs)
       : await mAccountSearchFullCount(searchArgs);
-
-    // Determine result numbers
-    fileResultsStart = filePageIndex * filePageSize - filePageSize + 1;
-    fileResultsEnd = Math.min(fileCount, filePageIndex * filePageSize);
-    accountResultsStart = accountPageIndex * accountPageSize - accountPageSize + 1;
-    accountResultsEnd = Math.min(accountCount, accountPageIndex * accountPageSize);
   }
 
   return {
@@ -96,16 +82,12 @@ export const load = async ({ url, cookies }) => {
     fileCount,
     filePageSize,
     filePageIndex,
-    fileResultsStart,
-    fileResultsEnd,
 
     // Accounts
     accounts: accountResults,
     accountCount: accountCount || 0,
     accountPageSize,
     accountPageIndex,
-    accountResultsStart,
-    accountResultsEnd,
 
     // Page info
     pageMeta: {
