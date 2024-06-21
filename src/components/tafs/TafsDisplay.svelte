@@ -55,21 +55,16 @@
             </svelte:element>
 
             {#each Object.keys(tafsByYear) as fiscalYear (fiscalYear)}
-              <div class="tafs-files">
-                <div class="fiscal-year">
-                  FY {fiscalYear}
-                </div>
-
-                <div class="iterations">
-                  {#each orderBy(tafsByYear[fiscalYear], 'iteration', 'asc') as tafIteration (tafIteration.tafsTableId)}
-                    <div>
-                      <a href={`/file/${tafIteration.fileId}#tafs_${tafIteration.tafsTableId}`}
-                        >Iteration {tafIteration.iteration}</a
-                      >
-                    </div>
-                  {/each}
-                </div>
-              </div>
+              <dl class="iterations">
+                <dh>FY {fiscalYear} Iterations</dh>
+                {#each orderBy(tafsByYear[fiscalYear], 'iteration', 'asc') as tafIteration (tafIteration.tafsTableId)}
+                  <dd>
+                    <a href={`/file/${tafIteration.fileId}#tafs_${tafIteration.tafsTableId}`}
+                      >{tafIteration.iteration}: {formatDate(tafIteration.approvalTimestamp)}</a
+                    >
+                  </dd>
+                {/each}
+              </dl>
             {/each}
           </div>
         {/each}
@@ -172,22 +167,12 @@
     margin: var(--spacing-double) var(--spacing) 0;
   }
 
-  .tafs-files {
-    display: flex;
-    column-gap: var(--spacing);
-    flex-align-items: top;
-    margin: var(--spacing-half) var(--spacing-double) 0;
-  }
-
-  .fiscal-year {
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
   .iterations {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: var(--spacing);
+    margin: 0;
+  }
+
+  .iterations dh {
+    font-weight: var(--font-copy-weight-bold);
   }
 
   .tafs-title,

@@ -9,15 +9,16 @@
   export let highlightParams: SearchParams;
 
   // Derived
+  $: searchTerms = highlightParams?.term?.split(',') || [];
   $: highlightedAccount = account
     ? {
         ...account,
         highlightedAccountTitle: highlight(account.accountTitle, [
-          highlightParams.term,
+          ...searchTerms,
           highlightParams.account
         ]),
-        highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, [highlightParams.term]),
-        highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, [highlightParams.term])
+        highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, searchTerms),
+        highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, searchTerms)
       }
     : {};
 </script>

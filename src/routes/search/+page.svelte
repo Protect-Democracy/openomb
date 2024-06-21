@@ -5,6 +5,7 @@
   import { formatNumber } from '$lib/formatters';
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
+  import NoResults from './NoResults.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
   import Spinner from '$components/icons/Spinner.svelte';
   import { submitting } from './form-store';
@@ -222,9 +223,9 @@
       <div class="page-container">
         <h2>Accounts</h2>
 
-        <p class="no-results">
-          <em>No accounts were found from your criteria. Please try refining and try again.</em>
-        </p>
+        <div class="text-container no-results">
+          <NoResults resultType="account" />
+        </div>
       </div>
     {/if}
   </section>
@@ -334,9 +335,9 @@
       <div class="page-container">
         <h2>Files</h2>
 
-        <p class="no-results">
-          <em>No files were found from your criteria. Please try refining and try again.</em>
-        </p>
+        <div class="text-container no-results">
+          <NoResults resultType="file" />
+        </div>
       </div>
     {/if}
   </section>
@@ -403,7 +404,6 @@
   }
 
   .no-results {
-    text-align: center;
     padding-top: var(--spacing-large);
     padding-bottom: var(--spacing-double);
     margin-left: auto;

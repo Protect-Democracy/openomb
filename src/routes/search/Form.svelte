@@ -1,6 +1,7 @@
 <script lang="ts">
   import Spinner from '$components/icons/Spinner.svelte';
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
+  import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
   import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
   import { submitting } from './form-store';
   import { getContext } from 'svelte';
@@ -36,19 +37,20 @@
     <div class="field">
       <label for="term">Keyword</label>
       <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
+      <small
+        >Multiple keywords must be separated by commas. E.g. <i
+          >navy,department of defense,medical</i
+        ></small
+      >
     </div>
 
     <div class="field">
       <label for="agencyBureau-input">Agency and bureau</label>
 
-      <SearchSelect
+      <AgencyBureauSearchSelect
         id="agencyBureau"
         name="agencyBureau"
-        options={agencyBureauOptions}
-        formatGroupLabel={(o) => o.budgetAgencyTitle}
-        formatGroupValue={(o) => o.budgetAgencyTitleId}
-        formatOptionLabel={(o) => o.budgetBureauTitle}
-        formatOptionValue={(o) => o.budgetBureauTitleId}
+        bureaus={agencyBureauOptions}
         value={url.searchParams.get('agencyBureau') || ''}
       />
     </div>
@@ -165,6 +167,10 @@
   .field-col button {
     width: calc(100% - var(--spacing));
     margin-bottom: var(--spacing);
+  }
+
+  .field small {
+    color: var(--color-text-muted);
   }
 
   .field {

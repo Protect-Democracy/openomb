@@ -129,7 +129,7 @@
 
       <nav>
         <a class:active={$url.pathname === '/search'} href="/search">Search</a>
-        <a class:active={$url.pathname === '/explore'} href="/explore">Explore</a>
+        <a class:active={$url.pathname === '/explore'} href="/explore">Explore by Agency</a>
         <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
         <a class:active={$url.pathname === '/about'} href="/about">About</a>
         {#if !isProduction()}

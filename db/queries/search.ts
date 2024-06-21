@@ -124,6 +124,74 @@ export function formatSearchParams(
 }
 
 /**
+ * Ensure that our file contains all keywords at least once.
+ * Multiple keywords are expected to be separated by commas within string
+ *
+ * @param searchTerm Keyword string
+ * @param column Table column to compare against
+ * @returns
+ */
+function keywordSearch(searchTerm: string, mainTable: 'files' | 'tafs' = 'files') {
+  const lineSearch = (keyword: string) => {
+    if (mainTable === 'tafs') {
+      return inArray(
+        tafs.tafsTableId,
+        db
+          .selectDistinct({ tafsTableId: lines.tafsTableId })
+          .from(lines)
+          .where(ilike(lines.lineDescription, `%${keyword}%`))
+      );
+    }
+
+    return inArray(
+      files.fileId,
+      db
+        .selectDistinct({ fileId: lines.fileId })
+        .from(lines)
+        .where(ilike(lines.lineDescription, `%${keyword}%`))
+    );
+  };
+
+  const footnoteSearch = (keyword: string) => {
+    if (mainTable === 'tafs') {
+      return inArray(
+        tafs.tafsTableId,
+        db
+          .selectDistinct({ tafsTableId: lines.tafsTableId })
+          .from(lines)
+          .innerJoin(
+            footnotes,
+            and(eq(lines.fileId, footnotes.fileId), eq(lines.lineIndex, footnotes.lineIndex))
+          )
+          .where(ilike(footnotes.footnoteText, `%${keyword}%`))
+      );
+    }
+    return inArray(
+      files.fileId,
+      db
+        .selectDistinct({ fileId: footnotes.fileId })
+        .from(footnotes)
+        .where(ilike(footnotes.footnoteText, `%${keyword}%`))
+    );
+  };
+
+  // If we have keywords separated by commas, separate these and use in search
+  const keywords = searchTerm.split(',');
+  return and(
+    ...keywords.map((keyword) =>
+      or(
+        ilike(tafs.accountTitle, `%${keyword.trim()}%`),
+        ilike(tafs.budgetAgencyTitle, `%${keyword.trim()}%`),
+        ilike(tafs.budgetBureauTitle, `%${keyword.trim()}%`),
+
+        lineSearch(keyword.trim()),
+        footnoteSearch(keyword.trim())
+      )
+    )
+  );
+}
+
+/**
  * Create the set of WHERE clauses to use for searching.  Adjusts slightly
  * depending on the primary table that is being searched.
  *
@@ -139,55 +207,7 @@ function generalSearchFilters(
   const where = [];
 
   // General search term
-  where.push(
-    searchParams.term
-      ? or(
-          ilike(tafs.accountTitle, `%${searchParams.term}%`),
-          ilike(tafs.budgetAgencyTitle, `%${searchParams.term}%`),
-          ilike(tafs.budgetBureauTitle, `%${searchParams.term}%`),
-          // The ilike directly is very expensive, even once indexes have been added,
-          // but the subquery seems ot be efficient
-          //ilike(lines.lineDescription, `%${searchParams.term}%`)
-          mainTable === 'tafs'
-            ? inArray(
-                tafs.tafsTableId,
-                db
-                  .selectDistinct({ tafsTableId: lines.tafsTableId })
-                  .from(lines)
-                  .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
-              )
-            : inArray(
-                files.fileId,
-                db
-                  .selectDistinct({ fileId: lines.fileId })
-                  .from(lines)
-                  .where(ilike(lines.lineDescription, `%${searchParams.term}%`))
-              ),
-          mainTable === 'tafs'
-            ? inArray(
-                tafs.tafsTableId,
-                db
-                  .selectDistinct({ tafsTableId: lines.tafsTableId })
-                  .from(lines)
-                  .innerJoin(
-                    footnotes,
-                    and(
-                      eq(lines.fileId, footnotes.fileId),
-                      eq(lines.lineIndex, footnotes.lineIndex)
-                    )
-                  )
-                  .where(ilike(footnotes.footnoteText, `%${searchParams.term}%`))
-              )
-            : inArray(
-                files.fileId,
-                db
-                  .selectDistinct({ fileId: footnotes.fileId })
-                  .from(footnotes)
-                  .where(ilike(footnotes.footnoteText, `%${searchParams.term}%`))
-              )
-        )
-      : undefined
-  );
+  where.push(searchParams.term ? keywordSearch(searchParams.term, mainTable) : undefined);
 
   // Other search terms
   where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);

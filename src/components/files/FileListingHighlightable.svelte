@@ -34,12 +34,13 @@
   $: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
   $: highlightedApproverTitle = highlight(file.approverTitle, [highlightParams?.approver]);
   $: hasHighlightedApproverTitle = hasHighlight(highlightedApproverTitle);
+  $: searchTerms = highlightParams?.term?.split(',') || [];
   $: agencies = highlightOrder(
     uniqBy(
       file?.tafs?.map((t) => ({
         id: t.budgetAgencyTitleId,
         title: t.budgetAgencyTitle,
-        highlightedTitle: highlight(t.budgetAgencyTitle, [highlightParams?.term])
+        highlightedTitle: highlight(t.budgetAgencyTitle, searchTerms)
       })) || [],
       'id'
     ),
@@ -50,7 +51,7 @@
       file?.tafs?.map((t) => ({
         id: t.budgetBureauTitleId,
         title: t.budgetBureauTitle,
-        highlightedTitle: highlight(t.budgetBureauTitle, [highlightParams?.term])
+        highlightedTitle: highlight(t.budgetBureauTitle, searchTerms)
       })) || [],
       'id'
     ),
@@ -71,8 +72,8 @@
     (filter(flatMap(file?.tafs, 'lines')) || []).map((l) => ({
       ...l,
       id: `${l.tafsTableId}-${l.lineIndex}`,
-      highlightedDescription: highlight(l.lineDescription, [highlightParams?.term]),
-      hasHighlight: hasHighlight(highlight(l.lineDescription, [highlightParams?.term]))
+      highlightedDescription: highlight(l.lineDescription, searchTerms),
+      hasHighlight: hasHighlight(highlight(l.lineDescription, searchTerms))
     })),
     'highlightedDescription'
   );
@@ -82,8 +83,8 @@
       file?.footnotes?.map((f) => ({
         id: f.footnoteNumber,
         text: f.footnoteText,
-        highlightedText: highlight(f.footnoteText, [highlightParams?.term], 100),
-        hasHighlight: hasHighlight(highlight(f.footnoteText, [highlightParams?.term], 100))
+        highlightedText: highlight(f.footnoteText, searchTerms, 100),
+        hasHighlight: hasHighlight(highlight(f.footnoteText, searchTerms, 100))
       })),
       'id'
     ),
@@ -97,7 +98,7 @@
     <svelte:element this={headerElement} class="main-heading {headerClasses}">
       <a href="/file/{file.fileId}">
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        {@html formatFileTitle(file, [highlightParams?.term, highlightParams?.account])}</a
+        {@html formatFileTitle(file, [...searchTerms, highlightParams?.account])}</a
       >
     </svelte:element>
 

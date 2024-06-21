@@ -387,9 +387,11 @@ export const tafsByAccount = async function (
       iteration: tafs.iteration,
       fiscalYear: tafs.fiscalYear,
       tafsTableId: tafs.tafsTableId,
-      fileId: tafs.fileId
+      fileId: tafs.fileId,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
     .where(
       and(
         eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),

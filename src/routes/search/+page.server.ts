@@ -36,8 +36,8 @@ export const load = async ({ url, cookies }) => {
     const searchArgs = {
       term: u('term') || '',
       tafs: u('tafs') || '',
-      bureau: agencyBureau?.pop() || '',
-      agency: agencyBureau?.pop() || '',
+      bureau: agencyBureau?.[1] || '',
+      agency: agencyBureau?.[0] || '',
       account: u('account') || '',
       approver: u('approver') || '',
       year: ga('year').join(','),
