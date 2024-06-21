@@ -70,10 +70,12 @@ export const load = async ({ url, cookies }) => {
     // Execute queries.  Important to memoize counts, less so for search.
     fileResults = await mFileSearchPaged(pagedSearchArgs);
     fileCount = jsEnabled
-      ? mFileSearchFullCount(pagedSearchArgs)
-      : await mFileSearchFullCount(pagedSearchArgs);
+      ? mFileSearchFullCount(searchArgs)
+      : await mFileSearchFullCount(searchArgs);
     accountResults = await mAccountSearchPaged(pagedSearchArgs);
-    accountCount = await mAccountSearchFullCount(pagedSearchArgs);
+    accountCount = jsEnabled
+      ? mAccountSearchFullCount(searchArgs)
+      : await mAccountSearchFullCount(searchArgs);
 
     // Determine result numbers
     fileResultsStart = filePageIndex * filePageSize - filePageSize + 1;

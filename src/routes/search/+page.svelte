@@ -122,13 +122,30 @@
       <aside class="result-actions-wrapper">
         <div class="result-actions page-container">
           <div class="result-count">
-            <p role="status">
-              Results
-              {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
-                Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
-              )}
-              of <strong>{formatNumber(accountCount || 0)} accounts</strong>
-            </p>
+            {#if accountCount instanceof Promise}
+              {#await accountCount}
+                <p class="muted" role="status">
+                  <span class="inline-icon"><Spinner /></span>
+                  Loading account count
+                </p>
+              {:then accountCount}
+                <p role="status">
+                  Results
+                  {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
+                    Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
+                  )}
+                  of <strong>{formatNumber(accountCount || 0)} accounts</strong>
+                </p>
+              {/await}
+            {:else if (accountCount || 0) > 0}
+              <p>
+                Results
+                {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
+                  Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
+                )}
+                of <strong>{formatNumber(accountCount || 0)} accounts</strong>
+              </p>
+            {/if}
           </div>
 
           <div class="sort-action">
@@ -377,6 +394,12 @@
     border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
     padding-right: var(--spacing);
     padding-bottom: var(--spacing-double);
+
+    @media (max-width: 768px) {
+      & {
+        width: 100%;
+      }
+    }
   }
 
   .page-container :global(.file-listing-small) {

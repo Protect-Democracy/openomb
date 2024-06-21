@@ -25,7 +25,7 @@
   export let highlightParams: SearchParams;
 
   // Constants
-  const tafsLimit = 3;
+  const tafsLimit = 1;
   const footnotesLimit = 3;
 
   // Derived
@@ -33,6 +33,7 @@
   $: hasTafs = file.tafs && file.tafs.length > 0 ? true : false;
   $: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
   $: highlightedApproverTitle = highlight(file.approverTitle, [highlightParams?.approver]);
+  $: hasHighlightedApproverTitle = hasHighlight(highlightedApproverTitle);
   $: agencies = highlightOrder(
     uniqBy(
       file?.tafs?.map((t) => ({
@@ -120,6 +121,15 @@
             {/if}
           </li>
         {/if}
+        {#if hasHighlightedApproverTitle}
+          <li>
+            <span>
+              Approved by
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html highlightedApproverTitle || file.approverTitle}
+            </span>
+          </li>
+        {/if}
         <li>File {file.fileId}</li>
       </ul>
     </div>
@@ -138,15 +148,6 @@
             >
           </span>
         </li>
-        {#if file.approverTitle}
-          <li>
-            <span class="tag">
-              By
-              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-              {@html highlightedApproverTitle || file.approverTitle}
-            </span>
-          </li>
-        {/if}
       </ul>
     </div>
 
