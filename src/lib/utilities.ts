@@ -93,6 +93,17 @@ export function setCookie(
 }
 
 /**
+ * Make a value into a Promise or just pass through if Promise
+ */
+export function makePromise<T>(value: T | Promise<T>): Promise<T> {
+  return value instanceof Promise
+    ? value
+    : new Promise((resolve) => {
+        resolve(value);
+      });
+}
+
+/**
  * Get the hours and minutes for cache invalidation
  */
 export function hoursAndMinutesForCacheInvalidation() {

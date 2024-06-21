@@ -79,7 +79,7 @@ export const load = async ({ url, cookies }) => {
 
     // Files
     files: fileResults,
-    fileCount,
+    fileCount: fileCount || 0,
     filePageSize,
     filePageIndex,
 
