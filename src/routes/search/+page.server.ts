@@ -8,7 +8,6 @@ import {
   mAccountSearchFullCount
 } from '$queries/search';
 import { bureaus } from '$queries/tafs';
-import { sortOptions } from '$config/search';
 
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ url }) => {
@@ -21,7 +20,7 @@ export const load = async ({ url }) => {
   const filePageSize = 50;
   const filePageIndex = h('page') ? Number(u('page')) : 1;
   const accountPageSize = 10;
-  const accountPageIndex = h('account-page') ? Number(u('account-page')) : 1;
+  const accountPageIndex = h('accountPage') ? Number(u('accountPage')) : 1;
 
   // Values we will only get when a search is done
   let formattedSearchParams,
@@ -60,7 +59,7 @@ export const load = async ({ url }) => {
       sort: u('sort'),
       accountOffset: (accountPageIndex - 1) * accountPageSize,
       accountLimit: accountPageSize,
-      accountSort: u('account-sort'),
+      accountSort: u('accountSort'),
       ...searchArgs
     };
 
@@ -86,7 +85,6 @@ export const load = async ({ url }) => {
     yearOptions: await yearOptions(),
     lineOptions: await lineNumberOptions(),
     agencyBureauOptions: await bureaus(),
-    sortOptions,
 
     // Files
     files: fileResults,

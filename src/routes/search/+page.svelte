@@ -8,6 +8,8 @@
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
   import { submitting } from './form-store';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
+
+  import { fileSortOptions, accountSortOptions } from '$config/search';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import AccountListingHiglightable from '$components/accounts/AccountListingHiglightable.svelte';
@@ -19,7 +21,8 @@
   const url = derived(page, ($page) => $page.url);
 
   // State
-  let sortFormEl: HTMLFormElement;
+  let fileSortFormEl: HTMLFormElement;
+  let accountSortFormEl: HTMLFormElement;
 
   // When we navigate on the client and JS enabled, we want to communicate
   // that the form is being submitted.
@@ -37,24 +40,6 @@
     submitting.set(false);
   });
 
-  // This seems annoying, but if we want the Sort form to be submittable without JS
-  // we need to account for the values from the main Search form, as the GET action
-  // on a form will remove existing query parameters.
-  const searchFormParams = [
-    'agencyBureau',
-    'term',
-    'tafs',
-    'bureau',
-    'agency',
-    'account',
-    'approver',
-    'year',
-    'approvedStart',
-    'approvedEnd',
-    'lineNum',
-    'footnoteNum'
-  ];
-
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
@@ -66,16 +51,21 @@
   // TODO: Maybe be more specific about how we determine if search has been done.
   $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
   $: currentFilesPage = $url.searchParams.get('page') ? Number($url.searchParams.get('page')) : 1;
-  $: currentAccountsPage = $url.searchParams.get('account-page')
-    ? Number($url.searchParams.get('account-page'))
+  $: currentAccountsPage = $url.searchParams.get('accountPage')
+    ? Number($url.searchParams.get('accountPage'))
     : 1;
 
-  // A shortcut to quickly update data on sort change
-  function updateSort() {
-    // For some reason the submit doesn't trigger the navigation,
-    // so do manually here.
+  // A shortcut to quickly update data on sort change.
+  // For some reason the submit doesn't trigger the navigation,
+  // so do manually here.
+  // TODO: Do this without a submit/page-reload
+  function fileUpdateSort() {
     submitting.set(true);
-    sortFormEl.submit();
+    fileSortFormEl.submit();
+  }
+  function accountUpdateSort() {
+    submitting.set(true);
+    accountSortFormEl.submit();
   }
 </script>
 
@@ -128,13 +118,48 @@
 
       <aside class="result-actions-wrapper">
         <div class="result-actions page-container">
-          <p role="status">
-            Results
-            {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
-              Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
-            )}
-            of <strong>{formatNumber(accountCount || 0)} accounts</strong>
-          </p>
+          <div class="result-count">
+            <p role="status">
+              Results
+              {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
+                Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
+              )}
+              of <strong>{formatNumber(accountCount || 0)} accounts</strong>
+            </p>
+          </div>
+
+          <div class="sort-action">
+            <form
+              action={`${$url.pathname}#account-results`}
+              method="get"
+              bind:this={accountSortFormEl}
+            >
+              <label for="account-sort">Sort results</label>
+
+              <select
+                name="accountSort"
+                id="account-sort"
+                value={$url.searchParams.get('accountSort') || 'account_asc'}
+                on:change={accountUpdateSort}
+              >
+                {#each accountSortOptions as option (option.key)}
+                  <option value={option.key}>{option.label}</option>
+                {/each}
+              </select>
+
+              {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
+                {#each $url.searchParams.getAll(param) as value}
+                  {#if param !== 'accountSort'}
+                    <input type="hidden" name={param} {value} />
+                  {/if}
+                {/each}
+              {/each}
+
+              <div class="no-js-only-block">
+                <button type="submit" class="small compact">Sort</button>
+              </div>
+            </form>
+          </div>
         </div>
       </aside>
 
@@ -152,7 +177,7 @@
           perPage={accountPageSize}
           total={accountCount}
           anchor="account-results"
-          urlPageParam="account-page"
+          urlPageParam="accountPage"
         />
       </div>
     {:else if hasSearched}
@@ -188,23 +213,25 @@
           </div>
 
           <div class="sort-action">
-            <form action={$url.pathname} method="get" bind:this={sortFormEl}>
+            <form action={`${$url.pathname}#file-results`} method="get" bind:this={fileSortFormEl}>
               <label for="sort">Sort results</label>
 
               <select
                 name="sort"
                 id="sort"
                 value={$url.searchParams.get('sort') || 'approved_desc'}
-                on:change={updateSort}
+                on:change={fileUpdateSort}
               >
-                {#each data.sortOptions as option (option.key)}
+                {#each fileSortOptions as option (option.key)}
                   <option value={option.key}>{option.label}</option>
                 {/each}
               </select>
 
-              {#each searchFormParams as param, index (index)}
+              {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
                 {#each $url.searchParams.getAll(param) as value}
-                  <input type="hidden" name={param} {value} />
+                  {#if param !== 'sort'}
+                    <input type="hidden" name={param} {value} />
+                  {/if}
                 {/each}
               {/each}
 

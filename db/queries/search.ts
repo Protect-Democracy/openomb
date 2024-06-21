@@ -8,6 +8,7 @@ import {
   lte,
   isNotNull,
   count,
+  countDistinct,
   asc,
   desc,
   inArray,
@@ -290,6 +291,9 @@ export async function searchSetup(
   // by aggregate values.  Default is just to order by approval.
   let order = [desc(files.approvalTimestamp)];
   // TODO: Unsure why this throws the type issue
+  if (searchParams?.sort === 'approved_asc') {
+    order = [asc(files.approvalTimestamp)];
+  }
   if (searchParams?.sort === 'account_asc') {
     const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
@@ -304,10 +308,22 @@ export async function searchSetup(
   }
 
   // Account ordering
-  const accountOrder = [
+  let accountOrder = [
     sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
     sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
   ];
+  if (searchParams?.accountSort === 'account_desc') {
+    accountOrder = [
+      sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
+      sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
+    ];
+  }
+  else if (searchParams?.accountSort === 'file_count_desc') {
+    accountOrder = [
+      desc(countDistinct(tafs.fileId)),
+      sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`
+    ];
+  }
 
   return {
     searchParams: formattedSearchParams,
