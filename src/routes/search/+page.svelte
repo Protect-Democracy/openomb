@@ -6,6 +6,7 @@
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
+  import Spinner from '$components/icons/Spinner.svelte';
   import { submitting } from './form-store';
   import { afterNavigate, beforeNavigate } from '$app/navigation';
 
@@ -45,7 +46,7 @@
   // eslint-disable-next-line svelte/valid-compile
   $: ({ searchParams, files, fileCount, filePageSize, accounts, accountCount, accountPageSize } =
     data);
-  $: hasFileResults = fileCount && fileCount > 0;
+  $: hasFileResults = files && files.length > 0;
   $: hasAccountResults = accounts && accounts.length > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
@@ -73,16 +74,18 @@
   <div class="page-container">
     <h1>Search Apportionments</h1>
 
-    <div class="no-js-only-block" role="search">
-      <div class="search-form">
-        <Form
-          url={$url}
-          agencyBureauOptions={data.agencyBureauOptions}
-          yearOptions={data.yearOptions}
-          lineOptions={data.lineOptions}
-        />
+    <noscript>
+      <div class="no-js-only-block" role="search">
+        <div class="search-form">
+          <Form
+            url={$url}
+            agencyBureauOptions={data.agencyBureauOptions}
+            yearOptions={data.yearOptions}
+            lineOptions={data.lineOptions}
+          />
+        </div>
       </div>
-    </div>
+    </noscript>
 
     <div class="has-js-only-block" role="search">
       {#if hasSearched}
@@ -155,9 +158,11 @@
                 {/each}
               {/each}
 
-              <div class="no-js-only-block">
-                <button type="submit" class="small compact">Sort</button>
-              </div>
+              <noscript>
+                <div class="no-js-only-block">
+                  <button type="submit" class="small compact">Sort</button>
+                </div>
+              </noscript>
             </form>
           </div>
         </div>
@@ -203,13 +208,30 @@
       <aside class="result-actions-wrapper">
         <div class="result-actions page-container">
           <div class="result-count">
-            <p role="status">
-              Results
-              {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
-                Math.min(fileCount || 0, currentFilesPage * filePageSize)
-              )}
-              of <strong>{formatNumber(fileCount || 0)} files</strong>
-            </p>
+            {#if fileCount instanceof Promise}
+              {#await fileCount}
+                <p class="muted" role="status">
+                  <span class="inline-icon"><Spinner /></span>
+                  Loading file count
+                </p>
+              {:then fileCount}
+                <p role="status">
+                  Results
+                  {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
+                    Math.min(fileCount || 0, currentFilesPage * filePageSize)
+                  )}
+                  of <strong>{formatNumber(fileCount || 0)} files</strong>
+                </p>
+              {/await}
+            {:else if (fileCount || 0) > 0}
+              <p>
+                Results
+                {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
+                  Math.min(fileCount || 0, currentFilesPage * filePageSize)
+                )}
+                of <strong>{formatNumber(fileCount || 0)} files</strong>
+              </p>
+            {/if}
           </div>
 
           <div class="sort-action">
@@ -235,9 +257,11 @@
                 {/each}
               {/each}
 
-              <div class="no-js-only-block">
-                <button type="submit" class="small compact">Sort</button>
-              </div>
+              <noscript>
+                <div class="no-js-only-block">
+                  <button type="submit" class="small compact">Sort</button>
+                </div>
+              </noscript>
             </form>
           </div>
         </div>

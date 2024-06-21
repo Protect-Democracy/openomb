@@ -10,11 +10,12 @@ import {
 import { bureaus } from '$queries/tafs';
 
 /** @type {import('./$types').PageLoad} */
-export const load = async ({ url }) => {
+export const load = async ({ url, cookies }) => {
   // Shortcuts
   const u = (p: string) => url.searchParams.get(p);
   const h = (p: string) => url.searchParams.has(p);
   const ga = (p: string) => url.searchParams.getAll(p);
+  const jsEnabled = !!cookies.get('jsEnabled');
 
   // Paging values
   const filePageSize = 50;
@@ -68,7 +69,9 @@ export const load = async ({ url }) => {
 
     // Execute queries.  Important to memoize counts, less so for search.
     fileResults = await mFileSearchPaged(pagedSearchArgs);
-    fileCount = await mFileSearchFullCount(pagedSearchArgs);
+    fileCount = jsEnabled
+      ? mFileSearchFullCount(pagedSearchArgs)
+      : await mFileSearchFullCount(pagedSearchArgs);
     accountResults = await mAccountSearchPaged(pagedSearchArgs);
     accountCount = await mAccountSearchFullCount(pagedSearchArgs);
 
