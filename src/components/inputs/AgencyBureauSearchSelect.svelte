@@ -125,8 +125,6 @@
   // specifically it claims the $open store is undefined.
   $: openProxy = typeof $open !== 'undefined' ? $open : false;
 
-  $: console.log(options);
-
   $: filteredOptions = $touchedInput
     ? options.filter((o) => {
         const normalizedInput = $inputValue.toLowerCase();
