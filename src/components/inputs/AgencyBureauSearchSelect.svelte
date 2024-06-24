@@ -125,6 +125,8 @@
   // specifically it claims the $open store is undefined.
   $: openProxy = typeof $open !== 'undefined' ? $open : false;
 
+  $: console.log(options);
+
   $: filteredOptions = $touchedInput
     ? options.filter((o) => {
         const normalizedInput = $inputValue.toLowerCase();
@@ -183,7 +185,7 @@
     </div>
 
     {#if openProxy}
-      <dl class="search-select-menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
+      <ul class="search-select-menu" {...$menu} use:menu transition:fly={{ duration: 150, y: -5 }}>
         <!-- TODO: It's not valid HTML to use div's inside ul like this, but Melt UI uses this in example. -->
 
         <!-- eslint-disable -->
@@ -191,33 +193,34 @@
         <!-- This still gives an eslint issue -->
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <div tabindex="0">
-          <dh
+          <li
+            class="empty-option"
             class:selected={$isSelected(emptyOption.value)}
             class:highlighted={$isHighlighted(emptyOption.value)}
             {...$option(emptyOption)}
             use:option
           >
             {emptyOption.label}
-          </dh>
+          </li>
 
           {#each filteredOptions as opt (opt.value)}
-            {@const optType = opt.agency ? 'dd' : 'dh'}
-            <svelte:element
-              this={optType}
+            <li
+              class:budget-option={!!opt.agency}
+              class:agency-option={!opt.agency}
               class:selected={$isSelected(opt.value)}
               class:highlighted={$isHighlighted(opt.value)}
               {...$option(opt)}
               use:option
             >
               {opt.label}
-            </svelte:element>
+            </li>
           {:else}
-            <dh class="no-results"><em>No results found</em></dh>
+            <li class="no-results"><em>No results found</em></li>
           {/each}
         </div>
 
         <!-- eslint-enable -->
-      </dl>
+      </ul>
     {/if}
   </div>
 </div>
@@ -268,28 +271,54 @@
     border-bottom-right-radius: 0;
   }
 
-  dl {
+  .search-select-menu {
     list-style: none;
     max-height: min(90vh, calc(var(--spacing) * 15));
     background-color: var(--color-background);
     overflow-y: scroll;
     margin: 0;
-    padding: 0;
+    padding: 0 0 var(--spacing) 0;
     border-left: var(--border-weight) solid var(--color-text);
     border-bottom: var(--border-weight) solid var(--color-text);
     border-right: var(--border-weight) solid var(--color-text);
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     font-size: var(--font-size-small);
-  }
 
-  dl[data-side='top'] {
-    border-bottom: none;
-    border-top: var(--border-weight) solid var(--color-text);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
+    &[data-side='top'] {
+      border-bottom: none;
+      border-top: var(--border-weight) solid var(--color-text);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+    }
+
+    li {
+      cursor: pointer;
+      padding: var(--spacing-thin) var(--spacing-half);
+      display: block;
+    }
+
+    .selected {
+      background-color: var(--color-highlight);
+    }
+
+    .highlighted {
+      background-color: var(--color-highlight);
+    }
+
+    .empty-option {
+      font-style: italic;
+    }
+
+    .agency-option {
+      font-weight: var(--font-copy-weight-bold);
+    }
+
+    .budget-option {
+      padding-left: var(--spacing-double);
+    }
   }
 
   /* The ul gets taken out of the flow when the menu is open. */
@@ -298,35 +327,6 @@
     border-bottom-right-radius: var(--border-radius);
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  }
-
-  .group {
-    padding: var(--spacing-thin) var(--spacing-half);
-  }
-
-  dh,
-  dd {
-    cursor: pointer;
-    padding: var(--spacing-thin) var(--spacing-half);
-    display: block;
-  }
-
-  dh.selected,
-  dd.selected {
-    background-color: var(--color-highlight);
-  }
-
-  dh.highlighted,
-  dd.highlighted {
-    background-color: var(--color-highlight);
-  }
-
-  .group {
-    margin: var(--spacing-half) 0;
-  }
-
-  .group-label {
-    font-weight: var(--font-copy-weight-bold);
   }
 
   .no-results {

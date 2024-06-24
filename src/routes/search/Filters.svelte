@@ -32,9 +32,16 @@
       return `Keyword "${value}"`;
     } else if (key === 'agencyBureau') {
       const ids = value.split(',');
-      return agencyBureauOptions.find(
-        (option) => option.budgetAgencyTitleId == ids[0] && option.budgetBureauTitleId == ids[1]
-      )?.budgetBureauTitle;
+      // Handle just Agency or Agency/Bureau
+      return ids.length === 1
+        ? agencyBureauOptions.find((option) => option.budgetAgencyTitleId == ids[0])
+            ?.budgetAgencyTitle
+        : ids.length === 2
+          ? agencyBureauOptions.find(
+              (option) =>
+                option.budgetAgencyTitleId == ids[0] && option.budgetBureauTitleId == ids[1]
+            )?.budgetBureauTitle
+          : undefined;
     } else if (key === 'tafs') {
       return `TAFS "${value}"`;
     } else if (key === 'account') {
