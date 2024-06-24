@@ -122,7 +122,7 @@ export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
  */
 export const highlight = function (text?: string | null, terms?: string[], trim?: number): string {
   terms = terms ? terms : [];
-  terms = filter(terms);
+  terms = filter(terms.map((t) => t.trim()));
 
   if (!terms || terms.length < 1 || !text) {
     return text || '';
