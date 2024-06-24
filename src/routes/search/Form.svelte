@@ -170,6 +170,7 @@
   }
 
   .field small {
+    padding-top: var(--spacing-half);
     color: var(--color-text-muted);
   }
 
