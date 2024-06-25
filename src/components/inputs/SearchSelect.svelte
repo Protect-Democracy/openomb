@@ -26,7 +26,7 @@
   export let multi = false;
   export let id;
   export let name;
-  export let value;
+  export let value: string | string[];
 
   export let formatOptionLabel = (o) => o;
   export let formatOptionValue = (o) => o;

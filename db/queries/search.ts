@@ -59,7 +59,9 @@ export type SearchPaginationParams = SearchParams & PaginationParams & AccountPa
 export type FormattedSearchParamsFields = {
   years: number[];
   lineNumbers: string[];
+  approverIds: string[];
   footnoteNumbers: string[];
+  keywordTerms: string[];
 };
 
 export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
@@ -94,6 +96,21 @@ export async function lineNumberOptions() {
 export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
 
 /**
+ * Get all existing approver title options
+ */
+export async function approverTitleOptions() {
+  const approverOptions = await db
+    .selectDistinct({ value: files.approverTitleId, label: files.approverTitle })
+    .from(files)
+    .where(isNotNull(files.approverTitleId))
+    .orderBy(files.approverTitle);
+
+  return approverOptions;
+}
+
+export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
+
+/**
  * Format the search parameters to make it easier to turn into query.
  *
  * @param searchParams Search params (optionally including pagination)
@@ -109,7 +126,13 @@ export function formatSearchParams(
   const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
+  const approverIds = (searchParams.approver ? searchParams.approver.split(',') : [])
+    .map((v) => v.trim())
+    .filter((t) => !!t);
   const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
+    .map((v) => v.trim())
+    .filter((t) => !!t);
+  const keywordTerms = (searchParams.term ? searchParams.term.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
 
@@ -117,7 +140,9 @@ export function formatSearchParams(
     ...searchParams,
     years,
     lineNumbers,
-    footnoteNumbers
+    approverIds,
+    footnoteNumbers,
+    keywordTerms
   };
 
   return formattedSearchParams;
@@ -127,11 +152,11 @@ export function formatSearchParams(
  * Ensure that our file contains all keywords at least once.
  * Multiple keywords are expected to be separated by commas within string
  *
- * @param searchTerm Keyword string
+ * @param searchTerm Keywords
  * @param column Table column to compare against
  * @returns
  */
-function keywordSearch(searchTerm: string, mainTable: 'files' | 'tafs' = 'files') {
+function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'files') {
   const lineSearch = (keyword: string) => {
     if (mainTable === 'tafs') {
       return inArray(
@@ -176,16 +201,15 @@ function keywordSearch(searchTerm: string, mainTable: 'files' | 'tafs' = 'files'
   };
 
   // If we have keywords separated by commas, separate these and use in search
-  const keywords = searchTerm.split(',');
+  // TODO: Is this more expensive than doing a LIKE ALL|ANY (ARRAY['%term%', '%other%', '%thing%'])
   return and(
-    ...keywords.map((keyword) =>
+    ...keywordTermas.map((keyword) =>
       or(
-        ilike(tafs.accountTitle, `%${keyword.trim()}%`),
-        ilike(tafs.budgetAgencyTitle, `%${keyword.trim()}%`),
-        ilike(tafs.budgetBureauTitle, `%${keyword.trim()}%`),
-
-        lineSearch(keyword.trim()),
-        footnoteSearch(keyword.trim())
+        ilike(tafs.accountTitle, `%${keyword}%`),
+        ilike(tafs.budgetAgencyTitle, `%${keyword}%`),
+        ilike(tafs.budgetBureauTitle, `%${keyword}%`),
+        lineSearch(keyword),
+        footnoteSearch(keyword)
       )
     )
   );
@@ -207,20 +231,26 @@ function generalSearchFilters(
   const where = [];
 
   // General search term
-  where.push(searchParams.term ? keywordSearch(searchParams.term, mainTable) : undefined);
+  where.push(
+    searchParams.keywordTerms.length
+      ? keywordSearch(searchParams.keywordTerms, mainTable)
+      : undefined
+  );
 
   // Other search terms
   where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);
   where.push(
     searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
   );
-  where.push(
-    searchParams.approver ? ilike(files.approverTitle, `%${searchParams.approver}%`) : undefined
-  );
 
   // Identifiers
   where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
   where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
+  where.push(
+    searchParams.approverIds?.length > 0
+      ? inArray(files.approverTitleId, searchParams.approverIds)
+      : undefined
+  );
   where.push(
     searchParams.lineNumbers?.length > 0
       ? inArray(lines.lineNumber, searchParams.lineNumbers)

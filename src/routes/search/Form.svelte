@@ -9,8 +9,9 @@
   // Props
   export let url;
   export let agencyBureauOptions = [];
-  export let yearOptions = [];
-  export let lineOptions = [];
+  export let yearOptions: number[] = [];
+  export let lineOptions: string[] = [];
+  export let approverTitleOptions: Record<'value' | 'label', string>[] = [];
 
   // Context
   const drawerContext = getContext('drawer');
@@ -38,9 +39,9 @@
       <label for="term">Keyword</label>
       <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
       <small
-        >Multiple keywords must be separated by commas. E.g. <i
-          >navy,department of defense,medical</i
-        ></small
+        >Multiple keywords are inclusive and must be separated by commas. E.g. <i
+          >navy, department of defense, medical</i
+        > will match all those terms.</small
       >
     </div>
 
@@ -70,7 +71,17 @@
 
     <div class="field">
       <label for="approver">Approved by</label>
-      <input type="text" id="approver" name="approver" value={url.searchParams.get('approver')} />
+
+      <SearchSelect
+        id="approver"
+        name="approver"
+        options={approverTitleOptions.map((o) => o.value)}
+        formatOptionLabel={(v) => {
+          return approverTitleOptions.find((o) => o.value === v)?.label;
+        }}
+        value={url.searchParams.getAll('approver')}
+        multi
+      />
     </div>
   </div>
 
