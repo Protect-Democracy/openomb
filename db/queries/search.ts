@@ -60,6 +60,7 @@ export type FormattedSearchParamsFields = {
   years: number[];
   lineNumbers: string[];
   footnoteNumbers: string[];
+  keywordTerms: string[];
 };
 
 export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
@@ -112,12 +113,16 @@ export function formatSearchParams(
   const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
+  const keywordTerms = (searchParams.term ? searchParams.term.split(',') : [])
+    .map((v) => v.trim())
+    .filter((t) => !!t);
 
   const formattedSearchParams: FormattedSearchParams | FormattedSearchPaginationParams = {
     ...searchParams,
     years,
     lineNumbers,
-    footnoteNumbers
+    footnoteNumbers,
+    keywordTerms
   };
 
   return formattedSearchParams;
@@ -127,11 +132,11 @@ export function formatSearchParams(
  * Ensure that our file contains all keywords at least once.
  * Multiple keywords are expected to be separated by commas within string
  *
- * @param searchTerm Keyword string
+ * @param searchTerm Keywords
  * @param column Table column to compare against
  * @returns
  */
-function keywordSearch(searchTerm: string, mainTable: 'files' | 'tafs' = 'files') {
+function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'files') {
   const lineSearch = (keyword: string) => {
     if (mainTable === 'tafs') {
       return inArray(
@@ -176,16 +181,15 @@ function keywordSearch(searchTerm: string, mainTable: 'files' | 'tafs' = 'files'
   };
 
   // If we have keywords separated by commas, separate these and use in search
-  const keywords = searchTerm.split(',');
+  // TODO: Is this more expensive than doing a LIKE ALL|ANY (ARRAY['%term%', '%other%', '%thing%'])
   return and(
-    ...keywords.map((keyword) =>
+    ...keywordTermas.map((keyword) =>
       or(
-        ilike(tafs.accountTitle, `%${keyword.trim()}%`),
-        ilike(tafs.budgetAgencyTitle, `%${keyword.trim()}%`),
-        ilike(tafs.budgetBureauTitle, `%${keyword.trim()}%`),
-
-        lineSearch(keyword.trim()),
-        footnoteSearch(keyword.trim())
+        ilike(tafs.accountTitle, `%${keyword}%`),
+        ilike(tafs.budgetAgencyTitle, `%${keyword}%`),
+        ilike(tafs.budgetBureauTitle, `%${keyword}%`),
+        lineSearch(keyword),
+        footnoteSearch(keyword)
       )
     )
   );
@@ -207,7 +211,11 @@ function generalSearchFilters(
   const where = [];
 
   // General search term
-  where.push(searchParams.term ? keywordSearch(searchParams.term, mainTable) : undefined);
+  where.push(
+    searchParams.keywordTerms.length
+      ? keywordSearch(searchParams.keywordTerms, mainTable)
+      : undefined
+  );
 
   // Other search terms
   where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);

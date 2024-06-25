@@ -38,9 +38,9 @@
       <label for="term">Keyword</label>
       <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
       <small
-        >Multiple keywords must be separated by commas. E.g. <i
-          >navy,department of defense,medical</i
-        ></small
+        >Multiple keywords are inclusive and must be separated by commas. E.g. <i
+          >navy, department of defense, medical</i
+        > will match all those terms.</small
       >
     </div>
 
