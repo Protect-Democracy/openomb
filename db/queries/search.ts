@@ -59,6 +59,7 @@ export type SearchPaginationParams = SearchParams & PaginationParams & AccountPa
 export type FormattedSearchParamsFields = {
   years: number[];
   lineNumbers: string[];
+  approverIds: string[];
   footnoteNumbers: string[];
   keywordTerms: string[];
 };
@@ -95,6 +96,21 @@ export async function lineNumberOptions() {
 export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
 
 /**
+ * Get all existing approver title options
+ */
+export async function approverTitleOptions() {
+  const approverOptions = await db
+    .selectDistinct({ value: files.approverTitleId, label: files.approverTitle })
+    .from(files)
+    .where(isNotNull(files.approverTitleId))
+    .orderBy(files.approverTitle);
+
+  return approverOptions;
+}
+
+export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
+
+/**
  * Format the search parameters to make it easier to turn into query.
  *
  * @param searchParams Search params (optionally including pagination)
@@ -110,6 +126,9 @@ export function formatSearchParams(
   const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
+  const approverIds = (searchParams.approver ? searchParams.approver.split(',') : [])
+    .map((v) => v.trim())
+    .filter((t) => !!t);
   const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
@@ -121,6 +140,7 @@ export function formatSearchParams(
     ...searchParams,
     years,
     lineNumbers,
+    approverIds,
     footnoteNumbers,
     keywordTerms
   };
@@ -222,13 +242,15 @@ function generalSearchFilters(
   where.push(
     searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
   );
-  where.push(
-    searchParams.approver ? ilike(files.approverTitle, `%${searchParams.approver}%`) : undefined
-  );
 
   // Identifiers
   where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
   where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
+  where.push(
+    searchParams.approverIds?.length > 0
+      ? inArray(files.approverTitleId, searchParams.approverIds)
+      : undefined
+  );
   where.push(
     searchParams.lineNumbers?.length > 0
       ? inArray(lines.lineNumber, searchParams.lineNumbers)

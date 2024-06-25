@@ -1,6 +1,7 @@
 import {
-  yearOptions,
-  lineNumberOptions,
+  mYearOptions,
+  mLineNumberOptions,
+  mApproverTitleOptions,
   formatSearchParams,
   mFileSearchPaged,
   mFileSearchFullCount,
@@ -39,7 +40,7 @@ export const load = async ({ url, cookies }) => {
       bureau: agencyBureau?.[1] || '',
       agency: agencyBureau?.[0] || '',
       account: u('account') || '',
-      approver: u('approver') || '',
+      approver: ga('approver').join(',') || '',
       year: ga('year').join(','),
       approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
       approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
@@ -73,9 +74,10 @@ export const load = async ({ url, cookies }) => {
   return {
     // Options/params
     searchParams: formattedSearchParams,
-    yearOptions: await yearOptions(),
-    lineOptions: await lineNumberOptions(),
+    yearOptions: await mYearOptions(),
+    lineOptions: await mLineNumberOptions(),
     agencyBureauOptions: await bureaus(),
+    approverTitleOptions: await mApproverTitleOptions(),
 
     // Files
     files: fileResults,

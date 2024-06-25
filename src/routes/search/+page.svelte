@@ -73,7 +73,7 @@
 
 <div class="content-container">
   <div class="page-container">
-    <h1>Search Apportionments</h1>
+    <h1>Search Appor&shy;tion&shy;ments</h1>
 
     <noscript>
       <div class="no-js-only-block" role="search">
@@ -83,6 +83,7 @@
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
+            approverTitleOptions={data.approverTitleOptions}
           />
         </div>
       </div>
@@ -96,6 +97,7 @@
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
+            approverTitleOptions={data.approverTitleOptions}
           />
         </div>
       {:else}
@@ -105,6 +107,7 @@
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
+            approverTitleOptions={data.approverTitleOptions}
           />
         </div>
       {/if}

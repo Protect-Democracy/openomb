@@ -10,8 +10,9 @@
   // Props
   export let url: URL;
   export let agencyBureauOptions = [];
-  export let yearOptions = [];
-  export let lineOptions = [];
+  export let yearOptions: number[] = [];
+  export let lineOptions: string[] = [];
+  export let approverTitleOptions: Record<'value' | 'label', string>[] = [];
 
   // Derived
   // eslint-disable-next-line svelte/valid-compile
@@ -47,7 +48,7 @@
     } else if (key === 'account') {
       return `Account "${value}"`;
     } else if (key === 'approver') {
-      return `Approved by "${value}"`;
+      return `Approved by "${value.split(',').map((v) => approverTitleOptions.find((o) => o.value === v)?.label)}"`;
     } else if (key === 'year') {
       return `Fiscal year ${value}`;
     } else if (key === 'approvedStart') {
@@ -87,7 +88,7 @@
       >
 
       <svelte:fragment slot="content">
-        <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} />
+        <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} {approverTitleOptions} />
       </svelte:fragment>
     </Drawer>
   </div>
