@@ -16,15 +16,15 @@
       id: 'what-is-omb',
       question: 'What is the U.S. Office of Management and Budget (OMB)?',
       answer: `
-        <p>OMB is part of the Executive Office of the Presidency and helps the president execute her agenda across the executive branch. One way OMB does this is by exercising an important power on the president’s behalf: the power to apportion Congress’s appropriations.</p>
+        <p>OMB is part of the Executive Office of the Presidency and helps the president execute her agenda across the executive branch. One way OMB does this is by exercising an important power on the president&apos;s behalf: the power to apportion Congress&apos;s appropriations.</p>
 
-        <p>After Congress enacts appropriations and other spending laws, OMB makes appropriated funds available to agencies to spend through legally binding plans called “apportionments.”. Apportionments tell agencies what funds they may spend, when they may spend them, and any conditions they must meet in order to spend them.</p>
+        <p>After Congress enacts appropriations and other spending laws, OMB makes appropriated funds available to agencies to spend through legally binding plans called &ldquo;apportionments.&rdquo;. Apportionments tell agencies what funds they may spend, when they may spend them, and any conditions they must meet in order to spend them.</p>
 
-        <p>Through OMB’s apportionments, the president implements Congress’s spending laws and exercises centralized control over the executive branch.</p>
+        <p>Through OMB&apos;s apportionments, the president implements Congress&apos;s spending laws and exercises centralized control over the executive branch.</p>
 
         <p>OMB has several other core functions:</p>
         <ul>
-          <li>It prepares the president’s annual budget request to Congress.</li>
+          <li>It prepares the president&apos;s annual budget request to Congress.</li>
           <li>It oversees agency performance, procurement, and information technology.</li>
           <li>It coordinates and reviews all significant federal regulations.</li>
           <li>It reviews legislation and coordinates and clears agencies&apos; interactions with Congress, including testimony and legislative proposals. </li>
@@ -51,9 +51,9 @@
 
         <p>Appropriated funds may be apportioned in several ways:</p>
         <ol>
-          <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as "Category A" apportionment. 31 U.S.C. § 1512(b)(1)(A).</li>
-          <li>By agency activities, functions, or projects. This is known as a "Category B" apportionment. 31 U.S.C. § 1512(b)(1)(B).</li>
-          <li>By time and project. This is known as a "Category AB" apportionment. 31 U.S.C. § 1512(b)(1)(C).</li>
+          <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as &ldquo;Category A&rdquo; apportionment. 31 U.S.C. § 1512(b)(1)(A).</li>
+          <li>By agency activities, functions, or projects. This is known as a &ldquo;Category B&rdquo; apportionment. 31 U.S.C. § 1512(b)(1)(B).</li>
+          <li>By time and project. This is known as a &ldquo;Category AB&rdquo; apportionment. 31 U.S.C. § 1512(b)(1)(C).</li>
         </ol>
 
         <p>Apportionments are legally binding on an agency because they carry the force of the Antideficiency Act. Officials who fail to follow an apportionment may violate that law and expose themselves to administrative or criminal penalties, which include a fine of up to $5,000 and a prison term of up to two years. 31 U.S.C. § 1519.</p>
@@ -67,14 +67,14 @@
 
         <p>The unnumbered rows at the top of an apportionment provide information about the funds being apportioned and the agency and bureau that receive those funds.</p>
 
-        <p>The numbered rows in an apportionment are split into a top half and a bottom half. The top half of the apportionment—line numbers starting with 1 (1xxx)—is purely descriptive. It reflects the budgetary resources generally available to the agency. (Budgetary resources include unobligated balances from prior years, appropriations, authority to borrow money, and authority to enter into contracts, among other resources.) </p>
+        <p>The numbered rows in an apportionment are split into a top half and a bottom half. The top half of the apportionment &mdash; line numbers starting with 1 (1xxx) &mdash; is purely descriptive. It reflects the budgetary resources generally available to the agency. (Budgetary resources include unobligated balances from prior years, appropriations, authority to borrow money, and authority to enter into contracts, among other resources.) </p>
 
         <p>Funds in the application of budgetary resources section may be apportioned in several different ways:</p>
 
         <ol>
-          <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as “Category A” apportionment.</li>
-          <li>By agency activities, functions, or projects. This is known as a “Category B” apportionment.</li>
-          <li>By time and project. This is known as a “Category AB” apportionment.</li>
+          <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as &ldquo;Category A&rdquo; apportionment.</li>
+          <li>By agency activities, functions, or projects. This is known as a &ldquo;Category B&rdquo; apportionment.</li>
+          <li>By time and project. This is known as a &ldquo;Category AB&rdquo; apportionment.</li>
         </ol>
 
         <p>Apportionments are complex documents. But in Oct. 2022, three experts hosted a training and broke down how to read them. Watch the training below or go <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=1450" target="_blank" rel="noopener noreferrer">directly to the video</a>.</p>
@@ -88,7 +88,7 @@
           allowfullscreen
         ></iframe>
 
-        <p>For more information on the line numbers in an apportionment, consult OMB Circular No.  A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the “OMB Footnotes” column in apportionments, consult the next FAQ </p>
+        <p>For more information on the line numbers in an apportionment, consult OMB Circular No.  A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the &ldquo;OMB Footnotes&rdquo; column in apportionments, consult the next FAQ </p>
       `
     },
     {
@@ -98,8 +98,8 @@
         <p>Footnotes are one of the most important parts of the apportionment. They provide further information about the funds in the apportionment or establish additional legal requirements related to the use of those funds.</p>
 
         <ol>
-          <li><strong>“A” footnotes</strong> are legally binding and establish further requirements related to, or conditions on the availability of, the apportioned funds. An “A” footnote might, for instance, require an agency to submit a spend plan to OMB before the agency may spend certain funds. Spend plans detail how an agency will use the funds OMB is apportioning. (See this example of a spend plan footnote in a <a href="/file/11345008">May 2024 apportionment for the Department of Veterans Affairs</a>.) OMB might also use an “A” footnote to <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">put an indefinite hold on funding</a>—as it did in 2019 when it withheld U.S. security assistance to Ukraine. This action <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">violated the Impoundment Control Act</a>.</li>
-          <li><strong>“B” footnotes</strong> appear in the budgetary resources section of the apportionment (its top half, lines 1xxx) and merely provide background information about a given line item or set of line items. A “B” footnote might, for instance, identify in greater detail the sources of the funds in a given line.</li>
+          <li><strong>&ldquo;A&rdquo; footnotes</strong> are legally binding and establish further requirements related to, or conditions on the availability of, the apportioned funds. An &ldquo;A&rdquo; footnote might, for instance, require an agency to submit a spend plan to OMB before the agency may spend certain funds. Spend plans detail how an agency will use the funds OMB is apportioning. (See this example of a spend plan footnote in a <a href="/file/11345008">May 2024 apportionment for the Department of Veterans Affairs</a>.) OMB might also use an &ldquo;A&rdquo; footnote to <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">put an indefinite hold on funding</a> &mdash; as it did in 2019 when it withheld U.S. security assistance to Ukraine. This action <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">violated the Impoundment Control Act</a>.</li>
+          <li><strong>&ldquo;B&rdquo; footnotes</strong> appear in the budgetary resources section of the apportionment (its top half, lines 1xxx) and merely provide background information about a given line item or set of line items. A &ldquo;B&rdquo; footnote might, for instance, identify in greater detail the sources of the funds in a given line.</li>
         </ol>
 
         <p>If footnotes appear on lines 1920 or 6190, they apply to all the lines in the 1xxx and 6xxx sections, respectively.</p>
@@ -109,48 +109,48 @@
     },
     {
       id: 'apportionment-iteration',
-      question: 'What is an apportionment “iteration”? ',
+      question: 'What is an apportionment &ldquo;iteration&rdquo;? ',
       answer: `
-        <p>An “iteration” is the version of an apportionment. </p>
+        <p>An &ldquo;iteration&rdquo; is the version of an apportionment. </p>
 
-        <p>Although OMB sometimes issues only a single apportionment for an account in a given fiscal year (see, e.g., the <a href="/agency/equal-employment-opportunity-commission/bureau/equal-employment-opportunity-commission/account/salaries-and-expenses">Salaries and Expenses Account for the Equal Employment Opportunity Commission</a>), OMB often issues multiple apportionments for a single account over the course of a fiscal year. Each subsequent apportionment (known as a “<a href="https://www.gao.gov/assets/gao-05-734sp.pdf#page=86" target="_blank" rel="noopener noreferrer">reapportionment</a>”) revises and supersedes the prior version. And each version has an iteration number. The first apportionment in a given fiscal year is Iteration 1, the second is Iteration 2, and so on. </p>
+        <p>Although OMB sometimes issues only a single apportionment for an account in a given fiscal year (see, e.g., the <a href="/agency/equal-employment-opportunity-commission/bureau/equal-employment-opportunity-commission/account/salaries-and-expenses">Salaries and Expenses Account for the Equal Employment Opportunity Commission</a>), OMB often issues multiple apportionments for a single account over the course of a fiscal year. Each subsequent apportionment (known as a &ldquo;<a href="https://www.gao.gov/assets/gao-05-734sp.pdf#page=86" target="_blank" rel="noopener noreferrer">reapportionment</a>&rdquo;) revises and supersedes the prior version. And each version has an iteration number. The first apportionment in a given fiscal year is Iteration 1, the second is Iteration 2, and so on. </p>
 
-        <p>Take, for example, the FY2022 apportionments for the no-year appropriation within U.S. Immigration and Custom Enforcement’s Operations and Support Account. This no-year sub-account within the Operations and Support Account is designated by the TAFS 070-0540 /X. In FY2022, that sub-account had four apportionments:
+        <p>Take, for example, the FY2022 apportionments for the no-year appropriation within U.S. Immigration and Custom Enforcement&apos;s Operations and Support Account. This no-year sub-account within the Operations and Support Account is designated by the TAFS 070-0540 /X. In FY2022, that sub-account had four apportionments:
           <a href="/file/11201779#tafs_11201779--070-0540--1--2022">Iteration 1</a>, issued on Oct. 27, 2021;
           <a href="/file/11210384#tafs_11210384--070-0540--2--2022">Iteration 2</a>, issued on Mar. 7, 2022;
           <a href="/file/11219232#tafs_11219232--070-0540--3--2022">Iteration 3</a>, issued on Apr. 23, 2022;
           and <a href="/file/11237553#tafs_11237553--070-0540--4--2022">Iteration 4</a>, issued on Sept. 2, 2022.
         </p>
 
-        <p>The number of iterations for a given account can tell us how closely OMB is overseeing or exerting control over the use of the funds in that account. For instance, that there were <a href="https://openomb.org/file/11246309#tafs_11246309--070-0540-2023-2023--1--2023">eight apportionment iterations for one ICE Operations and Support sub-account</a> (TAFS 070-0540 /2023) tells us that OMB was paying closer attention to the use of those funds than it was to the use of the EEOC’s Salaries and Expenses funds, for which there was one apportionment per account per fiscal year.</p>
+        <p>The number of iterations for a given account can tell us how closely OMB is overseeing or exerting control over the use of the funds in that account. For instance, that there were <a href="https://openomb.org/file/11246309#tafs_11246309--070-0540-2023-2023--1--2023">eight apportionment iterations for one ICE Operations and Support sub-account</a> (TAFS 070-0540 /2023) tells us that OMB was paying closer attention to the use of those funds than it was to the use of the EEOC&apos;s Salaries and Expenses funds, for which there was one apportionment per account per fiscal year.</p>
       `
     },
     {
       id: 'who-apportions-funds',
       question: 'Who may apportion funds?',
       answer: `
-        <p>The Antideficiency Act gives the president the power to apportion funds. 31 U.S.C. § 1513(b). The <a href="https://www.archives.gov/federal-register/codification/executive-order/06166.html" target="_blank" rel="noopener noreferrer">president has delegated that power</a> to the OMB director, who has <a href="https://www.federalregister.gov/documents/2022/04/01/2022-06873/delegation-of-apportionment-authority" target="_blank" rel="noopener noreferrer">delegated it, in turn, to OMB’s deputy associate directors</a>.</p>
+        <p>The Antideficiency Act gives the president the power to apportion funds. 31 U.S.C. § 1513(b). The <a href="https://www.archives.gov/federal-register/codification/executive-order/06166.html" target="_blank" rel="noopener noreferrer">president has delegated that power</a> to the OMB director, who has <a href="https://www.federalregister.gov/documents/2022/04/01/2022-06873/delegation-of-apportionment-authority" target="_blank" rel="noopener noreferrer">delegated it, in turn, to OMB&apos;s deputy associate directors</a>.</p>
       `
     },
     {
       id: 'how-to-find-apportionments',
       question: 'How do I find apportionments for the funds I care about?',
       answer: `
-        <p>There are a number of ways to use OpenOMB’s database to find the funds you care about.</p>
+        <p>There are a number of ways to use OpenOMB&apos;s database to find the funds you care about.</p>
 
         <ul>
           <li>One way is to <a href="/explore">explore by agency and bureau</a>.</li>
-          <li>Another is to use our <a href="/search">keyword search</a> to search the terms of interest to you—for instance, searching “immigration” to find accounts and apportionments related to immigration. You can restrict this search by agency and bureau to find immigration-related apportionments only for a particular agency, like the Department of Homeland Security, or only for a particular component of DHS, such as U.S. Immigration and Customs Enforcement.</li>
-          <li>If you’re wondering how OMB has been executing a recently passed appropriations bill, you could search the public law number in the <a href="/search">keyword search</a>. For instance, to find apportionments for the <a href="https://www.congress.gov/bill/118th-congress/house-bill/815/text" target="_blank" rel="noopener noreferrer">April 2024 supplemental appropriations bill</a> providing security assistance to Ukraine, Israel, and Taiwan, you would search “118-50” for the bill’s public law number.</li>
+          <li>Another is to use our <a href="/search">keyword search</a> to search the terms of interest to you &mdash; for instance, searching &ldquo;immigration&rdquo; to find accounts and apportionments related to immigration. You can restrict this search by agency and bureau to find immigration-related apportionments only for a particular agency, like the Department of Homeland Security, or only for a particular component of DHS, such as U.S. Immigration and Customs Enforcement.</li>
+          <li>If you&apos;re wondering how OMB has been executing a recently passed appropriations bill, you could search the public law number in the <a href="/search">keyword search</a>. For instance, to find apportionments for the <a href="https://www.congress.gov/bill/118th-congress/house-bill/815/text" target="_blank" rel="noopener noreferrer">April 2024 supplemental appropriations bill</a> providing security assistance to Ukraine, Israel, and Taiwan, you would search &ldquo;118-50&rdquo; for the bill&apos;s public law number.</li>
         </ul>
 
-        <p>Another approach is to search for the name or number of the account being apportioned. An apportionment makes available to an agency the budgetary resources from a given appropriation or fund account that is set up in the Treasury. The name of an account typically originates in an appropriations act—specifically in the act’s unnumbered paragraph headings, which correspond to an account set up in the Treasury for a particular agency and bureau. Take, for example, the “Health Care Systems” appropriation in the Consolidated Appropriations Act of 2022. That appropriation is for the Health Resources and Services Administration (the bureau) within the Department of Health and Human Services (the agency). “Health Care Systems” is the title of the unnumbered paragraph heading in the appropriations act. It denotes an account set up in the Treasury called “Health Care Systems.”</p>
+        <p>Another approach is to search for the name or number of the account being apportioned. An apportionment makes available to an agency the budgetary resources from a given appropriation or fund account that is set up in the Treasury. The name of an account typically originates in an appropriations act &mdash; specifically in the act&apos;s unnumbered paragraph headings, which correspond to an account set up in the Treasury for a particular agency and bureau. Take, for example, the &ldquo;Health Care Systems&rdquo; appropriation in the Consolidated Appropriations Act of 2022. That appropriation is for the Health Resources and Services Administration (the bureau) within the Department of Health and Human Services (the agency). &ldquo;Health Care Systems&rdquo; is the title of the unnumbered paragraph heading in the appropriations act. It denotes an account set up in the Treasury called &ldquo;Health Care Systems.&rdquo;</p>
 
         <p>Thus, to search by the name or number of the account, you can search by:</p>
 
         <ul>
           <li>The likely title of the account found in the unnumbered paragraph headings of an appropriations act;</li>
-          <li>Or the number of the account—the Treasury Account Symbol, or TAS—found in the Treasury Department’s <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Federal Account Symbols and Titles (FAST) Book Part II</a>. For more information on the TAS, see the FAQ below.</li>
+          <li>Or the number of the account &mdash; the Treasury Account Symbol, or TAS &mdash; found in the Treasury Department&apos;s <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Federal Account Symbols and Titles (FAST) Book Part II</a>. For more information on the TAS, see the FAQ below.</li>
           <li>For more detailed instructions on finding an account name and number, consult <a href="https://protectdemocracy.org/work/using-ombs-apportionment-website-resources-for-congress/#finding-an-apportionment" target="_blank" rel="noopener noreferrer">these instructions</a>.</li>
         </ul>
       `
@@ -168,7 +168,7 @@
       id: 'what-is-tas-tafs',
       question: 'What is a TAS? What is a TAFS?',
       answer: `
-        <p>A TAS is a Treasury Account Symbol. A TAFS is a Treasury Appropriation Fund Symbol. A TAS generically describes any account in the Treasury. A TAFS is a particular kind of account, namely one with budget authority— authority provided by statute to enter into financial obligations, such as by making payments, borrowing money, or contracting.</p>
+        <p>A TAS is a Treasury Account Symbol. A TAFS is a Treasury Appropriation Fund Symbol. A TAS generically describes any account in the Treasury. A TAFS is a particular kind of account, namely one with budget authority &mdash;  authority provided by statute to enter into financial obligations, such as by making payments, borrowing money, or contracting.</p>
 
         <p>TODO</p>
 
@@ -177,7 +177,7 @@
         <p>A TAS is composed of a three-digit agency identifier code and a four-digit account-specific code.
 
             <ul>
-              <li>The TAS for the Health Care Systems appropriation account is 075 0357. 075 identifies the Department of Health and Human Services as the agency and 0357 identifies Health Care Systems as an account in HHS’s Health Resources and Services Administration.</li>
+              <li>The TAS for the Health Care Systems appropriation account is 075 0357. 075 identifies the Department of Health and Human Services as the agency and 0357 identifies Health Care Systems as an account in HHS&apos;s Health Resources and Services Administration.</li>
             </ul>
         </p>
 
@@ -188,7 +188,7 @@
             </ul>
         </p>
 
-        <p>A list of every TAS can be found in the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department’s Federal Account Symbols and Titles (FAST) Book Part II</a>.</p>
+        <p>A list of every TAS can be found in the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department&apos;s Federal Account Symbols and Titles (FAST) Book Part II</a>.</p>
 
         <p>Search Tip: When entering a TAS into our search tool, be sure to hyphenate the three-digit agency identifier code and four-digit unique account code as follows: 075-0357.</p>
       `
@@ -198,7 +198,7 @@
       question:
         'Apportionments show what an agency can spend at a given time. Where can I find out what an agency has spent?',
       answer: `
-        <p>The report on budget execution and budgetary resources—also known as an SF-133—shows what an agency has spent. <a href="https://portal.max.gov/portal/document/SF133/Budget/FACTS%20II%20-%20SF%20133%20Report%20on%20Budget%20Execution%20and%20Budgetary%20Resources.html" target="_blank" rel="noopener noreferrer">OMB publishes SF-133s</a>.</p>
+        <p>The report on budget execution and budgetary resources &mdash; also known as an SF-133 &mdash; shows what an agency has spent. <a href="https://portal.max.gov/portal/document/SF133/Budget/FACTS%20II%20-%20SF%20133%20Report%20on%20Budget%20Execution%20and%20Budgetary%20Resources.html" target="_blank" rel="noopener noreferrer">OMB publishes SF-133s</a>.</p>
 
         <p>For information on how to read an SF-133, see this explainer by Ed Martin, a former official at the Department of Health and Human Services who worked on budget execution there for over 30 years:</p>
 
@@ -310,7 +310,9 @@
               aria-controls="faq-{faq.id}"
               on:click|preventDefault={() => toggleExpanded(faq.id)}
             >
-              {faq.question} <span class="icon"><ChevronDown /></span></button
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html faq.question}
+              <span class="icon"><ChevronDown /></span></button
             >
           </dt>
 
@@ -330,7 +332,10 @@
       <div class="no-js-only-block">
         <dl class="faqs">
           {#each faqs as faq}
-            <dt id="faq-{faq.id}">{faq.question}</dt>
+            <dt id="faq-{faq.id}">
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html faq.question}
+            </dt>
 
             <dd id="faq-dd-{faq.id}">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
