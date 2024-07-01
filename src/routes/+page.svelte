@@ -5,6 +5,7 @@
   import SearchForm from './SearchForm.svelte';
   import RecentFiles from './RecentFiles.svelte';
   import TopRightArrow from '$components/icons/TopRightArrow.svelte';
+  import Check from '$components/icons/Check.svelte';
   import graphIllustration from '$assets/graph-illustration.svg';
 
   export let data: PageData;
@@ -14,12 +15,12 @@
 <section class="intro">
   <div class="intro-inner page-container">
     <div class="intro-text">
-      <h1>Finding apportionments just got easier.</h1>
+      <h1>Track presidential spending decisions.</h1>
 
       <p class="center-container">
-        Updated daily, {siteName} is the easiest way to find apportionments issued by the U.S. Office
-        of Management and Budget. Apportionments are legally binding plans that make budgetary resources
-        available to federal agencies.
+        Apportionments are how the president, through the Office of Management and Budget, dictates
+        what money federal agencies can spend and when. Updated daily, OpenOMB&apos;s database makes
+        apportionments easy to find and potential abuses of this power easier to uncover.
       </p>
 
       <div class="search">
@@ -35,42 +36,79 @@
 
 <section class="summary">
   <div class="summary-inner page-container">
-    <div class="summary-text">
-      <h2 class="h3">
-        It shouldn&apos;t be hard to track the funds available to federal agencies.
-      </h2>
+    <div class="summary-intro">
+      <h2 class="h3">Why are apportionments important?</h2>
 
       <p>
-        {siteName} makes that information easy to find, with a searchable database of OMB&apos;s apportionments
-        from fiscal year 2022 to the present.
+        Apportionments are how the president implements Congress&apos;s spending laws and one way he
+        exercises centralized control over the executive branch. Presidents of both parties have
+        abused this power &mdash; making oversight of apportionments vital.
       </p>
 
-      <a href="/about">More about us</a>
+      <a href="/faq"
+        >More apportionment <acronym title="Frequently Asked Questions">FAQs</acronym></a
+      >
     </div>
 
-    <div class="summary-stats">
+    <div class="summary-list">
+      <h2 class="h3">Apportionments are legally binding plans that show:</h2>
+
       <p>
-        <strong>{formatNumber(data.fileStats?.filesApprovedPastWeek)}</strong>
-        New apportionments approved in the last 7 days
+        <span class="inline-icon"><Check /></span>
+        <span>What money an agency can spend and when.</span>
       </p>
 
       <p>
-        <strong>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</strong>
-        Total apportionments approved for fiscal year {currentYear}
-      </p>
-
-      <p>
-        <strong>{formatNumber(data.tafsStats?.totalAccounts)}</strong>
-        Total accounts tracked on {siteName}
-      </p>
-
-      <p>
-        <strong
-          >{formatNumber(data.tafsStats?.averageIterations, { maximumFractionDigits: 1 })}</strong
+        <span class="inline-icon"><Check /></span>
+        <span
+          >Any conditions <acronym title="Office of Management and Budget">OMB</acronym> has put on agency
+          access to funds.</span
         >
-        Average number of iterations per apportionment
+      </p>
+
+      <p>
+        <span class="inline-icon"><Check /></span>
+        <span
+          >Whether <acronym title="Office of Management and Budget">OMB</acronym> is withholding, restricting,
+          or delaying funds &mdash; potentially beyond what&apos;s allowed by law.</span
+        >
+      </p>
+
+      <p>
+        <span class="inline-icon"><Check /></span>
+        <span
+          >How closely the president, through
+          <acronym title="Office of Management and Budget">OMB</acronym>, is overseeing particular
+          pots of money.</span
+        >
       </p>
     </div>
+  </div>
+</section>
+
+<section class="stats">
+  <h2 class="sr-only">Apportionment Statistics</h2>
+
+  <div class="stats-inner page-container">
+    <ul class="no-list">
+      <li>
+        <strong>{formatNumber(data.fileStats?.filesApprovedPastWeek)}</strong>
+        <span>New apportionments approved in the last 7 days</span>
+      </li>
+
+      <li>
+        <strong>{formatNumber(data.fileStats?.filesCurrentFiscalYear)}</strong>
+        <span
+          >Total apportionments approved for <acronym title="Fiscal Year">FY</acronym
+          >{currentYear}</span
+        >
+      </li>
+
+      <li>
+        <strong>{formatNumber(data.tafsStats?.totalAccounts)}</strong>
+        <span>Total accounts tracked by {siteName}</span>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -96,9 +134,8 @@
       </li>
 
       <li>
-        <a href="/faq#faq-how-to-find-apportionments"
-          ><span class="faq-icon"><TopRightArrow /></span> How can I find the funds I&apos;m looking
-          for?</a
+        <a href="/faq#faq-how-have-presidents-abused-this-power"
+          ><span class="faq-icon"><TopRightArrow /></span> How have presidents abused this power?</a
         >
       </li>
 
@@ -137,58 +174,134 @@
 
   .intro-text {
     width: 50%;
+
+    @media (max-width: 768px) {
+      & {
+        width: 100%;
+      }
+    }
   }
 
   .intro-visual {
     padding: 0 var(--spacing);
+
+    @media (max-width: 768px) {
+      & {
+        display: none;
+      }
+    }
   }
 
   .summary {
     background-color: var(--color-background-inverse);
     color: var(--color-text-inverse);
-    padding: calc(var(--spacing) * 3) 0;
-    margin-bottom: var(--spacing-large);
-  }
-
-  .summary h2 {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  .summary a {
-    color: var(--color-link-inverse);
-  }
-
-  .summary-inner {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .summary-text {
-    max-width: 23rem;
-    margin-right: var(--spacing-large);
-  }
-
-  .summary-stats {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--spacing-triple);
-  }
-
-  .summary-stats p {
-    width: calc(50% - var(--spacing-double));
+    padding: var(--spacing-xlarge) 0;
     margin-bottom: 0;
+
+    h2 {
+      margin-top: 0;
+      padding-top: 0;
+      color: var(--color-blue-lighter);
+    }
+
+    .summary-inner {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--spacing-triple);
+
+      @media (max-width: 768px) {
+        & {
+          flex-direction: column;
+        }
+      }
+    }
+
+    .summary-intro {
+      flex-grow: 1;
+      flex-basis: 33.3333%;
+
+      @media (max-width: 1024px) {
+        & {
+          flex-basis: 50%;
+        }
+      }
+
+      a {
+        color: var(--color-text-inverse);
+        text-decoration: underline;
+      }
+    }
+
+    .summary-list {
+      flex-grow: 1;
+      flex-basis: 66.66666%;
+
+      @media (max-width: 1024px) {
+        & {
+          flex-basis: 50%;
+        }
+      }
+
+      p {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--spacing-small);
+        font-size: var(--font-size-slight);
+        font-weight: var(--font-copy-weight-bold);
+        border-bottom: var(--border-weight-thin) solid var(--color-gray-medium);
+        margin: 0;
+        padding: var(--spacing-smallish) 0;
+      }
+
+      p:first-of-type {
+        border-top: var(--border-weight-thin) solid var(--color-gray-medium);
+      }
+
+      .inline-icon :global(svg) {
+        color: var(--color-link);
+      }
+    }
   }
 
-  .summary-stats strong {
-    font-family: var(--font-family-heading);
-    font-size: var(--font-size-xxlarge);
-    display: block;
-    color: var(--color-blue-lighter);
-    /* To help ensure it aligns with the section to the left */
-    line-height: 1.01;
+  .stats {
+    background-color: var(--color-blue-lightest);
+    border-bottom: var(--border-weight) solid var(--color-black);
+    padding: var(--spacing-triple) 0;
+    margin-bottom: var(--spacing-large);
+
+    ul {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--spacing-xlarge);
+
+      @media (max-width: 1024px) {
+        & {
+          flex-direction: column;
+          gap: 0;
+          align-items: center;
+        }
+      }
+    }
+
+    li {
+      flex-grow: 1;
+      flex-basis: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing);
+    }
+
+    strong {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-xxlarge);
+
+      @media (max-width: 1024px) {
+        & {
+          font-size: var(--font-size-xlarge);
+        }
+      }
+    }
   }
 
   .recently-approved-files {
@@ -227,6 +340,21 @@
     margin: 0;
     padding: 0;
     list-style: none;
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+      & {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-flow: inherit;
+        gap: var(--spacing);
+      }
+    }
+
+    @media (max-width: 768px) {
+      & {
+        grid-auto-flow: row;
+        gap: var(--spacing);
+      }
+    }
   }
 
   .learn-items li {
@@ -248,32 +376,5 @@
     min-width: var(--spacing-double);
     max-width: var(--spacing-double);
     color: var(--color-white);
-  }
-
-  @media (max-width: 768px) {
-    .intro-visual {
-      display: none;
-    }
-
-    .intro-text {
-      width: 100%;
-    }
-
-    .summary-inner {
-      flex-direction: column;
-    }
-
-    .summary-stats {
-      margin-top: var(--spacing-large);
-      text-align: center;
-    }
-
-    .summary-text {
-      max-width: none;
-    }
-
-    .learn-items {
-      grid-auto-flow: row;
-    }
   }
 </style>

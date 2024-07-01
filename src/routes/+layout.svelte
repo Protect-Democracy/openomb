@@ -157,13 +157,20 @@
 
   <div class="attribution page-container">
     <p class="center-container">
-      This website is not affiliated with the White House Office of Management and Budget (OMB) or
-      any agency of the U.S. government. {siteName} is a searchable database maintained by
+      This website is not affiliated with the U.S. Office of Management and Budget (OMB), the
+      Executive Office of the Presidency, or any agency of the U.S. government. {siteName} is a searchable
+      database maintained by
+      <a
+        href="https://protectdemocracyproject.org/"
+        class="like-text"
+        target="_blank"
+        rel="noopener noreferrer">Protect Democracy Project</a
+      >, a registered 501(c)(3) charitable organization and part of the
       <a
         href="https://protectdemocracy.org/"
         class="like-text"
         target="_blank"
-        rel="noopener noreferrer">Protect Democracy</a
+        rel="noopener noreferrer">Protect Democracy group</a
       >.
     </p>
 

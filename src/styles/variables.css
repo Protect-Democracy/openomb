@@ -81,7 +81,7 @@
 
   --font-family-heading: 'Domine', serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
-  --font-heading-weight-normal: bold;
+  --font-heading-weight-normal: normal;
   --font-heading-weight-bold: 600;
 
   --font-family-monospace: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
@@ -96,6 +96,7 @@
   --base-font-size: 16px;
   --font-size-small: 0.8rem;
   --font-size-regular: 1rem;
+  --font-size-slight: 1.15rem;
   --font-size-medium: 1.25rem;
   --font-size-large: 1.5rem;
   --font-size-xlarge: 2rem;
