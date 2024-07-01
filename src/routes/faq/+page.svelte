@@ -14,41 +14,47 @@
   const faqs = [
     {
       id: 'what-is-omb',
-      question: 'What is the U.S. Office of Management and Budget?',
+      question: 'What is the U.S. Office of Management and Budget (OMB)?',
       answer: `
-        <p>The Office of Management Budget (OMB) is a component of the Executive Office of the Presidency. OMB prepares the president&apos;s annual budget request and executes the budget after Congress enacts appropriations.</p>
+        <p>OMB is part of the Executive Office of the Presidency and helps the president execute her agenda across the executive branch. One way OMB does this is by exercising an important power on the president’s behalf: the power to apportion Congress’s appropriations.</p>
 
-        <p>OMB executes the budget by apportioning appropriations. That is, OMB makes appropriated funds available to federal agencies for particular purposes, during specified time periods. It does this in legally binding plans called "apportionments".</p>
+        <p>After Congress enacts appropriations and other spending laws, OMB makes appropriated funds available to agencies to spend through legally binding plans called “apportionments.”. Apportionments tell agencies what funds they may spend, when they may spend them, and any conditions they must meet in order to spend them.</p>
 
-        <p>OMB has several other core functions:
-          <ul>
-            <li>It oversees agency performance, procurement, and information technology.</li>
-            <li>It coordinates and reviews all significant federal regulations.</li>
-            <li>It reviews legislation and coordinates and clears agencies&apos; interactions with Congress, including testimony and legislative proposals. </li>
-            <li>It reviews and clears executive orders and memoranda to agency heads.</li>
-          </ul>
-        </p>
+        <p>Through OMB’s apportionments, the president implements Congress’s spending laws and exercises centralized control over the executive branch.</p>
+
+        <p>OMB has several other core functions:</p>
+        <ul>
+          <li>It prepares the president’s annual budget request to Congress.</li>
+          <li>It oversees agency performance, procurement, and information technology.</li>
+          <li>It coordinates and reviews all significant federal regulations.</li>
+          <li>It reviews legislation and coordinates and clears agencies&apos; interactions with Congress, including testimony and legislative proposals. </li>
+          <li>It reviews and clears executive orders and memoranda to agency heads.</li>
+        </ul>
       `
     },
     {
       id: 'what-is-apportionment',
       question: 'What is an apportionment?',
       answer: `
-        <p>An apportionment is a legally binding plan that OMB uses to make federal funds available to federal agencies.</p>
+        <p>An apportionment is a legally binding plan that the president, acting through OMB, issues to federal agencies telling them what money they may spend and when they may spend it. </p>
 
         <p>Apportionments set limits &mdash; beyond those in appropriations and authorization legislation &mdash; on how and when an agency may spend funds, what an agency may spend funds on, and any conditions an agency must meet before spending funds.</p>
 
-        <p>The apportionment of funds is the second step in the life cycle of federal funds. Congress appropriates funds. OMB apportions the appropriation. And agencies obligate the apportioned funds by purchasing a service, entering into a contract, awarding a grant, or otherwise taking an action that requires the government to make a payment.</p>
+        <p>The apportionment of funds is the second step in the life cycle of federal funds.</p>
+        <ol>
+          <li>Congress appropriates funds.</li>
+          <li>The president, acting through OMB, apportions the appropriation.</li>
+          <li>And agencies obligate the apportioned funds by purchasing a service, entering into a contract, awarding a grant, or otherwise taking an action that requires the government to make a payment.</li>
+        </ol>
 
-        <p>Congress created the apportionment power to ensure agencies spend within the limits of the law. It is meant to be a purely ministerial tool.</p>
+        <p>Congress created the apportionment power to ensure agencies spend within the limits of the law. It is meant to be a purely ministerial tool. But presidents of both parties have abused this tool in violation of the law and in excess of their authority. President Trump did so by withholding U.S. military aid to Ukraine, which <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">violated the Impoundment Control Act</a>. And President Obama did so by <a href="https://casetext.com/case/us-house-of-representatives-v-capacity" target="_blank" rel="noopener noreferrer">using money that Congress had appropriated for a premium tax credit</a> instead to fund Affordable Care Act cost-sharing subsidies, which Congress had expressly refused to fund during the appropriations process.</p>
 
-        <p>Funds may be apportioned in several ways:
-          <ol>
-            <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as "Category A" apportionment. 31 U.S.C. § 1512(b)(1)(A).</li>
-            <li>By agency activities, functions, or projects. This is known as a "Category B" apportionment. 31 U.S.C. § 1512(b)(1)(B).</li>
-            <li>By time and project. This is known as a "Category AB" apportionment. 31 U.S.C. § 1512(b)(1)(C).</li>
-          </ol>
-        </p>
+        <p>Appropriated funds may be apportioned in several ways:</p>
+        <ol>
+          <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as "Category A" apportionment. 31 U.S.C. § 1512(b)(1)(A).</li>
+          <li>By agency activities, functions, or projects. This is known as a "Category B" apportionment. 31 U.S.C. § 1512(b)(1)(B).</li>
+          <li>By time and project. This is known as a "Category AB" apportionment. 31 U.S.C. § 1512(b)(1)(C).</li>
+        </ol>
 
         <p>Apportionments are legally binding on an agency because they carry the force of the Antideficiency Act. Officials who fail to follow an apportionment may violate that law and expose themselves to administrative or criminal penalties, which include a fine of up to $5,000 and a prison term of up to two years. 31 U.S.C. § 1519.</p>
       `
@@ -59,18 +65,17 @@
       answer: `
         <p>Most apportionments come in the form of an Excel spreadsheet with rows and columns.</p>
 
-        <p>The unnumbered rows at the top of an apportionment provide information about the account being apportioned, and the agency and bureau that receive the funds in that account.</p>
+        <p>The unnumbered rows at the top of an apportionment provide information about the funds being apportioned and the agency and bureau that receive those funds.</p>
 
-        <p>The numbered rows in an apportionment are split into a top half and a bottom half. The top half of the apportionment—line numbers starting with 1 (1xxx)—is purely descriptive. It reflects the budgetary resources generally available to the agency. The bottom half of the apportionment—line numbers starting with 6 (6xxx)—is where OMB exerts its apportionment power, dividing amounts by time, project, or both. This section of the apportionment is known as the application of budgetary resources and it is legally binding on the receiving agency.</p>
+        <p>The numbered rows in an apportionment are split into a top half and a bottom half. The top half of the apportionment—line numbers starting with 1 (1xxx)—is purely descriptive. It reflects the budgetary resources generally available to the agency. (Budgetary resources include unobligated balances from prior years, appropriations, authority to borrow money, and authority to enter into contracts, among other resources.) </p>
 
-        <p>Funds in the application of budgetary resources section may be apportioned in several different ways:
+        <p>Funds in the application of budgetary resources section may be apportioned in several different ways:</p>
 
-          <ol>
-            <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as “Category A” apportionment.</li>
-            <li>By agency activities, functions, or projects. This is known as a “Category B” apportionment.</li>
-            <li>By time and project. This is known as a “Category AB” apportionment.</li>
-          </ol>
-        </p>
+        <ol>
+          <li>By time &mdash; e.g. months, calendar quarters, operating seasons, or other time periods. This is known as “Category A” apportionment.</li>
+          <li>By agency activities, functions, or projects. This is known as a “Category B” apportionment.</li>
+          <li>By time and project. This is known as a “Category AB” apportionment.</li>
+        </ol>
 
         <p>Apportionments are complex documents. But in Oct. 2022, three experts hosted a training and broke down how to read them. Watch the training below or go <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=1450" target="_blank" rel="noopener noreferrer">directly to the video</a>.</p>
 
@@ -83,92 +88,80 @@
           allowfullscreen
         ></iframe>
 
-        <p>For more information on the line numbers in an apportionment, consult OMB Circular A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the “OMB Footnotes” column in apportionments, consult the next FAQ </p>
+        <p>For more information on the line numbers in an apportionment, consult OMB Circular No.  A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the “OMB Footnotes” column in apportionments, consult the next FAQ </p>
       `
     },
     {
       id: 'apportionment-footnote',
       question: 'What is an apportionment footnote?',
       answer: `
-        <p>Apportionment footnotes provide further information about, or establish further legal requirements related to the use of, the resources in a given line or set of lines in an apportionment.</p>
+        <p>Footnotes are one of the most important parts of the apportionment. They provide further information about the funds in the apportionment or establish additional legal requirements related to the use of those funds.</p>
 
-        <p>There are two kinds of footnotes:
-
-          <ol>
-            <li>“A” footnotes are legally binding and establish further requirements related to, or conditions on the availability of, the apportioned funds. An “A” footnote might, for instance, require an agency to submit a spend plan to OMB for its approval before the agency may spend certain funds. (Spend plans detail how an agency will use the funds OMB is apportioning.)</li>
-            <li>“B” footnotes appear in the budgetary resources section of the apportionment (its top half, lines 1xxx) and merely provide background information about a given line item or set of line items. A “B” footnote might, for instance, identify in greater detail the sources of the funds in a given line.</li>
-          </ol>
-        </p>
+        <ol>
+          <li><strong>“A” footnotes</strong> are legally binding and establish further requirements related to, or conditions on the availability of, the apportioned funds. An “A” footnote might, for instance, require an agency to submit a spend plan to OMB before the agency may spend certain funds. Spend plans detail how an agency will use the funds OMB is apportioning. (See this example of a spend plan footnote in a <a href="/file/11345008">May 2024 apportionment for the Department of Veterans Affairs</a>.) OMB might also use an “A” footnote to <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">put an indefinite hold on funding</a>—as it did in 2019 when it withheld U.S. security assistance to Ukraine. This action <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">violated the Impoundment Control Act</a>.</li>
+          <li><strong>“B” footnotes</strong> appear in the budgetary resources section of the apportionment (its top half, lines 1xxx) and merely provide background information about a given line item or set of line items. A “B” footnote might, for instance, identify in greater detail the sources of the funds in a given line.</li>
+        </ol>
 
         <p>If footnotes appear on lines 1920 or 6190, they apply to all the lines in the 1xxx and 6xxx sections, respectively.</p>
 
-        <p>For more information on apportionment footnotes, consult this <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=2670" target="_blank" rel="noopener noreferrer">expert training from Oct. 2022</a>.</p>
+        <p>For more information on apportionment footnotes, consult this <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=2670" target="_blank" rel="noopener noreferrer">expert training from Oct. 2022</a> (0:44:30-1:00:54).</p>
+      `
+    },
+    {
+      id: 'apportionment-iteration',
+      question: 'What is an apportionment “iteration”? ',
+      answer: `
+        <p>An “iteration” is the version of an apportionment. </p>
+
+        <p>Although OMB sometimes issues only a single apportionment for an account in a given fiscal year (see, e.g., the <a href="/agency/equal-employment-opportunity-commission/bureau/equal-employment-opportunity-commission/account/salaries-and-expenses">Salaries and Expenses Account for the Equal Employment Opportunity Commission</a>), OMB often issues multiple apportionments for a single account over the course of a fiscal year. Each subsequent apportionment (known as a “<a href="https://www.gao.gov/assets/gao-05-734sp.pdf#page=86" target="_blank" rel="noopener noreferrer">reapportionment</a>”) revises and supersedes the prior version. And each version has an iteration number. The first apportionment in a given fiscal year is Iteration 1, the second is Iteration 2, and so on. </p>
+
+        <p>Take, for example, the FY2022 apportionments for the no-year appropriation within U.S. Immigration and Custom Enforcement’s Operations and Support Account. This no-year sub-account within the Operations and Support Account is designated by the TAFS 070-0540 /X. In FY2022, that sub-account had four apportionments:
+          <a href="/file/11201779#tafs_11201779--070-0540--1--2022">Iteration 1</a>, issued on Oct. 27, 2021;
+          <a href="/file/11210384#tafs_11210384--070-0540--2--2022">Iteration 2</a>, issued on Mar. 7, 2022;
+          <a href="/file/11219232#tafs_11219232--070-0540--3--2022">Iteration 3</a>, issued on Apr. 23, 2022;
+          and <a href="/file/11237553#tafs_11237553--070-0540--4--2022">Iteration 4</a>, issued on Sept. 2, 2022.
+        </p>
+
+        <p>The number of iterations for a given account can tell us how closely OMB is overseeing or exerting control over the use of the funds in that account. For instance, that there were <a href="https://openomb.org/file/11246309#tafs_11246309--070-0540-2023-2023--1--2023">eight apportionment iterations for one ICE Operations and Support sub-account</a> (TAFS 070-0540 /2023) tells us that OMB was paying closer attention to the use of those funds than it was to the use of the EEOC’s Salaries and Expenses funds, for which there was one apportionment per account per fiscal year.</p>
       `
     },
     {
       id: 'who-apportions-funds',
       question: 'Who may apportion funds?',
       answer: `
-        <p>The Antideficiency Act gives the president the power to apportion funds. 31 U.S.C. § 1513(b). The president has delegated that power to the OMB director, who has <a href="https://www.federalregister.gov/documents/2022/04/01/2022-06873/delegation-of-apportionment-authority" target="_blank" rel="noopener noreferrer">delegated it, in turn, to OMB’s deputy associate directors</a>.</p>
+        <p>The Antideficiency Act gives the president the power to apportion funds. 31 U.S.C. § 1513(b). The <a href="https://www.archives.gov/federal-register/codification/executive-order/06166.html" target="_blank" rel="noopener noreferrer">president has delegated that power</a> to the OMB director, who has <a href="https://www.federalregister.gov/documents/2022/04/01/2022-06873/delegation-of-apportionment-authority" target="_blank" rel="noopener noreferrer">delegated it, in turn, to OMB’s deputy associate directors</a>.</p>
       `
     },
     {
       id: 'how-to-find-apportionments',
       question: 'How do I find apportionments for the funds I care about?',
       answer: `
-        <p>Apportionments are done at the account level. The best and easiest way to find an apportionment is thus to know the name or number of the relevant appropriation or fund account. Once you have this information, you can enter it into our search tool and navigate to the right apportionment.</p>
+        <p>There are a number of ways to use OpenOMB’s database to find the funds you care about.</p>
 
-        <p>Here’s how to find an account name and number:
+        <ul>
+          <li>One way is to <a href="/explore">explore by agency and bureau</a>.</li>
+          <li>Another is to use our <a href="/search">keyword search</a> to search the terms of interest to you—for instance, searching “immigration” to find accounts and apportionments related to immigration. You can restrict this search by agency and bureau to find immigration-related apportionments only for a particular agency, like the Department of Homeland Security, or only for a particular component of DHS, such as U.S. Immigration and Customs Enforcement.</li>
+          <li>If you’re wondering how OMB has been executing a recently passed appropriations bill, you could search the public law number in the <a href="/search">keyword search</a>. For instance, to find apportionments for the <a href="https://www.congress.gov/bill/118th-congress/house-bill/815/text" target="_blank" rel="noopener noreferrer">April 2024 supplemental appropriations bill</a> providing security assistance to Ukraine, Israel, and Taiwan, you would search “118-50” for the bill’s public law number.</li>
+        </ul>
 
-          <ol>
-            <li>Begin with the relevant appropriations act.</li>
-            <li>The unnumbered paragraph headings in an appropriations act correspond to an account set up in the Treasury for a particular agency and bureau. These headings typically serve as the name of the account.
+        <p>Another approach is to search for the name or number of the account being apportioned. An apportionment makes available to an agency the budgetary resources from a given appropriation or fund account that is set up in the Treasury. The name of an account typically originates in an appropriations act—specifically in the act’s unnumbered paragraph headings, which correspond to an account set up in the Treasury for a particular agency and bureau. Take, for example, the “Health Care Systems” appropriation in the Consolidated Appropriations Act of 2022. That appropriation is for the Health Resources and Services Administration (the bureau) within the Department of Health and Human Services (the agency). “Health Care Systems” is the title of the unnumbered paragraph heading in the appropriations act. It denotes an account set up in the Treasury called “Health Care Systems.”</p>
 
-              <ol>
-                <li>Take, for example, the <a href="https://www.congress.gov/117/plaws/publ103/PLAW-117publ103.pdf#page=396" target="_blank" rel="noopener noreferrer">“Health Care Systems” appropriation</a> in the Consolidated Appropriations Act of 2022. That appropriation is for the Health Resources and Services Administration (the bureau) within the Department of Health and Human Services (the agency). </li>
-                <li>“Health Care Systems” is the unnumbered paragraph heading. It denotes an account set up in the Treasury called “Health Care Systems.”</li>
-              </ol>
-            </li>
+        <p>Thus, to search by the name or number of the account, you can search by:</p>
 
-            <li>To verify that you have the correct account name and to find the corresponding account number, download the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department’s Federal Account Symbols and Titles (FAST) Book Part II</a>.</li>
-            <li>After opening the FAST Book, search for the account name you have identified. It should appear in the “Title” column of the spreadsheet.
+        <ul>
+          <li>The likely title of the account found in the unnumbered paragraph headings of an appropriations act;</li>
+          <li>Or the number of the account—the Treasury Account Symbol, or TAS—found in the Treasury Department’s <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Federal Account Symbols and Titles (FAST) Book Part II</a>. For more information on the TAS, see the FAQ below.</li>
+          <li>For more detailed instructions on finding an account name and number, consult <a href="https://protectdemocracy.org/work/using-ombs-apportionment-website-resources-for-congress/#finding-an-apportionment" target="_blank" rel="noopener noreferrer">these instructions</a>.</li>
+        </ul>
+      `
+    },
+    {
+      id: 'how-have-presidents-abused-this-power',
+      question: 'How have presidents abused the apportionment power?',
+      answer: `
+        <p>President Trump abused the apportionment power by withholding U.S. military aid to Ukraine through a series of apportionment footnotes that put a pause on that funding. The Government Accountability Office found that this hold <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer">violated the Impoundment Control Act</a>. </p>
 
-              <ol>
-                <li>Searching “Health Care Systems” brings us to the “Health Care Systems” account in the FAST Book’s Title column.</li>
-              </ol>
-            </li>
-
-            <li>To the left of that column, you will notice columns with unique identifier codes. Column A contains agency identifier codes. Column B contains the code for a particular account within the agency.
-              <ol>
-                <li>For “Health Care Systems,” 075 identifies the Department of Health and Human Services and 0357 identifies Health Care Systems as an account in the Health Resources and Services Administration.</li>
-              </ol>
-            </li>
-
-            <li>Column D—TAS, or Treasury Account Symbol—combines the codes in Columns A and B to form the unique code for the account.
-              <ol>
-                <li>For Health Care Systems, this is 075 0357.</li>
-              </ol>
-            </li>
-
-            <li>At this point, you can enter into our search tool either the account name or the TAS. If you enter the TAS, be sure to hyphenate the numbers (e.g. 075-0357) to return the correct results.
-            </li>
-
-            <li>However, it is important to know that a single TAS often has multiple sub-accounts.
-              <ol>
-                <li>Searching 075-0357, for instance, returns five results: 075-0357 /X; 075-0357 /2024; 075-0357 /2023; 075-0357 /2022; and 075-0357 2020/2022.</li>
-              </ol>
-            </li>
-
-            <li>These sub-accounts are denoted by a TAFS, or Treasury Appropriation Fund Symbol. Whereas a Treasury Account Symbol refers to any account in the Treasury, a TAFS is a TAS specifically with budget authority—that is, authority provided by statute to enter into financial obligations, such as by making payments, borrowing money, or contracting. Moreover, a TAFS contains an additional piece of information: the period of availability for the funding. This period may be annual, or a single fiscal year; multi-year, or multiple fiscal years; or no-year, which means the funds are available until they are expended. No-year accounts are denoted by an X.
-              <ol>
-                <li>For the Health Care Systems account, we see several kinds of TAFS. 075-0357 /X is a no-year account. 075-0357 2020/2022 was a multi-year account with funds available from fiscal year 2020-2022. And 075-0357 /2024 is an annual account with funding available only for fiscal year 2024.</li>
-              </ol>
-            </li>
-
-            <li>Apportionments are done specifically at the TAFS level. However, if you are unsure whether the account you are searching for is an annual, multi-year, or no-year account, you are better off searching for the TAS—composed of the three-digit agency identifier code and the four digit account-specific code (e.g. 075 0357).</li>
-          </ol>
-
-        </p>
+        <p>President Obama <a href="https://casetext.com/case/us-house-of-representatives-v-capacity" target="_blank" rel="noopener noreferrer">abused this power</a> by <a href="https://www.govinfo.gov/content/pkg/CHRG-114hhrg23194/pdf/CHRG-114hhrg23194.pdf#page=11" target="_blank" rel="noopener noreferrer">using money that Congress had appropriated for a premium tax credit</a> in part to fund Affordable Care Act cost-sharing subsidies, which Congress had expressly refused to fund during the appropriations process.</p>
       `
     },
     {
@@ -197,20 +190,7 @@
 
         <p>A list of every TAS can be found in the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department’s Federal Account Symbols and Titles (FAST) Book Part II</a>.</p>
 
-        <p>Search Tips:
-
-            <ul>
-              <li>When entering a TAS into our search tool, be sure to hyphenate the three-digit agency identifier code and four-digit unique account code as follows: 075-0357.</li>
-              <li>When entering a TAFS into the search tool, follow these written conventions:
-
-                <ul>
-                  <li>For no-year accounts: 075-0357 /X</li>
-                  <li>For multi-year accounts: 075-0357 2020/2022</li>
-                  <li>For annual accounts: 075-0357 /2024</li>
-                </ul>
-              </li>
-            </ul>
-        </p>
+        <p>Search Tip: When entering a TAS into our search tool, be sure to hyphenate the three-digit agency identifier code and four-digit unique account code as follows: 075-0357.</p>
       `
     },
     {
@@ -346,18 +326,20 @@
       </dl>
     </div>
 
-    <div class="no-js-only-block">
-      <dl class="faqs">
-        {#each faqs as faq}
-          <dt id="faq-{faq.id}">{faq.question}</dt>
+    <noscript>
+      <div class="no-js-only-block">
+        <dl class="faqs">
+          {#each faqs as faq}
+            <dt id="faq-{faq.id}">{faq.question}</dt>
 
-          <dd id="faq-dd-{faq.id}">
-            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html faq.answer}
-          </dd>
-        {/each}
-      </dl>
-    </div>
+            <dd id="faq-dd-{faq.id}">
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html faq.answer}
+            </dd>
+          {/each}
+        </dl>
+      </div>
+    </noscript>
   </div>
 </div>
 
