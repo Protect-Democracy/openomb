@@ -122,7 +122,7 @@
           and <a href="/file/11237553#tafs_11237553--070-0540--4--2022">Iteration 4</a>, issued on Sept. 2, 2022.
         </p>
 
-        <p>The number of iterations for a given account can tell us how closely OMB is overseeing or exerting control over the use of the funds in that account. For instance, that there were <a href="https://openomb.org/file/11246309#tafs_11246309--070-0540-2023-2023--1--2023">eight apportionment iterations for one ICE Operations and Support sub-account</a> (TAFS 070-0540 /2023) tells us that OMB was paying closer attention to the use of those funds than it was to the use of the EEOC&apos;s Salaries and Expenses funds, for which there was one apportionment per account per fiscal year.</p>
+        <p>The number of iterations for a given account can tell us how closely OMB is overseeing or exerting control over the use of the funds in that account. For instance, that there were <a href="/file/11246309#tafs_11246309--070-0540-2023-2023--1--2023">eight apportionment iterations for one ICE Operations and Support sub-account</a> (TAFS 070-0540 /2023) tells us that OMB was paying closer attention to the use of those funds than it was to the use of the EEOC&apos;s Salaries and Expenses funds, for which there was one apportionment per account per fiscal year.</p>
       `
     },
     {
@@ -170,23 +170,17 @@
       answer: `
         <p>A TAS is a Treasury Account Symbol. A TAFS is a Treasury Appropriation Fund Symbol. A TAS generically describes any account in the Treasury. A TAFS is a particular kind of account, namely one with budget authority &mdash;  authority provided by statute to enter into financial obligations, such as by making payments, borrowing money, or contracting.</p>
 
-        <p>TODO</p>
+        <p>A TAS is composed of a three-digit agency identifier code and a four-digit account-specific code.</p>
 
-        <p>TODO</p>
+        <ul>
+          <li>The TAS for the Health Care Systems appropriation account is 075 0357. 075 identifies the Department of Health and Human Services as the agency and 0357 identifies Health Care Systems as an account in HHS&apos;s Health Resources and Services Administration.</li>
+        </ul>
 
-        <p>A TAS is composed of a three-digit agency identifier code and a four-digit account-specific code.
+        <p>A TAFS is composed of the three-digit agency identifier code, the four-digit account-specific code, and an additional piece of information: the period of availability of the funding. This period may be annual, or a single fiscal year; multi-year, or multiple fiscal years; or no-year, which means the funds are available until they are expended. No-year accounts are denoted by an X.</p>
 
-            <ul>
-              <li>The TAS for the Health Care Systems appropriation account is 075 0357. 075 identifies the Department of Health and Human Services as the agency and 0357 identifies Health Care Systems as an account in HHS&apos;s Health Resources and Services Administration.</li>
-            </ul>
-        </p>
-
-        <p>A TAFS is composed of the three-digit agency identifier code, the four-digit account-specific code, and an additional piece of information: the period of availability of the funding. This period may be annual, or a single fiscal year; multi-year, or multiple fiscal years; or no-year, which means the funds are available until they are expended. No-year accounts are denoted by an X.
-
-            <ul>
-              <li>For the Health Care Systems account, we see several kinds of TAFS. 075-0357 /X is a no-year account. 075-0357 2020/2022 was a multi-year account with funds available from fiscal year 2020-2022. And 075-0357 /2024 is an annual account with funding available only for fiscal year 2024.</li>
-            </ul>
-        </p>
+        <ul>
+          <li>For the Health Care Systems account, we see several kinds of TAFS. 075-0357 /X is a no-year account. 075-0357 2020/2022 was a multi-year account with funds available from fiscal year 2020-2022. And 075-0357 /2024 is an annual account with funding available only for fiscal year 2024.</li>
+        </ul>
 
         <p>A list of every TAS can be found in the <a href="https://www.fiscal.treasury.gov/reference-guidance/fast-book/" target="_blank" rel="noopener noreferrer">Treasury Department&apos;s Federal Account Symbols and Titles (FAST) Book Part II</a>.</p>
 
@@ -218,26 +212,24 @@
       answer: `
         <p>In Oct. 2022, three experts led a <a href="https://www.youtube.com/watch?v=XEDz8Wg2wx0&t=6465s" target="_blank" rel="noopener noreferrer">training on how to read apportionments</a> and the law governing them.</p>
 
-        <p>After working on budget execution at the Department of Health and Human Services for over 30 years, Ed Martin created a more detailed series of video explainers on apportionments:
+        <p>After working on budget execution at the Department of Health and Human Services for over 30 years, Ed Martin created a more detailed series of video explainers on apportionments:</p>
 
-            <ul>
-              <li><a href="https://www.youtube.com/watch?v=23LQErvq4PE" target="_blank" rel="noopener noreferrer">Module 1</a> defines an apportionment, explains why we apportion, and lays out the basic rules of apportionment. </li>
-              <li><a href="https://www.youtube.com/watch?v=Uhkik94uS1g" target="_blank" rel="noopener noreferrer">Module 2</a> covers the apportionment form, the Standard Form (SF) 132. </li>
-              <li><a href="https://www.youtube.com/watch?v=fUcCIZQep6U" target="_blank" rel="noopener noreferrer">Module 3</a> examines the rest of the apportionment and the circumstances in which an apportionment is not necessary. </li>
-            </ul>
-        </p>
+        <ul>
+          <li><a href="https://www.youtube.com/watch?v=23LQErvq4PE" target="_blank" rel="noopener noreferrer">Module 1</a> defines an apportionment, explains why we apportion, and lays out the basic rules of apportionment. </li>
+          <li><a href="https://www.youtube.com/watch?v=Uhkik94uS1g" target="_blank" rel="noopener noreferrer">Module 2</a> covers the apportionment form, the Standard Form (SF) 132. </li>
+          <li><a href="https://www.youtube.com/watch?v=fUcCIZQep6U" target="_blank" rel="noopener noreferrer">Module 3</a> examines the rest of the apportionment and the circumstances in which an apportionment is not necessary. </li>
+        </ul>
 
         <p>An array of government resources also offer further information about apportionments. </p>
 
-        <p>OMB Circular No. A-11 is the manual behind the federal budget, offering guidance to agencies on budget preparation, submission, and execution. Sections 120, 123, 124 of A-11 concern apportionments.
+        <p>OMB Circular No. A-11 is the manual behind the federal budget, offering guidance to agencies on budget preparation, submission, and execution. Sections 120, 123, 124 of A-11 concern apportionments.</p>
 
-          <ul>
-            <li>Section 120 covers the apportionment process.</li>
-            <li>Section 123 covers apportionments under continuing resolutions.</li>
-            <li>Section 124 covers agency operations in the absence of appropriations.</li>
-            <li>Appendix F covers the format of the Standard Form (SF) 132 (the apportionment form) and SF 133 (the report on budget execution and budgetary resources)</li>
-          </ul>
-        </p>
+        <ul>
+          <li>Section 120 covers the apportionment process.</li>
+          <li>Section 123 covers apportionments under continuing resolutions.</li>
+          <li>Section 124 covers agency operations in the absence of appropriations.</li>
+          <li>Appendix F covers the format of the Standard Form (SF) 132 (the apportionment form) and SF 133 (the report on budget execution and budgetary resources)</li>
+        </ul>
 
         <p>OMB updates Circular A-11 annually. One may find the most up-to-date version here: <a href="https://www.whitehouse.gov/omb/information-for-agencies/circulars/" target="_blank" rel="noopener noreferrer">https://www.whitehouse.gov/omb/information-for-agencies/circulars/</a></p>
       `
@@ -248,20 +240,19 @@
       answer: `
         <p>Congress created the apportionment power in the Antideficiency Act to ensure federal agencies spend within the limits of the law. Failing to follow an apportionment may violate the Antideficiency Act and result in administrative or criminal penalties for the violating official.</p>
 
-        <p>The Antideficiency Act sections relevant to apportionments may be found <a href="https://www.law.cornell.edu/uscode/text/31/subtitle-II/chapter-15/subchapter-II" target="_blank" rel="noopener noreferrer">here</a> and below:
+        <p>The Antideficiency Act sections relevant to apportionments may be found <a href="https://www.law.cornell.edu/uscode/text/31/subtitle-II/chapter-15/subchapter-II" target="_blank" rel="noopener noreferrer">here</a> and below:</p>
 
-          <ul>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1511" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1511</a>: What is apportioned?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1512" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1512</a>: How should amounts be apportioned?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1513" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1513</a>: Who controls apportionments? When must apportionments be approved?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1514" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1514</a>: What are the requirements for a funds control system?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1515" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1515</a>: When can deficiency apportionments be requested? When can they be approved?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1516" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1516</a>: Which appropriations are exempt from apportionment?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1517" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1517</a>: What happens if an agency obligates or expends in excess of an apportionment?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1518" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1518</a>: What are the administrative penalties for exceeding an apportionment or administrative subdivision of funds?</li>
-            <li><a href="https://www.law.cornell.edu/uscode/text/31/1519" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1519</a>: What are the criminal penalties for exceeding an apportionment or administrative subdivision of funds?</li>
-          </ul>
-        </p>
+        <ul>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1511" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1511</a>: What is apportioned?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1512" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1512</a>: How should amounts be apportioned?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1513" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1513</a>: Who controls apportionments? When must apportionments be approved?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1514" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1514</a>: What are the requirements for a funds control system?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1515" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1515</a>: When can deficiency apportionments be requested? When can they be approved?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1516" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1516</a>: Which appropriations are exempt from apportionment?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1517" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1517</a>: What happens if an agency obligates or expends in excess of an apportionment?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1518" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1518</a>: What are the administrative penalties for exceeding an apportionment or administrative subdivision of funds?</li>
+          <li><a href="https://www.law.cornell.edu/uscode/text/31/1519" target="_blank" rel="noopener noreferrer">31 U.S.C. § 1519</a>: What are the criminal penalties for exceeding an apportionment or administrative subdivision of funds?</li>
+        </ul>
       `
     }
   ];
