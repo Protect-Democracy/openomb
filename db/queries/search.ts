@@ -208,6 +208,7 @@ function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'f
         ilike(tafs.accountTitle, `%${keyword}%`),
         ilike(tafs.budgetAgencyTitle, `%${keyword}%`),
         ilike(tafs.budgetBureauTitle, `%${keyword}%`),
+        ilike(files.fundsProvidedByParsed, `%${keyword}%`),
         lineSearch(keyword),
         footnoteSearch(keyword)
       )
