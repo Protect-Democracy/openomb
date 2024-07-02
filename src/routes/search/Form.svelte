@@ -57,10 +57,7 @@
     </div>
 
     <div class="field">
-      <label for="tafs"
-        >Account number (<acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym> or
-        <acronym title="Treasury Account Symbol">TAS</acronym>)</label
-      >
+      <label for="tafs">Account number (Treasury Account Symbol)</label>
       <input type="text" id="tafs" name="tafs" value={url.searchParams.get('tafs')} />
     </div>
 

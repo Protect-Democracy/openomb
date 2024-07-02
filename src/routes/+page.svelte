@@ -15,12 +15,12 @@
 <section class="intro">
   <div class="intro-inner page-container">
     <div class="intro-text">
-      <h1>Track presidential spending decisions.</h1>
+      <h1>Tracking presidential spending decisions just got easier.</h1>
 
       <p class="center-container">
         Apportionments are how the president, through the Office of Management and Budget, dictates
-        what money federal agencies can spend and when. Updated daily, OpenOMB&apos;s database makes
-        apportionments easy to find and potential abuses of this power easier to uncover.
+        what money federal agencies can spend. OpenOMB&apos;s database makes apportionments easy to
+        find and abuses of this power easier to uncover.
       </p>
 
       <div class="search">

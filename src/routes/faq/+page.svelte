@@ -18,7 +18,7 @@
       answer: `
         <p>OMB is part of the Executive Office of the Presidency and helps the president execute her agenda across the executive branch. One way OMB does this is by exercising an important power on the president&apos;s behalf: the power to apportion Congress&apos;s appropriations.</p>
 
-        <p>After Congress enacts appropriations and other spending laws, OMB makes appropriated funds available to agencies to spend through legally binding plans called &ldquo;apportionments.&rdquo;. Apportionments tell agencies what funds they may spend, when they may spend them, and any conditions they must meet in order to spend them.</p>
+        <p>After Congress enacts appropriations and other spending laws, OMB makes appropriated funds available to agencies to spend through legally binding plans called &ldquo;apportionments.&rdquo; Apportionments tell agencies what funds they may spend, when they may spend them, and any conditions they must meet in order to spend them.</p>
 
         <p>Through OMB&apos;s apportionments, the president implements Congress&apos;s spending laws and exercises centralized control over the executive branch.</p>
 
@@ -67,7 +67,9 @@
 
         <p>The unnumbered rows at the top of an apportionment provide information about the funds being apportioned and the agency and bureau that receive those funds.</p>
 
-        <p>The numbered rows in an apportionment are split into a top half and a bottom half. The top half of the apportionment &mdash; line numbers starting with 1 (1xxx) &mdash; is purely descriptive. It reflects the budgetary resources generally available to the agency. (Budgetary resources include unobligated balances from prior years, appropriations, authority to borrow money, and authority to enter into contracts, among other resources.) </p>
+        <p>The numbered rows in an apportionment are split into a top half and a bottom half. The top half of the apportionment &mdash; line numbers starting with 1 (1xxx) &mdash; is purely descriptive. It reflects the budgetary resources generally available to the agency. (Budgetary resources include unobligated balances from prior years, appropriations, authority to borrow money, and authority to enter into contracts, among other resources.)</p>
+
+        <p>The bottom half of the apportionment—line numbers starting with 6 (6xxx) &mdash; is where OMB exerts its apportionment power, dividing amounts by time, project, or both. This section of the apportionment is known as the application of budgetary resources and it is legally binding on the receiving agency.</p>
 
         <p>Funds in the application of budgetary resources section may be apportioned in several different ways:</p>
 
