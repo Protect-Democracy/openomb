@@ -12,6 +12,7 @@
   import { isProduction, setCookie } from '$lib/utilities';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
   import {
+    isBeta,
     siteName,
     siteAuthor,
     siteDescription,
@@ -40,8 +41,8 @@
   // Constants
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
-  // TODO: Update this when ready to not have development notice
-  const productionCheck = false; // !isProduction()
+  const productionCheck = isProduction();
+  const betaCheck = isBeta;
 
   // On Mount
   onMount(() => {
@@ -118,6 +119,13 @@
   <div class="development">
     <p>
       You are currently viewing a <strong>development version</strong> of this site and it may be inaccurate.
+    </p>
+  </div>
+{:else if productionCheck && betaCheck}
+  <div class="beta">
+    <p>
+      You are currently viewing a <strong>beta version</strong> of this site; please send
+      improvements to <a href="mailto:{contactEmail}">{contactEmail}</a>.
     </p>
   </div>
 {/if}
@@ -295,15 +303,25 @@
     max-width: 15rem;
   }
 
+  .beta,
   .development {
     padding: var(--spacing);
     background: var(--color-highlight);
     width: 100%;
+
+    p {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    a {
+      color: var(--color-text);
+      text-decoration: underline;
+    }
   }
 
-  .development p {
-    margin: 0 auto;
-    text-align: center;
+  .beta {
+    background: var(--color-blue-light);
   }
 
   @media (max-width: 768px) {
