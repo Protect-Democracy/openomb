@@ -106,6 +106,9 @@
     content="{deployedBaseUrl}{$pageMeta.twitterImgPath || socialTwitterImgPath}"
   />
 
+  <!-- Google search engine -->
+  <meta name="google-site-verification" content="Mly0FuXK91GFL2wY9XGyO7Po4w7VaZwiSZgfpgeeqSk" />
+
   {#if googleAnalyticsId}
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5NJ2S21X5"></script>
   {/if}
