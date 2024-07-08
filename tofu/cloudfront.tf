@@ -25,6 +25,7 @@ resource "aws_cloudfront_distribution" "cf_dist" {
     target_origin_id       = aws_alb.apportionments_app.dns_name
     viewer_protocol_policy = "redirect-to-https"
     cache_policy_id        = aws_cloudfront_cache_policy.apportionments.id
+    compress               = true
   }
 
   logging_config {
