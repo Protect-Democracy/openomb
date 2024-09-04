@@ -15,12 +15,12 @@
 <section class="intro">
   <div class="intro-inner page-container">
     <div class="intro-text">
-      <h1>Tracking presidential spending decisions just got easier.</h1>
+      <h1>Tracking apportionments just got easier.</h1>
 
       <p class="center-container">
-        Apportionments are how the president, through the Office of Management and Budget, dictates
-        what money federal agencies can spend. OpenOMB&apos;s database makes apportionments easy to
-        find and abuses of this power easier to uncover.
+        Apportionments are legally binding plans issued by the White House Office of Management and
+        Budget that set the pace at which federal agencies may spend appropriated funds.
+        {siteName}&apos;s database makes apportionments easy to find and track.
       </p>
 
       <div class="search">
@@ -40,9 +40,14 @@
       <h2 class="h3">Why are apportionments important?</h2>
 
       <p>
-        Apportionments are how the president implements Congress&apos;s spending laws and one way he
-        exercises centralized control over the executive branch. Presidents of both parties have
-        abused this power &mdash; making oversight of apportionments vital.
+        Apportionments are how the president, acting through <acronym
+          title="Office of Management and Budget">OMB</acronym
+        >, implements Congress&apos;s spending laws. Apportionments set the pace at which agencies
+        may spend funds by specifying what money an agency may spend, when, and subject to what
+        conditions. This is the second step in the life cycle of federal funds: Congress
+        appropriates, <acronym title="Office of Management and Budget">OMB</acronym> apportions, and
+        agencies spend. Administrations of both parties have abused this authority to halt or cut off
+        funding for enacted programs, making oversight of apportionments vital.
       </p>
 
       <a href="/faq"
@@ -69,17 +74,8 @@
       <p>
         <span class="inline-icon"><Check /></span>
         <span
-          >Whether <acronym title="Office of Management and Budget">OMB</acronym> is withholding, restricting,
-          or delaying funds &mdash; potentially beyond what&apos;s allowed by law.</span
-        >
-      </p>
-
-      <p>
-        <span class="inline-icon"><Check /></span>
-        <span
-          >How closely the president, through
-          <acronym title="Office of Management and Budget">OMB</acronym>, is overseeing particular
-          pots of money.</span
+          >Whether <acronym title="Office of Management and Budget">OMB</acronym> is delaying access
+          to, or withholding, funds.</span
         >
       </p>
     </div>
@@ -134,8 +130,8 @@
       </li>
 
       <li>
-        <a href="/faq#faq-how-have-presidents-abused-this-power"
-          ><span class="faq-icon"><TopRightArrow /></span> How have presidents abused this power?</a
+        <a href="/faq#faq-how-have-presidents-abused-this-authority"
+          ><span class="faq-icon"><TopRightArrow /></span> How have presidents abused this authority?</a
         >
       </li>
 

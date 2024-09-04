@@ -121,21 +121,21 @@
         {#if file.pdfUrl}
           <li>
             <a class="button" href={file.pdfUrl} target="_blank" rel="noopener noreferrer"
-              >Download source as PDF</a
+              >Download primary source as PDF (from OMB)</a
             >
           </li>
         {/if}
         {#if file.excelUrl}
           <li>
             <a class="button" href={file.excelUrl} target="_blank" rel="noopener noreferrer"
-              >Download source as Excel</a
+              >Download primary source as Excel (from OMB)</a
             >
           </li>
         {/if}
         {#if file.sourceUrl && !file.pdfUrl}
           <li>
             <a class="button" href={file.sourceUrl} target="_blank" rel="noopener noreferrer"
-              >Download source as JSON</a
+              >Download primary source as JSON (from OMB)</a
             >
           </li>
         {/if}
@@ -492,6 +492,7 @@
   tr.total {
     font-weight: bold;
     background-color: var(--color-gray-lighter);
+    border-bottom: double var(--color-text);
   }
 
   .footnote-row {

@@ -6,7 +6,7 @@ export const deployedBaseUrl = 'https://openomb.org';
 export const isBeta = true;
 export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';
-export const siteDescription = `OpenOMB is the easiest way to find and track presidential spending decisions. Presidents issue these decisions through the Office of Management and Budget in documents called apportionments. Apportionments tell federal agencies what money they may spend and when.`;
+export const siteDescription = `OpenOMB is the easiest way to find and track apportionments. Apportionments are legally binding plans issued by the White House Office of Management and Budget that set the pace at which federal agencies may spend appropriated funds. They specify what funds may be spent, when, and subject to what conditions.`;
 export const siteKeywords = [
   'OMB',
   'apportionments',
@@ -17,6 +17,7 @@ export const siteKeywords = [
   'presidential spending decision'
 ];
 export const contactEmail = 'contact@openomb.org';
+export const supportEmail = 'support@openomb.org';
 export const collectionHour = 2;
 export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
