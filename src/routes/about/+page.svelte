@@ -6,48 +6,67 @@
   <h1>About {siteName}</h1>
 
   <p>
-    OpenOMB is the easiest way to find and track presidential spending decisions. It is a searchable
-    database of apportionments &mdash; the legally binding plans that presidents issue through the
-    Office of Management and Budget, telling federal agencies what money they may spend, when, and
-    subject to what conditions.
+    {siteName} is a searchable database that makes apportionments easier to find and track. Apportionments
+    are how the president, acting through the Office of Management and Budget, implements Congress&apos;s
+    spending laws. Apportionments set the pace at which agencies may spend appropriated funds over the
+    course of a fiscal year by specifying what money an agency may spend, when, and subject to what conditions.
   </p>
 
   <p>
-    Apportionments are how the president implements Congress&apos;s spending laws and one way he
-    exercises centralized control over the executive branch. Presidents of both parties have abused
-    this power, in violation of the law and in excess of their authority. Until July 2022, however,
-    they exercised this power in the dark. Neither Congress nor the public had access to
-    apportionments.
+    Congress created the apportionment process in the Antideficiency Act to ensure agencies spend
+    within the limits of the law and do not prematurely exhaust the funds Congress has given them.
+    But administrations of both parties have, at times, abused this authority to defy
+    Congress&apos;s spending laws &mdash; such as when President Trump&apos;s <acronym
+      title="Office of Management and Budget">OMB</acronym
+    >
+    used the apportionment process
+    <a href="https://www.gao.gov/assets/b-331564.pdf" target="_blank" rel="noopener noreferrer"
+      >unlawfully to withhold security assistance funds</a
+    > that Congress had appropriated for Ukraine.
   </p>
 
   <p>
-    In the Consolidated Appropriations of 2022 and 2023, Congress took action to fix this problem.
-    It required OMB to post its apportionments on a public website. OMB does so at <a
-      href="https://apportionment-public.max.gov/"
-      target="_blank"
-      rel="noopener noreferrer">apportionment-public.max.gov</a
-    >. But OMB has continued to resist this statutorily mandated transparency. Its website is hard
-    to navigate and has no search function, making it difficult to find apportionments and oversee
+    Until July 2022, however, <acronym title="Office of Management and Budget">OMB</acronym> exercised
+    its apportionment authority largely out of public view. Neither Congress nor the public had access
+    to apportionments.
+  </p>
+
+  <p>
+    In the Consolidated Appropriations Acts of 2022 and 2023, Congress took action on a bipartisan
+    basis to fix this problem. It required <acronym title="Office of Management and Budget"
+      >OMB</acronym
+    >
+    to post its apportionments on a public website. OMB does so at
+    <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
+      >apportionment-public.max.gov</a
+    >. But <acronym title="Office of Management and Budget">OMB</acronym>&apos;s website is hard to
+    navigate and has no search function, making it difficult to find apportionments and oversee
     OMB&apos;s work.
   </p>
 
   <p>
-    OpenOMB aims to make oversight of OMB and the president significantly easier &mdash; for
-    Congress, the press, and the public. Drawing on the data files from <a
-      href="https://apportionment-public.max.gov/"
-      target="_blank"
-      rel="noopener noreferrer">apportionment-public.max.gov</a
-    >, this site makes OMB&apos;s apportionments searchable and easier to find. OpenOMB houses all
-    of OMB&apos;s public apportionments from fiscal year 2022 to the present.
+    {siteName} aims to make oversight of
+    <acronym title="Office of Management and Budget">OMB</acronym>&apos;s apportionments easier for
+    Congress, the press, and the public. Drawing on the data files from
+    <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
+      >apportionment-public.max.gov</a
+    >, this site makes OMB&apos;s apportionments searchable and easier to find. {siteName} houses all
+    of OMB&apos;s public apportionments from fiscal year 2022 to the present. All apportionment files
+    on {siteName} simply reflect the underlying, primary-source data and documents that
+    <acronym title="Office of Management and Budget">OMB</acronym>
+    has made available on
+    <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
+      >apportionment-public.max.gov</a
+    >.
   </p>
 
   <p>
-    The site is updated daily. It is maintained by <a
-      href="https://protectdemocracy.org/"
-      target="_blank"
-      rel="noopener noreferrer">Protect Democracy Project</a
-    >, a nonpartisan nonprofit, and is not affiliated with Office of Management and Budget, the
-    Executive Office of the Presidency, or any agency of the U.S. government.
+    {siteName} is updated daily. It is maintained by
+    <a href="https://protectdemocracy.org/" target="_blank" rel="noopener noreferrer"
+      >Protect Democracy Project</a
+    >, a nonpartisan nonprofit, and is not affiliated with the Office of Management and Budget
+    (OMB), the Executive Office of the President, the U.S. Congress, or any component of the U.S.
+    government.
   </p>
 
   <p>

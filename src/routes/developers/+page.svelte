@@ -1,6 +1,7 @@
 <script lang="ts">
   import { formatDate } from '$lib/formatters';
   import type { PageData } from './$types';
+  import { siteName, supportEmail } from '$config';
 
   // Props
   export let data: PageData;
@@ -13,12 +14,10 @@
   <h1>Developers and Researchers</h1>
 
   <p>
-    The OpenOMB project aims to make the U.S. Office of Management and Budget's apportionments data
-    more accessible to many different audiences. We know that direct access to our data can be much
-    easier to work with than using the website for certain purposes. If you would like to see
-    different methods or endpoints to the data, please <a href="mailto:support@openomb.org"
-      >contact us</a
-    >.
+    The {siteName} project aims to make the Office of Management and Budget's apportionments data more
+    accessible to many different audiences. We know that direct access to our data can be much easier
+    to work with than using the website for certain purposes. If you would like to see different methods
+    or endpoints to the data, please <a href="mailto:{supportEmail}">contact us</a>.
   </p>
 
   <p>

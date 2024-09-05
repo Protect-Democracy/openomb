@@ -169,9 +169,9 @@
 
   <div class="attribution page-container">
     <p class="center-container">
-      This website is not affiliated with the U.S. Office of Management and Budget (OMB), the
-      Executive Office of the Presidency, or any agency of the U.S. government. {siteName} is a searchable
-      database maintained by
+      This website is not affiliated with the Office of Management and Budget (OMB), the Executive
+      Office of the President, the U.S. Congress, or any component of the U.S. government. {siteName}
+      is a searchable database maintained by
       <a
         href="https://protectdemocracyproject.org/"
         class="like-text"
