@@ -9,6 +9,7 @@
   import { derived } from 'svelte/store';
   import { addDays } from 'date-fns';
   import { page } from '$app/stores';
+  import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
   import { isProduction, setCookie } from '$lib/utilities';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
   import {
@@ -138,15 +139,33 @@
   <div class="page-container">
     <div class="header-inner">
       <h1><a href="/">{siteName}</a></h1>
-
       <nav>
-        <a class:active={$url.pathname === '/search'} href="/search">Search</a>
-        <a class:active={$url.pathname === '/explore'} href="/explore">Explore by Agency</a>
-        <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
-        <a class:active={$url.pathname === '/about'} href="/about">About</a>
-        {#if !isProduction()}
-          <a href="/examples">Examples</a>
-        {/if}
+        <ul>
+          <li>
+            <a class:active={$url.pathname === '/search'} href="/search">Search</a>
+          </li>
+          <li>
+            <DropdownLinks
+              title="Explore Agencies"
+              fallbackHref="/explore"
+              links={[
+                { title: 'Explore by Agency', href: '/explore' },
+                { title: 'Explore by Folder', href: '/folders' }
+              ]}
+            />
+          </li>
+          <li>
+            <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
+          </li>
+          <li>
+            <a class:active={$url.pathname === '/about'} href="/about">About</a>
+          </li>
+          {#if !isProduction()}
+            <li>
+              <a href="/examples">Examples</a>
+            </li>
+          {/if}
+        </ul>
       </nav>
     </div>
   </div>
@@ -223,9 +242,20 @@
     padding: 0;
   }
 
+  .header-inner nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header-inner nav li {
+    margin-left: var(--spacing-double);
+  }
+
   nav a {
     color: var(--color-text);
-    margin-left: var(--spacing-double);
     font-weight: var(--font-copy-weight-bolder);
   }
 
@@ -329,7 +359,7 @@
   }
 
   @media (max-width: 768px) {
-    nav a {
+    .header-inner nav li {
       margin-left: var(--spacing);
     }
   }
