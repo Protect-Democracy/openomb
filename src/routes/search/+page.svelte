@@ -13,6 +13,7 @@
 
   import { fileSortOptions, accountSortOptions } from '$config/search';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+  import { Tabs, Tab } from '$components/tabs';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import AccountListingHiglightable from '$components/accounts/AccountListingHiglightable.svelte';
 
@@ -114,236 +115,242 @@
     </div>
   </div>
 
-  <section class="account-results" id="account-results">
-    {#if hasAccountResults}
-      <div class="page-container">
-        <div class="heading-links">
-          <h2>Accounts</h2>
-          <a href="#file-results">Go to File results</a>
-        </div>
-      </div>
-
-      <aside class="result-actions-wrapper">
-        <div class="result-actions page-container">
-          <div class="result-count">
-            {#if accountCount instanceof Promise}
-              {#await accountCount}
-                <p class="muted" role="status">
-                  <span class="inline-icon"><Spinner /></span>
-                  Loading account count
-                </p>
-              {:then accountCount}
-                <p role="status">
-                  Results
-                  {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
-                    Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
-                  )}
-                  of <strong>{formatNumber(accountCount || 0)} accounts</strong>
-                </p>
-              {/await}
-            {:else if (accountCount || 0) > 0}
-              <p>
-                Results
-                {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
-                  Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
-                )}
-                of <strong>{formatNumber(accountCount || 0)} accounts</strong>
-              </p>
-            {/if}
+  <div class="results" id="results">
+    <Tabs>
+      <Tab label="File Results">
+        {#if hasFileResults}
+          <div class="page-container">
+            <div class="heading-links">
+              <h2>Files</h2>
+            </div>
           </div>
 
-          <div class="sort-action">
-            <form
-              action={`${$url.pathname}#account-results`}
-              method="get"
-              bind:this={accountSortFormEl}
-            >
-              <label for="account-sort">Sort results</label>
+          <aside class="result-actions-wrapper">
+            <div class="result-actions page-container">
+              <div class="result-count">
+                {#if fileCount instanceof Promise}
+                  {#await fileCount}
+                    <p class="muted" role="status">
+                      <span class="inline-icon"><Spinner /></span>
+                      Loading file count
+                    </p>
+                  {:then fileCount}
+                    <p role="status">
+                      Results
+                      {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
+                        Math.min(fileCount || 0, currentFilesPage * filePageSize)
+                      )}
+                      of <strong>{formatNumber(fileCount || 0)} files</strong>
+                    </p>
+                  {/await}
+                {:else if (fileCount || 0) > 0}
+                  <p>
+                    Results
+                    {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
+                      Math.min(fileCount || 0, currentFilesPage * filePageSize)
+                    )}
+                    of <strong>{formatNumber(fileCount || 0)} files</strong>
+                  </p>
+                {/if}
+              </div>
 
-              <select
-                name="accountSort"
-                id="account-sort"
-                value={$url.searchParams.get('accountSort') || 'account_asc'}
-                on:change={accountUpdateSort}
-              >
-                {#each accountSortOptions as option (option.key)}
-                  <option value={option.key}>{option.label}</option>
-                {/each}
-              </select>
+              <div class="sort-action">
+                <form
+                  action={`${$url.pathname}#file-results`}
+                  method="get"
+                  bind:this={fileSortFormEl}
+                >
+                  <label for="sort">Sort results</label>
 
-              {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
-                {#each $url.searchParams.getAll(param) as value}
-                  {#if param !== 'accountSort'}
-                    <input type="hidden" name={param} {value} />
-                  {/if}
-                {/each}
-              {/each}
+                  <select
+                    name="sort"
+                    id="sort"
+                    value={$url.searchParams.get('sort') || 'approved_desc'}
+                    on:change={fileUpdateSort}
+                  >
+                    {#each fileSortOptions as option (option.key)}
+                      <option value={option.key}>{option.label}</option>
+                    {/each}
+                  </select>
 
-              <noscript>
-                <div class="no-js-only-block">
-                  <button type="submit" class="small compact">Sort</button>
-                </div>
-              </noscript>
-            </form>
+                  {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
+                    {#each $url.searchParams.getAll(param) as value}
+                      {#if param !== 'sort'}
+                        <input type="hidden" name={param} {value} />
+                      {/if}
+                    {/each}
+                  {/each}
+
+                  <noscript>
+                    <div class="no-js-only-block">
+                      <button type="submit" class="small compact">Sort</button>
+                    </div>
+                  </noscript>
+                </form>
+              </div>
+            </div>
+          </aside>
+
+          <div class="file-list page-container">
+            {#each files as file}
+              <FileListingHighlightable {file} highlightParams={searchParams} />
+            {/each}
           </div>
-        </div>
-      </aside>
 
-      <div class="account-list page-container">
-        <!-- There are technically accounts that have the same name with different casing,
-         so the id's are the same, but the name is different.  Ideally this is fixed in
-         data and/or the query, but for now we'll just use the index as well. -->
-        {#each accounts as account, ai (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}-${ai}`)}
-          <AccountListingHiglightable {account} highlightParams={searchParams} />
-        {/each}
-      </div>
-
-      <div class="pagination page-container">
-        {#if accountCount instanceof Promise}
-          {#await accountCount}
-            <p class="muted center-container">
-              <span class="inline-icon"><Spinner /></span>
-              Loading paging...
-            </p>
-          {:then accountCount}
-            <UrlPagination
-              perPage={accountPageSize}
-              total={accountCount}
-              anchor="account-results"
-              urlPageParam="accountPage"
-            />
-          {/await}
-        {:else if (accountCount || 0) > 0}
-          <UrlPagination
-            perPage={accountPageSize}
-            total={accountCount}
-            anchor="account-results"
-            urlPageParam="accountPage"
-          />
-        {/if}
-      </div>
-    {:else if hasSearched}
-      <div class="page-container">
-        <h2>Accounts</h2>
-
-        <div class="text-container no-results">
-          <NoResults resultType="account" />
-        </div>
-      </div>
-    {/if}
-  </section>
-
-  <section class="file-results" id="file-results">
-    {#if hasFileResults}
-      <div class="page-container">
-        <div class="heading-links">
-          <h2>Files</h2>
-          <a href="#account-results">Go to Account results</a>
-        </div>
-      </div>
-
-      <aside class="result-actions-wrapper">
-        <div class="result-actions page-container">
-          <div class="result-count">
+          <div class="pagination page-container">
             {#if fileCount instanceof Promise}
               {#await fileCount}
-                <p class="muted" role="status">
+                <p class="muted center-container">
                   <span class="inline-icon"><Spinner /></span>
-                  Loading file count
+                  Loading paging...
                 </p>
               {:then fileCount}
-                <p role="status">
-                  Results
-                  {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
-                    Math.min(fileCount || 0, currentFilesPage * filePageSize)
-                  )}
-                  of <strong>{formatNumber(fileCount || 0)} files</strong>
-                </p>
+                <UrlPagination
+                  perPage={filePageSize}
+                  total={fileCount}
+                  anchor="file-results"
+                  urlPageParam="page"
+                />
               {/await}
             {:else if (fileCount || 0) > 0}
-              <p>
-                Results
-                {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
-                  Math.min(fileCount || 0, currentFilesPage * filePageSize)
-                )}
-                of <strong>{formatNumber(fileCount || 0)} files</strong>
-              </p>
+              <UrlPagination
+                perPage={filePageSize}
+                total={fileCount}
+                anchor="file-results"
+                urlPageParam="page"
+              />
             {/if}
           </div>
+        {:else if hasSearched}
+          <div class="page-container">
+            <h2>Files</h2>
 
-          <div class="sort-action">
-            <form action={`${$url.pathname}#file-results`} method="get" bind:this={fileSortFormEl}>
-              <label for="sort">Sort results</label>
-
-              <select
-                name="sort"
-                id="sort"
-                value={$url.searchParams.get('sort') || 'approved_desc'}
-                on:change={fileUpdateSort}
-              >
-                {#each fileSortOptions as option (option.key)}
-                  <option value={option.key}>{option.label}</option>
-                {/each}
-              </select>
-
-              {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
-                {#each $url.searchParams.getAll(param) as value}
-                  {#if param !== 'sort'}
-                    <input type="hidden" name={param} {value} />
-                  {/if}
-                {/each}
-              {/each}
-
-              <noscript>
-                <div class="no-js-only-block">
-                  <button type="submit" class="small compact">Sort</button>
-                </div>
-              </noscript>
-            </form>
+            <div class="text-container no-results">
+              <NoResults resultType="file" />
+            </div>
           </div>
-        </div>
-      </aside>
-
-      <div class="file-list page-container">
-        {#each files as file}
-          <FileListingHighlightable {file} highlightParams={searchParams} />
-        {/each}
-      </div>
-
-      <div class="pagination page-container">
-        {#if fileCount instanceof Promise}
-          {#await fileCount}
-            <p class="muted center-container">
-              <span class="inline-icon"><Spinner /></span>
-              Loading paging...
-            </p>
-          {:then fileCount}
-            <UrlPagination
-              perPage={filePageSize}
-              total={fileCount}
-              anchor="file-results"
-              urlPageParam="page"
-            />
-          {/await}
-        {:else if (fileCount || 0) > 0}
-          <UrlPagination
-            perPage={filePageSize}
-            total={fileCount}
-            anchor="file-results"
-            urlPageParam="page"
-          />
         {/if}
-      </div>
-    {:else if hasSearched}
-      <div class="page-container">
-        <h2>Files</h2>
+      </Tab>
 
-        <div class="text-container no-results">
-          <NoResults resultType="file" />
-        </div>
-      </div>
-    {/if}
-  </section>
+      <Tab label="Account Results">
+        {#if hasAccountResults}
+          <div class="page-container">
+            <div class="heading-links">
+              <h2>Accounts</h2>
+            </div>
+          </div>
+
+          <aside class="result-actions-wrapper">
+            <div class="result-actions page-container">
+              <div class="result-count">
+                {#if accountCount instanceof Promise}
+                  {#await accountCount}
+                    <p class="muted" role="status">
+                      <span class="inline-icon"><Spinner /></span>
+                      Loading account count
+                    </p>
+                  {:then accountCount}
+                    <p role="status">
+                      Results
+                      {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
+                        Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
+                      )}
+                      of <strong>{formatNumber(accountCount || 0)} accounts</strong>
+                    </p>
+                  {/await}
+                {:else if (accountCount || 0) > 0}
+                  <p>
+                    Results
+                    {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
+                      Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
+                    )}
+                    of <strong>{formatNumber(accountCount || 0)} accounts</strong>
+                  </p>
+                {/if}
+              </div>
+
+              <div class="sort-action">
+                <form
+                  action={`${$url.pathname}#account-results`}
+                  method="get"
+                  bind:this={accountSortFormEl}
+                >
+                  <label for="account-sort">Sort results</label>
+
+                  <select
+                    name="accountSort"
+                    id="account-sort"
+                    value={$url.searchParams.get('accountSort') || 'account_asc'}
+                    on:change={accountUpdateSort}
+                  >
+                    {#each accountSortOptions as option (option.key)}
+                      <option value={option.key}>{option.label}</option>
+                    {/each}
+                  </select>
+
+                  {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
+                    {#each $url.searchParams.getAll(param) as value}
+                      {#if param !== 'accountSort'}
+                        <input type="hidden" name={param} {value} />
+                      {/if}
+                    {/each}
+                  {/each}
+
+                  <noscript>
+                    <div class="no-js-only-block">
+                      <button type="submit" class="small compact">Sort</button>
+                    </div>
+                  </noscript>
+                </form>
+              </div>
+            </div>
+          </aside>
+
+          <div class="account-list page-container">
+            <!-- There are technically accounts that have the same name with different casing,
+             so the id's are the same, but the name is different.  Ideally this is fixed in
+             data and/or the query, but for now we'll just use the index as well. -->
+            {#each accounts as account, ai (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}-${ai}`)}
+              <AccountListingHiglightable {account} highlightParams={searchParams} />
+            {/each}
+          </div>
+
+          <div class="pagination page-container">
+            {#if accountCount instanceof Promise}
+              {#await accountCount}
+                <p class="muted center-container">
+                  <span class="inline-icon"><Spinner /></span>
+                  Loading paging...
+                </p>
+              {:then accountCount}
+                <UrlPagination
+                  perPage={accountPageSize}
+                  total={accountCount}
+                  anchor="account-results"
+                  urlPageParam="accountPage"
+                />
+              {/await}
+            {:else if (accountCount || 0) > 0}
+              <UrlPagination
+                perPage={accountPageSize}
+                total={accountCount}
+                anchor="account-results"
+                urlPageParam="accountPage"
+              />
+            {/if}
+          </div>
+        {:else if hasSearched}
+          <div class="page-container">
+            <h2>Accounts</h2>
+
+            <div class="text-container no-results">
+              <NoResults resultType="account" />
+            </div>
+          </div>
+        {/if}
+      </Tab>
+    </Tabs>
+  </div>
 
   <ScrollToTop />
 </div>
@@ -365,12 +372,6 @@
     display: flex;
     justify-content: start;
     align-items: baseline;
-
-    a {
-      font-size: var(--font-size-small);
-      display: inline-block;
-      margin-left: var(--spacing-double);
-    }
   }
 
   .result-actions-wrapper {
@@ -413,7 +414,7 @@
     margin-right: auto;
   }
 
-  .account-results {
+  .results {
     margin-bottom: var(--spacing-double);
   }
 
