@@ -1,24 +1,25 @@
 <script lang="ts">
-  import { slide } from 'svelte/transition';
-  import { uniqBy } from 'lodash-es';
+  import { uniqBy, reduce } from 'lodash-es';
   import type { PageData } from './$types';
-  import { prefersReducedMotion } from '$lib/utilities';
-  import {
-    formatCurrency,
-    formatFileTitle,
-    formatTafsFormattedId,
-    formatDate
-  } from '$lib/formatters';
+  import { formatFileTitle, formatTafsFormattedId, formatDate } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+  import TAFSLines from './TAFSLines.svelte';
 
   // Props
   export let data: PageData;
 
-  // Constants
-  const transitionTime = 300;
-
   // Derived
-  $: ({ file } = data);
+  $: ({ file, prevIterationFiles } = data);
+  $: prevIterationFootnotes = uniqBy(
+    reduce(
+      Object.values(prevIterationFiles),
+      (accum, iterFile) => {
+        return [...accum, ...(iterFile.footnotes || [])];
+      },
+      []
+    ),
+    ['footnoteNumber', 'footnoteText']
+  );
   $: ({ tafs, footnotes } = file);
   $: uniqueAgencies = uniqBy(
     tafs.map((tafsGroup) => ({
@@ -27,34 +28,6 @@
     })),
     'id'
   );
-
-  // Keep track of if footnote is expanded.  Default to false
-  let footnotesExpanded: Record<string, boolean> = {};
-  $: tafs.forEach((tafsGroup) => {
-    tafsGroup.lines.forEach((line) => {
-      const id = `${tafsGroup.tafsTableId}-${line.lineIndex}`;
-      footnotesExpanded[id] =
-        footnotesExpanded[id] === undefined
-          ? false
-          : footnotesExpanded[id] === false
-            ? false
-            : true;
-    });
-  });
-
-  // Methods
-  function toggleFootnote(id: string, event: Event): void {
-    event?.preventDefault();
-    footnotesExpanded = {
-      ...footnotesExpanded,
-      [id]: !footnotesExpanded[id]
-    };
-    return;
-  }
-
-  function isTotalRow(line: object): boolean {
-    return line.lineNumber.match(/^(1920|6190)$/);
-  }
 </script>
 
 <article class="page-container content-container">
@@ -149,6 +122,10 @@
 
     {#if tafs?.length}
       {#each tafs as tafsGroup}
+        {@const prevIterationTafs = prevIterationFiles[tafsGroup.tafsTableId]?.tafs?.find(
+          (taf) => taf.tafsId === tafsGroup.tafsId
+        )}
+
         <section class="tafs-section">
           <h3 id="tafs_{tafsGroup.tafsTableId}" class="tafs-heading">
             <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {formatTafsFormattedId(
@@ -214,106 +191,7 @@
             </div>
           </div>
 
-          <div class="responsive-table">
-            <table class="font-small">
-              <thead>
-                <tr>
-                  <th>Line #</th>
-                  <th>Split</th>
-                  <th>Description</th>
-                  <th class="currency-column">Amount</th>
-                  <th>Footnotes</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {#each tafsGroup.lines as line}
-                  <tr class:total={isTotalRow(line)}>
-                    <td>{line.lineNumber}</td>
-                    <td>{line.lineSplit}</td>
-                    <td>{line.lineDescription}</td>
-                    <td class="currency-column">
-                      {#if line.approvedAmount}{formatCurrency(line.approvedAmount)}{/if}
-                    </td>
-                    <td>
-                      {#if line.footnotes && line.footnotes.length > 0}
-                        <span class="no-js-only-inline"><small>See footnotes below</small></span>
-                        <span class="has-js-only-inline">
-                          <button
-                            class="compact small"
-                            aria-expanded={footnotesExpanded[
-                              `${tafsGroup.tafsTableId}-${line.lineIndex}`
-                            ]
-                              ? true
-                              : false}
-                            aria-controls="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
-                            on:click={(e) =>
-                              toggleFootnote(`${tafsGroup.tafsTableId}-${line.lineIndex}`, e)}
-                            >Footnotes</button
-                          >
-                        </span>
-                      {/if}
-                    </td>
-                  </tr>
-
-                  {#if line.footnotes && line.footnotes.length > 0}
-                    <tr
-                      class="footnote-row no-js-only-table-row"
-                      id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
-                    >
-                      <th colspan="2" scope="row">
-                        Footnotes for line {line.lineNumber}{line.lineSplit
-                          ? ` (${line.lineSplit})`
-                          : ''}:</th
-                      >
-                      <td colspan="3">
-                        {#each line.footnotes as footnote}
-                          <p>
-                            <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
-                          </p>
-                        {/each}
-                      </td>
-                    </tr>
-                  {/if}
-
-                  {#if line.footnotes && line.footnotes.length > 0 && footnotesExpanded[`${tafsGroup.tafsTableId}-${line.lineIndex}`]}
-                    <!-- TODO: TRs don't care about height and so slide() transition does not work on them.  Tried creating a custom transition that managed max-height, but that did not work.  Adding transition to inner elements here works, but its a bit jumpy with the tr thing.  -->
-                    <tr
-                      class="footnote-row has-js-only-table-row"
-                      id="inline-footnotes-{tafsGroup.tafsTableId}-{line.lineIndex}"
-                    >
-                      <th colspan="2" scope="row">
-                        <div
-                          transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}
-                        >
-                          {#if line.lineNumber === '6190'}
-                            Footnotes for all <em>6xxx</em> lines:
-                          {:else if line.lineNumber === '1920'}
-                            Footnotes for all <em>1xxx</em> lines:
-                          {:else}
-                            Footnotes for line {line.lineNumber}{line.lineSplit
-                              ? ` (${line.lineSplit})`
-                              : ''}:
-                          {/if}
-                        </div></th
-                      >
-                      <td colspan="3">
-                        <div
-                          transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}
-                        >
-                          {#each line.footnotes as footnote}
-                            <p>
-                              <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
-                            </p>
-                          {/each}
-                        </div>
-                      </td>
-                    </tr>
-                  {/if}
-                {/each}
-              </tbody>
-            </table>
-          </div>
+          <TAFSLines currentTafs={tafsGroup} {prevIterationTafs} />
         </section>
       {/each}
     {:else}
@@ -350,6 +228,30 @@
       </table>
     {:else}
       <p><em>No footnotes available.</em></p>
+    {/if}
+
+    {#if prevIterationFiles && Object.keys(prevIterationFiles).length > 0}
+      <p class="previous-iteration-footnotes-desc">
+        The following are all of the footnotes associated with the previous iteration of this file.
+      </p>
+      {#if prevIterationFootnotes.length}
+        <table class="font-small previous-iteration-footnotes-table">
+          <thead>
+            <tr><th>Number</th><th>Text</th></tr>
+          </thead>
+
+          <tbody>
+            {#each prevIterationFootnotes as footnote}
+              <tr>
+                <td id="footnote__{footnote.footnoteNumber}">{footnote.footnoteNumber}</td>
+                <td><div class="text-container">{footnote.footnoteText}</div></td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {:else}
+        <p><em>No footnotes available.</em></p>
+      {/if}
     {/if}
   </section>
 
@@ -471,40 +373,7 @@
     list-style: none;
   }
 
-  .responsive-table,
-  table {
-    position: relative;
-  }
-
-  table thead {
-    /* TODO: .responsive-table element seems to mess with this */
-    position: sticky;
-    top: 0;
-    background-color: var(--color-background);
-    /* TODO: This does not come through when sticky; it is set as the default too */
-    border-bottom: var(--border-weight) solid var(--color-text);
-  }
-
-  .currency-column {
-    text-align: right;
-    padding-right: var(--spacing-double);
-  }
-
-  tr.total {
-    font-weight: bold;
-    background-color: var(--color-gray-lighter);
-    border-bottom: double var(--color-text);
-  }
-
-  .footnote-row {
-    vertical-align: top;
-
-    th {
-      max-width: 8em;
-    }
-
-    p {
-      margin-bottom: var(--spacing);
-    }
+  .previous-iteration-footnotes-desc {
+    margin-top: var(--spacing-triple);
   }
 </style>
