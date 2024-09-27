@@ -149,8 +149,8 @@
               title="Explore Agencies"
               fallbackHref="/explore"
               links={[
-                { title: 'Explore by Agency', href: '/explore' },
-                { title: 'Explore by Folder', href: '/folders' }
+                { title: 'Explore All Agencies', href: '/explore' },
+                { title: 'Explore CFO/CIO Act Agencies', href: '/folders' }
               ]}
             />
           </li>
