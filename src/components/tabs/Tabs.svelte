@@ -25,7 +25,12 @@
   setContext('tabs', tabContext);
 </script>
 
-<div {...$root} use:root class="page-container tab-menu">
+<div
+  {...$root}
+  use:root
+  class="page-container tab-menu"
+  class:has-tabs={typeof $tabs !== 'undefined' && $tabs.length}
+>
   <div {...$list} use:list class="tab-list">
     {#each $tabs as tab, index}
       <button {...$trigger(`tab-${index}`)} use:trigger class="trigger relative">
@@ -38,23 +43,34 @@
 
 <style>
   .tab-list {
-    background: var(--color-background-alt);
-    margin: var(--spacing) 0;
+    margin: var(--spacing-double) 0 var(--spacing) 0;
+    border-bottom: var(--border-weight) solid var(--color-toggle-on);
+    padding: 0 var(--spacing);
+    display: none;
   }
 
-  .tab-menu .trigger {
+  .has-tabs .tab-list {
+    display: block;
+  }
+
+  .tab-list .trigger {
     background: transparent;
-    color: var(--color-text);
     padding: var(--spacing-half) var(--spacing-double);
-    margin: 0;
+    margin: 0 var(--spacing-thin);
     min-width: unset;
-    border-top: 1px solid var(--color-gray-light);
-    border-right: 1px solid var(--color-gray-light);
-    border-left: 1px solid var(--color-gray-light);
-    border-radius: 0 var(--border-radius) 0 0;
-  }
-
-  .tab-menu .trigger[data-state='active'] {
     background-color: var(--color-background);
+    color: var(--color-text);
+    transition: var(--transition);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+
+    &[data-state='active'] {
+      background-color: var(--color-toggle-on);
+      color: var(--color-toggle-on-text);
+    }
+
+    &[data-state='inactive']:hover {
+      background-color: var(--color-gray-lighter);
+      color: var(--color-text);
+    }
   }
 </style>
