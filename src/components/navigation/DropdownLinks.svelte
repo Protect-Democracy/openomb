@@ -14,11 +14,12 @@
   import { derived } from 'svelte/store';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import ChevronDown from '$components/icons/ChevronDown.svelte';
 
   // Props
   export let title = '';
   export let fallbackHref = '';
-  export let links = [];
+  export let links: { title: string; href: string }[] = [];
 
   const url = derived(page, ($page) => $page.url);
   const {
@@ -26,9 +27,11 @@
   } = createDropdownMenu();
 </script>
 
-<button class="like-text dropdown-toggle has-js-only-inline" {...$trigger} use:trigger tabindex="0"
-  >{title}</button
->
+<button class="like-text dropdown-toggle has-js-only-inline" {...$trigger} use:trigger tabindex="0">
+  {title}
+  <span class="inline-icon"><ChevronDown /></span>
+</button>
+
 <div {...$menu} use:menu class="dropdown-menu">
   {#each links as link}
     <div
@@ -62,10 +65,32 @@
   }
 
   .dropdown-menu {
+    z-index: 100;
     background: var(--color-background);
+    box-shadow: var(--drop-shadow);
+    border-radius: var(--border-radius-small);
+    border: var(--border-weight-thin) solid var(--color-gray-medium);
+
+    & [data-arrow='true'][data-side='bottom'] {
+      border-top: var(--border-weight-thin) solid var(--color-gray-medium);
+      border-left: var(--border-weight-thin) solid var(--color-gray-medium);
+    }
   }
 
   .menu-item {
     padding: var(--spacing-half);
+    text-align: center;
+  }
+
+  button .inline-icon {
+    margin-left: var(--spacing-small);
+    margin-right: 0;
+    display: inline-block;
+    margin-top: var(--spacing-small);
+    transition: var(--transition);
+  }
+  button[aria-expanded='true'] .inline-icon {
+    transform-origin: 50% 40%;
+    transform: rotate(180deg);
   }
 </style>

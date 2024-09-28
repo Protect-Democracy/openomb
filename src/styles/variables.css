@@ -107,6 +107,8 @@
   --border-weight: var(--spacing-thin);
   --border-weight-thin: calc(var(--spacing-thin) / 2);
 
+  --drop-shadow: 0 6px 12px var(--color-gray-medium);
+
   --transition: 0.3s;
   --transition-fast: 0.1s;
 
