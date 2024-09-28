@@ -69,6 +69,7 @@ jobs:
         env:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_SENTRY_SCRIPT: ${{ secrets.VITE_SENTRY_SCRIPT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         uses: docker/build-push-action@v5
         with:
           context: .
