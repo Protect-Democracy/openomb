@@ -104,7 +104,7 @@
       <div id="file-results"></div>
       <div id="account-results"></div>
 
-      <Tabs defaultTabId="file-results" url={$url}>
+      <Tabs defaultTabId="file-results">
         <Tab label="File Results" id="file-results">
           {#if hasFileResults}
             <div class="page-container">

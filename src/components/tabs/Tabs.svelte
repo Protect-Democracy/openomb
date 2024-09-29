@@ -12,7 +12,6 @@
   import { createTabs } from '@melt-ui/svelte';
   import { writable } from 'svelte/store';
   import { setContext } from 'svelte';
-  import { goto } from '$app/navigation';
 
   // TODO: Ideally we could keep the default tab in the URL,
   // but there are two issues to figure out:
@@ -25,21 +24,12 @@
 
   // Props
   export let defaultTabId: string;
-  export let url: URL;
-
-  // Attempt to get default tab from URL
-  let hash = url.hash;
-  let tabHash = (hash || '').replace(/#/, '');
 
   // Setup tabs parts from MeltUI
   const {
     elements: { root, list, content, trigger }
   } = createTabs({
-    defaultValue: tabHash ? `tab-${tabHash}` : `tab-${defaultTabId}`,
-    onValueChange: ({ next }) => {
-      goto(`#${next.replace('tab-', '')}`);
-      return next;
-    }
+    defaultValue: `tab-${defaultTabId}`
   });
 
   // Setup tab context to keep track of tabs and content
