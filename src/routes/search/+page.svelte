@@ -2,30 +2,27 @@
   import type { PageData } from './$types';
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
-  import { formatNumber } from '$lib/formatters';
+  import { afterNavigate, beforeNavigate } from '$app/navigation';
+  import { fileSortOptions, accountSortOptions } from '$config/search';
+
   import Form from './Form.svelte';
   import Filters from './Filters.svelte';
   import NoResults from './NoResults.svelte';
-  import UrlPagination from '$components/pagination/UrlPagination.svelte';
-  import Spinner from '$components/icons/Spinner.svelte';
-  import { submitting } from './form-store';
-  import { afterNavigate, beforeNavigate } from '$app/navigation';
-
-  import { fileSortOptions, accountSortOptions } from '$config/search';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import { Tabs, Tab } from '$components/tabs';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import AccountListingHiglightable from '$components/accounts/AccountListingHiglightable.svelte';
+  import ResultSort from './ResultSort.svelte';
+  import ResultCount from './ResultCount.svelte';
+  import ResultPaging from './ResultPaging.svelte';
+
+  import { submitting } from './form-store';
 
   // Props
   export let data: PageData;
 
   // Stores
   const url = derived(page, ($page) => $page.url);
-
-  // State
-  let fileSortFormEl: HTMLFormElement;
-  let accountSortFormEl: HTMLFormElement;
 
   // When we navigate on the client and JS enabled, we want to communicate
   // that the form is being submitted.
@@ -57,19 +54,6 @@
   $: currentAccountsPage = $url.searchParams.get('accountPage')
     ? Number($url.searchParams.get('accountPage'))
     : 1;
-
-  // A shortcut to quickly update data on sort change.
-  // For some reason the submit doesn't trigger the navigation,
-  // so do manually here.
-  // TODO: Do this without a submit/page-reload
-  function fileUpdateSort() {
-    submitting.set(true);
-    fileSortFormEl.submit();
-  }
-  function accountUpdateSort() {
-    submitting.set(true);
-    accountSortFormEl.submit();
-  }
 </script>
 
 <div class="content-container">
@@ -128,66 +112,20 @@
 
             <aside class="result-actions-wrapper">
               <div class="result-actions page-container">
-                <div class="result-count">
-                  {#if fileCount instanceof Promise}
-                    {#await fileCount}
-                      <p class="muted" role="status">
-                        <span class="inline-icon"><Spinner /></span>
-                        Loading file count
-                      </p>
-                    {:then fileCount}
-                      <p role="status">
-                        Results
-                        {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
-                          Math.min(fileCount || 0, currentFilesPage * filePageSize)
-                        )}
-                        of <strong>{formatNumber(fileCount || 0)} files</strong>
-                      </p>
-                    {/await}
-                  {:else if (fileCount || 0) > 0}
-                    <p>
-                      Results
-                      {formatNumber(currentFilesPage * filePageSize - filePageSize + 1)} - {formatNumber(
-                        Math.min(fileCount || 0, currentFilesPage * filePageSize)
-                      )}
-                      of <strong>{formatNumber(fileCount || 0)} files</strong>
-                    </p>
-                  {/if}
-                </div>
+                <ResultCount
+                  countLabel="files"
+                  count={fileCount}
+                  currentPage={currentFilesPage}
+                  pageSize={filePageSize}
+                />
 
                 <div class="sort-action">
-                  <form
-                    action={`${$url.pathname}#file-results`}
-                    method="get"
-                    bind:this={fileSortFormEl}
-                  >
-                    <label for="sort">Sort results</label>
-
-                    <select
-                      name="sort"
-                      id="sort"
-                      value={$url.searchParams.get('sort') || 'approved_desc'}
-                      on:change={fileUpdateSort}
-                    >
-                      {#each fileSortOptions as option (option.key)}
-                        <option value={option.key}>{option.label}</option>
-                      {/each}
-                    </select>
-
-                    {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
-                      {#each $url.searchParams.getAll(param) as value}
-                        {#if param !== 'sort'}
-                          <input type="hidden" name={param} {value} />
-                        {/if}
-                      {/each}
-                    {/each}
-
-                    <noscript>
-                      <div class="no-js-only-block">
-                        <button type="submit" class="small compact">Sort</button>
-                      </div>
-                    </noscript>
-                  </form>
+                  <ResultSort
+                    id="sort"
+                    url={$url}
+                    sortOptions={fileSortOptions}
+                    defaultValue="approved_desc"
+                  />
                 </div>
               </div>
             </aside>
@@ -198,29 +136,13 @@
               {/each}
             </div>
 
-            <div class="pagination page-container">
-              {#if fileCount instanceof Promise}
-                {#await fileCount}
-                  <p class="muted center-container">
-                    <span class="inline-icon"><Spinner /></span>
-                    Loading paging...
-                  </p>
-                {:then fileCount}
-                  <UrlPagination
-                    perPage={filePageSize}
-                    total={fileCount}
-                    anchor="file-results"
-                    urlPageParam="page"
-                  />
-                {/await}
-              {:else if (fileCount || 0) > 0}
-                <UrlPagination
-                  perPage={filePageSize}
-                  total={fileCount}
-                  anchor="file-results"
-                  urlPageParam="page"
-                />
-              {/if}
+            <div class="page-container">
+              <ResultPaging
+                count={fileCount}
+                pageSize={filePageSize}
+                id="page"
+                anchor="file-results"
+              />
             </div>
           {:else if hasSearched}
             <div class="page-container">
@@ -243,67 +165,20 @@
 
             <aside class="result-actions-wrapper">
               <div class="result-actions page-container">
-                <div class="result-count">
-                  {#if accountCount instanceof Promise}
-                    {#await accountCount}
-                      <p class="muted" role="status">
-                        <span class="inline-icon"><Spinner /></span>
-                        Loading account count
-                      </p>
-                    {:then accountCount}
-                      <p role="status">
-                        Results
-                        {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} -
-                        {formatNumber(
-                          Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
-                        )}
-                        of <strong>{formatNumber(accountCount || 0)} accounts</strong>
-                      </p>
-                    {/await}
-                  {:else if (accountCount || 0) > 0}
-                    <p>
-                      Results
-                      {formatNumber(currentAccountsPage * accountPageSize - accountPageSize + 1)} - {formatNumber(
-                        Math.min(accountCount || 0, currentAccountsPage * accountPageSize)
-                      )}
-                      of <strong>{formatNumber(accountCount || 0)} accounts</strong>
-                    </p>
-                  {/if}
-                </div>
+                <ResultCount
+                  countLabel="counts"
+                  count={accountCount}
+                  currentPage={currentAccountsPage}
+                  pageSize={accountPageSize}
+                />
 
                 <div class="sort-action">
-                  <form
-                    action={`${$url.pathname}#account-results`}
-                    method="get"
-                    bind:this={accountSortFormEl}
-                  >
-                    <label for="account-sort">Sort results</label>
-
-                    <select
-                      name="accountSort"
-                      id="account-sort"
-                      value={$url.searchParams.get('accountSort') || 'account_asc'}
-                      on:change={accountUpdateSort}
-                    >
-                      {#each accountSortOptions as option (option.key)}
-                        <option value={option.key}>{option.label}</option>
-                      {/each}
-                    </select>
-
-                    {#each $url.searchParams.keys() as param, pi (`${param}-${pi}`)}
-                      {#each $url.searchParams.getAll(param) as value}
-                        {#if param !== 'accountSort'}
-                          <input type="hidden" name={param} {value} />
-                        {/if}
-                      {/each}
-                    {/each}
-
-                    <noscript>
-                      <div class="no-js-only-block">
-                        <button type="submit" class="small compact">Sort</button>
-                      </div>
-                    </noscript>
-                  </form>
+                  <ResultSort
+                    id="accountSort"
+                    url={$url}
+                    sortOptions={accountSortOptions}
+                    defaultValue="account_asc"
+                  />
                 </div>
               </div>
             </aside>
@@ -317,29 +192,13 @@
               {/each}
             </div>
 
-            <div class="pagination page-container">
-              {#if accountCount instanceof Promise}
-                {#await accountCount}
-                  <p class="muted center-container">
-                    <span class="inline-icon"><Spinner /></span>
-                    Loading paging...
-                  </p>
-                {:then accountCount}
-                  <UrlPagination
-                    perPage={accountPageSize}
-                    total={accountCount}
-                    anchor="account-results"
-                    urlPageParam="accountPage"
-                  />
-                {/await}
-              {:else if (accountCount || 0) > 0}
-                <UrlPagination
-                  perPage={accountPageSize}
-                  total={accountCount}
-                  anchor="account-results"
-                  urlPageParam="accountPage"
-                />
-              {/if}
+            <div class="page-container">
+              <ResultPaging
+                count={accountCount}
+                pageSize={accountPageSize}
+                id="accountPage"
+                anchor="account-results"
+              />
             </div>
           {:else if hasSearched}
             <div class="page-container">
@@ -359,11 +218,6 @@
 </div>
 
 <style>
-  .pagination {
-    margin: var(--spacing-double) auto;
-    text-align: center;
-  }
-
   .search-filters {
     margin: var(--spacing) 0;
     padding: var(--spacing) 0;
@@ -389,25 +243,6 @@
     justify-content: space-between;
     align-items: center;
     align-items: baseline;
-  }
-
-  .result-count {
-    display: flex;
-    gap: var(--spacing);
-  }
-
-  .sort-action form {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .sort-action label {
-    margin-right: var(--spacing);
-  }
-
-  .sort-action button {
-    margin-left: var(--spacing);
   }
 
   .no-results {
@@ -451,10 +286,6 @@
     .result-actions {
       flex-direction: column;
       row-gap: var(--spacing);
-    }
-
-    .result-count {
-      align-self: flex-start;
     }
   }
 </style>
