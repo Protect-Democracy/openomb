@@ -144,6 +144,7 @@ a.button.secondary:hover {
   border-color: var(--color-secondary-hover-border);
 }
 
+/* Alt version */
 button.alt,
 input[type='submit'].alt,
 input[type='button'].alt,
@@ -164,6 +165,7 @@ a.button.alt:hover {
   color: var(--color-alt-hover-text);
 }
 
+/* Toggle buttons */
 button[aria-pressed='false'].alt,
 input[type='submit'][aria-pressed='false'].alt,
 input[type='button'][aria-pressed='false'].alt,
@@ -184,6 +186,80 @@ a[aria-pressed='false'].button.alt:hover {
   color: var(--color-text-inverse);
 }
 
+/* Switch button */
+button.button-switch,
+input[type='submit'].button-switch,
+input[type='button'].button-switch,
+input[type='reset'].button-switch,
+[role='button'].button-switch,
+a.button.button-switch {
+  --local-padding: calc(1em / 6);
+  --local-width: 4rem;
+  --local-height: 2rem;
+  background-color: var(--color-gray-lighter);
+  color: var(--color-text);
+  width: var(--local-width);
+  min-width: 0;
+  height: var(--local-height);
+  padding: var(--local-padding);
+  border-radius: var(--border-radius-full);
+  position: relative;
+
+  .button-switch-slider {
+    display: block;
+    background-color: var(--color-white);
+    width: calc(var(--local-height) - (var(--local-padding) * 4));
+    height: calc(var(--local-height) - (var(--local-padding) * 4));
+    border-radius: var(--border-radius-full);
+    transform: translate(var(--local-padding));
+    transition: transform 0.2s ease-out;
+    border: var(--border-weight) solid var(--color-primary);
+  }
+
+  &[aria-pressed='true'] {
+    background-color: var(--color-primary);
+  }
+
+  &[aria-pressed='true'] .button-switch-slider {
+    transform: translate(calc(var(--local-width) - var(--local-height)));
+  }
+
+  &.small {
+    --local-padding: calc(1em / 10);
+    --local-width: 3rem;
+    --local-height: 1.5rem;
+    padding: var(--local-padding);
+    border-radius: var(--border-radius-full);
+  }
+
+  /* Alt */
+  &.alt .button-switch-slider {
+    border-color: var(--color-blue);
+  }
+
+  &[aria-pressed='false'].alt {
+    background-color: var(--color-blue-light);
+  }
+
+  &[aria-pressed='true'].alt {
+    background-color: var(--color-blue);
+  }
+
+  /* Data switch */
+  &.data .button-switch-slider {
+    border-color: var(--color-orange-dark);
+  }
+
+  &[aria-pressed='false'].data {
+    background-color: var(--color-orange-light);
+  }
+
+  &[aria-pressed='true'].data {
+    background-color: var(--color-orange-dark);
+  }
+}
+
+/* Make look like text */
 button.like-text,
 input[type='submit'].like-text,
 input[type='button'].like-text,
@@ -225,6 +301,7 @@ a.button.like-link:hover {
   text-decoration: underline;
 }
 
+/* Limited padding */
 button.compact,
 input[type='submit'].compact,
 input[type='button'].compact,
@@ -236,6 +313,7 @@ a.button.compact {
   padding: calc(var(--spacing-smallish) - var(--border-weight)) var(--spacing);
 }
 
+/* Small size */
 button.small,
 input[type='submit'].small,
 input[type='button'].small,
@@ -248,6 +326,7 @@ a.button.small {
   border-radius: var(--border-radius-small);
 }
 
+/* Icon in a button */
 .button-icon {
   display: inline-block;
   height: 1.1em;

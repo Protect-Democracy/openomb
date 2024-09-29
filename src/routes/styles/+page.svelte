@@ -311,6 +311,58 @@
   <button aria-pressed="true">On</button>
   <button aria-pressed="false">Off</button>
 
+  <h3>Switch</h3>
+
+  <button class="button-switch" aria-pressed="true">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch" aria-pressed="false">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch alt" aria-pressed="false">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch alt" aria-pressed="true">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch data" aria-pressed="false">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch data" aria-pressed="true">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <br />
+
+  <button class="button-switch small" aria-pressed="true">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch small" aria-pressed="false">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch alt small" aria-pressed="false">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch alt small" aria-pressed="true">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch data small" aria-pressed="false">
+    <span class="button-switch-slider"></span>
+  </button>
+
+  <button class="button-switch data small" aria-pressed="true">
+    <span class="button-switch-slider"></span>
+  </button>
+
   <h3>Icons</h3>
 
   <button disabled>
