@@ -101,8 +101,11 @@
 
   {#if hasFileResults || hasAccountResults}
     <div class="results" id="results">
-      <Tabs>
-        <Tab label="File Results">
+      <div id="file-results"></div>
+      <div id="account-results"></div>
+
+      <Tabs defaultTabId="file-results" url={$url}>
+        <Tab label="File Results" id="file-results">
           {#if hasFileResults}
             <div class="page-container">
               <div class="heading-links">
@@ -122,6 +125,7 @@
                 <div class="sort-action">
                   <ResultSort
                     id="sort"
+                    anchor="file-results"
                     url={$url}
                     sortOptions={fileSortOptions}
                     defaultValue="approved_desc"
@@ -155,7 +159,7 @@
           {/if}
         </Tab>
 
-        <Tab label="Account Results">
+        <Tab label="Account Results" id="account-results">
           {#if hasAccountResults}
             <div class="page-container">
               <div class="heading-links">
@@ -175,6 +179,7 @@
                 <div class="sort-action">
                   <ResultSort
                     id="accountSort"
+                    anchor="account-results"
                     url={$url}
                     sortOptions={accountSortOptions}
                     defaultValue="account_asc"

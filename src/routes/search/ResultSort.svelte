@@ -4,6 +4,7 @@
   // Props
   export let url: URL;
   export let id: string;
+  export let anchor: string;
   export let sortOptions: { key: string; label: string }[] = [];
   export let defaultValue: string;
 
@@ -19,7 +20,7 @@
 </script>
 
 <div class="result-sort">
-  <form action={`${url.pathname}#${id}`} method="get" bind:this={sortFormEl}>
+  <form action={`${url.pathname}#${anchor}`} method="get" bind:this={sortFormEl}>
     <label for={id}>Sort results</label>
 
     <select name={id} {id} value={url.searchParams.get(id) || defaultValue} on:change={updateSort}>

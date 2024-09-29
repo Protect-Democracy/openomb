@@ -12,15 +12,38 @@
   import { createTabs } from '@melt-ui/svelte';
   import { writable } from 'svelte/store';
   import { setContext } from 'svelte';
+  import { goto } from '$app/navigation';
 
+  // TODO: Ideally we could keep the default tab in the URL,
+  // but there are two issues to figure out:
+  // 1) If the hash is the same as something else, it will scroll
+  //    to that place, which is a bit unexpected when changing tabs
+  // 2) For some reason the non default content doesn't show up
+  //    if there is a hash set on the page load.  For instance,
+  //    setting to #account-results on the search page, the results
+  //    don't show up initially but will after clicking other tab
+
+  // Props
+  export let defaultTabId: string;
+  export let url: URL;
+
+  // Attempt to get default tab from URL
+  let hash = url.hash;
+  let tabHash = (hash || '').replace(/#/, '');
+
+  // Setup tabs parts from MeltUI
   const {
     elements: { root, list, content, trigger }
   } = createTabs({
-    defaultValue: 'tab-0'
+    defaultValue: tabHash ? `tab-${tabHash}` : `tab-${defaultTabId}`,
+    onValueChange: ({ next }) => {
+      goto(`#${next.replace('tab-', '')}`);
+      return next;
+    }
   });
 
+  // Setup tab context to keep track of tabs and content
   let tabs = writable([]);
-
   let tabContext = { tabs, content };
   setContext('tabs', tabContext);
 </script>
@@ -32,12 +55,13 @@
   class:has-tabs={typeof $tabs !== 'undefined' && $tabs.length}
 >
   <div {...$list} use:list class="tab-list">
-    {#each $tabs as tab, index}
-      <button {...$trigger(`tab-${index}`)} use:trigger class="trigger relative">
-        {tab}
+    {#each $tabs as tab}
+      <button {...$trigger(`tab-${tab.id}`)} use:trigger class="trigger relative">
+        {tab.label}
       </button>
     {/each}
   </div>
+
   <slot />
 </div>
 
