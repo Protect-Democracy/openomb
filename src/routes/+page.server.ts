@@ -10,7 +10,7 @@ export async function load() {
 
     // Most of the defaults are good for the homepage
     pageMeta: {
-      title: undefined,
+      title: 'OpenOMB | Tracking apportionments just got easier',
       description: undefined,
       keywords: undefined,
       includeSearch: true

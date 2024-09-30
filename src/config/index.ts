@@ -6,7 +6,7 @@ export const deployedBaseUrl = 'https://openomb.org';
 export const isBeta = true;
 export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';
-export const siteDescription = `OpenOMB is the easiest way to find and track apportionments. Apportionments are legally binding plans issued by the White House Office of Management and Budget that set the pace at which federal agencies may spend appropriated funds. They specify what funds may be spent, when, and subject to what conditions.`;
+export const siteDescription = `OpenOMB is the easiest way to find and track apportionments. Apportionments are legally binding plans issued by the White House Office of Management and Budget that set the pace at which federal agencies may spend appropriated funds. OpenOMB's database makes apportionments easy to find and track.`;
 export const siteKeywords = [
   'OMB',
   'apportionments',
