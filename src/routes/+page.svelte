@@ -176,6 +176,28 @@
         width: 100%;
       }
     }
+
+    /* "Apportionments" is a long word that breaks the page on small screens. */
+    @media (max-width: 400px) {
+      h1 {
+        font-size: calc(var(--font-size-xxlarge) * 0.92);
+      }
+    }
+    @media (max-width: 375px) {
+      h1 {
+        font-size: calc(var(--font-size-xxlarge) * 0.89);
+      }
+    }
+    @media (max-width: 350px) {
+      h1 {
+        font-size: calc(var(--font-size-xxlarge) * 0.8);
+      }
+    }
+    @media (max-width: 320px) {
+      h1 {
+        font-size: calc(var(--font-size-xxlarge) * 0.7);
+      }
+    }
   }
 
   .intro-visual {
@@ -215,7 +237,7 @@
 
     .summary-intro {
       flex-grow: 1;
-      flex-basis: 33.3333%;
+      flex-basis: 50%;
 
       @media (max-width: 1024px) {
         & {
@@ -231,7 +253,7 @@
 
     .summary-list {
       flex-grow: 1;
-      flex-basis: 66.66666%;
+      flex-basis: 50%;
 
       @media (max-width: 1024px) {
         & {

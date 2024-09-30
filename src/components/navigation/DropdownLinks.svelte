@@ -80,6 +80,10 @@
   .menu-item {
     padding: var(--spacing-half);
     text-align: center;
+
+    a {
+      font-size: var(--font-size-small);
+    }
   }
 
   button .inline-icon {
