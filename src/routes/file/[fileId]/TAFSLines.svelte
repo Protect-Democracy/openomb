@@ -85,7 +85,7 @@
           <th colspan="2" class="previous-highlight"
             >Previously approved (Iteration {prevIterationTafs.iteration})</th
           >
-          <th colspan="2">Current OMB Action (Iteration {currentTafs.iteration})</th>
+          <th colspan="2">Current OMB action (Iteration {currentTafs.iteration})</th>
         </tr>
       {/if}
 
@@ -323,12 +323,24 @@
   .currency-column {
     text-align: right;
     padding-right: var(--spacing-double);
+
+    @media (max-width: 1000px) {
+      & {
+        padding-right: var(--spacing);
+      }
+    }
   }
 
   .missing-line-column {
     color: var(--color-previous-unchecked);
     text-align: right;
     padding-right: var(--spacing-double);
+
+    @media (max-width: 1000px) {
+      & {
+        padding-right: var(--spacing);
+      }
+    }
   }
 
   tr.total {
