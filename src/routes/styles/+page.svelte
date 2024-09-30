@@ -313,53 +313,58 @@
 
   <h3>Switch</h3>
 
-  <button class="button-switch" aria-pressed="true">
+  <p>
+    For accessible toggles, utilize <code>aria-checked="true"</code> or
+    <code>aria-checked="false"</code> and <code>role="switch"</code>.
+  </p>
+
+  <button class="button-switch" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch" aria-pressed="false">
+  <button class="button-switch" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch alt" aria-pressed="false">
+  <button class="button-switch alt" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch alt" aria-pressed="true">
+  <button class="button-switch alt" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch data" aria-pressed="false">
+  <button class="button-switch data" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch data" aria-pressed="true">
+  <button class="button-switch data" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
   </button>
 
   <br />
 
-  <button class="button-switch small" aria-pressed="true">
+  <button class="button-switch small" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch small" aria-pressed="false">
+  <button class="button-switch small" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch alt small" aria-pressed="false">
+  <button class="button-switch alt small" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch alt small" aria-pressed="true">
+  <button class="button-switch alt small" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch data small" aria-pressed="false">
+  <button class="button-switch previous small" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
   </button>
 
-  <button class="button-switch data small" aria-pressed="true">
+  <button class="button-switch previous small" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
   </button>
 

@@ -216,11 +216,11 @@ a.button.button-switch {
     border: var(--border-weight) solid var(--color-primary);
   }
 
-  &[aria-pressed='true'] {
+  &[aria-checked='true'] {
     background-color: var(--color-primary);
   }
 
-  &[aria-pressed='true'] .button-switch-slider {
+  &[aria-checked='true'] .button-switch-slider {
     transform: translate(calc(var(--local-width) - var(--local-height)));
   }
 
@@ -237,25 +237,25 @@ a.button.button-switch {
     border-color: var(--color-blue);
   }
 
-  &[aria-pressed='false'].alt {
+  &[aria-checked='false'].alt {
     background-color: var(--color-blue-light);
   }
 
-  &[aria-pressed='true'].alt {
+  &[aria-checked='true'].alt {
     background-color: var(--color-blue);
   }
 
-  /* Data switch */
-  &.data .button-switch-slider {
-    border-color: var(--color-orange-dark);
+  /* Previous switch */
+  &.previous .button-switch-slider {
+    border-color: var(--color-previous-checked);
   }
 
-  &[aria-pressed='false'].data {
-    background-color: var(--color-orange-light);
+  &[aria-checked='false'].previous {
+    background-color: var(--color-previous-unchecked);
   }
 
-  &[aria-pressed='true'].data {
-    background-color: var(--color-orange-dark);
+  &[aria-checked='true'].previous {
+    background-color: var(--color-previous-checked);
   }
 }
 
