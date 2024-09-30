@@ -32,14 +32,15 @@ const cspDirectives = {
   'connect-src': ['self', 'https://*.sentry.io', 'https://www.google-analytics.com/'],
   'img-src': ['self', 'data:'],
   'frame-src': ['self', 'https://www.youtube.com/embed/'],
-  'worker-src': ['self'],
+  // Blob seems a bit dangerous here, but SvelteKit wants to load a blob as worker.
+  'worker-src': ['self', 'blob:'],
   // Note: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri
   // https://docs.sentry.io/product/security-policy-reporting/#content-security-policy
   //
   // In theory we should add a `report-to` directive here, but then that requires a separate
   // `Report-To` header.  SvelteKit does not support this automatically so we would have to put that
   // header in another part of the application.  That coupled with the fact that report-uri is actually
-  // more supported (though deprecated) means we aren't going to do report-to  right now.
+  // more supported (though deprecated) means we aren't going to do report-to right now.
   'report-uri': sentrySvelteReportUri ? [sentrySvelteReportUri] : undefined
 };
 
