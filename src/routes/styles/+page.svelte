@@ -67,6 +67,10 @@
   ];
 </script>
 
+<svelte:head>
+  <meta name="robots" content="noindex,follow" />
+</svelte:head>
+
 <div class="page-container content-container">
   <h1>Style guide</h1>
 

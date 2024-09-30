@@ -4,7 +4,9 @@ export async function GET() {
   return new Response(
     `
 User-agent: *
-Disallow: /
+
+Disallow: /examples
+Disallow: /styles
 
 Sitemap: ${deployedBaseUrl}/sitemap.xml
     `.trim(),

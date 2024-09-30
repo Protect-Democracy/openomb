@@ -4,6 +4,10 @@
   export let data: PageData;
 </script>
 
+<svelte:head>
+  <meta name="robots" content="noindex,follow" />
+</svelte:head>
+
 <div class="page-container content-container">
   <h2>Examples</h2>
 
