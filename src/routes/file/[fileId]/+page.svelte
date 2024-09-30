@@ -18,6 +18,7 @@
 
   // Derived
   $: ({ file, prevIterationFiles } = data);
+  $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = uniqBy(
     reduce(
       Object.values(prevIterationFiles),
@@ -31,21 +32,25 @@
   $: ({ tafs, footnotes } = file);
 </script>
 
-<article class="page-container content-container">
+<article class="page-container content-container" class:has-previous={hasPreviousFiles}>
   <h1 class="h2">
     <span>{formatFileTitle(file)}</span>
   </h1>
 
-  <Metadata {file} />
-
-  <div class="previous-toggle">
-    <Switch
-      id="file-show-previous"
-      checked={showPrevious}
-      label={`${$showPrevious ? 'Hide' : 'Show'} previous iterations`}
-      variant="previous small"
-    />
+  <div class="metadata-container">
+    <Metadata {file} />
   </div>
+
+  {#if hasPreviousFiles}
+    <div class="previous-toggle">
+      <Switch
+        id="file-show-previous"
+        checked={showPrevious}
+        label={`${$showPrevious ? 'Hide' : 'Show'} previous iterations`}
+        variant="previous small"
+      />
+    </div>
+  {/if}
 
   <section>
     <h2 class="sr-only">Schedules</h2>
@@ -110,6 +115,14 @@
 </article>
 
 <style>
+  .metadata-container {
+    margin-bottom: var(--spacing-large);
+  }
+
+  .has-previous .metadata-container {
+    margin-bottom: 0;
+  }
+
   .tafs-section {
     margin-bottom: var(--spacing-large);
   }
