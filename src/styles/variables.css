@@ -53,6 +53,13 @@
   --color-secondary-hover-text: var(--color-text-inverse);
   --color-secondary-hover-border: transparent;
 
+  --color-previous: var(--color-yellow-darker);
+  --color-previous-text: var(--color-text-inverse);
+  --color-previous-hover: var(--color-yellow-light);
+  --color-previous-hover-text: var(--color-text);
+  --color-previous-checked: var(--color-yellow-darker);
+  --color-previous-unchecked: var(--color-yellow-light);
+
   /* Unsure of semantic name for this */
   --color-alt: var(--color-gray-dark);
   --color-alt-text: var(--color-text-inverse);
@@ -104,6 +111,7 @@
 
   --border-radius: calc(var(--spacing) * 2 / 3);
   --border-radius-small: calc(var(--spacing) * 1 / 3);
+  --border-radius-full: 9999px;
   --border-weight: var(--spacing-thin);
   --border-weight-thin: calc(var(--spacing-thin) / 2);
 
