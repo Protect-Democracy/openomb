@@ -193,7 +193,7 @@
                 : ''} (Previous):
             </th>
 
-            <td colspan="3">
+            <td colspan="5">
               {#each prevIterationLine.footnotes as footnote}
                 <p>
                   <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
@@ -213,7 +213,7 @@
                 ? ` (${currentIterationLine.lineSplit})`
                 : ''}{showingPrevious ? ' (Current)' : ''}:
             </th>
-            <td colspan="3">
+            <td colspan={showingPrevious ? 5 : 3}>
               {#each currentIterationLine.footnotes as footnote}
                 <p>
                   <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
@@ -242,7 +242,7 @@
                 {/if}
               </div></th
             >
-            <td colspan="3">
+            <td colspan={showingPrevious ? 5 : 3}>
               <div transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}>
                 {#each prevIterationLine.footnotes as footnote}
                   <p>
@@ -273,7 +273,7 @@
                 {/if}
               </div></th
             >
-            <td colspan="3">
+            <td colspan={showingPrevious ? 5 : 3}>
               <div transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}>
                 {#each currentIterationLine.footnotes as footnote}
                   <p>
