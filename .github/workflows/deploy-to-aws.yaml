@@ -59,10 +59,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
+          # Set a latest for default/main branch, and a tag with the commit sha
           tags: |
-            # set latest tag for main branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-            # set tag to the long commit code
+            type=raw,value=latest,enable={{is_default_branch}}
             type=sha,format=long
 
       - name: Build and push Docker image
