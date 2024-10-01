@@ -2,6 +2,10 @@ import { deployedBaseUrl } from '$config';
 import { mAllFiles } from '$queries/files';
 
 export async function GET() {
+  // TODO: Google is not picking up this file (see Search Console).  It is within the
+  // sitemap limits for Google, so maybe the issue is that it takes too long to generate.
+  // Should be split up into multiple sitemaps.
+  // https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
   const files = (await mAllFiles()) || [];
 
   const urls = files.map((f) => {
