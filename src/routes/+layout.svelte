@@ -137,37 +137,36 @@
 
 <header>
   <div class="page-container">
-    <div class="header-inner">
-      <h1><a href="/">{siteName}</a></h1>
-      <nav>
-        <ul>
+    <nav>
+      <a class="h1 home" href="/">{siteName}<span class="sr-only"> Home</span></a>
+
+      <ul>
+        <li>
+          <a class:active={$url.pathname === '/search'} href="/search">Search</a>
+        </li>
+        <li>
+          <DropdownLinks
+            title="Explore Agencies"
+            fallbackHref="/explore"
+            links={[
+              { title: 'All Agencies', href: '/explore' },
+              { title: 'CFO/CIO Act Agencies', href: '/folders' }
+            ]}
+          />
+        </li>
+        <li>
+          <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
+        </li>
+        <li>
+          <a class:active={$url.pathname === '/about'} href="/about">About</a>
+        </li>
+        {#if !isProduction()}
           <li>
-            <a class:active={$url.pathname === '/search'} href="/search">Search</a>
+            <a href="/examples">Examples</a>
           </li>
-          <li>
-            <DropdownLinks
-              title="Explore Agencies"
-              fallbackHref="/explore"
-              links={[
-                { title: 'All Agencies', href: '/explore' },
-                { title: 'CFO/CIO Act Agencies', href: '/folders' }
-              ]}
-            />
-          </li>
-          <li>
-            <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
-          </li>
-          <li>
-            <a class:active={$url.pathname === '/about'} href="/about">About</a>
-          </li>
-          {#if !isProduction()}
-            <li>
-              <a href="/examples">Examples</a>
-            </li>
-          {/if}
-        </ul>
-      </nav>
-    </div>
+        {/if}
+      </ul>
+    </nav>
   </div>
 </header>
 
@@ -220,7 +219,7 @@
     border-bottom: var(--border-weight) solid var(--color-black);
   }
 
-  .header-inner {
+  nav {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -228,39 +227,37 @@
     padding: var(--spacing-double) 0;
   }
 
-  h1 {
+  .home {
     font-size: 1.25rem;
     padding: 0;
     margin: 0;
-  }
 
-  h1 a {
-    color: var(--color-text);
+    a {
+      color: var(--color-text);
+    }
   }
-
   nav {
-    padding: 0;
-  }
+    padding: var(--spacing-double) 0;
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
 
-  .header-inner nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+    li {
+      margin-left: var(--spacing-double);
+    }
 
-  .header-inner nav li {
-    margin-left: var(--spacing-double);
-  }
+    a {
+      color: var(--color-text);
+      font-weight: var(--font-copy-weight-bolder);
+    }
 
-  nav a {
-    color: var(--color-text);
-    font-weight: var(--font-copy-weight-bolder);
-  }
-
-  nav a.active {
-    text-decoration: underline;
+    a.active {
+      text-decoration: underline;
+    }
   }
 
   /* This caused some weird behavior on the About page.
