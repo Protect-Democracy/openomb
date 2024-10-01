@@ -7,9 +7,14 @@
 </script>
 
 <div class="page-container content-container">
-  <h1>Folders</h1>
+  <h1>CFO/CIO Act Agencies</h1>
 
-  <p>The complete list of all top-level folders that apportionment files are found in.</p>
+  <p>
+    The list below contains folders of apportionments for CFO/CIO Act Agencies, as well as a folder
+    for other independent agencies. This folder structure mirrors the structure of <acronym
+      title="Office of Management and Budget">OMB</acronym
+    >&apos;s apportionment website.
+  </p>
 
   <ul>
     {#each folders as folder, fIndex}

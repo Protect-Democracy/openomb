@@ -5,7 +5,7 @@ export async function load() {
   return {
     folders: await folders(),
     pageMeta: {
-      title: `Folders`
+      title: `CFO/CIO Act Agencies (Folders)`
     }
   };
 }

@@ -57,7 +57,9 @@
     has made available on
     <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
       >apportionment-public.max.gov</a
-    >.
+    >. (For accounts with multiple account-specific apportionments in a given fiscal year, OpenOMB
+    has recreated the &ldquo;Previous Approved&rdquo; and &ldquo;Prev Footnote&rdquo; columns based
+    on the data OMB disclosed in the prior apportionment.)
   </p>
 
   <p>
