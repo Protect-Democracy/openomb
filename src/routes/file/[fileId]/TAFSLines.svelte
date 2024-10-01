@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sortBy, forEach } from 'lodash-es';
+  import { sortBy, forEach, maxBy } from 'lodash-es';
   import { slide } from 'svelte/transition';
   import { formatCurrency } from '$lib/formatters';
   import { prefersReducedMotion } from '$lib/utilities';
@@ -45,6 +45,10 @@
 
   // Derived
   $: showingPrevious = showPrevious && !!prevIterationTafs;
+  $: isLatestIteration =
+    currentTafs &&
+    currentTafs.iterations &&
+    currentTafs.iteration === maxBy(currentTafs.iterations, 'iteration').iteration;
 
   // Reactivity
   $: {
@@ -83,9 +87,12 @@
         <tr class="iteration-header">
           <th colspan="3"></th>
           <th colspan="2" class="previous-highlight"
-            >Previously approved (Iteration {prevIterationTafs.iteration})</th
+            >Previously Approved (Iteration {prevIterationTafs.iteration})</th
           >
-          <th colspan="2">Current OMB action (Iteration {currentTafs.iteration})</th>
+          <th colspan="2">
+            {#if isLatestIteration}Current{/if}
+            OMB Action (Iteration {currentTafs.iteration})
+          </th>
         </tr>
       {/if}
 

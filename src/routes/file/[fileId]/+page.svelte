@@ -46,7 +46,7 @@
       <Switch
         id="file-show-previous"
         checked={showPrevious}
-        label={`${$showPrevious ? 'Hide' : 'Show'} previous iterations`}
+        label={`${$showPrevious ? 'Hide' : 'Show'} previous iteration`}
         variant="previous small"
       />
     </div>
