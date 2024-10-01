@@ -90,7 +90,7 @@
       {/if}
 
       <tr class="data-header">
-        <th>Line #</th>
+        <th>Line&nbsp;#</th>
         <th>Split</th>
         <th>Description</th>
         {#if showingPrevious}
@@ -183,7 +183,7 @@
 
         {#if showingPrevious && prevIterationLine && prevIterationLine.footnotes && prevIterationLine.footnotes.length > 0}
           <tr
-            class="footnote-row no-js-only-table-row"
+            class="footnote-row no-js-only-table-row previous-footnote"
             id="inline-footnotes-{prevIterationTafs.tafsTableId}-{prevIterationLine.lineIndex}"
           >
             <th colspan="2" scope="row">
@@ -226,7 +226,7 @@
         {#if prevIterationTafs && prevIterationLine && prevIterationLine.footnotes && prevIterationLine.footnotes.length > 0 && footnotesExpanded[`${prevIterationTafs.tafsTableId}-${prevIterationLine.lineIndex}`]}
           <!-- TODO: TRs don't care about height and so slide() transition does not work on them.  Tried creating a custom transition that managed max-height, but that did not work.  Adding transition to inner elements here works, but its a bit jumpy with the tr thing.  -->
           <tr
-            class="footnote-row has-js-only-table-row"
+            class="footnote-row has-js-only-table-row previous-footnote"
             id="inline-footnotes-{prevIterationTafs.tafsTableId}-{prevIterationLine.lineIndex}"
           >
             <th colspan="2" scope="row">
@@ -311,15 +311,6 @@
     margin: 0;
   }
 
-  table thead {
-    /* TODO: .responsive-table element seems to mess with this */
-    position: sticky;
-    top: 0;
-    background-color: var(--color-background);
-    /* TODO: This does not come through when sticky; it is set as the default too */
-    border-bottom: var(--border-weight) solid var(--color-text);
-  }
-
   .currency-column {
     text-align: right;
     padding-right: var(--spacing-double);
@@ -332,7 +323,7 @@
   }
 
   .missing-line-column {
-    color: var(--color-previous-unchecked);
+    color: var(--color-previous-checked);
     text-align: right;
     padding-right: var(--spacing-double);
 
@@ -365,12 +356,15 @@
     .iteration-header {
       text-align: center;
     }
+    thead tr.iteration-header th {
+      padding-bottom: var(--spacing-small);
+      padding-top: var(--spacing-small);
+    }
 
     thead tr.iteration-header th:nth-child(2) {
       border-left: var(--border-weight) solid var(--color-previous-checked);
       border-top: var(--border-weight) solid var(--color-previous-checked);
       border-right: var(--border-weight) solid var(--color-previous-checked);
-      padding-bottom: var(--spacing-small);
     }
 
     thead tr.data-header th:nth-child(4),
@@ -395,6 +389,10 @@
         border-bottom: var(--border-weight) solid var(--color-previous-checked);
       }
     }
+  }
+
+  .previous-footnote th {
+    background-color: var(--color-previous-unchecked);
   }
 
   .previous-highlight {
