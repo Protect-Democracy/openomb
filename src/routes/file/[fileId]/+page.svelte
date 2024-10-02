@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { uniqBy, reduce } from 'lodash-es';
+  import { uniqBy, orderBy, reduce } from 'lodash-es';
   import { writable } from 'svelte/store';
   import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
@@ -19,15 +19,18 @@
   // Derived
   $: ({ file, prevIterationFiles } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
-  $: prevIterationFootnotes = uniqBy(
-    reduce(
-      Object.values(prevIterationFiles),
-      (accum, iterFile) => {
-        return [...accum, ...(iterFile.footnotes || [])];
-      },
-      []
+  $: prevIterationFootnotes = orderBy(
+    uniqBy(
+      reduce(
+        Object.values(prevIterationFiles),
+        (accum, iterFile) => {
+          return [...accum, ...(iterFile.footnotes || [])];
+        },
+        []
+      ),
+      (f) => `${f.fileId}-${f.footnoteNumber}`
     ),
-    ['footnoteNumber', 'footnoteText']
+    ['fileId', 'footnoteNumber']
   );
   $: ({ tafs, footnotes } = file);
 </script>
@@ -100,7 +103,8 @@
       <p class="previous-iteration-footnotes-desc">
         The following are all of the footnotes associated with the <span
           class="previous-highlight-text">previous iteration of this file</span
-        >. Note that previous iterations of a file make come from multiple files.
+        >. Note that previous iterations of accounts in this file may come from multiple previous
+        files.
       </p>
 
       {#if prevIterationFootnotes.length}
@@ -139,6 +143,8 @@
 
   .previous-highlight-text {
     display: inline-block;
-    border-bottom: var(--border-weight) solid var(--color-previous-checked);
+    padding-left: var(--spacing-tiny);
+    padding-right: var(--spacing-tiny);
+    background-color: var(--color-previous-unchecked);
   }
 </style>
