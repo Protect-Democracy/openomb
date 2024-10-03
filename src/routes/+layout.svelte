@@ -160,7 +160,7 @@
         <li>
           <a class:active={$url.pathname === '/about'} href="/about">About</a>
         </li>
-        {#if !isProduction()}
+        {#if !productionCheck}
           <li>
             <a href="/examples">Examples</a>
           </li>
@@ -231,10 +231,7 @@
     font-size: 1.25rem;
     padding: 0;
     margin: 0;
-
-    a {
-      color: var(--color-text);
-    }
+    color: var(--color-text);
   }
   nav {
     padding: var(--spacing-double) 0;
@@ -248,6 +245,11 @@
 
     li {
       margin-left: var(--spacing-double);
+      @media (max-width: 768px) {
+        & {
+          margin-left: var(--spacing);
+        }
+      }
     }
 
     a {
@@ -344,20 +346,9 @@
       margin: 0 auto;
       text-align: center;
     }
-
-    a {
-      color: var(--color-text);
-      text-decoration: underline;
-    }
   }
 
   .beta {
     background: var(--color-blue-light);
-  }
-
-  @media (max-width: 768px) {
-    .header-inner nav li {
-      margin-left: var(--spacing);
-    }
   }
 </style>

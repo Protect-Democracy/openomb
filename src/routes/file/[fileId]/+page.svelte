@@ -115,6 +115,17 @@
     {/if}
   </section>
 
+  <section class="page-footnotes">
+    <h2 class="sr-only">Notes about this page</h2>
+
+    <ul>
+      <li id="page-footnote-funds">
+        &dagger; Links to public laws are automatically generated and are not guaranteed to be
+        accurate.
+      </li>
+    </ul>
+  </section>
+
   <ScrollToTop />
 </article>
 
@@ -146,5 +157,16 @@
     padding-left: var(--spacing-tiny);
     padding-right: var(--spacing-tiny);
     background-color: var(--color-previous-unchecked);
+  }
+
+  .page-footnotes {
+    padding-top: var(--spacing-large);
+    font-size: var(--font-size-small);
+
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+    }
   }
 </style>

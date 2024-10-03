@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { uniqBy } from 'lodash-es';
-  import { formatDate } from '$lib/formatters';
+  import { uniqBy, isString } from 'lodash-es';
+  import { formatDate, deconstructLaws } from '$lib/formatters';
+  import ExternalLink from '$components/links/ExternalLink.svelte';
 
   // Props
   export let file;
@@ -14,6 +15,7 @@
     })),
     'id'
   );
+  $: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
 </script>
 
 <div class="file-metadata">
@@ -61,9 +63,19 @@
     </li>
 
     <li class="grid-value grid-span-2">
-      <strong>Funds provided by<span class="sr-only">:</span></strong>
+      <strong
+        >Funds provided by <a href="#page-footnote-funds">&dagger;</a><span class="sr-only">:</span
+        ></strong
+      >
       <span>
-        {file.fundsProvidedByParsed}
+        {#each fundsParts as part}
+          {#if isString(part)}
+            {part}{' '}
+          {:else}
+            {part.pre || ''}<ExternalLink url={part.url}>{part.text}</ExternalLink>{part.post ||
+              ''}{' '}
+          {/if}
+        {/each}
       </span>
     </li>
   </ul>

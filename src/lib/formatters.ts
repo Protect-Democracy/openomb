@@ -182,3 +182,49 @@ export const highlightOrder = function (
     ['asc', 'asc']
   );
 };
+
+/**
+ * Link laws in text.
+ */
+export const linkLaws = function (text?: string): string {
+  if (!text) {
+    return '';
+  }
+
+  return text.replace(
+    /(\s|^)([0-9]{3})-([0-9]+)(\s|$|,)/g,
+    '$1<a href="https://www.congress.gov/$2/plaws/publ$3/PLAW-$2publ$3.pdf" target="_blank" rel="noopener noreferrer">$2-$3</a>$4'
+  );
+};
+
+/**
+ * Deconstruct text and link laws.
+ *
+ * Turn into an array of strings or objects so that we can use in
+ * the client and utilize logic.
+ */
+export const deconstructLaws = function (text?: string): Array<string | object> {
+  if (!text) {
+    return [];
+  }
+
+  // Search regex
+  const lawSearch = /(.*)([0-9]{3})-([0-9]+)(.*)/;
+
+  // Turn into array
+  const split = text.split(/\s+/);
+
+  return split.map((text) => {
+    const found = text.match(lawSearch);
+    if (found) {
+      return {
+        url: `https://www.congress.gov/${found[2]}/plaws/publ${found[3]}/PLAW-${found[2]}publ${found[3]}.pdf`,
+        text: `${found[2]}-${found[3]}`,
+        pre: found[1],
+        post: found[4]
+      };
+    }
+
+    return text;
+  });
+};
