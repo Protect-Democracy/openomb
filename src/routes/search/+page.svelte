@@ -261,6 +261,18 @@
     margin-bottom: var(--spacing-double);
   }
 
+  @media (max-width: 600px) {
+    .results :global(.tab-list) {
+      padding-left: var(--spacing-tiny);
+      padding-left: var(--spacing-tiny);
+    }
+
+    .results :global(.tab-list button) {
+      padding-left: var(--spacing);
+      padding-right: var(--spacing);
+    }
+  }
+
   .account-list {
     display: flex;
     flex-wrap: wrap;
