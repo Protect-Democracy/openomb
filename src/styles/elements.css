@@ -102,6 +102,7 @@ h6,
   padding-top: var(--spacing);
   margin-top: 0;
   margin-bottom: var(--spacing);
+  word-break: break-word;
 }
 
 h1,
