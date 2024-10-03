@@ -32,8 +32,9 @@ const cspDirectives = {
   'connect-src': ['self', 'https://*.sentry.io', 'https://www.google-analytics.com/'],
   'img-src': ['self', 'data:'],
   'frame-src': ['self', 'https://www.youtube.com/embed/'],
-  // Blob seems a bit dangerous here, but SvelteKit wants to load a blob as worker.
+  // Blob seems a bit dangerous here, but SvelteKit and Sentry want to load a blob as worker.
   'worker-src': ['self', 'blob:'],
+  'child-src': ['self', 'blob:'],
   // Note: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri
   // https://docs.sentry.io/product/security-policy-reporting/#content-security-policy
   //
