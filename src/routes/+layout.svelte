@@ -232,6 +232,7 @@
     padding: 0;
     margin: 0;
     color: var(--color-text);
+    word-break: normal;
   }
   nav {
     padding: var(--spacing-double) 0;
