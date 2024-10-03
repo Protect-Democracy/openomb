@@ -34,6 +34,7 @@
     border-bottom: var(--border-weight) solid var(--color-text);
     margin: 0;
     padding: var(--spacing) 0;
+    word-break: break-word;
   }
 
   .approval-file {
