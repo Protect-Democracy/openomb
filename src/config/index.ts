@@ -3,7 +3,7 @@
  */
 
 import horizontalSocialImage from '$assets/social/OpenOMB-Share-Horiz.png';
-import squareSocialImage from '$assets/social/OpenOMB-Share-Squarish.png';
+//import squareSocialImage from '$assets/social/OpenOMB-Share-Squarish.png';
 
 export const deployedBaseUrl = 'https://openomb.org';
 export const isBeta = true;
@@ -25,7 +25,7 @@ export const collectionHour = 2;
 export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
 export const cacheRevalidateSeconds = 60 * 3;
-export const socialOgImgPath = squareSocialImage;
+export const socialOgImgPath = horizontalSocialImage;
 export const socialOgImgWidth = 940;
 export const socialOgImgHeight = 788;
 export const socialTwitterCard = 'summary_large_image';
