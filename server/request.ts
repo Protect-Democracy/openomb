@@ -170,7 +170,7 @@ async function fetchWithRetries(
       console.error(`fetchWithRetries failure [Attempt ${i}] (${error}) for "${fetchResource}"`);
     }
 
-    if (response.status < 300) {
+    if (response && response.status < 300) {
       return response;
     }
 
