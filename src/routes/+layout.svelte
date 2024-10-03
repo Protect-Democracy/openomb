@@ -350,5 +350,10 @@
 
   .beta {
     background: var(--color-blue-light);
+    color: var(--color-text-inverse);
+
+    a {
+      color: var(--color-text-inverse);
+    }
   }
 </style>
