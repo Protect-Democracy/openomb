@@ -96,21 +96,27 @@
     </div>
 
     <div class="field">
-      <label for="approvedDateRange">Approved date range</label>
-      <div class="date-fields">
+      <label id="approved-date-range-label" for="approved-date-range">Approved date range</label>
+      <div
+        id="approved-date-range"
+        class="date-fields"
+        role="group"
+        aria-labelledby="approved-date-range-label"
+      >
         <input
-          id="approvedDateRange"
+          id="approvedStart"
           name="approvedStart"
           type="date"
           value={url.searchParams.get('approvedStart')}
         />
+
         <span class="date-through">
           <span class="sr-only">Through</span>
           <span role="img" aria-label="Dash symbol" aria-hidden="true">-</span>
         </span>
 
         <input
-          id="approvedDateRange"
+          id="approvedEnd"
           name="approvedEnd"
           type="date"
           value={url.searchParams.get('approvedEnd')}
@@ -189,6 +195,12 @@
   .date-fields {
     display: flex;
     column-gap: var(--spacing-half);
+
+    @media (max-width: 400px) {
+      & {
+        flex-wrap: wrap;
+      }
+    }
   }
 
   .date-fields input {
