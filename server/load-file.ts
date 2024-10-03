@@ -300,6 +300,7 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
   // https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20Defense/PDF/FY2023_Department%20of%20Defense_Apportionment_2022-09-30.pdf
   // https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20Health%20and%20Human%20Services/PDF/FY2023_Department%20of%20Health%20and%20Human%20Services_Apportionment_2022-09-30.pdf
   // https://apportionment-public.max.gov/Fiscal%20Year%202022/Department%20of%20Education/PDF/FY2022_Department%20of%20Education%202022-07-13.pdf
+  // https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf
   const urlPath = decodeURI(pdfUrl)
     .replace(env.baseUrl, '')
     .replace(/\.pdf$/, '');
@@ -307,13 +308,13 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
   const fiscalYear = parts[0].replace('Fiscal Year ', '');
   const fileName = parts[parts.length - 1].replace(/\s+/g, '_').trim();
 
-  const approvalDateMatch = fileName.match(/.*_(\d{4}-\d{2}-\d{2})$/);
+  const approvalDateMatch = fileName.match(/.*_(\d{4}[-_]\d{2}[-_]\d{2})$/);
   if (!approvalDateMatch) {
     throw new Error(`Approval date not found in file name | URL: ${pdfUrl}`);
   }
-  const approvalDate = new Date(approvalDateMatch[1]);
+  const approvalDate = new Date(approvalDateMatch[1].replace(/[-_]/g, '-'));
 
-  const folderMatch = fileName.match(/^FY\d{4}_(.*)_\d{4}-\d{2}-\d{2}$/);
+  const folderMatch = fileName.match(/^FY\d{4}_(.*)_\d{4}[-_]\d{2}[-_]\d{2}$/);
   if (!folderMatch) {
     throw new Error(`Folder not found in file name | URL: ${pdfUrl}`);
   }
