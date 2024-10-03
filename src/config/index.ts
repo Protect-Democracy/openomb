@@ -2,6 +2,9 @@
  * Config for the application that are valid on both server and client.
  */
 
+import horizontalSocialImage from '$assets/social/OpenOMB-Share-Horiz.png';
+import squareSocialImage from '$assets/social/OpenOMB-Share-Squarish.png';
+
 export const deployedBaseUrl = 'https://openomb.org';
 export const isBeta = true;
 export const siteName = 'OpenOMB';
@@ -22,13 +25,13 @@ export const collectionHour = 2;
 export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
 export const cacheRevalidateSeconds = 60 * 3;
-export const socialOgImgPath = '/og.png';
-export const socialOgImgWidth = 1200;
-export const socialOgImgHeight = 630;
+export const socialOgImgPath = squareSocialImage;
+export const socialOgImgWidth = 940;
+export const socialOgImgHeight = 788;
 export const socialTwitterCard = 'summary_large_image';
 export const socialTwitterSite = '@protctdemocracy';
 export const socialTwitterCreator = '@protctdemocracy';
-export const socialTwitterImgPath = '/twitter.png';
+export const socialTwitterImgPath = horizontalSocialImage;
 export const googleAnalyticsId = 'G-Y5NJ2S21X5';
 export const securityHeaders = {
   // Security headers
