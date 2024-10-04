@@ -134,36 +134,35 @@
                   <span class:zero-amount={!prevIterationLine.approvedAmount}>
                     {formatCurrency(prevIterationLine.approvedAmount)}
                   </span>
-
-                  {#if change}
-                    <br />
-                    <span class="previous-highlight-text font-small">
-                      {change > 0 ? '+' : ''}{formatCurrency(change)}
-                    </span>
-                  {/if}
                 </td>
               {:else if currentIterationLine && !prevIterationLine}
                 <td class="missing-line-column">
                   <span class="sr-only">Line added</span>&mdash;
-
-                  {#if change}
-                    <br />
-                    <span class="previous-highlight-text font-small">
-                      {change > 0 ? '+' : ''}{formatCurrency(change)}
-                    </span>
-                  {/if}
                 </td>
               {/if}
             {/if}
 
             {#if currentIterationLine}
               <td class="currency-column">
+                {#if change}
+                  <span class="previous-highlight-text font-small">
+                    {change > 0 ? '+' : ''}{formatCurrency(change)}
+                  </span>
+                  <br />
+                {/if}
+
                 <span class:zero-amount={!currentIterationLine.approvedAmount}>
                   {formatCurrency(currentIterationLine.approvedAmount)}
                 </span>
               </td>
             {:else if showingPrevious && !currentIterationLine}
               <td class="missing-line-column">
+                {#if change}
+                  <span class="previous-highlight-text font-small">
+                    {change > 0 ? '+' : ''}{formatCurrency(change)}
+                  </span>
+                  <br />
+                {/if}
                 <span class="sr-only">Line removed</span>&mdash;
               </td>
             {/if}
@@ -314,6 +313,10 @@
     margin: 0;
   }
 
+  tbody tr:hover {
+    background-color: var(--color-gray-lightest);
+  }
+
   .currency-column {
     text-align: right;
     padding-right: var(--spacing-double);
@@ -326,7 +329,7 @@
   }
 
   .has-previous .has-change .currency-column {
-    vertical-align: top;
+    vertical-align: bottom;
   }
 
   .zero-amount {
@@ -345,7 +348,7 @@
     }
   }
 
-  tr.total {
+  tbody tr.total {
     font-weight: bold;
     background-color: var(--color-gray-lighter);
     border-bottom: calc(var(--border-weight) * 2) double var(--color-text);
