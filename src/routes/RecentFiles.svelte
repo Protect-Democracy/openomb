@@ -43,6 +43,12 @@
     display: block;
   }
 
+  .approval-date {
+    text-align: right;
+    min-width: 15em;
+    margin-left: var(--spacing);
+  }
+
   .folder {
     display: block;
     font-size: var(--font-size-small);
@@ -69,6 +75,7 @@
     .approval-date {
       width: 100%;
       text-align: right;
+      margin-left: 0;
     }
   }
 </style>
