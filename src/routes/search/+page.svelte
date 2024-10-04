@@ -49,6 +49,8 @@
   $: hasAccountResults = accounts && accounts.length > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
   // TODO: Maybe be more specific about how we determine if search has been done.
+  // If someone does a blank search on the landing page, then only the term is
+  // present in the URL.
   $: hasSearched = hasSearchParams && $url.searchParams.toString() !== 'term=';
   $: currentFilesPage = $url.searchParams.get('page') ? Number($url.searchParams.get('page')) : 1;
   $: currentAccountsPage = $url.searchParams.get('accountPage')
@@ -99,7 +101,7 @@
     </div>
   </div>
 
-  {#if hasFileResults || hasAccountResults}
+  {#if hasSearched}
     <div class="results" id="results">
       <div id="file-results"></div>
       <div id="account-results"></div>
@@ -148,7 +150,7 @@
                 anchor="file-results"
               />
             </div>
-          {:else if hasSearched}
+          {:else}
             <div class="page-container">
               <h2>Files</h2>
 
@@ -205,7 +207,7 @@
                 anchor="account-results"
               />
             </div>
-          {:else if hasSearched}
+          {:else}
             <div class="page-container">
               <h2>Accounts</h2>
 
