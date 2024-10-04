@@ -20,6 +20,7 @@ import {
   dbId
 } from './utilities';
 import { db } from '../db/connection';
+import pdfFixes from '../data/fixes/pdf-files';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {
@@ -314,11 +315,7 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
   }
   const approvalDate = new Date(approvalDateMatch[1].replace(/[-_]/g, '-'));
 
-  const folderMatch = fileName.match(/^FY\d{4}_(.*)_\d{4}[-_]\d{2}[-_]\d{2}$/);
-  if (!folderMatch) {
-    throw new Error(`Folder not found in file name | URL: ${pdfUrl}`);
-  }
-  const folder = folderMatch[1].replace(/_/g, ' ').trim();
+  const folder = parts[1].replace(/_/g, ' ').trim();
 
   // Create file record
   const fileRecord = {
@@ -334,6 +331,11 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
     modifiedAt: new Date(),
     removed: false
   };
+
+  // Handle any fixes
+  if (pdfFixes[pdfUrl]) {
+    Object.assign(fileRecord, pdfFixes[pdfUrl]);
+  }
 
   // Upsert file
   const records = await db
