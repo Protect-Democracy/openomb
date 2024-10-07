@@ -27,8 +27,10 @@ export const load = async ({ url, cookies }) => {
   // Values we will only get when a search is done
   let formattedSearchParams, fileCount, fileResults, accountCount, accountResults;
 
-  // Only perform our search once the form is submitted
-  if (url.searchParams.toString().length) {
+  // Only perform our search once the form is submitted.  From the landing page, an
+  // empty query is in the form ?term= so we don't need to perform a search.
+  const searchString = url.searchParams.toString();
+  if (searchString && searchString !== 'term=') {
     // Get our arguments for our search queries.
     //
     // Note: Make sure to update the values in search/+page.svelte if the arguments
