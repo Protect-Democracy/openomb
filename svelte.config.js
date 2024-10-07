@@ -20,6 +20,7 @@ const cspDirectives = {
     'self',
     'https://browser.sentry-cdn.com',
     'https://js.sentry-cdn.com',
+    'https://cdnjs.cloudflare.com/polyfill/',
     'https://www.googletagmanager.com',
     'nonce-SENTRY_SCRIPT_SETUP',
     'nonce-PROGRESSIVE_JS_CHECK',

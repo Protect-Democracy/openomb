@@ -111,6 +111,11 @@
   <meta name="google-site-verification" content="Mly0FuXK91GFL2wY9XGyO7Po4w7VaZwiSZgfpgeeqSk" />
   <meta name="msvalidate.01" content="C7881E834C48F63E2DA9E7ABB3CBFE75" />
 
+  <!-- Polyfill via Cloudflare -->
+  <script
+    src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=es2017"
+  ></script>
+
   {#if googleAnalyticsId}
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5NJ2S21X5"></script>
   {/if}
