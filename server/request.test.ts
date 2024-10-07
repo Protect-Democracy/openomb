@@ -74,6 +74,16 @@ test('request() basic fetch', async () => {
   expect(scrape.meta.response.status).toEqual(200);
 });
 
+test('request() error type mismatch', async () => {
+  const url = 'https://apportionment-public.max.gov/';
+  const data = '<not parsable json>';
+  (fetch as Mock).mockResolvedValue(mockFetch(data));
+
+  expect(async () => {
+    await request(url, {}, { cacheDir: testCacheDir, expectedType: 'json' });
+  }).rejects.toThrowError(/.*not a function.*/);
+});
+
 test('request() use cache', async () => {
   const url = 'https://apportionment-public.max.gov/';
   const data = 'test';

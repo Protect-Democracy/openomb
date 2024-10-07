@@ -3,13 +3,14 @@
  */
 
 // Dependencies
+import { captureException } from '@sentry/node';
+import { groupBy } from 'lodash-es';
 import { eq } from 'drizzle-orm';
 import { request, urlExists } from './request';
 import { files, computeFundsProvidedByParsed } from '../db/schema/files';
 import { lines, computeLineType } from '../db/schema/lines';
 import { footnotes } from '../db/schema/footnotes';
 import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '../db/schema/tafs';
-import { groupBy } from 'lodash-es';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -69,10 +70,24 @@ const env = environmentVariables();
  * Load an apportionment file into the database.
  */
 // @todo - figure out how to get around sentry data limits to profile this (separate into transactions?)
-async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert> {
-  // Get the file
-  const fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries: 5 });
-  const sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
+async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert | undefined> {
+  // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
+  // completely stop the process.
+  let fileResponse;
+  let sourceData;
+  try {
+    fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries: 5 });
+    sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
+  }
+  catch (error) {
+    const e = new Error(
+      `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error?.message || error}`
+    );
+    e.name = 'LoadJsonFileError';
+    console.error(e);
+    captureException(e);
+    return;
+  }
 
   // Check response
   if (
@@ -278,9 +293,22 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert>
  * we simply make a basic entry in the DB using data from
  * the URL.
  */
-async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert> {
-  // Get the file
-  const fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries: 5 });
+async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | undefined> {
+  // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
+  // completely stop the process.
+  let fileResponse;
+  try {
+    fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries: 5 });
+  }
+  catch (error) {
+    const e = new Error(
+      `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
+    );
+    e.name = 'LoadJsonFileError';
+    console.error(e);
+    captureException(e);
+    return;
+  }
 
   // Check response
   if (

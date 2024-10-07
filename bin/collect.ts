@@ -126,7 +126,9 @@ async function cli(): Promise<void> {
     await createSpan('loadJsonFile[]', async () => {
       for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
         const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
-        fileIds.push(fileRecord.fileId);
+        if (fileRecord) {
+          fileIds.push(fileRecord.fileId);
+        }
         if (options.showProgress) {
           progress.updateTask(jsonProgressMessage, {
             percentage: (urlIndex + 1) / jsonUrls.length
@@ -146,7 +148,9 @@ async function cli(): Promise<void> {
     await createSpan('loadPdfFile[]', async () => {
       for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
         const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
-        fileIds.push(fileRecord.fileId);
+        if (fileRecord) {
+          fileIds.push(fileRecord.fileId);
+        }
         if (options.showProgress) {
           progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
         }
