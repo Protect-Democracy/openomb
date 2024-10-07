@@ -1,5 +1,6 @@
 import type { Dataset, Organization, Thing, WebPage, WithContext } from 'schema-dts';
 import { siteName, siteDescription, siteKeywords, deployedBaseUrl } from '$config';
+import { isArray } from 'lodash-es';
 import { formatFileTitle, formatTafsFormattedId } from './formatters';
 import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
@@ -104,5 +105,16 @@ export function fileSchema(
 }
 
 export function formatJsonLdScript(schema: Schema) {
+  // Need the @context
+  if (isArray(schema)) {
+    schema = {
+      '@context': 'http://schema.org',
+      '@graph': schema
+    };
+  }
+  else {
+    schema['@context'] = 'https://schema.org';
+  }
+
   return `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;
 }
