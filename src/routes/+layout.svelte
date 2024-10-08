@@ -42,6 +42,7 @@
   // Constants
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
+  console.log($url.pathname);
   const productionCheck = isProduction();
   const betaCheck = isBeta;
 
@@ -66,7 +67,11 @@
 <svelte:head>
   <!-- Unsure why this throws an error since it works.  See: https://github.com/sveltejs/eslint-plugin-svelte/issues/652 -->
   <!-- eslint-disable svelte/valid-compile -->
-  <title>{$pageMeta.title ? `${$pageMeta.title} | ` : ''}{siteName}</title>
+  <title
+    >{$url.pathname === '/'
+      ? $pageMeta.title
+      : `${$pageMeta.title || '(untitled)'} | ${siteName}`}</title
+  >
 
   <meta name="author" content={$pageMeta.author || siteAuthor} />
   <meta name="description" content={$pageMeta.description || siteDescription} />
