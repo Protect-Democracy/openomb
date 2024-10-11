@@ -1,4 +1,12 @@
-import type { Dataset, Organization, Thing, WebPage, WithContext } from 'schema-dts';
+import type {
+  Dataset,
+  Organization,
+  Thing,
+  WebPage,
+  WithContext,
+  GovernmentOrganization,
+  SearchAction
+} from 'schema-dts';
 import { siteName, siteDescription, siteKeywords, deployedBaseUrl } from '$config';
 import { isArray } from 'lodash-es';
 import { formatFileTitle, formatTafsFormattedId } from './formatters';
@@ -6,39 +14,65 @@ import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
 import pdLogo from '$assets/logos/pd-white-words-logo.svg';
 
+// General schema handler
 type Schema = Thing | WithContext<Thing>;
 
+// Constants
+const ombSchema: GovernmentOrganization = {
+  '@type': 'GovernmentOrganization',
+  name: 'Office of Management and Budget',
+  url: 'https://www.whitehouse.gov/omb/'
+};
+
+const pdSchema: Organization = {
+  '@type': 'Organization',
+  '@id': 'https://protectdemocracy.org/#organization',
+  name: 'Protect Democracy',
+  logo: {
+    '@type': 'ImageObject',
+    image: `${deployedBaseUrl}${pdLogo}`,
+    caption: 'Protect Democracy logo'
+  },
+  nonprofitStatus: 'https://schema.org/Nonprofit501c3',
+  url: 'https://protectdemocracy.org/'
+};
+
+const searchAction: SearchAction = {
+  '@type': 'SearchAction',
+  target: `${deployedBaseUrl}search?term={query}`,
+  query: 'required'
+};
+
+/**
+ * Generates schema for project/homepage
+ */
 export function projectSchema(): Organization {
   return {
     '@type': 'Project',
     name: siteName,
-    parentOrganization: {
-      '@type': 'EducationalOrganization',
-      name: 'Protect Democracy',
-      logo: {
-        '@type': 'ImageObject',
-        image: pdLogo,
-        caption: 'Protect Democracy'
-      },
-      nonprofitStatus: 'https://schema.org/Nonprofit501c3',
-      url: 'https://protectdemocracy.org/'
-    },
+    parentOrganization: pdSchema,
     description: siteDescription,
-    keywords: siteKeywords
+    keywords: siteKeywords,
+    potentialAction: [searchAction]
   };
 }
 
+/**
+ * Generates schema for general pages
+ */
 export function pageSchema(data: {
   title?: string;
   description?: string;
   breadcrumbs?: Array<{ title: string; url: string }>;
   includeSearch?: boolean;
 }): WebPage {
+  // https://schema.org/WebPage
   const schema: WebPage = {
     '@type': 'WebPage',
     name: data?.title || siteName,
     description: data?.description || siteDescription,
-    provider: projectSchema()
+    author: projectSchema(),
+    inLanguage: 'en-US'
   };
 
   if (data?.breadcrumbs?.length) {
@@ -55,32 +89,37 @@ export function pageSchema(data: {
   }
 
   if (data?.includeSearch) {
-    schema.potentialAction = {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${deployedBaseUrl}/search?term={search_term_string}`
-      },
-      query: 'required name=search_term_string'
-    };
+    schema.potentialAction = [searchAction];
   }
 
   return schema;
 }
 
+/**
+ * Generates schema for File pages
+ */
 export function fileSchema(
   file: filesSelect & {
     tafs?: Array<tafsSelect>;
   }
 ): Dataset {
+  // https://developers.google.com/search/docs/appearance/structured-data/dataset
+  // https://schema.org/Dataset
   const schema: Dataset = {
     '@type': 'Dataset',
+    '@id': `${deployedBaseUrl}/file/${file.fileId}`,
     name: formatFileTitle(file) || file.fileId,
     description: `Apportionment file ${file.fileId} retrieved from OMB public records`,
     url: `${deployedBaseUrl}/file/${file.fileId}`,
-    sameAs: [file.sourceUrl],
-    creator: 'https://apportionment-public.max.gov/',
-    maintainer: projectSchema(),
+    author: projectSchema(),
+    // https://github.com/schemaorg/schemaorg/issues/2311
+    isBasedOn: {
+      '@type': 'Dataset',
+      name: file.sourceUrl,
+      url: file.sourceUrl,
+      maintainer: ombSchema
+    },
+    license: 'https://creativecommons.org/publicdomain/zero/1.0/',
     isAccessibleForFree: true,
     inLanguage: 'en-US',
     datePublished: file.approvalTimestamp?.toISOString(),
@@ -105,7 +144,7 @@ export function fileSchema(
 }
 
 export function formatJsonLdScript(schema: Schema) {
-  // Need the @context
+  // Need the @context, and Safari doesn't like top-level arrays.
   if (isArray(schema)) {
     schema = {
       '@context': 'http://schema.org',
