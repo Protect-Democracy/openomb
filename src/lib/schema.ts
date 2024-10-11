@@ -133,13 +133,6 @@ export function fileSchema(
     }))
   };
 
-  if (file.excelUrl) {
-    (schema.sameAs as Array<string>).push(file.excelUrl);
-  }
-  if (file.pdfUrl) {
-    (schema.sameAs as Array<string>).push(file.pdfUrl);
-  }
-
   return schema;
 }
 

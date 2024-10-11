@@ -42,7 +42,6 @@
   // Constants
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
-  console.log($url.pathname);
   const productionCheck = isProduction();
   const betaCheck = isBeta;
 
