@@ -172,7 +172,7 @@
             <aside class="result-actions-wrapper">
               <div class="result-actions page-container">
                 <ResultCount
-                  countLabel="counts"
+                  countLabel="accounts"
                   count={accountCount}
                   currentPage={currentAccountsPage}
                   pageSize={accountPageSize}
