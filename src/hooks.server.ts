@@ -11,8 +11,8 @@ if (env.sentrySvelteDsn) {
   Sentry.init({
     dsn: env.sentrySvelteDsn,
     environment: env.environment,
-    tracesSampleRate: 1,
-    profilesSampleRate: 1,
+    tracesSampleRate: 0.2,
+    profilesSampleRate: 0.2,
     integrations: [nodeProfilingIntegration()]
   });
 }
