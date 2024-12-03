@@ -22,7 +22,7 @@
   <ul class="grid-values">
     <li class="grid-value">
       <strong>File ID<span class="sr-only">:</span></strong>
-      <span>{file.fileId}</span>
+      <span class="file-id-value">{file.fileId}</span>
     </li>
 
     <li class="grid-value">
@@ -187,5 +187,9 @@
         min-width: auto;
       }
     }
+  }
+
+  .file-id-value {
+    word-break: break-all;
   }
 </style>

@@ -32,7 +32,12 @@ const cspDirectives = {
   'font-src': ['self'],
   'connect-src': ['self', 'https://*.sentry.io', 'https://www.google-analytics.com/'],
   'img-src': ['self', 'data:'],
-  'frame-src': ['self', 'https://www.youtube.com/embed/'],
+  'frame-src': [
+    'self',
+    'https://www.youtube.com/embed/',
+    'https://apportionment-public.max.gov/',
+    'https://pdfobject.com/'
+  ],
   // Blob seems a bit dangerous here, but SvelteKit and Sentry want to load a blob as worker.
   'worker-src': ['self', 'blob:'],
   'child-src': ['self', 'blob:'],

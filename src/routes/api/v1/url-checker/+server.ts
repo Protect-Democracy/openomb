@@ -3,7 +3,8 @@ import { json } from '@sveltejs/kit';
 import { mUrlIsReachable } from '../../../../../server/urls';
 
 /**
- * Health endpoint
+ * Url Checker endpoint.  Used internally to check if a URL is
+ * reachable so that we can only create links to valid URLs.
  */
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {

@@ -9,6 +9,7 @@
   import Metadata from './Metadata.svelte';
   import TAFSMeta from './TAFSMeta.svelte';
   import FootnoteTable from './FootnoteTable.svelte';
+  import LetterApportionmentPreview from './LetterApportionmentPreview.svelte';
 
   // Props
   export let data: PageData;
@@ -17,6 +18,7 @@
   let showPrevious = writable(true);
 
   // Derived
+  $: letterApportionment = !!file.pdfUrl;
   $: ({ file, prevIterationFiles } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = orderBy(
@@ -44,6 +46,12 @@
     <Metadata {file} />
   </div>
 
+  {#if letterApportionment}
+    <h2>Apportionment letter</h2>
+
+    <LetterApportionmentPreview {file} />
+  {/if}
+
   {#if hasPreviousFiles}
     <div class="previous-toggle">
       <Switch
@@ -56,9 +64,9 @@
   {/if}
 
   <section>
-    <h2 class="sr-only">Schedules</h2>
-
     {#if tafs?.length}
+      <h2 class="sr-only">Schedules</h2>
+
       {#each tafs as tafsGroup}
         {@const prevIterationTafs = prevIterationFiles[tafsGroup.tafsTableId]?.tafs?.find(
           (taf) => taf.tafsId === tafsGroup.tafsId
@@ -77,6 +85,8 @@
         </section>
       {/each}
     {:else}
+      <h2>Schedules</h2>
+
       <p><em>No schedule information available.</em></p>
     {/if}
   </section>
