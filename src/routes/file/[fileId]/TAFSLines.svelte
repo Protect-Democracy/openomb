@@ -144,7 +144,7 @@
 
             {#if currentIterationLine}
               <td class="currency-column">
-                {#if change}
+                {#if change && showingPrevious}
                   <span class="previous-highlight-text font-small">
                     {change > 0 ? '+' : ''}{formatCurrency(change)}
                   </span>
