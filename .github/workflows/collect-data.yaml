@@ -88,4 +88,4 @@ jobs:
       - name: Run ECS collect task
         shell: bash
         run: |
-          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE --tags Key=Name,Value=apportionments-collect-all
+          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE --tags key=Name,value=apportionments-collect-all
