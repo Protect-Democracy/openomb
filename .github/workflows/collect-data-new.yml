@@ -1,9 +1,10 @@
-# Collects data from OMB website and saves the results to S3 and Aurora DB
-# Runs on a schedule (see below)
+# Collects recen data from OMB website and saves the results to DB.
+# Note that this only runs the recent updates and the full data collection
+# and archive to S3 should be done separately.
 #
-# This one collects all data (updates existing data) and creates archive.
+# Runs on a schedule (see below)
 
-name: Collect data (Full)
+name: Collect data (New)
 
 on:
   # Unforutately, Github Actions does not support timezone setting
@@ -14,7 +15,7 @@ on:
   # it run a few hours before the header cache time (currently 5AM New_York).
   # 6AM UTC = 2AM EDT
   schedule:
-    - cron: '0 6 * * 0'
+    - cron: '0 6 * * 1-6'
   workflow_dispatch:
 
 env:
@@ -88,4 +89,4 @@ jobs:
       - name: Run ECS collect task
         shell: bash
         run: |
-          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE
+          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE --overrides '{ "containerOverrides": [{ "name": "apportionments-collect-new", "command": ["build-collect/collect.js", "--new-records-only"] }]}'

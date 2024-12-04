@@ -12,6 +12,7 @@ import chalk from 'chalk';
 import { db } from '../db/connection';
 import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
+import type { filesSelect } from '../db/schema/files';
 import { request } from '../server/request';
 import { loadJsonFile, loadPdfFile } from '../server/load-file';
 import {
@@ -45,6 +46,10 @@ async function cli(): Promise<void> {
   program
     .version(packageJson.version)
     .description('Collect OMB data')
+    .option(
+      '--new-records-only',
+      'Only collect new records.  This will skip any archiving of the data.'
+    )
     .option('--no-collection', 'Do not do collection/scraping of data.')
     .option('--no-archive', 'Do not zip and archive to S3.')
     .option('--show-progress', 'Show progress of collection.')
@@ -52,6 +57,11 @@ async function cli(): Promise<void> {
   const options = program.opts();
 
   console.info(`Started data collection - ${new Date()}`);
+
+  // If new records only, don't archive
+  if (options.newRecordsOnly) {
+    options.archive = false;
+  }
 
   // If we are going to archive, let's check that we can connect to S3
   if (options.archive) {
@@ -74,7 +84,7 @@ async function cli(): Promise<void> {
 
   // Create timestamp and id for this run
   const start = new Date();
-  const collectionId = `omb-${start.toISOString()}`;
+  const collectionId = `omb-${options.newRecordsOnly ? 'new-records-only' : 'full'}-${start.toISOString()}`;
 
   // Setup progress bars
   let progress;
@@ -122,13 +132,26 @@ async function cli(): Promise<void> {
     // Load JSON files
     const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
 
-    // Go through each URL and collect data
+    // Go through each JSON URL and collect data
     await createSpan('loadJsonFile[]', async () => {
       for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
-        const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
-        if (fileRecord) {
-          fileIds.push(fileRecord.fileId);
+        // If new records only, check if file exists
+        let existingRecord;
+        if (options.newRecordsOnly) {
+          existingRecord = await findFileBySourceUrl(jsonUrls[urlIndex]);
+          if (existingRecord) {
+            fileIds.push(existingRecord.fileId);
+          }
         }
+
+        // Add new record
+        if (!existingRecord) {
+          const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
+          if (fileRecord) {
+            fileIds.push(fileRecord.fileId);
+          }
+        }
+
         if (options.showProgress) {
           progress.updateTask(jsonProgressMessage, {
             percentage: (urlIndex + 1) / jsonUrls.length
@@ -147,10 +170,23 @@ async function cli(): Promise<void> {
     // Go through each URL and collect data
     await createSpan('loadPdfFile[]', async () => {
       for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
-        const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
-        if (fileRecord) {
-          fileIds.push(fileRecord.fileId);
+        // If new records only, check if file exists
+        let existingRecord;
+        if (options.newRecordsOnly) {
+          existingRecord = await findFileBySourceUrl(pdfUrls[urlIndex]);
+          if (existingRecord) {
+            fileIds.push(existingRecord.fileId);
+          }
         }
+
+        // Add new record
+        if (!existingRecord) {
+          const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
+          if (fileRecord) {
+            fileIds.push(fileRecord.fileId);
+          }
+        }
+
         if (options.showProgress) {
           progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
         }
@@ -184,6 +220,7 @@ async function cli(): Promise<void> {
     }
   }
 
+  // Don't archive if only getting new records
   if (options.archive) {
     // Archive progress
     const archiveProgressMessage = 'Archiving data';
@@ -242,4 +279,17 @@ async function apportionmentList(): Promise<string[]> {
 
     return unique(links);
   });
+}
+
+/**
+ * Check database for existing record by source URL.
+ *
+ * @param sourceUrl Source URL to check for
+ * @returns Existing record or null
+ */
+async function findFileBySourceUrl(sourceUrl: string): Promise<filesSelect | null> {
+  const existingRecords = await db.query.files.findFirst({
+    where: eq(files.sourceUrl, sourceUrl)
+  });
+  return existingRecords ? existingRecords : null;
 }
