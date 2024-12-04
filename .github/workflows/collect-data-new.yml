@@ -1,7 +1,8 @@
-# Collects data from OMB website and saves the results to S3 and Aurora DB
-# Runs on a schedule (see below)
+# Collects recen data from OMB website and saves the results to DB.
+# Note that this only runs the recent updates and the full data collection
+# and archive to S3 should be done separately.
 #
-# This one just adds new data.
+# Runs on a schedule (see below)
 
 name: Collect data (New)
 
