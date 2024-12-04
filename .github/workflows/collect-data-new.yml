@@ -86,7 +86,15 @@ jobs:
         run: |
           echo "AWS_NETWORK_CONFIG=${{ steps.aws_run_task_network_config.outputs.stdout }}" >> "$GITHUB_ENV"
 
+      - name: Get container name
+        id: aws_container_name
+        run: |
+          aws describe-container-instances --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --container-instances "${{ env.AWS_CONTAINER_INSTANCE_ARN }}" --query 'containerInstances[0].runningTasks[0].containers[0].name' --output text
+      - name: Set container name
+        run: |
+          echo "AWS_CONTAINER_NAME=${{ steps.aws_container_name.outputs.stdout }}" >> "$GITHUB_ENV"
+
       - name: Run ECS collect task
         shell: bash
         run: |
-          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE --overrides '{ "containerOverrides": [{ "command": ["build-collect/collect.js", "--new-records-only"] }]}'
+          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE --overrides '{ "containerOverrides": [{ "name": "${{ env.AWS_CONTAINER_NAME }}", "command": ["build-collect/collect.js", "--new-records-only"] }]}'
