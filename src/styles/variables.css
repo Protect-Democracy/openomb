@@ -5,6 +5,7 @@
 :root {
   --color-white: #ffffff;
   --color-black: #000000;
+  --color-gray-lightest: #f1eeea;
   --color-gray-lighter: #dbd4cb;
   --color-gray-light: #c2bcb3;
   --color-gray-medium: #787878;
@@ -101,6 +102,7 @@
   --line-height: 1.5;
   --line-height-small: 1.2;
   --base-font-size: 16px;
+  --font-size-tiny: 0.5rem;
   --font-size-small: 0.8rem;
   --font-size-regular: 1rem;
   --font-size-slight: 1.15rem;
