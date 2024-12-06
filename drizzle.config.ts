@@ -8,8 +8,8 @@ const env = environmentVariables();
 export default {
   schema: './db/schema/*.ts',
   out: './db/migrations',
-  driver: 'pg',
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: env.dbUri
+    url: env.dbUri
   }
 } satisfies Config;

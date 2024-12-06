@@ -13,7 +13,7 @@ import {
   integer,
   foreignKey
 } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { lines } from './lines';
 import { files } from './files';
 
@@ -85,11 +85,8 @@ export const footnotes = pgTable(
       fileFootnoteIndex: index('fn_file_footnote_index').on(
         footnotes.fileId,
         footnotes.footnoteNumber
-      )
-      // TODO: It looks like Drizzle doesn't support full-text/GIN indexes
-      // which is what is appropriate here.
-      // https://github.com/drizzle-team/drizzle-orm/issues/247
-      //footnoteText: index('footnote_text_index').on(footnotes.footnoteText)
+      ),
+      footnoteTextIndex: index('footnote_text_index').using('gin', sql`footnote_text gin_trgm_ops`)
     };
   }
 );

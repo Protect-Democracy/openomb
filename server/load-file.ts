@@ -6,6 +6,7 @@
 import { captureException } from '@sentry/node';
 import { groupBy } from 'lodash-es';
 import { eq } from 'drizzle-orm';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { request, urlExists } from './request';
 import { files, computeFundsProvidedByParsed } from '../db/schema/files';
 import { lines, computeLineType } from '../db/schema/lines';
@@ -304,7 +305,7 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | 
     const e = new Error(
       `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
     );
-    e.name = 'LoadJsonFileError';
+    e.name = 'LoadPdfFileError';
     console.error(e);
     captureException(e);
     return;
@@ -359,6 +360,21 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | 
     modifiedAt: new Date(),
     removed: false
   };
+
+  // Read text from PDF
+  try {
+    fileRecord.sourceText = await readPdfText(pdfUrl);
+  }
+  catch (error) {
+    const e = new Error(
+      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${error?.message || error}`
+    );
+    e.name = 'ParsePdfFileError';
+    console.error(e);
+    captureException(e);
+
+    // It's ok if we don't get the PDF text ??
+  }
 
   // Handle any fixes
   if (pdfFixes[pdfUrl]) {
@@ -466,6 +482,36 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
     .filter((f) => !!f)
     .map((f) => f.trim().toUpperCase());
   return footnoteNumbers.length > 0 ? footnoteNumbers : null;
+}
+
+/**
+ * Get text from PDF file.
+ *
+ * @param url URL to read from
+ * @returns
+ */
+async function readPdfText(url: string): Promise<string> {
+  // Download the file
+  const data = await fetch(url).then(async (response) => await response.arrayBuffer());
+
+  // Load doc
+  const doc = await pdfjsLib.getDocument({ data }).promise;
+
+  // Get text from all pages
+  const pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
+    return (await (await doc.getPage(i + 1)).getTextContent()).items
+      .map((token) => token.str)
+      .join(' ');
+  });
+
+  // Put together
+  let fullText = (await Promise.all(pageTexts)).join(' \n ');
+
+  // TODO: Some additional processing to clean up text
+  fullText = fullText.replace(/[^\S\r\n]+/g, ' ').trim();
+  console.log(fullText);
+
+  return fullText;
 }
 
 export { loadJsonFile, loadPdfFile };

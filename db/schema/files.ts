@@ -4,7 +4,7 @@
 
 // Dependencies
 import { integer, pgTable, index, varchar, timestamp, boolean, text } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { tafs } from './tafs';
 import { lines } from './lines';
 import { footnotes } from './footnotes';
@@ -44,6 +44,7 @@ export const files = pgTable(
     pdfUrl: varchar('pdf_url'),
     sourceUrl: varchar('source_url').notNull(),
     sourceData: text('source_data'),
+    sourceText: text('source_text'),
     createdAt: timestamp('created_at').defaultNow(),
     modifiedAt: timestamp('modified_at').defaultNow(),
     removed: boolean('removed').default(false)
@@ -67,7 +68,8 @@ export const files = pgTable(
       sourceUrlIndex: index('file_source_url_index').on(files.sourceUrl),
       removedIndex: index('file_removed_index').on(files.removed),
       createdAtIndex: index('file_created_at_index').on(files.createdAt),
-      modifiedAtIndex: index('file_modified_at_index').on(files.modifiedAt)
+      modifiedAtIndex: index('file_modified_at_index').on(files.modifiedAt),
+      sourceTextIndex: index('file_source_text_index').using('gin', sql`source_text gin_trgm_ops`)
     };
   }
 );

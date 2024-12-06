@@ -1,4 +1,6 @@
 {
+  "id": "b446793f-c379-45e4-9493-c5b80e6d173a",
+  "prevId": "7f6baab4-e8f9-4ac2-95ce-792f4cf06457",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -65,6 +67,7 @@
       },
       "indexes": {
         "co_start_index": {
+          "name": "co_start_index",
           "columns": [
             {
               "expression": "start",
@@ -73,13 +76,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "co_start_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "co_complete_index": {
+          "name": "co_complete_index",
           "columns": [
             {
               "expression": "complete",
@@ -88,13 +91,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "co_complete_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "co_status_index": {
+          "name": "co_status_index",
           "columns": [
             {
               "expression": "status",
@@ -103,11 +106,10 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "co_status_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -115,18 +117,18 @@
       "uniqueConstraints": {
         "collections_start_unique": {
           "name": "collections_start_unique",
-          "columns": ["start"],
-          "nullsNotDistinct": false
+          "nullsNotDistinct": false,
+          "columns": ["start"]
         },
         "collections_complete_unique": {
           "name": "collections_complete_unique",
-          "columns": ["complete"],
-          "nullsNotDistinct": false
+          "nullsNotDistinct": false,
+          "columns": ["complete"]
         }
       },
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.files": {
       "name": "files",
@@ -216,6 +218,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "source_text": {
+          "name": "source_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -240,6 +248,7 @@
       },
       "indexes": {
         "file_file_name_index": {
+          "name": "file_file_name_index",
           "columns": [
             {
               "expression": "file_name",
@@ -248,13 +257,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_file_name_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_fiscal_year_index": {
+          "name": "file_fiscal_year_index",
           "columns": [
             {
               "expression": "fiscal_year",
@@ -263,13 +272,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_fiscal_year_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_approval_timestamp_index": {
+          "name": "file_approval_timestamp_index",
           "columns": [
             {
               "expression": "approval_timestamp",
@@ -278,13 +287,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_approval_timestamp_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_folder_index": {
+          "name": "file_folder_index",
           "columns": [
             {
               "expression": "folder",
@@ -293,13 +302,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_folder_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_folder_id_index": {
+          "name": "file_folder_id_index",
           "columns": [
             {
               "expression": "folder_id",
@@ -308,13 +317,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_folder_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_approver_title_index": {
+          "name": "file_approver_title_index",
           "columns": [
             {
               "expression": "approver_title",
@@ -323,13 +332,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_approver_title_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_approver_title_id_index": {
+          "name": "file_approver_title_id_index",
           "columns": [
             {
               "expression": "approver_title_id",
@@ -338,13 +347,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_approver_title_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_funds_provided_by_index": {
+          "name": "file_funds_provided_by_index",
           "columns": [
             {
               "expression": "funds_provided_by",
@@ -353,13 +362,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_funds_provided_by_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_funds_provided_by_parsed_index": {
+          "name": "file_funds_provided_by_parsed_index",
           "columns": [
             {
               "expression": "funds_provided_by_parsed",
@@ -368,13 +377,58 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_funds_provided_by_parsed_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "file_excel_url_index": {
+          "name": "file_excel_url_index",
+          "columns": [
+            {
+              "expression": "excel_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_pdf_url_index": {
+          "name": "file_pdf_url_index",
+          "columns": [
+            {
+              "expression": "pdf_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_source_url_index": {
+          "name": "file_source_url_index",
+          "columns": [
+            {
+              "expression": "source_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "file_removed_index": {
+          "name": "file_removed_index",
           "columns": [
             {
               "expression": "removed",
@@ -383,13 +437,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_removed_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_created_at_index": {
+          "name": "file_created_at_index",
           "columns": [
             {
               "expression": "created_at",
@@ -398,13 +452,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_created_at_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "file_modified_at_index": {
+          "name": "file_modified_at_index",
           "columns": [
             {
               "expression": "modified_at",
@@ -413,19 +467,33 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "file_modified_at_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "file_source_text_index": {
+          "name": "file_source_text_index",
+          "columns": [
+            {
+              "expression": "source_text gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
         }
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.footnotes": {
       "name": "footnotes",
@@ -472,6 +540,7 @@
       },
       "indexes": {
         "fn_file_footnote_index": {
+          "name": "fn_file_footnote_index",
           "columns": [
             {
               "expression": "file_id",
@@ -486,31 +555,45 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "fn_file_footnote_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "footnote_text_index": {
+          "name": "footnote_text_index",
+          "columns": [
+            {
+              "expression": "footnote_text gin_trgm_ops",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
         }
       },
       "foreignKeys": {
         "footnotes_file_id_files_file_id_fk": {
           "name": "footnotes_file_id_files_file_id_fk",
           "tableFrom": "footnotes",
-          "columnsFrom": ["file_id"],
           "tableTo": "files",
+          "columnsFrom": ["file_id"],
           "columnsTo": ["file_id"],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "footnotes_file_id_line_index_lines_file_id_line_index_fk": {
           "name": "footnotes_file_id_line_index_lines_file_id_line_index_fk",
           "tableFrom": "footnotes",
-          "columnsFrom": ["file_id", "line_index"],
           "tableTo": "lines",
+          "columnsFrom": ["file_id", "line_index"],
           "columnsTo": ["file_id", "line_index"],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -521,8 +604,8 @@
       },
       "uniqueConstraints": {},
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.lines": {
       "name": "lines",
@@ -594,6 +677,7 @@
       },
       "indexes": {
         "line_line_number_index": {
+          "name": "line_line_number_index",
           "columns": [
             {
               "expression": "line_number",
@@ -602,13 +686,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "line_line_number_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "line_line_split_index": {
+          "name": "line_line_split_index",
           "columns": [
             {
               "expression": "line_split",
@@ -617,13 +701,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "line_line_split_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "line_line_description_index": {
+          "name": "line_line_description_index",
           "columns": [
             {
               "expression": "line_description",
@@ -632,13 +716,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "line_line_description_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "line_approved_amount_index": {
+          "name": "line_approved_amount_index",
           "columns": [
             {
               "expression": "approved_amount",
@@ -647,31 +731,30 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "line_approved_amount_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "lines_tafs_table_id_tafs_tafs_table_id_fk": {
           "name": "lines_tafs_table_id_tafs_tafs_table_id_fk",
           "tableFrom": "lines",
-          "columnsFrom": ["tafs_table_id"],
           "tableTo": "tafs",
+          "columnsFrom": ["tafs_table_id"],
           "columnsTo": ["tafs_table_id"],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         },
         "lines_file_id_files_file_id_fk": {
           "name": "lines_file_id_files_file_id_fk",
           "tableFrom": "lines",
-          "columnsFrom": ["file_id"],
           "tableTo": "files",
+          "columnsFrom": ["file_id"],
           "columnsTo": ["file_id"],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -683,13 +766,13 @@
       "uniqueConstraints": {
         "lines_file_id_line_index_unique": {
           "name": "lines_file_id_line_index_unique",
-          "columns": ["file_id", "line_index"],
-          "nullsNotDistinct": false
+          "nullsNotDistinct": false,
+          "columns": ["file_id", "line_index"]
         }
       },
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     },
     "public.tafs": {
       "name": "tafs",
@@ -850,6 +933,7 @@
       },
       "indexes": {
         "tafs_cgac_agency_index": {
+          "name": "tafs_cgac_agency_index",
           "columns": [
             {
               "expression": "cgac_agency",
@@ -858,13 +942,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_cgac_agency_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_cgac_acct_index": {
+          "name": "tafs_cgac_acct_index",
           "columns": [
             {
               "expression": "cgac_acct",
@@ -873,13 +957,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_cgac_acct_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_allocation_agency_code_index": {
+          "name": "tafs_allocation_agency_code_index",
           "columns": [
             {
               "expression": "allocation_agency_code",
@@ -888,13 +972,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_allocation_agency_code_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_allocation_subacct_index": {
+          "name": "tafs_allocation_subacct_index",
           "columns": [
             {
               "expression": "allocation_subacct",
@@ -903,13 +987,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_allocation_subacct_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_account_id_index": {
+          "name": "tafs_account_id_index",
           "columns": [
             {
               "expression": "account_id",
@@ -918,13 +1002,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_account_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_budget_agency_title_index": {
+          "name": "tafs_budget_agency_title_index",
           "columns": [
             {
               "expression": "budget_agency_title",
@@ -933,13 +1017,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_budget_agency_title_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_budget_bureau_title_index": {
+          "name": "tafs_budget_bureau_title_index",
           "columns": [
             {
               "expression": "budget_bureau_title",
@@ -948,13 +1032,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_budget_bureau_title_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_account_title_index": {
+          "name": "tafs_account_title_index",
           "columns": [
             {
               "expression": "account_title",
@@ -963,13 +1047,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_account_title_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_iteration_description_index": {
+          "name": "tafs_iteration_description_index",
           "columns": [
             {
               "expression": "iteration_description",
@@ -978,13 +1062,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_iteration_description_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_budget_agency_title_id_index": {
+          "name": "tafs_budget_agency_title_id_index",
           "columns": [
             {
               "expression": "budget_agency_title_id",
@@ -993,13 +1077,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_budget_agency_title_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_budget_bureau_title_id_index": {
+          "name": "tafs_budget_bureau_title_id_index",
           "columns": [
             {
               "expression": "budget_bureau_title_id",
@@ -1008,13 +1092,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_budget_bureau_title_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_account_title_id_index": {
+          "name": "tafs_account_title_id_index",
           "columns": [
             {
               "expression": "account_title_id",
@@ -1023,13 +1107,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_account_title_id_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_rpt_cat_index": {
+          "name": "tafs_rpt_cat_index",
           "columns": [
             {
               "expression": "rpt_cat",
@@ -1038,13 +1122,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_rpt_cat_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_adj_aut_index": {
+          "name": "tafs_adj_aut_index",
           "columns": [
             {
               "expression": "adj_aut",
@@ -1053,13 +1137,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_adj_aut_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_created_at_index": {
+          "name": "tafs_created_at_index",
           "columns": [
             {
               "expression": "created_at",
@@ -1068,13 +1152,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_created_at_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "tafs_modified_at_index": {
+          "name": "tafs_modified_at_index",
           "columns": [
             {
               "expression": "modified_at",
@@ -1083,22 +1167,21 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "tafs_modified_at_index",
           "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "tafs_file_id_files_file_id_fk": {
           "name": "tafs_file_id_files_file_id_fk",
           "tableFrom": "tafs",
-          "columnsFrom": ["file_id"],
           "tableTo": "files",
+          "columnsFrom": ["file_id"],
           "columnsTo": ["file_id"],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -1110,26 +1193,24 @@
       "uniqueConstraints": {
         "tafs_tafs_table_id_unique": {
           "name": "tafs_tafs_table_id_unique",
-          "columns": ["tafs_table_id"],
-          "nullsNotDistinct": false
+          "nullsNotDistinct": false,
+          "columns": ["tafs_table_id"]
         }
       },
       "policies": {},
-      "isRLSEnabled": false,
-      "checkConstraints": {}
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {},
   "schemas": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "9ee5fdd1-82f1-47eb-9189-166724686a74",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "sequences": {},
+  "roles": {},
   "policies": {},
   "views": {},
-  "roles": {}
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
 }
