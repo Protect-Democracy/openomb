@@ -133,6 +133,13 @@
         &dagger; Links to public laws are automatically generated and are not guaranteed to be
         accurate.
       </li>
+
+      {#if letterApportionment}
+        <li id="page-footnote-file-id">
+          &Dagger; For letter apportionments, the file identifier is an internally assigned
+          identifier and not assigned by the Office of Management and Budget.
+        </li>
+      {/if}
     </ul>
   </section>
 
