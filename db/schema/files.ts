@@ -62,6 +62,9 @@ export const files = pgTable(
       fundsProvidedByParsedIndex: index('file_funds_provided_by_parsed_index').on(
         files.fundsProvidedByParsed
       ),
+      excelUrlIndex: index('file_excel_url_index').on(files.excelUrl),
+      pdfUrlIndex: index('file_pdf_url_index').on(files.pdfUrl),
+      sourceUrlIndex: index('file_source_url_index').on(files.sourceUrl),
       removedIndex: index('file_removed_index').on(files.removed),
       createdAtIndex: index('file_created_at_index').on(files.createdAt),
       modifiedAtIndex: index('file_modified_at_index').on(files.modifiedAt)
