@@ -46,6 +46,7 @@ export const load = async ({ url, cookies }) => {
       year: ga('year').join(','),
       approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
       approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
+      apportionmentType: ga('apportionmentType').join(',') || '',
       lineNum: ga('lineNum').join(','),
       footnoteNum: ga('footnoteNum').join(',')
     };

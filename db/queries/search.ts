@@ -7,6 +7,7 @@ import {
   gte,
   lte,
   isNotNull,
+  isNull,
   count,
   countDistinct,
   asc,
@@ -37,6 +38,7 @@ export type SearchParams = {
   approver: string;
   approvedStart?: Date;
   approvedEnd?: Date;
+  apportionmentType: string;
   year: string;
   lineNum: string;
   footnoteNum: string;
@@ -62,6 +64,7 @@ export type FormattedSearchParamsFields = {
   approverIds: string[];
   footnoteNumbers: string[];
   keywordTerms: string[];
+  apportionmentTypes: string[];
 };
 
 export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
@@ -135,6 +138,13 @@ export function formatSearchParams(
   const keywordTerms = (searchParams.term ? searchParams.term.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
+  const apportionmentTypes = (
+    searchParams.apportionmentType ? searchParams.apportionmentType.split(',') : []
+  )
+    .map((v) => {
+      return v.match(/letter/i) ? 'letter' : 'spreadsheet';
+    })
+    .filter((t) => !!t);
 
   const formattedSearchParams: FormattedSearchParams | FormattedSearchPaginationParams = {
     ...searchParams,
@@ -142,7 +152,8 @@ export function formatSearchParams(
     lineNumbers,
     approverIds,
     footnoteNumbers,
-    keywordTerms
+    keywordTerms,
+    apportionmentTypes
   };
 
   return formattedSearchParams;
@@ -156,7 +167,7 @@ export function formatSearchParams(
  * @param column Table column to compare against
  * @returns
  */
-function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'files') {
+function keywordSearch(keywordTerms: string[], mainTable: 'files' | 'tafs' = 'files') {
   const lineSearch = (keyword: string) => {
     if (mainTable === 'tafs') {
       return inArray(
@@ -203,7 +214,7 @@ function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'f
   // If we have keywords separated by commas, separate these and use in search
   // TODO: Is this more expensive than doing a LIKE ALL|ANY (ARRAY['%term%', '%other%', '%thing%'])
   return and(
-    ...keywordTermas.map((keyword) =>
+    ...keywordTerms.map((keyword) =>
       or(
         ilike(tafs.accountTitle, `%${keyword}%`),
         ilike(tafs.budgetAgencyTitle, `%${keyword}%`),
@@ -307,6 +318,20 @@ function generalSearchFilters(
   where.push(
     searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
   );
+
+  // Apportionemnt type.  Only need to search on a single one
+  if (
+    searchParams.apportionmentTypes.length === 1 &&
+    searchParams.apportionmentTypes[0] === 'letter'
+  ) {
+    where.push(isNotNull(files.pdfUrl));
+  }
+  if (
+    searchParams.apportionmentTypes.length === 1 &&
+    searchParams.apportionmentTypes[0] === 'spreadsheet'
+  ) {
+    where.push(isNull(files.pdfUrl));
+  }
 
   // Complete AND wheres
   const filteredWhere = where.filter((v) => !!v);

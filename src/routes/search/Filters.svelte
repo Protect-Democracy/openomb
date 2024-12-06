@@ -55,6 +55,8 @@
       return `Approved after ${formatDate(value)}`;
     } else if (key === 'approvedEnd') {
       return `Approved before ${formatDate(value)}`;
+    } else if (key === 'apportionmentType') {
+      return `Apportionment Type ${value}`;
     } else if (key === 'lineNum') {
       return `Line ${value}`;
     } else if (key === 'footnoteNum') {
