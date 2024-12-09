@@ -509,7 +509,6 @@ async function readPdfText(url: string): Promise<string> {
 
   // TODO: Some additional processing to clean up text
   fullText = fullText.replace(/[^\S\r\n]+/g, ' ').trim();
-  console.log(fullText);
 
   return fullText;
 }
