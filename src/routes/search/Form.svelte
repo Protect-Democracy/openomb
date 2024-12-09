@@ -154,7 +154,7 @@
       <CheckboxButtons
         id="apportionmentType"
         name="apportionmentType"
-        options={['Spreadsheet (Excel)', 'Letter (PDF)']}
+        options={['Standard (Excel)', 'Letter (PDF)']}
         value={url.searchParams.getAll('apportionmentType')}
         multi
       />
