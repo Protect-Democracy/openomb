@@ -80,6 +80,11 @@ export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): 
       : `${accounts[0]} and ${formatNumber(accounts.length - 1)} other account${accounts.length - 1 > 1 ? 's' : ''}`;
   }
 
+  // Letter apportionment
+  if (file?.pdfUrl && file.approvalTimestamp) {
+    return `${file.folder}, Letter Apportionment - ${formatDate(file.approvalTimestamp, 'medium')}`;
+  }
+
   // No tafs information
   return `${file.folder} - ${file.fileId}`;
 }
