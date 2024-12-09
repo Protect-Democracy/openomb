@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { uniqBy, orderBy, reduce } from 'lodash-es';
+  import { uniqBy, reduce } from 'lodash-es';
   import { writable } from 'svelte/store';
   import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
@@ -21,18 +21,15 @@
   $: letterApportionment = !!file.pdfUrl;
   $: ({ file, prevIterationFiles } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
-  $: prevIterationFootnotes = orderBy(
-    uniqBy(
-      reduce(
-        Object.values(prevIterationFiles),
-        (accum, iterFile) => {
-          return [...accum, ...(iterFile.footnotes || [])];
-        },
-        []
-      ),
-      (f) => `${f.fileId}-${f.footnoteNumber}`
+  $: prevIterationFootnotes = uniqBy(
+    reduce(
+      Object.values(prevIterationFiles),
+      (accum, iterFile) => {
+        return [...accum, ...(iterFile.footnotes || [])];
+      },
+      []
     ),
-    ['fileId', 'footnoteNumber']
+    (f) => `${f.fileId}-${f.footnoteNumber}`
   );
   $: ({ tafs, footnotes } = file);
 </script>
