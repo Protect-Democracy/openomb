@@ -4,15 +4,7 @@
 
 import { toDate, toZonedTime } from 'date-fns-tz';
 import { add as dateAdd } from 'date-fns';
-import env from '$lib/environment';
 import { collectionHour, collectionMinute, collectionTimezone } from '$config';
-
-/**
- * Determine if production using environment or vite
- *
- * @returns True if in production
- */
-export const isProduction = (): boolean => env.environment == 'production' || import.meta.env.PROD;
 
 /**
  * Get seconds to the next specific time in a timezone.

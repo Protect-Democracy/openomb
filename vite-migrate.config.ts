@@ -16,7 +16,7 @@ const dependencies = Object.keys({
 
 export default defineConfig({
   build: {
-    target: ['node18'],
+    target: ['node20'],
     // Note that this directory will get cleared out on build, so combing
     // places with other scripts is not a good idea
     outDir: 'build-migrate',

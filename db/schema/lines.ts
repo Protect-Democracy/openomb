@@ -17,6 +17,7 @@ import { relations } from 'drizzle-orm';
 import { files } from './files';
 import { tafs } from './tafs';
 import { footnotes } from './footnotes';
+import { lineTypes } from './line-types';
 
 // Table
 // {
@@ -98,7 +99,8 @@ export const lines = pgTable(
 
     // Line type defined by the line number, which is more of an ID, though
     // as a number has some help in sorting.
-    lineType: varchar('line_type'),
+    // TODO: Change this to lineTypeId
+    lineTypeId: varchar('line_type_id').references(() => lineTypes.lineTypeId),
 
     // Meta
     createdAt: timestamp('created_at').defaultNow(),
@@ -125,98 +127,8 @@ export const lines = pgTable(
 );
 
 /**
- * Translation of line types
- *
- * See https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=927
- * 0001 - 0999 = OBLIGATIONS BY PROGRAM ACTIVITY
- * 1000 - 1999 = BUDGETARY RESOURCES
- * 2000 - 2999 = STATUS OF BUDGETARY RESOURCES
- * 3000 - 3999 = CHANGE IN OBLIGATED BALANCE
- * 4000 - 4999 = BUDGET AUTHORITY AND OUTLAYS, NET
- * 5000 - 5999 = Memorandum (non-add) entries
- * 6000 - 6999 = APPLICATION OF BUDGETARY RESOURCES
- * 7000 - 7999 = UNFUNDED DEFICIENCIES
- * 8000 - 8999 = GUARANTEED LOAN LEVELS AND APPLICATIONS
+ * ??
  */
-export const lineTypes = [
-  {
-    id: 'obligations',
-    name: 'Obligations by Program Activity',
-    lowerLimit: 1,
-    upperLimit: 999
-  },
-  {
-    id: 'budgetary-resources',
-    name: 'Budgetary Resources',
-    lowerLimit: 1000,
-    upperLimit: 1999
-  },
-  {
-    id: 'budgetary-resources-status',
-    name: 'Status of Budgetary Resources',
-    lowerLimit: 2000,
-    upperLimit: 2999
-  },
-  {
-    id: 'obligated-balance-changes',
-    name: 'Change in Obligated Balance',
-    lowerLimit: 3000,
-    upperLimit: 3999
-  },
-  {
-    id: 'budget-authority',
-    name: 'Budget Authority and Outlays, Net',
-    lowerLimit: 4000,
-    upperLimit: 4999
-  },
-  {
-    id: 'memorandum',
-    name: 'Memorandum (non-add) entries',
-    lowerLimit: 5000,
-    upperLimit: 5999
-  },
-  {
-    id: 'budgetary-resources-application',
-    name: 'Application of Budgetary Resources',
-    lowerLimit: 6000,
-    upperLimit: 6999
-  },
-  {
-    id: 'unfunded-deficiencies',
-    name: 'Unfunded Deficiencies',
-    lowerLimit: 7000,
-    upperLimit: 7999
-  },
-  {
-    id: 'guaranteed-loan-levels',
-    name: 'Guaranteed Loan Levels and Applications',
-    lowerLimit: 8000,
-    upperLimit: 8999
-  }
-];
-
-/**
- * Compute line type from a schedule line record.
- *
- * @param linesRecord
- * @returns The computed line type
- */
-export const computeLineType = (linesRecord: typeof lines.$inferSelect): string | null => {
-  const intableLineNumber = linesRecord.lineNumber && linesRecord.lineNumber.match(/^[0-9]+$/);
-  if (!intableLineNumber) {
-    return null;
-  }
-
-  const parsedLineNumber = parseInt(linesRecord.lineNumber || '');
-  for (const lineType of lineTypes) {
-    if (parsedLineNumber >= lineType.lowerLimit && parsedLineNumber <= lineType.upperLimit) {
-      return lineType.id;
-    }
-  }
-
-  return 'other';
-};
-
 export const linesRelations = relations(lines, ({ one, many }) => ({
   file: one(files, {
     fields: [lines.fileId],

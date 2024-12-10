@@ -10,7 +10,8 @@
   import { addDays } from 'date-fns';
   import { page } from '$app/stores';
   import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
-  import { isProduction, setCookie } from '$lib/utilities';
+  import { setCookie } from '$lib/utilities';
+  import env from '$lib/environment';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
   import {
     isBeta,
@@ -42,7 +43,7 @@
   // Constants
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
-  const productionCheck = isProduction();
+  const productionCheck = env.environment == 'production' || import.meta.env.PROD;
   const betaCheck = isBeta;
 
   // On Mount

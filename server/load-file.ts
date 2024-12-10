@@ -9,7 +9,8 @@ import { eq } from 'drizzle-orm';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { request, urlExists } from './request';
 import { files, computeFundsProvidedByParsed } from '../db/schema/files';
-import { lines, computeLineType } from '../db/schema/lines';
+import { lines } from '../db/schema/lines';
+import { mLineTypeFromLineNumber } from '../db/queries/line-types';
 import { footnotes } from '../db/schema/footnotes';
 import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '../db/schema/tafs';
 import {
@@ -150,7 +151,8 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
   await db.delete(tafs).where(eq(tafs.fileId, fileRecord.fileId));
 
   // Go through the schedule data
-  const scheduleRecords = sourceData.ScheduleData.map((d, di) => {
+  const scheduleRecords = [];
+  for (const [di, d] of sourceData.ScheduleData.entries()) {
     const line = {
       fileId: cleanString(sourceData.FileId.toString()),
       fiscalYear: fileRecord.fiscalYear,
@@ -178,13 +180,14 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
       createdAt: new Date(),
       modifiedAt: new Date()
     };
-    line.lineType = computeLineType(line);
+    line.lineTypeId =
+      (await mLineTypeFromLineNumber(cleanString(d.LineNumber)))?.lineTypeId || 'other';
     // TafsId is needed for Table ID
     line.tafsId = computeTafsId(line);
     line.tafsTableId = computeTafsTableId(line);
     line.accountId = computeAccountId(line);
-    return line;
-  });
+    scheduleRecords.push(line);
+  }
 
   // Group by TAFS id
   const tafsGroups = groupBy(scheduleRecords, 'tafsId');
@@ -243,7 +246,7 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
         lineDescription: d.lineDescription,
         approvedAmount: d.approvedAmount,
         fileId: fileRecord.fileId,
-        lineType: d.lineType,
+        lineTypeId: d.lineTypeId,
         createdAt: new Date(),
         modifiedAt: new Date()
       };
