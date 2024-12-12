@@ -66,7 +66,7 @@ export const lineTypeFromLineNumber = async (
       .select()
       .from(lineTypes)
       .where(
-        and(lte(lineTypes.upperLimit, lineNumberInt), gte(lineTypes.lowerLimit, lineNumberInt))
+        and(gte(lineTypes.upperLimit, lineNumberInt), lte(lineTypes.lowerLimit, lineNumberInt))
       );
     if (foundLineType?.length > 0) {
       return foundLineType[0];

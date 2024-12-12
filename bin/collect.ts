@@ -25,6 +25,7 @@ import {
 import packageJson from '../package.json' assert { type: 'json' };
 import { setupCustomSentry, createTransaction, createSpan } from '../server/sentry-custom';
 import { loadDefaultLineTypes } from '../db/queries/line-types';
+import { loadDefaultLineDescriptions } from '../db/queries/line-descriptions';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();
@@ -53,6 +54,7 @@ async function cli(): Promise<void> {
     )
     .option('--no-collection', 'Do not do collection/scraping of data.')
     .option('--no-archive', 'Do not zip and archive to S3.')
+    .option('--no-meta', 'Do not load metadata such as line types and descriptions.')
     .option('--show-progress', 'Show progress of collection.')
     .parse(process.argv);
   const options = program.opts();
@@ -124,8 +126,11 @@ async function cli(): Promise<void> {
     const collectionRows = await db.insert(collections).values(collectionRecord).returning();
     const collectionRow = collectionRows[0];
 
-    // Make sure default line types are loaded
-    await loadDefaultLineTypes();
+    // Load up metadata if needed
+    if (options.meta) {
+      await loadDefaultLineTypes();
+      await loadDefaultLineDescriptions();
+    }
 
     // Keep track of file ids to mark any as removed
     const fileIds: string[] = [];
