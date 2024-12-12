@@ -1,26 +1,12 @@
-# Execute unit tests on any push or pull request merge to main branch
-# Excludes several files that do not affect the code
-
-name: Unit Tests
+# Note that if/when Integration Tests are enabled, the build
+# will be implicitly tested there and this may be obsolete.
+name: Build Tests
 
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'tofu/**'
-      - 'docs/**'
-      - 'tests/**'
-      - '**/*.md'
-      - '**/.*'
-
   pull_request:
     branches: [main]
-    paths-ignore:
-      - 'tofu/**'
-      - 'docs/**'
-      - 'tests/**'
-      - '**/*.md'
-      - '**/.*'
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
@@ -41,5 +27,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Unit tests
-        run: npm run test:unit
+      # Build each separately to help with debugging
+      - name: Build web
+        run: npm run build:web
+
+      - name: Build collect
+        run: npm run build:collect
+
+      - name: Build migrate
+        run: npm run build:migrate
