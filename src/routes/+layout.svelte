@@ -21,13 +21,11 @@
     siteKeywords,
     contactEmail,
     deployedBaseUrl,
-    socialOgImgPath,
     socialOgImgWidth,
     socialOgImgHeight,
     socialTwitterCard,
     socialTwitterSite,
     socialTwitterCreator,
-    socialTwitterImgPath,
     googleAnalyticsId
   } from '$config';
   import pdLogo from '$assets/logos/pd-white-words-logo.svg';
@@ -36,11 +34,14 @@
   import fav32 from '$assets/favicon/favicon-32x32.png';
   import favIco from '$assets/favicon/favicon.ico';
   import favSafari from '$assets/favicon/safari-pinned-tab.svg';
+  import horizontalSocialImage from '$assets/social/OpenOMB-Share-Horiz.png';
 
   // Styles
   import '../styles/index.css';
 
   // Constants
+  const socialOgImgPath = horizontalSocialImage;
+  const socialTwitterImgPath = horizontalSocialImage;
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
   const productionCheck = env.environment == 'production' || import.meta.env.PROD;
