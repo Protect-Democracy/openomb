@@ -4,6 +4,7 @@
 
 // Dependencies
 import { eq, gte, lte, and } from 'drizzle-orm';
+import { isInteger } from 'lodash-es';
 import { lineTypes } from '../schema/line-types';
 import { db } from '../connection';
 import defaultLineTypes from '../../data/line-types';
@@ -60,12 +61,16 @@ export const lineTypeFromLineNumber = async (
   const lineNumberInt = parseInt(lineNumber.toString(), 10);
 
   // Find line type from the range
-  const foundLineType = await db
-    .select()
-    .from(lineTypes)
-    .where(and(lte(lineTypes.upperLimit, lineNumberInt), gte(lineTypes.lowerLimit, lineNumberInt)));
-  if (foundLineType?.length > 0) {
-    return foundLineType[0];
+  if (isInteger(lineNumberInt) && lineNumberInt >= 0) {
+    const foundLineType = await db
+      .select()
+      .from(lineTypes)
+      .where(
+        and(lte(lineTypes.upperLimit, lineNumberInt), gte(lineTypes.lowerLimit, lineNumberInt))
+      );
+    if (foundLineType?.length > 0) {
+      return foundLineType[0];
+    }
   }
 
   // Otherwise, return other

@@ -97,9 +97,7 @@ export const lines = pgTable(
     // endPoa: integer('end_poa'),
     // availabilityTypeCode: varchar('availability_type_code'),
 
-    // Line type defined by the line number, which is more of an ID, though
-    // as a number has some help in sorting.
-    // TODO: Change this to lineTypeId
+    // Line type id
     lineTypeId: varchar('line_type_id').references(() => lineTypes.lineTypeId),
 
     // Meta
