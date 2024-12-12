@@ -6,7 +6,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # branches: [main]
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
