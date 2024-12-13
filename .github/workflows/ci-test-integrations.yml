@@ -6,7 +6,10 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    paths-ignore:
+      - 'tofu/**'
+      - 'docs/**'
+      - '**/*.md'
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
