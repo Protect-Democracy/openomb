@@ -8,7 +8,7 @@ import {
   mAccountSearchPaged,
   mAccountSearchFullCount
 } from '$queries/search';
-import { bureaus } from '$queries/tafs';
+import { mBureaus } from '$queries/tafs';
 
 /** @type {import('./$types').PageLoad} */
 export const load = async ({ url, cookies }) => {
@@ -79,7 +79,7 @@ export const load = async ({ url, cookies }) => {
     searchParams: formattedSearchParams,
     yearOptions: await mYearOptions(),
     lineOptions: await mLineNumberOptions(),
-    agencyBureauOptions: await bureaus(),
+    agencyBureauOptions: await mBureaus(),
     approverTitleOptions: await mApproverTitleOptions(),
 
     // Files

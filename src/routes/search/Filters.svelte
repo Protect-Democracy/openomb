@@ -58,7 +58,7 @@
     } else if (key === 'apportionmentType') {
       return `Apportionment Type ${value}`;
     } else if (key === 'lineNum') {
-      return `Line ${value}`;
+      return `Line ${value.replace(/[^0-9]+/g, '')}`;
     } else if (key === 'footnoteNum') {
       return `Has Footnote ${value}`;
     }

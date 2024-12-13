@@ -4,6 +4,7 @@
 
 // Dependencies
 import { pgTable, timestamp, varchar, index } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 import { lineTypes } from './line-types';
 
 // Table schema
@@ -26,6 +27,16 @@ export const lineDescriptions = pgTable(
     };
   }
 );
+
+/**
+ * Tell Drizzle about relations.
+ */
+export const lineDescriptionsRelations = relations(lineDescriptions, ({ one }) => ({
+  lineType: one(lineTypes, {
+    fields: [lineDescriptions.lineTypeId],
+    references: [lineTypes.lineTypeId]
+  })
+}));
 
 // Types for select/insert operations
 export type lineDescriptionsSelect = typeof lineDescriptions.$inferSelect;

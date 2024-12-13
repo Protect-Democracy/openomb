@@ -18,6 +18,7 @@ import { files } from './files';
 import { tafs } from './tafs';
 import { footnotes } from './footnotes';
 import { lineTypes } from './line-types';
+import { lineDescriptions } from './line-descriptions';
 
 // Table
 // {
@@ -125,7 +126,7 @@ export const lines = pgTable(
 );
 
 /**
- * ??
+ * Tell Drizzle about relations.
  */
 export const linesRelations = relations(lines, ({ one, many }) => ({
   file: one(files, {
@@ -135,6 +136,14 @@ export const linesRelations = relations(lines, ({ one, many }) => ({
   tafs: one(tafs, {
     fields: [lines.tafsTableId],
     references: [tafs.tafsTableId]
+  }),
+  lineType: one(lineTypes, {
+    fields: [lines.lineTypeId],
+    references: [lineTypes.lineTypeId]
+  }),
+  lineDescription: one(lineDescriptions, {
+    fields: [lines.lineNumber],
+    references: [lineDescriptions.lineNumber]
   }),
   footnotes: many(footnotes)
 }));

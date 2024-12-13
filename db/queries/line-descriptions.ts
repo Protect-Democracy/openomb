@@ -11,6 +11,7 @@ import { lineDescriptions } from '../schema/line-descriptions';
 import type { lineDescriptionsSelect } from '../schema/line-descriptions';
 import { db } from '../connection';
 import { mLineTypeFromLineNumber } from './line-types';
+import { memoizeDataAsync } from '../../server/cache';
 
 // Types
 type lineDescriptionCsvRecord = {
@@ -72,3 +73,17 @@ export const loadDefaultLineDescriptions = async (): Promise<void> => {
 
   return;
 };
+
+/**
+ * Get all line descriptions and include types.
+ */
+export const allLineDescriptions = async (): Promise<Array<lineDescriptionsSelect> | null> => {
+  return db.query.lineDescriptions.findMany({
+    with: {
+      lineType: true
+    }
+  });
+};
+
+// Memoized version
+export const mAllLineDescriptions = memoizeDataAsync(allLineDescriptions);
