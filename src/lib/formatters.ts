@@ -80,6 +80,11 @@ export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): 
       : `${accounts[0]} and ${formatNumber(accounts.length - 1)} other account${accounts.length - 1 > 1 ? 's' : ''}`;
   }
 
+  // Letter apportionment
+  if (file?.pdfUrl && file.approvalTimestamp) {
+    return `${file.folder}, Letter Apportionment - ${formatDate(file.approvalTimestamp, 'medium')}`;
+  }
+
   // No tafs information
   return `${file.folder} - ${file.fileId}`;
 }
@@ -127,7 +132,7 @@ export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
  */
 export const highlight = function (text?: string | null, terms?: string[], trim?: number): string {
   terms = terms ? terms : [];
-  terms = filter(terms.map((t) => t.trim()));
+  terms = filter(terms.map((t) => t?.trim())).filter(Boolean);
 
   if (!terms || terms.length < 1 || !text) {
     return text || '';

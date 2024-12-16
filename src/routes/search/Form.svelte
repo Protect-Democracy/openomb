@@ -147,6 +147,18 @@
         multi
       />
     </div>
+
+    <div class="field">
+      <label for="apportionmentType">Apportionment Type</label>
+
+      <CheckboxButtons
+        id="apportionmentType"
+        name="apportionmentType"
+        options={['Standard (Excel)', 'Letter (PDF)']}
+        value={url.searchParams.getAll('apportionmentType')}
+        multi
+      />
+    </div>
   </div>
 
   <div class="field-col">

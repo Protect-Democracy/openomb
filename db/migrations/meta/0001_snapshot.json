@@ -374,6 +374,51 @@
           "method": "btree",
           "concurrently": false
         },
+        "file_excel_url_index": {
+          "columns": [
+            {
+              "expression": "excel_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "file_excel_url_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
+        },
+        "file_pdf_url_index": {
+          "columns": [
+            {
+              "expression": "pdf_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "file_pdf_url_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
+        },
+        "file_source_url_index": {
+          "columns": [
+            {
+              "expression": "source_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "file_source_url_index",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
+        },
         "file_removed_index": {
           "columns": [
             {
@@ -1126,8 +1171,8 @@
     "tables": {},
     "columns": {}
   },
-  "id": "9ee5fdd1-82f1-47eb-9189-166724686a74",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "7f6baab4-e8f9-4ac2-95ce-792f4cf06457",
+  "prevId": "9ee5fdd1-82f1-47eb-9189-166724686a74",
   "sequences": {},
   "policies": {},
   "views": {},

@@ -285,13 +285,13 @@ function getS3Client() {
       : undefined;
 
   // For debugging
-  console.log(
-    env.awsSso
-      ? 'Utilizing AWS fromSSO credentials method'
-      : env.awsContainerMetadata
-        ? 'Utilizing AWS fromContainerMetadata credentials method'
-        : 'Utilizing AWS default credentials method'
-  );
+  // console.log(
+  //   env.awsSso
+  //     ? 'Utilizing AWS fromSSO credentials method'
+  //     : env.awsContainerMetadata
+  //       ? 'Utilizing AWS fromContainerMetadata credentials method'
+  //       : 'Utilizing AWS default credentials method'
+  // );
 
   // Create client
   const s3 = new S3Client({

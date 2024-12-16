@@ -8,6 +8,20 @@
       "when": 1712078264912,
       "tag": "0000_green_moira_mactaggert",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1733509827334,
+      "tag": "0001_jazzy_vengeance",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1733522359958,
+      "tag": "0002_peaceful_roland_deschain",
+      "breakpoints": true
     }
   ]
 }
