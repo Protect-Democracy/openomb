@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  # Api endpoint for sending notifications
+  notifications:
+    build:
+      context: '.'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mailcatcher
+
+  # Redis queue for notifications
+  redis:
+    image: redis:alpine
+
+  # Intercept and test email sending locally
+  mailcatcher:
+    image: dockage/mailcatcher:0.9.0
+    ports:
+      - '1025:1025'
+      - '1080:1080'

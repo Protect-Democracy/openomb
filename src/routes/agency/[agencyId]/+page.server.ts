@@ -5,7 +5,6 @@ import { error } from '@sveltejs/kit';
 /** @type {import('./$types').PageLoad} */
 export async function load({ params }) {
   const agency = await agencyDetails(params.agencyId);
-
   if (!agency) {
     error(404, 'Unable to find agency');
   }

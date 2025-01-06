@@ -43,7 +43,7 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ searchParams, files, fileCount, filePageSize, accounts, accountCount, accountPageSize } =
+  $: ({ searchParams, files, fileCount, filePageSize, accounts, accountCount, accountPageSize, user } =
     data);
   $: hasFileResults = files && files.length > 0;
   $: hasAccountResults = accounts && accounts.length > 0;
@@ -67,6 +67,7 @@
         <div class="search-form">
           <Form
             url={$url}
+            user={user}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
@@ -81,6 +82,7 @@
         <div class="search-filters">
           <Filters
             url={$url}
+            user={user}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
@@ -91,6 +93,7 @@
         <div class="search-form">
           <Form
             url={$url}
+            user={user}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}

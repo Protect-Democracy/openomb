@@ -1,3 +1,5 @@
+import { redirect } from '@sveltejs/kit';
+import { deserialize } from '$app/forms';
 import {
   mYearOptions,
   mLineNumberOptions,
@@ -6,12 +8,56 @@ import {
   mFileSearchPaged,
   mFileSearchFullCount,
   mAccountSearchPaged,
-  mAccountSearchFullCount
+  mAccountSearchFullCount,
+  saveUserSearch,
 } from '$queries/search';
 import { bureaus } from '$queries/tafs';
 
+/** @satisfies {import('./$types').Actions} */
+export const actions = {
+  save: async ({ locals, request }) => {
+    const session = await locals.auth();
+    const data = await request.json();
+    // Add subscription
+    if (session && data.criterion) {
+      return await saveUserSearch(session.user.email, data.criterion);
+    }
+  },
+  subscribe: async ({ locals, request, fetch }) => {
+    const session = await locals.auth();
+    const data = await request.text();
+    const searchParams = new URLSearchParams(data);
+    const criterion = {
+      term: searchParams.get('term'),
+      agencyBureau: searchParams.get('agencyBureau'),
+      tafs: searchParams.get('tafs'),
+      account: searchParams.get('account'),
+      approver: searchParams.getAll('approver'),
+      year: searchParams.getAll('year'),
+      approvedStart: searchParams.get('approvedStart'),
+      approvedEnd: searchParams.get('approvedEnd'),
+      lineNum: searchParams.getAll('lineNum'),
+      footnoteNum: searchParams.getAll('footnoteNum')
+    }
+
+    const resp = await fetch('/search?/save', {
+      method: 'POST',
+      headers: {
+        'x-sveltekit-action': 'true'
+      },
+      body: JSON.stringify({ criterion }),
+    });
+    const newSearch = deserialize(await resp.text());
+
+    // Add subscription
+    if (newSearch.data.id) {
+      redirect(303, `/subscribe/search/${newSearch.data.id}`);
+    }
+  },
+};
+
 /** @type {import('./$types').PageLoad} */
-export const load = async ({ url, cookies }) => {
+export const load = async ({ url, cookies, locals }) => {
   // Shortcuts
   const u = (p: string) => url.searchParams.get(p);
   const h = (p: string) => url.searchParams.has(p);

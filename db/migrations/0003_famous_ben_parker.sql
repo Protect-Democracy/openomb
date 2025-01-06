@@ -1,0 +1,2 @@
+ALTER TABLE "subscriptions" DROP CONSTRAINT "subscriptions_userId_type_itemId_unique";--> statement-breakpoint
+ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_userId_type_itemId_unique" UNIQUE NULLS NOT DISTINCT("userId","type","itemId");

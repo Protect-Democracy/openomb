@@ -41,7 +41,7 @@ async function cli(): Promise<void> {
   const migrationsDir = joinPath(_dirname, '..', 'db', 'migrations');
 
   // This will run migrations on the database, skipping the ones already applied
-  await createSpan({ name: 'migrate', op: 'db.transaction' }, () =>
+  await createSpan({ name: 'migrate', op: 'db.transaction' }, async () =>
     migrate(db, { migrationsFolder: migrationsDir })
   );
 

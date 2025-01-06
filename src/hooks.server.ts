@@ -26,6 +26,7 @@ import type { Handle } from '@sveltejs/kit';
 import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
 import { cacheRevalidateSeconds, securityHeaders } from '$config';
 import { overrideDrizzleTracer } from '$db/connection';
+import { authHandles } from "./auth"
 
 // Override our drizzle tracing so that we see queries
 overrideDrizzleTracer();
@@ -76,4 +77,4 @@ const addHeaders: Handle = async ({ event, resolve }) => {
 const sentryHandle = Sentry.sentryHandle({ injectFetchProxyScript: false });
 
 // Add our handlers to each request
-export const handle = sequence(sentryHandle, addHeaders);
+export const handle = sequence(sentryHandle, addHeaders, ...authHandles);

@@ -3,9 +3,8 @@ import { bureauDetails, accountsByBureau } from '$queries/tafs';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params }) {
+export async function load({ params, locals, depends }) {
   const bureau = await bureauDetails(params.agencyId, params.bureauId);
-
   if (!bureau) {
     error(404, 'Unable to find bureau');
   }

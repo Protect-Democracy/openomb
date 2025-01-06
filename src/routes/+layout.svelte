@@ -190,6 +190,7 @@
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
+        <li><a data-sveltekit-reload href="/subscribe">Subscriptions</a></li>
       </ul>
     </div>
   </div>

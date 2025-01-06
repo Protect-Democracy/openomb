@@ -9,6 +9,7 @@
 
   // Props
   export let url: URL;
+  export let user;
   export let agencyBureauOptions = [];
   export let yearOptions: number[] = [];
   export let lineOptions: string[] = [];
@@ -88,7 +89,7 @@
       >
 
       <svelte:fragment slot="content">
-        <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} {approverTitleOptions} />
+        <Form {url} {user} {agencyBureauOptions} {yearOptions} {lineOptions} {approverTitleOptions} />
       </svelte:fragment>
     </Drawer>
   </div>

@@ -3,11 +3,13 @@
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
   import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
   import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
+  import SearchSubscribe from '$components/subscriptions/SearchSubscribe.svelte';
   import { submitting } from './form-store';
   import { getContext } from 'svelte';
 
   // Props
   export let url;
+  export let user;
   export let agencyBureauOptions = [];
   export let yearOptions: number[] = [];
   export let lineOptions: string[] = [];
@@ -162,6 +164,10 @@
 
   <div class="field-col">
     <button type="reset" class="secondary">Reset</button>
+  </div>
+
+  <div class="field-col">
+    <SearchSubscribe user={user} />
   </div>
 </form>
 

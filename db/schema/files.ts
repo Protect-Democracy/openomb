@@ -3,11 +3,12 @@
  */
 
 // Dependencies
-import { integer, pgTable, index, varchar, timestamp, boolean, text } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { integer, pgTable, index, varchar, timestamp, boolean, text, pgView } from 'drizzle-orm/pg-core';
+import { relations, gte } from 'drizzle-orm';
 import { tafs } from './tafs';
 import { lines } from './lines';
 import { footnotes } from './footnotes';
+import { subDays, startOfDay } from 'date-fns';
 
 // Table
 // {
@@ -100,6 +101,20 @@ export const filesRelations = relations(files, ({ many }) => ({
   lines: many(lines),
   footnotes: many(footnotes)
 }));
+
+/**
+ * Views for recently approved files - used when querying subscriptions
+ */
+const dayAgo = startOfDay(new Date());
+export const filesApprovedTodayView = pgView(
+  'files_approved_today_view'
+).as((qb) => qb.select().from(files).where(gte(files.approvalTimestamp, dayAgo)));
+
+// Using 6 days instead of seven so we exclude previous same day of week from results
+const weekAgo = startOfDay(subDays(new Date(), 6));
+export const filesApprovedSinceLastWeekView = pgView(
+  'files_approved_since_last_week_view'
+).as((qb) => qb.select().from(files).where(gte(files.approvalTimestamp, weekAgo)));
 
 /**
  * Export some types

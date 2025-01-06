@@ -57,6 +57,18 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
+          "name" : "NOTIFICATIONS_SERVICE_URI",
+          "value": "http://localhost:8080"
+        },
+        {
+          "name" : "AUTH_SECRET",
+          "value": ""
+        },
+        {
+          "name" : "Origin", # Needed for authentication to work correctly
+          "value": "https://${var.domain_name}"
+        },
+        {
           "name" : "APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI",
           "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI"]
         },
@@ -84,6 +96,73 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         "options" : {
           "awslogs-region" : "${var.region}",
           "awslogs-group" : "/ecs/apportionments-app",
+          "awslogs-stream-prefix" : "ecs"
+        }
+      }
+    },
+
+    # Notification service sidecar containers
+    # @todo - will eventually become their own service
+    {
+      "name" : "notifications-service",
+      "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
+      "essential" : true,
+      "portMappings" : [
+        {
+          "containerPort" : 8080
+        }
+      ],
+      "environment" : [
+        {
+          "name" : "DOMAIN",
+          "value" : "localhost"
+        },
+        {
+          "name" : "EMAIL_PROVIDER",
+          "value" : "aws"
+        },
+        {
+          "name" : "AWS_REGION",
+          "value" : "${var.region}"
+        },
+        {
+          "name" : "REDIS_HOST",
+          "value" : "localhost"
+        },
+        {
+          "name" : "REDIS_PORT",
+          "value" : "${tostring(6379)}"
+        }
+      ],
+      "secrets" : [
+      ],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${var.region}",
+          "awslogs-group" : "/ecs/notifications-service",
+          "awslogs-stream-prefix" : "ecs"
+        }
+      }
+    },
+    {
+      "name" : "notifications-queue",
+      "image" : "redis:alpine"
+      "essential" : true,
+      "portMappings" : [
+        {
+          "containerPort" : 6379
+        }
+      ],
+      "environment" : [
+      ],
+      "secrets" : [
+      ],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${var.region}",
+          "awslogs-group" : "/ecs/notifications-queue",
           "awslogs-stream-prefix" : "ecs"
         }
       }

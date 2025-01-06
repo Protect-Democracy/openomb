@@ -3,9 +3,10 @@
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
   export let data: PageData;
-  $: ({ account, tafsByAccount } = data);
+  $: ({ account, tafsByAccount, user } = data);
 </script>
 
 <div class="page-container">
@@ -34,6 +35,8 @@
   </Breadcrumbs>
 
   <h1>{account.accountTitle} Account</h1>
+
+  <SubscribeLink user={user} subType="account" subItemId={`${account.bureau.agency.budgetAgencyTitleId},${account.bureau.budgetBureauTitleId},${account.accountTitleId}`} />
 
   <p>There are {account.fileCount} files in this account.</p>
 

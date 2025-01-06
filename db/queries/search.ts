@@ -17,10 +17,16 @@ import {
 } from 'drizzle-orm';
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import { db } from '../connection';
-import { files } from '../schema/files';
+import {
+  files,
+  filesApprovedTodayView,
+  filesApprovedSinceLastWeekView,
+} from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
+import { searches } from '../schema/searches';
+import { users } from '../schema/users';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types
@@ -725,3 +731,44 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
 }
 
 export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
+
+/**
+ * Returns search results within a limited set of files, those approved within the last day or week
+ * depending on the provided time window specification.
+ *
+ * This function is used to more quickly/performantly provide subscription results
+ */
+export async function fileSearchRecentlyApproved(timeWindow: 'daily'|'weekly', searchParams: SearchParams) {
+  const { where } = await searchSetup(searchParams, 'files');
+  // Select the limited file view based on the desired time window
+  const fileView = timeWindow === 'daily' ? filesApprovedTodayView : filesApprovedSinceLastWeekView;
+
+  const recentlyApprovedFileResults = await db
+    .select()
+    .from(fileView)
+    .leftJoin(tafs, eq(fileView.fileId, tafs.fileId))
+    .leftJoin(lines, eq(fileView.fileId, lines.fileId))
+    .leftJoin(footnotes, eq(fileView.fileId, footnotes.fileId))
+    .where(where)
+    .groupBy(fileView.fileId)
+
+  return recentlyApprovedFileResults;
+}
+
+/**
+ * Save a search for the specified user
+ * (Currently used only by subscriptions)
+ */
+export async function saveUserSearch(email: string, criterion: SearchParams) {
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  // If we have no user, exit early
+  if (!userResults?.[0]) {
+    return null;
+  }
+  const newSearch = {
+    userId: userResults[0].id,
+    criterion,
+  };
+  const newRecords = await db.insert(searches).values(newSearch).returning({ id: searches.id });
+  return newRecords[0];
+}
