@@ -201,3 +201,6 @@ terraform.rc
 
 # Sentry Config File
 .sentryclirc
+
+# Optional python virtual env
+.venv
