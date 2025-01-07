@@ -2,8 +2,7 @@
  * General utilities that should run fine on server or client.
  */
 
-import { toDate, toZonedTime } from 'date-fns-tz';
-import { add as dateAdd } from 'date-fns';
+import { DateTime } from 'luxon';
 import env from '$lib/environment';
 import { collectionHour, collectionMinute, collectionTimezone } from '$config';
 
@@ -31,10 +30,17 @@ export const secondsToZonedTime = function (
   dateToCompare: string | Date = new Date(),
   minimumSeconds: number = 30
 ): number {
-  // We want to get the date time in the timezone.  Unsure why this is difficult
-  // in date-fns, but this seems to work.
-  const parsedDateToCompare = toDate(dateToCompare, { timeZone: timezone });
-  const zonedDateToCompare = toZonedTime(parsedDateToCompare, timezone);
+  // Support ISO string or native date and force to specific timezone
+  const parsedDateToCompare =
+    typeof dateToCompare === 'string'
+      ? DateTime.fromISO(dateToCompare)
+      : DateTime.fromJSDate(dateToCompare);
+
+  if (!parsedDateToCompare.isValid) {
+    return minimumSeconds;
+  }
+
+  const zonedDateToCompare = parsedDateToCompare.setZone(timezone).toJSDate();
   const currentHour = zonedDateToCompare.getHours();
   const currentMinute = zonedDateToCompare.getMinutes();
 
@@ -126,5 +132,5 @@ export function secondsToCacheInvalidation() {
  * Output date for cache
  */
 export function dateForCacheInvalidation() {
-  return dateAdd(new Date(), { seconds: secondsToCacheInvalidation() });
+  return DateTime.now().plus({ seconds: secondsToCacheInvalidation() }).toJSDate();
 }
