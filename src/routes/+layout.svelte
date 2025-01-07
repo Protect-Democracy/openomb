@@ -190,6 +190,7 @@
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
+        <li><a href="/terms">Terms of use</a></li>
       </ul>
     </div>
   </div>
@@ -298,6 +299,12 @@
     display: flex;
     justify-content: center;
     gap: var(--spacing-large);
+
+    @media (max-width: 400px) {
+      & {
+        display: block;
+      }
+    }
   }
 
   footer .links li {
