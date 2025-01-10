@@ -8,7 +8,7 @@ import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
-import { subDays, startOfWeek, startOfDay } from 'date-fns';
+import { DateTime } from 'luxon';
 import { memoizeDataAsync } from '../../server/cache';
 
 /**
@@ -183,14 +183,14 @@ export const fileStats = async function () {
   const now = new Date();
 
   // Set date to start of week, get files approved since
-  const dateWeek = startOfWeek(new Date());
+  const dateWeek = DateTime.now().startOf('week').toJSDate();
   const filesApprovedThisWeek = db
     .select({ fileCount: count(files.fileId) })
     .from(files)
     .where(gte(files.approvalTimestamp, dateWeek));
 
   // Set date to week ago, get files approved since
-  const weekAgo = startOfDay(subDays(new Date(), 7));
+  const weekAgo = DateTime.now().plus({ days: -7 }).startOf('day').toJSDate();
   const filesApprovedPastWeek = db
     .select({ fileCount: count(files.fileId) })
     .from(files)

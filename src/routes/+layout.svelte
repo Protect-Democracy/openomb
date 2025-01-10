@@ -7,7 +7,7 @@
   import '@fontsource/ibm-plex-sans/700.css';
   import { onMount } from 'svelte';
   import { derived } from 'svelte/store';
-  import { addDays } from 'date-fns';
+  import { DateTime } from 'luxon';
   import { page } from '$app/stores';
   import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
   import { isProduction, setCookie } from '$lib/utilities';
@@ -60,7 +60,7 @@
 
   // Set cookie that JS is enabled which is useful
   // if the server needs to know if JS is enabled.
-  setCookie('jsEnabled', 'true', { expires: addDays(new Date(), 30) });
+  setCookie('jsEnabled', 'true', { expires: DateTime.now().plus({ days: 30 }).toJSDate() });
 </script>
 
 <svelte:head>
