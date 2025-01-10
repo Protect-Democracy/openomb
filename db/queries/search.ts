@@ -22,6 +22,7 @@ import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
+import { lineTypes } from '../schema/line-types';
 import { lineDescriptions } from '$db/schema/line-descriptions';
 import { memoizeDataAsync } from '../../server/cache';
 
@@ -104,12 +105,21 @@ export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
  * Get line description options.
  */
 export const lineNumberOptions = async function () {
-  const results = await db.query.lineDescriptions.findMany({
-    with: {
-      lineType: true
-    },
-    orderBy: [asc(lineDescriptions.lineNumber)]
-  });
+  // Get line descriptions for line numbers that are in the data
+  // as line descriptions data is a full set of line numbers but not
+  // necessarily all are used.
+  const results = await db
+    .selectDistinct({
+      lineNumber: lines.lineNumber,
+      description: lineDescriptions.description,
+      lineTypeId: lines.lineTypeId,
+      lineType: lineTypes.name
+    })
+    .from(lines)
+    .leftJoin(lineDescriptions, eq(lines.lineNumber, lineDescriptions.lineNumber))
+    .leftJoin(lineTypes, eq(lines.lineTypeId, lineTypes.lineTypeId))
+    .where(isNotNull(lines.lineNumber))
+    .orderBy(asc(lines.lineNumber));
 
   if (!results) {
     return [];
@@ -119,9 +129,9 @@ export const lineNumberOptions = async function () {
   return results.map((v) => {
     return {
       value: v.lineNumber,
-      label: `${v.lineNumber} - ${v.description}`,
-      groupValue: v.lineType?.lineTypeId || 'other',
-      groupLabel: v.lineType?.name || 'Other'
+      label: v.description ? `${v.lineNumber} - ${v.description}` : `${v.lineNumber} - (unknown)`,
+      groupValue: v.lineTypeId || 'other',
+      groupLabel: v.lineType || 'Other'
     };
   });
 };
@@ -137,7 +147,6 @@ export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
 export function formatSearchParams(
   searchParams: SearchPaginationParams | SearchParams
 ): FormattedSearchParams {
-  console.log(searchParams.lineNum);
   // Format
   const years = (searchParams.year ? searchParams.year.split(',') : [])
     .map((v) => parseInt(v))

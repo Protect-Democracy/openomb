@@ -46,15 +46,36 @@ export const loadDefaultLineDescriptions = async (): Promise<void> => {
     // Lines,Description
     // 1000,"Act. Unob Bal: Brought forward, October 1"
     // 1010,Actual - Unob Bal: Transferred to other accounts
+    // 6011-6110,Category B: Amounts requested on a basis other than calendar quarters
     const parsedRecords: Array<lineDescriptionsSelect> = [];
     for (const record of records) {
-      parsedRecords.push({
-        lineNumber: record.Lines,
-        description: record.Description,
-        lineTypeId: (await mLineTypeFromLineNumber(record.Lines))?.lineTypeId || 'other',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      });
+      // Check for multiple lines
+      const isRange = !!record.Lines.match(/[0-9]*-[0-9]*/);
+      const isSingle = !!record.Lines.match(/[0-9]*/);
+      if (isRange) {
+        const [start, end] = record.Lines.split('-');
+        for (let i = parseInt(start, 10); i <= parseInt(end, 10); i++) {
+          parsedRecords.push({
+            lineNumber: i.toString(),
+            description: record.Description,
+            lineTypeId: (await mLineTypeFromLineNumber(i.toString()))?.lineTypeId || 'other',
+            createdAt: new Date(),
+            updatedAt: new Date()
+          });
+        }
+      }
+      else if (isSingle) {
+        parsedRecords.push({
+          lineNumber: record.Lines,
+          description: record.Description,
+          lineTypeId: (await mLineTypeFromLineNumber(record.Lines))?.lineTypeId || 'other',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      }
+      else {
+        throw new Error(`Invalid line number: ${record.Lines}`);
+      }
     }
 
     // Upsert records
