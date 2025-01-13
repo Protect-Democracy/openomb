@@ -139,7 +139,7 @@ function parseIntegerFromString(value?: string): number | null {
 }
 
 /**
- * Parse timestamp from file API.
+ * Parse OMB timestamp from file data.
  *
  * Example: 2024-02-14-09.53.46.372578
  *          2024-01-01-00.01.01.000001
@@ -149,11 +149,18 @@ function parseTimestampFromString(timestamp?: string, utc: boolean = true): Date
     return null;
   }
 
+  // First check if it is generally a timestamp we expect
+  if (!timestamp.match(/[0-9.-:]+/)) {
+    return null;
+  }
+
+  // Luxon doesn't have a way to parse the seconds that are a decimal and not a
+  // millisecond so we have to remove it.  Make sure there are 3 decimal points.
+  timestamp =
+    (timestamp.match(/\./g) || []).length === 3 ? timestamp.replace(/\.[0-9]+$/, '') : timestamp;
+
   const dateOptions = utc ? { zone: 'utc' } : {};
-  const parsed =
-    timestamp && timestamp.match(/[0-9.-:]+/)
-      ? DateTime.fromFormat(timestamp, 'yyyy-LL-dd-HH.mm.ss.SSS', dateOptions)
-      : null;
+  const parsed = DateTime.fromFormat(timestamp, 'yyyy-LL-dd-HH.mm.ss', dateOptions);
   return parsed && parsed.isValid ? parsed.toJSDate() : null;
 }
 
