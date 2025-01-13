@@ -44,10 +44,19 @@ test('parseTimestampFromString()', () => {
   expect(parseTimestampFromString('')).toEqual(null);
   expect(parseTimestampFromString('abc')).toEqual(null);
   expect(parseTimestampFromString('2024-01-01-00.01.01.001')).toEqual(
-    new Date(Date.UTC(2024, 0, 1, 0, 1, 1, 1))
+    new Date(Date.UTC(2024, 0, 1, 0, 1, 1))
   );
   expect(parseTimestampFromString('2024-01-01-00.01.01.001', false)).toEqual(
-    new Date(2024, 0, 1, 0, 1, 1, 1)
+    new Date(2024, 0, 1, 0, 1, 1)
+  );
+  expect(parseTimestampFromString('2024-02-14-09.53.46.372578', false)).toEqual(
+    new Date(2024, 1, 14, 9, 53, 46)
+  );
+  expect(parseTimestampFromString('2024-02-14-09.53.46', false)).toEqual(
+    new Date(2024, 1, 14, 9, 53, 46)
+  );
+  expect(parseTimestampFromString('2024-01-01-00.01.01.000001', false)).toEqual(
+    new Date(2024, 0, 1, 0, 1, 1)
   );
   expect(parseTimestampFromString('33-38', false)).toEqual(null);
 });
