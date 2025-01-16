@@ -1,18 +1,16 @@
 <script lang="ts">
+  import type { PageData } from './$types';
   import { filter } from 'lodash-es';
   import LogIn from '$components/subscriptions/LogIn.svelte';
   import LogOut from '$components/subscriptions/LogOut.svelte';
   import SubscriptionGroup from './SubscriptionGroup.svelte';
 
-
   export let data: PageData;
   export let form;
   $: ({ userSubscriptions, user } = data);
 
-  console.log(form);
-
   $: folderSubs = filter(userSubscriptions, (sub) => sub.type === 'folder');
-  $: fileSubs = filter(userSubscriptions, (sub) => sub.type === 'file');
+  $: tafsSubs = filter(userSubscriptions, (sub) => sub.type === 'tafs');
   $: agencySubs = filter(userSubscriptions, (sub) => sub.type === 'agency');
   $: bureauSubs = filter(userSubscriptions, (sub) => sub.type === 'bureau');
   $: accountSubs = filter(userSubscriptions, (sub) => sub.type === 'account');
@@ -24,11 +22,17 @@
     <section class="content-container">
       <h2>Subscriptions</h2>
       <p>
-        Adjust how frequently you are sent updates about a subscription or unsubscribe from the provided entry entirely.  Any adjustments will be saved when the form is submitted.
+        Adjust how frequently you are sent updates about a subscription or unsubscribe from the
+        provided entry entirely. Any adjustments will be saved when the form is submitted.
       </p>
 
       {#if form?.success}
-        <p>Subscriptions saved successfully!</p>
+        <p class="form-success">Subscriptions saved successfully!</p>
+      {:else if form?.error}
+        <p class="form-error">
+          There was an error saving your subscription data. Please try again or, if problems
+          persist, contact support@openomb.org.
+        </p>
       {/if}
 
       <form method="POST" action="/subscribe?/manage">
@@ -36,13 +40,13 @@
           <thead>
             <tr>
               <td class="sub-link">Subscription</td>
-              <td class="sub-frequency">Frequency</td>
-              <td class="sub-remove">Remove?</td>
+              <td class="sub-frequency">Email Frequency</td>
+              <td class="sub-remove">Remove Subscription?</td>
             </tr>
           </thead>
           <tbody>
             <SubscriptionGroup title="Folders" subs={folderSubs} />
-            <SubscriptionGroup title="Files" subs={fileSubs} />
+            <SubscriptionGroup title="TAFS" subs={tafsSubs} />
             <SubscriptionGroup title="Agencies" subs={agencySubs} />
             <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
             <SubscriptionGroup title="Accounts" subs={accountSubs} />
@@ -67,7 +71,11 @@
         </div>
         <div class="action-col">
           <form method="POST" action="/subscribe?/deactivate">
-            <p>Delete this email address and all associated data from the website.  This will destroy all subscriptions associated with the current email.  You will be able to re-subscribe in the future.</p>
+            <p>
+              Delete this email address and all associated data from the website. This will destroy
+              all subscriptions associated with the current email. You will be able to re-subscribe
+              in the future.
+            </p>
             <button>Delete Account & Data</button>
           </form>
         </div>
@@ -75,7 +83,7 @@
     </section>
   {:else}
     <section class="content-container">
-      <LogIn callbackUrl="/subscribe?reload=1" />
+      <LogIn callbackUrl="/subscribe" />
     </section>
   {/if}
 </div>
@@ -84,14 +92,31 @@
   .content-container:has(+ .content-container) {
     margin-bottom: 0;
   }
+  .form-success {
+    font-weight: var(--font-copy-weight-bold);
+    color: var(--color-green-dark);
+  }
+  .form-error {
+    font-weight: var(--font-copy-weight-bold);
+    color: var(--color-error);
+  }
+  .sub-remove,
+  .sub-frequency {
+    text-align: center;
+  }
   .actions {
     display: flex;
     column-gap: var(--spacing-double);
     align-items: flex-end;
   }
-
   .action-col {
     text-align: center;
   }
 
+  @media (max-width: 768px) {
+    .actions {
+      flex-direction: column;
+      row-gap: var(--spacing-double);
+    }
+  }
 </style>

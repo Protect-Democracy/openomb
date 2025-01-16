@@ -62,6 +62,7 @@ type ApportionmentEnvironment = {
   awsContainerMetadata: boolean;
   sentryNodeDsn: string;
   environment: string;
+  notificationsServiceUri: string;
 };
 
 // Export package.json
@@ -119,7 +120,7 @@ function environmentVariables(): ApportionmentEnvironment {
     awsContainerMetadata:
       !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
       process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false',
-    notificationsServiceUri: process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080',
+    notificationsServiceUri: process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080'
   };
 }
 

@@ -38,6 +38,7 @@ Utilize the following environment variables, optionally using a `.env` file:
 - `REDIS_HOST`: Host for redis queue instance.
 
 For local development, use the following `.env` values:
+
 ```
 DOMAIN=localhost
 PORT=8080
@@ -73,7 +74,7 @@ To send a test email:
 ```bash
 curl -X POST -d '{"to":"some.email@gmail.com","body":"test body","title":"test title"}' \
     -H "Content-Type: application/json" \
-    "http://localhost:8080/email/send" 
+    "http://localhost:8080/email/send"
 ```
 
 To view this email within Mailcatcher, visit http://localhost:1080

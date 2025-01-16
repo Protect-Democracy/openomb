@@ -1,6 +1,6 @@
 {
-  "id": "192a4a1f-a5a9-4825-bc92-1bbcc0bf2f16",
-  "prevId": "7370457b-b499-42da-9312-df4f4ad14164",
+  "id": "db9e0dd8-f836-447b-9ed2-5e06cecfb840",
+  "prevId": "81cce1d8-c91b-4809-b00c-6822c901a5be",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -568,6 +568,13 @@
           "notNull": true,
           "default": "'daily'"
         },
+        "last_notified_at": {
+          "name": "last_notified_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -620,7 +627,7 @@
       "uniqueConstraints": {
         "subscriptions_userId_type_itemId_unique": {
           "name": "subscriptions_userId_type_itemId_unique",
-          "nullsNotDistinct": false,
+          "nullsNotDistinct": true,
           "columns": ["userId", "type", "itemId"]
         }
       }

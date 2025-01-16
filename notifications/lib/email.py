@@ -4,18 +4,21 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from util.environment import emailProvider, smtpHost, smtpPort, awsRegion
 
-sender_email = "notifier@openomb.org"
-reply_email = "reply@openomb.org"
+def format_address(address, name):
+    if (name):
+        return "{} <{}>".format(name, email)
+    else:
+        return email
 
 def send_email(email):
     if (emailProvider == 'smtp'):
         server = smtplib.SMTP(smtpHost, smtpPort)
         try :
             message = MIMEMultipart("alternative")
-            message["From"] = "OpenOMB Notifications <{}>".format(sender_email)
+            message["From"] = format_address(email['from'], email['from_name'])
             message["To"] = ", ".join(email['to'])
             message["Subject"] = email['title']
-            message["reply-to"] = "OpenOMB Help <{}>".format(reply_email)
+            message["reply-to"] = format_address(email['reply'], email['reply_name'])
 
             if (email['html']):
                 body = MIMEText(email['html'], "html")
@@ -23,7 +26,7 @@ def send_email(email):
                 body = MIMEText(email['text'], "plain")
             message.attach(body)
 
-            server.sendmail(sender_email, email['to'], message.as_string())
+            server.sendmail(email['from'], email['to'], message.as_string())
         except Exception as e:
             print(e)
         finally:
@@ -31,13 +34,13 @@ def send_email(email):
     else if (emailProvider == 'aws'):
         client = boto3.client("ses", region_name=awsRegion)
         client.send_email(
-            Source="OpenOMB Notifications <{}>".format(sender_email),
+            Source=format_address(email['from'], email['from_name']),
             Destination={"ToAddresses": email['to']},
             ReplyToAddresses=[
-                "OpenOMB Help <{}>".format(reply_email)
+                format_address(email['reply'], email['reply_name']),
             ],
-            ConfigurationSetName=EMAIL_CONFIGURATION_SET,
-            Tags=tags,
+            ConfigurationSetName="notification_emails",
+            Tags=[],
             Message={
                 "Body": {
                     "Html": {"Charset": "utf-8", "Data": email['html']},

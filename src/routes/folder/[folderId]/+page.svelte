@@ -4,9 +4,11 @@
   import FileListingSmall from '$components/files/FileListingSmall.svelte';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
   export let data: PageData;
-  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved } = data);
+  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved, user, existingSubscription } =
+    data);
 </script>
 
 <div class="page-container">
@@ -56,6 +58,8 @@
       {/each}
     </section>
   {/if}
+
+  <SubscribeLink {user} subType="folder" subItemId={folder.folderId} {existingSubscription} />
 
   <section class="page-section">
     <h2>Recently approved files</h2>

@@ -5,6 +5,7 @@
   import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import Switch from '$components/inputs/Switch.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
   import TAFSLines from './TAFSLines.svelte';
   import Metadata from './Metadata.svelte';
   import TAFSMeta from './TAFSMeta.svelte';
@@ -17,7 +18,7 @@
   let showPrevious = writable(true);
 
   // Derived
-  $: ({ file, prevIterationFiles } = data);
+  $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = uniqBy(
     reduce(
@@ -62,11 +63,20 @@
         )}
 
         <section class="tafs-section">
-          <h3 id="tafs_{tafsGroup.tafsTableId}" class="tafs-heading">
-            <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {formatTafsFormattedId(
-              tafsGroup
-            )} - {tafsGroup.accountTitle}
-          </h3>
+          <div class="tafs-heading-wrapper">
+            <h3 id="tafs_{tafsGroup.tafsTableId}" class="tafs-heading">
+              <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {formatTafsFormattedId(
+                tafsGroup
+              )} - {tafsGroup.accountTitle}
+            </h3>
+            <SubscribeLink
+              hideText
+              {user}
+              subType="tafs"
+              subItemId={tafsGroup.tafsTableId}
+              existingSubscription={tafsSubscriptions[tafsGroup.tafsTableId]}
+            />
+          </div>
 
           <TAFSMeta {tafsGroup} />
 
@@ -139,6 +149,11 @@
     margin-bottom: var(--spacing-large);
   }
 
+  .tafs-heading-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .previous-toggle {
     background-color: var(--color-background-alt);
     padding: var(--spacing) var(--spacing-double);
@@ -164,6 +179,13 @@
       padding: 0;
       margin: 0;
       list-style-type: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .tafs-heading-wrapper {
+      flex-direction: column;
+      margin-bottom: var(--spacing);
     }
   }
 </style>

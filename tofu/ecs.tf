@@ -58,15 +58,15 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         },
         {
           "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value": "http://localhost:8080"
+          "value" : "http://localhost:8080"
         },
         {
           "name" : "AUTH_SECRET",
-          "value": ""
+          "value" : ""
         },
         {
           "name" : "Origin", # Needed for authentication to work correctly
-          "value": "https://${var.domain_name}"
+          "value" : "https://${var.domain_name}"
         },
         {
           "name" : "APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI",

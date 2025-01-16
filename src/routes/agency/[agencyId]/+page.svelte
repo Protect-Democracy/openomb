@@ -7,7 +7,7 @@
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
   export let data: PageData;
-  $: ({ agency, bureausByAgency, recentlyApproved, user } = data);
+  $: ({ agency, bureausByAgency, recentlyApproved, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -27,8 +27,6 @@
 <div class="page-container content-container">
   <h1>Agency: {agency.budgetAgencyTitle}</h1>
 
-  <SubscribeLink user={user} subType="agency" subItemId={agency.budgetAgencyTitleId} />
-
   <p>
     There are <strong>{formatNumber(agency.fileCount)} files</strong> associated with this agency.
   </p>
@@ -47,6 +45,13 @@
       {/each}
     </ul>
   </section>
+
+  <SubscribeLink
+    {user}
+    subType="agency"
+    subItemId={agency.budgetAgencyTitleId}
+    {existingSubscription}
+  />
 
   <section class="page-section">
     <h2>Recently approved</h2>

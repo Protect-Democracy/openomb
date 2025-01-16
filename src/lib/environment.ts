@@ -1,4 +1,18 @@
-import { env as publicEnv } from '$env/dynamic/public';
+import { BROWSER } from 'esm-env';
+
+/**
+ * This avoids an error where scripts referencing this cannot see
+ * the svelte library $env import.  @todo - is there a better way to fix this?
+ */
+let publicEnv;
+if (BROWSER) {
+  // If we are on the client, use our dynamic public env from svelte
+  publicEnv = (await import('$env/dynamic/public')).env;
+}
+else {
+  // If we are on the server, use the process env values
+  publicEnv = process.env;
+}
 
 /**
  * Environment variables that are specifically used in our sveltekit application

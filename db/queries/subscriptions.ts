@@ -3,15 +3,15 @@
  */
 
 // Dependencies
-import { map } from 'lodash-es'
-import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray } from 'drizzle-orm';
+import { map } from 'lodash-es';
+import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { searches } from '../schema/searches';
 import { subscriptions } from '../schema/subscriptions';
 import { users } from '../schema/users';
-import { formatFileTitle } from '../../src/lib/formatters';
+import { formatTafsFormattedId } from '../../src/lib/formatters';
 
 /**
  * Gets the item details for each individual subscription
@@ -26,48 +26,55 @@ async function getSubscriptionDetails(sub) {
     });
     return {
       ...sub,
-      itemDetails: { name: item.folder },
-      itemLink: `/folder/${sub.itemId}`,
+      itemDetails: item,
+      description: item.folder,
+      itemLink: `/folder/${sub.itemId}`
     };
-  } else if (sub.type === 'file') {
-    const item = await db.query.files.findFirst({
-      where: eq(files.fileId, sub.itemId),
-      with: {
-        tafs: true
-      },
+  }
+  else if (sub.type === 'tafs') {
+    const item = await db.query.tafs.findFirst({
+      where: eq(tafs.tafsTableId, sub.itemId)
     });
     return {
       ...sub,
-      itemDetails: { name: formatFileTitle(item) },
-      itemLink: `/file/${sub.itemId}`,
+      itemDetails: item,
+      description: `TAFS: ${formatTafsFormattedId(item)}`,
+      itemLink: `/file/${item.fileId}#tafs_${item.tafsTableId}`
     };
-  } else if (sub.type === 'agency') {
+  }
+  else if (sub.type === 'agency') {
     const item = await db.query.tafs.findFirst({
       where: eq(tafs.budgetAgencyTitleId, sub.itemId)
     });
     return {
       ...sub,
-      itemDetails: { name: item.budgetAgencyTitle },
-      itemLink: `/agency/${sub.itemId}`,
+      itemDetails: {
+        agency: item.budgetAgencyTitle,
+        agencyId: item.budgetAgencyTitleId
+      },
+      description: item.budgetAgencyTitle,
+      itemLink: `/agency/${sub.itemId}`
     };
-  } else if (sub.type === 'bureau') {
-    const [agency,bureau] = sub.itemId.split(',');
+  }
+  else if (sub.type === 'bureau') {
+    const [agency, bureau] = sub.itemId.split(',');
     const item = await db.query.tafs.findFirst({
-      where: and(
-        eq(tafs.budgetAgencyTitleId, agency),
-        eq(tafs.budgetBureauTitleId, bureau)
-      )
+      where: and(eq(tafs.budgetAgencyTitleId, agency), eq(tafs.budgetBureauTitleId, bureau))
     });
     return {
       ...sub,
       itemDetails: {
         agency: item.budgetAgencyTitle,
-        name: item.budgetBureauTitle,
+        agencyId: item.budgetAgencyTitleId,
+        bureau: item.budgetBureauTitle,
+        bureauId: item.budgetBureauTitleId
       },
-      itemLink: `/agency/${agency}/bureau/${bureau}`,
+      description: item.budgetBureauTitle,
+      itemLink: `/agency/${agency}/bureau/${bureau}`
     };
-  } else if (sub.type === 'account') {
-    const [agency,bureau,account] = sub.itemId.split(',');
+  }
+  else if (sub.type === 'account') {
+    const [agency, bureau, account] = sub.itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(
         eq(tafs.budgetAgencyTitleId, agency),
@@ -79,19 +86,25 @@ async function getSubscriptionDetails(sub) {
       ...sub,
       itemDetails: {
         agency: item.budgetAgencyTitle,
+        agencyId: item.budgetAgencyTitleId,
         bureau: item.budgetBureauTitle,
-        name: item.accountTitle,
+        bureauId: item.budgetBureauTitleId,
+        account: item.accountTitle,
+        accountId: item.accountId
       },
-      itemLink: `/agency/${agency}/bureau/${bureau}/account/${account}`,
+      description: item.accountTitle,
+      itemLink: `/agency/${agency}/bureau/${bureau}/account/${account}`
     };
-  } else if (sub.type === 'search') {
+  }
+  else if (sub.type === 'search') {
     const item = await db.query.searches.findFirst({
       where: eq(searches.id, sub.itemId)
     });
     return {
       ...sub,
       itemDetails: item,
-      itemLink: `/search?${new URLSearchParams(item.criterion).toString()}`,
+      description: 'Saved Search',
+      itemLink: `/search?${new URLSearchParams(item.criterion).toString()}`
     };
   }
 }
@@ -101,18 +114,19 @@ async function getSubscriptionDetails(sub) {
  */
 export const getSubscriptionsByUser = async function () {
   const userSubs = {};
-  const subscriptionResults = await db.select()
+  const subscriptionResults = await db
+    .select()
     .from(subscriptions)
     .leftJoin(users, eq(subscriptions.userId, users.id));
   for (const result of subscriptionResults) {
-    if(!userSubs[result.user.email]) {
+    if (!userSubs[result.user.email]) {
       userSubs[result.user.email] = [];
     }
     const subDetails = await getSubscriptionDetails(result.subscriptions);
     userSubs[result.user.email].push(subDetails);
   }
   return userSubs;
-}
+};
 
 /**
  * Get a single subscription given the user's email, the type, and the item id
@@ -123,11 +137,16 @@ export const getUserSubscription = async function (email: string, type: string, 
   if (!userResults?.[0]) {
     return null;
   }
-  const subscriptionResults = await db.select().from(subscriptions).where(and(
-    eq(subscriptions.userId, userResults[0].id),
-    eq(subscriptions.type, type),
-    eq(subscriptions.itemId, itemId),
-  ));
+  const subscriptionResults = await db
+    .select()
+    .from(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.userId, userResults[0].id),
+        eq(subscriptions.type, type),
+        eq(subscriptions.itemId, itemId)
+      )
+    );
 
   return subscriptionResults?.[0];
 };
@@ -136,7 +155,11 @@ export const getUserSubscription = async function (email: string, type: string, 
  * Get a single subscription given the user's email, the type, and the item id
  * Also provide details for the item that was subscribed to
  */
-export const getUserSubscriptionDetails = async function (email: string, type: string, itemId: string) {
+export const getUserSubscriptionDetails = async function (
+  email: string,
+  type: string,
+  itemId: string
+) {
   const subscriptionResults = await getUserSubscription(email, type, itemId);
 
   return await getSubscriptionDetails(subscriptionResults);
@@ -150,8 +173,8 @@ export const getUserSubscriptionList = async function (email: string) {
     where: eq(users.email, email),
     with: {
       subscriptions: true,
-      searches: true,
-    },
+      searches: true
+    }
   });
   return userResults.subscriptions;
 };
@@ -169,6 +192,11 @@ export const getUserSubscriptionListDetails = async function (email: string) {
  * Add a single subscription given the user's email, the type, and the item id
  */
 export const addSubscription = async function (email: string, type: string, itemId: string) {
+  const existingSub = await getUserSubscription(email, type, itemId);
+  if (existingSub) {
+    return existingSub;
+  }
+
   const userResults = await db.select().from(users).where(eq(users.email, email));
   // If we have no user, exit early
   if (!userResults?.[0]) {
@@ -177,9 +205,9 @@ export const addSubscription = async function (email: string, type: string, item
   const newSubscription = {
     userId: userResults[0].id,
     type,
-    itemId,
+    itemId
   };
-  const newRecords = await db.insert(subscriptions).values(newSubscription).onConflictDoNothing().returning();
+  const newRecords = await db.insert(subscriptions).values(newSubscription).returning();
   return newRecords[0];
 };
 
@@ -187,16 +215,39 @@ export const addSubscription = async function (email: string, type: string, item
  * Update a subscription's frequency given the subscription id
  * We also provide the current user to verify permission
  */
-export const setSubscriptionFrequency = async function (email: string, subscriptionId: string, frequency: string) {
+export const setSubscriptionFrequency = async function (
+  email: string,
+  subscriptionId: string,
+  frequency: string
+) {
   const userResults = await db.select().from(users).where(eq(users.email, email));
   // If we have no user, exit early
   if (!userResults?.[0]) {
     return null;
   }
-  const updatedRecords = await db.update(subscriptions).set({ frequency }).where(and(
-    eq(subscriptions.userId, userResults[0].id),
-    eq(subscriptions.id, subscriptionId),
-  )).returning();
+  const updatedRecords = await db
+    .update(subscriptions)
+    .set({ frequency, modifiedAt: new Date() })
+    .where(and(eq(subscriptions.userId, userResults[0].id), eq(subscriptions.id, subscriptionId)))
+    .returning();
+  return updatedRecords[0];
+};
+
+/**
+ * Update a subscription's notified date to current timestamp to indicate it has been processed
+ * We also provide the current user to verify permission
+ */
+export const setSubscriptionAsNotified = async function (email: string, subscriptionId: string) {
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  // If we have no user, exit early
+  if (!userResults?.[0]) {
+    return null;
+  }
+  const updatedRecords = await db
+    .update(subscriptions)
+    .set({ lastNotifiedAt: new Date(), modifiedAt: new Date() })
+    .where(and(eq(subscriptions.userId, userResults[0].id), eq(subscriptions.id, subscriptionId)))
+    .returning();
   return updatedRecords[0];
 };
 
@@ -204,17 +255,27 @@ export const setSubscriptionFrequency = async function (email: string, subscript
  * Remove a single subscription given the subscription id
  * We also provide the current user to verify permission
  */
-export const removeSubscriptions = async function (email: string, subscriptionId: string | Array<string>) {
+export const removeSubscriptions = async function (
+  email: string,
+  subscriptionId: string | Array<string>
+) {
   const userResults = await db.select().from(users).where(eq(users.email, email));
   // If we have no user, exit early
   if (!userResults?.[0]) {
     return null;
   }
 
-  await db.delete(subscriptions).where(and(
-    eq(subscriptions.userId, userResults[0].id),
-    Array.isArray(subscriptionId) ? inArray(subscriptions.id, subscriptionId) : eq(subscriptions.id, subscriptionId),
-  ));
+  console.log('sub', userResults[0].id, subscriptionId);
+  await db
+    .delete(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.userId, userResults[0].id),
+        Array.isArray(subscriptionId)
+          ? inArray(subscriptions.id, subscriptionId)
+          : eq(subscriptions.id, subscriptionId)
+      )
+    );
 };
 
 /**
@@ -223,4 +284,4 @@ export const removeSubscriptions = async function (email: string, subscriptionId
 export const removeUser = async function (email: string) {
   // Deletion cascades, so when user is removed, all entries that reference user id will be removed
   await db.delete(users).where(eq(users.email, email));
-}
+};

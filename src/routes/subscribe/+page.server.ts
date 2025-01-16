@@ -1,41 +1,34 @@
-import {
-  error,
-  redirect,
-} from '@sveltejs/kit';
-import { deserialize } from '$app/forms';
-import type { PageServerLoad } from "./$types"
-import {
-  signIn,
-  signOut,
-} from '../../auth';
-import { getAuthUser } from '$lib/auth';
+import { error, redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+import { signIn, signOut } from '../../auth';
 import {
   addSubscription,
   removeSubscriptions,
   setSubscriptionFrequency,
   getUserSubscriptionList,
   getUserSubscriptionListDetails,
-  removeUser,
+  removeUser
 } from '$queries/subscriptions';
+import { subscriptionTypes } from '$config/subscriptions';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
   add: async ({ locals, request }) => {
     // Check login
-    const user = await getAuthUser({ locals });
+    const user = (await locals.auth())?.user;
     if (!user) {
       error(401, 'Must be authenticated to access this page');
     }
 
     // Add subscription
     const data = await request.json();
-    if (data.type && data.itemId) {
-      await addSubscription(user.email, data.type, data.itemId);
+    if (subscriptionTypes.includes(data.type) && data.itemId) {
+      return await addSubscription(user.email, data.type, data.itemId);
     }
   },
   remove: async ({ locals, request }) => {
     // Check login
-    const user = await getAuthUser({ locals });
+    const user = (await locals.auth())?.user;
     if (!user) {
       error(401, 'Must be authenticated to access this page');
     }
@@ -43,12 +36,12 @@ export const actions = {
     // Remove subscription
     const data = await request.json();
     if (data.subId) {
-      await removeSubscriptions(user.email, data.subId);
+      return await removeSubscriptions(user.email, data.subId);
     }
   },
   update: async ({ locals, request }) => {
     // Check login
-    const user = await getAuthUser({ locals });
+    const user = (await locals.auth())?.user;
     if (!user) {
       error(401, 'Must be authenticated to access this page');
     }
@@ -56,12 +49,12 @@ export const actions = {
     // Update subscription frequency
     const data = await request.json();
     if (data.subId && data.frequency) {
-      await setSubscriptionFrequency(user.email, data.subId, data.frequency);
+      return await setSubscriptionFrequency(user.email, data.subId, data.frequency);
     }
   },
-  manage: async ({ locals, request}) => {
+  manage: async ({ locals, request }) => {
     // Check login
-    const user = await getAuthUser({ locals });
+    const user = (await locals.auth())?.user;
     if (!user) {
       error(401, 'Must be authenticated to access this page');
     }
@@ -87,9 +80,9 @@ export const actions = {
     await Promise.all(updates);
     return { success: true };
   },
-  deactivate: async ({ locals, request}) => {
+  deactivate: async ({ locals }) => {
     // Check login
-    const user = await getAuthUser({ locals });
+    const user = (await locals.auth())?.user;
     if (!user) {
       error(401, 'Must be authenticated to access this page');
     }
@@ -99,12 +92,12 @@ export const actions = {
     return redirect(301, '/subscribe/deactivated');
   },
   login: signIn,
-  logout: signOut,
+  logout: signOut
 };
 
 export const load: PageServerLoad = async ({ locals }) => {
   // Get user session
-  const user = await getAuthUser({ locals });
+  const user = (await locals.auth())?.user;
 
   // If logged in, get subscription details
   let userSubscriptions;
@@ -114,7 +107,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   return {
     user,
-    userSubscriptions,
-  }
-}
-
+    userSubscriptions
+  };
+};

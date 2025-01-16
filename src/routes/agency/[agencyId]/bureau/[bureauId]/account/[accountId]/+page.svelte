@@ -6,7 +6,7 @@
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
   export let data: PageData;
-  $: ({ account, tafsByAccount, user } = data);
+  $: ({ account, tafsByAccount, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -36,9 +36,14 @@
 
   <h1>{account.accountTitle} Account</h1>
 
-  <SubscribeLink user={user} subType="account" subItemId={`${account.bureau.agency.budgetAgencyTitleId},${account.bureau.budgetBureauTitleId},${account.accountTitleId}`} />
-
   <p>There are {account.fileCount} files in this account.</p>
+
+  <SubscribeLink
+    {user}
+    subType="account"
+    subItemId={`${account.bureau.agency.budgetAgencyTitleId},${account.bureau.budgetBureauTitleId},${account.accountTitleId}`}
+    {existingSubscription}
+  />
 
   <TafsDisplay groupByAccount hideAccountHeader tafs={tafsByAccount} />
 </div>

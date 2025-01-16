@@ -24,7 +24,7 @@
     "test:integration:ui": "playwright test --ui",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest watch",
-    "collect": "tsx bin/collect.ts",
+    "collect": "dotenvx run -- tsx bin/collect.ts",
     "notify": "dotenvx run -- tsx bin/notifications.ts",
     "db:generate-migration": "drizzle-kit generate:pg",
     "db:migrate": "tsx bin/migrate.ts"

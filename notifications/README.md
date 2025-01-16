@@ -2,6 +2,7 @@
 
 Api application to allow for sending of notifications
 Currently supports:
+
 - email
 
 ## Usage

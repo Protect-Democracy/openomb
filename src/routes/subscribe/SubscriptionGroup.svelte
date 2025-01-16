@@ -14,19 +14,29 @@
   {#each subs as subscription}
     <tr>
       <td class="sub-link">
-        <a href={subscription.itemLink}>{subscription.itemDetails.name || 'Saved Search'}</a>
+        <a href={subscription.itemLink}>{subscription.description}</a>
       </td>
       <td class="sub-frequency">
-        <label class="sr-only" for={`frequency-${subscription.id}`}>Subscription Frequency</label>
+        <label class="sr-only" for={`frequency-${subscription.id}`}
+          >Set Email Frequency for {subscription.description}</label
+        >
         <CheckboxButtons
           name={`frequency-${subscription.id}`}
-          options={['daily','weekly']}
-          formatOptionLabel={capitalize} value={subscription.frequency}
+          options={['daily', 'weekly']}
+          formatOptionLabel={capitalize}
+          value={subscription.frequency}
         />
       </td>
       <td class="sub-remove">
-        <label class="sr-only" for={`remove-${subscription.id}`}>Remove Subscription</label>
-        <input type="checkbox" id={`remove-${subscription.id}`} name="remove" value={subscription.id} />
+        <label class="sr-only" for={`remove-${subscription.id}`}
+          >Remove Subscription to {subscription.description}</label
+        >
+        <input
+          type="checkbox"
+          id={`remove-${subscription.id}`}
+          name="remove"
+          value={subscription.id}
+        />
       </td>
     </tr>
   {/each}
@@ -38,5 +48,10 @@
     font-weight: var(--font-copy-weight-bold);
     background-color: var(--color-background-alt);
     color: var(--color-text-alt);
+  }
+
+  .sub-remove,
+  .sub-frequency {
+    text-align: center;
   }
 </style>

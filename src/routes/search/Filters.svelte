@@ -89,7 +89,14 @@
       >
 
       <svelte:fragment slot="content">
-        <Form {url} {user} {agencyBureauOptions} {yearOptions} {lineOptions} {approverTitleOptions} />
+        <Form
+          {url}
+          {user}
+          {agencyBureauOptions}
+          {yearOptions}
+          {lineOptions}
+          {approverTitleOptions}
+        />
       </svelte:fragment>
     </Drawer>
   </div>

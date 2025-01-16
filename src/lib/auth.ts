@@ -1,69 +1,55 @@
-/**
- * Get the current user's session
- *  This is needed to get the session on the client as well
- *  as on the server.  Server loads do not always fire
- * @todo - is there a better solution for this?
- */
-export async function getAuthUser({ locals, fetch }) {
-  if (locals) {
-    // If we are loading from the server, return our session
-    const session = await locals.auth();
-    return session?.user;
-  }
+import { notifierEmailName, notifierEmail } from '$config/subscriptions';
 
-  // If local server data is not available, fetch our user session directly
-  if (fetch) {
-    const response = await fetch('/auth/session');
-    const session = await response.json();
-    return session?.user;
-  }
-}
+// This code only runs on the server, so we want private env variables.
+//  (this avoids setting the notifications uri in the client env)
+import { environmentVariables } from '../../server/utilities';
 
+const env = environmentVariables();
 
 /**
  * Send the email that is used to verify and log in a user
  */
 export async function sendVerificationRequest(params) {
-  const { identifier: to, provider, url, theme } = params
-  const { host } = new URL(url)
-  const res = await fetch("http://notifications:8080/email/send", {
-    method: "POST",
+  const { identifier: to, url, theme } = params;
+  const { host } = new URL(url);
+  const res = await fetch(`${env.notificationsServiceUri}/email/send`, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from: provider.from,
+      from: notifierEmail,
+      from_name: notifierEmailName,
       to,
       title: `Sign in to ${host}`,
       html: html({ url, host, theme }),
-      text: text({ url, host }),
-    }),
-  })
+      text: text({ url, host })
+    })
+  });
 
-  if (!res.ok)
-    throw new Error("Resend error: " + JSON.stringify(await res.json()))
+  if (!res.ok) throw new Error('Resend error: ' + JSON.stringify(await res.json()));
 }
 
 function text(params: { url: string; host: string }) {
-  const { url } = params
+  const { url } = params;
 
-  return `Please click here to authenticate - ${url}`
+  return `Please click here to authenticate - ${url}`;
 }
 
 function html(params: { url: string; host: string; theme: Theme }) {
-  const { url, host, theme } = params
+  const { url, host, theme } = params;
 
-  const escapedHost = host.replace(/\./g, "&#8203;.")
+  const escapedHost = host.replace(/\./g, '&#8203;.');
 
-  const brandColor = theme.brandColor || "#346df1"
+  const brandColor = theme.brandColor || '#346df1';
   const color = {
-    background: "#f9f9f9",
-    text: "#444",
-    mainBackground: "#fff",
+    background: '#f9f9f9',
+    text: '#444',
+    mainBackground: '#fff',
     buttonBackground: brandColor,
     buttonBorder: brandColor,
-    buttonText: theme.buttonText || "#fff",
-  }
+    buttonText: theme.buttonText || '#fff'
+  };
 
   return `
 <body style="background: ${color.background};">
@@ -95,5 +81,5 @@ function html(params: { url: string; host: string; theme: Theme }) {
     </tr>
   </table>
 </body>
-`
+`;
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "subscriptions" ADD COLUMN "last_notified_at" timestamp DEFAULT now();

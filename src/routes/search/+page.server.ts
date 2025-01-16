@@ -1,5 +1,4 @@
-import { redirect } from '@sveltejs/kit';
-import { deserialize } from '$app/forms';
+import { error } from '@sveltejs/kit';
 import {
   mYearOptions,
   mLineNumberOptions,
@@ -10,50 +9,38 @@ import {
   mAccountSearchPaged,
   mAccountSearchFullCount,
   saveUserSearch,
+  removeUserSearches,
+  getUserSearch
 } from '$queries/search';
+import { getUserSubscription } from '$queries/subscriptions';
 import { bureaus } from '$queries/tafs';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
-  save: async ({ locals, request }) => {
-    const session = await locals.auth();
+  add: async ({ locals, request }) => {
+    const user = (await locals.auth())?.user;
+    if (!user) {
+      error(401, 'Must be authenticated to access this page');
+    }
+
     const data = await request.json();
     // Add subscription
-    if (session && data.criterion) {
-      return await saveUserSearch(session.user.email, data.criterion);
+    if (data.criterion) {
+      return await saveUserSearch(user.email, data.criterion);
     }
   },
-  subscribe: async ({ locals, request, fetch }) => {
-    const session = await locals.auth();
-    const data = await request.text();
-    const searchParams = new URLSearchParams(data);
-    const criterion = {
-      term: searchParams.get('term'),
-      agencyBureau: searchParams.get('agencyBureau'),
-      tafs: searchParams.get('tafs'),
-      account: searchParams.get('account'),
-      approver: searchParams.getAll('approver'),
-      year: searchParams.getAll('year'),
-      approvedStart: searchParams.get('approvedStart'),
-      approvedEnd: searchParams.get('approvedEnd'),
-      lineNum: searchParams.getAll('lineNum'),
-      footnoteNum: searchParams.getAll('footnoteNum')
+  remove: async ({ locals, request }) => {
+    const user = (await locals.auth())?.user;
+    if (!user) {
+      error(401, 'Must be authenticated to access this page');
     }
 
-    const resp = await fetch('/search?/save', {
-      method: 'POST',
-      headers: {
-        'x-sveltekit-action': 'true'
-      },
-      body: JSON.stringify({ criterion }),
-    });
-    const newSearch = deserialize(await resp.text());
-
+    const data = await request.json();
     // Add subscription
-    if (newSearch.data.id) {
-      redirect(303, `/subscribe/search/${newSearch.data.id}`);
+    if (data.searchId) {
+      return await removeUserSearches(user.email, data.searchId);
     }
-  },
+  }
 };
 
 /** @type {import('./$types').PageLoad} */
@@ -76,6 +63,11 @@ export const load = async ({ url, cookies, locals }) => {
   // Only perform our search once the form is submitted.  From the landing page, an
   // empty query is in the form ?term= so we don't need to perform a search.
   const searchString = url.searchParams.toString();
+
+  // User & subscription values
+  const user = (await locals.auth())?.user;
+  let existingSubscription;
+
   if (searchString && searchString !== 'term=') {
     // Get our arguments for our search queries.
     //
@@ -108,6 +100,12 @@ export const load = async ({ url, cookies, locals }) => {
     // Formatted search params
     formattedSearchParams = formatSearchParams(pagedSearchArgs);
 
+    // If we have search parameters, try getting an existing subscription
+    const existingSearch = user ? await getUserSearch(user.email, searchArgs) : null;
+    if (existingSearch) {
+      existingSubscription = await getUserSubscription(user.email, 'search', existingSearch.id);
+    }
+
     // Execute queries.  Important to memoize counts, less so for search.
     fileResults = await mFileSearchPaged(pagedSearchArgs);
     fileCount = jsEnabled
@@ -138,6 +136,10 @@ export const load = async ({ url, cookies, locals }) => {
     accountCount: accountCount || 0,
     accountPageSize,
     accountPageIndex,
+
+    //Subscription & user
+    user,
+    existingSubscription,
 
     // Page info
     pageMeta: {

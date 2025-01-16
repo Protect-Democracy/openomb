@@ -1,13 +1,19 @@
 import { recentlyApprovedWithTafs } from '$queries/files';
 import { bureauDetails, accountsByBureau } from '$queries/tafs';
+import { getUserSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params, locals, depends }) {
+export async function load({ params, locals }) {
   const bureau = await bureauDetails(params.agencyId, params.bureauId);
   if (!bureau) {
     error(404, 'Unable to find bureau');
   }
+
+  const user = (await locals.auth())?.user;
+  const existingSubscription = user
+    ? await getUserSubscription(user.email, 'bureau', `${params.agencyId},${params.bureauId}`)
+    : null;
 
   return {
     bureau,
@@ -16,6 +22,10 @@ export async function load({ params, locals, depends }) {
       agencyId: params.agencyId,
       bureauId: params.bureauId
     }),
+
+    user,
+    existingSubscription,
+
     pageMeta: {
       title: `Bureau: ${bureau.budgetBureauTitle} (Agency: ${bureau.agency.budgetAgencyTitle})`,
       breadcrumbs: [

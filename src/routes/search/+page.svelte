@@ -12,6 +12,7 @@
   import { Tabs, Tab } from '$components/tabs';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import AccountListingHiglightable from '$components/accounts/AccountListingHiglightable.svelte';
+  import SearchSubscribe from '$components/subscriptions/SearchSubscribe.svelte';
   import ResultSort from './ResultSort.svelte';
   import ResultCount from './ResultCount.svelte';
   import ResultPaging from './ResultPaging.svelte';
@@ -43,8 +44,17 @@
   // Derived
   // Linting issue workaround - https://github.com/sveltejs/eslint-plugin-svelte/issues/652
   // eslint-disable-next-line svelte/valid-compile
-  $: ({ searchParams, files, fileCount, filePageSize, accounts, accountCount, accountPageSize, user } =
-    data);
+  $: ({
+    searchParams,
+    files,
+    fileCount,
+    filePageSize,
+    accounts,
+    accountCount,
+    accountPageSize,
+    user,
+    existingSubscription
+  } = data);
   $: hasFileResults = files && files.length > 0;
   $: hasAccountResults = accounts && accounts.length > 0;
   $: hasSearchParams = $url.searchParams.toString().length > 0;
@@ -67,7 +77,6 @@
         <div class="search-form">
           <Form
             url={$url}
-            user={user}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
@@ -82,7 +91,7 @@
         <div class="search-filters">
           <Filters
             url={$url}
-            user={user}
+            {user}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
@@ -93,7 +102,6 @@
         <div class="search-form">
           <Form
             url={$url}
-            user={user}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}
@@ -106,6 +114,10 @@
 
   {#if hasSearched}
     <div class="results" id="results">
+      <div class="page-container">
+        <SearchSubscribe {user} url={$url} {existingSubscription} />
+      </div>
+
       <div id="file-results"></div>
       <div id="account-results"></div>
 

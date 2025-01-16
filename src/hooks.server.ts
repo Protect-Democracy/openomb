@@ -26,7 +26,7 @@ import type { Handle } from '@sveltejs/kit';
 import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
 import { cacheRevalidateSeconds, securityHeaders } from '$config';
 import { overrideDrizzleTracer } from '$db/connection';
-import { authHandles } from "./auth"
+import { authHandle } from './auth';
 
 // Override our drizzle tracing so that we see queries
 overrideDrizzleTracer();
@@ -41,6 +41,23 @@ export const handleError = Sentry.handleErrorWithSentry();
  *  are only adding our headers once per server request.
  */
 const addHeaders: Handle = async ({ event, resolve }) => {
+  // If we have a user logged in, do not include caching headers
+  const user = (await event.locals.auth())?.user;
+  console.log(user);
+  const cacheHeaders = user
+    ? {
+        'Cache-Control': 'no-cache, must-revalidate',
+        Expires: 'Sat, 26 Jul 1997 05:00:00 GMT'
+      }
+    : {
+        // Cache headers.  Given that we know that we will be running the data collection
+        // process daily at a certain time, we can use Expires header.  Make sure not to set
+        // the max-age in Cache-Control as that will override Expires.
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
+        'Cache-Control': `public, stale-while-revalidate=${isProduction() ? cacheRevalidateSeconds : 10}`,
+        Expires: dateForCacheInvalidation().toUTCString()
+      };
+
   // Common headers.
   //
   // Note: These only apply to code routes and not assets or static files.
@@ -54,12 +71,7 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   //
   // Note: CSP headers are configured in `svelte.config.js`
   event.setHeaders({
-    // Cache headers.  Given that we know that we will be running the data collection
-    // process daily at a certain time, we can use Expires header.  Make sure not to set
-    // the max-age in Cache-Control as that will override Expires.
-    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expires
-    'Cache-Control': `public, stale-while-revalidate=${isProduction() ? cacheRevalidateSeconds : 10}`,
-    Expires: dateForCacheInvalidation().toUTCString(),
+    ...cacheHeaders,
 
     // Sentry profiling header
     // https://docs.sentry.io/platforms/javascript/guides/sveltekit/profiling/#step-2-add-document-policy-js-profiling-header
@@ -77,4 +89,4 @@ const addHeaders: Handle = async ({ event, resolve }) => {
 const sentryHandle = Sentry.sentryHandle({ injectFetchProxyScript: false });
 
 // Add our handlers to each request
-export const handle = sequence(sentryHandle, addHeaders, ...authHandles);
+export const handle = sequence(sentryHandle, authHandle, addHeaders);

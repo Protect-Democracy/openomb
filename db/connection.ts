@@ -48,7 +48,7 @@ export const db = drizzle(pool, {
     ...collections,
     ...users,
     ...subscriptions,
-    ...searches,
+    ...searches
   }
 });
 console.info('Database connected');
