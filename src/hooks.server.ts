@@ -23,9 +23,12 @@ if (env.sentrySvelteDsn) {
 // Dependencies
 import { sequence } from '@sveltejs/kit/hooks';
 import type { Handle } from '@sveltejs/kit';
-import { isProduction, dateForCacheInvalidation } from '$lib/utilities';
+import { dateForCacheInvalidation } from '$lib/utilities';
 import { cacheRevalidateSeconds, securityHeaders } from '$config';
 import { overrideDrizzleTracer } from '$db/connection';
+
+// Is production
+export const isProduction = (): boolean => env.environment == 'production' || import.meta.env.PROD;
 
 // Override our drizzle tracing so that we see queries
 overrideDrizzleTracer();

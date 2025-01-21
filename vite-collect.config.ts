@@ -15,8 +15,16 @@ const dependencies = Object.keys({
 });
 
 export default defineConfig({
+  // TODO: Unsure why these aliases are not being picked up via
+  // the tsconfig.json.  This is a workaround.
+  resolve: {
+    alias: {
+      $config: 'src/config/index.ts',
+      '$config/*': 'src/config/*'
+    }
+  },
   build: {
-    target: ['node18'],
+    target: ['node20'],
     // Note that this directory will get cleared out on build, so combing
     // places with other scripts is not a good idea
     outDir: 'build-collect',

@@ -22,6 +22,8 @@ import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
+import { lineTypes } from '../schema/line-types';
+import { lineDescriptions } from '$db/schema/line-descriptions';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types
@@ -85,20 +87,6 @@ export async function yearOptions() {
 export const mYearOptions = memoizeDataAsync(yearOptions);
 
 /**
- * Get all existing line number values
- */
-export async function lineNumberOptions() {
-  const lineNumberOptions = await db
-    .selectDistinct({ data: lines.lineNumber })
-    .from(lines)
-    .where(isNotNull(lines.lineNumber));
-
-  return lineNumberOptions.map((v) => v.data);
-}
-
-export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
-
-/**
  * Get all existing approver title options
  */
 export async function approverTitleOptions() {
@@ -114,6 +102,43 @@ export async function approverTitleOptions() {
 export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
 
 /**
+ * Get line description options.
+ */
+export const lineNumberOptions = async function () {
+  // Get line descriptions for line numbers that are in the data
+  // as line descriptions data is a full set of line numbers but not
+  // necessarily all are used.
+  const results = await db
+    .selectDistinct({
+      lineNumber: lines.lineNumber,
+      description: lineDescriptions.description,
+      lineTypeId: lines.lineTypeId,
+      lineType: lineTypes.name
+    })
+    .from(lines)
+    .leftJoin(lineDescriptions, eq(lines.lineNumber, lineDescriptions.lineNumber))
+    .leftJoin(lineTypes, eq(lines.lineTypeId, lineTypes.lineTypeId))
+    .where(isNotNull(lines.lineNumber))
+    .orderBy(asc(lines.lineNumber));
+
+  if (!results) {
+    return [];
+  }
+
+  // Format for options
+  return results.map((v) => {
+    return {
+      value: v.lineNumber,
+      label: v.description ? `${v.lineNumber} - ${v.description}` : `${v.lineNumber} - (unknown)`,
+      groupValue: v.lineTypeId || 'other',
+      groupLabel: v.lineType || 'Other'
+    };
+  });
+};
+
+export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
+
+/**
  * Format the search parameters to make it easier to turn into query.
  *
  * @param searchParams Search params (optionally including pagination)
@@ -127,7 +152,7 @@ export function formatSearchParams(
     .map((v) => parseInt(v))
     .filter((t) => !!t);
   const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
-    .map((v) => v.trim())
+    .map((v) => (v.match(/[0-9]+/) ? v.trim() : ''))
     .filter((t) => !!t);
   const approverIds = (searchParams.approver ? searchParams.approver.split(',') : [])
     .map((v) => v.trim())
