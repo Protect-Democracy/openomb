@@ -130,7 +130,16 @@
       <SearchSelect
         id="lineNum"
         name="lineNum"
-        options={lineOptions}
+        options={lineOptions.map((o) => o.value)}
+        formatOptionLabel={(v) => {
+          return lineOptions.find((o) => o.value === v)?.label;
+        }}
+        formatGroupValue={(v) => {
+          return lineOptions.find((o) => o.value === v)?.groupValue;
+        }}
+        formatGroupLabel={(v) => {
+          return lineOptions.find((o) => o.value === v)?.groupLabel;
+        }}
         value={url.searchParams.getAll('lineNum')}
         multi
       />

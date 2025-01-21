@@ -22,6 +22,20 @@
       "when": 1733522359958,
       "tag": "0002_peaceful_roland_deschain",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1733862966960,
+      "tag": "0003_aberrant_thunderbolt_ross",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1734036486793,
+      "tag": "0004_gigantic_lady_vermin",
+      "breakpoints": true
     }
   ]
 }
