@@ -116,6 +116,11 @@ export const tafs = pgTable(
     beginPoa: integer('begin_poa'),
     endPoa: integer('end_poa'),
 
+    // Computed formatted TAFS ID.  Saved in DB for easier searching.
+    // Ideally this is not null, but unsure how to handle creating the data
+    // in the SQL migration.
+    tafsIdFormatted: varchar('tafs_id_formatted'),
+
     // Computed account identifier (cgacAgency, cgacAcct, allocationAgencyCode, allocationSubacct)
     accountId: varchar('account_id').notNull(),
 
@@ -169,6 +174,7 @@ export const tafs = pgTable(
       ),
       allocationSubacctIndex: index('tafs_allocation_subacct_index').on(tafs.allocationSubacct),
       accountIdIndex: index('tafs_account_id_index').on(tafs.accountId),
+      tafsIdFormattedIndex: index('tafs_tafs_id_formatted_index').on(tafs.tafsIdFormatted),
       budgetAgencyTitleIndex: index('tafs_budget_agency_title_index').on(tafs.budgetAgencyTitle),
       budgetBureauTitleIndex: index('tafs_budget_bureau_title_index').on(tafs.budgetBureauTitle),
       accountTitleIndex: index('tafs_account_title_index').on(tafs.accountTitle),
@@ -255,6 +261,44 @@ export const computeAccountId = (tafsRecord: typeof tafs.$inferSelect): string =
   ]
     .filter(Boolean)
     .join('-');
+};
+
+/**
+ * Consistent formatting of the TAFS ID.
+ *
+ * Examples:
+ *  - 12-3510 2023/2024
+ *  - 60-60-002-8051 /X
+ *  - 69-0130 /2022
+ *
+ * Note that this not seem consistent in the Excel files and unsure what
+ * this should be exactly.
+ *
+ * Have seen no years with the X in the middle and at the end
+ *    - 080-X-1200
+ *    - 60-60-002-8051 /X
+ *
+ * @param tafsRecord
+ * @returns Formatted TAFS ID
+ */
+export const computeTafsIdFormatted = (tafsRecord: typeof tafs.$inferSelect): string => {
+  const account = [
+    tafsRecord.cgacAgency,
+    tafsRecord.cgacAcct,
+    tafsRecord.allocationAgencyCode,
+    tafsRecord.allocationSubacct
+  ]
+    .filter(Boolean)
+    .join('-');
+
+  const years =
+    tafsRecord.beginPoa && tafsRecord.endPoa && +tafsRecord.beginPoa !== +tafsRecord.endPoa
+      ? `${tafsRecord.beginPoa}/${tafsRecord.endPoa}`
+      : tafsRecord.beginPoa
+        ? `/${tafsRecord.beginPoa}`
+        : '/X';
+
+  return `${account} ${years}`;
 };
 
 /**

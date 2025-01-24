@@ -378,6 +378,7 @@ export const tafsByAccount = async function (
   return await db
     .select({
       tafsId: tafs.tafsId,
+      tafsIdFormatted: tafs.tafsIdFormatted,
       cgacAgency: tafs.cgacAgency,
       cgacAcct: tafs.cgacAcct,
       allocationAgencyCode: tafs.allocationAgencyCode,
@@ -403,6 +404,7 @@ export const tafsByAccount = async function (
 };
 
 // Memoized
+export const mTafsByAccount = memoizeDataAsync(tafsByAccount);
 export const mAgenciesWithChildren = memoizeDataAsync(agenciesWithChildren);
 export const mAgencies = memoizeDataAsync(agencies);
 export const mBureaus = memoizeDataAsync(bureaus);

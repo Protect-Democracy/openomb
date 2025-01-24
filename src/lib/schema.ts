@@ -9,7 +9,7 @@ import type {
 } from 'schema-dts';
 import { siteName, siteDescription, siteKeywords, deployedBaseUrl } from '$config';
 import { isArray } from 'lodash-es';
-import { formatFileTitle, formatTafsFormattedId } from './formatters';
+import { formatFileTitle } from './formatters';
 import type { filesSelect } from '$db/schema/files';
 import type { tafsSelect } from '$db/schema/tafs';
 import pdLogo from '$assets/logos/pd-white-words-logo.svg';
@@ -127,7 +127,7 @@ export function fileSchema(
     dateModified: file.modifiedAt?.toISOString(),
     hasPart: file.tafs?.map((t) => ({
       '@type': 'Dataset',
-      name: `${formatTafsFormattedId(t) || t.tafsId} - ${t.accountTitle}`,
+      name: `${t.tafsIdFormatted || t.tafsId} - ${t.accountTitle}`,
       description: `${t.accountTitle} account, Iteration ${t.iteration}, Fiscal year ${t.fiscalYear}`,
       url: `${deployedBaseUrl}/file/${file.fileId}#tafs_${t.tafsTableId}`
     }))

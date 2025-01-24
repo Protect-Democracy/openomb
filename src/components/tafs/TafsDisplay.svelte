@@ -15,7 +15,7 @@
 
 <script lang="ts">
   import { groupBy, orderBy } from 'lodash-es';
-  import { formatDate, formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
+  import { formatDate, formatFileTitle } from '$lib/formatters';
 
   export let tafs;
   export let headerElement = 'h3';
@@ -51,7 +51,7 @@
               this={hideAccountHeader ? headerElement : subheaderElement}
               class="tafs-title"
             >
-              TAFS {formatTafsFormattedId(tafsById[tafsId][0])}
+              TAFS {tafsById[tafsId][0].tafsIdFormatted}
             </svelte:element>
 
             {#each Object.keys(tafsByYear) as fiscalYear (fiscalYear)}
@@ -94,7 +94,7 @@
               >
             </svelte:element>
             <svelte:element this={hideFileHeader ? subheaderElement : 'div'} class="tafs-subtitle">
-              TAFS {formatTafsFormattedId(tafsEntry)}
+              TAFS {tafsEntry.tafsIdFormatted}
             </svelte:element>
             <div class="tags">
               <span class="tag">FY {tafsEntry.fiscalYear}</span>
@@ -130,7 +130,7 @@
           >
         </svelte:element>
         <svelte:element this={subheaderElement} class="tafs-subtitle">
-          TAFS {formatTafsFormattedId(tafsEntry)}
+          TAFS {tafsEntry.tafsIdFormatted}
         </svelte:element>
         <div class="tags">
           <span class="tag">FY {tafsEntry.fiscalYear}</span>

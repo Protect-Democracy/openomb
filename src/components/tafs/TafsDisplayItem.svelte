@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { tafsDetails } from '$db/schema/tafs';
-  import { formatTafsFormattedId, formatDateISO, formatDate } from '$lib/formatters';
+  import { formatDateISO, formatDate } from '$lib/formatters';
 
   // Props
   export let tafs: tafsDetails;
@@ -23,7 +23,7 @@
     <ul class="inline-list ids">
       <li>
         <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>
-        {formatTafsFormattedId(tafs)}
+        {tafs.tafsIdFormatted}
       </li>
       <li>File {fileId}</li>
     </ul>

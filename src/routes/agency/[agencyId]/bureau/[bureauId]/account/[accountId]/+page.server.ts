@@ -1,4 +1,4 @@
-import { accountDetails, tafsByAccount } from '$queries/tafs';
+import { accountDetails, mTafsByAccount } from '$queries/tafs';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
@@ -11,7 +11,7 @@ export async function load({ params }) {
 
   return {
     account,
-    tafsByAccount: await tafsByAccount(params.agencyId, params.bureauId, params.accountId),
+    tafsByAccount: await mTafsByAccount(params.agencyId, params.bureauId, params.accountId),
     pageMeta: {
       title: `Account: ${account.accountTitle} (Bureau: ${account.bureau.agency.budgetAgencyTitle})`,
       breadcrumbs: [

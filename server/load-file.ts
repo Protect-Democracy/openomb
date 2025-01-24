@@ -13,7 +13,13 @@ import { files, computeFundsProvidedByParsed } from '../db/schema/files';
 import { lines } from '../db/schema/lines';
 import { mLineTypeFromLineNumber } from '../db/queries/line-types';
 import { footnotes } from '../db/schema/footnotes';
-import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '../db/schema/tafs';
+import {
+  tafs,
+  computeTafsId,
+  computeTafsTableId,
+  computeAccountId,
+  computeTafsIdFormatted
+} from '../db/schema/tafs';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -188,6 +194,7 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
     line.tafsId = computeTafsId(line);
     line.tafsTableId = computeTafsTableId(line);
     line.accountId = computeAccountId(line);
+    line.tafsIdFormatted = computeTafsIdFormatted(line);
     scheduleRecords.push(line);
   }
 
@@ -214,6 +221,7 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
       allocationSubacct: schedulesData[0].allocationSubacct,
       beginPoa: schedulesData[0].beginPoa,
       endPoa: schedulesData[0].endPoa,
+      tafsIdFormatted: schedulesData[0].tafsIdFormatted,
       accountId: schedulesData[0].accountId,
       budgetAgencyTitle: schedulesData[0].budgetAgencyTitle,
       budgetBureauTitle: schedulesData[0].budgetBureauTitle,

@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { uniqBy, reduce } from 'lodash-es';
   import { writable } from 'svelte/store';
-  import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
+  import { formatFileTitle } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import Switch from '$components/inputs/Switch.svelte';
   import TAFSLines from './TAFSLines.svelte';
@@ -71,9 +71,8 @@
 
         <section class="tafs-section">
           <h3 id="tafs_{tafsGroup.tafsTableId}" class="tafs-heading">
-            <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {formatTafsFormattedId(
-              tafsGroup
-            )} - {tafsGroup.accountTitle}
+            <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {tafsGroup.tafsIdFormatted}
+            - {tafsGroup.accountTitle}
           </h3>
 
           <TAFSMeta {tafsGroup} />

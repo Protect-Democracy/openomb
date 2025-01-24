@@ -4,7 +4,6 @@
     formatDate,
     formatDateISO,
     highlight,
-    formatTafsFormattedId,
     highlightOrder,
     hasHighlight
   } from '$lib/formatters';
@@ -61,8 +60,8 @@
     uniqBy(
       file?.tafs?.map((t) => ({
         id: t.tafsId,
-        title: formatTafsFormattedId(t),
-        highlightedTitle: highlight(formatTafsFormattedId(t), [highlightParams?.tafs])
+        title: t.tafsIdFormatted,
+        highlightedTitle: highlight(t.tafsIdFormatted, [highlightParams?.tafs])
       })) || [],
       'id'
     ),

@@ -90,44 +90,6 @@ export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): 
 }
 
 /**
- * Consistent formatting of the TAFS ID.
- *
- * Examples:
- *  - 12-3510 2023/2024
- *  - 60-60-002-8051 /X
- *  - 69-0130 /2022
- *
- * Note that this not seem consistent in the Excel files and unsure what
- * this should be exactly.
- *
- * Have seen no years with the X in the middle and at the end
- *    - 080-X-1200
- *    - 60-60-002-8051 /X
- *
- * @param tafsRecord
- * @returns Formatted TAFS ID
- */
-export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
-  const account = [
-    tafsRecord.cgacAgency,
-    tafsRecord.cgacAcct,
-    tafsRecord.allocationAgencyCode,
-    tafsRecord.allocationSubacct
-  ]
-    .filter(Boolean)
-    .join('-');
-
-  const years =
-    tafsRecord.beginPoa && tafsRecord.endPoa && +tafsRecord.beginPoa !== +tafsRecord.endPoa
-      ? `${tafsRecord.beginPoa}/${tafsRecord.endPoa}`
-      : tafsRecord.beginPoa
-        ? `/${tafsRecord.beginPoa}`
-        : '/X';
-
-  return `${account} ${years}`;
-};
-
-/**
  * Highlight part of a string based on a set of search terms
  */
 export const highlight = function (text?: string | null, terms?: string[], trim?: number): string {
