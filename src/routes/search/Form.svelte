@@ -3,6 +3,7 @@
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
   import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
   import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
+  import Popover from '$components/popover/Popover.svelte';
   import { submitting } from './form-store';
   import { getContext } from 'svelte';
 
@@ -36,13 +37,25 @@
 <form method="get" on:submit={submitHandler}>
   <div class="field-col">
     <div class="field">
-      <label for="term">Keyword</label>
-      <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
-      <small
-        >Multiple keywords are inclusive and must be separated by commas. E.g. <i
-          >navy, department of defense, medical</i
-        > will match all those terms.</small
-      >
+      <div class="label-group">
+        <label for="term">Keyword</label>
+        <Popover triggerLabel="Help for keyword search">
+          <p class="field-help" id="term-help">
+            Multiple keywords are inclusive and must be separated by commas. E.g. <i
+              >navy, department of defense, medical</i
+            > will match all those terms.
+          </p>
+        </Popover>
+      </div>
+
+      <input
+        type="text"
+        id="term"
+        name="term"
+        value={url.searchParams.get('term')}
+        aria-describedby="term-help"
+        placeholder="e.g. navy, medical"
+      />
     </div>
 
     <div class="field">
@@ -57,13 +70,33 @@
     </div>
 
     <div class="field">
-      <label for="tafs">Account number (Treasury Account Symbol)</label>
-      <input type="text" id="tafs" name="tafs" value={url.searchParams.get('tafs')} />
+      <div class="label-group">
+        <label for="tafs">Account number (Treasury Account Symbol)</label>
+        <Popover triggerLabel="Help for Treasury Account Symbol search">
+          <p class="field-help" id="tafs-help">
+            Filter on TAFS identifier. E.g. <i>326-1900, /X, 2022/2025</i>.
+          </p>
+        </Popover>
+      </div>
+      <input
+        type="text"
+        id="tafs"
+        name="tafs"
+        value={url.searchParams.get('tafs')}
+        aria-describedby="tafs-help"
+        placeholder="e.g. 326-1900"
+      />
     </div>
 
     <div class="field">
       <label for="account">Account name</label>
-      <input type="text" id="account" name="account" value={url.searchParams.get('account')} />
+      <input
+        type="text"
+        id="account"
+        name="account"
+        value={url.searchParams.get('account')}
+        placeholder="e.g. Student Aid"
+      />
     </div>
 
     <div class="field">
@@ -204,13 +237,22 @@
     margin-bottom: var(--spacing);
   }
 
-  .field small {
-    padding-top: var(--spacing-half);
-    color: var(--color-text-muted);
-  }
-
   .field {
     min-height: calc(var(--spacing) * 4.3);
+  }
+
+  .label-group {
+    display: flex;
+    justify-content: space-between;
+
+    label {
+      margin-right: var(--spacing);
+    }
+  }
+
+  .field-help {
+    font-size: var(--font-size-small);
+    margin: 0;
   }
 
   .date-fields {

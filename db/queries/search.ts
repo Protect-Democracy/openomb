@@ -139,6 +139,43 @@ export const lineNumberOptions = async function () {
 export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
 
 /**
+ * Get TAFS search options
+ *
+ * Note, there are 5000+ TAFS options, so loading this into
+ * the browser is too much.
+ */
+export const tafsOptions = async function () {
+  // Get line descriptions for line numbers that are in the data
+  // as line descriptions data is a full set of line numbers but not
+  // necessarily all are used.
+  const results = await db
+    .selectDistinct({
+      tafsIdFormatted: tafs.tafsIdFormatted,
+      accountTitle: tafs.accountTitle,
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId
+    })
+    .from(tafs)
+    .orderBy(asc(tafs.budgetAgencyTitle), asc(tafs.tafsIdFormatted));
+
+  if (!results) {
+    return [];
+  }
+
+  // Format for options
+  return results.map((v) => {
+    return {
+      value: v.tafsIdFormatted,
+      label: `${v.tafsIdFormatted} - ${v.budgetAgencyTitle}`,
+      groupValue: v.budgetAgencyTitleId,
+      groupLabel: v.budgetAgencyTitle
+    };
+  });
+};
+
+export const mTafsOptions = memoizeDataAsync(tafsOptions);
+
+/**
  * Format the search parameters to make it easier to turn into query.
  *
  * @param searchParams Search params (optionally including pagination)
@@ -276,7 +313,7 @@ function generalSearchFilters(
   );
 
   // Other search terms
-  where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);
+  where.push(searchParams.tafs ? ilike(tafs.tafsIdFormatted, `%${searchParams.tafs}%`) : undefined);
   where.push(
     searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
   );
