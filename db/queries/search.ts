@@ -7,6 +7,7 @@ import {
   gte,
   lte,
   isNotNull,
+  isNull,
   count,
   countDistinct,
   asc,
@@ -23,6 +24,8 @@ import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
 import { searches } from '../schema/searches';
 import { users } from '../schema/users';
+import { lineTypes } from '../schema/line-types';
+import { lineDescriptions } from '$db/schema/line-descriptions';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types
@@ -39,6 +42,7 @@ export type SearchParams = {
   approver: string;
   approvedStart?: Date;
   approvedEnd?: Date;
+  apportionmentType: string;
   year: string;
   lineNum: string;
   footnoteNum: string;
@@ -64,6 +68,7 @@ export type FormattedSearchParamsFields = {
   approverIds: string[];
   footnoteNumbers: string[];
   keywordTerms: string[];
+  apportionmentTypes: string[];
 };
 
 export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
@@ -84,20 +89,6 @@ export async function yearOptions() {
 export const mYearOptions = memoizeDataAsync(yearOptions);
 
 /**
- * Get all existing line number values
- */
-export async function lineNumberOptions() {
-  const lineNumberOptions = await db
-    .selectDistinct({ data: lines.lineNumber })
-    .from(lines)
-    .where(isNotNull(lines.lineNumber));
-
-  return lineNumberOptions.map((v) => v.data);
-}
-
-export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
-
-/**
  * Get all existing approver title options
  */
 export async function approverTitleOptions() {
@@ -113,6 +104,43 @@ export async function approverTitleOptions() {
 export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
 
 /**
+ * Get line description options.
+ */
+export const lineNumberOptions = async function () {
+  // Get line descriptions for line numbers that are in the data
+  // as line descriptions data is a full set of line numbers but not
+  // necessarily all are used.
+  const results = await db
+    .selectDistinct({
+      lineNumber: lines.lineNumber,
+      description: lineDescriptions.description,
+      lineTypeId: lines.lineTypeId,
+      lineType: lineTypes.name
+    })
+    .from(lines)
+    .leftJoin(lineDescriptions, eq(lines.lineNumber, lineDescriptions.lineNumber))
+    .leftJoin(lineTypes, eq(lines.lineTypeId, lineTypes.lineTypeId))
+    .where(isNotNull(lines.lineNumber))
+    .orderBy(asc(lines.lineNumber));
+
+  if (!results) {
+    return [];
+  }
+
+  // Format for options
+  return results.map((v) => {
+    return {
+      value: v.lineNumber,
+      label: v.description ? `${v.lineNumber} - ${v.description}` : `${v.lineNumber} - (unknown)`,
+      groupValue: v.lineTypeId || 'other',
+      groupLabel: v.lineType || 'Other'
+    };
+  });
+};
+
+export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
+
+/**
  * Format the search parameters to make it easier to turn into query.
  *
  * @param searchParams Search params (optionally including pagination)
@@ -126,7 +154,7 @@ export function formatSearchParams(
     .map((v) => parseInt(v))
     .filter((t) => !!t);
   const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
-    .map((v) => v.trim())
+    .map((v) => (v.match(/[0-9]+/) ? v.trim() : ''))
     .filter((t) => !!t);
   const approverIds = (searchParams.approver ? searchParams.approver.split(',') : [])
     .map((v) => v.trim())
@@ -137,6 +165,13 @@ export function formatSearchParams(
   const keywordTerms = (searchParams.term ? searchParams.term.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
+  const apportionmentTypes = (
+    searchParams.apportionmentType ? searchParams.apportionmentType.split(',') : []
+  )
+    .map((v) => {
+      return v.match(/letter/i) ? 'letter' : 'spreadsheet';
+    })
+    .filter((t) => !!t);
 
   const formattedSearchParams: FormattedSearchParams | FormattedSearchPaginationParams = {
     ...searchParams,
@@ -144,7 +179,8 @@ export function formatSearchParams(
     lineNumbers,
     approverIds,
     footnoteNumbers,
-    keywordTerms
+    keywordTerms,
+    apportionmentTypes
   };
 
   return formattedSearchParams;
@@ -158,7 +194,7 @@ export function formatSearchParams(
  * @param column Table column to compare against
  * @returns
  */
-function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'files') {
+function keywordSearch(keywordTerms: string[], mainTable: 'files' | 'tafs' = 'files') {
   const lineSearch = (keyword: string) => {
     if (mainTable === 'tafs') {
       return inArray(
@@ -205,12 +241,13 @@ function keywordSearch(keywordTermas: string[], mainTable: 'files' | 'tafs' = 'f
   // If we have keywords separated by commas, separate these and use in search
   // TODO: Is this more expensive than doing a LIKE ALL|ANY (ARRAY['%term%', '%other%', '%thing%'])
   return and(
-    ...keywordTermas.map((keyword) =>
+    ...keywordTerms.map((keyword) =>
       or(
         ilike(tafs.accountTitle, `%${keyword}%`),
         ilike(tafs.budgetAgencyTitle, `%${keyword}%`),
         ilike(tafs.budgetBureauTitle, `%${keyword}%`),
         ilike(files.fundsProvidedByParsed, `%${keyword}%`),
+        ilike(files.sourceText, `%${keyword}%`),
         lineSearch(keyword),
         footnoteSearch(keyword)
       )
@@ -310,6 +347,20 @@ function generalSearchFilters(
   where.push(
     searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
   );
+
+  // Apportionemnt type.  Only need to search on a single one
+  if (
+    searchParams.apportionmentTypes.length === 1 &&
+    searchParams.apportionmentTypes[0] === 'letter'
+  ) {
+    where.push(isNotNull(files.pdfUrl));
+  }
+  if (
+    searchParams.apportionmentTypes.length === 1 &&
+    searchParams.apportionmentTypes[0] === 'spreadsheet'
+  ) {
+    where.push(isNull(files.pdfUrl));
+  }
 
   // Complete AND wheres
   const filteredWhere = where.filter((v) => !!v);

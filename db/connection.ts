@@ -24,6 +24,8 @@ import * as collections from './schema/collections';
 import * as users from './schema/users';
 import * as subscriptions from './schema/subscriptions';
 import * as searches from './schema/searches';
+import * as lineTypes from './schema/line-types';
+import * as lineDescriptions from './schema/line-descriptions';
 
 // Constants
 const env = environmentVariables();
@@ -48,7 +50,9 @@ export const db = drizzle(pool, {
     ...collections,
     ...users,
     ...subscriptions,
-    ...searches
+    ...searches,
+    ...lineTypes,
+    ...lineDescriptions
   }
 });
 console.info('Database connected');

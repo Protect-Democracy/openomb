@@ -8,6 +8,7 @@
 
   // Derived
   $: ({ tafs } = file);
+  $: letterApportionment = !!file.pdfUrl;
   $: uniqueAgencies = uniqBy(
     tafs.map((tafsGroup) => ({
       id: tafsGroup.budgetAgencyTitleId,
@@ -22,7 +23,10 @@
   <ul class="grid-values">
     <li class="grid-value">
       <strong>File ID<span class="sr-only">:</span></strong>
-      <span>{file.fileId}</span>
+      <span class="file-id-value"
+        >{file.fileId}{#if letterApportionment}<a href="#page-footnote-file-id">&Dagger;</a
+          >{/if}</span
+      >
     </li>
 
     <li class="grid-value">
@@ -187,5 +191,9 @@
         min-width: auto;
       }
     }
+  }
+
+  .file-id-value {
+    word-break: break-all;
   }
 </style>

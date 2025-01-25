@@ -130,7 +130,16 @@
       <SearchSelect
         id="lineNum"
         name="lineNum"
-        options={lineOptions}
+        options={lineOptions.map((o) => o.value)}
+        formatOptionLabel={(v) => {
+          return lineOptions.find((o) => o.value === v)?.label;
+        }}
+        formatGroupValue={(v) => {
+          return lineOptions.find((o) => o.value === v)?.groupValue;
+        }}
+        formatGroupLabel={(v) => {
+          return lineOptions.find((o) => o.value === v)?.groupLabel;
+        }}
         value={url.searchParams.getAll('lineNum')}
         multi
       />
@@ -144,6 +153,18 @@
         name="footnoteNum"
         options={['A', 'B']}
         value={url.searchParams.getAll('footnoteNum')}
+        multi
+      />
+    </div>
+
+    <div class="field">
+      <label for="apportionmentType">Apportionment Type</label>
+
+      <CheckboxButtons
+        id="apportionmentType"
+        name="apportionmentType"
+        options={['Standard (Excel)', 'Letter (PDF)']}
+        value={url.searchParams.getAll('apportionmentType')}
         multi
       />
     </div>

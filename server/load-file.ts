@@ -6,9 +6,12 @@
 import { captureException } from '@sentry/node';
 import { groupBy } from 'lodash-es';
 import { eq } from 'drizzle-orm';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
+import { DateTime } from 'luxon';
 import { request, urlExists } from './request';
 import { files, computeFundsProvidedByParsed } from '../db/schema/files';
-import { lines, computeLineType } from '../db/schema/lines';
+import { lines } from '../db/schema/lines';
+import { mLineTypeFromLineNumber } from '../db/queries/line-types';
 import { footnotes } from '../db/schema/footnotes';
 import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '../db/schema/tafs';
 import {
@@ -65,6 +68,7 @@ export type ApportionmentFileJson = {
 
 // Constants
 const env = environmentVariables();
+const collectionTimezone = 'America/New_York';
 
 /**
  * Load an apportionment file into the database.
@@ -149,7 +153,8 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
   await db.delete(tafs).where(eq(tafs.fileId, fileRecord.fileId));
 
   // Go through the schedule data
-  const scheduleRecords = sourceData.ScheduleData.map((d, di) => {
+  const scheduleRecords = [];
+  for (const [di, d] of sourceData.ScheduleData.entries()) {
     const line = {
       fileId: cleanString(sourceData.FileId.toString()),
       fiscalYear: fileRecord.fiscalYear,
@@ -177,13 +182,14 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
       createdAt: new Date(),
       modifiedAt: new Date()
     };
-    line.lineType = computeLineType(line);
+    line.lineTypeId =
+      (await mLineTypeFromLineNumber(cleanString(d.LineNumber)))?.lineTypeId || 'other';
     // TafsId is needed for Table ID
     line.tafsId = computeTafsId(line);
     line.tafsTableId = computeTafsTableId(line);
     line.accountId = computeAccountId(line);
-    return line;
-  });
+    scheduleRecords.push(line);
+  }
 
   // Group by TAFS id
   const tafsGroups = groupBy(scheduleRecords, 'tafsId');
@@ -242,7 +248,7 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
         lineDescription: d.lineDescription,
         approvedAmount: d.approvedAmount,
         fileId: fileRecord.fileId,
-        lineType: d.lineType,
+        lineTypeId: d.lineTypeId,
         createdAt: new Date(),
         modifiedAt: new Date()
       };
@@ -304,7 +310,7 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | 
     const e = new Error(
       `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
     );
-    e.name = 'LoadJsonFileError';
+    e.name = 'LoadPdfFileError';
     console.error(e);
     captureException(e);
     return;
@@ -330,18 +336,18 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | 
   // https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20Health%20and%20Human%20Services/PDF/FY2023_Department%20of%20Health%20and%20Human%20Services_Apportionment_2022-09-30.pdf
   // https://apportionment-public.max.gov/Fiscal%20Year%202022/Department%20of%20Education/PDF/FY2022_Department%20of%20Education%202022-07-13.pdf
   // https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf
+  // https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf
   const urlPath = decodeURI(pdfUrl)
     .replace(env.baseUrl, '')
     .replace(/\.pdf$/, '');
   const parts = urlPath.split('/');
   const fiscalYear = parts[0].replace('Fiscal Year ', '');
   const fileName = parts[parts.length - 1].replace(/\s+/g, '_').trim();
+  const approvalDate = approvalDateFromPdfFileName(fileName);
 
-  const approvalDateMatch = fileName.match(/.*_(\d{4}[-_]\d{2}[-_]\d{2})$/);
-  if (!approvalDateMatch) {
+  if (!approvalDate) {
     throw new Error(`Approval date not found in file name | URL: ${pdfUrl}`);
   }
-  const approvalDate = new Date(approvalDateMatch[1].replace(/[-_]/g, '-'));
 
   const folder = parts[1].replace(/_/g, ' ').trim();
 
@@ -359,6 +365,21 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | 
     modifiedAt: new Date(),
     removed: false
   };
+
+  // Read text from PDF
+  try {
+    fileRecord.sourceText = await readPdfText(pdfUrl);
+  }
+  catch (error) {
+    const e = new Error(
+      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${error?.message || error}`
+    );
+    e.name = 'ParsePdfFileError';
+    console.error(e);
+    captureException(e);
+
+    // It's ok if we don't get the PDF text ??
+  }
 
   // Handle any fixes
   if (pdfFixes[pdfUrl]) {
@@ -468,4 +489,79 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
   return footnoteNumbers.length > 0 ? footnoteNumbers : null;
 }
 
-export { loadJsonFile, loadPdfFile };
+/**
+ * Determine approval date from PDF file name.
+ *
+ * The current assumption is that the date is at the end of the file name,
+ * but it can come in a few different formats.
+ *
+ * YYYY-MM-DD
+ * https://apportionment-public.max.gov/Fiscal%20Year%202024/Department%20of%20Defense/PDF/FY2024_Department%20of%20Defense_Apportionment_2023-09-30.pdf
+ * YYYY_MM_DD
+ * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf
+ * MM.DD.YYYY
+ * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf
+ *
+ * Approvals actually come in at specific times, so we default to noon.
+ *
+ * @param fileName File name without the extension at the end.
+ * @returns Approval date or null
+ */
+function approvalDateFromPdfFileName(fileName: string): Date | null {
+  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy'];
+  const assumedTime = '--12:00:00';
+  const assumedFormat = '--HH:mm:ss';
+
+  // Get date part
+  const datePart = fileName.match(/.*_(\d{2,4}[-_.]\d{2,4}[-_.]\d{2,4})$/);
+  if (!datePart || !datePart[1]) {
+    return null;
+  }
+
+  for (const format of formats) {
+    const parsedDate = DateTime.fromFormat(
+      `${datePart[1]}${assumedTime}`,
+      `${format}${assumedFormat}`,
+      {
+        zone: collectionTimezone
+      }
+    );
+    if (parsedDate.isValid) {
+      return parsedDate.toJSDate();
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Get text from PDF file.
+ *
+ * @param url URL to read from
+ * @returns
+ */
+async function readPdfText(url: string): Promise<string> {
+  // Download the file
+  const data = await fetch(url).then(async (response) => await response.arrayBuffer());
+
+  // Load doc
+  const doc = await pdfjsLib.getDocument({ data }).promise;
+
+  // Get text from all pages
+  const pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
+    return (await (await doc.getPage(i + 1)).getTextContent()).items
+      .map((token) => token.str)
+      .join(' ');
+  });
+
+  // Put together
+  let fullText = (await Promise.all(pageTexts)).join(' \n ');
+
+  // TODO: Some additional processing to clean up text
+  fullText = fullText.replace(/[^\S\r\n]+/g, ' ').trim();
+
+  return fullText;
+}
+
+// Extra exports for testing
+export { loadJsonFile, loadPdfFile, approvalDateFromPdfFileName };

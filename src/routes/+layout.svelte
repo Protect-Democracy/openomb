@@ -7,10 +7,11 @@
   import '@fontsource/ibm-plex-sans/700.css';
   import { onMount } from 'svelte';
   import { derived } from 'svelte/store';
-  import { addDays } from 'date-fns';
+  import { DateTime } from 'luxon';
   import { page } from '$app/stores';
   import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
-  import { isProduction, setCookie } from '$lib/utilities';
+  import { setCookie } from '$lib/utilities';
+  import env from '$lib/environment';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
   import {
     isBeta,
@@ -20,32 +21,30 @@
     siteKeywords,
     contactEmail,
     deployedBaseUrl,
-    googleAnalyticsId
-  } from '$config';
-  import {
-    socialOgImgPath,
     socialOgImgWidth,
     socialOgImgHeight,
     socialTwitterCard,
     socialTwitterSite,
     socialTwitterCreator,
-    socialTwitterImgPath
-  } from '$config/meta-social';
-  import { subscribeFeatureEnabled } from '$config/subscriptions';
+    googleAnalyticsId
+  } from '$config';
   import pdLogo from '$assets/logos/pd-white-words-logo.svg';
   import favAppleTouch from '$assets/favicon/apple-touch-icon.png';
   import fav16 from '$assets/favicon/favicon-16x16.png';
   import fav32 from '$assets/favicon/favicon-32x32.png';
   import favIco from '$assets/favicon/favicon.ico';
   import favSafari from '$assets/favicon/safari-pinned-tab.svg';
+  import horizontalSocialImage from '$assets/social/OpenOMB-Share-Horiz.png';
 
   // Styles
   import '../styles/index.css';
 
   // Constants
+  const socialOgImgPath = horizontalSocialImage;
+  const socialTwitterImgPath = horizontalSocialImage;
   const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
   const url = derived(page, ($page) => $page.url);
-  const productionCheck = isProduction();
+  const productionCheck = env.environment == 'production' || import.meta.env.PROD;
   const betaCheck = isBeta;
 
   // On Mount
@@ -63,7 +62,7 @@
 
   // Set cookie that JS is enabled which is useful
   // if the server needs to know if JS is enabled.
-  setCookie('jsEnabled', 'true', { expires: addDays(new Date(), 30) });
+  setCookie('jsEnabled', 'true', { expires: DateTime.now().plus({ days: 30 }).toJSDate() });
 </script>
 
 <svelte:head>
@@ -193,9 +192,6 @@
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
-        {#if subscribeFeatureEnabled}
-          <li><a href="/subscribe">Subscriptions</a></li>
-        {/if}
       </ul>
     </div>
   </div>
@@ -304,6 +300,12 @@
     display: flex;
     justify-content: center;
     gap: var(--spacing-large);
+
+    @media (max-width: 400px) {
+      & {
+        display: block;
+      }
+    }
   }
 
   footer .links li {

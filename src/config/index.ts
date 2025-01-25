@@ -3,7 +3,7 @@
  */
 
 export const deployedBaseUrl = 'https://openomb.org';
-export const isBeta = true;
+export const isBeta = false;
 export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';
 export const siteDescription = `OpenOMB is the easiest way to find and track apportionments. Apportionments are legally binding plans issued by the White House Office of Management and Budget that set the pace at which federal agencies may spend appropriated funds. OpenOMB's database makes apportionments easy to find and track.`;
@@ -22,6 +22,11 @@ export const collectionHour = 2;
 export const collectionMinute = 0;
 export const collectionTimezone = 'America/New_York';
 export const cacheRevalidateSeconds = 60 * 3;
+export const socialOgImgWidth = 1600;
+export const socialOgImgHeight = 900;
+export const socialTwitterCard = 'summary_large_image';
+export const socialTwitterSite = '@protctdemocracy';
+export const socialTwitterCreator = '@protctdemocracy';
 export const googleAnalyticsId = 'G-Y5NJ2S21X5';
 export const securityHeaders = {
   // Security headers

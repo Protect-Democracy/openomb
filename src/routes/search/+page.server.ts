@@ -12,8 +12,8 @@ import {
   removeUserSearches,
   getUserSearch
 } from '$queries/search';
+import { mBureaus } from '$queries/tafs';
 import { getUserSubscription } from '$queries/subscriptions';
-import { bureaus } from '$queries/tafs';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -84,6 +84,7 @@ export const load = async ({ url, cookies, locals }) => {
       year: ga('year').join(','),
       approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
       approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
+      apportionmentType: ga('apportionmentType').join(',') || '',
       lineNum: ga('lineNum').join(','),
       footnoteNum: ga('footnoteNum').join(',')
     };
@@ -122,7 +123,7 @@ export const load = async ({ url, cookies, locals }) => {
     searchParams: formattedSearchParams,
     yearOptions: await mYearOptions(),
     lineOptions: await mLineNumberOptions(),
-    agencyBureauOptions: await bureaus(),
+    agencyBureauOptions: await mBureaus(),
     approverTitleOptions: await mApproverTitleOptions(),
 
     // Files

@@ -37,5 +37,6 @@ describe('secondsToZonedTime()', () => {
     // Minimum value
     expect(secondsToZonedTime(15, 30, 'Africa/Bissau', '2023-12-01T15:30:00')).toEqual(30);
     expect(secondsToZonedTime(15, 30, 'Africa/Bissau', '2023-12-01T15:30:00', 40)).toEqual(40);
+    expect(secondsToZonedTime(15, 30, 'Africa/Bissau', 'inparsable', 40)).toEqual(40);
   });
 });

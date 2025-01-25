@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
-  import FileListingSmall from '$components/files/FileListingSmall.svelte';
+  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
@@ -46,15 +46,15 @@
 
   {#if filesWithoutTafs && filesWithoutTafs.length}
     <section class="page-section">
-      <h2>Other files</h2>
+      <h2>Letter apportionments</h2>
 
       <p>
-        The following files do not have agency data attached to them. This is likely caused because
-        they were originally PDF files with limited data.
+        The following are Letter Apportionments and do not have agency and schedule data attached to
+        them as there source is a PDF and not structured data from a spreadsheet.
       </p>
 
       {#each filesWithoutTafs as file}
-        <FileListingSmall {file} />
+        <FileListingHighlightable {file} />
       {/each}
     </section>
   {/if}
@@ -66,8 +66,21 @@
 
     <div class="recently-approved-files">
       {#each recentlyApproved as file}
-        <FileListingSmall {file} />
+        <FileListingHighlightable {file} />
       {/each}
     </div>
   </section>
 </div>
+
+<style>
+  .page-container :global(.file-listing-small) {
+    border-bottom: var(--border-weight-thin) solid var(--color-gray-light);
+    padding-bottom: var(--spacing);
+    margin-bottom: var(--spacing-double);
+  }
+
+  .page-container :global(.file-listing-small:last-child) {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+</style>

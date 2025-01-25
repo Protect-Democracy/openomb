@@ -196,7 +196,7 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
 };
 
 /**
- * Distinct bureaus with file counts
+ * Distinct bureaus with file counts (used for search options)
  */
 export const bureaus = async function () {
   return db
