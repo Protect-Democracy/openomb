@@ -4,14 +4,37 @@ services:
   notifications:
     build:
       context: '.'
+    environment:
+      - EMAIL_PROVIDER=smtp
+      - SMTP_HOST=mailcatcher
+      - SMTP_PORT=1025
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - '8080:8080'
     depends_on:
       - mailcatcher
 
+  # Worker that runs the queue jobs for redis
+  queueworker:
+    build:
+      context: '.'
+    environment:
+      - EMAIL_PROVIDER=smtp
+      - SMTP_HOST=mailcatcher
+      - SMTP_PORT=1025
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+        - redis
+    command: rq worker --url redis://redis:6379
+    links:
+        - redis
+
   # Redis queue for notifications
   redis:
     image: redis:alpine
+    command: "redis-server --bind redis --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes"
 
   # Intercept and test email sending locally
   mailcatcher:

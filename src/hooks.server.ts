@@ -43,7 +43,6 @@ export const handleError = Sentry.handleErrorWithSentry();
 const addHeaders: Handle = async ({ event, resolve }) => {
   // If we have a user logged in, do not include caching headers
   const user = (await event.locals.auth())?.user;
-  console.log(user);
   const cacheHeaders = user
     ? {
         'Cache-Control': 'no-cache, must-revalidate',

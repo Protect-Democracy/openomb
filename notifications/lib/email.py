@@ -6,9 +6,9 @@ from util.environment import emailProvider, smtpHost, smtpPort, awsRegion
 
 def format_address(address, name):
     if (name):
-        return "{} <{}>".format(name, email)
+        return "{} <{}>".format(name, address)
     else:
-        return email
+        return address
 
 def send_email(email):
     if (emailProvider == 'smtp'):
@@ -16,9 +16,12 @@ def send_email(email):
         try :
             message = MIMEMultipart("alternative")
             message["From"] = format_address(email['from'], email['from_name'])
-            message["To"] = ", ".join(email['to'])
+            if isinstance(email['to'], str):
+                message["To"] = email['to']
+            else:
+                message["To"] = ", ".join(email['to'])
             message["Subject"] = email['title']
-            message["reply-to"] = format_address(email['reply'], email['reply_name'])
+            # message["reply-to"] = format_address(email['reply'], email['reply_name'])
 
             if (email['html']):
                 body = MIMEText(email['html'], "html")
@@ -28,10 +31,10 @@ def send_email(email):
 
             server.sendmail(email['from'], email['to'], message.as_string())
         except Exception as e:
-            print(e)
+            print(e, flush=True)
         finally:
             server.quit()
-    else if (emailProvider == 'aws'):
+    elif (emailProvider == 'aws'):
         client = boto3.client("ses", region_name=awsRegion)
         client.send_email(
             Source=format_address(email['from'], email['from_name']),

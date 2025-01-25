@@ -18,8 +18,14 @@ def get_jobs():
         'deferred': q.deferred_job_registry.get_job_ids(),
     }
 
-def run_jobs():
+def run_worker_once():
     w = Worker(['default'], connection=redis)
     w.work(burst=True)
+
+    return w
+
+def start_worker():
+    w = Worker(['default'], connection=redis)
+    w.work()
 
     return w

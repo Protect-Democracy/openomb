@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from lib.email import send_email
-from lib.queue import add_job, get_jobs, run_jobs
+from lib.queue import add_job, get_jobs, run_worker_once
 import json
 
 class SendEmail(Resource):
@@ -27,7 +27,7 @@ class QueueEmail(Resource):
 class ProcessEmail(Resource):
     def post(self):
         try:
-            worker = run_jobs()
+            worker = run_worker_once()
             return { 'status': 200, 'response': 'Emails processed!', 'worker': {
             'success': worker.successful_job_count,
             'failure': worker.failed_job_count,

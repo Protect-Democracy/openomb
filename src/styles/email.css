@@ -1,0 +1,29 @@
+/**
+ * Styles that are included globally within our email templates
+ *
+ * Includes subsets of other styles and any necessary overrides/alterations
+ */
+
+/* Normalize/reset */
+@import 'modern-normalize/modern-normalize.css';
+
+/* Fonts */
+@import './fonts.css';
+
+/* Variables */
+@import './variables.css';
+
+/* Elements */
+@import './elements.css';
+
+/* Components and variants */
+@import './components.css';
+
+/** Table overrides for email **/
+table {
+  margin-bottom: 0;
+}
+
+tbody tr {
+  border-bottom: none;
+}

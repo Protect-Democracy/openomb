@@ -45,5 +45,13 @@ export default defineConfig({
 
   test: {
     include: ['{src,server,db}/**/*.{test,spec}.{js,ts}']
+  },
+
+  // TODO - this might impact older browsers, but allows our lib env
+  // to be used on client and server.  should find a better fix
+  esbuild: {
+    supported: {
+      'top-level-await': true //browsers can handle top-level-await features
+    }
   }
 });

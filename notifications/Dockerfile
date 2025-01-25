@@ -12,7 +12,7 @@ RUN pip3 install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 COPY ./api_modules/ ./api_modules/
 COPY ./lib/ ./lib/
 COPY ./util/ ./util/
-COPY .env app.py .
+COPY app.py .
 
 # Expose port 8080 for the Flask application
 EXPOSE 8080

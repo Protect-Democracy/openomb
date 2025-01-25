@@ -134,13 +134,47 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "${tostring(6379)}"
         }
       ],
-      "secrets" : [
-      ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
           "awslogs-region" : "${var.region}",
           "awslogs-group" : "/ecs/notifications-service",
+          "awslogs-stream-prefix" : "ecs"
+        }
+      }
+    },
+    {
+      "name" : "notifications-queue-worker",
+      "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
+      "essential" : true,
+      "environment" : [
+        {
+          "name" : "DOMAIN",
+          "value" : "localhost"
+        },
+        {
+          "name" : "EMAIL_PROVIDER",
+          "value" : "aws"
+        },
+        {
+          "name" : "AWS_REGION",
+          "value" : "${var.region}"
+        },
+        {
+          "name" : "REDIS_HOST",
+          "value" : "localhost"
+        },
+        {
+          "name" : "REDIS_PORT",
+          "value" : "${tostring(6379)}"
+        }
+      ],
+      "command" : ["rq worker --url redis://localhost:6379"],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${var.region}",
+          "awslogs-group" : "/ecs/notifications-queue-worker",
           "awslogs-stream-prefix" : "ecs"
         }
       }
@@ -153,10 +187,6 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         {
           "containerPort" : 6379
         }
-      ],
-      "environment" : [
-      ],
-      "secrets" : [
       ],
       "logConfiguration" : {
         "logDriver" : "awslogs",
