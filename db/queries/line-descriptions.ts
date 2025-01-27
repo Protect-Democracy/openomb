@@ -3,15 +3,12 @@
  */
 
 // Dependencies
-import { dirname, resolve as resolvePath } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { readFileSync } from 'node:fs';
-import { parse } from 'csv-parse/sync';
 import { lineDescriptions } from '../schema/line-descriptions';
 import type { lineDescriptionsSelect } from '../schema/line-descriptions';
 import { db } from '../connection';
 import { mLineTypeFromLineNumber } from './line-types';
 import { memoizeDataAsync } from '../../server/cache';
+import defaultLineDescriptions from '../../data/line-descriptions';
 
 // Types
 type lineDescriptionCsvRecord = {
@@ -19,24 +16,11 @@ type lineDescriptionCsvRecord = {
   Description: string;
 };
 
-// Directory (note that __dirname might actually be available globally)
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// Path to data
-const lineDescriptionsFilePath = resolvePath(__dirname, '../../data/line-descriptions.csv');
-
 /**
  * Load default line descriptions from CSV file
  */
 export const loadDefaultLineDescriptions = async (): Promise<void> => {
-  // Read CSV file
-  const csvContent = readFileSync(lineDescriptionsFilePath, 'utf-8');
-
-  // Parse CSV content
-  const records: Array<lineDescriptionCsvRecord> = parse(csvContent, {
-    columns: true,
-    skip_empty_lines: true
-  });
+  const records: lineDescriptionCsvRecord[] = defaultLineDescriptions;
 
   // Insert records if they don't exist
   if (records?.length > 0) {

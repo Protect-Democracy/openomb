@@ -26,7 +26,8 @@
     "test:unit:watch": "vitest watch",
     "collect": "tsx bin/collect.ts",
     "db:generate-migration": "drizzle-kit generate",
-    "db:migrate": "tsx bin/migrate.ts"
+    "db:migrate": "tsx bin/migrate.ts",
+    "csv-to-ts": "tsx bin/csv-to-ts.ts"
   },
   "lint-staged": {
     "*/**/*.{js,jsx,ts,tsx,svelte}": [
