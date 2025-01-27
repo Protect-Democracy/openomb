@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { differenceInDays, differenceInHours } from 'date-fns';
+import { DateTime } from 'luxon';
 import { map, reduce } from 'lodash-es';
 import {
   getSubscriptionsByUser,
@@ -14,8 +14,10 @@ import { fileSearchFullCount, fileSearchPaged } from '../db/queries/search';
 import { request } from '../server/request';
 import { environmentVariables } from '../server/utilities';
 import { setupCustomSentry, createTransaction } from '../server/sentry-custom';
+import { deployedBaseUrl } from '../src/config';
 import {
   maxFilesPerNotificationEntry,
+  runWeeklyEmailsOn,
   notifierEmailName,
   notifierEmail,
   replyEmailName,
@@ -48,9 +50,10 @@ async function cli(): Promise<void> {
       // Check if our subscription is weekly or daily and, based on that, if it needs to run again
       if (
         (sub.frequency === 'weekly' &&
-          new Date().getDay() === 1 &&
-          differenceInDays(new Date(), sub.lastNotifiedAt) > 6) ||
-        (sub.frequency === 'daily' && differenceInHours(new Date(), sub.lastNotifiedAt) > 18)
+          new Date().getDay() === runWeeklyEmailsOn &&
+          Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['days'])) > 6) ||
+        (sub.frequency === 'daily' &&
+          Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['days'])) > 18)
       ) {
         const notification = await getSubscriptionWithFiles(email, sub);
         notification && notifySubs.push(notification);
@@ -129,11 +132,10 @@ async function sendNotificationEmail(email, notifySubs) {
 
 function buildTemplate(notifySubs) {
   // Email values for easier update
-  const siteHost = 'https://openomb.org';
   const title = 'New Apportionment Approvals';
   const text =
     'New apportionment files have been approved within your subscriptions.  These files are listed below.';
-  const subscriptionLink = `${siteHost}/subscribe`;
+  const subscriptionLink = `${deployedBaseUrl}/subscribe`;
   const subscriptionText = 'Manage Subscriptions';
   const disclaimer =
     'This website is not affiliated with the Office of Management and Budget (OMB), the Executive Office of the President, the U.S. Congress, or any component of the U.S. government. OpenOMB is a searchable database maintained by Protect Democracy Project, a registered 501(c)(3) charitable organization and part of the Protect Democracy group.';
@@ -155,12 +157,12 @@ function buildTemplate(notifySubs) {
           notifySubs,
           (curr, sub) => `
           ${curr}
-          <dt><a href="${siteHost}${sub.itemLink}" target="_blank" style="color:undefined;text-decoration:none;">${sub.description}</a>: ${formatNumber(sub.fileCount)} new files</dt>
+          <dt><a href="${deployedBaseUrl}${sub.itemLink}" target="_blank" style="color:undefined;text-decoration:none;">${sub.description}</a>: ${formatNumber(sub.fileCount)} new files</dt>
           ${reduce(
             sub.files,
             (curr, file) => `
             ${curr}
-            <dd><a href="${siteHost}/file/${file.fileId}" target="_blank" style="color:undefined;text-decoration:none;">${formatFileTitle(file)}</a></dd>
+            <dd><a href="${deployedBaseUrl}/file/${file.fileId}" target="_blank" style="color:undefined;text-decoration:none;">${formatFileTitle(file)}</a></dd>
             `,
             ''
           )}

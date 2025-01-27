@@ -28,6 +28,7 @@
     socialTwitterCreator,
     googleAnalyticsId
   } from '$config';
+  import { subscribeFeatureEnabled } from '$config/subscriptions';
   import pdLogo from '$assets/logos/pd-white-words-logo.svg';
   import favAppleTouch from '$assets/favicon/apple-touch-icon.png';
   import fav16 from '$assets/favicon/favicon-16x16.png';
@@ -192,6 +193,9 @@
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
+        {#if subscribeFeatureEnabled}
+          <li><a href="/subscribe">Subscriptions</a></li>
+        {/if}
       </ul>
     </div>
   </div>

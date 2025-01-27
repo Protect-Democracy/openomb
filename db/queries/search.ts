@@ -25,7 +25,7 @@ import { footnotes } from '../schema/footnotes';
 import { searches } from '../schema/searches';
 import { users } from '../schema/users';
 import { lineTypes } from '../schema/line-types';
-import { lineDescriptions } from '$db/schema/line-descriptions';
+import { lineDescriptions } from '../schema/line-descriptions';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types

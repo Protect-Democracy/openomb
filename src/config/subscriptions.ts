@@ -8,6 +8,9 @@ export const subscribeFeatureEnabled = true;
 // (Rest are cut off, but full count is shown)
 export const maxFilesPerNotificationEntry = 20;
 
+// Day that weekly emails are run
+export const runWeeklyEmailsOn = 1; //Monday
+
 // Email addresses for notifications
 export const notifierEmailName = 'OpenOMB Notifications';
 export const notifierEmail = 'notifier@openomb.org';

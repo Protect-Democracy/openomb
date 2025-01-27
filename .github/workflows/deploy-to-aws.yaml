@@ -76,6 +76,30 @@ jobs:
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
 
+      - name: Extract metadata tags for notification service image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        id: notification_meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/notifications
+          # Set a latest for default/main branch, and a tag with the commit sha
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,format=long
+
+      - name: Build and push notification service image
+        env:
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+          VITE_SENTRY_SCRIPT: ${{ secrets.VITE_SENTRY_SCRIPT }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./notifications
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.notificatoin_meta.outputs.tags }}
+
       - name: Deploy to Amazon ECS
         run: aws ecs update-service --cluster ${{ env.AWS_ECS_CLUSTER }} --service ${{ env.AWS_ECS_SERVICE }} --force-new-deployment
 

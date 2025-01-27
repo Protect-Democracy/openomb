@@ -42,6 +42,9 @@ locals {
 }
 
 # ECR for Notifications queue
+output "ecr_notifications_repo" {
+  value = aws_ecr_repository.ecr.repository_url
+}
 
 resource "aws_ecr_repository" "notifications" {
   name                 = "notifications"

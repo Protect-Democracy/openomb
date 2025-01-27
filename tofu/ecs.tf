@@ -338,3 +338,66 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
 
   network_mode = "awsvpc"
 }
+
+resource "aws_ecs_task_definition" "apportionments_notify" {
+  family = "apportionments-notify"
+
+  container_definitions = jsonencode([
+    {
+      "name" : "apportionments-notify",
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
+      "essential" : true,
+      "environment" : [
+        {
+          "name" : "APPORTIONMENTS_DB_HOST",
+          "value" : "${aws_rds_cluster.apportionments.endpoint}"
+        },
+        {
+          "name" : "APPORTIONMENTS_DB_PORT",
+          "value" : "${tostring(aws_rds_cluster.apportionments.port)}"
+        },
+        {
+          "name" : "APPORTIONMENTS_DB_NAME",
+          "value" : "${aws_rds_cluster.apportionments.database_name}"
+        },
+        {
+          "name" : "NOTIFICATIONS_SERVICE_URI",
+          "value" : "http://localhost:8080"
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_NODE_DSN"]
+        },
+        {
+          "name" : "NODE_ENV",
+          "value" : "${var.node_env}"
+        }
+      ],
+      "secrets" : [
+        {
+          "name" : "APPORTIONMENTS_DB_AUTHENTICATION",
+          "valueFrom" : "${aws_rds_cluster.apportionments.master_user_secret[0].secret_arn}"
+        }
+      ],
+      "command" : ["build-notify/notify.js"],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${var.region}",
+          "awslogs-group" : "/ecs/apportionments-notify",
+          "awslogs-stream-prefix" : "ecs"
+        }
+      }
+    }
+  ])
+
+  execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
+  task_role_arn      = aws_iam_role.db_migration.arn
+
+  # Minimum values for Fargate
+  cpu                      = 256
+  memory                   = 512
+  requires_compatibilities = ["FARGATE"]
+
+  network_mode = "awsvpc"
+}

@@ -54,7 +54,8 @@ data "aws_iam_policy_document" "pass_role" {
     resources = [
       "${aws_iam_role.apportionments_app_task_execution_role.arn}",
       "${aws_iam_role.db_migration.arn}",
-      "${aws_iam_role.collect.arn}"
+      "${aws_iam_role.collect.arn}",
+      "${aws_iam_role.notify.arn}"
     ]
   }
 }
@@ -129,7 +130,10 @@ data "aws_iam_policy_document" "github_actions" {
       "ecr:PutImage",
       "ecr:UploadLayerPart",
     ]
-    resources = [aws_ecr_repository.ecr.arn]
+    resources = [
+      aws_ecr_repository.ecr.arn,
+      aws_ecr_repository.notifications.arn
+    ]
   }
 
   statement {
@@ -154,7 +158,8 @@ data "aws_iam_policy_document" "github_actions" {
     resources = [
       "${aws_iam_role.apportionments_app_task_execution_role.arn}",
       "${aws_iam_role.db_migration.arn}",
-      "${aws_iam_role.collect.arn}"
+      "${aws_iam_role.collect.arn}",
+      "${aws_iam_role.notify.arn}",
     ]
   }
 
@@ -372,6 +377,86 @@ resource "aws_iam_role_policy_attachment" "collect_gha" {
 
 resource "aws_iam_role_policy_attachment" "collect_assume_role" {
   role       = aws_iam_role.collect.name
+  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
+}
+
+###################
+# GitHub Actions notify role
+###################
+
+resource "aws_iam_role" "notify" {
+  name               = "notify"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "notify" {
+  statement {
+    actions = ["ecs:RunTask"]
+    resources = [
+      "${aws_ecs_task_definition.apportionments_notify.arn_without_revision}:*"
+    ]
+  }
+  statement {
+    actions = ["s3:ListBucket"]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}",
+      "${aws_s3_bucket.apportionments_bucket.arn}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}",
+      "${aws_s3_bucket.apportionments_bucket.arn}/*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:DeleteItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.remotestate_table.id}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.notify.arn}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "notify" {
+  name        = "notify"
+  description = "Grant the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.notify.json
+}
+
+resource "aws_iam_role_policy_attachment" "notify" {
+  role       = aws_iam_role.notify.name
+  policy_arn = aws_iam_policy.notify.arn
+}
+
+resource "aws_iam_role_policy_attachment" "notify_gha" {
+  role       = aws_iam_role.notify.name
+  policy_arn = aws_iam_policy.github_actions.arn
+}
+
+resource "aws_iam_role_policy_attachment" "notify_assume_role" {
+  role       = aws_iam_role.notify.name
   policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
 
