@@ -3,6 +3,9 @@
 *~
 .idea/
 
+# Data
+data/line-descriptions.csv
+
 # OS
 .DS_Store
 Thumbs.db
