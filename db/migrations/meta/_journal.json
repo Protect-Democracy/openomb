@@ -43,6 +43,13 @@
       "when": 1737765606920,
       "tag": "0005_magenta_agent_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1738710684915,
+      "tag": "0006_normal_wendell_vaughn",
+      "breakpoints": true
     }
   ]
 }
