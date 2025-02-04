@@ -1,16 +1,14 @@
-from flask import Flask, jsonify, redirect
-from flask_restful import Api, MethodNotAllowed, NotFound
+from api_modules.email import ProcessEmail, QueueEmail, SendEmail
+from flask import Flask, jsonify
 from flask_cors import CORS
-from util.environment import domain
-from api_modules.email import SendEmail, QueueEmail, ProcessEmail
-from flask_swagger_ui import get_swaggerui_blueprint
+from flask_restful import Api, MethodNotAllowed, NotFound
 
 # ============================================
 # Main
 # ============================================
 application = Flask(__name__)
 app = application
-app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config["PROPAGATE_EXCEPTIONS"] = True
 CORS(app)
 api = Api(app, prefix="", catch_all_404s=True)
 
@@ -48,10 +46,9 @@ def handle_method_not_allowed_error(e):
     return response
 
 
-@app.route('/')
-def redirect_to_prefix():
-    if prefix != '':
-        return redirect(prefix)
+@app.route("/")
+def route_home():
+    return jsonify({"message": "ok"})
 
 
 # ============================================
@@ -59,9 +56,9 @@ def redirect_to_prefix():
 # ============================================
 
 # Email
-api.add_resource(SendEmail, '/email/send')
-api.add_resource(QueueEmail, '/email/queue')
-api.add_resource(ProcessEmail, '/email/process')
+api.add_resource(SendEmail, "/email/send")
+api.add_resource(QueueEmail, "/email/queue")
+api.add_resource(ProcessEmail, "/email/process")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(8080)
