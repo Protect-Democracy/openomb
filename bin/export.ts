@@ -10,20 +10,7 @@ import { promisify } from 'node:util';
 import { Command } from 'commander';
 import { sql } from 'drizzle-orm';
 import { dbConnectionString, db } from '../db/connection';
-import {
-  files,
-  footnotes,
-  lines,
-  tafs,
-  collections,
-  searches,
-  subscriptions,
-  users,
-  accounts,
-  authenticators,
-  sessions,
-  verificationTokens
-} from '../db/schema';
+import { files, footnotes, lines, tafs } from '../db/schema';
 import packageJson from '../package.json' assert { type: 'json' };
 
 // Constants
@@ -49,7 +36,7 @@ async function cli(): Promise<void> {
   const options = program.opts();
 
   // Dates
-  const startDate = new Date('2024-06-01');
+  const startDate = new Date('2024-10-01');
   const endDate = new Date('2025-01-31');
 
   // For DB Dump
@@ -77,24 +64,6 @@ async function cli(): Promise<void> {
           OR ${files.approvalTimestamp} > ${endDate}`
   );
 
-  // Truncate
-  for (const schema of [
-    collections,
-    searches,
-    subscriptions,
-    users,
-    accounts,
-    authenticators,
-    sessions,
-    verificationTokens
-  ]) {
-    await db.execute(sql`TRUNCATE ${schema} CASCADE`);
-  }
-
-  for (const table of ['account', 'authenticator', 'session', 'verificationToken']) {
-    await db.execute(`TRUNCATE ${table} CASCADE`);
-  }
-
   // Use pg_dump to export schema
   let schemaOutput = '';
   try {
@@ -118,8 +87,31 @@ async function cli(): Promise<void> {
     process.exit(1);
   }
 
+  // Use pg_dump to export specific tables
+  try {
+    const { stderr } = await execP(
+      [
+        `pg_dump "${connectionString}" --data-only --no-owner --schema=public -t files -t lines -t tafs -t footnotes > ${options.output}.data-temp`,
+        `sed -i '' 's/^INSERT INTO public\\./INSERT INTO /' ${options.output}.data-temp`,
+        `sed -i '' 's/^COPY public\\./COPY /' ${options.output}.data-temp`
+      ].join(' && ')
+    );
+    if (stderr) {
+      console.error('Error exporting data:', stderr);
+      process.exit(1);
+    }
+  }
+  catch (error) {
+    console.error('Error exporting data:', error);
+    process.exit(1);
+  }
+
   // Write file
-  await execP(`echo "${schemaOutput}" > ${options.output}`);
+  await execP(
+    `echo "CREATE EXTENSION IF NOT EXISTS pg_trgm;\n\n${schemaOutput}\n\n" > ${options.output}`
+  );
+  await execP(`cat ${options.output}.data-temp >> ${options.output}`);
+  await execP(`rm ${options.output}.data-temp`);
 
   // End
   console.log('Export completed.');
