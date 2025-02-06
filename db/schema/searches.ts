@@ -41,3 +41,54 @@ export const searchesRelations = relations(searches, ({ one }) => ({
     references: [users.id]
   })
 }));
+
+/**
+ * Compute parsed description value.
+ *
+ * Describes the criterion in text
+ *
+ */
+export const descriptionParsed = (
+  searchesRecord: typeof searches.$inferSelect | undefined
+): string => {
+  if (!searchesRecord?.criterion) {
+    return '';
+  }
+  const criterionArray: Array<string> = [];
+  const criterion = searchesRecord.criterion;
+  if (criterion.term) {
+    criterionArray.push(`'${criterion.term}'`);
+  }
+  if (criterion.tafs) {
+    criterionArray.push(`TAFS: ${criterion.tafs}`);
+  }
+  if (criterion.agency) {
+    criterionArray.push(`Agency: ${criterion.agency}`);
+  }
+  if (criterion.bureau) {
+    criterionArray.push(`Bureau: ${criterion.bureau}`);
+  }
+  if (criterion.account) {
+    criterionArray.push(`Account: ${criterion.account}`);
+  }
+  if (criterion.approver) {
+    criterionArray.push(`Approver: ${criterion.approver}`);
+  }
+  if (criterion.year) {
+    criterionArray.push(`Year(s): ${criterion.year}`);
+  }
+  if (criterion.lineNum) {
+    criterionArray.push(`Line #: ${criterion.lineNum}`);
+  }
+  if (criterion.footnoteNum) {
+    criterionArray.push(`Footnote(s): ${criterion.footnoteNum}`);
+  }
+
+  return criterionArray.join('; ');
+};
+
+/**
+ * Export some types
+ */
+export type searchesSelect = typeof searches.$inferSelect;
+export type searchesInsert = typeof searches.$inferInsert;

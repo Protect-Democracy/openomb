@@ -6,17 +6,37 @@
 import { map } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '../connection';
-import { files } from '../schema/files';
-import { tafs } from '../schema/tafs';
-import { searches } from '../schema/searches';
-import { subscriptions } from '../schema/subscriptions';
+import { files, type filesSelect } from '../schema/files';
+import { tafs, type tafsSelect } from '../schema/tafs';
+import { searches, descriptionParsed, type searchesSelect } from '../schema/searches';
+import { subscriptions, type subscriptionSelect } from '../schema/subscriptions';
 import { users } from '../schema/users';
 import { formatTafsFormattedId } from '../../src/lib/formatters';
+
+type ItemDetails =
+  | filesSelect
+  | tafsSelect
+  | searchesSelect
+  | {
+      agency?: string;
+      agencyId?: string;
+      bureau?: string;
+      bureauId?: string;
+      account?: string;
+      accountId?: string;
+    };
 
 /**
  * Gets the item details for each individual subscription
  */
-async function getSubscriptionDetails(sub) {
+async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
+  | (subscriptionSelect & {
+      itemDetails: ItemDetails;
+      description: string;
+      itemLink: string;
+    })
+  | undefined
+> {
   if (!sub) {
     return;
   }
@@ -26,8 +46,8 @@ async function getSubscriptionDetails(sub) {
     });
     return {
       ...sub,
-      itemDetails: item,
-      description: item.folder,
+      itemDetails: item || ({} as filesSelect),
+      description: item?.folder || '',
       itemLink: `/folder/${sub.itemId}`
     };
   }
@@ -37,9 +57,9 @@ async function getSubscriptionDetails(sub) {
     });
     return {
       ...sub,
-      itemDetails: item,
-      description: `TAFS: ${formatTafsFormattedId(item)}`,
-      itemLink: `/file/${item.fileId}#tafs_${item.tafsTableId}`
+      itemDetails: item || ({} as tafsSelect),
+      description: `TAFS: ${item && formatTafsFormattedId(item)}`,
+      itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
   }
   else if (sub.type === 'agency') {
@@ -49,10 +69,10 @@ async function getSubscriptionDetails(sub) {
     return {
       ...sub,
       itemDetails: {
-        agency: item.budgetAgencyTitle,
-        agencyId: item.budgetAgencyTitleId
+        agency: item?.budgetAgencyTitle || '',
+        agencyId: item?.budgetAgencyTitleId || ''
       },
-      description: item.budgetAgencyTitle,
+      description: item?.budgetAgencyTitle || '',
       itemLink: `/agency/${sub.itemId}`
     };
   }
@@ -64,12 +84,12 @@ async function getSubscriptionDetails(sub) {
     return {
       ...sub,
       itemDetails: {
-        agency: item.budgetAgencyTitle,
-        agencyId: item.budgetAgencyTitleId,
-        bureau: item.budgetBureauTitle,
-        bureauId: item.budgetBureauTitleId
+        agency: item?.budgetAgencyTitle || '',
+        agencyId: item?.budgetAgencyTitleId || '',
+        bureau: item?.budgetBureauTitle || '',
+        bureauId: item?.budgetBureauTitleId || ''
       },
-      description: item.budgetBureauTitle,
+      description: item?.budgetBureauTitle || '',
       itemLink: `/agency/${agency}/bureau/${bureau}`
     };
   }
@@ -85,14 +105,14 @@ async function getSubscriptionDetails(sub) {
     return {
       ...sub,
       itemDetails: {
-        agency: item.budgetAgencyTitle,
-        agencyId: item.budgetAgencyTitleId,
-        bureau: item.budgetBureauTitle,
-        bureauId: item.budgetBureauTitleId,
-        account: item.accountTitle,
-        accountId: item.accountId
+        agency: item?.budgetAgencyTitle || '',
+        agencyId: item?.budgetAgencyTitleId || '',
+        bureau: item?.budgetBureauTitle || '',
+        bureauId: item?.budgetBureauTitleId || '',
+        account: item?.accountTitle || '',
+        accountId: item?.accountId || ''
       },
-      description: item.accountTitle,
+      description: item?.accountTitle || '',
       itemLink: `/agency/${agency}/bureau/${bureau}/account/${account}`
     };
   }
@@ -102,9 +122,9 @@ async function getSubscriptionDetails(sub) {
     });
     return {
       ...sub,
-      itemDetails: item,
-      description: 'Saved Search',
-      itemLink: `/search?${new URLSearchParams(item.criterion).toString()}`
+      itemDetails: item || {},
+      description: `Saved Search: <i>${descriptionParsed(item)}</i>`,
+      itemLink: `/search?${new URLSearchParams(item?.criterion).toString()}`
     };
   }
 }
@@ -112,18 +132,24 @@ async function getSubscriptionDetails(sub) {
 /**
  * Gets all subscriptions, with details, grouped by user
  */
-export const getSubscriptionsByUser = async function () {
-  const userSubs = {};
+export const getSubscriptionsByUser = async function (): Promise<
+  Record<string, Array<subscriptionSelect>>
+> {
+  const userSubs: Record<string, Array<subscriptionSelect>> = {};
   const subscriptionResults = await db
     .select()
     .from(subscriptions)
     .leftJoin(users, eq(subscriptions.userId, users.id));
   for (const result of subscriptionResults) {
-    if (!userSubs[result.user.email]) {
-      userSubs[result.user.email] = [];
+    if (result.user?.email) {
+      if (!userSubs[result.user.email]) {
+        userSubs[result.user.email] = [];
+      }
+      const subDetails = await getSubscriptionDetails(result.subscriptions);
+      if (subDetails) {
+        userSubs[result.user.email].push(subDetails);
+      }
     }
-    const subDetails = await getSubscriptionDetails(result.subscriptions);
-    userSubs[result.user.email].push(subDetails);
   }
   return userSubs;
 };
@@ -131,11 +157,15 @@ export const getSubscriptionsByUser = async function () {
 /**
  * Get a single subscription given the user's email, the type, and the item id
  */
-export const getUserSubscription = async function (email: string, type: string, itemId: string) {
+export const getUserSubscription = async function (
+  email: string,
+  type: string,
+  itemId: string
+): Promise<subscriptionSelect | undefined> {
   const userResults = await db.select().from(users).where(eq(users.email, email));
   // If we have no user, exit early
   if (!userResults?.[0]) {
-    return null;
+    return;
   }
   const subscriptionResults = await db
     .select()
@@ -162,13 +192,17 @@ export const getUserSubscriptionDetails = async function (
 ) {
   const subscriptionResults = await getUserSubscription(email, type, itemId);
 
-  return await getSubscriptionDetails(subscriptionResults);
+  if (subscriptionResults) {
+    return await getSubscriptionDetails(subscriptionResults);
+  }
 };
 
 /**
  * Get all subscriptions associated with the provided email
  */
-export const getUserSubscriptionList = async function (email: string) {
+export const getUserSubscriptionList = async function (
+  email: string
+): Promise<Array<subscriptionSelect>> {
   const userResults = await db.query.users.findFirst({
     where: eq(users.email, email),
     with: {
@@ -176,7 +210,7 @@ export const getUserSubscriptionList = async function (email: string) {
       searches: true
     }
   });
-  return userResults.subscriptions;
+  return userResults?.subscriptions || [];
 };
 
 /**
@@ -264,8 +298,6 @@ export const removeSubscriptions = async function (
   if (!userResults?.[0]) {
     return null;
   }
-
-  console.log('sub', userResults[0].id, subscriptionId);
   await db
     .delete(subscriptions)
     .where(

@@ -22,7 +22,7 @@ import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
-import { searches } from '../schema/searches';
+import { searches, type searchesSelect } from '../schema/searches';
 import { users } from '../schema/users';
 import { lineTypes } from '../schema/line-types';
 import { lineDescriptions } from '../schema/line-descriptions';
@@ -829,11 +829,14 @@ export async function removeUserSearches(email: string, searchId: string | Array
  * Get a user's saved search with a given criterion
  * (Currently used only by subscriptions)
  */
-export async function getUserSearch(email: string, criterion: SearchParams) {
+export async function getUserSearch(
+  email: string,
+  criterion: SearchParams
+): Promise<searchesSelect | undefined> {
   const userResults = await db.select().from(users).where(eq(users.email, email));
   // If we have no user, exit early
   if (!userResults?.[0]) {
-    return null;
+    return;
   }
   const newRecords = await db
     .select()

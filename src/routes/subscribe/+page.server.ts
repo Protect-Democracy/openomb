@@ -107,6 +107,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   return {
     user,
-    userSubscriptions
+    userSubscriptions,
+
+    pageMeta: {
+      title: 'Subscriptions',
+      description:
+        'Manage your subscriptions for notifications regarding freshly approved apportionments.'
+    }
   };
 };

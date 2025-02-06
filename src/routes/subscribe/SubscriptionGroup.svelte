@@ -14,7 +14,8 @@
   {#each subs as subscription}
     <tr>
       <td class="sub-link">
-        <a href={subscription.itemLink}>{subscription.description}</a>
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        <a href={subscription.itemLink}>{@html subscription.description}</a>
       </td>
       <td class="sub-frequency">
         <label class="sr-only" for={`frequency-${subscription.id}`}

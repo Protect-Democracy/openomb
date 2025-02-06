@@ -4,7 +4,7 @@
 
 // Dependencies
 import { DateTime } from 'luxon';
-import { map, reduce } from 'lodash-es';
+import { map, reduce, filter } from 'lodash-es';
 import {
   getSubscriptionsByUser,
   getUserSubscriptionDetails,
@@ -70,16 +70,16 @@ async function cli(): Promise<void> {
   console.info('Finished notification');
 }
 
-async function getSubscriptionWithFiles(email, sub) {
+async function getSubscriptionWithFiles(email: string, sub) {
   let criterion;
   if (sub.type === 'search') {
     criterion = sub.itemDetails.criterion;
   }
   else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
     criterion = {
-      agency: sub.itemDetails.agencyId,
-      bureau: sub.itemDetails.bureauId,
-      account: sub.itemDetails.accountId
+      agency: sub.itemDetails.agencyId || '',
+      bureau: sub.itemDetails.bureauId || '',
+      account: sub.itemDetails.account || ''
     };
   }
   else if (sub.type === 'folder') {
@@ -88,19 +88,20 @@ async function getSubscriptionWithFiles(email, sub) {
   else if (sub.type === 'tafs') {
     const detailRecord = await getUserSubscriptionDetails(email, sub.type, sub.itemId);
     criterion = {
-      tafs: detailRecord.itemDetails.tafsId,
-      year: `${detailRecord.itemDetails.fiscalYear}`
+      tafs: detailRecord?.itemDetails.tafsId,
+      year: `${detailRecord?.itemDetails.fiscalYear}`
     };
   }
-  const fileCount = await fileSearchFullCount({ ...criterion, approvedStart: sub.lastNotifiedAt });
+  criterion['approvedStart'] = sub.lastNotifiedAt;
+  const fileCount = await fileSearchFullCount(criterion);
   const files = await fileSearchPaged({
     ...criterion,
-    approvedStart: sub.lastNotifiedAt,
     limit: maxFilesPerNotificationEntry
   });
   if (files.length) {
     return {
       ...sub,
+      criterion,
       fileCount,
       files
     };
@@ -131,6 +132,14 @@ async function sendNotificationEmail(email, notifySubs) {
 }
 
 function buildTemplate(notifySubs) {
+  // Separate into categories
+  const folderSubs = filter(notifySubs, (sub) => sub.type === 'folder');
+  const tafsSubs = filter(notifySubs, (sub) => sub.type === 'tafs');
+  const agencySubs = filter(notifySubs, (sub) => sub.type === 'agency');
+  const bureauSubs = filter(notifySubs, (sub) => sub.type === 'bureau');
+  const accountSubs = filter(notifySubs, (sub) => sub.type === 'account');
+  const searchSubs = filter(notifySubs, (sub) => sub.type === 'search');
+
   // Email values for easier update
   const title = 'New Apportionment Approvals';
   const text =
@@ -153,23 +162,12 @@ function buildTemplate(notifySubs) {
         <![endif]--><!--]--></div> <div style="max-width:calc(40 * var(--spacing));margin:auto;"><!--[--><!--[--><!--[--><!--[-->
         <h2 style="">${title}</h2>
         <p style="font-size:undefined;line-height:undefined;margin:undefined;">${text}</p>
-        <dl>${reduce(
-          notifySubs,
-          (curr, sub) => `
-          ${curr}
-          <dt><a href="${deployedBaseUrl}${sub.itemLink}" target="_blank" style="color:undefined;text-decoration:none;">${sub.description}</a>: ${formatNumber(sub.fileCount)} new files</dt>
-          ${reduce(
-            sub.files,
-            (curr, file) => `
-            ${curr}
-            <dd><a href="${deployedBaseUrl}/file/${file.fileId}" target="_blank" style="color:undefined;text-decoration:none;">${formatFileTitle(file)}</a></dd>
-            `,
-            ''
-          )}
-          ${sub.fileCount > maxFilesPerNotificationEntry ? `<dd>... and ${formatNumber(sub.fileCount - maxFilesPerNotificationEntry)} more</dd>` : ''}
-          `,
-          ''
-        )}</dl>
+        ${buildTemplateSection('Folder', folderSubs)}
+        ${buildTemplateSection('TAFS', tafsSubs)}
+        ${buildTemplateSection('Agencies', agencySubs)}
+        ${buildTemplateSection('Bureaus', bureauSubs)}
+        ${buildTemplateSection('Accounts', accountSubs)}
+        ${buildTemplateSection('Searches', searchSubs)}
         </div> <div><!--[-->
         <!--[if mso | IE]>
           </td><td></td></tr></table>
@@ -182,5 +180,33 @@ function buildTemplate(notifySubs) {
         <!--]--><!--]--></div> <div><!--[--><!--[if mso | IE]>
           </td><td></td></tr></table>
           <![endif]--><!--]--></div><!--]--><!--]--></body><!--]--><!--]-->
+  `;
+}
+
+function buildTemplateSection(sectionTitle: string, sectionSubs) {
+  if (!sectionSubs.length) {
+    return '';
+  }
+  return `
+    <h3 style="">${sectionTitle}</h3>
+    <dl>
+      ${reduce(
+        sectionSubs,
+        (curr, sub) => `
+        ${curr}
+        <dt><a href="${deployedBaseUrl}${sub.itemLink}" target="_blank" style="color:undefined;text-decoration:none;">${sub.description}</a>: ${formatNumber(sub.fileCount)} new files</dt>
+        ${reduce(
+          sub.files,
+          (curr, file) => `
+          ${curr}
+          <dd><a href="${deployedBaseUrl}/file/${file.fileId}" target="_blank" style="color:undefined;text-decoration:none;">${formatFileTitle(file)}</a></dd>
+          `,
+          ''
+        )}
+        ${sub.fileCount > maxFilesPerNotificationEntry ? `<dd>... and ${formatNumber(sub.fileCount - maxFilesPerNotificationEntry)} more (<a href="${deployedBaseUrl}/search?${new URLSearchParams({ ...sub.criterion, approvedStart: DateTime.fromJSDate(sub.criterion.approvedStart).toISODate() }).toString()}">View All</a>)</dd>` : ''}
+        `,
+        ''
+      )}
+    </dl>
   `;
 }

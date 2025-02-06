@@ -8,8 +8,7 @@ export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
     // If we don't have a user, it will show the login form again
     return {
       user,
-      type: params.type,
-      itemId: params.itemId
+      type: params.type
     };
   }
 
@@ -54,6 +53,10 @@ export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
   return {
     user,
     type: params.type,
-    itemId: params.itemId
+    itemId: params.itemId,
+
+    pageMeta: {
+      title: `Unsubscribed from ${params.type}`
+    }
   };
 };
