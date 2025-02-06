@@ -7,7 +7,7 @@ name: Notify subscribers
 on:
   # We want this to run whenever our collection tasks run successfully
   workflow_run:
-    workflows: ["Collect data (Full)", "Collect data (New)"]
+    workflows: ['Collect data (Full)', 'Collect data (New)']
     types:
       - completed
   workflow_dispatch:

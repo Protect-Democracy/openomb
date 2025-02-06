@@ -23,7 +23,7 @@ type lineDescriptionCsvRecord = {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Path to data
-const lineDescriptionsFilePath = resolvePath(__dirname, '../../data/line-descriptions.csv');
+const lineDescriptionsFilePath = resolvePath(__dirname, '../data/line-descriptions.csv');
 
 /**
  * Load default line descriptions from CSV file

@@ -62,7 +62,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         },
         {
           "name" : "AUTH_SECRET",
-          "value" : ""
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.auth_secret.secret_string)["AUTH_SECRET"]
         },
         {
           "name" : "Origin", # Needed for authentication to work correctly

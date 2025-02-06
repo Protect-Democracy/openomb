@@ -13,3 +13,6 @@ export const accountSortOptions = [
   { key: 'account_desc', label: 'Account Z-A' },
   { key: 'file_count_desc', label: 'Most Files First' }
 ];
+
+export const filePageSize = 50;
+export const accountPageSize = 10;

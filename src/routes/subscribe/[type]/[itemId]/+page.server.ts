@@ -36,6 +36,10 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
     user,
     type: params.type,
     itemId: params.itemId,
-    subscription
+    subscription,
+
+    pageMeta: {
+      title: `Subscribed to ${params.type}`
+    }
   };
 };

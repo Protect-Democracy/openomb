@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { redirect, error } from '@sveltejs/kit';
 import { getUserSubscriptionDetails } from '$queries/subscriptions';
 import { subscriptionTypes } from '$config/subscriptions';
 
@@ -40,6 +40,10 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
     user,
     type: params.type,
     itemId: params.itemId,
-    subscription
+    subscription,
+
+    pageMeta: {
+      title: `Unsubscribed from ${params.type}`
+    }
   };
 };

@@ -10,6 +10,7 @@
   // Props
   export let url: URL;
   export let user;
+  export let folders = [];
   export let agencyBureauOptions = [];
   export let yearOptions: number[] = [];
   export let lineOptions: string[] = [];
@@ -32,6 +33,9 @@
   function getFilterLabel(key, value) {
     if (key === 'term') {
       return `Keyword "${value}"`;
+    } else if (key === 'folder') {
+      // Include folder for email results (view all link)
+      return `Folder "${folders.find((f) => f.folderId === value)?.folder}"`;
     } else if (key === 'agencyBureau') {
       const ids = value.split(',');
       // Handle just Agency or Agency/Bureau

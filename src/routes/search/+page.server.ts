@@ -13,6 +13,7 @@ import {
   getUserSearch
 } from '$queries/search';
 import { mBureaus } from '$queries/tafs';
+import { mFolders } from '$queries/files';
 import { getUserSubscription } from '$queries/subscriptions';
 
 /** @satisfies {import('./$types').Actions} */
@@ -77,6 +78,7 @@ export const load = async ({ url, cookies, locals }) => {
     const searchArgs = {
       term: u('term') || '',
       tafs: u('tafs') || '',
+      folder: u('folder') || '', // Included for email notification link
       bureau: agencyBureau?.[1] || '',
       agency: agencyBureau?.[0] || '',
       account: u('account') || '',
@@ -121,6 +123,7 @@ export const load = async ({ url, cookies, locals }) => {
   return {
     // Options/params
     searchParams: formattedSearchParams,
+    folders: await mFolders(),
     yearOptions: await mYearOptions(),
     lineOptions: await mLineNumberOptions(),
     agencyBureauOptions: await mBureaus(),

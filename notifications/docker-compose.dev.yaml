@@ -26,15 +26,15 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
-        - redis
+      - redis
     command: rq worker --url redis://redis:6379
     links:
-        - redis
+      - redis
 
   # Redis queue for notifications
   redis:
     image: redis:alpine
-    command: "redis-server --bind redis --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes"
+    command: 'redis-server --bind redis --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes'
 
   # Intercept and test email sending locally
   mailcatcher:
