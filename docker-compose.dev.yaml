@@ -3,10 +3,6 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile.dev
-    depends_on:
-      db:
-        condition: service_healthy
     environment:
       - APPORTIONMENTS_DB_URI=postgres://apportionments:password@host.docker.internal:5488/apportionments
       - NOTIFICATIONS_SERVICE_URI=http://notifications:8080
@@ -24,21 +20,6 @@ services:
       - ./db:/app/db
     working_dir: /app
     command: sh -c "npm run db:migrate && npm run dev -- --host"
-  db:
-    image: postgres:16-alpine
-    restart: always
-    user: postgres
-    environment:
-      POSTGRES_USER: apportionments
-      POSTGRES_PASSWORD: password
-      PGDATA: /pg-data
-    ports:
-      - '5488:5432'
-    volumes:
-      - ./tests/data/sample.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./pg-data:/pg-data
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -d apportionments -U apportionments']
 
 include:
   - ./notifications/docker-compose.dev.yaml
