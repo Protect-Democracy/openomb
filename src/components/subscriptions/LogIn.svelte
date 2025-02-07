@@ -12,6 +12,7 @@
 -->
 <script lang="ts">
   // Props
+  export let variant: 'small' | 'full' = 'full';
   export let callbackUrl;
   export let action = 'Authenticate';
 </script>
@@ -23,11 +24,20 @@
   <label for="input-email-for-http-email-provider" class="sr-only">Email</label>
   <input
     id="input-email-for-http-email-provider"
+    class:compact={variant === 'small'}
+    class:small={variant === 'small'}
     type="email"
     name="email"
     placeholder="email@example.com"
   />
-  <button class="compact" id="submitButton" type="submit" tabindex="0">{action}</button>
+
+  <button
+    class="subscribe compact"
+    class:small={variant === 'small'}
+    id="submitButton"
+    type="submit"
+    tabindex="0">{action}</button
+  >
 </form>
 
 <style>

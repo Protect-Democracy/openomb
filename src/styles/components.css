@@ -69,6 +69,11 @@ a.like-text {
   color: var(--color-text);
 }
 
+a.subscribe,
+a.auth {
+  color: var(--color-subscribe);
+}
+
 .font-small {
   font-size: var(--font-size-small);
 }
@@ -131,17 +136,36 @@ a.button.secondary {
   background-color: var(--color-secondary);
   color: var(--color-secondary-text);
   border-color: var(--color-secondary-border);
+
+  &:hover {
+    background-color: var(--color-secondary-hover);
+    color: var(--color-secondary-hover-text);
+    border-color: var(--color-secondary-hover-border);
+  }
 }
 
-button.secondary:hover,
-input[type='submit'].secondary:hover,
-input[type='button'].secondary:hover,
-input[type='reset'].secondary:hover,
-[role='button'].secondary:hover,
-a.button.secondary:hover {
-  background-color: var(--color-secondary-hover);
-  color: var(--color-secondary-hover-text);
-  border-color: var(--color-secondary-hover-border);
+/* Subscribe and auth buttons */
+button.subscribe,
+input[type='submit'].subscribe,
+input[type='button'].subscribe,
+input[type='reset'].subscribe,
+[role='button'].subscribe,
+a.button.subscribe,
+button.auth,
+input[type='submit'].auth,
+input[type='button'].auth,
+input[type='reset'].auth,
+[role='button'].auth,
+a.button.auth {
+  background-color: var(--color-subscribe);
+  color: var(--color-subscribe-text);
+  border-color: var(--color-subscribe-border);
+
+  &:hover {
+    background-color: var(--color-subscribe-hover);
+    color: var(--color-subscribe-hover-text);
+    border-color: var(--color-subscribe-hover-border);
+  }
 }
 
 /* Alt version */
@@ -314,6 +338,14 @@ a.button.compact {
 }
 
 /* Small size */
+input.small,
+textarea.small,
+select.small {
+  font-size: var(--font-size-small);
+  border-radius: var(--border-radius-small);
+  padding: calc(var(--spacing-half) - var(--border-weight)) var(--spacing-half);
+}
+
 button.small,
 input[type='submit'].small,
 input[type='button'].small,

@@ -25,7 +25,15 @@
 <div class="page-container content-container">
   <h1>Folder: {folder.folder}</h1>
 
-  <p>There are <strong>{formatNumber(folder.fileCount)}</strong> files in this folder.</p>
+  <p>There are <strong>{formatNumber(folder.fileCount)} files</strong> in this folder.</p>
+
+  <SubscribeLink
+    {user}
+    subType="folder"
+    subItemId={folder.folderId}
+    subItemFormatted={folder.folder}
+    {existingSubscription}
+  />
 
   <section class="page-section">
     <h2>Agencies</h2>
@@ -58,8 +66,6 @@
       {/each}
     </section>
   {/if}
-
-  <SubscribeLink {user} subType="folder" subItemId={folder.folderId} {existingSubscription} />
 
   <section class="page-section">
     <h2>Recently approved files</h2>

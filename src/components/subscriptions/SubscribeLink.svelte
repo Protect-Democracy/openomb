@@ -23,8 +23,10 @@
 
   // Props
   export let user;
-  export let subType;
-  export let subItemId;
+  export let variant: 'small' | 'full' | null = 'full';
+  export let subType: 'folder' | 'account' | 'agency' | 'bureau' | 'search' | 'file' | 'tafs';
+  export let subItemId: string | null;
+  export let subItemFormatted: string | null;
   export let existingSubscription;
   export let hideText = false;
   export let overrideFeatureFlag = false;
@@ -63,59 +65,86 @@
 </script>
 
 {#if overrideFeatureFlag || subscribeFeatureEnabled}
-  <aside class="subscribe-action">
-    {#if !hideText}
-      {#if addedSubscription}
-        <p class="muted">
-          You are receiving email updates when new files are approved for this {subType}
-        </p>
-      {:else}
-        <p class="muted">Receive email updates when new files are approved for this {subType}</p>
-      {/if}
-    {/if}
-    {#if user}
-      <div class="has-js-only-block">
-        <button
-          class="button compact"
-          on:click={addedSubscription ? unsubscribe : subscribe}
-          disabled={loading}
-          title={addedSubscription
-            ? `Unsubscribe from email updates for approved files`
-            : `Subscribe to email updates for approved files`}
-        >
-          {#if loading}
-            <span class="button-icon"><Spinner /></span>
+  <aside class:variant-small={variant === 'small'}>
+    <div class="subscribe-action">
+      {#if !hideText}
+        <p class:font-small={variant === 'small'}>
+          {#if addedSubscription}
+            You are subscribed to receive email updates when new files are approved for <em
+              >{subItemFormatted || `this ${subType}`}</em
+            >.
+          {:else}
+            Receive email updates when new files are approved for <em
+              >{subItemFormatted || `this ${subType}`}</em
+            >.
           {/if}
-          {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
-        </button>
-      </div>
+        </p>
+      {/if}
 
-      <div class="no-js-only-block">
-        {#if existingSubscription}
-          <a class="button compact" href={`/subscribe/${subType}/${subItemId}/remove`}
-            >Unsubscribe</a
+      {#if user}
+        <div class="has-js-only-block">
+          <button
+            class="button compact subscribe"
+            class:small={variant === 'small'}
+            on:click={addedSubscription ? unsubscribe : subscribe}
+            disabled={loading}
+            title={addedSubscription
+              ? `Unsubscribe from email updates for approved files`
+              : `Subscribe to email updates for approved files`}
           >
-        {:else}
-          <a class="button compact" href={`/subscribe/${subType}/${subItemId}`}>Subscribe</a>
-        {/if}
-      </div>
-    {:else}
-      <LogIn callbackUrl={`/subscribe/${subType}/${subItemId}`} action="Subscribe" />
-    {/if}
+            {#if loading}
+              <span class="button-icon"><Spinner /></span>
+            {/if}
+            {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
+          </button>
+        </div>
+
+        <div class="no-js-only-block">
+          {#if existingSubscription}
+            <a
+              class="button compact subscribe"
+              class:small={variant === 'small'}
+              href={`/subscribe/${subType}/${subItemId}/remove`}>Unsubscribe</a
+            >
+          {:else}
+            <a class="button compact subscribe" href={`/subscribe/${subType}/${subItemId}`}
+              >Subscribe</a
+            >
+          {/if}
+        </div>
+
+        <div class="manage-subscriptions">
+          <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
+        </div>
+      {:else}
+        <LogIn {variant} callbackUrl={`/subscribe/${subType}/${subItemId}`} action="Subscribe" />
+      {/if}
+    </div>
   </aside>
 {/if}
 
 <style>
+  aside {
+    background-color: var(--color-subscribe-background);
+    padding: var(--spacing);
+    margin-bottom: var(--spacing);
+  }
+
   .subscribe-action {
-    display: flex;
-    column-gap: var(--spacing);
-    align-items: center;
-    justify-content: flex-end;
+    @media (max-width: 768px) {
+      & {
+        flex-direction: column;
+        row-gap: var(--spacing);
+      }
+    }
   }
 
   .subscribe-action p {
-    margin: 0;
-    font-size: var(--font-size-slight);
+    margin-bottom: var(--spacing-half);
+  }
+
+  .manage-subscriptions {
+    margin-top: var(--spacing);
   }
 
   @media (max-width: 768px) {

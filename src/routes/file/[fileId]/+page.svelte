@@ -77,18 +77,21 @@
                 tafsGroup
               )} - {tafsGroup.accountTitle}
             </h3>
-            <SubscribeLink
-              hideText
-              {user}
-              subType="tafs"
-              subItemId={tafsGroup.tafsTableId}
-              existingSubscription={tafsSubscriptions[tafsGroup.tafsTableId]}
-            />
           </div>
 
           <TAFSMeta {tafsGroup} />
 
           <TAFSLines currentTafs={tafsGroup} {prevIterationTafs} showPrevious={$showPrevious} />
+
+          <div class="tafs-subscribe">
+            <SubscribeLink
+              {user}
+              subType="tafs"
+              subItemId={tafsGroup.tafsTableId}
+              subItemFormatted={`TAFS ${formatTafsFormattedId(tafsGroup)} - FY ${file.fiscalYear}`}
+              existingSubscription={tafsSubscriptions[tafsGroup.tafsTableId]}
+            />
+          </div>
         </section>
       {/each}
     {:else}
@@ -166,11 +169,6 @@
     margin-bottom: var(--spacing-large);
   }
 
-  .tafs-heading-wrapper {
-    display: flex;
-    justify-content: space-between;
-  }
-
   .previous-toggle {
     background-color: var(--color-background-alt);
     padding: var(--spacing) var(--spacing-double);
@@ -196,13 +194,6 @@
       padding: 0;
       margin: 0;
       list-style-type: none;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .tafs-heading-wrapper {
-      flex-direction: column;
-      margin-bottom: var(--spacing);
     }
   }
 </style>
