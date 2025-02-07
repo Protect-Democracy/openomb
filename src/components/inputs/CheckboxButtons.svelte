@@ -68,7 +68,7 @@
   <div {...$root} use:root class="toggle-group" aria-label={name}>
     {#each options as option}
       <button
-        class="compact toggle-item"
+        class="compact toggle-item subscribe"
         {...$item(`${formatOptionValue(option)}`)}
         use:item
         aria-label={formatOptionLabel(option)}

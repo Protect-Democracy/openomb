@@ -341,14 +341,9 @@ input[type='reset'][aria-pressed='false'],
 a[aria-pressed='false'].button {
   background-color: var(--color-toggle-off);
   color: var(--color-toggle-off-text);
-}
 
-button[aria-pressed='false']:hover,
-input[type='submit'][aria-pressed='false']:hover,
-input[type='button'][aria-pressed='false']:hover,
-input[type='reset'][aria-pressed='false']:hover,
-[role='button'][aria-pressed='false']:hover,
-a[aria-pressed='false'].button:hover {
-  background-color: var(--color-toggle-hover);
-  color: var(--color-toggle-hover-text);
+  &:hover {
+    background-color: var(--color-toggle-hover);
+    color: var(--color-toggle-hover-text);
+  }
 }

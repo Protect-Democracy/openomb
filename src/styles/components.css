@@ -376,6 +376,41 @@ a.button.small {
   vertical-align: sub;
 }
 
+/* Toggle subscribe */
+
+/* Toggles */
+button[aria-pressed='true'].subscribe,
+input[type='submit'][aria-pressed='true'].subscribe,
+input[type='button'][aria-pressed='true'].subscribe,
+input[type='reset'][aria-pressed='true'].subscribe,
+[role='button'][aria-pressed='true'].subscribe,
+a[aria-pressed='true'].button.subscribe {
+  background-color: var(--color-subscribe);
+  color: var(--color-text-inverse);
+
+  &:hover {
+    background-color: var(--color-subscribe);
+    color: var(--color-text-inverse);
+  }
+}
+
+button[aria-pressed='false'].subscribe,
+input[type='submit'][aria-pressed='false'].subscribe,
+input[type='button'][aria-pressed='false'].subscribe,
+input[type='reset'][aria-pressed='false'].subscribe,
+[role='button'][aria-pressed='false'].subscribe,
+a[aria-pressed='false'].button.subscribe {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-color: var(--color-subscribe);
+
+  &:hover {
+    background-color: var(--color-subscribe-hover);
+    color: var(--color-text-inverse);
+    border-color: var(--color-subscribe);
+  }
+}
+
 /* Forms */
 
 /* Generic form item container */
