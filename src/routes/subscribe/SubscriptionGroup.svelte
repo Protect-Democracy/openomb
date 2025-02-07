@@ -17,17 +17,20 @@
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         <a href={subscription.itemLink}>{@html subscription.description}</a>
       </td>
+
       <td class="sub-frequency">
         <label class="sr-only" for={`frequency-${subscription.id}`}
           >Set Email Frequency for {subscription.description}</label
         >
         <CheckboxButtons
+          id={`frequency-${subscription.id}`}
           name={`frequency-${subscription.id}`}
           options={['daily', 'weekly']}
           formatOptionLabel={capitalize}
           value={subscription.frequency}
         />
       </td>
+
       <td class="sub-remove">
         <label class="sr-only" for={`remove-${subscription.id}`}
           >Remove Subscription to {subscription.description}</label

@@ -46,14 +46,27 @@
             </tr>
           </thead>
 
-          <tbody>
-            <SubscriptionGroup title="Searches" subs={searchSubs} />
-            <SubscriptionGroup title="Folders" subs={folderSubs} />
-            <SubscriptionGroup title="Agencies" subs={agencySubs} />
-            <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
-            <SubscriptionGroup title="Accounts" subs={accountSubs} />
-            <SubscriptionGroup title="TAFS" subs={tafsSubs} />
-          </tbody>
+          {#if userSubscriptions.length === 0}
+            <tbody>
+              <tr>
+                <td colspan="3"
+                  ><em
+                    >No subscriptions found. Navigate to an agency, file, search, etc. to subscribe
+                    to different feeds of data.</em
+                  ></td
+                >
+              </tr>
+            </tbody>
+          {:else}
+            <tbody>
+              <SubscriptionGroup title="Searches" subs={searchSubs} />
+              <SubscriptionGroup title="Folders" subs={folderSubs} />
+              <SubscriptionGroup title="Agencies" subs={agencySubs} />
+              <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
+              <SubscriptionGroup title="Accounts" subs={accountSubs} />
+              <SubscriptionGroup title="TAFS" subs={tafsSubs} />
+            </tbody>
+          {/if}
         </table>
 
         <div class="actions">

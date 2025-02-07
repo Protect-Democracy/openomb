@@ -22,6 +22,7 @@
   <input type="hidden" name="providerId" value="email" />
   <input type="hidden" name="callbackUrl" value={callbackUrl} />
   <label for="input-email-for-http-email-provider" class="sr-only">Email</label>
+
   <input
     id="input-email-for-http-email-provider"
     class:compact={variant === 'small'}
