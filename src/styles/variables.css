@@ -61,7 +61,7 @@
   --color-previous-checked: var(--color-yellow-darker);
   --color-previous-unchecked: var(--color-yellow-light);
 
-  --color-subscribe-background: var(--color-blue-lighter);
+  --color-subscribe-background: var(--color-blue-lightest);
   --color-subscribe: var(--color-blue);
   --color-subscribe-text: var(--color-text-inverse);
   --color-subscribe-border: var(--color-blue);

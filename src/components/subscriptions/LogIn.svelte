@@ -14,7 +14,7 @@
   // Props
   export let variant: 'small' | 'full' = 'full';
   export let callbackUrl;
-  export let action = 'Authenticate';
+  export let action = 'Send link';
 </script>
 
 <form class="login-form" action="/auth/signin/http-email" method="POST">

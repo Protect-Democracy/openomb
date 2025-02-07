@@ -82,39 +82,41 @@
       {/if}
 
       {#if user}
-        <div class="has-js-only-block">
-          <button
-            class="button compact subscribe"
-            class:small={variant === 'small'}
-            on:click={addedSubscription ? unsubscribe : subscribe}
-            disabled={loading}
-            title={addedSubscription
-              ? `Unsubscribe from email updates for approved files`
-              : `Subscribe to email updates for approved files`}
-          >
-            {#if loading}
-              <span class="button-icon"><Spinner /></span>
-            {/if}
-            {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
-          </button>
-        </div>
-
-        <div class="no-js-only-block">
-          {#if existingSubscription}
-            <a
+        <div class="user-actions">
+          <div class="has-js-only-block">
+            <button
               class="button compact subscribe"
               class:small={variant === 'small'}
-              href={`/subscribe/${subType}/${subItemId}/remove`}>Unsubscribe</a
+              on:click={addedSubscription ? unsubscribe : subscribe}
+              disabled={loading}
+              title={addedSubscription
+                ? `Unsubscribe from email updates for approved files`
+                : `Subscribe to email updates for approved files`}
             >
-          {:else}
-            <a class="button compact subscribe" href={`/subscribe/${subType}/${subItemId}`}
-              >Subscribe</a
-            >
-          {/if}
-        </div>
+              {#if loading}
+                <span class="button-icon"><Spinner /></span>
+              {/if}
+              {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
+            </button>
+          </div>
 
-        <div class="manage-subscriptions">
-          <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
+          <div class="no-js-only-block">
+            {#if existingSubscription}
+              <a
+                class="button compact subscribe"
+                class:small={variant === 'small'}
+                href={`/subscribe/${subType}/${subItemId}/remove`}>Unsubscribe</a
+              >
+            {:else}
+              <a class="button compact subscribe" href={`/subscribe/${subType}/${subItemId}`}
+                >Subscribe</a
+              >
+            {/if}
+          </div>
+
+          <div class="manage-subscriptions">
+            <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
+          </div>
         </div>
       {:else}
         <LogIn {variant} callbackUrl={`/subscribe/${subType}/${subItemId}`} action="Subscribe" />
@@ -130,27 +132,17 @@
     margin-bottom: var(--spacing);
   }
 
-  .subscribe-action {
-    @media (max-width: 768px) {
-      & {
-        flex-direction: column;
-        row-gap: var(--spacing);
-      }
-    }
-  }
-
-  .subscribe-action p {
-    margin-bottom: var(--spacing-half);
+  button {
+    margin: 0;
   }
 
   .manage-subscriptions {
-    margin-top: var(--spacing);
+    margin: 0;
   }
 
-  @media (max-width: 768px) {
-    .subscribe-action {
-      flex-direction: column;
-      row-gap: var(--spacing);
-    }
+  .user-actions {
+    display: flex;
+    column-gap: var(--spacing);
+    align-items: center;
   }
 </style>

@@ -20,7 +20,8 @@
 <div class="page-container">
   {#if user}
     <section class="content-container">
-      <h2>Subscriptions</h2>
+      <h1>Subscriptions</h1>
+
       <p>
         Adjust how frequently you are sent updates about a subscription or unsubscribe from the
         provided entry entirely. Any adjustments will be saved when the form is submitted.
@@ -83,6 +84,13 @@
     </section>
   {:else}
     <section class="content-container">
+      <h1>Login</h1>
+
+      <p>
+        Log in using your email address; you will be sent a "magic link" that will log you into the
+        site. Once logged in, you can subscribe to different feeds of data.
+      </p>
+
       <LogIn callbackUrl="/subscribe" />
     </section>
   {/if}

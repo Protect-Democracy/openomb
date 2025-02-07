@@ -22,6 +22,7 @@
   // Props
   export let user;
   export let url;
+  export let variant: 'small' | 'full' | null = 'full';
   export let existingSubscription;
   export let overrideFeatureFlag = false;
 
@@ -97,38 +98,50 @@
 </script>
 
 {#if overrideFeatureFlag || subscribeFeatureEnabled}
-  <aside class="subscribe-action">
-    {#if addedSubscription}
-      <p class="muted">
-        You are receiving email updates when new files are approved matching this search
-      </p>
-    {:else}
-      <p class="muted">Receive email updates when new files are approved matching this search</p>
-    {/if}
-    {#if user}
-      <div class="has-js-only-block">
-        <button
-          class="button compact"
-          on:click={addedSubscription ? unsubscribe : subscribe}
-          disabled={loading}
-        >
-          {#if loading}
-            <span class="button-icon"><Spinner /></span>
-          {/if}
-          {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
-        </button>
-      </div>
+  <aside class="subscribe-action" class:variant-small={variant === 'small'}>
+    <p class:font-small={variant === 'small'}>
+      {#if addedSubscription}
+        You are receiving email updates when new files are approved matching this search.
+      {:else}
+        Receive email updates when new files are approved matching this search.
+      {/if}
+    </p>
 
-      <div class="no-js-only-block">
-        {#if existingSubscription}
-          <a class="button compact" href={`/subscribe/search/${existingSubscription.itemId}/remove`}
-            >Unsubscribe</a
+    {#if user}
+      <div class="user-actions">
+        <div class="has-js-only-block">
+          <button
+            class="button compact subscribe"
+            class:small={variant === 'small'}
+            on:click={addedSubscription ? unsubscribe : subscribe}
+            disabled={loading}
           >
-        {:else}
-          <a class="button compact" href={`/subscribe/search?${url.searchParams.toString()}`}
-            >Subscribe</a
-          >
-        {/if}
+            {#if loading}
+              <span class="button-icon"><Spinner /></span>
+            {/if}
+            {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
+          </button>
+        </div>
+
+        <div class="no-js-only-block">
+          {#if existingSubscription}
+            <a
+              class="button compact subscribe"
+              class:small={variant === 'small'}
+              href={`/subscribe/search/${existingSubscription.itemId}/remove`}>Unsubscribe</a
+            >
+          {:else}
+            <a
+              class="button compact subscribe"
+              class:small={variant === 'small'}
+              href={`/subscribe/search?${url.searchParams.toString()}`}>Subscribe</a
+            >
+          {/if}
+        </div>
+
+        <div class="manage-subscriptions">
+          <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
+        </div>
       </div>
     {:else}
       <LogIn callbackUrl={`/subscribe/search?${url.searchParams.toString()}`} action="Subscribe" />
@@ -137,22 +150,23 @@
 {/if}
 
 <style>
-  .subscribe-action {
+  aside {
+    background-color: var(--color-subscribe-background);
+    padding: var(--spacing);
+    margin-bottom: var(--spacing);
+  }
+
+  button {
+    margin: 0;
+  }
+
+  .manage-subscriptions {
+    margin: 0;
+  }
+
+  .user-actions {
     display: flex;
     column-gap: var(--spacing);
     align-items: center;
-    justify-content: flex-end;
-  }
-
-  .subscribe-action p {
-    margin: 0;
-    font-size: var(--font-size-slight);
-  }
-
-  @media (max-width: 768px) {
-    .subscribe-action {
-      flex-direction: column;
-      row-gap: var(--spacing);
-    }
   }
 </style>
