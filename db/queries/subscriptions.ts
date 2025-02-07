@@ -52,13 +52,15 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
     };
   }
   else if (sub.type === 'tafs') {
+    // TAFS subscriptions are for a specific TAFS and Fiscal Year
+    // which is what we track as far as "iteractions" go.
     const item = await db.query.tafs.findFirst({
       where: eq(tafs.tafsTableId, sub.itemId)
     });
     return {
       ...sub,
       itemDetails: item || ({} as tafsSelect),
-      description: `TAFS: ${item && formatTafsFormattedId(item)}`,
+      description: `TAFS: ${item && formatTafsFormattedId(item)} - ${item?.accountTitle} (FY ${item?.fiscalYear})`,
       itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
   }
