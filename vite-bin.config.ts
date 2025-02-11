@@ -1,9 +1,6 @@
 /**
- * Vite config for compiling/building the bin/migrate.ts script
- *
- * TODO: Ideally we could combine with vite-collect.config.ts
+ * Vite config for compiling/building bin/* scripts script
  */
-import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import { sentryRollupPlugin } from '@sentry/rollup-plugin';
 
@@ -15,12 +12,20 @@ const dependencies = Object.keys({
 });
 
 export default defineConfig({
+  // TODO: Unsure why these aliases are not being picked up via
+  // the tsconfig.json.  This is a workaround.
+  resolve: {
+    alias: {
+      $config: 'src/config/index.ts',
+      '$config/*': 'src/config/*'
+    }
+  },
   build: {
     target: ['node20'],
-    // Note that this directory will get cleared out on build, so combing
-    // places with other scripts is not a good idea
-    outDir: 'build-migrate',
-    ssr: resolve(__dirname, 'bin', 'migrate.ts'),
+    // Use --outDir to specify the output directory
+    //outDir: 'build-migrate',
+    // Pass in --ssr to build a bin/* script
+    //ssr: resolve(__dirname, 'bin', 'migrate.ts'),
     rollupOptions: {
       external: dependencies,
       output: {

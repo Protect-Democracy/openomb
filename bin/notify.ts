@@ -5,6 +5,7 @@
 // Dependencies
 import { DateTime } from 'luxon';
 import { map, reduce, filter } from 'lodash-es';
+import { Command } from 'commander';
 import {
   getSubscriptionsByUser,
   getUserSubscriptionDetails,
@@ -24,6 +25,8 @@ import {
   replyEmail
 } from '../src/config/subscriptions';
 import { formatFileTitle, formatNumber } from '../src/lib/formatters';
+import packageJson from '../package.json' assert { type: 'json' };
+// import { compileTemplates } from '../email/templates';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();
@@ -38,7 +41,17 @@ createTransaction('apportionment-notifications', cli);
  * Main CLI function
  */
 async function cli(): Promise<void> {
+  // Setup commander
+  const program = new Command();
+  program
+    .version(packageJson.version)
+    .description('Send any subscription notifications.')
+    .parse(process.argv);
+
   console.info(`Started subscription notification - ${new Date()}`);
+
+  // Render the email templates for use in the notifications
+  // const emailTemplates = await compileTemplates();
 
   const userSubscriptions = await getSubscriptionsByUser();
 

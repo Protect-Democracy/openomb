@@ -6,10 +6,12 @@
   "scripts": {
     "prepare": "husky || true",
     "dev": "dotenvx run -- vite dev",
+    "dev:web": "npm run dev",
+    "dev:email": "dotenvx run -- tsx email/server.ts",
     "build:web": "vite build",
-    "build:collect": "vite build --config vite-collect.config.ts",
-    "build:migrate": "vite build --config vite-migrate.config.ts",
-    "build:notify": "vite build --config vite-notify.config.ts",
+    "build:collect": "vite build --config vite-bin.config.ts --ssr bin/collect.ts --outDir build-collect",
+    "build:migrate": "vite build --config vite-bin.config.ts --ssr bin/migrate.ts --outDir build-migrate",
+    "build:notify": "vite build --config vite-bin.config.ts --ssr bin/notify.ts --outDir build-notify",
     "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify",
     "preview": "npm run preview:web",
     "preview:web": "dotenvx run -- vite preview",
@@ -28,6 +30,7 @@
     "test:unit:watch": "vitest watch",
     "collect": "tsx bin/collect.ts",
     "notify": "tsx bin/notify.ts",
+    "email": "tsx bin/email.ts",
     "db:generate-migration": "drizzle-kit generate",
     "db:migrate": "tsx bin/migrate.ts",
     "db:export": "tsx bin/export.ts"
@@ -70,7 +73,7 @@
     "node-html-parser": "^6.1.12",
     "pdfjs-dist": "^4.9.155",
     "pg": "^8.11.3",
-    "svelte": "^5.0.0-next.131",
+    "svelte": "5.0.0-next.131",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {
@@ -93,8 +96,10 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.39.0",
+    "express": "^4.21.2",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
+    "nodemailer": "^6.10.0",
     "postcss-custom-media": "^10.0.4",
     "postcss-nesting": "^12.1.4",
     "prettier": "^3.1.1",
@@ -117,7 +122,7 @@
   ],
   "overrides": {
     "@melt-ui/svelte": {
-      "svelte": "^5.0.0-next.131"
+      "svelte": "5.0.0-next.131"
     }
   }
 }
