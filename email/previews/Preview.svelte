@@ -21,6 +21,8 @@
 
 <style>
   h1 {
-    color: red;
+    --color-gray-dark: aqua;
+    --color-alt: var(--color-gray-dark);
+    color: var(--color-alt);
   }
 </style>

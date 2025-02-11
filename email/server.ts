@@ -1,4 +1,3 @@
-import fs from 'node:fs/promises';
 import path from 'node:path';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
@@ -10,7 +9,7 @@ const port = process.env.PORT || 5175;
 const base = process.env.BASE || '/';
 
 // Cached production assets
-const templateHtml = isProduction ? await fs.readFile('./dist/client/index.html', 'utf-8') : '';
+// const templateHtml = isProduction ? await fs.readFile('./dist/client/index.html', 'utf-8') : '';
 
 // Create http server
 const app = express();
@@ -31,10 +30,10 @@ if (!isProduction) {
 }
 else {
   // TODO, though this will not be used for production
-  const compression = (await import('compression')).default;
-  const sirv = (await import('sirv')).default;
-  app.use(compression());
-  app.use(base, sirv('./dist/client', { extensions: [] }));
+  // const compression = (await import('compression')).default;
+  // const sirv = (await import('sirv')).default;
+  // app.use(compression());
+  // app.use(base, sirv('./dist/client', { extensions: [] }));
 }
 
 // Serve HTML
@@ -42,32 +41,24 @@ app.all('*', async (req, res) => {
   try {
     const url = req.originalUrl.replace(base, '');
 
-    /** @type {string} */
-    let template;
     /** @type {import('./src/entry-server.js').render} */
     let render;
 
     if (!isProduction) {
-      // Always read fresh template in development
-      template = await fs.readFile(path.join(vite.config.root, './index.html'), 'utf-8');
-      template = await vite.transformIndexHtml(url, template);
-      render = (await vite.ssrLoadModule('/render.ts')).render;
+      // Always read fresh template in development.  Note the render function
+      // handles putting into the index.html template
+      // template = await fs.readFile(path.join(vite.config.root, './index.html'), 'utf-8');
+      // template = await vite.transformIndexHtml(url, template);
+      render = (await vite.ssrLoadModule('/dev-render.ts')).render;
     }
     else {
       // TODO, though this will not be used for production
-      template = templateHtml;
-      render = (await import('./dist/server/entry-server.js')).render;
+      // template = templateHtml;
+      // render = (await import('./dist/server/entry-server.js')).render;
     }
 
     const rendered = await render(url);
-
-    console.log(rendered);
-    const html = template
-      .replace(`<!--app-head-->`, rendered.head || '')
-      .replace(`<!--app-css-->`, rendered.css || '')
-      .replace(`<!--app-html-->`, rendered.html || '');
-
-    res.status(200).set({ 'Content-Type': 'text/html' }).send(html);
+    res.status(200).set({ 'Content-Type': 'text/html' }).send(rendered);
   }
   catch (e) {
     vite?.ssrFixStacktrace(e);
