@@ -125,7 +125,7 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
     return {
       ...sub,
       itemDetails: item || {},
-      description: `Saved Search: <i>${descriptionParsed(item)}</i>`,
+      description: `Saved Search: ${descriptionParsed(item)}`,
       itemLink: `/search?${new URLSearchParams(item?.criterion).toString()}`
     };
   }

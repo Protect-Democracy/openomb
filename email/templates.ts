@@ -120,8 +120,8 @@ export async function renderTemplate(component, props) {
   // https://www.caniemail.com/features/
   // https://www.campaignmonitor.com/css/flexbox/align-content/
   //
-  // We probably should convert rem/em to px because of support
-  // https://www.caniemail.com/features/css-unit-rem/
+  // TODO: Somehow convert calc
+  processed = remToPx(processed);
 
   return processed;
 }
@@ -144,4 +144,16 @@ function injectStyles(input, replacer) {
     </style>
   `
   );
+}
+
+/**
+ * Convert rem values to px values.
+ *
+ * @param {string} input
+ * @param {basePixels} number
+ */
+export function remToPx(input: string, basePixels = 16) {
+  return input.replace(/([\d.]+)rem/g, (match, value) => {
+    return `${parseFloat(value) * basePixels}px`;
+  });
 }

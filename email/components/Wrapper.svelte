@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { Container, Text, Img, Hr, Heading } from '@sveltelaunch/svelte-5-email';
-  // Note that most email clients don't support Base64 images
-  // https://www.caniemail.com/features/image-base64/
-  import logoImage from '../../src/assets/favicon/android-chrome-192x192.png?inline&width=50&height=50';
+  import { Container, Img, Hr, Heading } from '@sveltelaunch/svelte-5-email';
   import { siteName, deployedBaseUrl } from '../../src/config/index.ts';
+
+  // TODO: How to handle images in email templates?
 
   export let title: string;
   export let subscriptionsUrl: string = `${deployedBaseUrl}/subscribe`;
@@ -28,7 +27,7 @@
 
   <div class="header">
     <Img
-      src={logoImage}
+      src="{deployedBaseUrl}/static-assets/email/logo-192.png"
       alt="OpenOMB logo"
       align="left"
       style={{
@@ -53,21 +52,19 @@
   <slot />
 
   <div class="footer">
-    <Text>
+    <p class="font-small">
       To {#if unsubscribable}unsubscribe from these emails and to
       {/if} manage your account, visit the
       <a href={subscriptionsUrl} target="_blank">Subscriptions Page</a>
       on {siteName}.
-    </Text>
+    </p>
 
-    <Text className="font-small muted">
-      <span class="small-text"
-        >{siteName} is not affiliated with the Office of Management and Budget (OMB), the Executive Office
-        of the President, the U.S. Congress, or any component of the U.S. government. OpenOMB is a searchable
-        database maintained by Protect Democracy Project, a registered 501(c)(3) charitable organization
-        and part of the Protect Democracy group.
-      </span>
-    </Text>
+    <p class="font-small muted small-text">
+      {siteName} is not affiliated with the Office of Management and Budget (OMB), the Executive Office
+      of the President, the U.S. Congress, or any component of the U.S. government. OpenOMB is a searchable
+      database maintained by Protect Democracy Project, a registered 501(c)(3) charitable organization
+      and part of the Protect Democracy group.
+    </p>
   </div>
 </Container>
 
@@ -85,10 +82,11 @@
   .footer {
     margin-top: 3rem;
     background-color: var(--color-blue-lightest);
-    padding: 1rem 2rem;
+    padding: 1.5rem 1.5rem;
   }
 
   .small-text {
     line-height: 1.3;
+    margin-bottom: 0;
   }
 </style>
