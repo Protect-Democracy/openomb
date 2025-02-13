@@ -32,8 +32,7 @@
     "notify": "tsx bin/notify.ts",
     "email": "tsx bin/email.ts",
     "db:generate-migration": "drizzle-kit generate",
-    "db:migrate": "tsx bin/migrate.ts",
-    "db:export": "tsx bin/export.ts"
+    "db:migrate": "tsx bin/migrate.ts"
   },
   "lint-staged": {
     "*/**/*.{js,jsx,ts,tsx,svelte}": [
