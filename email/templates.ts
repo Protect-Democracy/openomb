@@ -19,7 +19,12 @@ const globalStyles = globalStylesToInclude.map((file) => {
   return fs.readFileSync(path.join(globalStylesDirectory, file), 'utf-8');
 });
 
-// Templates
+/**
+ * Compile all email templates in a directory.
+ *
+ * @param directory
+ * @returns
+ */
 export async function compileTemplates(directory = 'templates') {
   const files = fs.readdirSync(path.join(__dirname, directory));
 
@@ -36,9 +41,16 @@ export async function compileTemplates(directory = 'templates') {
   return templates;
 }
 
-// There is not way to do an import .svelte file and Svelte doesn't
-// expose a way to dynamically compile a component in a way that is
-// useful that can handle dependencies.  So we call Vite to compile.
+/**
+ * Compile an email template.
+ *
+ * There is not way to do an import .svelte file and Svelte doesn't
+ * expose a way to dynamically compile a component in a way that is
+ * useful that can handle dependencies.  So we call Vite to compile.
+ *
+ * TODO: Memoize this.  The memoizing in server/cache.ts i smeant to handle
+ * simple data types and this includes functions.
+ */
 export async function compileTemplate(file) {
   const text = fs.readFileSync(file, 'utf-8');
   const filename = path.basename(file);

@@ -17,7 +17,7 @@
 
 <Preview>OpenOMB File Notifications</Preview>
 
-<Wrapper {title}>
+<Wrapper {title} unsubscribable={true}>
   <Text
     >New apportionment files have been approved within your subscriptions. These files are listed
     below.</Text

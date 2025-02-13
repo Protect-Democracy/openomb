@@ -49,10 +49,17 @@ To run a local development server on port `5175` to preview the email templates,
 npm run dev:email
 ```
 
-This will preview the email in the browser which is good for faster development, but is limited as most email clients have a limited ability to render HTML and CSS. To send an example email to a real email address, run the following:
+This will preview the email in the browser which is good for faster development, but is limited as most email clients have a limited ability to render HTML and CSS.
+
+### Send email
+
+To send an example email to a real email address, run the following:
 
 ```bash
+# This will try to use some test data
 npm run email -- --address test@example.com --template FileNotificationEmail
+# This will pull data from a user in the system and fake a last notified date
+npm run email -- --address test@example.com --template FileNotificationEmail --user example.user@example.com --subscription-last-notified 1970-01-01
 ```
 
 To send this directly, you can set the following environment variables:
@@ -66,3 +73,7 @@ process.env.DEV_EMAIL_PASS
 ```
 
 **TODO** To use the notification service instead of directly sending an email, use the following flag: `--use-notification-service`.
+
+### Use in the local server
+
+Due to how we compile the email templates dynamically, there is some issues with vite's dev server, so we specifically don't watch in the `.cache/` directory where we store those files. This means that when running the local dev web server, it may not automatically pick up email template changes.

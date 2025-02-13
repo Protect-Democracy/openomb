@@ -34,6 +34,15 @@ export default defineConfig({
     })
   ],
 
+  server: {
+    watch: {
+      // Need to not watch in the cache and build specifically
+      // because we dynamically build email templates.  This also means
+      // that you may have to restart the server if you change an email
+      ignored: ['**/.cache/**', '**/build-*/**']
+    }
+  },
+
   // Unfortunately we have to add the postcss plugins here
   // so that global imports will use it, as well as in
   // svelte.config.js so component can use it. :/

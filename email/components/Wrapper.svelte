@@ -6,6 +6,8 @@
   import { siteName, deployedBaseUrl } from '../../src/config/index.ts';
 
   export let title: string;
+  export let subscriptionsUrl: string = `${deployedBaseUrl}/subscribe`;
+  export let unsubscribable: boolean = true;
 </script>
 
 <Container
@@ -52,10 +54,9 @@
 
   <div class="footer">
     <Text>
-      To unsubscribe from these emails and to manage your account, visit the <a
-        href="{deployedBaseUrl}/subscribe"
-        target="_blank">Subscriptions Page</a
-      >
+      To {#if unsubscribable}unsubscribe from these emails and to
+      {/if} manage your account, visit the
+      <a href={subscriptionsUrl} target="_blank">Subscriptions Page</a>
       on {siteName}.
     </Text>
 
