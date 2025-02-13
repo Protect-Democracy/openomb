@@ -8,6 +8,7 @@
 import { Command } from 'commander';
 import { createTransport } from 'nodemailer';
 import { compileTemplates } from '../email/templates';
+import { getSubscriptionsWithFilesByUser } from '../server/subscriptions';
 import packageJson from '../package.json' assert { type: 'json' };
 
 /**
@@ -21,6 +22,14 @@ async function cli(): Promise<void> {
     .description('Send an email.')
     .option('-a, --address <email>', 'Email address to send to.')
     .option('-t, --template <template>', 'What template to send, such as FileNotificationEmail.')
+    .option(
+      '-u, --subscription-user <email>',
+      'User to pull data from for subscription templates, otherwise will use test data.'
+    )
+    .option(
+      '-l, --subscription-last-notified <data>',
+      'for use with "user" option.  Last notified date to provide, i.e. 1970-01-01, otherwise uses what is in the database.'
+    )
     .option('-s, --use-notifications-service', 'TODO.  Otherwise, will send email directly.')
     .parse(process.argv);
 
@@ -45,12 +54,22 @@ async function cli(): Promise<void> {
     process.exit(1);
   }
 
-  // Get the data for the template
-  const data = templateData(options.template);
-  data.email = options.address;
+  // Get the data for the template if user provided
+  let data;
+  if (options.subscriptionUser) {
+    data = await getSubscriptionsWithFilesByUser(
+      options.subscriptionUser,
+      new Date(options.subscriptionLastNotified)
+    );
+    data = { subscriptions: data };
+  }
+  else {
+    // TODO: Maybe use test data in email/previews/ ?
+    data = {};
+  }
 
   // Render template
-  const { html: emailBody } = await emailTemplate.render(data);
+  const emailBody = await emailTemplate.render(data);
 
   // Send email
   if (options.useNotificationsService) {
@@ -100,25 +119,6 @@ async function sendEmail(email: string, subject: string, body: string) {
     subject,
     html: body
   });
-}
-
-/**
- * Get data for template.
- *
- * Unsure what is the best thing here.  Ideally we have real data to send.
- * Maybe it makes sense to get notifications for a specific user?
- */
-function templateData(template: string) {
-  if (template === 'FileNotificationEmail') {
-    return {
-      file: {
-        name: 'Test File',
-        url: 'https://example.com/test-file.pdf'
-      }
-    };
-  }
-
-  return {};
 }
 
 cli();

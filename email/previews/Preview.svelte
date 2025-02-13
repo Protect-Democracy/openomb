@@ -10,7 +10,7 @@
 {:else}
   <h1>Email previews</h1>
 
-  <p>Make sure to test in actual email clients.</p>
+  <p>Make sure to test in actual email clients as well.</p>
 
   <nav>
     <ul>
@@ -20,9 +20,4 @@
 {/if}
 
 <style>
-  h1 {
-    --color-gray-dark: aqua;
-    --color-alt: var(--color-gray-dark);
-    color: var(--color-alt);
-  }
 </style>

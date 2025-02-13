@@ -1,5 +1,14 @@
-// Valid types of items to subscribe to
-export const subscriptionTypes = ['search', 'folder', 'agency', 'bureau', 'account', 'tafs'];
+// Valid types of items to subscribe to.  Order matters here as this
+// is used for soting.
+export const subscriptionTypes = ['folder', 'agency', 'bureau', 'account', 'tafs', 'search'];
+export const subscriptionTypeTitles = {
+  folder: 'Folders',
+  agency: 'Agencies',
+  bureau: 'Bureaus',
+  account: 'Accounts',
+  tafs: 'TAFS',
+  search: 'Searches'
+};
 
 // Feature flag for testing subscriptions
 export const subscribeFeatureEnabled = true;

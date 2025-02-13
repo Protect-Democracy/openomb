@@ -142,14 +142,15 @@ export const getSubscriptionsByUser = async function (): Promise<
     .select()
     .from(subscriptions)
     .leftJoin(users, eq(subscriptions.userId, users.id));
+
   for (const result of subscriptionResults) {
-    if (result.user?.email) {
-      if (!userSubs[result.user.email]) {
-        userSubs[result.user.email] = [];
+    if (result.users?.email) {
+      if (!userSubs[result.users.email]) {
+        userSubs[result.users.email] = [];
       }
       const subDetails = await getSubscriptionDetails(result.subscriptions);
       if (subDetails) {
-        userSubs[result.user.email].push(subDetails);
+        userSubs[result.users.email].push(subDetails);
       }
     }
   }

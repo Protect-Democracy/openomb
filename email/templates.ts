@@ -13,6 +13,11 @@ import juice from 'juice';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const compileDirectory = path.join(__dirname, '..', '.cache', 'email-templates');
 const htmlTemplate = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
+const globalStylesDirectory = path.join(__dirname, '..', 'src', 'styles');
+const globalStylesToInclude = ['variables.css', 'elements.css', 'components.css', 'utilities.css'];
+const globalStyles = globalStylesToInclude.map((file) => {
+  return fs.readFileSync(path.join(globalStylesDirectory, file), 'utf-8');
+});
 
 // Templates
 export async function compileTemplates(directory = 'templates') {
@@ -69,9 +74,7 @@ export async function compileTemplate(file) {
     tempLocation: expectedComponent,
     component,
     render: async (props) => {
-      return renderTemplate(component, {
-        props
-      });
+      return await renderTemplate(component, props);
     }
   };
 }
@@ -80,22 +83,35 @@ export async function compileTemplate(file) {
  * Render a component and handle any finessing.
  */
 export async function renderTemplate(component, props) {
+  let processed;
+
   // There is html and body (unsure why both but seem to be the same)
   const { head, body } = svelteRender(component, {
     props
   });
 
   // Put into the larger HTML template
-  const html = htmlTemplate.replace(`<!--app-head-->`, head).replace(`<!--app-html-->`, body);
+  processed = htmlTemplate.replace(`<!--app-head-->`, head).replace(`<!--app-html-->`, body);
 
   // Inject global styles
-  const styled = injectStyles(html, '<!--app-styles-->');
+  processed = injectStyles(processed, '<!--app-global-css-->');
 
   // Inline CSS, resolve variables, and more
   // https://github.com/Automattic/juice
-  const inlined = juice(styled);
+  processed = juice(processed);
 
-  return inlined;
+  // Juice doesn't fully handle the styles from the global styles
+  // so let's get rid of it.
+  processed = processed.replace(/<style id="global-styles">.*?<\/style>/s, '');
+
+  // TODO: We may need to do more processing.
+  // https://www.caniemail.com/features/
+  // https://www.campaignmonitor.com/css/flexbox/align-content/
+  //
+  // We probably should convert rem/em to px because of support
+  // https://www.caniemail.com/features/css-unit-rem/
+
+  return processed;
 }
 
 /**
@@ -108,6 +124,12 @@ export async function renderTemplate(component, props) {
  * unsure how to do that.
  */
 function injectStyles(input, replacer) {
-  // TODO
-  return input.replace(replacer, '');
+  return input.replace(
+    replacer,
+    `
+    <style id="global-styles">
+      ${globalStyles.join('\n\n')}
+    </style>
+  `
+  );
 }

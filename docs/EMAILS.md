@@ -1,6 +1,27 @@
 # Emails
 
-### Templates
+## Limited HTML and CSS
+
+Writing HTML and CSS for emails is a bit different than writing for the web. Most email clients have limited support for modern CSS and HTML features. For example, most email clients do not support CSS Grid, Flexbox, or even media queries. This means that emails need to be designed with these limitations in mind.
+
+The current processing for templates helps with the following:
+
+- Uses [svelte-email](https://github.com/carstenlebek/svelte-email) library to make it more straightforward to use specific HTML tags and CSS properties.
+  - Note that this is an forked version of an unmaintained library, but is also not very maintained, so may not be a good solution in the long run.
+- Inlines CSS styles to elements.
+- Other processing via [juice](https://github.com/Automattic/juice) such as:
+  - Converting CSS variables to values.
+  - Removes unused CSS.
+- Includes a few of the global styles from the main application.
+  - Though note that things like media queries don't translate given current tooling.
+  - Which files are included is managed in `email/templates.ts`
+
+It is still up to you to make sure that that you use HTML and CSS that is going to be supported across most email clients. Some resources for this are the following:
+
+- [Campaign Monitor's CSS Support Guide](https://www.campaignmonitor.com/css/)
+- [Can I email...](https://www.caniemail.com/)
+
+## Templates
 
 Email templates are managed in Svelte components in `email/templates/`.
 
