@@ -4,7 +4,7 @@ services:
     build:
       context: .
     environment:
-      - APPORTIONMENTS_DB_URI=postgres://apportionments:password@host.docker.internal:5488/apportionments
+      - APPORTIONMENTS_DB_URI=postgres://postgres@host.docker.internal:5432/apportionments
       - NOTIFICATIONS_SERVICE_URI=http://notifications:8080
       - AUTH_SECRET=97ea9721afd3c427f6806c8d70b6207e
       - ORIGIN=http://localhost:3000
@@ -12,14 +12,12 @@ services:
       - PUBLIC_SENTRY_SVELTE_DSN=
       - PUBLIC_NODE_ENV=development
     ports:
-      - '3000:3000'
-      - '5173:5173'
+      - '3000:5173'
     volumes:
-      - ./src:/app/src
-      - ./server:/app/server
-      - ./db:/app/db
+      - ./:/app
+      - /app/node_modules
     working_dir: /app
-    command: sh -c "npm run db:migrate && npm run dev -- --host"
+    command: npm run dev -- --host
 
 include:
   - ./notifications/docker-compose.dev.yaml
