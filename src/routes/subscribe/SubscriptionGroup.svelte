@@ -25,6 +25,7 @@
         <CheckboxButtons
           id={`frequency-${subscription.id}`}
           name={`frequency-${subscription.id}`}
+          buttonClass="subscribe"
           options={['daily', 'weekly']}
           formatOptionLabel={capitalize}
           value={subscription.frequency}
@@ -50,7 +51,7 @@
   .sub-category {
     font-size: var(--font-size-small);
     font-weight: var(--font-copy-weight-bold);
-    background-color: var(--color-background-alt);
+    background-color: var(--color-gray-lightest);
     color: var(--color-text-alt);
   }
 

@@ -24,6 +24,7 @@
   let defaultValue;
   export { defaultValue as value };
 
+  export let buttonClass = '';
   export let formatOptionLabel = (o) => o;
   export let formatOptionValue = (o) => o;
 
@@ -68,7 +69,7 @@
   <div {...$root} use:root class="toggle-group" aria-label={name}>
     {#each options as option}
       <button
-        class="compact toggle-item subscribe"
+        class="compact toggle-item {buttonClass}"
         {...$item(`${formatOptionValue(option)}`)}
         use:item
         aria-label={formatOptionLabel(option)}
