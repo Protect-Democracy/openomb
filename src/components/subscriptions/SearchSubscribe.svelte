@@ -14,13 +14,17 @@
 -->
 
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { deserialize } from '$app/forms';
   import Spinner from '$components/icons/Spinner.svelte';
   import LogIn from './LogIn.svelte';
   import { subscribeFeatureEnabled } from '$config/subscriptions';
+  import { clientGetUser } from '$lib/users';
+
+  import type { User } from '$lib/users';
 
   // Props
-  export let user;
+  export let user: User;
   export let url;
   export let variant: 'small' | 'full' | null = 'full';
   export let existingSubscription;
@@ -28,6 +32,14 @@
 
   let addedSubscription = existingSubscription;
   let loading = false;
+
+  onMount(async () => {
+    // To be able to keep general routes able to use browser caching, we
+    // utilize some client side JS to fetch the user data.  Ideally,
+    // we could have SvelteKit just make this component client only, but
+    // unsure if there is a way to do that.
+    user = user || (await clientGetUser());
+  });
 
   async function subscribe() {
     loading = true;

@@ -50,10 +50,10 @@ const addHeaders: Handle = async ({ event, resolve }) => {
 
   // We can't set headers again if they have already been set, so we manage
   // here for global handling.
-  const noCache = !!user || path.match(/\/subscribe*/);
+  const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*)/);
   const cacheHeaders = noCache
     ? {
-        'Cache-Control': 'no-cache, no-store',
+        'Cache-Control': 'private, no-store',
         Expires: 'Sat, 26 Jul 1997 05:00:00 GMT'
       }
     : {
