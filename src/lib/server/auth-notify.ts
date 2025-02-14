@@ -23,7 +23,6 @@ export async function sendVerificationRequest(params) {
 
   // If they are trying to auth via a subscribe link, we need to send a different email
   const template = isSubscribeLink(urlRef) ? 'SubscriptionEmail' : 'AuthenticationEmail';
-  console.log(template);
 
   // Compile the templates if they haven't been compiled yet
   if (!emailTemplates) {
