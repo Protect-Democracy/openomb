@@ -41,6 +41,10 @@ const templateData = {
 const { html } = templates['FileNotification'].render(templateData);
 ```
 
+### Adding templates
+
+Add templates to `email/templates/`. You should also add a preview template in `email/previews/` that uses the email template, and then update `email/previews/Preview.svelte` to include the new preview.
+
 ## Previewing
 
 To run a local development server on port `5175` to preview the email templates, run the following:
