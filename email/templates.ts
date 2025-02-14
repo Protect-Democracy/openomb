@@ -12,11 +12,10 @@ import juice from 'juice';
 // Constants
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const compileDirectory = path.join(__dirname, '..', '.cache', 'email-templates');
-const htmlTemplate = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf-8');
-const globalStylesDirectory = path.join(__dirname, '..', 'src', 'styles');
+const htmlTemplate = readFileSync('./index.html', 'utf-8');
 const globalStylesToInclude = ['variables.css', 'elements.css', 'components.css', 'utilities.css'];
 const globalStyles = globalStylesToInclude.map((file) => {
-  return fs.readFileSync(path.join(globalStylesDirectory, file), 'utf-8');
+  return readFileSync(`../src/styles/${file}`, 'utf-8');
 });
 
 /**
@@ -35,7 +34,7 @@ export async function compileTemplates(directory = 'templates') {
   const templates = {};
   for (const file of svelteFiles) {
     const name = file.replace('.svelte', '');
-    templates[name] = await compileTemplate(path.join(__dirname, directory, file));
+    templates[name] = await compileTemplate(`${directory}/${file}`);
   }
 
   return templates;
@@ -52,7 +51,7 @@ export async function compileTemplates(directory = 'templates') {
  * simple data types and this includes functions.
  */
 export async function compileTemplate(file) {
-  const text = fs.readFileSync(file, 'utf-8');
+  const text = readFileSync(file, 'utf-8');
   const filename = path.basename(file);
   const filenameBase = filename.replace('.svelte', '');
   const tempDirectory = path.join(compileDirectory, filename);
@@ -156,4 +155,19 @@ export function remToPx(input: string, basePixels = 16) {
   return input.replace(/([\d.]+)rem/g, (match, value) => {
     return `${parseFloat(value) * basePixels}px`;
   });
+}
+
+/**
+ * Read file and return as string in a way that supports vite and Node.
+ *
+ * Use relative path to this file.
+ */
+export function readFileSync(file: string) {
+  // Vite environment
+  if (import.meta.env) {
+    return fs.readFileSync(path.join('email', file), 'utf-8');
+  }
+  else {
+    return fs.readFileSync(path.join(__dirname, file), 'utf-8');
+  }
 }
