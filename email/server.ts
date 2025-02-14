@@ -21,7 +21,7 @@ let vite;
 if (!isProduction) {
   const { createServer } = await import('vite');
   vite = await createServer({
-    configFile: path.join(__dirname, 'vite-email.config.ts'),
+    configFile: path.join(__dirname, '..', 'vite-email.config.ts'),
     server: { middlewareMode: true },
     appType: 'custom',
     base

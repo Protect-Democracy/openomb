@@ -43,7 +43,11 @@ const { html } = templates['FileNotification'].render(templateData);
 
 ### Adding templates
 
-Add templates to `email/templates/`. You should also add a preview template in `email/previews/` that uses the email template, and then update `email/previews/Preview.svelte` to include the new preview.
+- Add actual templates to `email/templates/`.
+- Updated list in `email/templates.ts`
+  - Unfortunately this is necessary to be able to handle vite build environments and node/ts environments.
+- Add a preview template in `email/previews/` that uses the email template.
+- Update `email/previews/Preview.svelte` to include the new preview.
 
 ## Previewing
 

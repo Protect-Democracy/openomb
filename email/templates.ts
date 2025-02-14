@@ -11,30 +11,29 @@ import juice from 'juice';
 
 // Constants
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const compileDirectory = path.join(__dirname, '..', '.cache', 'email-templates');
-const htmlTemplate = readFileSync('./index.html', 'utf-8');
+// Compile needs to be relative to this file to work across environments
+// since we are writing and then importing from
+const compileDirectory = path.join(__dirname, '.cache/email-templates');
+// TODO: Previously we did fs.readdirSync to get the list of templates, but
+// to be able to support Vite builds, we need to know the list of templates
+const emailTemplates = ['AuthenticationEmail', 'FileNotificationEmail', 'SubscriptionEmail'];
+const htmlTemplate = fs.readFileSync(crossEnvPath('./index.html'), 'utf-8');
 const globalStylesToInclude = ['variables.css', 'elements.css', 'components.css', 'utilities.css'];
 const globalStyles = globalStylesToInclude.map((file) => {
-  return readFileSync(`../src/styles/${file}`, 'utf-8');
+  return fs.readFileSync(crossEnvPath(`../src/styles/${file}`), 'utf-8');
 });
 
 /**
- * Compile all email templates in a directory.
+ * Compile all email templates.
  *
  * @param directory
  * @returns
  */
-export async function compileTemplates(directory = 'templates') {
-  const files = fs.readdirSync(path.join(__dirname, directory));
-
-  // Filter svelte files
-  const svelteFiles = files.filter((file) => file.endsWith('.svelte'));
-
+export async function compileTemplates() {
   // Make into a object
   const templates = {};
-  for (const file of svelteFiles) {
-    const name = file.replace('.svelte', '');
-    templates[name] = await compileTemplate(`${directory}/${file}`);
+  for (const templateName of emailTemplates) {
+    templates[templateName] = await compileTemplate(templateName);
   }
 
   return templates;
@@ -50,24 +49,25 @@ export async function compileTemplates(directory = 'templates') {
  * TODO: Memoize this.  The memoizing in server/cache.ts i smeant to handle
  * simple data types and this includes functions.
  */
-export async function compileTemplate(file) {
-  const text = readFileSync(file, 'utf-8');
-  const filename = path.basename(file);
-  const filenameBase = filename.replace('.svelte', '');
+export async function compileTemplate(templateName: string) {
+  const filePath = crossEnvPath(`templates/${templateName}.svelte`);
+  const text = fs.readFileSync(filePath, 'utf-8');
+  const filename = `${templateName}.svelte`;
+  const filenameBase = templateName;
   const tempDirectory = path.join(compileDirectory, filename);
   fs.mkdirSync(tempDirectory, { recursive: true });
 
   // TODO: Make it so that it doesn't output anything unless error
   await build({
-    configFile: path.join(__dirname, 'vite-email.config.ts'),
+    configFile: crossEnvPath('../vite-email.config.ts'),
 
     build: {
       target: ['node20'],
       ssr: true,
       outDir: tempDirectory,
       lib: {
-        entry: file,
-        name: 'EmailTemplate',
+        entry: filePath,
+        name: templateName,
         formats: ['es']
       },
       rollupOptions: {
@@ -81,7 +81,6 @@ export async function compileTemplate(file) {
   const component = (await import(/* @vite-ignore */ expectedComponent)).default;
   return {
     text,
-    location: file,
     tempLocation: expectedComponent,
     component,
     render: async (props) => {
@@ -158,16 +157,14 @@ export function remToPx(input: string, basePixels = 16) {
 }
 
 /**
- * Read file and return as string in a way that supports vite and Node.
- *
- * Use relative path to this file.
+ * Cross env path.
  */
-export function readFileSync(file: string) {
+export function crossEnvPath(file: string) {
   // Vite environment
   if (import.meta.env) {
-    return fs.readFileSync(path.join('email', file), 'utf-8');
+    return path.join('email', file);
   }
   else {
-    return fs.readFileSync(path.join(__dirname, file), 'utf-8');
+    return path.join(__dirname, file);
   }
 }
