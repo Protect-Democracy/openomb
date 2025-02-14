@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'vite';
 import { render as svelteRender } from 'svelte/server';
 import juice from 'juice';
+import reduceCssCalc from 'reduce-css-calc';
 
 // Constants
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -120,6 +121,7 @@ export async function renderTemplate(component, props) {
   //
   // TODO: Somehow convert calc
   processed = remToPx(processed);
+  processed = reduceCalc(processed);
 
   return processed;
 }
@@ -153,6 +155,15 @@ function injectStyles(input, replacer) {
 export function remToPx(input: string, basePixels = 16) {
   return input.replace(/([\d.]+)rem/g, (match, value) => {
     return `${parseFloat(value) * basePixels}px`;
+  });
+}
+
+/**
+ * Reduce calc
+ */
+export function reduceCalc(input: string) {
+  return input.replace(/:([^;]*?calc\([^;]*?);/g, (match, expressionWithCalc) => {
+    return `: ${reduceCssCalc(expressionWithCalc)};`;
   });
 }
 

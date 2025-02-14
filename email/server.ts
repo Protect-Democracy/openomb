@@ -49,7 +49,7 @@ app.all('*', async (req, res) => {
       // handles putting into the index.html template
       // template = await fs.readFile(path.join(vite.config.root, './index.html'), 'utf-8');
       // template = await vite.transformIndexHtml(url, template);
-      render = (await vite.ssrLoadModule('/dev-render.ts')).render;
+      render = (await vite.ssrLoadModule(path.join(__dirname, 'dev-render.ts'))).render;
     }
     else {
       // TODO, though this will not be used for production
