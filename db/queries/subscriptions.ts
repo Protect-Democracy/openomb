@@ -12,6 +12,7 @@ import { searches, descriptionParsed, type searchesSelect } from '../schema/sear
 import { subscriptions, type subscriptionSelect } from '../schema/subscriptions';
 import { users } from '../schema/users';
 import { formatTafsFormattedId } from '../../src/lib/formatters';
+import { memoizeDataAsync } from '../../server/cache';
 
 type ItemDetails =
   | filesSelect
@@ -134,7 +135,7 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
 /**
  * Gets all subscriptions, with details, grouped by user
  */
-export const getSubscriptionsByUser = async function (): Promise<
+export const subscriptionsByUser = async function (): Promise<
   Record<string, Array<subscriptionSelect>>
 > {
   const userSubs: Record<string, Array<subscriptionSelect>> = {};
@@ -160,7 +161,7 @@ export const getSubscriptionsByUser = async function (): Promise<
 /**
  * Get a single subscription given the user's email, the type, and the item id
  */
-export const getUserSubscription = async function (
+export const userSubscription = async function (
   email: string,
   type: string,
   itemId: string
@@ -188,12 +189,12 @@ export const getUserSubscription = async function (
  * Get a single subscription given the user's email, the type, and the item id
  * Also provide details for the item that was subscribed to
  */
-export const getUserSubscriptionDetails = async function (
+export const userSubscriptionDetails = async function (
   email: string,
   type: string,
   itemId: string
 ) {
-  const subscriptionResults = await getUserSubscription(email, type, itemId);
+  const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
     return await getSubscriptionDetails(subscriptionResults);
@@ -203,7 +204,7 @@ export const getUserSubscriptionDetails = async function (
 /**
  * Get all subscriptions associated with the provided email
  */
-export const getUserSubscriptionList = async function (
+export const userSubscriptionList = async function (
   email: string
 ): Promise<Array<subscriptionSelect>> {
   const userResults = await db.query.users.findFirst({
@@ -220,8 +221,8 @@ export const getUserSubscriptionList = async function (
  * Get all subscriptions associated with the provided email
  * Also provide details for the item(s) that were subscribed to
  */
-export const getUserSubscriptionListDetails = async function (email: string) {
-  const subscriptionResults = await getUserSubscriptionList(email);
+export const userSubscriptionListDetails = async function (email: string) {
+  const subscriptionResults = await userSubscriptionList(email);
   return await Promise.all(map(subscriptionResults, getSubscriptionDetails));
 };
 
@@ -229,7 +230,7 @@ export const getUserSubscriptionListDetails = async function (email: string) {
  * Add a single subscription given the user's email, the type, and the item id
  */
 export const addSubscription = async function (email: string, type: string, itemId: string) {
-  const existingSub = await getUserSubscription(email, type, itemId);
+  const existingSub = await userSubscription(email, type, itemId);
   if (existingSub) {
     return existingSub;
   }
@@ -320,3 +321,9 @@ export const removeUser = async function (email: string) {
   // Deletion cascades, so when user is removed, all entries that reference user id will be removed
   await db.delete(users).where(eq(users.email, email));
 };
+
+export const mUserSubscription = memoizeDataAsync(userSubscription);
+export const mUserSubscriptionDetails = memoizeDataAsync(userSubscriptionDetails);
+export const mUserSubscriptionList = memoizeDataAsync(userSubscriptionList);
+export const mUserSubscriptionListDetails = memoizeDataAsync(userSubscriptionListDetails);
+export const mSubscriptionsByUser = memoizeDataAsync(subscriptionsByUser);

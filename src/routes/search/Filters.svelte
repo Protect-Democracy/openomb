@@ -66,6 +66,10 @@
       return `Line ${value.replace(/[^0-9]+/g, '')}`;
     } else if (key === 'footnoteNum') {
       return `Has Footnote ${value}`;
+    } else if (key === 'createdStart') {
+      return `Added to OpenOMB after ${formatDate(value)}`;
+    } else if (key === 'createdEnd') {
+      return `Added to OpenOMB before ${formatDate(value)}`;
     }
 
     return false;

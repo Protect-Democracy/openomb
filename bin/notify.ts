@@ -3,16 +3,18 @@
  */
 
 // Dependencies
-import { DateTime } from 'luxon';
 import { map } from 'lodash-es';
 import { Command } from 'commander';
-import { getSubscriptionsByUser, setSubscriptionAsNotified } from '../db/queries/subscriptions';
+import { mSubscriptionsByUser, setSubscriptionAsNotified } from '../db/queries/subscriptions';
 import { request } from '../server/request';
 import { environmentVariables } from '../server/utilities';
-import { getSubscriptionWithFiles } from '../server/subscriptions';
+import {
+  includeDailyNotification,
+  includeWeeklyNotification,
+  getSubscriptionWithFiles
+} from '../server/subscriptions';
 import { setupCustomSentry, createTransaction } from '../server/sentry-custom';
 import {
-  runWeeklyEmailsOn,
   notifierEmailName,
   notifierEmail,
   replyEmailName,
@@ -46,7 +48,7 @@ async function cli(): Promise<void> {
   // Render the email templates for use in the notifications
   // const emailTemplates = await compileTemplates();
 
-  const userSubscriptions = await getSubscriptionsByUser();
+  const userSubscriptions = await mSubscriptionsByUser();
 
   for (const email of Object.keys(userSubscriptions)) {
     // For a user, find any relevant new files, then send the notification
@@ -54,13 +56,7 @@ async function cli(): Promise<void> {
     const notifySubs = [];
     for (const sub of currentUserSubs) {
       // Check if our subscription is weekly or daily and, based on that, if it needs to run again
-      if (
-        (sub.frequency === 'weekly' &&
-          new Date().getDay() === runWeeklyEmailsOn &&
-          Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['days'])) > 6) ||
-        (sub.frequency === 'daily' &&
-          Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['days'])) > 18)
-      ) {
+      if (includeDailyNotification(sub) || includeWeeklyNotification(sub)) {
         const notification = await getSubscriptionWithFiles(email, sub);
         notification && notifySubs.push(notification);
       }

@@ -1,6 +1,6 @@
 import { recentlyApprovedWithTafs } from '$queries/files';
 import { bureauDetails, accountsByBureau } from '$queries/tafs';
-import { getUserSubscription } from '$queries/subscriptions';
+import { mUserSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
@@ -12,7 +12,7 @@ export async function load({ params, locals }) {
 
   const user = (await locals.auth())?.user;
   const existingSubscription = user
-    ? await getUserSubscription(user.email, 'bureau', `${params.agencyId},${params.bureauId}`)
+    ? await mUserSubscription(user.email, 'bureau', `${params.agencyId},${params.bureauId}`)
     : null;
 
   return {

@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es';
 import { fileDetails } from '$queries/files';
-import { getUserSubscription } from '$queries/subscriptions';
+import { mUserSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 import { formatFileTitle } from '$lib/formatters';
 import { fileSchema } from '$lib/schema';
@@ -24,7 +24,7 @@ export async function load({ params, locals }) {
         }
       }
       if (user && taf) {
-        tafsSubscriptions[taf.tafsTableId] = await getUserSubscription(
+        tafsSubscriptions[taf.tafsTableId] = await mUserSubscription(
           user.email,
           'tafs',
           taf.tafsTableId

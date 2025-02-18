@@ -78,11 +78,11 @@
   <h2>Subscriptions</h2>
   <h3>Folders</h3>
   <p>
-    Department of Education
     <SubscribeLink
       user={data.user}
       subType="folder"
       subItemId="department-of-education"
+      subItemFormatted="Department of Education"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == 'department-of-education'
       )}
@@ -90,11 +90,11 @@
     />
   </p>
   <p>
-    International Assistance Programs
     <SubscribeLink
       user={data.user}
       subType="folder"
       subItemId="international-assistance-programs"
+      subItemFormatted="International Assistance Programs"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == 'international-assistance-programs'
       )}
@@ -104,11 +104,11 @@
 
   <h3>Agencies</h3>
   <p>
-    Department of Defense Military Programs
     <SubscribeLink
       user={data.user}
       subType="agency"
       subItemId="department-of-defense-military-programs"
+      subItemFormatted="Department of Defense Military Programs"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == 'department-of-defense-military-programs'
       )}
@@ -116,11 +116,11 @@
     />
   </p>
   <p>
-    Securities and Exchange Commission
     <SubscribeLink
       user={data.user}
       subType="agency"
       subItemId="securities-and-exchange-commission"
+      subItemFormatted="Securities and Exchange Commission"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == 'securities-and-exchange-commission'
       )}
@@ -130,11 +130,11 @@
 
   <h3>Bureaus</h3>
   <p>
-    National Science Foundation
     <SubscribeLink
       user={data.user}
       subType="bureau"
       subItemId="national-science-foundation,national-science-foundation"
+      subItemFormatted="National Science Foundation"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == 'national-science-foundation,national-science-foundation'
       )}
@@ -142,11 +142,11 @@
     />
   </p>
   <p>
-    Federal Highway Administration
     <SubscribeLink
       user={data.user}
       subType="bureau"
       subItemId="department-of-transportation,federal-highway-administration"
+      subItemFormatted="Federal Highway Administration"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == 'department-of-transportation,federal-highway-administration'
       )}
@@ -156,11 +156,11 @@
 
   <h3>Accounts</h3>
   <p>
-    Executive Office of the President
     <SubscribeLink
       user={data.user}
       subType="account"
       subItemId="executive-office-of-the-president,office-of-administration,executive-office-of-the-president"
+      subItemFormatted="Executive Office of the President"
       existingSubscription={data.existingSubscriptions.find(
         (sub) =>
           sub.itemId ==
@@ -170,11 +170,11 @@
     />
   </p>
   <p>
-    Supplemental Security Income Program
     <SubscribeLink
       user={data.user}
       subType="account"
       subItemId="social-security-administration,social-security-administration,supplemental-security-income-program"
+      subItemFormatted="Supplemental Security Income Program"
       existingSubscription={data.existingSubscriptions.find(
         (sub) =>
           sub.itemId ==
@@ -186,11 +186,11 @@
 
   <h3>TAFS</h3>
   <p>
-    011-0041 /X - United States DOGE Service
     <SubscribeLink
       user={data.user}
       subType="tafs"
       subItemId="11409026--011-0041--1--2025"
+      subItemFormatted="011-0041 /X - United States DOGE Service"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == '11409026--011-0041--1--2025'
       )}
@@ -198,11 +198,11 @@
     />
   </p>
   <p>
-    091-0202 2024/2025 - Student Aid Administration
     <SubscribeLink
       user={data.user}
       subType="tafs"
       subItemId="11408172--091-0202-2024-2025--3--2025"
+      subItemFormatted="091-0202 2024/2025 - Student Aid Administration"
       existingSubscription={data.existingSubscriptions.find(
         (sub) => sub.itemId == '11408172--091-0202-2024-2025--3--2025'
       )}
@@ -218,7 +218,9 @@
         '/search?term=farm&agencyBureau=&tafs=&account=&approver=&approvedStart=&approvedEnd=&lineNum=budgetary-resources%2C1011&footnoteNum=B',
         $url.origin
       )}
-      existingSubscription={data.existingSubscriptions.find((sub) => sub.itemId == '')}
+      existingSubscription={data.existingSubscriptions.find(
+        (sub) => sub.itemDetails?.criterion?.term == 'farm'
+      )}
       overrideFeatureFlag
     />
   </p>
@@ -229,7 +231,11 @@
         '/search?term=&agencyBureau=&tafs=&account=&approver=acting-deputy-associate-director-for-international-affairs-programs&approvedStart=&approvedEnd=&lineNum=budgetary-resources%2C1011&footnoteNum=B',
         $url.origin
       )}
-      existingSubscription={data.existingSubscriptions.find((sub) => sub.itemId == '')}
+      existingSubscription={data.existingSubscriptions.find(
+        (sub) =>
+          sub.itemDetails?.criterion?.approver ==
+          'acting-deputy-associate-director-for-international-affairs-programs'
+      )}
       overrideFeatureFlag
     />
   </p>

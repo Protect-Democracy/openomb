@@ -30,6 +30,7 @@
     type="email"
     name="email"
     placeholder="email@example.com"
+    required
   />
 
   <button

@@ -46,6 +46,11 @@ export type SearchParams = {
   year: string;
   lineNum: string;
   footnoteNum: string;
+
+  // Notification specific fields
+  folder?: string;
+  createdStart?: Date;
+  createdEnd?: Date;
 };
 
 export type PaginationParams = {
@@ -347,6 +352,10 @@ function generalSearchFilters(
   where.push(
     searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
   );
+  where.push(
+    searchParams.createdStart ? gte(files.createdAt, searchParams.createdStart) : undefined
+  );
+  where.push(searchParams.createdEnd ? lte(files.createdAt, searchParams.createdEnd) : undefined);
 
   // Apportionemnt type.  Only need to search on a single one
   if (
@@ -786,7 +795,7 @@ export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
  */
 export async function saveUserSearch(email: string, criterion: SearchParams) {
   // Cut out of saving the search if it has already been saved
-  const existingSearch = await getUserSearch(email, criterion);
+  const existingSearch = await mUserSearch(email, criterion);
   if (existingSearch) {
     return existingSearch;
   }
@@ -829,7 +838,7 @@ export async function removeUserSearches(email: string, searchId: string | Array
  * Get a user's saved search with a given criterion
  * (Currently used only by subscriptions)
  */
-export async function getUserSearch(
+export async function userSearch(
   email: string,
   criterion: SearchParams
 ): Promise<searchesSelect | undefined> {
@@ -849,3 +858,5 @@ export async function getUserSearch(
     );
   return newRecords[0];
 }
+
+export const mUserSearch = memoizeDataAsync(userSearch);

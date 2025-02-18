@@ -91,6 +91,18 @@ export function setCookie(
 }
 
 /**
+ * Client-side check if a cookie value is set
+ */
+export async function cookieHasValue(name: string) {
+  // If not client side
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  return document.cookie.split(';').some((item) => item.trim().startsWith(`${name}=`));
+}
+
+/**
  * Make a value into a Promise or just pass through if Promise
  */
 export function makePromise<T>(value: T | Promise<T>): Promise<T> {

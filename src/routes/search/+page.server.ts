@@ -10,11 +10,11 @@ import {
   mAccountSearchFullCount,
   saveUserSearch,
   removeUserSearches,
-  getUserSearch
+  mUserSearch
 } from '$queries/search';
 import { mBureaus } from '$queries/tafs';
 import { mFolders } from '$queries/files';
-import { getUserSubscription } from '$queries/subscriptions';
+import { mUserSubscription } from '$queries/subscriptions';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -78,7 +78,6 @@ export const load = async ({ url, cookies, locals }) => {
     const searchArgs = {
       term: u('term') || '',
       tafs: u('tafs') || '',
-      folder: u('folder') || '', // Included for email notification link
       bureau: agencyBureau?.[1] || '',
       agency: agencyBureau?.[0] || '',
       account: u('account') || '',
@@ -88,7 +87,12 @@ export const load = async ({ url, cookies, locals }) => {
       approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
       apportionmentType: ga('apportionmentType').join(',') || '',
       lineNum: ga('lineNum').join(','),
-      footnoteNum: ga('footnoteNum').join(',')
+      footnoteNum: ga('footnoteNum').join(','),
+
+      // Included for email notification link, not used in form
+      folder: u('folder') || '',
+      createdStart: u('createdStart') ? new Date(`${u('createdStart')}T00:00:00`) : undefined,
+      createdEnd: u('createdEnd') ? new Date(`${u('createdEnd')}T23:59:59`) : undefined
     };
     const pagedSearchArgs = {
       offset: (filePageIndex - 1) * filePageSize,
@@ -104,9 +108,9 @@ export const load = async ({ url, cookies, locals }) => {
     formattedSearchParams = formatSearchParams(pagedSearchArgs);
 
     // If we have search parameters, try getting an existing subscription
-    const existingSearch = user ? await getUserSearch(user.email, searchArgs) : null;
+    const existingSearch = user ? await mUserSearch(user.email, searchArgs) : null;
     if (existingSearch) {
-      existingSubscription = await getUserSubscription(user.email, 'search', existingSearch.id);
+      existingSubscription = await mUserSubscription(user.email, 'search', existingSearch.id);
     }
 
     // Execute queries.  Important to memoize counts, less so for search.
