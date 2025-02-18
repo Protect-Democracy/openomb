@@ -11,6 +11,10 @@
   // State
   let sortFormEl: HTMLFormElement;
 
+  // It looks like using a function or expression in value causes a bug?
+  // https://github.com/sveltejs/svelte/issues/15316
+  $: currentValue = url.searchParams.get(id) || defaultValue;
+
   // The regular form doesn't seem to change the page in a way that
   // does submitting so we have to do it manually.
   function updateSort() {
@@ -23,7 +27,7 @@
   <form action={`${url.pathname}#${anchor}`} method="get" bind:this={sortFormEl}>
     <label for={id}>Sort results</label>
 
-    <select name={id} {id} value={url.searchParams.get(id) || defaultValue} on:change={updateSort}>
+    <select name={id} {id} value={currentValue} on:change={updateSort}>
       {#each sortOptions as option (option.key)}
         <option value={option.key}>{option.label}</option>
       {/each}
