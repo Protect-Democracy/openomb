@@ -12,6 +12,9 @@ services:
       - REDIS_PORT=6379
     ports:
       - '8080:8080'
+    volumes:
+      - ./:/notification-api
+    command: gunicorn app:app -b 0.0.0.0:8080 -w 2 --reload
     depends_on:
       - mailcatcher
 
@@ -34,6 +37,8 @@ services:
   # Redis queue for notifications
   redis:
     image: redis:alpine
+    ports:
+      - '8081:6379'
     command: 'redis-server --bind redis --maxmemory 256mb --maxmemory-policy allkeys-lru --appendonly yes'
 
   # Intercept and test email sending locally

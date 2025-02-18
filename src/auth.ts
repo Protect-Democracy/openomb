@@ -1,11 +1,17 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from '$db/connection';
-import { sendVerificationRequest } from '$lib/server/authNotify';
+import { sendVerificationRequest } from '$lib/server/auth-notify';
+import { users, accounts, sessions, verificationTokens } from '$db/schema';
 
 const { handle, signIn, signOut } = SvelteKitAuth({
   trustHost: true,
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens
+  }),
   providers: [
     {
       id: 'http-email',

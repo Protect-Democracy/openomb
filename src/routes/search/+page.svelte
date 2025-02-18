@@ -115,10 +115,6 @@
 
   {#if hasSearched}
     <div class="results" id="results">
-      <div class="page-container">
-        <SearchSubscribe {user} url={$url} {existingSubscription} />
-      </div>
-
       <div id="file-results"></div>
       <div id="account-results"></div>
 
@@ -151,6 +147,10 @@
                 </div>
               </div>
             </aside>
+
+            <div class="subscription-action">
+              <SearchSubscribe {user} url={$url} {existingSubscription} variant="small" />
+            </div>
 
             <div class="file-list page-container">
               {#each files as file}
@@ -266,6 +266,10 @@
     justify-content: space-between;
     align-items: center;
     align-items: baseline;
+  }
+
+  .subscription-action {
+    margin-bottom: var(--spacing-double);
   }
 
   .no-results {

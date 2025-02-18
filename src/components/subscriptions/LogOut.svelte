@@ -18,5 +18,5 @@
 
 <form method="POST" action="/subscribe?/logout">
   <input type="hidden" name="redirectTo" value={callbackUrl} />
-  <button type="submit">{action}</button>
+  <button class="auth" type="submit">{action}</button>
 </form>

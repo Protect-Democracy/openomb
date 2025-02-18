@@ -16,21 +16,35 @@
 -->
 
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { deserialize } from '$app/forms';
   import Spinner from '$components/icons/Spinner.svelte';
   import LogIn from './LogIn.svelte';
   import { subscribeFeatureEnabled } from '$config/subscriptions';
+  import { clientGetUser } from '$lib/users';
+
+  import type { User } from '$lib/users';
 
   // Props
-  export let user;
-  export let subType;
-  export let subItemId;
+  export let user: User;
+  export let variant: 'small' | 'full' | null = 'full';
+  export let subType: 'folder' | 'account' | 'agency' | 'bureau' | 'search' | 'file' | 'tafs';
+  export let subItemId: string | null;
+  export let subItemFormatted: string | null;
   export let existingSubscription;
   export let hideText = false;
   export let overrideFeatureFlag = false;
 
   let addedSubscription = existingSubscription;
   let loading = false;
+
+  onMount(async () => {
+    // To be able to keep general routes able to use browser caching, we
+    // utilize some client side JS to fetch the user data.  Ideally,
+    // we could have SvelteKit just make this component client only, but
+    // unsure if there is a way to do that.
+    user = user || (await clientGetUser());
+  });
 
   async function subscribe() {
     loading = true;
@@ -63,65 +77,84 @@
 </script>
 
 {#if overrideFeatureFlag || subscribeFeatureEnabled}
-  <aside class="subscribe-action">
-    {#if !hideText}
-      {#if addedSubscription}
-        <p class="muted">
-          You are receiving email updates when new files are approved for this {subType}
-        </p>
-      {:else}
-        <p class="muted">Receive email updates when new files are approved for this {subType}</p>
-      {/if}
-    {/if}
-    {#if user}
-      <div class="has-js-only-block">
-        <button
-          class="button compact"
-          on:click={addedSubscription ? unsubscribe : subscribe}
-          disabled={loading}
-          title={addedSubscription
-            ? `Unsubscribe from email updates for approved files`
-            : `Subscribe to email updates for approved files`}
-        >
-          {#if loading}
-            <span class="button-icon"><Spinner /></span>
+  <aside class:variant-small={variant === 'small'}>
+    <div class="subscribe-action">
+      {#if !hideText}
+        <p class:font-small={variant === 'small'}>
+          {#if addedSubscription}
+            You are subscribed to receive email updates when new files are approved for <em
+              >{subItemFormatted || `this ${subType}`}</em
+            >.
+          {:else}
+            Receive email updates when new files are approved for <em
+              >{subItemFormatted || `this ${subType}`}</em
+            >.
           {/if}
-          {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
-        </button>
-      </div>
+        </p>
+      {/if}
 
-      <div class="no-js-only-block">
-        {#if existingSubscription}
-          <a class="button compact" href={`/subscribe/${subType}/${subItemId}/remove`}
-            >Unsubscribe</a
-          >
-        {:else}
-          <a class="button compact" href={`/subscribe/${subType}/${subItemId}`}>Subscribe</a>
-        {/if}
-      </div>
-    {:else}
-      <LogIn callbackUrl={`/subscribe/${subType}/${subItemId}`} action="Subscribe" />
-    {/if}
+      {#if user}
+        <div class="user-actions">
+          <div class="has-js-only-block">
+            <button
+              class="button compact subscribe"
+              class:small={variant === 'small'}
+              on:click={addedSubscription ? unsubscribe : subscribe}
+              disabled={loading}
+              title={addedSubscription
+                ? `Unsubscribe from email updates for approved files`
+                : `Subscribe to email updates for approved files`}
+            >
+              {#if loading}
+                <span class="button-icon"><Spinner /></span>
+              {/if}
+              {addedSubscription ? 'Unsubscribe' : 'Subscribe'}
+            </button>
+          </div>
+
+          <div class="no-js-only-block">
+            {#if existingSubscription}
+              <a
+                class="button compact subscribe"
+                class:small={variant === 'small'}
+                href={`/subscribe/${subType}/${subItemId}/remove`}>Unsubscribe</a
+              >
+            {:else}
+              <a class="button compact subscribe" href={`/subscribe/${subType}/${subItemId}`}
+                >Subscribe</a
+              >
+            {/if}
+          </div>
+
+          <div class="manage-subscriptions">
+            <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
+          </div>
+        </div>
+      {:else}
+        <LogIn {variant} callbackUrl={`/subscribe/${subType}/${subItemId}`} action="Subscribe" />
+      {/if}
+    </div>
   </aside>
 {/if}
 
 <style>
-  .subscribe-action {
+  aside {
+    background-color: var(--color-subscribe-background);
+    padding: var(--spacing);
+    margin-bottom: var(--spacing);
+  }
+
+  button {
+    margin: 0;
+  }
+
+  .manage-subscriptions {
+    margin: 0;
+  }
+
+  .user-actions {
     display: flex;
     column-gap: var(--spacing);
     align-items: center;
-    justify-content: flex-end;
-  }
-
-  .subscribe-action p {
-    margin: 0;
-    font-size: var(--font-size-slight);
-  }
-
-  @media (max-width: 768px) {
-    .subscribe-action {
-      flex-direction: column;
-      row-gap: var(--spacing);
-    }
   }
 </style>

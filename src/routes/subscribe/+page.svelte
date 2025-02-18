@@ -20,7 +20,8 @@
 <div class="page-container">
   {#if user}
     <section class="content-container">
-      <h2>Subscriptions</h2>
+      <h1>Subscriptions</h1>
+
       <p>
         Adjust how frequently you are sent updates about a subscription or unsubscribe from the
         provided entry entirely. Any adjustments will be saved when the form is submitted.
@@ -44,45 +45,69 @@
               <td class="sub-remove">Remove Subscription?</td>
             </tr>
           </thead>
-          <tbody>
-            <SubscriptionGroup title="Folders" subs={folderSubs} />
-            <SubscriptionGroup title="TAFS" subs={tafsSubs} />
-            <SubscriptionGroup title="Agencies" subs={agencySubs} />
-            <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
-            <SubscriptionGroup title="Accounts" subs={accountSubs} />
-            <SubscriptionGroup title="Searches" subs={searchSubs} />
-          </tbody>
+
+          {#if userSubscriptions.length === 0}
+            <tbody>
+              <tr>
+                <td colspan="3"
+                  ><em
+                    >No subscriptions found. Navigate to an agency, file, search, etc. to subscribe
+                    to different feeds of data.</em
+                  ></td
+                >
+              </tr>
+            </tbody>
+          {:else}
+            <tbody>
+              <SubscriptionGroup title="Searches" subs={searchSubs} />
+              <SubscriptionGroup title="Folders" subs={folderSubs} />
+              <SubscriptionGroup title="Agencies" subs={agencySubs} />
+              <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
+              <SubscriptionGroup title="Accounts" subs={accountSubs} />
+              <SubscriptionGroup title="TAFS" subs={tafsSubs} />
+            </tbody>
+          {/if}
         </table>
+
         <div class="actions">
-          <div class="action-col">
-            <input type="submit" value="Modify Subscriptions" />
-          </div>
+          <input class="subscribe" type="submit" value="Modify Subscriptions" />
         </div>
       </form>
     </section>
 
     <section class="content-container">
-      <h2>Account actions</h2>
+      <h2>Account management</h2>
 
-      <div class="actions">
-        <div class="action-col">
-          <p>End the current user session tied to this email address.</p>
-          <LogOut callbackUrl="/subscribe" />
-        </div>
-        <div class="action-col">
-          <form method="POST" action="/subscribe?/deactivate">
-            <p>
-              Delete this email address and all associated data from the website. This will destroy
-              all subscriptions associated with the current email. You will be able to re-subscribe
-              in the future.
-            </p>
-            <button>Delete Account & Data</button>
-          </form>
-        </div>
+      <div class="page-section">
+        <h3>Log out</h3>
+
+        <p>End the current user session tied to this email address.</p>
+        <LogOut callbackUrl="/subscribe" />
+      </div>
+
+      <div class="page-section">
+        <h3>Delete account</h3>
+
+        <p>
+          <strong>Warning: this action cannot be undone.</strong>. Delete this email address and all
+          associated data from the website. This will destroy all subscriptions associated with the
+          current email. You will be able to re-subscribe in the future.
+        </p>
+
+        <form method="POST" action="/subscribe?/deactivate">
+          <button class="auth">Delete Account & Data</button>
+        </form>
       </div>
     </section>
   {:else}
     <section class="content-container">
+      <h1>Login</h1>
+
+      <p>
+        Log in using your email address; you will be sent a "magic link" that will log you into the
+        site. Once logged in, you can subscribe to different feeds of data.
+      </p>
+
       <LogIn callbackUrl="/subscribe" />
     </section>
   {/if}
@@ -92,24 +117,23 @@
   .content-container:has(+ .content-container) {
     margin-bottom: 0;
   }
+
   .form-success {
     font-weight: var(--font-copy-weight-bold);
     color: var(--color-green-dark);
   }
+
   .form-error {
     font-weight: var(--font-copy-weight-bold);
     color: var(--color-error);
   }
+
+  table {
+    margin-bottom: var(--spacing-double);
+  }
+
   .sub-remove,
   .sub-frequency {
-    text-align: center;
-  }
-  .actions {
-    display: flex;
-    column-gap: var(--spacing-double);
-    align-items: flex-end;
-  }
-  .action-col {
     text-align: center;
   }
 

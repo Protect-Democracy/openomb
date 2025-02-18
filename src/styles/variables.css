@@ -61,6 +61,14 @@
   --color-previous-checked: var(--color-yellow-darker);
   --color-previous-unchecked: var(--color-yellow-light);
 
+  --color-subscribe-background: var(--color-blue-lightest);
+  --color-subscribe: var(--color-blue);
+  --color-subscribe-text: var(--color-text-inverse);
+  --color-subscribe-border: var(--color-blue);
+  --color-subscribe-hover: var(--color-blue-light);
+  --color-subscribe-hover-text: var(--color-text);
+  --color-subscribe-hover-border: transparent;
+
   /* Unsure of semantic name for this */
   --color-alt: var(--color-gray-dark);
   --color-alt-text: var(--color-text-inverse);

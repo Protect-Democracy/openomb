@@ -45,10 +45,15 @@ export const handleError = Sentry.handleErrorWithSentry();
  */
 const addHeaders: Handle = async ({ event, resolve }) => {
   // If we have a user logged in, do not include caching headers
+  const path = event.url.pathname;
   const user = (await event.locals.auth())?.user;
-  const cacheHeaders = user
+
+  // We can't set headers again if they have already been set, so we manage
+  // here for global handling.
+  const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*)/);
+  const cacheHeaders = noCache
     ? {
-        'Cache-Control': 'no-cache, must-revalidate',
+        'Cache-Control': 'private, no-store',
         Expires: 'Sat, 26 Jul 1997 05:00:00 GMT'
       }
     : {

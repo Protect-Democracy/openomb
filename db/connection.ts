@@ -98,7 +98,7 @@ export function overrideDrizzleTracer() {
   };
 }
 
-function dbConnectionString() {
+export function dbConnectionString() {
   // If Uri is provided, use that
   if (env.dbUri) {
     return env.dbUri;

@@ -11,7 +11,7 @@ COPY --from=build /app/build-collect /app/build-collect
 COPY --from=build /app/build-migrate /app/build-migrate
 COPY --from=build /app/build-web /app/build-web
 COPY --from=build /app/node_modules /app/node_modules
-COPY --from=build /app/package-lock.json /app/package.json /app
+COPY --from=build /app/package-lock.json /app/package.json /app/
 WORKDIR /app
 EXPOSE 3000
 CMD ["build-web"]

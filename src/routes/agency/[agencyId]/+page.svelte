@@ -31,6 +31,14 @@
     There are <strong>{formatNumber(agency.fileCount)} files</strong> associated with this agency.
   </p>
 
+  <SubscribeLink
+    {user}
+    subType="agency"
+    subItemId={agency.budgetAgencyTitleId}
+    subItemFormatted={agency.budgetAgencyTitle}
+    {existingSubscription}
+  />
+
   <section class="page-section">
     <h2>Bureaus</h2>
 
@@ -45,13 +53,6 @@
       {/each}
     </ul>
   </section>
-
-  <SubscribeLink
-    {user}
-    subType="agency"
-    subItemId={agency.budgetAgencyTitleId}
-    {existingSubscription}
-  />
 
   <section class="page-section">
     <h2>Recently approved</h2>

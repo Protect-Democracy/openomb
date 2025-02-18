@@ -52,13 +52,15 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
     };
   }
   else if (sub.type === 'tafs') {
+    // TAFS subscriptions are for a specific TAFS and Fiscal Year
+    // which is what we track as far as "iteractions" go.
     const item = await db.query.tafs.findFirst({
       where: eq(tafs.tafsTableId, sub.itemId)
     });
     return {
       ...sub,
       itemDetails: item || ({} as tafsSelect),
-      description: `TAFS: ${item && formatTafsFormattedId(item)}`,
+      description: `TAFS: ${item && formatTafsFormattedId(item)} - ${item?.accountTitle} (FY ${item?.fiscalYear})`,
       itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
   }
@@ -123,7 +125,7 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
     return {
       ...sub,
       itemDetails: item || {},
-      description: `Saved Search: <i>${descriptionParsed(item)}</i>`,
+      description: `Saved Search: ${descriptionParsed(item)}`,
       itemLink: `/search?${new URLSearchParams(item?.criterion).toString()}`
     };
   }
@@ -140,14 +142,15 @@ export const getSubscriptionsByUser = async function (): Promise<
     .select()
     .from(subscriptions)
     .leftJoin(users, eq(subscriptions.userId, users.id));
+
   for (const result of subscriptionResults) {
-    if (result.user?.email) {
-      if (!userSubs[result.user.email]) {
-        userSubs[result.user.email] = [];
+    if (result.users?.email) {
+      if (!userSubs[result.users.email]) {
+        userSubs[result.users.email] = [];
       }
       const subDetails = await getSubscriptionDetails(result.subscriptions);
       if (subDetails) {
-        userSubs[result.user.email].push(subDetails);
+        userSubs[result.users.email].push(subDetails);
       }
     }
   }
