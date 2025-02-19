@@ -57,7 +57,10 @@ resource "aws_cloudfront_cache_policy" "apportionments" {
     enable_accept_encoding_brotli = true
 
     cookies_config {
-      cookie_behavior = "none"
+      cookie_behavior = "whitelist"
+      cookies {
+        items = ["authjs.session-token", "authjs.callback-url"]
+      }
     }
     headers_config {
       header_behavior = "none"
