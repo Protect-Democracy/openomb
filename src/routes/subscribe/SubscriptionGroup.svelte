@@ -9,7 +9,7 @@
 
 {#if subs && subs.length}
   <tr class="sub-category">
-    <td colspan={3}>{title}</td>
+    <th colspan={3}>{title}</th>
   </tr>
   {#each subs as subscription}
     <tr>

@@ -1,5 +1,5 @@
 import { accountDetails, tafsByAccount } from '$queries/tafs';
-import { getUserSubscription } from '$queries/subscriptions';
+import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
@@ -11,7 +11,7 @@ export async function load({ params, locals }) {
 
   const user = (await locals.auth())?.user;
   const existingSubscription = user
-    ? await getUserSubscription(
+    ? await userSubscription(
         user.email,
         'account',
         `${params.agencyId},${params.bureauId},${params.accountId}`

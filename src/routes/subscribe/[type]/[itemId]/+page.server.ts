@@ -1,4 +1,4 @@
-import { getUserSubscriptionDetails } from '$queries/subscriptions';
+import { userSubscriptionDetails } from '$queries/subscriptions';
 import { subscriptionTypes } from '$config/subscriptions';
 
 export const load: PageServerLoad = async ({ params, locals, fetch }) => {
@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
   }
 
   let subscription;
-  subscription = await getUserSubscriptionDetails(user.email, params.type, params.itemId);
+  subscription = await userSubscriptionDetails(user.email, params.type, params.itemId);
   if (!subscription) {
     // Call our api endpoint to subscribe on the server.
     // (This prevents us from having to duplicate logic)
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
       },
       body: JSON.stringify(params)
     });
-    subscription = await getUserSubscriptionDetails(user.email, params.type, params.itemId);
+    subscription = await userSubscriptionDetails(user.email, params.type, params.itemId);
   }
   return {
     user,

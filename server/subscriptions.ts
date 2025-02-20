@@ -1,11 +1,11 @@
 /**
  * Methods for managing subscriptions and getting data.
  */
-
+import { DateTime } from 'luxon';
 import { mFileSearchFullCount, mFileSearchPaged } from '../db/queries/search';
-import { getUserSubscriptionDetails, getSubscriptionsByUser } from '../db/queries/subscriptions';
+import { userSubscriptionDetails, subscriptionsByUser } from '../db/queries/subscriptions';
 
-import { maxFilesPerNotificationEntry } from '../src/config/subscriptions';
+import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '../src/config/subscriptions';
 
 /**
  * Get files for a user and specific subscription.
@@ -36,7 +36,7 @@ export async function getSubscriptionWithFiles(
     criterion = { folder: sub.itemId };
   }
   else if (sub.type === 'tafs') {
-    const detailRecord = await getUserSubscriptionDetails(email, sub.type, sub.itemId);
+    const detailRecord = await userSubscriptionDetails(email, sub.type, sub.itemId);
     criterion = {
       tafs: detailRecord?.itemDetails.tafsId,
       year: `${detailRecord?.itemDetails.fiscalYear}`
@@ -44,7 +44,7 @@ export async function getSubscriptionWithFiles(
   }
 
   // Use specific last notified if provided which should only be for testing
-  criterion['approvedStart'] = lastNotified ? lastNotified : sub.lastNotifiedAt;
+  criterion['createdStart'] = lastNotified ? lastNotified : sub.lastNotifiedAt;
 
   const fileCount = await mFileSearchFullCount(criterion);
   const files = await mFileSearchPaged({
@@ -73,7 +73,7 @@ export async function getSubscriptionsWithFilesByUser(
   lastNotified: Date | undefined = undefined
 ) {
   // TODO: Make this more efficient
-  const userSubscriptions = await getSubscriptionsByUser();
+  const userSubscriptions = await subscriptionsByUser();
 
   // If email has subscriptions
   if (userSubscriptions[email]) {
@@ -88,4 +88,25 @@ export async function getSubscriptionsWithFilesByUser(
 
     return notifySubs;
   }
+}
+
+/**
+ * Should our file be included as a daily notification
+ */
+export function includeDailyNotification(sub): boolean {
+  return (
+    sub.frequency === 'daily' &&
+    Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['hours']).as('hours')) > 18
+  );
+}
+
+/**
+ * Should our file be included as a weekly notification
+ */
+export function includeWeeklyNotification(sub): boolean {
+  return (
+    sub.frequency === 'weekly' &&
+    new Date().getDay() === runWeeklyEmailsOn &&
+    Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['days']).as('days')) > 6.5
+  );
 }

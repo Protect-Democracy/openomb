@@ -14,7 +14,7 @@ export const searches = pgTable(
     id: text('id')
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-    userId: text('userId')
+    userId: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     // Criterion for search is saved in JSON format for future flexibility

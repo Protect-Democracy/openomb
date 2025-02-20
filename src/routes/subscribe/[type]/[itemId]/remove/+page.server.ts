@@ -1,5 +1,5 @@
 import { redirect, error } from '@sveltejs/kit';
-import { getUserSubscriptionDetails } from '$queries/subscriptions';
+import { userSubscriptionDetails } from '$queries/subscriptions';
 import { subscriptionTypes } from '$config/subscriptions';
 
 export const load: PageServerLoad = async ({ params, locals, fetch }) => {
@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
     redirect(303, '/');
   }
 
-  const subscription = await getUserSubscriptionDetails(user.email, params.type, params.itemId);
+  const subscription = await userSubscriptionDetails(user.email, params.type, params.itemId);
   if (subscription) {
     // Call our api endpoint to subscribe on the server.
     // (This prevents us from having to duplicate logic)

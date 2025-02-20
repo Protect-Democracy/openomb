@@ -14,13 +14,13 @@ export const subscriptions = pgTable(
     id: text('id')
       .primaryKey()
       .$defaultFn(() => crypto.randomUUID()),
-    userId: text('userId')
+    userId: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     // Type refers to entity being subscribed to (account, file, search)
     type: varchar('type').notNull(),
     // ItemId refers to the identifying key for the specific entity
-    itemId: varchar('itemId').notNull(),
+    itemId: varchar('item_id').notNull(),
     frequency: varchar('frequency').notNull().default('daily'),
     // Set to current so that notifications occur on next interval after subscription
     lastNotifiedAt: timestamp('last_notified_at').defaultNow(),

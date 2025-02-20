@@ -20,8 +20,9 @@
   import { deserialize } from '$app/forms';
   import Spinner from '$components/icons/Spinner.svelte';
   import LogIn from './LogIn.svelte';
-  import { subscribeFeatureEnabled } from '$config/subscriptions';
-  import { clientGetUser } from '$lib/users';
+  import { subscribeFeatureEnabled, sessionCookieName } from '$config/subscriptions';
+  import { clientGetUser, clientGetSubscriptionById } from '$lib/users';
+  import { cookieHasValue } from '$lib/utilities';
 
   import type { User } from '$lib/users';
 
@@ -43,7 +44,11 @@
     // utilize some client side JS to fetch the user data.  Ideally,
     // we could have SvelteKit just make this component client only, but
     // unsure if there is a way to do that.
-    user = user || (await clientGetUser());
+    if (cookieHasValue(sessionCookieName)) {
+      user = user || (await clientGetUser());
+      addedSubscription =
+        addedSubscription || (await clientGetSubscriptionById(subType, subItemId));
+    }
   });
 
   async function subscribe() {
@@ -76,7 +81,7 @@
   }
 </script>
 
-{#if overrideFeatureFlag || subscribeFeatureEnabled}
+{#if overrideFeatureFlag || subscribeFeatureEnabled || user}
   <aside class:variant-small={variant === 'small'}>
     <div class="subscribe-action">
       {#if !hideText}

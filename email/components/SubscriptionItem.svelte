@@ -6,6 +6,14 @@
   import { formatFileTitle, formatDate } from '../../src/lib/formatters';
 
   export let subscription = {};
+
+  $: searchParams = new URLSearchParams({
+    ...subscription.criterion,
+    agencyBureau: `${subscription.criterion.agency}${subscription.criterion.bureau && ','}${subscription.criterion.bureau}`,
+    createdStart: DateTime.fromJSDate(subscription.criterion.createdStart).toISODate()
+  });
+  $: searchParams.delete('agency');
+  $: searchParams.delete('bureau');
 </script>
 
 <div>
@@ -29,10 +37,7 @@
     {#if subscription.fileCount > maxFilesPerNotificationEntry}
       <li>
         ... and {subscription.fileCount - maxFilesPerNotificationEntry} more (<a
-          href={`${deployedBaseUrl}/search?${new URLSearchParams({
-            ...subscription.criterion,
-            approvedStart: DateTime.fromJSDate(subscription.criterion.approvedStart).toISODate()
-          }).toString()}`}>View All</a
+          href={`${deployedBaseUrl}/search?${searchParams.toString()}`}>View All</a
         >)
       </li>
     {/if}

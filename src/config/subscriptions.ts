@@ -11,7 +11,10 @@ export const subscriptionTypeTitles = {
 };
 
 // Feature flag for testing subscriptions
-export const subscribeFeatureEnabled = true;
+export const subscribeFeatureEnabled = false;
+
+// Cookie name for authjs session
+export const sessionCookieName = 'authjs.session-token';
 
 // Used in server script, max files that can be listed for a single notification item
 // (Rest are cut off, but full count is shown)

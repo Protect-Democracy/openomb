@@ -1,6 +1,6 @@
 import { folderDetails, filesWithoutTafs, recentlyApprovedWithTafs } from '$queries/files';
 import { agenciesByFolder } from '$queries/tafs';
-import { getUserSubscription } from '$queries/subscriptions';
+import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
@@ -13,7 +13,7 @@ export async function load({ params, locals }) {
 
   const user = (await locals.auth())?.user;
   const existingSubscription = user
-    ? await getUserSubscription(user.email, 'folder', params.folderId)
+    ? await userSubscription(user.email, 'folder', params.folderId)
     : null;
 
   return {
