@@ -58,7 +58,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         },
         {
           "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value" : "http://localhost:8080"
+          "value" : "http://172.17.0.1:8080"
         },
         {
           "name" : "AUTH_SECRET",
@@ -115,7 +115,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
       "environment" : [
         {
           "name" : "DOMAIN",
-          "value" : "localhost"
+          "value" : "172.17.0.1"
         },
         {
           "name" : "EMAIL_PROVIDER",
@@ -127,7 +127,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         },
         {
           "name" : "REDIS_HOST",
-          "value" : "localhost"
+          "value" : "172.17.0.1"
         },
         {
           "name" : "REDIS_PORT",
@@ -150,7 +150,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
       "environment" : [
         {
           "name" : "DOMAIN",
-          "value" : "localhost"
+          "value" : "172.17.0.1"
         },
         {
           "name" : "EMAIL_PROVIDER",
@@ -162,14 +162,14 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         },
         {
           "name" : "REDIS_HOST",
-          "value" : "localhost"
+          "value" : "172.17.0.1"
         },
         {
           "name" : "REDIS_PORT",
           "value" : "${tostring(6379)}"
         }
       ],
-      "command" : ["rq worker --url redis://localhost:6379"],
+      "command" : ["rq worker --url redis://172.17.0.1:6379"],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
@@ -362,7 +362,7 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
         },
         {
           "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value" : "http://localhost:8080"
+          "value" : "http://172.17.0.1:8080"
         },
         {
           "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",
