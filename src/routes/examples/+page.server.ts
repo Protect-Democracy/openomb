@@ -1,11 +1,11 @@
 import { recentlyApproved, recentlyRemoved, folders, approvers } from '$queries/files';
-import { mUserSubscriptionListDetails } from '$queries/subscriptions';
+import { userSubscriptionListDetails } from '$queries/subscriptions';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ locals }) {
   const user = (await locals.auth())?.user;
 
-  const existingSubscriptions = user ? await mUserSubscriptionListDetails(user.email) : [];
+  const existingSubscriptions = user ? await userSubscriptionListDetails(user.email) : [];
 
   return {
     recentlyRemoved: await recentlyRemoved(),

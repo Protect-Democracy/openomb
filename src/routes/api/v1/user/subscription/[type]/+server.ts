@@ -1,8 +1,8 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
 import { filter } from 'lodash-es';
-import { mUserSubscriptionDetails, mUserSubscriptionListDetails } from '$queries/subscriptions';
-import { mUserSearch } from '$queries/search';
+import { userSubscriptionDetails, userSubscriptionListDetails } from '$queries/subscriptions';
+import { userSearch } from '$queries/search';
 
 /**
  * Subscription info endpoint
@@ -16,7 +16,7 @@ export async function GET({ locals, params, url }) {
 
   if (params.type !== 'search' || !url.searchParams.has('term')) {
     // If we aren't searching for a specific subscription based on search terms, return all with the given type
-    const subscriptions = user ? await mUserSubscriptionListDetails(user.email) : [];
+    const subscriptions = user ? await userSubscriptionListDetails(user.email) : [];
     return json({
       query: {},
       results: {
@@ -45,10 +45,10 @@ export async function GET({ locals, params, url }) {
     footnoteNum: ga('footnoteNum').join(',')
   };
 
-  const userSearch = user ? await mUserSearch(user.email, criterion) : undefined;
+  const userSearchResult = user ? await userSearch(user.email, criterion) : undefined;
   const subscription =
-    user && userSearch
-      ? await mUserSubscriptionDetails(user.email, 'search', userSearch.id)
+    user && userSearchResult
+      ? await userSubscriptionDetails(user.email, 'search', userSearchResult.id)
       : undefined;
 
   return json({

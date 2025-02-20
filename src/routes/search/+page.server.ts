@@ -10,11 +10,11 @@ import {
   mAccountSearchFullCount,
   saveUserSearch,
   removeUserSearches,
-  mUserSearch
+  userSearch
 } from '$queries/search';
 import { mBureaus } from '$queries/tafs';
 import { mFolders } from '$queries/files';
-import { mUserSubscription } from '$queries/subscriptions';
+import { userSubscription } from '$queries/subscriptions';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -108,9 +108,9 @@ export const load = async ({ url, cookies, locals }) => {
     formattedSearchParams = formatSearchParams(pagedSearchArgs);
 
     // If we have search parameters, try getting an existing subscription
-    const existingSearch = user ? await mUserSearch(user.email, searchArgs) : null;
+    const existingSearch = user ? await userSearch(user.email, searchArgs) : null;
     if (existingSearch) {
-      existingSubscription = await mUserSubscription(user.email, 'search', existingSearch.id);
+      existingSubscription = await userSubscription(user.email, 'search', existingSearch.id);
     }
 
     // Execute queries.  Important to memoize counts, less so for search.

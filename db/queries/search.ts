@@ -858,5 +858,3 @@ export async function userSearch(
     );
   return newRecords[0];
 }
-
-export const mUserSearch = memoizeDataAsync(userSearch);

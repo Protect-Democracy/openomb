@@ -5,7 +5,7 @@
 // Dependencies
 import { map } from 'lodash-es';
 import { Command } from 'commander';
-import { mSubscriptionsByUser, setSubscriptionAsNotified } from '../db/queries/subscriptions';
+import { subscriptionsByUser, setSubscriptionAsNotified } from '../db/queries/subscriptions';
 import { request } from '../server/request';
 import { environmentVariables } from '../server/utilities';
 import {
@@ -48,7 +48,7 @@ async function cli(): Promise<void> {
   // Render the email templates for use in the notifications
   // const emailTemplates = await compileTemplates();
 
-  const userSubscriptions = await mSubscriptionsByUser();
+  const userSubscriptions = await subscriptionsByUser();
 
   for (const email of Object.keys(userSubscriptions)) {
     // For a user, find any relevant new files, then send the notification

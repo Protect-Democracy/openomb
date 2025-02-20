@@ -3,7 +3,7 @@
  */
 import { DateTime } from 'luxon';
 import { mFileSearchFullCount, mFileSearchPaged } from '../db/queries/search';
-import { mUserSubscriptionDetails, mSubscriptionsByUser } from '../db/queries/subscriptions';
+import { userSubscriptionDetails, subscriptionsByUser } from '../db/queries/subscriptions';
 
 import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '../src/config/subscriptions';
 
@@ -36,7 +36,7 @@ export async function getSubscriptionWithFiles(
     criterion = { folder: sub.itemId };
   }
   else if (sub.type === 'tafs') {
-    const detailRecord = await mUserSubscriptionDetails(email, sub.type, sub.itemId);
+    const detailRecord = await userSubscriptionDetails(email, sub.type, sub.itemId);
     criterion = {
       tafs: detailRecord?.itemDetails.tafsId,
       year: `${detailRecord?.itemDetails.fiscalYear}`
@@ -73,7 +73,7 @@ export async function getSubscriptionsWithFilesByUser(
   lastNotified: Date | undefined = undefined
 ) {
   // TODO: Make this more efficient
-  const userSubscriptions = await mSubscriptionsByUser();
+  const userSubscriptions = await subscriptionsByUser();
 
   // If email has subscriptions
   if (userSubscriptions[email]) {

@@ -29,63 +29,63 @@ type ItemDetails =
 
 /**
  * Gets the item details for each individual subscription
+ *  (fetching by type & itemId allows for caching)
  */
-async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
-  | (subscriptionSelect & {
+async function getSubscriptionDetails(
+  type: string,
+  itemId: string
+): Promise<
+  | {
       itemDetails: ItemDetails;
       description: string;
       itemLink: string;
-    })
+    }
   | undefined
 > {
-  if (!sub) {
+  if (!type || !itemId) {
     return;
   }
-  if (sub.type === 'folder') {
+  if (type === 'folder') {
     const item = await db.query.files.findFirst({
-      where: eq(files.folderId, sub.itemId)
+      where: eq(files.folderId, itemId)
     });
     return {
-      ...sub,
       itemDetails: item || ({} as filesSelect),
       description: item?.folder || '',
-      itemLink: `/folder/${sub.itemId}`
+      itemLink: `/folder/${itemId}`
     };
   }
-  else if (sub.type === 'tafs') {
+  else if (type === 'tafs') {
     // TAFS subscriptions are for a specific TAFS and Fiscal Year
     // which is what we track as far as "iteractions" go.
     const item = await db.query.tafs.findFirst({
-      where: eq(tafs.tafsTableId, sub.itemId)
+      where: eq(tafs.tafsTableId, itemId)
     });
     return {
-      ...sub,
       itemDetails: item || ({} as tafsSelect),
       description: `TAFS: ${item && formatTafsFormattedId(item)} - ${item?.accountTitle} (FY ${item?.fiscalYear})`,
       itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
   }
-  else if (sub.type === 'agency') {
+  else if (type === 'agency') {
     const item = await db.query.tafs.findFirst({
-      where: eq(tafs.budgetAgencyTitleId, sub.itemId)
+      where: eq(tafs.budgetAgencyTitleId, itemId)
     });
     return {
-      ...sub,
       itemDetails: {
         agency: item?.budgetAgencyTitle || '',
         agencyId: item?.budgetAgencyTitleId || ''
       },
       description: item?.budgetAgencyTitle || '',
-      itemLink: `/agency/${sub.itemId}`
+      itemLink: `/agency/${itemId}`
     };
   }
-  else if (sub.type === 'bureau') {
-    const [agency, bureau] = sub.itemId.split(',');
+  else if (type === 'bureau') {
+    const [agency, bureau] = itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(eq(tafs.budgetAgencyTitleId, agency), eq(tafs.budgetBureauTitleId, bureau))
     });
     return {
-      ...sub,
       itemDetails: {
         agency: item?.budgetAgencyTitle || '',
         agencyId: item?.budgetAgencyTitleId || '',
@@ -96,8 +96,8 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
       itemLink: `/agency/${agency}/bureau/${bureau}`
     };
   }
-  else if (sub.type === 'account') {
-    const [agency, bureau, account] = sub.itemId.split(',');
+  else if (type === 'account') {
+    const [agency, bureau, account] = itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(
         eq(tafs.budgetAgencyTitleId, agency),
@@ -106,7 +106,6 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
       )
     });
     return {
-      ...sub,
       itemDetails: {
         agency: item?.budgetAgencyTitle || '',
         agencyId: item?.budgetAgencyTitleId || '',
@@ -119,18 +118,22 @@ async function getSubscriptionDetails(sub: subscriptionSelect): Promise<
       itemLink: `/agency/${agency}/bureau/${bureau}/account/${account}`
     };
   }
-  else if (sub.type === 'search') {
+  else if (type === 'search') {
     const item = await db.query.searches.findFirst({
-      where: eq(searches.id, sub.itemId)
+      where: eq(searches.id, itemId)
     });
     return {
-      ...sub,
       itemDetails: item || {},
       description: `Saved Search: ${descriptionParsed(item)}`,
       itemLink: `/search?${new URLSearchParams(item?.criterion).toString()}`
     };
   }
 }
+
+/**
+ * Memoize detail select for caching
+ */
+const mGetSubscriptionDetails = memoizeDataAsync(getSubscriptionDetails);
 
 /**
  * Gets all subscriptions, with details, grouped by user
@@ -149,9 +152,12 @@ export const subscriptionsByUser = async function (): Promise<
       if (!userSubs[result.users.email]) {
         userSubs[result.users.email] = [];
       }
-      const subDetails = await getSubscriptionDetails(result.subscriptions);
+      const subDetails = await mGetSubscriptionDetails(
+        result.subscriptions.type,
+        result.subscriptions.itemId
+      );
       if (subDetails) {
-        userSubs[result.users.email].push(subDetails);
+        userSubs[result.users.email].push({ ...result.subscriptions, ...subDetails });
       }
     }
   }
@@ -197,7 +203,11 @@ export const userSubscriptionDetails = async function (
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
-    return await getSubscriptionDetails(subscriptionResults);
+    const subscriptionDetails = await mGetSubscriptionDetails(
+      subscriptionResults.type,
+      subscriptionResults.itemId
+    );
+    return { ...subscriptionResults, ...subscriptionDetails };
   }
 };
 
@@ -223,7 +233,12 @@ export const userSubscriptionList = async function (
  */
 export const userSubscriptionListDetails = async function (email: string) {
   const subscriptionResults = await userSubscriptionList(email);
-  return await Promise.all(map(subscriptionResults, getSubscriptionDetails));
+  return await Promise.all(
+    map(subscriptionResults, async (result) => {
+      const details = await mGetSubscriptionDetails(result.type, result.itemId);
+      return { ...result, ...details };
+    })
+  );
 };
 
 /**
@@ -321,9 +336,3 @@ export const removeUser = async function (email: string) {
   // Deletion cascades, so when user is removed, all entries that reference user id will be removed
   await db.delete(users).where(eq(users.email, email));
 };
-
-export const mUserSubscription = memoizeDataAsync(userSubscription);
-export const mUserSubscriptionDetails = memoizeDataAsync(userSubscriptionDetails);
-export const mUserSubscriptionList = memoizeDataAsync(userSubscriptionList);
-export const mUserSubscriptionListDetails = memoizeDataAsync(userSubscriptionListDetails);
-export const mSubscriptionsByUser = memoizeDataAsync(subscriptionsByUser);

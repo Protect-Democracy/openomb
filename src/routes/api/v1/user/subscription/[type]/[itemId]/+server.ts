@@ -1,6 +1,6 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
-import { mUserSubscriptionDetails } from '$queries/subscriptions';
+import { userSubscriptionDetails } from '$queries/subscriptions';
 
 /**
  * Subscription info endpoint
@@ -12,7 +12,7 @@ import { mUserSubscriptionDetails } from '$queries/subscriptions';
 export async function GET({ locals, params }) {
   const user = (await locals.auth())?.user;
   const subscription = user
-    ? await mUserSubscriptionDetails(user.email, params.type, params.itemId)
+    ? await userSubscriptionDetails(user.email, params.type, params.itemId)
     : undefined;
 
   return json({

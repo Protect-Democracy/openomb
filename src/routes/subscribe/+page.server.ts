@@ -5,8 +5,8 @@ import {
   addSubscription,
   removeSubscriptions,
   setSubscriptionFrequency,
-  mUserSubscriptionList,
-  mUserSubscriptionListDetails,
+  userSubscriptionList,
+  userSubscriptionListDetails,
   removeUser
 } from '$queries/subscriptions';
 import { subscriptionTypes } from '$config/subscriptions';
@@ -60,7 +60,7 @@ export const actions = {
     }
 
     const data = await request.formData();
-    const userSubscriptions = await mUserSubscriptionList(user.email);
+    const userSubscriptions = await userSubscriptionList(user.email);
 
     // Collect our requests so that our updates run async
     const updates = [];
@@ -102,7 +102,7 @@ export const load: PageServerLoad = async ({ locals }) => {
   // If logged in, get subscription details
   let userSubscriptions;
   if (user) {
-    userSubscriptions = await mUserSubscriptionListDetails(user.email);
+    userSubscriptions = await userSubscriptionListDetails(user.email);
   }
 
   return {
