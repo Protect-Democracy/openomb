@@ -98,7 +98,7 @@ jobs:
           context: ./notifications
           push: true
           platforms: linux/amd64
-          tags: ${{ steps.notificatoin_meta.outputs.tags }}
+          tags: ${{ steps.notification_meta.outputs.tags }}
 
       - name: Deploy to Amazon ECS
         run: aws ecs update-service --cluster ${{ env.AWS_ECS_CLUSTER }} --service ${{ env.AWS_ECS_SERVICE }} --force-new-deployment
