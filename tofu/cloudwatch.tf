@@ -7,3 +7,19 @@ resource "aws_cloudwatch_log_group" "apportionments_collect" {
 resource "aws_cloudwatch_log_group" "apportionments_migrate" {
   name = "/ecs/apportionments-migrate"
 }
+
+resource "aws_cloudwatch_log_group" "apportionments_notify" {
+  name = "/ecs/apportionments-notify"
+}
+
+resource "aws_cloudwatch_log_group" "notifications_service" {
+  name = "/ecs/notifications-service"
+}
+
+resource "aws_cloudwatch_log_group" "notifications_queue" {
+  name = "/ecs/notifications-queue"
+}
+
+resource "aws_cloudwatch_log_group" "notifications_queue_worker" {
+  name = "/ecs/notifications-queue-worker"
+}
