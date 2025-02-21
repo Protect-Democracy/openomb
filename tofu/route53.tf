@@ -62,25 +62,25 @@ resource "aws_route53_record" "email_txt" {
 
 # SES Email Notification domain records
 
-resource "aws_route53_record" "amazonses_dkim_record" {
+resource "aws_route53_record" "amazonses_dkim_records" {
   count   = 3
-  zone_id = aws_route53_zone.apportionments.id
-  name    = "${element(aws_ses_domain_dkim.ses_domain_dkim.dkim_tokens, count.index)}._domainkey.${var.domain_name}"
+  zone_id = aws_route53_zone.apportionments.zone_id
+  name    = "${element(aws_ses_domain_dkim.dkim_identity.dkim_tokens, count.index)}._domainkey.${var.domain_name}"
   type    = "CNAME"
   ttl     = "600"
-  records = ["${element(aws_ses_domain_dkim.ses_domain_dkim.dkim_tokens, count.index)}.dkim.amazonses.com"]
+  records = ["${element(aws_ses_domain_dkim.dkim_identity.dkim_tokens, count.index)}.dkim.amazonses.com"]
 }
 
 resource "aws_route53_record" "amazonses_mail_from_mx" {
-  zone_id = aws_route53_zone.apportionments.id
-  name    = aws_ses_domain_mail_from.example.mail_from_domain
+  zone_id = aws_route53_zone.apportionments.zone_id
+  name    = aws_ses_domain_mail_from.main.mail_from_domain
   type    = "MX"
   ttl     = "600"
   records = ["10 feedback-smtp.${var.region}.amazonses.com"] # Change to the region in which aws_ses_domain_identity is created
 }
 
 resource "aws_route53_record" "spf_domain" {
-  zone_id = data.aws_route53_zone.main.zone_id
+  zone_id = aws_route53_zone.apportionments.zone_id
   name    = var.domain_name
   type    = "TXT"
   ttl     = "600"
@@ -88,7 +88,7 @@ resource "aws_route53_record" "spf_domain" {
 }
 
 resource "aws_route53_record" "spf_mail_from" {
-  zone_id = data.aws_route53_zone.main.zone_id
+  zone_id = aws_route53_zone.apportionments.zone_id
   name    = aws_ses_domain_mail_from.main.mail_from_domain
   type    = "TXT"
   ttl     = "600"
