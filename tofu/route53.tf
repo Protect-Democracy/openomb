@@ -57,6 +57,7 @@ resource "aws_route53_record" "email_txt" {
 
   records = [
     "forward-email=openomb@protectdemocracy.org",
+    "v=spf1 include:amazonses.com -all"
   ]
 }
 
@@ -77,14 +78,6 @@ resource "aws_route53_record" "amazonses_mail_from_mx" {
   type    = "MX"
   ttl     = "600"
   records = ["10 feedback-smtp.${var.region}.amazonses.com"] # Change to the region in which aws_ses_domain_identity is created
-}
-
-resource "aws_route53_record" "spf_domain" {
-  zone_id = aws_route53_zone.apportionments.zone_id
-  name    = var.domain_name
-  type    = "TXT"
-  ttl     = "600"
-  records = ["v=spf1 include:amazonses.com -all"]
 }
 
 resource "aws_route53_record" "spf_mail_from" {
