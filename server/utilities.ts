@@ -62,6 +62,7 @@ type ApportionmentEnvironment = {
   awsContainerMetadata: boolean;
   sentryNodeDsn: string;
   environment: string;
+  notificationsServiceUri: string;
 };
 
 // Export package.json
@@ -118,7 +119,8 @@ function environmentVariables(): ApportionmentEnvironment {
     awsSsoRoleName: process.env['APPORTIONMENTS_AWS_SSO_ROLE_NAME'] || '',
     awsContainerMetadata:
       !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
-      process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false'
+      process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false',
+    notificationsServiceUri: process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080'
   };
 }
 

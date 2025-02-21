@@ -7,6 +7,7 @@ User-agent: *
 
 Disallow: /examples
 Disallow: /styles
+Disallow: /subscribe
 
 Sitemap: ${deployedBaseUrl}/sitemap.xml
     `.trim(),

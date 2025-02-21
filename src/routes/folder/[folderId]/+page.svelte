@@ -4,9 +4,11 @@
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
   export let data: PageData;
-  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved } = data);
+  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved, user, existingSubscription } =
+    data);
 </script>
 
 <div class="page-container">
@@ -23,7 +25,15 @@
 <div class="page-container content-container">
   <h1>Folder: {folder.folder}</h1>
 
-  <p>There are <strong>{formatNumber(folder.fileCount)}</strong> files in this folder.</p>
+  <p>There are <strong>{formatNumber(folder.fileCount)} files</strong> in this folder.</p>
+
+  <SubscribeLink
+    {user}
+    subType="folder"
+    subItemId={folder.folderId}
+    subItemFormatted={folder.folder}
+    {existingSubscription}
+  />
 
   <section class="page-section">
     <h2>Agencies</h2>

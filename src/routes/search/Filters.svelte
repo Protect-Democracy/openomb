@@ -9,6 +9,8 @@
 
   // Props
   export let url: URL;
+  export let user;
+  export let folders = [];
   export let agencyBureauOptions = [];
   export let yearOptions: number[] = [];
   export let lineOptions: string[] = [];
@@ -31,6 +33,9 @@
   function getFilterLabel(key, value) {
     if (key === 'term') {
       return `Keyword "${value}"`;
+    } else if (key === 'folder') {
+      // Include folder for email results (view all link)
+      return `Folder "${folders.find((f) => f.folderId === value)?.folder}"`;
     } else if (key === 'agencyBureau') {
       const ids = value.split(',');
       // Handle just Agency or Agency/Bureau
@@ -61,6 +66,10 @@
       return `Line ${value.replace(/[^0-9]+/g, '')}`;
     } else if (key === 'footnoteNum') {
       return `Has Footnote ${value}`;
+    } else if (key === 'createdStart') {
+      return `Added to OpenOMB after ${formatDate(value)}`;
+    } else if (key === 'createdEnd') {
+      return `Added to OpenOMB before ${formatDate(value)}`;
     }
 
     return false;
@@ -90,7 +99,14 @@
       >
 
       <svelte:fragment slot="content">
-        <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} {approverTitleOptions} />
+        <Form
+          {url}
+          {user}
+          {agencyBureauOptions}
+          {yearOptions}
+          {lineOptions}
+          {approverTitleOptions}
+        />
       </svelte:fragment>
     </Drawer>
   </div>

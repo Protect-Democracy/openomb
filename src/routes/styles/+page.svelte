@@ -324,52 +324,64 @@
 
   <button class="button-switch" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">On</span>
   </button>
 
   <button class="button-switch" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">Off</span>
   </button>
 
   <button class="button-switch alt" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">Off</span>
   </button>
 
   <button class="button-switch alt" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">On</span>
   </button>
 
   <button class="button-switch data" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">Off</span>
   </button>
 
   <button class="button-switch data" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">On</span>
   </button>
 
   <br />
 
   <button class="button-switch small" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">On</span>
   </button>
 
   <button class="button-switch small" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">Off</span>
   </button>
 
   <button class="button-switch alt small" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">Off</span>
   </button>
 
   <button class="button-switch alt small" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">On</span>
   </button>
 
   <button class="button-switch previous small" role="switch" aria-checked="false">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">Off</span>
   </button>
 
   <button class="button-switch previous small" role="switch" aria-checked="true">
     <span class="button-switch-slider"></span>
+    <span class="sr-only">On</span>
   </button>
 
   <h3>Icons</h3>

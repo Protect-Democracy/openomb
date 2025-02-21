@@ -4,9 +4,10 @@
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
   export let data: PageData;
-  $: ({ agency, bureausByAgency, recentlyApproved } = data);
+  $: ({ agency, bureausByAgency, recentlyApproved, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -29,6 +30,14 @@
   <p>
     There are <strong>{formatNumber(agency.fileCount)} files</strong> associated with this agency.
   </p>
+
+  <SubscribeLink
+    {user}
+    subType="agency"
+    subItemId={agency.budgetAgencyTitleId}
+    subItemFormatted={agency.budgetAgencyTitle}
+    {existingSubscription}
+  />
 
   <section class="page-section">
     <h2>Bureaus</h2>

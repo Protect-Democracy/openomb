@@ -40,3 +40,26 @@ locals {
     ]
   })
 }
+
+# ECR for Notifications queue
+resource "aws_ecr_repository" "notifications" {
+  name                 = "notifications"
+  image_tag_mutability = "MUTABLE"
+
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+resource "aws_ecr_lifecycle_policy" "ecr_notifications_policy" {
+  repository = aws_ecr_repository.notifications.name
+  policy     = local.ecr_policy
+}
+
+output "ecr_notifications_repo" {
+  value = aws_ecr_repository.notifications.repository_url
+}

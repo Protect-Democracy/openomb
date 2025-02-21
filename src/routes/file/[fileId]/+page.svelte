@@ -5,6 +5,7 @@
   import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import Switch from '$components/inputs/Switch.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
   import TAFSLines from './TAFSLines.svelte';
   import Metadata from './Metadata.svelte';
   import TAFSMeta from './TAFSMeta.svelte';
@@ -19,7 +20,7 @@
 
   // Derived
   $: letterApportionment = !!file.pdfUrl;
-  $: ({ file, prevIterationFiles } = data);
+  $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = uniqBy(
     reduce(
@@ -70,15 +71,27 @@
         )}
 
         <section class="tafs-section">
-          <h3 id="tafs_{tafsGroup.tafsTableId}" class="tafs-heading">
-            <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {formatTafsFormattedId(
-              tafsGroup
-            )} - {tafsGroup.accountTitle}
-          </h3>
+          <div class="tafs-heading-wrapper">
+            <h3 id="tafs_{tafsGroup.tafsTableId}" class="tafs-heading">
+              <acronym title="Treasury Appropriation Fund Symbol">TAFS</acronym>: {formatTafsFormattedId(
+                tafsGroup
+              )} - {tafsGroup.accountTitle}
+            </h3>
+          </div>
 
           <TAFSMeta {tafsGroup} />
 
           <TAFSLines currentTafs={tafsGroup} {prevIterationTafs} showPrevious={$showPrevious} />
+
+          <div class="tafs-subscribe">
+            <SubscribeLink
+              {user}
+              subType="tafs"
+              subItemId={tafsGroup.tafsTableId}
+              subItemFormatted={`TAFS ${formatTafsFormattedId(tafsGroup)} - FY ${file.fiscalYear}`}
+              existingSubscription={tafsSubscriptions[tafsGroup.tafsTableId]}
+            />
+          </div>
         </section>
       {/each}
     {:else}

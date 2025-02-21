@@ -1,14 +1,18 @@
 import { sortBy } from 'lodash-es';
 import { fileDetails } from '$queries/files';
+import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 import { formatFileTitle } from '$lib/formatters';
 import { fileSchema } from '$lib/schema';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params }) {
+export async function load({ params, locals }) {
   const file = await fileDetails(params.fileId);
 
+  const user = (await locals.auth())?.user;
+
   const prevIterationFiles = {};
+  const tafsSubscriptions = {};
   if (file?.tafs) {
     for (const taf of file.tafs) {
       const sorted = sortBy(taf.iterations, ['iteration']);
@@ -18,6 +22,13 @@ export async function load({ params }) {
         if (prev) {
           prevIterationFiles[taf.tafsTableId] = await fileDetails(prev.fileId);
         }
+      }
+      if (user && taf) {
+        tafsSubscriptions[taf.tafsTableId] = await userSubscription(
+          user.email,
+          'tafs',
+          taf.tafsTableId
+        );
       }
     }
   }
@@ -29,6 +40,8 @@ export async function load({ params }) {
   return {
     file,
     prevIterationFiles,
+    user,
+    tafsSubscriptions,
     pageMeta: {
       title: `${formatFileTitle(file)} | ${file.fileId}`,
       // TODO

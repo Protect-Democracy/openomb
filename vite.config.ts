@@ -34,6 +34,15 @@ export default defineConfig({
     })
   ],
 
+  server: {
+    watch: {
+      // Need to not watch in the cache and build specifically
+      // because we dynamically build email templates.  This also means
+      // that you may have to restart the server if you change an email
+      ignored: ['**/.cache/**', '**/build-*/**']
+    }
+  },
+
   // Unfortunately we have to add the postcss plugins here
   // so that global imports will use it, as well as in
   // svelte.config.js so component can use it. :/
@@ -45,5 +54,13 @@ export default defineConfig({
 
   test: {
     include: ['{src,server,db}/**/*.{test,spec}.{js,ts}']
+  },
+
+  // TODO - this might impact older browsers, but allows our lib env
+  // to be used on client and server.  should find a better fix
+  esbuild: {
+    supported: {
+      'top-level-await': true //browsers can handle top-level-await features
+    }
   }
 });

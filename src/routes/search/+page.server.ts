@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import {
   mYearOptions,
   mLineNumberOptions,
@@ -6,12 +7,45 @@ import {
   mFileSearchPaged,
   mFileSearchFullCount,
   mAccountSearchPaged,
-  mAccountSearchFullCount
+  mAccountSearchFullCount,
+  saveUserSearch,
+  removeUserSearches,
+  userSearch
 } from '$queries/search';
 import { mBureaus } from '$queries/tafs';
+import { mFolders } from '$queries/files';
+import { userSubscription } from '$queries/subscriptions';
+
+/** @satisfies {import('./$types').Actions} */
+export const actions = {
+  add: async ({ locals, request }) => {
+    const user = (await locals.auth())?.user;
+    if (!user) {
+      error(401, 'Must be authenticated to access this page');
+    }
+
+    const data = await request.json();
+    // Add subscription
+    if (data.criterion) {
+      return await saveUserSearch(user.email, data.criterion);
+    }
+  },
+  remove: async ({ locals, request }) => {
+    const user = (await locals.auth())?.user;
+    if (!user) {
+      error(401, 'Must be authenticated to access this page');
+    }
+
+    const data = await request.json();
+    // Add subscription
+    if (data.searchId) {
+      return await removeUserSearches(user.email, data.searchId);
+    }
+  }
+};
 
 /** @type {import('./$types').PageLoad} */
-export const load = async ({ url, cookies }) => {
+export const load = async ({ url, cookies, locals }) => {
   // Shortcuts
   const u = (p: string) => url.searchParams.get(p);
   const h = (p: string) => url.searchParams.has(p);
@@ -30,6 +64,11 @@ export const load = async ({ url, cookies }) => {
   // Only perform our search once the form is submitted.  From the landing page, an
   // empty query is in the form ?term= so we don't need to perform a search.
   const searchString = url.searchParams.toString();
+
+  // User & subscription values
+  const user = (await locals.auth())?.user;
+  let existingSubscription;
+
   if (searchString && searchString !== 'term=') {
     // Get our arguments for our search queries.
     //
@@ -48,7 +87,12 @@ export const load = async ({ url, cookies }) => {
       approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
       apportionmentType: ga('apportionmentType').join(',') || '',
       lineNum: ga('lineNum').join(','),
-      footnoteNum: ga('footnoteNum').join(',')
+      footnoteNum: ga('footnoteNum').join(','),
+
+      // Included for email notification link, not used in form
+      folder: u('folder') || '',
+      createdStart: u('createdStart') ? new Date(`${u('createdStart')}T00:00:00`) : undefined,
+      createdEnd: u('createdEnd') ? new Date(`${u('createdEnd')}T23:59:59`) : undefined
     };
     const pagedSearchArgs = {
       offset: (filePageIndex - 1) * filePageSize,
@@ -62,6 +106,12 @@ export const load = async ({ url, cookies }) => {
 
     // Formatted search params
     formattedSearchParams = formatSearchParams(pagedSearchArgs);
+
+    // If we have search parameters, try getting an existing subscription
+    const existingSearch = user ? await userSearch(user.email, searchArgs) : null;
+    if (existingSearch) {
+      existingSubscription = await userSubscription(user.email, 'search', existingSearch.id);
+    }
 
     // Execute queries.  Important to memoize counts, less so for search.
     fileResults = await mFileSearchPaged(pagedSearchArgs);
@@ -77,6 +127,7 @@ export const load = async ({ url, cookies }) => {
   return {
     // Options/params
     searchParams: formattedSearchParams,
+    folders: await mFolders(),
     yearOptions: await mYearOptions(),
     lineOptions: await mLineNumberOptions(),
     agencyBureauOptions: await mBureaus(),
@@ -93,6 +144,10 @@ export const load = async ({ url, cookies }) => {
     accountCount: accountCount || 0,
     accountPageSize,
     accountPageIndex,
+
+    //Subscription & user
+    user,
+    existingSubscription,
 
     // Page info
     pageMeta: {

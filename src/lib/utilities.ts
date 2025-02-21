@@ -3,7 +3,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { collectionHour, collectionMinute, collectionTimezone } from '$config';
+import { collectionHour, collectionMinute, collectionTimezone } from '../config';
 
 /**
  * Get seconds to the next specific time in a timezone.
@@ -88,6 +88,18 @@ export function setCookie(
   }
 
   document.cookie = updatedCookie;
+}
+
+/**
+ * Client-side check if a cookie value is set
+ */
+export async function cookieHasValue(name: string) {
+  // If not client side
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  return document.cookie.split(';').some((item) => item.trim().startsWith(`${name}=`));
 }
 
 /**

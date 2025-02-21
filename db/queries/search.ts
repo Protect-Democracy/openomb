@@ -22,8 +22,10 @@ import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
 import { lines } from '../schema/lines';
 import { footnotes } from '../schema/footnotes';
+import { searches, type searchesSelect } from '../schema/searches';
+import { users } from '../schema/users';
 import { lineTypes } from '../schema/line-types';
-import { lineDescriptions } from '$db/schema/line-descriptions';
+import { lineDescriptions } from '../schema/line-descriptions';
 import { memoizeDataAsync } from '../../server/cache';
 
 // Types
@@ -44,6 +46,11 @@ export type SearchParams = {
   year: string;
   lineNum: string;
   footnoteNum: string;
+
+  // Notification specific fields
+  folder?: string;
+  createdStart?: Date;
+  createdEnd?: Date;
 };
 
 export type PaginationParams = {
@@ -282,6 +289,7 @@ function generalSearchFilters(
   );
 
   // Identifiers
+  where.push(searchParams.folder ? eq(files.folderId, searchParams.folder) : undefined);
   where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
   where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
   where.push(
@@ -344,6 +352,10 @@ function generalSearchFilters(
   where.push(
     searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
   );
+  where.push(
+    searchParams.createdStart ? gte(files.createdAt, searchParams.createdStart) : undefined
+  );
+  where.push(searchParams.createdEnd ? lte(files.createdAt, searchParams.createdEnd) : undefined);
 
   // Apportionemnt type.  Only need to search on a single one
   if (
@@ -776,3 +788,73 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
 }
 
 export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
+
+/**
+ * Save a search for the specified user
+ * (Currently used only by subscriptions)
+ */
+export async function saveUserSearch(email: string, criterion: SearchParams) {
+  // Cut out of saving the search if it has already been saved
+  const existingSearch = await mUserSearch(email, criterion);
+  if (existingSearch) {
+    return existingSearch;
+  }
+
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  // If we have no user, exit early
+  if (!userResults?.[0]) {
+    return null;
+  }
+  const newSearch = {
+    userId: userResults[0].id,
+    criterion
+  };
+  const newRecords = await db.insert(searches).values(newSearch).returning({ id: searches.id });
+  return newRecords[0];
+}
+
+/**
+ * Remove saved search(es) for user
+ * (Currently used only by subscriptions)
+ */
+export async function removeUserSearches(email: string, searchId: string | Array<string>) {
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  // If we have no user, exit early
+  if (!userResults?.[0]) {
+    return null;
+  }
+
+  await db
+    .delete(searches)
+    .where(
+      and(
+        eq(searches.userId, userResults[0].id),
+        Array.isArray(searchId) ? inArray(searches.id, searchId) : eq(searches.id, searchId)
+      )
+    );
+}
+
+/**
+ * Get a user's saved search with a given criterion
+ * (Currently used only by subscriptions)
+ */
+export async function userSearch(
+  email: string,
+  criterion: SearchParams
+): Promise<searchesSelect | undefined> {
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  // If we have no user, exit early
+  if (!userResults?.[0]) {
+    return;
+  }
+  const newRecords = await db
+    .select()
+    .from(searches)
+    .where(
+      and(
+        eq(searches.userId, userResults[0].id),
+        sql`${searches.criterion}::json::text = ${criterion}::json::text`
+      )
+    );
+  return newRecords[0];
+}

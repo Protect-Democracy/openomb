@@ -21,6 +21,9 @@ import * as footnotes from './schema/footnotes';
 import * as lines from './schema/lines';
 import * as tafs from './schema/tafs';
 import * as collections from './schema/collections';
+import * as users from './schema/users';
+import * as subscriptions from './schema/subscriptions';
+import * as searches from './schema/searches';
 import * as lineTypes from './schema/line-types';
 import * as lineDescriptions from './schema/line-descriptions';
 
@@ -45,6 +48,9 @@ export const db = drizzle(pool, {
     ...lines,
     ...tafs,
     ...collections,
+    ...users,
+    ...subscriptions,
+    ...searches,
     ...lineTypes,
     ...lineDescriptions
   }
@@ -92,7 +98,7 @@ export function overrideDrizzleTracer() {
   };
 }
 
-function dbConnectionString() {
+export function dbConnectionString() {
   // If Uri is provided, use that
   if (env.dbUri) {
     return env.dbUri;

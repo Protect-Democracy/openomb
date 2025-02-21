@@ -39,3 +39,6 @@ jobs:
 
       - name: Build migrate
         run: npm run build:migrate
+
+      - name: Build notify
+        run: npm run build:notify
