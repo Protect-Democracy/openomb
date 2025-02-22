@@ -5,10 +5,18 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { build } from 'vite';
 import { render as svelteRender } from 'svelte/server';
 import juice from 'juice';
 import reduceCssCalc from 'reduce-css-calc';
+
+/**
+ * Vite build import causes errors when built and run in node because
+ *  it includes code incompatible with es modules (__dirname), so
+ *  this is a necessary workaround
+ */
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url ?? __filename);
+const { build } = require('vite');
 
 // Constants
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
