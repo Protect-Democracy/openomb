@@ -11,6 +11,8 @@ COPY --from=build /app/build-collect /app/build-collect
 COPY --from=build /app/build-migrate /app/build-migrate
 COPY --from=build /app/build-notify /app/build-notify
 COPY --from=build /app/build-web /app/build-web
+COPY --from=build /app/email /app/email
+COPY --from=build /app/static /app/static
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/package-lock.json /app/package.json /app/
 WORKDIR /app
