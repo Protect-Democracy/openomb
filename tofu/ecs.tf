@@ -106,7 +106,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
     {
       "name" : "notifications-service",
       "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
-      "essential" : true,
+      "essential" : false,
       "portMappings" : [
         {
           "containerPort" : 8080
@@ -146,7 +146,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
     {
       "name" : "notifications-queue-worker",
       "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
-      "essential" : true,
+      "essential" : false,
       "environment" : [
         {
           "name" : "DOMAIN",
