@@ -339,6 +339,7 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
   network_mode = "awsvpc"
 }
 
+# TODO: Temporarily disabled
 #resource "aws_ecs_task_definition" "apportionments_notify" {
 #  family = "apportionments-notify"
 #
