@@ -1,3 +1,4 @@
+# Install dependencies and build
 FROM node:20-bullseye-slim AS build
 WORKDIR /app
 COPY package*.json ./
@@ -5,19 +6,29 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+# Copy build artifacts to a minimal image
 # FROM gcr.io/distroless/nodejs20-debian12
 FROM node:20-bullseye-slim
+
+# Builds
 COPY --from=build /app/build-collect /app/build-collect
 COPY --from=build /app/build-migrate /app/build-migrate
 COPY --from=build /app/build-notify /app/build-notify
 COPY --from=build /app/build-web /app/build-web
 
-COPY --from=build /app/email /app/email
-COPY --from=build /app/static /app/static
-COPY --from=build /app/src/styles /app/src/styles
-
+# Dependencies
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/package-lock.json /app/package.json /app/
+
+# Email templates are weird and try to read from the filesystem.
+# Ideally we can have the email templates be fully built or handled
+# appropriately in the build step, so that we wouldn't need to copy
+# all of this over.
+COPY --from=build /app/email /app/email
+COPY --from=build /app/static /app/static
+COPY --from=build /app/src /app/src
+COPY --from=build /app/vite-email.config.ts /app/vite-email.config.ts
+
 WORKDIR /app
 EXPOSE 3000
 CMD ["build-web"]
