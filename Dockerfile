@@ -29,6 +29,9 @@ COPY --from=build /app/static /app/static
 COPY --from=build /app/src /app/src
 COPY --from=build /app/vite-email.config.ts /app/vite-email.config.ts
 
+#Database migration scripts requires us to copy all of our migration files
+COPY --from=build /app/db /app/db
+
 WORKDIR /app
 EXPOSE 3000
 CMD ["build-web"]
