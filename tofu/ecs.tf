@@ -65,7 +65,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : jsondecode(data.aws_secretsmanager_secret_version.auth_secret.secret_string)["AUTH_SECRET"]
         },
         {
-          "name" : "Origin", # Needed for authentication to work correctly
+          "name" : "ORIGIN", # Needed for authentication to work correctly
           "value" : "https://${var.domain_name}"
         },
         {
@@ -106,7 +106,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
     {
       "name" : "notifications-service",
       "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
-      "essential" : false,
+      "essential" : true,
       "portMappings" : [
         {
           "containerPort" : 8080
@@ -169,7 +169,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "${tostring(6379)}"
         }
       ],
-      "command" : ["rq worker --url redis://localhost:6379"],
+      "command" : ["rq", "worker", "--url", "redis://localhost:6379"],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
@@ -182,12 +182,13 @@ resource "aws_ecs_task_definition" "apportionments_app" {
     {
       "name" : "notifications-queue",
       "image" : "redis:alpine"
-      "essential" : true,
+      "essential" : false,
       "portMappings" : [
         {
           "containerPort" : 6379
         }
       ],
+      "command" : ["redis-server", "--bind", "localhost", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru", "--appendonly", "yes"],
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
