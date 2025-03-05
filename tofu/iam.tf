@@ -462,7 +462,7 @@ resource "aws_iam_role_policy_attachment" "update_infrastructure_administrator_a
 
 resource "aws_iam_role" "send_email" {
   name               = "send-email"
-  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+  assume_role_policy = data.aws_iam_policy_document.send_email.json
 }
 
 data "aws_iam_policy_document" "send_email" {
