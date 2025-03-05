@@ -462,7 +462,7 @@ resource "aws_iam_role_policy_attachment" "update_infrastructure_administrator_a
 
 resource "aws_iam_role" "send_email" {
   name               = "send-email"
-  assume_role_policy = data.aws_iam_policy_document.send_email.json
+  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume_role.json
 }
 
 data "aws_iam_policy_document" "send_email" {
@@ -476,4 +476,30 @@ data "aws_iam_policy_document" "send_email" {
       aws_ses_email_identity.notifier.arn
     ]
   }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.send_email.arn}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "send_email" {
+  name        = "send-email"
+  description = "Grant the ability to send SES email on ECS"
+  policy      = data.aws_iam_policy_document.send_email.json
+}
+
+resource "aws_iam_role_policy_attachment" "send_email" {
+  role       = aws_iam_role.send_email.name
+  policy_arn = aws_iam_policy.send_email.arn
+}
+
+resource "aws_iam_role_policy_attachment" "send_email_assume_role" {
+  role       = aws_iam_role.send_email.name
+  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
