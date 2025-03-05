@@ -145,7 +145,8 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "awslogs-group" : "/ecs/notifications-service",
           "awslogs-stream-prefix" : "ecs"
         }
-      }
+      },
+      "taskRoleArn" : aws_iam_role.send_email.arn
     },
     {
       "name" : "notifications-queue-worker",
@@ -181,7 +182,8 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "awslogs-group" : "/ecs/notifications-queue-worker",
           "awslogs-stream-prefix" : "ecs"
         }
-      }
+      },
+      "taskRoleArn" : aws_iam_role.send_email.arn
     },
     {
       "name" : "notifications-queue",

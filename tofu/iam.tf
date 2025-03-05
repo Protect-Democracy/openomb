@@ -455,3 +455,25 @@ resource "aws_iam_role_policy_attachment" "update_infrastructure_administrator_a
   # able to manipulate many aspects of infrastructure via tofu commands
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+
+###################
+# SES email notifier role
+###################
+
+resource "aws_iam_role" "send_email" {
+  name               = "send-email"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "send_email" {
+  statement {
+    actions = [
+      "ses:SendEmail",
+      "ses:SendRawEmail"
+    ]
+    resources = [
+      aws_ses_domain_identity.domain_identity.arn,
+      aws_ses_email_identity.notifier.arn
+    ]
+  }
+}
