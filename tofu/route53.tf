@@ -87,3 +87,11 @@ resource "aws_route53_record" "spf_mail_from" {
   ttl     = "600"
   records = ["v=spf1 include:amazonses.com -all"]
 }
+
+resource "aws_route53_record" "dmarc_record_notifier" {
+  zone_id = aws_route53_zone.apportionments.zone_id
+  name    = "_dmarc.${var.domain_name}"
+  type    = "TXT"
+  ttl     = "600"
+  records = ["v=DMARC1;p=none;pct=0;rua=mailto:${aws_ses_email_identity.notifier.email}"]
+}

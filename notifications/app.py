@@ -1,7 +1,23 @@
 from api_modules.email import ProcessEmail, QueueEmail, SendEmail
+import sentry_sdk
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restful import Api, MethodNotAllowed, NotFound
+from util.environment import sentryDsn
+
+sentry_sdk.init(
+    dsn=sentryDsn,
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 # ============================================
 # Main
