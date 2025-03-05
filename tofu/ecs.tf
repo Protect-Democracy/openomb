@@ -145,8 +145,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "awslogs-group" : "/ecs/notifications-service",
           "awslogs-stream-prefix" : "ecs"
         }
-      },
-      "taskRoleArn" : aws_iam_role.send_email.arn
+      }
     },
     {
       "name" : "notifications-queue-worker",
@@ -182,8 +181,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "awslogs-group" : "/ecs/notifications-queue-worker",
           "awslogs-stream-prefix" : "ecs"
         }
-      },
-      "taskRoleArn" : aws_iam_role.send_email.arn
+      }
     },
     {
       "name" : "notifications-queue",
@@ -207,6 +205,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
   ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
+  task_role_arn = aws_iam_role.send_email.arn
 
   # Minimum values for Fargate
   cpu                      = 1024
