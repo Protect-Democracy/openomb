@@ -132,7 +132,11 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         {
           "name" : "REDIS_PORT",
           "value" : "${tostring(6379)}"
-        }
+        },
+        {
+          "name" : "SENTRY_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["NOTIFICATIONS_SERVICE_SENTRY_DSN"]
+        },
       ],
       "logConfiguration" : {
         "logDriver" : "awslogs",

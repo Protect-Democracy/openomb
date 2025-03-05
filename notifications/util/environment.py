@@ -17,6 +17,7 @@ class ENVIRONMENT:
         self.awsRegion = os.getenv("AWS_REGION")
         self.redisHost = os.getenv("REDIS_HOST")
         self.redisPort = os.getenv("REDIS_PORT")
+        self.sentryDsn = os.getenv("SENTRY_DSN")
 
     def get_instance(self):
         if not hasattr(self, "_instance"):
@@ -50,6 +51,9 @@ class ENVIRONMENT:
     def getRedisPort(self):
         return self.redisPort
 
+    def getSentryDsn(self):
+        return self.sentryDsn
+
 
 domain = ENVIRONMENT().get_instance().getDomain()
 port = ENVIRONMENT().get_instance().getPort()
@@ -60,3 +64,4 @@ smtpPort = ENVIRONMENT().get_instance().getSmtpPort()
 awsRegion = ENVIRONMENT().get_instance().getAwsRegion()
 redisHost = ENVIRONMENT().get_instance().getRedisHost()
 redisPort = ENVIRONMENT().get_instance().getRedisPort()
+sentryDsn = ENVIRONMENT().get_instance().getSentryDsn()
