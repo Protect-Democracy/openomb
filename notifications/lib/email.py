@@ -47,15 +47,17 @@ def send_email(email):
             response = client.send_email(
                 Source=format_address(email['from'], email['from_name']),
                 Destination={"ToAddresses": email['to']},
-                ReplyToAddresses=[
-                    format_address(email['reply'], email['reply_name']),
-                ],
+                # This field errors out if it is included when empty
+                # ReplyToAddresses=[
+                #    format_address(email['reply'], email['reply_name']),
+                # ],
                 ConfigurationSetName="notification-emails",
                 Tags=[],
                 Message={
                     "Body": {
                         "Html": {"Charset": "utf-8", "Data": email['html']},
-                        "Text": {"Charset": "utf-8", "Data": email['text']},
+                        # This field also errors out if it is included when empty
+                        # "Text": {"Charset": "utf-8", "Data": email['text']},
                     },
                     "Subject": {"Charset": "utf-8", "Data": email['title']},
                 },
