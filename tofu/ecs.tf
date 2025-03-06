@@ -205,6 +205,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
   ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
+  task_role_arn      = aws_iam_role.send_email.arn
 
   # Minimum values for Fargate
   cpu                      = 1024
