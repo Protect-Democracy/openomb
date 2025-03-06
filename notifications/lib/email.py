@@ -36,18 +36,20 @@ def send_email(email):
             server.quit()
     elif (emailProvider == 'aws'):
         client = boto3.client("ses", region_name=awsRegion)
+        if isinstance(email['to'], str):
+            email['to'] = [email['to']]
         client.send_email(
             Source=format_address(email['from'], email['from_name']),
             Destination={"ToAddresses": email['to']},
             ReplyToAddresses=[
                 format_address(email['reply'], email['reply_name']),
             ],
-            ConfigurationSetName="notification_emails",
+            ConfigurationSetName="notification-emails",
             Tags=[],
             Message={
                 "Body": {
                     "Html": {"Charset": "utf-8", "Data": email['html']},
-                    "Text": {"Charset": "utf-8", "Data": email['plain']},
+                    "Text": {"Charset": "utf-8", "Data": email['text']},
                 },
                 "Subject": {"Charset": "utf-8", "Data": email['title']},
             },

@@ -74,7 +74,7 @@ resource "aws_route53_record" "amazonses_dkim_records" {
 
 resource "aws_route53_record" "amazonses_mail_from_mx" {
   zone_id = aws_route53_zone.apportionments.zone_id
-  name    = aws_ses_domain_mail_from.main.mail_from_domain
+  name    = aws_ses_domain_mail_from.domain_mail_from.mail_from_domain
   type    = "MX"
   ttl     = "600"
   records = ["10 feedback-smtp.${var.region}.amazonses.com"] # Change to the region in which aws_ses_domain_identity is created
@@ -82,7 +82,7 @@ resource "aws_route53_record" "amazonses_mail_from_mx" {
 
 resource "aws_route53_record" "spf_mail_from" {
   zone_id = aws_route53_zone.apportionments.zone_id
-  name    = aws_ses_domain_mail_from.main.mail_from_domain
+  name    = aws_ses_domain_mail_from.domain_mail_from.mail_from_domain
   type    = "TXT"
   ttl     = "600"
   records = ["v=spf1 include:amazonses.com -all"]
