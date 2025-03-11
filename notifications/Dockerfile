@@ -1,5 +1,5 @@
 # Use the official Python 3.8 slim image as the base image
-FROM public.ecr.aws/bitnami/python:3.9-prod as python-base
+FROM public.ecr.aws/bitnami/python:3.9-prod AS python-base
 
 # Set the working directory within the container
 WORKDIR /notification-api
