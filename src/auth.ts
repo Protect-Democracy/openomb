@@ -6,6 +6,7 @@ import { users, accounts, sessions, verificationTokens } from '$db/schema';
 
 const { handle, signIn, signOut } = SvelteKitAuth({
   trustHost: true,
+  debug: true,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,

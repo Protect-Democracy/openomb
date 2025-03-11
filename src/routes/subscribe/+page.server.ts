@@ -98,7 +98,7 @@ export const actions = {
 export const load: PageServerLoad = async ({ locals }) => {
   // Get user session
   const user = (await locals.auth())?.user;
-  console.log('subscribe.server', user); // todo - for troubleshooting, remove
+  console.log('subscribe.server.user', user); // todo - for troubleshooting, remove
 
   // If logged in, get subscription details
   let userSubscriptions;
