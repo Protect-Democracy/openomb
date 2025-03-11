@@ -5,11 +5,6 @@ from flask_cors import CORS
 from flask_restful import Api, MethodNotAllowed, NotFound
 from util.environment import sentryDsn
 
-# Set logging values
-# Temporarily setting this to debug level while we troubleshoot emailing
-import logging
-logging.basicConfig(level=logging.DEBUG)
-
 
 sentry_sdk.init(
     dsn=sentryDsn,

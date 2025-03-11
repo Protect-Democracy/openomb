@@ -1,3 +1,4 @@
+import logging
 from redis import Redis
 from rq import Queue, Worker
 from util.environment import redisHost, redisPort
@@ -6,17 +7,25 @@ redis = Redis(host=redisHost,port=redisPort)
 q = Queue(connection=redis)
 
 def add_job(task_func, *args, **kwargs):
-    return q.enqueue_call(task_func, args, kwargs)
+    try:
+        return q.enqueue_call(task_func, args, kwargs)
+    except Exception as e:
+        logging.warning(e)
+        raise e
 
 def get_jobs():
-    return {
-        'queued': q.job_ids,
-        'scheduled': q.scheduled_job_registry.get_job_ids(),
-        'started': q.started_job_registry.get_job_ids(),
-        'finished': q.finished_job_registry.get_job_ids(),
-        'failed': q.failed_job_registry.get_job_ids(),
-        'deferred': q.deferred_job_registry.get_job_ids(),
-    }
+    try:
+        return {
+            'queued': q.job_ids,
+            'scheduled': q.scheduled_job_registry.get_job_ids(),
+            'started': q.started_job_registry.get_job_ids(),
+            'finished': q.finished_job_registry.get_job_ids(),
+            'failed': q.failed_job_registry.get_job_ids(),
+            'deferred': q.deferred_job_registry.get_job_ids(),
+        }
+    except Exception as e:
+        logging.warning(e)
+        raise e
 
 def run_worker_once():
     w = Worker(['default'], connection=redis)

@@ -472,9 +472,14 @@ data "aws_iam_policy_document" "send_email" {
       "ses:SendRawEmail"
     ]
     resources = [
-      aws_ses_domain_identity.domain_identity.arn,
-      aws_ses_email_identity.notifier.arn
+      "arn:aws:ses:*:*:identity/*",
+      aws_ses_configuration_set.notification_emails.arn
     ]
+    condition {
+      test = "StringEquals"
+      values = [aws_ses_email_identity.notifier.email]
+      variable = "ses:FromAddress"
+    }
   }
 
   statement {
