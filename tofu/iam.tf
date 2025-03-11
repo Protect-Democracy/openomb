@@ -476,8 +476,8 @@ data "aws_iam_policy_document" "send_email" {
       aws_ses_configuration_set.notification_emails.arn
     ]
     condition {
-      test = "StringEquals"
-      values = [aws_ses_email_identity.notifier.email]
+      test     = "StringEquals"
+      values   = [aws_ses_email_identity.notifier.email]
       variable = "ses:FromAddress"
     }
   }

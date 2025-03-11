@@ -24,6 +24,23 @@ const { handle, signIn, signOut } = SvelteKitAuth({
   pages: {
     verifyRequest: '/subscribe/verify',
     error: '/subscribe/error'
+  },
+  events: {
+    async signIn(message) {
+      console.log('auth.signIn', message);
+    },
+    async signOut(message) {
+      console.log('auth.signOut', message);
+    },
+    async createUser(message) {
+      console.log('auth.createUser', message);
+    },
+    async updateUser(message) {
+      console.log('auth.updateUser', message);
+    },
+    async session(message) {
+      console.log('auth.session', message);
+    }
   }
 });
 
