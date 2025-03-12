@@ -7,7 +7,6 @@ import env from '$lib/environment';
 
 const { handle, signIn, signOut } = SvelteKitAuth({
   trustHost: true,
-  debug: true,
   // Secure cookie https detection may be bugged, so set based on environment
   useSecureCookies: env.environment === 'development' ? false : true,
   // Ensure secret value is set (set from process to ensure not included/built in client files)
