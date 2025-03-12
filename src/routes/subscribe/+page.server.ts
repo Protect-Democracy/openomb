@@ -95,10 +95,11 @@ export const actions = {
   logout: signOut
 };
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, request }) => {
   // Get user session
   const user = (await locals.auth())?.user;
   console.log('subscribe.server.user', user); // todo - for troubleshooting, remove
+  console.log('subscribe.server.request.cookies', request.headers.get('cookie'));
 
   // If logged in, get subscription details
   let userSubscriptions;
