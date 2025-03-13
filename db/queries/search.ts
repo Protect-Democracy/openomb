@@ -795,7 +795,7 @@ export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
  */
 export async function saveUserSearch(email: string, criterion: SearchParams) {
   // Cut out of saving the search if it has already been saved
-  const existingSearch = await mUserSearch(email, criterion);
+  const existingSearch = await userSearch(email, criterion);
   if (existingSearch) {
     return existingSearch;
   }
