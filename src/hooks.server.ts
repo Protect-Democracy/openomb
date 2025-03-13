@@ -48,8 +48,6 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   const path = event.url.pathname;
   const user = (await event.locals.auth())?.user;
 
-  console.log('hook.addHeaders.request.cookies', event.request.headers.get('cookie'));
-
   // We can't set headers again if they have already been set, so we manage
   // here for global handling.
   const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*)/);

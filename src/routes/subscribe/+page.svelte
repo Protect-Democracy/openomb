@@ -8,7 +8,6 @@
   export let data: PageData;
   export let form;
   $: ({ userSubscriptions, user } = data);
-  $: console.log('subscribe.client.user', user); // todo - for troubleshooting, remove
 
   $: folderSubs = filter(userSubscriptions, (sub) => sub.type === 'folder');
   $: tafsSubs = filter(userSubscriptions, (sub) => sub.type === 'tafs');
