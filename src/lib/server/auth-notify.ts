@@ -1,5 +1,7 @@
 import { notifierEmailName, notifierEmail } from '$config/subscriptions';
-import { compileTemplates } from '../../../email/templates';
+import { renderTemplate } from '$email/render';
+import AuthenticationEmail from '$email/templates/AuthenticationEmail.svelte';
+import SubscriptionEmail from '$email/templates/SubscriptionEmail.svelte';
 
 // This code only runs on the server, so we want private env variables.
 //  (this avoids setting the notifications uri in the client env)
@@ -7,9 +9,6 @@ import { environmentVariables } from '../../../server/utilities';
 
 // Constants
 const env = environmentVariables();
-
-// We should only compile templates once.
-let emailTemplates;
 
 /**
  * Send the email that is used to verify and log in a user
@@ -22,15 +21,10 @@ export async function sendVerificationRequest(params) {
   const manageSubscriptionsUrl = `${urlRef.origin}${urlRef.pathname}?callbackUrl=${urlRef.origin}/subscribe&token=${token}&email=${to}`;
 
   // If they are trying to auth via a subscribe link, we need to send a different email
-  const template = isSubscribeLink(urlRef) ? 'SubscriptionEmail' : 'AuthenticationEmail';
-
-  // Compile the templates if they haven't been compiled yet
-  if (!emailTemplates) {
-    emailTemplates = await compileTemplates();
-  }
+  const template = isSubscribeLink(urlRef) ? SubscriptionEmail : AuthenticationEmail;
 
   // Render the email
-  const htmlRender = await emailTemplates[template].render({
+  const htmlRender = renderTemplate(template, {
     authUrl: url,
     subscriptionsUrl: manageSubscriptionsUrl
   });
