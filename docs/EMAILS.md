@@ -6,15 +6,15 @@ Writing HTML and CSS for emails is a bit different than writing for the web. Mos
 
 The current processing for templates helps with the following:
 
-- Uses [svelte-email](https://github.com/carstenlebek/svelte-email) library to make it more straightforward to use specific HTML tags and CSS properties.
-  - Note that this is an forked version of an unmaintained library, but is also not very maintained, so may not be a good solution in the long run.
 - Inlines CSS styles to elements.
+  - Global styles will get inlined automatically.
+  - **Local styles should be manually inlined.**
+    - TODO: This is due to using email components in SvelteKit which configures CSS to be external, so when rendering a component we can't get the CSS out for it. Maybe there will be a way around it at some point.
 - Other processing via [juice](https://github.com/Automattic/juice) such as:
   - Converting CSS variables to values.
   - Removes unused CSS.
 - Includes a few of the global styles from the main application.
   - Though note that things like media queries don't translate given current tooling.
-  - Which files are included is managed in `email/templates.ts`
 
 It is still up to you to make sure that that you use HTML and CSS that is going to be supported across most email clients. Some resources for this are the following:
 
@@ -28,33 +28,23 @@ Email templates are managed in Svelte components in `email/templates/`.
 To use the templates in some server-side service, you can do something like the following:
 
 ```typescript
-import { compileTemplates } from 'email/templates';
+import SubscriptionEmail from 'email/templates/SubscriptionEmail.svelte';
+import { renderTemplate } from 'email/render';
 
-const templates = await compileTemplates();
-const templateData = {
-  name: 'John Doe',
-  ...
-};
-
-// Generally the HTML output should have everything in it, but there is
-// also a `head` and `css` property
-const { html } = templates['FileNotification'].render(templateData);
+const output = renderTemplate(SubscriptionEmail, { subscriptions: [] });
 ```
 
 ### Adding templates
 
 - Add actual templates to `email/templates/`.
-- Updated list in `email/templates.ts`
-  - Unfortunately this is necessary to be able to handle vite build environments and node/ts environments.
-- Add a preview template in `email/previews/` that uses the email template.
-- Update `email/previews/Preview.svelte` to include the new preview.
+- Update previews in `src/routes/examples/+page.server.ts`.
 
 ## Previewing
 
-To run a local development server on port `5175` to preview the email templates, run the following:
+Email template previews can be seen in the browser when running the web application locally with `npm run dev`, the going to:
 
-```bash
-npm run dev:email
+```
+http://localhost:3000/examples
 ```
 
 This will preview the email in the browser which is good for faster development, but is limited as most email clients have a limited ability to render HTML and CSS.
@@ -81,7 +71,3 @@ process.env.DEV_EMAIL_PASS
 ```
 
 **TODO** To use the notification service instead of directly sending an email, use the following flag: `--use-notification-service`.
-
-### Use in the local server
-
-Due to how we compile the email templates dynamically, there is some issues with vite's dev server, so we specifically don't watch in the `.cache/` directory where we store those files. This means that when running the local dev web server, it may not automatically pick up email template changes.
