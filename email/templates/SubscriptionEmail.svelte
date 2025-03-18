@@ -3,9 +3,9 @@
   import { contactEmail, deployedBaseUrl, siteName } from '../../src/config';
 
   export let title = 'Subscribe to apportionments';
+  export let subscriptionsUrl = undefined;
   export let subscriptionItemDescription;
   export let authUrl;
-  export let subscriptionsUrl;
 </script>
 
 <Wrapper {title} {subscriptionsUrl} unsubscribable={false}>
@@ -20,7 +20,7 @@
 
   <a class="button compact" href={authUrl} target="_blank">Subscribe</a>
 
-  <div class="footnotes">
+  <div style="margin-top: 2rem;">
     <p class="font-small">
       You are receiving this email because you requested a subscription on <a
         href={deployedBaseUrl}
@@ -30,9 +30,3 @@
     </p>
   </div>
 </Wrapper>
-
-<style>
-  .footnotes {
-    margin-top: 2rem;
-  }
-</style>

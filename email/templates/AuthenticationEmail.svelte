@@ -12,7 +12,7 @@
 
   <a class="button compact" href={authUrl} target="_blank">Login</a>
 
-  <div class="footnotes">
+  <div style="margin-top: 2rem;">
     <p class="font-small">
       You are receiving this email because you are attempting to login or requested a subscription
       on <a href={deployedBaseUrl} target="_blank">{siteName}</a>. If you did not request this
@@ -21,9 +21,3 @@
     </p>
   </div>
 </Wrapper>
-
-<style>
-  .footnotes {
-    margin-top: 2rem;
-  }
-</style>

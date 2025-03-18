@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Heading } from '@sveltelaunch/svelte-5-email';
   import SubscriptionItem from './SubscriptionItem.svelte';
   import { subscriptionTypeTitles } from '../../src/config/subscriptions';
 
@@ -11,7 +10,7 @@
 </script>
 
 <div>
-  <Heading as="h3">{title}</Heading>
+  <h3>{title}</h3>
 
   {#each subscriptionGroup as subscription}
     <div>
