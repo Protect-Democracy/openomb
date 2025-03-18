@@ -21,7 +21,8 @@ import {
   replyEmail
 } from '../src/config/subscriptions';
 import packageJson from '../package.json' assert { type: 'json' };
-import { compileTemplates } from '../email/templates';
+import { renderTemplate } from '../email/render';
+import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();
@@ -63,11 +64,8 @@ async function cli(): Promise<void> {
     }
 
     if (notifySubs.length) {
-      // Compile email templates
-      const emailTemplates = await compileTemplates();
-
       // Send our notification email to the user
-      await sendNotificationEmail(email, notifySubs, emailTemplates);
+      await sendNotificationEmail(email, notifySubs);
       // Update our subscriptions to indicate notifications were sent
       await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
     }
@@ -75,10 +73,11 @@ async function cli(): Promise<void> {
   console.info('Finished notification');
 }
 
-async function sendNotificationEmail(email, notifySubs, emailTemplates) {
-  const emailBody = await emailTemplates.FileNotificationEmail.render({
+async function sendNotificationEmail(email, notifySubs) {
+  const emailBody = await renderTemplate(FileNotificationEmail, {
     subscriptions: notifySubs
   });
+
   await request(
     `${env.notificationsServiceUri}/email/queue`,
     {

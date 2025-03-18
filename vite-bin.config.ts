@@ -3,6 +3,7 @@
  */
 import { defineConfig } from 'vite';
 import { sentryRollupPlugin } from '@sentry/rollup-plugin';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 import packageJson from './package.json';
 
@@ -20,6 +21,20 @@ export default defineConfig({
       '$config/*': 'src/config/*'
     }
   },
+  plugins: [
+    svelte({
+      compilerOptions: {
+        css: 'injected'
+      }
+    })
+  ],
+  // TODO: This causes issues with running the built script, but specifically
+  // for the email tool, we would like this to work so that there's parity.
+  // css: {
+  //   postcss: {
+  //     plugins: [postcssNesting, postcssCustomMedia, autoprefixer]
+  //   }
+  // },
   build: {
     target: ['node20'],
     // Use --outDir to specify the output directory
