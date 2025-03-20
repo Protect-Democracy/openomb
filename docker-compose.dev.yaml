@@ -17,7 +17,7 @@ services:
       - ./:/app
       - /app/node_modules
     working_dir: /app
-    command: npm run dev -- --host
+    command: npm run dev:web -- --host
 
 include:
   - ./notifications/docker-compose.dev.yaml
