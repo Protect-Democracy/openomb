@@ -20,14 +20,17 @@ COPY --from=build /app/build-web /app/build-web
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/package-lock.json /app/package.json /app/
 
+# Static assets
+COPY --from=build /app/static /app/static
+
+# TODO: This is probably not needed anymore.
+#
 # Email templates are weird and try to read from the filesystem.
 # Ideally we can have the email templates be fully built or handled
 # appropriately in the build step, so that we wouldn't need to copy
 # all of this over.
 COPY --from=build /app/email /app/email
-COPY --from=build /app/static /app/static
 COPY --from=build /app/src /app/src
-COPY --from=build /app/vite-email.config.ts /app/vite-email.config.ts
 
 #Database migration scripts requires us to copy all of our migration files
 COPY --from=build /app/db /app/db

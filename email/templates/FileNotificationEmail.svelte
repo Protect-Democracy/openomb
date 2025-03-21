@@ -1,6 +1,5 @@
 <script lang="ts">
   import { groupBy, sortBy } from 'lodash-es';
-  import { Preview, Text } from '@sveltelaunch/svelte-5-email';
   import Wrapper from '../components/Wrapper.svelte';
   import SubscriptionGroup from '../components/SubscriptionGroup.svelte';
   import { subscriptionTypes } from '../../src/config/subscriptions';
@@ -15,13 +14,11 @@
   );
 </script>
 
-<Preview>OpenOMB File Notifications</Preview>
-
 <Wrapper {title} unsubscribable={true}>
-  <Text
-    >New apportionment files have been approved within your subscriptions. These files are listed
-    below.</Text
-  >
+  <p>
+    New apportionment files have been approved within your subscriptions. These files are listed
+    below.
+  </p>
 
   <div>
     {#each Object.entries(subscriptionGroups) as [type, subscriptionGroup]}
@@ -29,6 +26,3 @@
     {/each}
   </div>
 </Wrapper>
-
-<style>
-</style>

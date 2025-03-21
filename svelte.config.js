@@ -67,7 +67,12 @@ const config = {
       // TODO: Actually, maybe we don't need this here at all
       // TODO: and just in the vite.config.ts file.
       postcss: {
-        plugins: [postcssNesting(), postcssCustomMedia(), autoprefixer()]
+        plugins: [
+          // noIsPseudoSelector, is: doesn't play nice with juice (email css processor)
+          postcssNesting({ noIsPseudoSelector: true }),
+          postcssCustomMedia(),
+          autoprefixer()
+        ]
       }
     })
   ],
@@ -85,7 +90,8 @@ const config = {
       $lib: 'src/lib',
       $assets: 'src/assets',
       $components: 'src/components',
-      $config: 'src/config'
+      $config: 'src/config',
+      $email: 'email'
     },
 
     csp: {

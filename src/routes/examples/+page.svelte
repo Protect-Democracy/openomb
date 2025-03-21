@@ -6,9 +6,13 @@
   import SearchSubscribe from '$components/subscriptions/SearchSubscribe.svelte';
 
   export let data: PageData;
+  let emailTemplates = [];
+  let emailTemplate = '';
 
   // Stores
   const url = derived(page, ($page) => $page.url);
+  $: emailTemplates = Object.keys(data.emailExamples);
+  $: emailTemplate = emailTemplate || emailTemplates[0];
 </script>
 
 <svelte:head>
@@ -16,6 +20,21 @@
 </svelte:head>
 
 <div class="page-container content-container">
+  <h2>Emails previews</h2>
+
+  <div>
+    {#each emailTemplates as template}
+      <button
+        class="small compact"
+        class:secondary={emailTemplate != template}
+        on:click={() => (emailTemplate = template)}>{template}</button
+      >
+    {/each}
+  </div>
+
+  <iframe class="email-example" srcdoc={data.emailExamples[emailTemplate]} title="Email previews"
+  ></iframe>
+
   <h2>Examples</h2>
 
   <ul>
@@ -77,168 +96,151 @@
 
   <h2>Subscriptions</h2>
   <h3>Folders</h3>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="folder"
-      subItemId="department-of-education"
-      subItemFormatted="Department of Education"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == 'department-of-education'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="folder"
-      subItemId="international-assistance-programs"
-      subItemFormatted="International Assistance Programs"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == 'international-assistance-programs'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
+
+  <SubscribeLink
+    user={data.user}
+    subType="folder"
+    subItemId="department-of-education"
+    subItemFormatted="Department of Education"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == 'department-of-education'
+    )}
+    overrideFeatureFlag
+  />
+
+  <SubscribeLink
+    user={data.user}
+    subType="folder"
+    subItemId="international-assistance-programs"
+    subItemFormatted="International Assistance Programs"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == 'international-assistance-programs'
+    )}
+    overrideFeatureFlag
+  />
 
   <h3>Agencies</h3>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="agency"
-      subItemId="department-of-defense-military-programs"
-      subItemFormatted="Department of Defense Military Programs"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == 'department-of-defense-military-programs'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="agency"
-      subItemId="securities-and-exchange-commission"
-      subItemFormatted="Securities and Exchange Commission"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == 'securities-and-exchange-commission'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
+
+  <SubscribeLink
+    user={data.user}
+    subType="agency"
+    subItemId="department-of-defense-military-programs"
+    subItemFormatted="Department of Defense Military Programs"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == 'department-of-defense-military-programs'
+    )}
+    overrideFeatureFlag
+  />
+  <SubscribeLink
+    user={data.user}
+    subType="agency"
+    subItemId="securities-and-exchange-commission"
+    subItemFormatted="Securities and Exchange Commission"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == 'securities-and-exchange-commission'
+    )}
+    overrideFeatureFlag
+  />
 
   <h3>Bureaus</h3>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="bureau"
-      subItemId="national-science-foundation,national-science-foundation"
-      subItemFormatted="National Science Foundation"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == 'national-science-foundation,national-science-foundation'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="bureau"
-      subItemId="department-of-transportation,federal-highway-administration"
-      subItemFormatted="Federal Highway Administration"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == 'department-of-transportation,federal-highway-administration'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
+
+  <SubscribeLink
+    user={data.user}
+    subType="bureau"
+    subItemId="national-science-foundation,national-science-foundation"
+    subItemFormatted="National Science Foundation"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == 'national-science-foundation,national-science-foundation'
+    )}
+    overrideFeatureFlag
+  />
+  <SubscribeLink
+    user={data.user}
+    subType="bureau"
+    subItemId="department-of-transportation,federal-highway-administration"
+    subItemFormatted="Federal Highway Administration"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == 'department-of-transportation,federal-highway-administration'
+    )}
+    overrideFeatureFlag
+  />
 
   <h3>Accounts</h3>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="account"
-      subItemId="executive-office-of-the-president,office-of-administration,executive-office-of-the-president"
-      subItemFormatted="Executive Office of the President"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) =>
-          sub.itemId ==
-          'executive-office-of-the-president,office-of-administration,executive-office-of-the-president'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="account"
-      subItemId="social-security-administration,social-security-administration,supplemental-security-income-program"
-      subItemFormatted="Supplemental Security Income Program"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) =>
-          sub.itemId ==
-          'social-security-administration,social-security-administration,supplemental-security-income-program'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
+
+  <SubscribeLink
+    user={data.user}
+    subType="account"
+    subItemId="executive-office-of-the-president,office-of-administration,executive-office-of-the-president"
+    subItemFormatted="Executive Office of the President"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) =>
+        sub.itemId ==
+        'executive-office-of-the-president,office-of-administration,executive-office-of-the-president'
+    )}
+    overrideFeatureFlag
+  />
+  <SubscribeLink
+    user={data.user}
+    subType="account"
+    subItemId="social-security-administration,social-security-administration,supplemental-security-income-program"
+    subItemFormatted="Supplemental Security Income Program"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) =>
+        sub.itemId ==
+        'social-security-administration,social-security-administration,supplemental-security-income-program'
+    )}
+    overrideFeatureFlag
+  />
 
   <h3>TAFS</h3>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="tafs"
-      subItemId="11409026--011-0041--1--2025"
-      subItemFormatted="011-0041 /X - United States DOGE Service"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == '11409026--011-0041--1--2025'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
-  <p>
-    <SubscribeLink
-      user={data.user}
-      subType="tafs"
-      subItemId="11408172--091-0202-2024-2025--3--2025"
-      subItemFormatted="091-0202 2024/2025 - Student Aid Administration"
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemId == '11408172--091-0202-2024-2025--3--2025'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
+
+  <SubscribeLink
+    user={data.user}
+    subType="tafs"
+    subItemId="11409026--011-0041--1--2025"
+    subItemFormatted="011-0041 /X - United States DOGE Service"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == '11409026--011-0041--1--2025'
+    )}
+    overrideFeatureFlag
+  />
+  <SubscribeLink
+    user={data.user}
+    subType="tafs"
+    subItemId="11408172--091-0202-2024-2025--3--2025"
+    subItemFormatted="091-0202 2024/2025 - Student Aid Administration"
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemId == '11408172--091-0202-2024-2025--3--2025'
+    )}
+    overrideFeatureFlag
+  />
 
   <h3>Searches</h3>
-  <p>
-    <SearchSubscribe
-      user={data.user}
-      url={new URL(
-        '/search?term=farm&agencyBureau=&tafs=&account=&approver=&approvedStart=&approvedEnd=&lineNum=budgetary-resources%2C1011&footnoteNum=B',
-        $url.origin
-      )}
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) => sub.itemDetails?.criterion?.term == 'farm'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
-  <p>
-    <SearchSubscribe
-      user={data.user}
-      url={new URL(
-        '/search?term=&agencyBureau=&tafs=&account=&approver=acting-deputy-associate-director-for-international-affairs-programs&approvedStart=&approvedEnd=&lineNum=budgetary-resources%2C1011&footnoteNum=B',
-        $url.origin
-      )}
-      existingSubscription={data.existingSubscriptions.find(
-        (sub) =>
-          sub.itemDetails?.criterion?.approver ==
-          'acting-deputy-associate-director-for-international-affairs-programs'
-      )}
-      overrideFeatureFlag
-    />
-  </p>
+
+  <SearchSubscribe
+    user={data.user}
+    url={new URL(
+      '/search?term=farm&agencyBureau=&tafs=&account=&approver=&approvedStart=&approvedEnd=&lineNum=budgetary-resources%2C1011&footnoteNum=B',
+      $url.origin
+    )}
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) => sub.itemDetails?.criterion?.term == 'farm'
+    )}
+    overrideFeatureFlag
+  />
+  <SearchSubscribe
+    user={data.user}
+    url={new URL(
+      '/search?term=&agencyBureau=&tafs=&account=&approver=acting-deputy-associate-director-for-international-affairs-programs&approvedStart=&approvedEnd=&lineNum=budgetary-resources%2C1011&footnoteNum=B',
+      $url.origin
+    )}
+    existingSubscription={data.existingSubscriptions.find(
+      (sub) =>
+        sub.itemDetails?.criterion?.approver ==
+        'acting-deputy-associate-director-for-international-affairs-programs'
+    )}
+    overrideFeatureFlag
+  />
 
   <!--
 <h2>Folder, Agency, Bureau</h2>
@@ -276,3 +278,13 @@
   <h2>Styles</h2>
   <a href="/styles">Page with many elements to help with global style development</a>
 </div>
+
+<style>
+  .email-example {
+    border: 3px solid var(--color-text);
+    margin: 1rem 0;
+    width: 100%;
+    height: 800px;
+    max-height: 90vh;
+  }
+</style>

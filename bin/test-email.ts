@@ -7,9 +7,13 @@
 // Dependencies
 import { Command } from 'commander';
 import { createTransport } from 'nodemailer';
-import { compileTemplates } from '../email/templates';
+import { renderTemplate } from '../email/render';
 import { getSubscriptionsWithFilesByUser } from '../server/subscriptions';
 import packageJson from '../package.json' assert { type: 'json' };
+
+import AuthenticationEmail from '../email/templates/AuthenticationEmail.svelte';
+import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
+import SubscriptionEmail from '../email/templates/SubscriptionEmail.svelte';
 
 /**
  * Main CLI handler.
@@ -21,7 +25,11 @@ async function cli(): Promise<void> {
     .version(packageJson.version)
     .description('Send an email.')
     .option('-a, --address <email>', 'Email address to send to.')
-    .option('-t, --template <template>', 'What template to send, such as FileNotificationEmail.')
+    .option(
+      '-t, --template <template>',
+      'What template to send.  Defaults to FileNotificationEmail.',
+      'FileNotificationEmail'
+    )
     .option(
       '-u, --subscription-user <email>',
       'User to pull data from for subscription templates, otherwise will use test data.'
@@ -41,15 +49,16 @@ async function cli(): Promise<void> {
     process.exit(1);
   }
 
-  // Get templates
-  console.info('Compiling templates...');
-  const emailTemplates = await compileTemplates();
-
-  // Check template exists
+  // Get the template
+  const emailTemplates = {
+    AuthenticationEmail,
+    FileNotificationEmail,
+    SubscriptionEmail
+  };
   const emailTemplate = emailTemplates[options.template];
   if (!emailTemplate) {
     console.error(
-      `Template "${options.template}" not found.  Available templates: ${Object.keys(emailTemplates).join(', ')}`
+      `Unknown template "${options.template}.  Please use one of the following: ${Object.keys(emailTemplates).join(', ')}`
     );
     process.exit(1);
   }
@@ -69,7 +78,7 @@ async function cli(): Promise<void> {
   }
 
   // Render template
-  const emailBody = await emailTemplate.render(data);
+  const emailBody = renderTemplate(emailTemplate, data);
 
   // Send email
   if (options.useNotificationsService) {
@@ -121,4 +130,4 @@ async function sendEmail(email: string, subject: string, body: string) {
   });
 }
 
-cli();
+await cli();

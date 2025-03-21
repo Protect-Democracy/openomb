@@ -48,7 +48,8 @@ export default defineConfig({
   // svelte.config.js so component can use it. :/
   css: {
     postcss: {
-      plugins: [postcssNesting, postcssCustomMedia, autoprefixer]
+      // noIsPseudoSelector, is: doesn't play nice with juice (email css processor)
+      plugins: [postcssNesting({ noIsPseudoSelector: true }), postcssCustomMedia, autoprefixer]
     }
   },
 
