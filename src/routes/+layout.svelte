@@ -193,6 +193,7 @@
         <li><a href="/about">About</a></li>
         <li><a href="/developers">For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
+        <li><a href="/terms">Terms of use</a></li>
         {#if subscribeFeatureEnabled}
           <li><a href="/subscribe">Subscriptions</a></li>
         {/if}
