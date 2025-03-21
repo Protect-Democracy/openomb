@@ -89,10 +89,14 @@ export const actions = {
 
     await removeUser(user.email);
 
-    return redirect(301, '/subscribe/deactivated');
+    redirect(303, '/subscribe/deactivated');
   },
   login: signIn,
-  logout: signOut
+  logout: async (params) => {
+    // Because we are redirecting, we do not want to return the response
+    // (if we do, we get a json response in production)
+    await signOut(params);
+  }
 };
 
 export const load: PageServerLoad = async ({ locals }) => {

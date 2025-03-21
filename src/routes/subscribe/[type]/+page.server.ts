@@ -1,5 +1,7 @@
 import { redirect } from '@sveltejs/kit';
-import { deserialize } from '$app/forms';
+// We have to use the devalue library directly
+// since deserialize is only available within .svelte files
+import { parse } from 'devalue';
 
 export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
   // Get user session
@@ -44,19 +46,23 @@ export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
     },
     body: JSON.stringify({ criterion })
   });
-  const newSearch = deserialize(await resp.text());
 
-  // Redirect with item id to add subscription
-  if (newSearch.data.id) {
-    redirect(303, `/subscribe/search/${newSearch.data.id}`);
+  const result = await resp.json();
+  if (result.data) {
+    const newSearch = parse(result.data);
+
+    // Redirect with item id to add subscription
+    if (newSearch.id) {
+      redirect(303, `/subscribe/search/${newSearch.id}`);
+    }
   }
+
   return {
     user,
     type: params.type,
-    itemId: params.itemId,
 
     pageMeta: {
-      title: `Unsubscribed from ${params.type}`
+      title: `Subscribe to ${params.type}`
     }
   };
 };
