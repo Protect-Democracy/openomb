@@ -65,6 +65,10 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : jsondecode(data.aws_secretsmanager_secret_version.auth_secret.secret_string)["AUTH_SECRET"]
         },
         {
+          "name" : "AUTH_URL", # Needed for authentication redirects to have correct (non-aws) domain
+          "value" : "https://${var.domain_name}/auth"
+        },
+        {
           "name" : "ORIGIN", # Needed for authentication to work correctly
           "value" : "https://${var.domain_name}"
         },
