@@ -89,12 +89,20 @@ export const actions = {
 
     await removeUser(user.email);
 
+    // We are returning a redirect here so users land on a page confirming
+    //  that they've been deactivated (and what that means)
     redirect(303, '/subscribe/deactivated');
   },
-  login: signIn,
+  login: async (params) => {
+    // This is not broken, but this does have the chance to return the redirect
+    // response. So just in case, we also want to explicitly not return it
+    // https://github.com/nextauthjs/next-auth/blob/main/packages/frameworks-sveltekit/src/lib/actions.ts#L75
+    await signIn(params);
+  },
   logout: async (params) => {
     // Because we are redirecting, we do not want to return the response
     // (if we do, we get a json response in production)
+    // https://github.com/nextauthjs/next-auth/blob/main/packages/frameworks-sveltekit/src/lib/actions.ts#L105
     await signOut(params);
   }
 };

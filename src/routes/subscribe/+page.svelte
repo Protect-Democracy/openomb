@@ -89,9 +89,9 @@
         <h3>Delete account</h3>
 
         <p>
-          <strong>Warning: this action cannot be undone.</strong>. Delete this email address and all
-          associated data from the website. This will destroy all subscriptions associated with the
-          current email. You will be able to re-subscribe in the future.
+          <strong>Warning: this action cannot be undone.</strong> Delete this email address and all associated
+          data from the website. This will destroy all subscriptions associated with the current email.
+          You will be able to re-subscribe in the future.
         </p>
 
         <form method="POST" action="/subscribe?/deactivate">
