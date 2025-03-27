@@ -5,6 +5,7 @@
   import '@fontsource/ibm-plex-sans/400.css';
   import '@fontsource/ibm-plex-sans/600.css';
   import '@fontsource/ibm-plex-sans/700.css';
+  import type { PageData } from './$types';
   import { onMount } from 'svelte';
   import { derived } from 'svelte/store';
   import { DateTime } from 'luxon';
@@ -47,6 +48,9 @@
   const url = derived(page, ($page) => $page.url);
   const productionCheck = env.environment == 'production' || import.meta.env.PROD;
   const betaCheck = isBeta;
+
+  // Props
+  export let data: PageData;
 
   // On Mount
   onMount(() => {
@@ -143,6 +147,16 @@
     <p>
       You are currently viewing a <strong>beta version</strong> of this site; please send
       improvements to <a href="mailto:{contactEmail}">{contactEmail}</a>.
+    </p>
+  </div>
+{/if}
+{#if data.isSourceDown}
+  <div class="downtime">
+    <p>
+      The <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
+        >OMB website</a
+      > that provides the underlying data used by OpenOMB is offline. There will be no new apportionments
+      posted on OpenOMB until that site is back online.
     </p>
   </div>
 {/if}
@@ -360,7 +374,8 @@
   }
 
   .beta,
-  .development {
+  .development,
+  .downtime {
     padding: var(--spacing);
     background: var(--color-highlight);
     width: 100%;
@@ -373,6 +388,15 @@
 
   .beta {
     background: var(--color-blue-light);
+    color: var(--color-text-inverse);
+
+    a {
+      color: var(--color-text-inverse);
+    }
+  }
+
+  .downtime {
+    background: var(--color-error);
     color: var(--color-text-inverse);
 
     a {

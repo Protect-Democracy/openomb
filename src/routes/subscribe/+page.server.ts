@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { signIn, signOut } from '../../auth';
+import { signOut } from '../../auth';
 import {
   addSubscription,
   removeSubscriptions,
@@ -80,7 +80,8 @@ export const actions = {
     await Promise.all(updates);
     return { success: true };
   },
-  deactivate: async ({ locals }) => {
+  deactivate: async (params) => {
+    const { locals } = params;
     // Check login
     const user = (await locals.auth())?.user;
     if (!user) {
@@ -88,46 +89,18 @@ export const actions = {
     }
 
     await removeUser(user.email);
+    await signOut(params);
 
-    // We are sending a redirect here so users land on a page confirming
-    //  that they've been deactivated (and what that means)
-    redirect(303, '/subscribe/deactivated');
-  },
-  login: async (params) => {
-    try {
-      await signIn(params);
-    }
-    catch (e) {
-      // This is not broken, but this does have the chance to return the redirect
-      // response. So just in case, we also want to explicitly not return it
-      // https://github.com/nextauthjs/next-auth/blob/main/packages/frameworks-sveltekit/src/lib/actions.ts#L75
-      if (e?.status === 302 && e?.location) {
-        redirect(e.status, e.location);
-      }
-      else {
-        throw e;
-      }
-    }
-  },
-  logout: async (params) => {
-    try {
-      await signOut(params);
-    }
-    catch (e) {
-      // Because we are redirecting, we do not want to return the response
-      // (if we do, we get a json response in production) - so we need to recreate the redirect
-      // https://github.com/nextauthjs/next-auth/blob/main/packages/frameworks-sveltekit/src/lib/actions.ts#L105
-      if (e?.status === 302 && e?.location) {
-        redirect(e.status, e.location);
-      }
-      else {
-        throw e;
-      }
-    }
+    return { deactivated: true };
   }
 };
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
+  // If we have a redirection, do that immediately
+  if (url.searchParams.has('redirectTo')) {
+    redirect(303, url.searchParams.get('redirectTo'));
+  }
+
   // Get user session
   const user = (await locals.auth())?.user;
 

@@ -16,7 +16,9 @@
 <!-- Form setup copied from auth.js's sveltekit component -->
 <!-- Their SignIn component does not provide an inline option -->
 
-<form method="POST" action="/subscribe?/logout">
-  <input type="hidden" name="redirectTo" value={callbackUrl} />
+<form method="POST" action="/auth/signout">
+  <input type="hidden" name="csrfToken" />
+  <input type="hidden" name="providerId" value="email" />
+  <input type="hidden" name="callbackUrl" value={callbackUrl} />
   <button class="auth" type="submit">{action}</button>
 </form>
