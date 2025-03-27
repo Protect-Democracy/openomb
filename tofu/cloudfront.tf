@@ -59,7 +59,7 @@ resource "aws_cloudfront_cache_policy" "apportionments" {
     cookies_config {
       cookie_behavior = "whitelist"
       cookies {
-        items = ["__Secure-authjs.session-token", "__Secure-authjs.callback-url"]
+        items = ["__Secure-authjs.session-token", "__Secure-authjs.callback-url", "jsEnabled"]
       }
     }
     headers_config {

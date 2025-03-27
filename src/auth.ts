@@ -32,14 +32,17 @@ const { handle, signIn, signOut } = SvelteKitAuth({
 });
 
 // Replace the auth handle function so that we can handle
-//  HEAD requests and prevent them using up access codes
-//  https://next-auth.js.org/tutorials/avoid-corporate-link-checking-email-provider
+//  email validation requests and prevent them using up access codes
 const authHandle: Handle = async (props) => {
-  // If it is an email client HEAD request, bypass authentication handle
+  // If it is an email client verification request, bypass authentication handle
+  // (an email client will not have visited the site before, so should not have this cookie in their headers)
+  // Note: this will require the user to request the email and open the link within the same browser
   if (
-    props.event.request.method === 'HEAD' &&
-    Boolean(props.event.url.pathname.match(/^\/(auth|subscribe).*/))
+    Boolean(props.event.url.pathname.match(/^\/(auth|subscribe)\/callback.*/)) &&
+    props.event.cookies.get('jsEnabled') == null
   ) {
+    // We need to set our auth function to avoid reference errors
+    props.event.locals.auth = async () => Promise.resolve({ expires: '' });
     return await props.resolve(props.event);
   }
   return await handle(props);

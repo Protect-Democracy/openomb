@@ -57,7 +57,7 @@ resource "aws_route53_record" "email_txt" {
 
   records = [
     "forward-email=openomb@protectdemocracy.org",
-    "v=spf1 include:amazonses.com -all"
+    "v=spf1 include:amazonses.com ~all"
   ]
 }
 
@@ -85,7 +85,7 @@ resource "aws_route53_record" "spf_mail_from" {
   name    = aws_ses_domain_mail_from.domain_mail_from.mail_from_domain
   type    = "TXT"
   ttl     = "600"
-  records = ["v=spf1 include:amazonses.com -all"]
+  records = ["v=spf1 include:amazonses.com ~all"]
 }
 
 resource "aws_route53_record" "dmarc_record_notifier" {
