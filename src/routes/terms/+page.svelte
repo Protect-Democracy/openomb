@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { sourceDataUrl } from '$config';
 </script>
 
 <div class="page-container content-container">
@@ -77,15 +78,14 @@
 
   <p>
     The entire Website is copyrighted by Protect Democracy Project. The underlying data is made
-    publicly available by OMB at https://apportionment-public.max.gov/. Certain articles or
-    materials with the Website are also separately copyrighted by Protect Democracy Project, Protect
-    Democracy United, or by others as indicated. All rights reserved. All other content on the
-    Website, including, without limitation, the text, software, scripts, graphics, photos, sounds,
-    music, videos, interactive features, and the like (collectively the “Content”) and the
-    trademarks, service marks, and logos contained therein (“Marks”), are either owned by Protect
-    Democracy Project, or are licensed to Protect Democracy Project, and are subject to copyright
-    and other intellectual property rights (except for works of the federal government for which
-    there is no copyright protection).
+    publicly available by OMB at {sourceDataUrl}. Certain articles or materials with the Website are
+    also separately copyrighted by Protect Democracy Project, Protect Democracy United, or by others
+    as indicated. All rights reserved. All other content on the Website, including, without
+    limitation, the text, software, scripts, graphics, photos, sounds, music, videos, interactive
+    features, and the like (collectively the “Content”) and the trademarks, service marks, and logos
+    contained therein (“Marks”), are either owned by Protect Democracy Project, or are licensed to
+    Protect Democracy Project, and are subject to copyright and other intellectual property rights
+    (except for works of the federal government for which there is no copyright protection).
   </p>
 
   <p>

@@ -91,7 +91,7 @@
       {#if file.pdfUrl}
         <li>
           <a class="button" href={file.pdfUrl} target="_blank" rel="noopener noreferrer"
-            >Download primary source as PDF <br /> <small>apportionment-public.max.gov</small></a
+            >Download primary source as PDF <br /> <small>{new URL(file.pdfUrl).hostname}</small></a
           >
         </li>
       {/if}
@@ -99,14 +99,15 @@
         <li>
           <a class="button" href={file.excelUrl} target="_blank" rel="noopener noreferrer"
             >Download primary source as Excel <br />
-            <small>apportionment-public.max.gov</small></a
+            <small>{new URL(file.excelUrl).hostname}</small></a
           >
         </li>
       {/if}
       {#if file.sourceUrl && !file.pdfUrl}
         <li>
           <a class="button" href={file.sourceUrl} target="_blank" rel="noopener noreferrer"
-            >Download primary source as JSON <br /> <small>apportionment-public.max.gov</small></a
+            >Download primary source as JSON <br />
+            <small>{new URL(file.sourceUrl).hostname}</small></a
           >
         </li>
       {/if}

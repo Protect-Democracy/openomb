@@ -1,7 +1,7 @@
 <script lang="ts">
   import { formatDate } from '$lib/formatters';
   import type { PageData } from './$types';
-  import { siteName, supportEmail } from '$config';
+  import { siteName, supportEmail, sourceDataUrl } from '$config';
 
   // Props
   export let data: PageData;
@@ -22,8 +22,8 @@
 
   <p>
     If you would like direct access to the source data, it is available at <a
-      href="https://apportionment-public.max.gov/"
-      rel="noopener noreferrer">apportionment-public.max.gov</a
+      href={sourceDataUrl}
+      rel="noopener noreferrer">{new URL(sourceDataUrl).hostname}</a
     >.
   </p>
 
@@ -39,7 +39,7 @@
   <!--
   <p>
     When the original data is scraped from the <a
-      href="https://apportionment-public.max.gov/"
+      href={sourceDataUrl}
       target="_blank"
       rel="noopener noreferrer">OMB site</a
     > we bundle up the raw responses.

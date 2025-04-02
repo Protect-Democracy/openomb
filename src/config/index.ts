@@ -3,6 +3,7 @@
  */
 
 export const deployedBaseUrl = 'https://openomb.org';
+export const sourceDataUrl = 'https://apportionment-public.max.gov/';
 export const isBeta = false;
 export const siteName = 'OpenOMB';
 export const siteAuthor = 'Protect Democracy';

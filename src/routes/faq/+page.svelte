@@ -4,7 +4,7 @@
    */
   import { page } from '$app/stores';
   import { slide } from 'svelte/transition';
-  import { siteName, contactEmail } from '$config';
+  import { siteName, contactEmail, sourceDataUrl } from '$config';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
   // State
@@ -121,7 +121,7 @@
       answer: `
         <p>An &ldquo;iteration&rdquo; is the version of an apportionment. </p>
 
-        <p>The Antideficiency Act <a href="https://www.law.cornell.edu/uscode/text/31/1512" target="_blank" rel="noopener noreferrer">requires OMB to apportion appropriations</a> and review an apportionment at least four times a year. It also gives OMB the authority to <a href="https://www.gao.gov/assets/gao-05-734sp.pdf#page=86" target="_blank" rel="noopener noreferrer">&ldquo;reapportion&rdquo; an appropriation</a> &mdash; that is, to revise its original apportionment and issue a new version that supersedes the prior one. On ${siteName}, each version of an apportionment is referred to as an &ldquo;iteration.&rdquo; The first account-specific apportionment in a given fiscal year is Iteration 1, the second is Iteration 2, and so on. This convention matches the file names on OMB&apos;s apportionment website, <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer">apportionment-public.max.gov</a>. </p>
+        <p>The Antideficiency Act <a href="https://www.law.cornell.edu/uscode/text/31/1512" target="_blank" rel="noopener noreferrer">requires OMB to apportion appropriations</a> and review an apportionment at least four times a year. It also gives OMB the authority to <a href="https://www.gao.gov/assets/gao-05-734sp.pdf#page=86" target="_blank" rel="noopener noreferrer">&ldquo;reapportion&rdquo; an appropriation</a> &mdash; that is, to revise its original apportionment and issue a new version that supersedes the prior one. On ${siteName}, each version of an apportionment is referred to as an &ldquo;iteration.&rdquo; The first account-specific apportionment in a given fiscal year is Iteration 1, the second is Iteration 2, and so on. This convention matches the file names on OMB&apos;s apportionment website, <a href="${sourceDataUrl}" target="_blank" rel="noopener noreferrer">${new URL(sourceDataUrl).hostname}</a>. </p>
 
         <p>Take, for example, the FY2022 apportionments for the &ldquo;no-year&rdquo; (or indefinite) appropriation within U.S. Immigration and Customs Enforcement&apos;s Operations and Support Account. This no-year sub-account within the Operations and Support Account is designated by the TAFS 070-0540 /X. In FY2022, that sub-account had four apportionments:
           <a href="/file/11201779#tafs_11201779--070-0540--1--2022">Iteration 1</a>, issued on Oct. 27, 2021;
