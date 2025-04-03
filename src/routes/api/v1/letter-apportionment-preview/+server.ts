@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import { sourceDataUrl } from '$config';
 
 /**
  * Proxy PDF's from OMB for local iframe embedding.
@@ -29,7 +30,7 @@ export async function GET({ url }) {
     return json({ error: true, status: 400, message: error.toString() }, { status: 400 });
   }
 
-  if (urlObj.hostname !== 'apportionment-public.max.gov') {
+  if (urlObj.hostname !== new URL(sourceDataUrl).hostname) {
     return json({ error: true, status: 400, message: `Invalid URL` }, { status: 400 });
   }
 

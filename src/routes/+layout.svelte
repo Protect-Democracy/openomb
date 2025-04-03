@@ -22,6 +22,7 @@
     siteKeywords,
     contactEmail,
     deployedBaseUrl,
+    sourceDataUrl,
     socialOgImgWidth,
     socialOgImgHeight,
     socialTwitterCard,
@@ -153,10 +154,9 @@
 {#if data.isSourceDown}
   <div class="downtime">
     <p>
-      The <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
-        >OMB website</a
-      > that provides the underlying data used by OpenOMB is offline. There will be no new apportionments
-      posted on OpenOMB until that site is back online.
+      The <a href={sourceDataUrl} target="_blank" rel="noopener noreferrer">OMB website</a> that provides
+      the underlying data used by OpenOMB is offline. There will be no new apportionments posted on OpenOMB
+      until that site is back online.
     </p>
   </div>
 {/if}

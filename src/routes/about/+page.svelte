@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { siteName, contactEmail } from '$config';
+  import { siteName, contactEmail, sourceDataUrl } from '$config';
 </script>
 
 <div class="page-container content-container">
@@ -37,8 +37,8 @@
       >OMB</acronym
     >
     to post its apportionments on a public website. OMB does so at
-    <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
-      >apportionment-public.max.gov</a
+    <a href={sourceDataUrl} target="_blank" rel="noopener noreferrer"
+      >{new URL(sourceDataUrl).hostname}</a
     >. But <acronym title="Office of Management and Budget">OMB</acronym>&apos;s website is hard to
     navigate and has no search function, making it difficult to find apportionments and oversee
     OMB&apos;s work.
@@ -48,15 +48,15 @@
     {siteName} aims to make oversight of
     <acronym title="Office of Management and Budget">OMB</acronym>&apos;s apportionments easier for
     Congress, the press, and the public. Drawing on the data files from
-    <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
-      >apportionment-public.max.gov</a
+    <a href={sourceDataUrl} target="_blank" rel="noopener noreferrer"
+      >{new URL(sourceDataUrl).hostname}</a
     >, this site makes OMB&apos;s apportionments searchable and easier to find. {siteName} houses all
     of OMB&apos;s public apportionments from fiscal year 2022 to the present. All apportionment files
     on {siteName} simply reflect the underlying, primary-source data and documents that
     <acronym title="Office of Management and Budget">OMB</acronym>
     has made available on
-    <a href="https://apportionment-public.max.gov/" target="_blank" rel="noopener noreferrer"
-      >apportionment-public.max.gov</a
+    <a href={sourceDataUrl} target="_blank" rel="noopener noreferrer"
+      >{new URL(sourceDataUrl).hostname}</a
     >. (For accounts with multiple account-specific apportionments in a given fiscal year, OpenOMB
     has recreated the &ldquo;Previous Approved&rdquo; and &ldquo;Prev Footnote&rdquo; columns based
     on the data OMB disclosed in the prior apportionment.)
