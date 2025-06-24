@@ -13,8 +13,10 @@ on:
   # We want this to align with the config in src/config/index.ts and have
   # it run a few hours before the header cache time (currently 5AM New_York).
   # 6AM UTC = 2AM EDT
-  schedule:
-    - cron: '0 6 * * 0'
+  # For now, this is disabled. Perhaps re-enable when data is restored and verified
+  #schedule:
+  #  - cron: '0 6 * * 0'
+  # Allow the job to still be run manually
   workflow_dispatch:
 
 env:
