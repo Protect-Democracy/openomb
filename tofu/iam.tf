@@ -518,7 +518,7 @@ data "aws_iam_policy_document" "execute_backup" {
     effect = "Allow"
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["backup.amazonaws.com"]
     }
 
@@ -527,11 +527,11 @@ data "aws_iam_policy_document" "execute_backup" {
 }
 
 resource "aws_iam_role" "backup_service_role" {
-  name = "AWSBackupDefaultServiceRole"
+  name               = "AWSBackupDefaultServiceRole"
   assume_role_policy = data.aws_iam_policy_document.execute_backup.json
 }
 
-  # Attach the IAM policy required for backup operations
+# Attach the IAM policy required for backup operations
 resource "aws_iam_role_policy_attachment" "backup_service_role_attachment" {
   role       = aws_iam_role.backup_service_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
