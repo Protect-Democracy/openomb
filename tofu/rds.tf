@@ -12,10 +12,11 @@ variable "engine_version" {
 }
 
 # Defines the number of days to retain backups
+# (Set to 1 because we are using AWS Backup Service for long term snapshots)
 variable "backup_retention_period" {
   description = "Length in days to retain database backups"
   type        = number
-  default     = 7
+  default     = 1
 }
 
 # Defines the master username for the Aurora postgresql database
