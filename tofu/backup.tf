@@ -5,7 +5,7 @@
 # https://faun.pub/how-to-safeguard-your-rds-instances-with-terraform-backup-plans-acdc3349ee2a
 
 resource "aws_backup_vault" "vault" {
-  name        = "openomb_backup_vault"
+  name        = "openomb-backup-vault"
   kms_key_arn = aws_kms_key.vault_key.arn
 }
 
