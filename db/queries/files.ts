@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray } from 'drizzle-orm';
+import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray, sql } from 'drizzle-orm';
 import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -318,8 +318,24 @@ export const allFiles = async function () {
     .orderBy(desc(files.approvalTimestamp));
 };
 
+/**
+ * Count all files by month of approval date and group by year.
+ */
+export const allFilesByMonthByYear = async function () {
+  return await db
+    .select({
+      year: sql<number>`DATE_PART('year', ${files.approvalTimestamp})`.as('year'),
+      month: sql<number>`DATE_PART('month', ${files.approvalTimestamp})`.as('month'),
+      fileCount: count(files.fileId).as('fileCount')
+    })
+    .from(files)
+    .groupBy(sql`year`, sql`month`)
+    .orderBy(sql`year`, sql`month`);
+};
+
 // Memoized
 export const mFileStats = memoizeDataAsync(fileStats);
 export const mFolders = memoizeDataAsync(folders);
 export const mAllFiles = memoizeDataAsync(allFiles);
 export const mRecentlyApprovedWithTafs = memoizeDataAsync(recentlyApprovedWithTafs);
+export const mAllFilesByMonthByYear = memoizeDataAsync(allFilesByMonthByYear);
