@@ -322,3 +322,4 @@ export const allFiles = async function () {
 export const mFileStats = memoizeDataAsync(fileStats);
 export const mFolders = memoizeDataAsync(folders);
 export const mAllFiles = memoizeDataAsync(allFiles);
+export const mRecentlyApprovedWithTafs = memoizeDataAsync(recentlyApprovedWithTafs);

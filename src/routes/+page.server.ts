@@ -1,12 +1,12 @@
-import { mFileStats, recentlyApprovedWithTafs } from '$queries/files';
-import { tafsStats } from '$queries/tafs';
+import { mFileStats, mRecentlyApprovedWithTafs } from '$queries/files';
+import { mTafsStats } from '$queries/tafs';
 
 /** @type {import('./$types').PageLoad} */
 export async function load() {
   return {
-    recentFiles: await recentlyApprovedWithTafs(10),
+    recentFiles: await mRecentlyApprovedWithTafs(10),
     fileStats: await mFileStats(),
-    tafsStats: await tafsStats(),
+    tafsStats: await mTafsStats(),
 
     // Most of the defaults are good for the homepage
     pageMeta: {
