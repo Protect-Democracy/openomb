@@ -20,6 +20,7 @@
           if (point.active) {
             ctx.beginPath();
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.strokeWidth = 2;
             ctx.moveTo(point.x, top);
             ctx.lineTo(point.x, bottom);
             ctx.stroke();
@@ -35,10 +36,11 @@
   Chart.register(...registerables);
   Chart.register(verticalHoverLinePlugin);
 
-  // 1. Define typed component props
-  let { options }: { options: ChartConfiguration } = $props();
+  // Define typed component props
+  let { options, align }: { options: ChartConfiguration; align: 'left' | 'center' | 'right' } =
+    $props();
 
-  // 2. Add types for the canvas element and chart instance
+  // Add types for the canvas element and chart instance
   let canvasElement: HTMLCanvasElement | undefined;
   let chart: Chart | undefined;
 
@@ -58,7 +60,7 @@
 
   $effect(() => {
     if (chart) {
-      // The options object is now fully typed
+      // If options are provided, update the chart
       chart.options = options.options ?? {};
       chart.data = options.data;
       chart.update();
@@ -66,7 +68,7 @@
   });
 </script>
 
-<div>
+<div class="align-{align}">
   <canvas bind:this={canvasElement}></canvas>
 </div>
 
@@ -77,5 +79,13 @@
     height: 100%;
     display: flex;
     justify-content: center;
+
+    &.align-left {
+      justify-content: flex-start;
+    }
+
+    &.align-right {
+      justify-content: flex-end;
+    }
   }
 </style>

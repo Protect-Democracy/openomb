@@ -124,7 +124,7 @@
     <h2 class="h2-alt">Apportionments Over Time</h2>
 
     <div class="chart-approvals-by-year">
-      <ApprovalsByYear data={data.allFilesByMonthByYear} />
+      <ApprovalsByYear data={data.fileCountByMonthByYear} />
     </div>
   </div>
 </section>

@@ -2,20 +2,13 @@
   import { sortBy, uniq, range } from 'lodash-es';
   import Chart from './Chart.svelte';
 
-  const colors = [
-    '#059260',
-    '#ff482a',
-    '#00baff',
-    '#eab626',
-    '#852c7e',
-    '#002a12',
-    '#300000',
-    '#004c68',
-    '#002b2d'
-  ];
+  const colors = ['#ffca7c', '#fba62b', '#d98307', '#aa6500', '#059260'].reverse();
 
-  let { data } = $props<{ data: { year: number; month: number; fileCount: number }[] }>();
-  let years = $derived(sortBy(uniq(data.map((d) => d.year)), 'year'));
+  let { data, align } = $props<{
+    data: { year: number; month: number; fileCount: number }[];
+    align: 'left' | 'center' | 'right';
+  }>();
+  let years = $derived(sortBy(uniq(data.map((d) => d.year)), 'year').reverse());
   let datasets = $derived(
     years.map((year, yi) => {
       // Fill in nulls for months with no data, make into format { x: month, y: fileCount }
@@ -30,13 +23,15 @@
         label: year,
         data: yearData,
         pointHitRadius: 15,
-        pointRadius: 0,
+        pointRadius: 1,
         pointHoverRadius: 5,
+        borderWidth: 3,
         borderColor: colors[yi],
         backgroundColor: colors[yi]
       };
     })
   );
+  let maximum = $derived(Math.max(...data.map((d) => d.fileCount)) || 0);
 
   function getMonthName(month: number): string {
     const monthNames = [
@@ -58,6 +53,7 @@
 </script>
 
 <Chart
+  {align}
   options={{
     type: 'line',
     data: {
@@ -78,13 +74,14 @@
           beginAtZero: true,
           title: {
             display: true,
-            text: 'Number of Approvals'
+            text: 'Approvals each month'
           },
           ticks: {
             callback: (value) => {
               return value !== 0 ? value.toLocaleString() : '';
             }
-          }
+          },
+          max: maximum && maximum < 10 ? 10 : undefined
         }
       },
       interaction: {
@@ -93,7 +90,7 @@
       },
       plugins: {
         tooltip: {
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
           titleColor: '#222222',
           bodyColor: '#222222',
           callbacks: {

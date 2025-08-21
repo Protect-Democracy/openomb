@@ -5,6 +5,7 @@
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
   export let data: PageData;
   $: ({ agency, bureausByAgency, recentlyApproved, user, existingSubscription } = data);
@@ -55,6 +56,14 @@
   </section>
 
   <section class="page-section">
+    <h2>Files approved by month</h2>
+
+    <div class="chart-container">
+      <ApprovalsByYear data={data.fileCountByMonthByYear} align="left" />
+    </div>
+  </section>
+
+  <section class="page-section">
     <h2>Recently approved</h2>
 
     <div class="recently-approved-files">
@@ -75,5 +84,11 @@
   .page-container :global(.file-listing-small:last-child) {
     border-bottom: none;
     padding-bottom: 0;
+  }
+
+  .chart-container {
+    width: 100%;
+    height: 20rem;
+    margin-bottom: var(--spacing-double);
   }
 </style>

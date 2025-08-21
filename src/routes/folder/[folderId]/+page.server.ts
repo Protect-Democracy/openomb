@@ -1,4 +1,9 @@
-import { folderDetails, filesWithoutTafs, recentlyApprovedWithTafs } from '$queries/files';
+import {
+  folderDetails,
+  mFilesWithoutTafs,
+  mRecentlyApprovedWithTafs,
+  mFileCountByMonthByYear
+} from '$queries/files';
 import { agenciesByFolder } from '$queries/tafs';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
@@ -19,8 +24,9 @@ export async function load({ params, locals }) {
   return {
     folder,
     agenciesByFolder: await agenciesByFolder(params.folderId),
-    filesWithoutTafs: await filesWithoutTafs(folder.folderId),
-    recentlyApproved: await recentlyApprovedWithTafs(20, { folderId: folder.folderId }),
+    filesWithoutTafs: await mFilesWithoutTafs(folder.folderId),
+    recentlyApproved: await mRecentlyApprovedWithTafs(20, { folderId: folder.folderId }),
+    fileCountByMonthByYear: await mFileCountByMonthByYear({ folderId: folder.folderId }),
     user,
     existingSubscription,
     pageMeta: {
