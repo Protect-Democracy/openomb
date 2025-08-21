@@ -82,6 +82,14 @@
   query: {
     ...any query parameters that were provided
   },
+  paging: {
+    // If available
+    page: 1, // The page number requested
+    offset: 0, // The offset of the results
+    pages: 10, // Total number of pages available
+    size: 50, // Number of results per page
+    count: 100 // Total number of results available
+  },
   results: ...data
 }`}
 </pre>
@@ -110,6 +118,38 @@
           ><code>sourceData</code> - Set to anything to include source data in response; defaults to
           false.</td
         >
+      </tr>
+      <tr>
+        <td> <code>/api/v1/files/search</code></td>
+        <td
+          >Search for files using various parameters. Can copy the URL query parameters from the <a
+            href="/search">search page</a
+          >.</td
+        >
+        <td>
+          <code>term</code> - Keyword to search in multiple fields across files, lines, and
+          footnotes.<br />
+          <code>agencyBureau</code> - Search in a specific agency or bureau, in format ACCOUNT_ID or
+          ACCOUNT_ID,BUREAU_ID.<br />
+          <code>tafs</code> - Keyword search specifically for TAFS.<br />
+          <code>account</code> - Keyword search specifically for accounts.<br />
+          <code>approver</code> - Approver ID; utilize multiple approver query params for multiple
+          values.<br />
+          <code>year</code> - Approval year; utilize multiple year query params for multiple values.<br
+          />
+          <code>approvedStart</code> - Date in ISO YYYY-MM-DD format to limit approvals by.<br />
+          <code>approvedEnd</code> - Date in ISO YYYY-MM-DD format to limit approvals by.<br />
+          <code>apportionmentType</code> - Limit files based on source type. Should be either
+          <code>Letter (PDF)</code>
+          or <code>Standard (Excel)</code><br />
+          <code>lineNum</code> - Line number ID; utilize multiple year query params for multiple
+          values.<br />
+          <code>footnoteNum</code> - Contains a certain footnote type, either A or B.<br />
+          <code>sort</code> - Should be approved_desc, approved_asc, agency_asc, bureau_asc, or
+          account_asc. Defaults to approved_desc.<br />
+          <code>limit</code> - Limit number of results; defaults to 50; limit is 1000.<br />
+          <code>page</code> - Page number to return; defaults to 1.<br />
+        </td>
       </tr>
       <tr>
         <td> <code>/api/v1/folders</code></td>

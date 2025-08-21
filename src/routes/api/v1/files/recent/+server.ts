@@ -12,7 +12,7 @@ export async function GET({ url }) {
   limit = Math.min(limit, 1000);
 
   // Get files
-  const files = await recentlyApproved();
+  const files = await recentlyApproved(limit);
 
   return json({
     query: {
