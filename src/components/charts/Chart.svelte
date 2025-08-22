@@ -1,8 +1,7 @@
 <script lang="ts">
-  // Component that wraps around chart js and handles updates
+  // Component that wraps around chart js and handles updates.
   import { onMount } from 'svelte';
   import { Chart, registerables, type ChartConfiguration } from 'chart.js';
-  import 'chartjs-adapter-luxon';
 
   const verticalHoverLinePlugin = {
     id: 'verticalHoverLine',
