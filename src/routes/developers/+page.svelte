@@ -109,16 +109,29 @@
       <tr>
         <td> <code>/api/v1/files/recent</code></td>
         <td>Get recently approved files.</td>
-        <td><code>limit</code> - Limit number of results; defaults to 50; limit is 1000.</td>
+        <td>
+          <ul>
+            <li>
+              <code class="code-alt">limit</code> - Limit number of results; defaults to 50; limit is
+              1000.
+            </li>
+          </ul>
+        </td>
       </tr>
+
       <tr>
         <td> <code>/api/v1/files/[fileId]</code></td>
         <td>Get the details of a single file if you know the <strong>File ID</strong></td>
-        <td
-          ><code>sourceData</code> - Set to anything to include source data in response; defaults to
-          false.</td
-        >
+        <td>
+          <ul>
+            <li>
+              <code class="code-alt">sourceData</code> - Set to anything to include source data in response;
+              defaults to false.
+            </li>
+          </ul>
+        </td>
       </tr>
+
       <tr>
         <td> <code>/api/v1/files/search</code></td>
         <td
@@ -127,35 +140,66 @@
           >.</td
         >
         <td>
-          <code>term</code> - Keyword to search in multiple fields across files, lines, and
-          footnotes.<br />
-          <code>agencyBureau</code> - Search in a specific agency or bureau, in format ACCOUNT_ID or
-          ACCOUNT_ID,BUREAU_ID.<br />
-          <code>tafs</code> - Keyword search specifically for TAFS.<br />
-          <code>account</code> - Keyword search specifically for accounts.<br />
-          <code>approver</code> - Approver ID; utilize multiple approver query params for multiple
-          values.<br />
-          <code>year</code> - Approval year; utilize multiple year query params for multiple values.<br
-          />
-          <code>approvedStart</code> - Date in ISO YYYY-MM-DD format to limit approvals by.<br />
-          <code>approvedEnd</code> - Date in ISO YYYY-MM-DD format to limit approvals by.<br />
-          <code>apportionmentType</code> - Limit files based on source type. Should be either
-          <code>Letter (PDF)</code>
-          or <code>Standard (Excel)</code><br />
-          <code>lineNum</code> - Line number ID; utilize multiple year query params for multiple
-          values.<br />
-          <code>footnoteNum</code> - Contains a certain footnote type, either A or B.<br />
-          <code>sort</code> - Should be approved_desc, approved_asc, agency_asc, bureau_asc, or
-          account_asc. Defaults to approved_desc.<br />
-          <code>limit</code> - Limit number of results; defaults to 50; limit is 1000.<br />
-          <code>page</code> - Page number to return; defaults to 1.<br />
+          <ul>
+            <li>
+              <code class="code-alt">term</code> - Keyword to search in multiple fields across files,
+              lines, and footnotes.
+            </li>
+            <li>
+              <code class="code-alt">agencyBureau</code> - Search in a specific agency or bureau, in
+              format ACCOUNT_ID or ACCOUNT_ID,BUREAU_ID.
+            </li>
+            <li><code class="code-alt">tafs</code> - Keyword search specifically for TAFS.</li>
+            <li>
+              <code class="code-alt">account</code> - Keyword search specifically for accounts.
+            </li>
+            <li>
+              <code class="code-alt">approver</code> - Approver ID; utilize multiple approver query params
+              for multiple values.
+            </li>
+            <li>
+              <code class="code-alt">year</code> - Approval year; utilize multiple year query params
+              for multiple values.
+            </li>
+            <li>
+              <code class="code-alt">approvedStart</code> - Date in ISO YYYY-MM-DD format to limit approvals
+              by.
+            </li>
+            <li>
+              <code class="code-alt">approvedEnd</code> - Date in ISO YYYY-MM-DD format to limit approvals
+              by.
+            </li>
+            <li>
+              <code class="code-alt">apportionmentType</code> - Limit files based on source type. Should
+              be either "Letter (PDF)" or "Standard (Excel)".
+            </li>
+            <li>
+              <code class="code-alt">lineNum</code> - Line number ID; utilize multiple year query params
+              for multiple values.
+            </li>
+            <li>
+              <code class="code-alt">footnoteNum</code> - Contains a certain footnote type, either A
+              or B.
+            </li>
+            <li>
+              <code class="code-alt">sort</code> - Should be approved_desc, approved_asc, agency_asc,
+              bureau_asc, or account_asc. Defaults to approved_desc.
+            </li>
+            <li>
+              <code class="code-alt">limit</code> - Limit number of results; defaults to 50; limit is
+              1000.
+            </li>
+            <li><code class="code-alt">page</code> - Page number to return; defaults to 1.</li>
+          </ul>
         </td>
       </tr>
+
       <tr>
         <td> <code>/api/v1/folders</code></td>
         <td>Get the full list of folders.</td>
         <td></td>
       </tr>
+
       <tr>
         <td> <code>/api/v1/collections</code></td>
         <td>Get a list of completed collections (i.e. scraping runs).</td>
@@ -164,3 +208,19 @@
     </tbody>
   </table>
 </div>
+
+<style>
+  table {
+    td:nth-child(2) {
+      max-width: 15rem;
+    }
+
+    td:nth-child(3) {
+      font-size: var(--font-size-small);
+
+      code {
+        font-size: var(--font-size-small);
+      }
+    }
+  }
+</style>
