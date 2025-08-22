@@ -7,6 +7,7 @@
     "prepare": "husky || true",
     "dev": "npm run dev:web",
     "dev:web": "dotenvx run -- vite dev",
+    "dev:footnotes": "dotenvx run -- tsx bin/export-footnotes.ts",
     "dev:migrate": "dotenvx run -- tsx bin/migrate.ts",
     "dev:collect": "dotenvx run -- tsx bin/collect.ts",
     "dev:notify": "npm run build:notify && dotenvx run -- node build-notify/notify.js",
@@ -15,8 +16,9 @@
     "build:collect": "vite build --config vite-bin.config.ts --ssr bin/collect.ts --outDir build-collect",
     "build:migrate": "vite build --config vite-bin.config.ts --ssr bin/migrate.ts --outDir build-migrate",
     "build:notify": "vite build --config vite-bin.config.ts --ssr bin/notify.ts --outDir build-notify",
+    "build:footnotes": "vite build --config vite-bin.config.ts --ssr bin/export-footnotes.ts --outDir build-export-footnotes",
     "build:test-email": "vite build --config vite-bin.config.ts --ssr bin/test-email.ts --outDir build-test-email",
-    "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify && npm run build:test-email",
+    "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify && npm run build:test-email && npm run build:footnotes",
     "preview": "npm run preview:web",
     "preview:web": "dotenvx run -- vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -34,7 +36,8 @@
     "collect": "tsx bin/collect.ts",
     "notify": "npm run build:notify && node build-notify/notify.js",
     "test-email": "npm run build:test-email && node build-test-email/test-email.js",
-    "csv-to-ts": "tsx bin/csv-to-ts.ts"
+    "csv-to-ts": "tsx bin/csv-to-ts.ts",
+    "footnotes": "npm run build:footnotes && node build-export-footnotes/export-footnotes.js"
   },
   "lint-staged": {
     "*/**/*.{js,jsx,ts,tsx,svelte}": [
@@ -114,7 +117,8 @@
     "typescript": "^5.0.0",
     "vite": "^5.2.8",
     "vite-imagetools": "^7.0.5",
-    "vitest": "^1.4.0"
+    "vitest": "^1.4.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"

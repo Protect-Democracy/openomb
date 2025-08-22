@@ -536,3 +536,83 @@ resource "aws_iam_role_policy_attachment" "backup_service_role_attachment" {
   role       = aws_iam_role.backup_service_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
 }
+
+###################
+# GitHub Actions export footnotes role
+# (This may be temporary!)
+###################
+
+resource "aws_iam_role" "export_footnotes" {
+  name               = "export-footnotes"
+  assume_role_policy = data.aws_iam_policy_document.github_actions_assume_role.json
+}
+
+data "aws_iam_policy_document" "export_footnotes" {
+  statement {
+    actions = ["ecs:RunTask"]
+    resources = [
+      "${aws_ecs_task_definition.apportionments_export_footnotes.arn_without_revision}:*"
+    ]
+  }
+  statement {
+    actions = ["s3:ListBucket"]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}",
+      "${aws_s3_bucket.apportionments_bucket.arn}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.tfstate_bucket.arn}/${var.tfstate_key_name}",
+      "${aws_s3_bucket.apportionments_bucket.arn}/*"
+    ]
+  }
+
+  # We only need to read the database
+  statement {
+    actions = [
+      "dynamodb:DescribeTable",
+      "dynamodb:GetItem"
+    ]
+    resources = [
+      "arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.remotestate_table.id}"
+    ]
+  }
+
+  statement {
+    actions = [
+      "iam:PassRole",
+    ]
+    resources = [
+      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
+      "${aws_iam_role.export_footnotes.arn}"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "export_footnotes" {
+  name        = "export-footnotes"
+  description = "Grant the ability to run tasks on ECS"
+  policy      = data.aws_iam_policy_document.export_footnotes.json
+}
+
+resource "aws_iam_role_policy_attachment" "export_footnotes" {
+  role       = aws_iam_role.export_footnotes.name
+  policy_arn = aws_iam_policy.export_footnotes.arn
+}
+
+resource "aws_iam_role_policy_attachment" "export_footnotes_gha" {
+  role       = aws_iam_role.export_footnotes.name
+  policy_arn = aws_iam_policy.github_actions.arn
+}
+
+resource "aws_iam_role_policy_attachment" "export_footnotes_assume_role" {
+  role       = aws_iam_role.export_footnotes.name
+  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
+}

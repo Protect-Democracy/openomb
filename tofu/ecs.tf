@@ -411,3 +411,74 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
 
   network_mode = "awsvpc"
 }
+
+resource "aws_ecs_task_definition" "apportionments_export_footnotes" {
+  family = "apportionments-export-footnotes"
+
+  container_definitions = jsonencode([
+    {
+      "name" : "apportionments-export-footnotes",
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
+      "essential" : true,
+      "environment" : [
+        {
+          "name" : "APPORTIONMENTS_DB_HOST",
+          "value" : "${aws_rds_cluster.apportionments.endpoint}"
+        },
+        {
+          "name" : "APPORTIONMENTS_DB_PORT",
+          "value" : "${tostring(aws_rds_cluster.apportionments.port)}"
+        },
+        {
+          "name" : "APPORTIONMENTS_DB_NAME",
+          "value" : "${aws_rds_cluster.apportionments.database_name}"
+        },
+        {
+          "name" : "APPORTIONMENTS_ARCHIVE_S3_REGION",
+          "value" : "${var.region}"
+        },
+        {
+          "name" : "APPORTIONMENTS_ARCHIVE_S3_BUCKET",
+          "value" : "${aws_s3_bucket.apportionments_bucket.id}"
+        },
+        {
+          "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["APPORTIONMENTS_SENTRY_NODE_DSN"]
+        },
+        {
+          "name" : "NODE_ENV",
+          "value" : "${var.node_env}"
+        },
+        {
+          "name" : "APPORTIONMENTS_AWS_CONTAINER_METADATA",
+          "value" : "true"
+        }
+      ],
+      "secrets" : [
+        {
+          "name" : "APPORTIONMENTS_DB_AUTHENTICATION",
+          "valueFrom" : "${aws_rds_cluster.apportionments.master_user_secret[0].secret_arn}"
+        }
+      ],
+      "command" : ["build-export-footnotes/export-footnotes.js"],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "${var.region}",
+          "awslogs-group" : "/ecs/apportionments-export-footnotes",
+          "awslogs-stream-prefix" : "ecs"
+        }
+      }
+    }
+  ])
+
+  execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
+  task_role_arn      = aws_iam_role.export_footnotes.arn
+
+  # Minimum values for Fargate
+  cpu                      = 1024
+  memory                   = 2048
+  requires_compatibilities = ["FARGATE"]
+
+  network_mode = "awsvpc"
+}
