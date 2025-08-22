@@ -32,11 +32,11 @@
     >.
   </p>
 
+  <!--
   <h2>Bulk downloads</h2>
 
   <p><em>Coming soon.</em></p>
 
-  <!--
   <p>
     When the original data is scraped from the <a
       href={sourceDataUrl}
