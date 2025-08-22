@@ -304,11 +304,11 @@ function generalSearchFilters(
   );
 
   // Joining footnotes in our search is expensive, so we do a subquery
-  const footnoteNumberFilters = (searchParams.footnoteNumbers || []).map((n) =>
-    ilike(footnotes.footnoteNumber, `${n}%`)
-  );
+  const footnoteNumberFilters = (searchParams.footnoteNumbers || []).map((n) => {
+    return ilike(footnotes.footnoteNumber, `${n}%`);
+  });
   where.push(
-    searchParams.footnoteNumbers?.length > 1 && mainTable === 'tafs'
+    searchParams.footnoteNumbers?.length >= 1 && mainTable === 'tafs'
       ? inArray(
           tafs.tafsTableId,
           db
@@ -324,7 +324,7 @@ function generalSearchFilters(
                 : footnoteNumberFilters[0]
             )
         )
-      : searchParams.footnoteNumbers?.length > 1 && mainTable === 'files'
+      : searchParams.footnoteNumbers?.length >= 1 && mainTable === 'files'
         ? inArray(
             files.fileId,
             db
