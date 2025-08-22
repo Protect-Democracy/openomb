@@ -83,14 +83,16 @@ async function main() {
     .where(inArray(footnotes.fileId, Object.keys(fileReference)));
 
   console.log('Building results');
-  const combinedData = footnoteResults.map((entry) => ({
-    number: entry.footnoteNumber,
-    contents: entry.footnoteText,
-    lineIndex: entry.lineIndex,
-    fileName: fileReference[entry.fileId].name,
-    fileFiscalYear: fileReference[entry.fileId].fiscalYear,
-    fileApproved: fileReference[entry.fileId].approved
-  }));
+  const combinedData = footnoteResults
+    .map((entry) => ({
+      number: entry.footnoteNumber,
+      contents: entry.footnoteText,
+      lineIndex: entry.lineIndex,
+      fileName: fileReference[entry.fileId].name,
+      fileFiscalYear: fileReference[entry.fileId].fiscalYear,
+      fileApproved: fileReference[entry.fileId].approved
+    }))
+    .sort((entryA, entryB) => new Date(entryB.fileApproved) - new Date(entryA.fileApproved));
 
   console.log('Writing results to xlsx file');
   // Create our sheet
