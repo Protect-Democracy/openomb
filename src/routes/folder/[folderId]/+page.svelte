@@ -5,6 +5,7 @@
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
   export let data: PageData;
   $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved, user, existingSubscription } =
@@ -52,6 +53,16 @@
     {/if}
   </section>
 
+  {#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
+    <section class="page-section">
+      <h2>Files approved by month</h2>
+
+      <div class="chart-container">
+        <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
+      </div>
+    </section>
+  {/await}
+
   {#if filesWithoutTafs && filesWithoutTafs.length}
     <section class="page-section">
       <h2>Letter apportionments</h2>
@@ -88,5 +99,10 @@
   .page-container :global(.file-listing-small:last-child) {
     border-bottom: none;
     padding-bottom: 0;
+  }
+
+  .chart-container {
+    width: 100%;
+    margin-bottom: var(--spacing-double);
   }
 </style>

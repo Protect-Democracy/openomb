@@ -407,3 +407,4 @@ export const mAgenciesWithChildren = memoizeDataAsync(agenciesWithChildren);
 export const mAgencies = memoizeDataAsync(agencies);
 export const mBureaus = memoizeDataAsync(bureaus);
 export const mAccounts = memoizeDataAsync(accounts);
+export const mTafsStats = memoizeDataAsync(tafsStats);
