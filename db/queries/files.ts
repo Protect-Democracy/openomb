@@ -332,9 +332,7 @@ export const fileCountByMonthByYear = async function (filters?: {
     throw new Error('Must provide both agency and bureau identifiers.');
   }
 
-  // This doesn't seem like the best way to do this, i.e. with subqueries and IN, but doesn't seem like
-  // you can limit the top level findMany based on joined (with) where.  We could do a manualy query, but
-  // the findMany and with paradigm creates a preferred way and output.
+  // Sub query to be able to search by tafs agency/bureau
   const findFilesByTafsFiltersQuery = db
     .selectDistinct({ fileId: tafs.fileId })
     .from(tafs)

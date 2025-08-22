@@ -57,7 +57,7 @@
     <h2>Files approved by month</h2>
 
     <div class="chart-container">
-      <ApprovalsByYear data={data.fileCountByMonthByYear} align="left" />
+      <ApprovalsByYear data={data.fileCountByMonthByYear} align="left" height="20rem" />
     </div>
   </section>
 
@@ -101,7 +101,6 @@
 
   .chart-container {
     width: 100%;
-    height: 20rem;
     margin-bottom: var(--spacing-double);
   }
 </style>

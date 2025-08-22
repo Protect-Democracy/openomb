@@ -121,10 +121,10 @@
 
 <section class="charts">
   <div class="charts page-container-small">
-    <h2 class="h2-alt">Apportionments Over Time</h2>
+    <h2 class="h2-alt">Approvals Over Time</h2>
 
     <div class="chart-approvals-by-year">
-      <ApprovalsByYear data={data.fileCountByMonthByYear} />
+      <ApprovalsByYear data={data.fileCountByMonthByYear} height="30rem" />
     </div>
   </div>
 </section>
@@ -349,8 +349,6 @@
     }
 
     .chart-approvals-by-year {
-      height: 30rem;
-      max-height: 80vh;
       margin-bottom: var(--spacing-xlarge);
     }
   }

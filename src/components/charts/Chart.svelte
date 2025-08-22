@@ -3,6 +3,8 @@
   import { onMount } from 'svelte';
   import { Chart, registerables, type ChartConfiguration } from 'chart.js';
 
+  // Plugin to draw vertical line on hover.  Unsure if there is a better way to do this,
+  // or maybe a better place for this.
   const verticalHoverLinePlugin = {
     id: 'verticalHoverLine',
     beforeDatasetDraw(chart) {
@@ -35,9 +37,12 @@
   Chart.register(...registerables);
   Chart.register(verticalHoverLinePlugin);
 
-  // Define typed component props
-  let { options, align }: { options: ChartConfiguration; align: 'left' | 'center' | 'right' } =
-    $props();
+  // Define props.  Using a height here is not ideal, but given the nesting of <Chart> components, it's necessary.
+  let {
+    options,
+    align,
+    height = '15rem'
+  }: { options: ChartConfiguration; align: 'left' | 'center' | 'right'; height: string } = $props();
 
   // Add types for the canvas element and chart instance
   let canvasElement: HTMLCanvasElement | undefined;
@@ -67,7 +72,7 @@
   });
 </script>
 
-<div class="align-{align}">
+<div class="align-{align}" style="height: {height}">
   <canvas bind:this={canvasElement}></canvas>
 </div>
 
@@ -78,6 +83,7 @@
     height: 100%;
     display: flex;
     justify-content: center;
+    max-height: 80vh;
 
     &.align-left {
       justify-content: flex-start;
