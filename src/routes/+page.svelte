@@ -119,15 +119,17 @@
   </div>
 </section>
 
-<section class="charts">
-  <div class="charts page-container-small">
-    <h2 class="h2-alt">Approvals Over Time</h2>
+{#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
+  <section class="charts">
+    <div class="charts page-container-small">
+      <h2 class="h2-alt">Approvals Over Time</h2>
 
-    <div class="chart-approvals-by-year">
-      <ApprovalsByYear data={data.fileCountByMonthByYear} height="30rem" />
+      <div class="chart-approvals-by-year">
+        <ApprovalsByYear data={fileCountByMonthByYearData} height="30rem" />
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+{/await}
 
 <section class="learn">
   <div class="page-container">

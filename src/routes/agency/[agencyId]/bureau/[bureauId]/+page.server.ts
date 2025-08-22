@@ -22,7 +22,7 @@ export async function load({ params, locals }) {
       agencyId: params.agencyId,
       bureauId: params.bureauId
     }),
-    fileCountByMonthByYear: await mFileCountByMonthByYear({
+    fileCountByMonthByYear: mFileCountByMonthByYear({
       agencyId: params.agencyId,
       bureauId: params.bureauId
     }),

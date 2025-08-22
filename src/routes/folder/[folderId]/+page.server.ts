@@ -26,7 +26,7 @@ export async function load({ params, locals }) {
     agenciesByFolder: await agenciesByFolder(params.folderId),
     filesWithoutTafs: await mFilesWithoutTafs(folder.folderId),
     recentlyApproved: await mRecentlyApprovedWithTafs(20, { folderId: folder.folderId }),
-    fileCountByMonthByYear: await mFileCountByMonthByYear({ folderId: folder.folderId }),
+    fileCountByMonthByYear: mFileCountByMonthByYear({ folderId: folder.folderId }),
     user,
     existingSubscription,
     pageMeta: {

@@ -7,7 +7,7 @@ export async function load() {
     recentFiles: await mRecentlyApprovedWithTafs(10),
     fileStats: await mFileStats(),
     tafsStats: await mTafsStats(),
-    fileCountByMonthByYear: await mFileCountByMonthByYear(),
+    fileCountByMonthByYear: mFileCountByMonthByYear(),
 
     // Most of the defaults are good for the homepage
     pageMeta: {

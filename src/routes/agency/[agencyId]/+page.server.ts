@@ -21,7 +21,7 @@ export async function load({ params, locals }) {
     recentlyApproved: await mRecentlyApprovedWithTafs(20, {
       agencyId: params.agencyId
     }),
-    fileCountByMonthByYear: await mFileCountByMonthByYear({
+    fileCountByMonthByYear: mFileCountByMonthByYear({
       agencyId: params.agencyId
     }),
 

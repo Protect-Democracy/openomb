@@ -53,13 +53,15 @@
     {/if}
   </section>
 
-  <section class="page-section">
-    <h2>Files approved by month</h2>
+  {#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
+    <section class="page-section">
+      <h2>Files approved by month</h2>
 
-    <div class="chart-container">
-      <ApprovalsByYear data={data.fileCountByMonthByYear} align="left" height="20rem" />
-    </div>
-  </section>
+      <div class="chart-container">
+        <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
+      </div>
+    </section>
+  {/await}
 
   {#if filesWithoutTafs && filesWithoutTafs.length}
     <section class="page-section">
