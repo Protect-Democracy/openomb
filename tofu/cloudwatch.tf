@@ -23,6 +23,3 @@ resource "aws_cloudwatch_log_group" "notifications_queue" {
 resource "aws_cloudwatch_log_group" "notifications_queue_worker" {
   name = "/ecs/notifications-queue-worker"
 }
-resource "aws_cloudwatch_log_group" "apportionments_export_footnotes" {
-  name = "/ecs/apportionments-export-footnotes"
-}

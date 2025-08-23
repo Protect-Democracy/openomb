@@ -14,7 +14,6 @@ FROM node:20-bullseye-slim
 COPY --from=build /app/build-collect /app/build-collect
 COPY --from=build /app/build-migrate /app/build-migrate
 COPY --from=build /app/build-notify /app/build-notify
-COPY --from=build /app/build-export-footnotes /app/build-export-footnotes
 COPY --from=build /app/build-web /app/build-web
 
 # Dependencies

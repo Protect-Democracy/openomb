@@ -207,3 +207,6 @@ terraform.rc
 
 # Optional python virtual env
 .venv
+
+# Output files for one-off analysis scripts
+/analysis/output/*
