@@ -16,7 +16,7 @@
     "build:migrate": "vite build --config vite-bin.config.ts --ssr bin/migrate.ts --outDir build-migrate",
     "build:notify": "vite build --config vite-bin.config.ts --ssr bin/notify.ts --outDir build-notify",
     "build:test-email": "vite build --config vite-bin.config.ts --ssr bin/test-email.ts --outDir build-test-email",
-    "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify && npm run build:test-email && npm run build:footnotes",
+    "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify && npm run build:test-email",
     "preview": "npm run preview:web",
     "preview:web": "dotenvx run -- vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
