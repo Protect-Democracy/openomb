@@ -8,6 +8,11 @@ const pdfFixes = {
     {
       // This file has a typo in the URL where the approval date is set to the wrong year.
       approvalTimestamp: new Date('2024-09-30')
+    },
+  'https://apportionment-public.max.gov/Fiscal%20Year%202025/Multiple%20Agencies/PDF/FY2025%20Department%20of%20State%20and%20International%20Assistance%20Programs%20letter%20apportionment.pdf.pdf':
+    {
+      // This file has no approval date provided in the url
+      approvalTimestamp: new Date('2025-08-29')
     }
 };
 
