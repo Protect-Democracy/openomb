@@ -345,8 +345,9 @@ async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | 
   const fileName = parts[parts.length - 1].replace(/\s+/g, '_').trim();
   const approvalDate = approvalDateFromPdfFileName(fileName);
 
-  if (!approvalDate) {
-    throw new Error(`Approval date not found in file name | URL: ${pdfUrl}`);
+  // Throw error if we do not have an approval date in the title or fixes
+  if (!approvalDate && !pdfFixes[pdfUrl]?.approvalTimestamp) {
+    throw new Error(`Approval date not found in file name or file fixes | URL: ${pdfUrl}`);
   }
 
   const folder = parts[1].replace(/_/g, ' ').trim();
