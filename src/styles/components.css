@@ -92,6 +92,14 @@ h4 > small {
   color: var(--color-text-muted);
 }
 
+.code-alt {
+  background-color: transparent;
+  padding: 0;
+  text-decoration: underline;
+  border: 0;
+  font-family: var(--font-family-monospace);
+}
+
 /* Lists */
 ul.inline-list {
   display: inline-block;
