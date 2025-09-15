@@ -35,7 +35,7 @@
     "notify": "npm run build:notify && node build-notify/notify.js",
     "test-email": "npm run build:test-email && node build-test-email/test-email.js",
     "csv-to-ts": "tsx bin/csv-to-ts.ts",
-    "recent-footnotes": "dotenvx run -- tsx analysis/export-footnotes-since-2024.ts"
+    "footnotes": "dotenvx run -- tsx analysis/export-spend-plan-footnotes.ts"
   },
   "lint-staged": {
     "*/**/*.{js,jsx,ts,tsx,svelte}": [
