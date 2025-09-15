@@ -32,11 +32,11 @@
     >.
   </p>
 
+  <!--
   <h2>Bulk downloads</h2>
 
   <p><em>Coming soon.</em></p>
 
-  <!--
   <p>
     When the original data is scraped from the <a
       href={sourceDataUrl}
@@ -82,6 +82,14 @@
   query: {
     ...any query parameters that were provided
   },
+  paging: {
+    // If available
+    page: 1, // The page number requested
+    offset: 0, // The offset of the results
+    pages: 10, // Total number of pages available
+    size: 50, // Number of results per page
+    count: 100 // Total number of results available
+  },
   results: ...data
 }`}
 </pre>
@@ -101,21 +109,97 @@
       <tr>
         <td> <code>/api/v1/files/recent</code></td>
         <td>Get recently approved files.</td>
-        <td><code>limit</code> - Limit number of results; defaults to 50; limit is 1000.</td>
+        <td>
+          <ul>
+            <li>
+              <code class="code-alt">limit</code> - Limit number of results; defaults to 50; limit is
+              1000.
+            </li>
+          </ul>
+        </td>
       </tr>
+
       <tr>
         <td> <code>/api/v1/files/[fileId]</code></td>
         <td>Get the details of a single file if you know the <strong>File ID</strong></td>
-        <td
-          ><code>sourceData</code> - Set to anything to include source data in response; defaults to
-          false.</td
-        >
+        <td>
+          <ul>
+            <li>
+              <code class="code-alt">sourceData</code> - Set to anything to include source data in response;
+              defaults to false.
+            </li>
+          </ul>
+        </td>
       </tr>
+
+      <tr>
+        <td> <code>/api/v1/files/search</code></td>
+        <td
+          >Search for files using various parameters. Can copy the URL query parameters from the <a
+            href="/search">search page</a
+          >.</td
+        >
+        <td>
+          <ul>
+            <li>
+              <code class="code-alt">term</code> - Keyword to search in multiple fields across files,
+              lines, and footnotes.
+            </li>
+            <li>
+              <code class="code-alt">agencyBureau</code> - Search in a specific agency or bureau, in
+              format ACCOUNT_ID or ACCOUNT_ID,BUREAU_ID.
+            </li>
+            <li><code class="code-alt">tafs</code> - Keyword search specifically for TAFS.</li>
+            <li>
+              <code class="code-alt">account</code> - Keyword search specifically for accounts.
+            </li>
+            <li>
+              <code class="code-alt">approver</code> - Approver ID; utilize multiple approver query params
+              for multiple values.
+            </li>
+            <li>
+              <code class="code-alt">year</code> - Approval year; utilize multiple year query params
+              for multiple values.
+            </li>
+            <li>
+              <code class="code-alt">approvedStart</code> - Date in ISO YYYY-MM-DD format to limit approvals
+              by.
+            </li>
+            <li>
+              <code class="code-alt">approvedEnd</code> - Date in ISO YYYY-MM-DD format to limit approvals
+              by.
+            </li>
+            <li>
+              <code class="code-alt">apportionmentType</code> - Limit files based on source type. Should
+              be either "Letter (PDF)" or "Standard (Excel)".
+            </li>
+            <li>
+              <code class="code-alt">lineNum</code> - Line number ID; utilize multiple year query params
+              for multiple values.
+            </li>
+            <li>
+              <code class="code-alt">footnoteNum</code> - Contains a certain footnote type, either A
+              or B.
+            </li>
+            <li>
+              <code class="code-alt">sort</code> - Should be approved_desc, approved_asc, agency_asc,
+              bureau_asc, or account_asc. Defaults to approved_desc.
+            </li>
+            <li>
+              <code class="code-alt">limit</code> - Limit number of results; defaults to 50; limit is
+              1000.
+            </li>
+            <li><code class="code-alt">page</code> - Page number to return; defaults to 1.</li>
+          </ul>
+        </td>
+      </tr>
+
       <tr>
         <td> <code>/api/v1/folders</code></td>
         <td>Get the full list of folders.</td>
         <td></td>
       </tr>
+
       <tr>
         <td> <code>/api/v1/collections</code></td>
         <td>Get a list of completed collections (i.e. scraping runs).</td>
@@ -124,3 +208,19 @@
     </tbody>
   </table>
 </div>
+
+<style>
+  table {
+    td:nth-child(2) {
+      max-width: 15rem;
+    }
+
+    td:nth-child(3) {
+      font-size: var(--font-size-small);
+
+      code {
+        font-size: var(--font-size-small);
+      }
+    }
+  }
+</style>

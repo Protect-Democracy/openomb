@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray } from 'drizzle-orm';
+import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray, sql } from 'drizzle-orm';
 import { db } from '../connection';
 import { files } from '../schema/files';
 import { tafs } from '../schema/tafs';
@@ -318,7 +318,64 @@ export const allFiles = async function () {
     .orderBy(desc(files.approvalTimestamp));
 };
 
+/**
+ * Count of files by month and year with optional filters.
+ */
+export const fileCountByMonthByYear = async function (filters?: {
+  folderId?: string;
+  approverId?: string;
+  agencyId?: string;
+  bureauId?: string;
+}) {
+  // Check that we have both agency and bureau if bureau provided
+  if (filters?.bureauId && !filters?.agencyId) {
+    throw new Error('Must provide both agency and bureau identifiers.');
+  }
+
+  // Sub query to be able to search by tafs agency/bureau
+  const findFilesByTafsFiltersQuery = db
+    .selectDistinct({ fileId: tafs.fileId })
+    .from(tafs)
+    .where(
+      filters?.bureauId
+        ? and(
+            eq(tafs.budgetAgencyTitleId, filters?.agencyId || ''),
+            eq(tafs.budgetBureauTitleId, filters?.bureauId || '')
+          )
+        : eq(tafs.budgetAgencyTitleId, filters?.agencyId || '')
+    );
+
+  const tafsFilters = filters?.agencyId || filters?.bureauId;
+  const whereClauses = [
+    tafsFilters ? inArray(files.fileId, findFilesByTafsFiltersQuery) : undefined,
+    filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,
+    filters?.approverId ? eq(files.approverTitleId, filters?.approverId) : undefined
+  ].filter((w) => w !== undefined);
+  const where =
+    whereClauses.length === 1
+      ? whereClauses[0]
+      : whereClauses.length > 1
+        ? and(...whereClauses)
+        : undefined;
+
+  const counts = await db
+    .select({
+      year: sql<number>`DATE_PART('year', ${files.approvalTimestamp})`.as('year'),
+      month: sql<number>`DATE_PART('month', ${files.approvalTimestamp})`.as('month'),
+      fileCount: count(files.fileId).as('fileCount')
+    })
+    .from(files)
+    .where(where)
+    .groupBy(sql`year`, sql`month`)
+    .orderBy(sql`year`, sql`month`);
+
+  return counts || [];
+};
+
 // Memoized
 export const mFileStats = memoizeDataAsync(fileStats);
 export const mFolders = memoizeDataAsync(folders);
 export const mAllFiles = memoizeDataAsync(allFiles);
+export const mFilesWithoutTafs = memoizeDataAsync(filesWithoutTafs);
+export const mRecentlyApprovedWithTafs = memoizeDataAsync(recentlyApprovedWithTafs);
+export const mFileCountByMonthByYear = memoizeDataAsync(fileCountByMonthByYear);

@@ -6,6 +6,7 @@
   import RecentFiles from './RecentFiles.svelte';
   import TopRightArrow from '$components/icons/TopRightArrow.svelte';
   import Check from '$components/icons/Check.svelte';
+  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
   import graphIllustration from '$assets/graph-illustration.svg';
 
   export let data: PageData;
@@ -117,6 +118,18 @@
     <a class="button" href="/explore">Explore apportionments by agency</a>
   </div>
 </section>
+
+{#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
+  <section class="charts">
+    <div class="charts page-container-small">
+      <h2 class="h2-alt">Approvals Over Time</h2>
+
+      <div class="chart-approvals-by-year">
+        <ApprovalsByYear data={fileCountByMonthByYearData} height="30rem" />
+      </div>
+    </div>
+  </section>
+{/await}
 
 <section class="learn">
   <div class="page-container">
@@ -329,6 +342,17 @@
   .recently-approved-files h2 {
     text-align: center;
     margin-bottom: var(--spacing-large);
+  }
+
+  .charts {
+    h2 {
+      text-align: center;
+      margin-bottom: var(--spacing-large);
+    }
+
+    .chart-approvals-by-year {
+      margin-bottom: var(--spacing-xlarge);
+    }
   }
 
   .explore {
