@@ -1,14 +1,7 @@
-import { notifierEmailName, notifierEmail } from '$config/subscriptions';
 import { renderTemplate } from '$email/render';
 import AuthenticationEmail from '$email/templates/AuthenticationEmail.svelte';
 import SubscriptionEmail from '$email/templates/SubscriptionEmail.svelte';
-
-// This code only runs on the server, so we want private env variables.
-//  (this avoids setting the notifications uri in the client env)
-import { environmentVariables } from '../../../server/utilities';
-
-// Constants
-const env = environmentVariables();
+import { sendEmail } from '../../../server/utilities';
 
 /**
  * Send the email that is used to verify and log in a user
@@ -29,24 +22,7 @@ export async function sendVerificationRequest(params) {
     subscriptionsUrl: manageSubscriptionsUrl
   });
 
-  const res = await fetch(`${env.notificationsServiceUri}/email/send`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from: notifierEmail,
-      from_name: notifierEmailName,
-      to,
-      title: `Subscribe to OpenOMB`,
-      html: htmlRender
-      //text: renderEmail({ authUrl: url, manageSubscriptionsUrl }, { plainText: true })
-    })
-  });
-
-  if (!res.ok) {
-    throw new Error('Resend error: ' + JSON.stringify(await res.json()));
-  }
+  await sendEmail(to, 'Subscribe to OpenOMB', htmlRender);
 }
 
 /**

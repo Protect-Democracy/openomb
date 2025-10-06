@@ -131,8 +131,7 @@ data "aws_iam_policy_document" "github_actions" {
       "ecr:UploadLayerPart",
     ]
     resources = [
-      aws_ecr_repository.ecr.arn,
-      aws_ecr_repository.notifications.arn
+      aws_ecr_repository.ecr.arn
     ]
   }
 
@@ -454,59 +453,6 @@ resource "aws_iam_role_policy_attachment" "update_infrastructure_administrator_a
   # Give this role Administrator level access because it will need to be
   # able to manipulate many aspects of infrastructure via tofu commands
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-###################
-# SES email notifier role
-###################
-
-resource "aws_iam_role" "send_email" {
-  name               = "send-email"
-  assume_role_policy = data.aws_iam_policy_document.ecs_task_assume_role.json
-}
-
-data "aws_iam_policy_document" "send_email" {
-  statement {
-    actions = [
-      "ses:SendEmail",
-      "ses:SendRawEmail"
-    ]
-    resources = [
-      "arn:aws:ses:*:*:identity/*",
-      aws_ses_configuration_set.notification_emails.arn
-    ]
-    condition {
-      test     = "StringEquals"
-      values   = [aws_ses_email_identity.notifier.email]
-      variable = "ses:FromAddress"
-    }
-  }
-
-  statement {
-    actions = [
-      "iam:PassRole",
-    ]
-    resources = [
-      "${aws_iam_role.apportionments_app_task_execution_role.arn}",
-      "${aws_iam_role.send_email.arn}"
-    ]
-  }
-}
-
-resource "aws_iam_policy" "send_email" {
-  name        = "send-email"
-  description = "Grant the ability to send SES email on ECS"
-  policy      = data.aws_iam_policy_document.send_email.json
-}
-
-resource "aws_iam_role_policy_attachment" "send_email" {
-  role       = aws_iam_role.send_email.name
-  policy_arn = aws_iam_policy.send_email.arn
-}
-
-resource "aws_iam_role_policy_attachment" "send_email_assume_role" {
-  role       = aws_iam_role.send_email.name
-  policy_arn = data.aws_iam_policy.ecs_task_execution_role.arn
 }
 
 ###################

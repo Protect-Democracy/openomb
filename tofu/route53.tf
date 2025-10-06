@@ -56,42 +56,37 @@ resource "aws_route53_record" "email_txt" {
   ttl     = 3600
 
   records = [
-    "forward-email=openomb@protectdemocracy.org",
-    "v=spf1 include:amazonses.com ~all"
+    "forward-email=openomb@protectdemocracy.org"
   ]
 }
 
-# SES Email Notification domain records
+# Mailgun Email Notification domain records
 
-resource "aws_route53_record" "amazonses_dkim_records" {
-  count   = 3
+resource "aws_route53_record" "mailgun_sending" {
+  for_each = {
+    for record in data.mailgun_domain.domain.sending_records_set : record.id => record
+  }
   zone_id = aws_route53_zone.apportionments.zone_id
-  name    = "${element(aws_ses_domain_dkim.dkim_identity.dkim_tokens, count.index)}._domainkey.${var.domain_name}"
-  type    = "CNAME"
+  name    = each.value.name
+  type    = each.value.record_type
   ttl     = "600"
-  records = ["${element(aws_ses_domain_dkim.dkim_identity.dkim_tokens, count.index)}.dkim.amazonses.com"]
+  records = [each.value.value]
 }
 
-resource "aws_route53_record" "amazonses_mail_from_mx" {
+resource "aws_route53_record" "mailgun_mx" {
   zone_id = aws_route53_zone.apportionments.zone_id
-  name    = aws_ses_domain_mail_from.domain_mail_from.mail_from_domain
+  name    = data.mailgun_domain.domain.name
   type    = "MX"
   ttl     = "600"
-  records = ["10 feedback-smtp.${var.region}.amazonses.com"] # Change to the region in which aws_ses_domain_identity is created
+  records = [
+    for record in data.mailgun_domain.domain.receiving_records_set: "${record.priority} ${record.value}"
+  ]
 }
 
-resource "aws_route53_record" "spf_mail_from" {
+resource "aws_route53_record" "mailgun_dmarc" {
   zone_id = aws_route53_zone.apportionments.zone_id
-  name    = aws_ses_domain_mail_from.domain_mail_from.mail_from_domain
+  name    = "_dmarc.${data.mailgun_domain.domain.name}"
   type    = "TXT"
   ttl     = "600"
-  records = ["v=spf1 include:amazonses.com ~all"]
-}
-
-resource "aws_route53_record" "dmarc_record_notifier" {
-  zone_id = aws_route53_zone.apportionments.zone_id
-  name    = "_dmarc.${var.domain_name}"
-  type    = "TXT"
-  ttl     = "600"
-  records = ["v=DMARC1;p=none;pct=0;rua=mailto:${aws_ses_email_identity.notifier.email}"]
+  records = ["v=DMARC1;p=none;pct=0;rua=mailto:openomb@protectdemocracy.org"]
 }

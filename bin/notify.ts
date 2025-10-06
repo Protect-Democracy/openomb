@@ -6,29 +6,19 @@
 import { map } from 'lodash-es';
 import { Command } from 'commander';
 import { subscriptionsByUser, setSubscriptionAsNotified } from '../db/queries/subscriptions';
-import { request } from '../server/request';
-import { environmentVariables } from '../server/utilities';
+import { sendEmail } from '../server/utilities';
 import {
   includeDailyNotification,
   includeWeeklyNotification,
   getSubscriptionWithFiles
 } from '../server/subscriptions';
 import { setupCustomSentry, createTransaction } from '../server/sentry-custom';
-import {
-  notifierEmailName,
-  notifierEmail,
-  replyEmailName,
-  replyEmail
-} from '../src/config/subscriptions';
 import packageJson from '../package.json' assert { type: 'json' };
 import { renderTemplate } from '../email/render';
 import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();
-
-// Constants
-const env = environmentVariables();
 
 // Main
 createTransaction('apportionment-notifications', cli);
@@ -78,23 +68,5 @@ async function sendNotificationEmail(email, notifySubs) {
     subscriptions: notifySubs
   });
 
-  await request(
-    `${env.notificationsServiceUri}/email/queue`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: notifierEmail,
-        from_name: notifierEmailName,
-        reply: replyEmail,
-        reply_name: replyEmailName,
-        to: email,
-        title: `OpenOMB Subscriptions`,
-        html: emailBody
-      })
-    },
-    { expectedType: 'json', ttl: 1, retries: 5 }
-  );
+  await sendEmail(email, 'OpenOMB Subscriptions', emailBody);
 }

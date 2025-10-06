@@ -13,6 +13,7 @@ import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
 import packageJson from '../package.json' assert { type: 'json' };
+import { notifierEmailName, notifierEmail } from '../src/config/subscriptions';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -63,6 +64,7 @@ type ApportionmentEnvironment = {
   sentryNodeDsn: string;
   environment: string;
   notificationsServiceUri: string;
+  notificationSendKey: string;
 };
 
 // Export package.json
@@ -120,7 +122,9 @@ function environmentVariables(): ApportionmentEnvironment {
     awsContainerMetadata:
       !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
       process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false',
-    notificationsServiceUri: process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080'
+    notificationsServiceUri:
+      process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080',
+    notificationSendKey: process.env['NOTIFICATIONS_SEND_KEY'] || ''
   };
 }
 
@@ -370,6 +374,40 @@ async function putS3File(
   }
 }
 
+/**
+ * Sends an email via our configured service
+ *
+ * @param to The recepient email address.
+ * @param subject The email subject.
+ * @param html The email body html (as string).
+ */
+async function sendEmail(to: string, subject: string, html: string) {
+  const env = environmentVariables();
+
+  // Set up form data
+  const formData = new FormData();
+  formData.append(
+    'from',
+    notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail
+  );
+  formData.append('to', to);
+  formData.append('subject', subject);
+  formData.append('html', html);
+  formData.append('o:testmode', 'yes');
+
+  const res = await fetch(env.notificationsServiceUri, {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${btoa(`api:${env.notificationSendKey}`)}`
+    },
+    body: formData
+  });
+
+  if (!res.ok) {
+    throw new Error('Error sending email: ' + JSON.stringify(await res.json()));
+  }
+}
+
 export {
   environmentVariables,
   unique,
@@ -382,5 +420,6 @@ export {
   listS3BucketObjects,
   parseBoolean,
   cleanString,
-  dbId
+  dbId,
+  sendEmail
 };
