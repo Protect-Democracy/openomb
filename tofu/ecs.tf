@@ -57,12 +57,12 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
-          "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value" : "https://api.mailgun.net/v3/mg.openomb.org/messages"
+          "name" : "MAILGUN_DOMAIN",
+          "value" : "mg.openomb.org"
         },
         {
-          "name" : "NOTIFICATIONS_SEND_KEY",
-          # "value": "${mailgun_api_key.send_key.secret}"
+          "name" : "MAILGUN_SEND_KEY",
+          # "value" : "${mailgun_api_key.send_key.secret}"
           "value" : jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
         },
         {
@@ -273,12 +273,12 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
-          "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value" : "https://api.mailgun.net/v3/mg.openomb.org/messages"
+          "name" : "MAILGUN_DOMAIN",
+          "value" : "mg.openomb.org"
         },
         {
-          "name" : "NOTIFICATIONS_SEND_KEY",
-          # "value": "${mailgun_api_key.send_key.secret}"
+          "name" : "MAILGUN_SEND_KEY",
+          # "value" : "${mailgun_api_key.send_key.secret}"
           "value" : jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
         },
         {

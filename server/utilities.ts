@@ -12,6 +12,8 @@ import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-
 import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
+import Mailgun from 'mailgun.js';
+import type { Interfaces } from 'mailgun.js/definitions';
 import packageJson from '../package.json' assert { type: 'json' };
 import { notifierEmailName, notifierEmail } from '../src/config/subscriptions';
 
@@ -28,6 +30,12 @@ const s3AclOptions = [
   'bucket-owner-read',
   'bucket-owner-full-control'
 ];
+
+// Instantiate mailgun library with native FormData
+const mailgun = new Mailgun(FormData);
+// Store mailgun client so process uses same connection
+//  (only really relevant with notification job task)
+let mg: undefined | Interfaces.IMailgunClient;
 
 // Expected types from environment variables
 type ApportionmentEnvironment = {
@@ -63,8 +71,8 @@ type ApportionmentEnvironment = {
   awsContainerMetadata: boolean;
   sentryNodeDsn: string;
   environment: string;
-  notificationsServiceUri: string;
-  notificationSendKey: string;
+  mailgunDomain: string;
+  mailgunSendKey: string;
 };
 
 // Export package.json
@@ -122,9 +130,8 @@ function environmentVariables(): ApportionmentEnvironment {
     awsContainerMetadata:
       !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
       process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false',
-    notificationsServiceUri:
-      process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080',
-    notificationSendKey: process.env['NOTIFICATIONS_SEND_KEY'] || ''
+    mailgunDomain: process.env['MAILGUN_DOMAIN'] || 'mg.openomb.org',
+    mailgunSendKey: process.env['MAILGUN_SEND_KEY'] || ''
   };
 }
 
@@ -383,29 +390,22 @@ async function putS3File(
  */
 async function sendEmail(to: string, subject: string, html: string) {
   const env = environmentVariables();
-
-  // Set up form data
-  const formData = new FormData();
-  formData.append(
-    'from',
-    notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail
-  );
-  formData.append('to', to);
-  formData.append('subject', subject);
-  formData.append('html', html);
-  formData.append('o:testmode', 'yes');
-
-  const res = await fetch(env.notificationsServiceUri, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${btoa(`api:${env.notificationSendKey}`)}`
-    },
-    body: formData
-  });
-
-  if (!res.ok) {
-    throw new Error('Error sending email: ' + JSON.stringify(await res.json()));
+  if (!mg) {
+    // if we do not already have a client instance, create one
+    mg = mailgun.client({
+      username: 'api',
+      key: env.mailgunSendKey,
+      useFetch: true
+    });
   }
+
+  await mg.messages.create(env.mailgunDomain, {
+    to: to,
+    from: notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail,
+    subject: subject,
+    html: html,
+    'o:testmode': 'yes'
+  });
 }
 
 export {

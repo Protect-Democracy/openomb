@@ -9,12 +9,12 @@ import { Command } from 'commander';
 import { createTransport } from 'nodemailer';
 import { renderTemplate } from '../email/render';
 import { getSubscriptionsWithFilesByUser } from '../server/subscriptions';
+import { sendEmail as notificationServiceSendEmail } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 
 import AuthenticationEmail from '../email/templates/AuthenticationEmail.svelte';
 import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
 import SubscriptionEmail from '../email/templates/SubscriptionEmail.svelte';
-
 /**
  * Main CLI handler.
  */
@@ -38,7 +38,10 @@ async function cli(): Promise<void> {
       '-l, --subscription-last-notified <data>',
       'for use with "user" option.  Last notified date to provide, i.e. 1970-01-01, otherwise uses what is in the database.'
     )
-    .option('-s, --use-notifications-service', 'TODO.  Otherwise, will send email directly.')
+    .option(
+      '-s, --use-notification-service',
+      'Use our mailgun implementation.  Otherwise, will send email directly.'
+    )
     .parse(process.argv);
 
   const options = program.opts();
@@ -81,10 +84,12 @@ async function cli(): Promise<void> {
   const emailBody = renderTemplate(emailTemplate, data);
 
   // Send email
-  if (options.useNotificationsService) {
-    // TODO: Probably want to re-use things from notify.ts or
-    // abstract some functions into another file
-    console.info('NOT IMPLEMENTED');
+  if (options.useNotificationService) {
+    notificationServiceSendEmail(
+      options.address,
+      `Testing template: "${options.template}"`,
+      emailBody
+    );
   }
   else {
     await sendEmail(options.address, `Testing template: "${options.template}"`, emailBody);

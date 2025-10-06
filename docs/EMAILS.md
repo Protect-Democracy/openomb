@@ -55,9 +55,9 @@ To send an example email to a real email address, run the following:
 
 ```bash
 # This will try to use some test data
-npm run email -- --address test@example.com --template FileNotificationEmail
+npm run test-email -- --address test@example.com --template FileNotificationEmail
 # This will pull data from a user in the system and fake a last notified date
-npm run email -- --address test@example.com --template FileNotificationEmail --user example.user@example.com --subscription-last-notified 1970-01-01
+npm run test-email -- --address test@example.com --template FileNotificationEmail --user example.user@example.com --subscription-last-notified 1970-01-01
 ```
 
 To send this directly, you can set the following environment variables:
@@ -70,4 +70,16 @@ process.env.DEV_EMAIL_USER
 process.env.DEV_EMAIL_PASS
 ```
 
-**TODO** To use the notification service instead of directly sending an email, use the following flag: `--use-notification-service`.
+To use the notification service instead of directly sending an email, use the following flag: `--use-notification-service`. Note that this will require:
+
+- setting the `MAILGUN_SEND_KEY` environment variable
+- ensuring the process has access to your environment
+
+```bash
+# Set the key on the process environment directly
+process.env.MAILGUN_SEND_KEY=<key>
+npm run test-email -- --address test@example.com --template FileNotificationEmail --use-notification-service
+
+# Or use dotenvx if you have it set within your .env
+npx dotenvx run -- npm run test-email -- --address test@example.com --template FileNotificationEmail --use-notification-service
+```
