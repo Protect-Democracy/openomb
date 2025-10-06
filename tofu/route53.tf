@@ -79,7 +79,7 @@ resource "aws_route53_record" "mailgun_mx" {
   type    = "MX"
   ttl     = "600"
   records = [
-    for record in data.mailgun_domain.domain.receiving_records_set: "${record.priority} ${record.value}"
+    for record in data.mailgun_domain.domain.receiving_records_set : "${record.priority} ${record.value}"
   ]
 }
 

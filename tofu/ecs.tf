@@ -61,9 +61,9 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "https://api.mailgun.net/v3/mg.openomb.org/messages"
         },
         {
-          "name": "NOTIFICATIONS_SEND_KEY",
+          "name" : "NOTIFICATIONS_SEND_KEY",
           # "value": "${mailgun_api_key.send_key.secret}"
-          "value": jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
         },
         {
           "name" : "AUTH_SECRET",
@@ -277,9 +277,9 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
           "value" : "https://api.mailgun.net/v3/mg.openomb.org/messages"
         },
         {
-          "name": "NOTIFICATIONS_SEND_KEY",
+          "name" : "NOTIFICATIONS_SEND_KEY",
           # "value": "${mailgun_api_key.send_key.secret}"
-          "value": jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
         },
         {
           "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",

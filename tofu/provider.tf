@@ -32,7 +32,7 @@ terraform {
       source = "hashicorp/aws"
     }
     mailgun = {
-      source  = "wgebis/mailgun"
+      source = "wgebis/mailgun"
     }
   }
 }
