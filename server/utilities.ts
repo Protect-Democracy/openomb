@@ -15,7 +15,12 @@ import { DateTime } from 'luxon';
 import Mailgun from 'mailgun.js';
 import type { Interfaces } from 'mailgun.js/definitions';
 import packageJson from '../package.json' assert { type: 'json' };
-import { notifierEmailName, notifierEmail } from '../src/config/subscriptions';
+import {
+  notifierEmailName,
+  notifierEmail,
+  replyEmailName,
+  replyEmail
+} from '../src/config/subscriptions';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -404,6 +409,7 @@ async function sendEmail(to: string, subject: string, html: string) {
     from: notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail,
     subject: subject,
     html: html,
+    'h:Reply-To': replyEmailName ? `${replyEmailName} <${replyEmail}>` : replyEmail,
     'o:testmode': 'yes'
   });
 }
