@@ -409,8 +409,7 @@ async function sendEmail(to: string, subject: string, html: string) {
     from: notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail,
     subject: subject,
     html: html,
-    'h:Reply-To': replyEmailName ? `${replyEmailName} <${replyEmail}>` : replyEmail,
-    'o:testmode': 'yes'
+    'h:Reply-To': replyEmailName ? `${replyEmailName} <${replyEmail}>` : replyEmail
   });
 }
 
