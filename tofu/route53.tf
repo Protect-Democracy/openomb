@@ -73,16 +73,6 @@ resource "aws_route53_record" "mailgun_sending" {
   records = [each.value.value]
 }
 
-resource "aws_route53_record" "mailgun_mx" {
-  zone_id = aws_route53_zone.apportionments.zone_id
-  name    = data.mailgun_domain.domain.name
-  type    = "MX"
-  ttl     = "600"
-  records = [
-    for record in data.mailgun_domain.domain.receiving_records_set : "${record.priority} ${record.value}"
-  ]
-}
-
 resource "aws_route53_record" "mailgun_dmarc" {
   zone_id = aws_route53_zone.apportionments.zone_id
   name    = "_dmarc.${data.mailgun_domain.domain.name}"
