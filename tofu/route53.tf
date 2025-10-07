@@ -56,7 +56,8 @@ resource "aws_route53_record" "email_txt" {
   ttl     = 3600
 
   records = [
-    "forward-email=openomb@protectdemocracy.org"
+    "forward-email=openomb@protectdemocracy.org",
+    "v=spf1 a include:spf.forwardemail.net include:_spf.google.com ~all"
   ]
 }
 
@@ -71,6 +72,17 @@ resource "aws_route53_record" "mailgun_sending" {
   type    = each.value.record_type
   ttl     = "600"
   records = [each.value.value]
+}
+
+
+resource "aws_route53_record" "mailgun_mx" {
+  zone_id = aws_route53_zone.apportionments.zone_id
+  name    = data.mailgun_domain.domain.name
+  type    = "MX"
+  ttl     = "600"
+  records = [
+    for record in data.mailgun_domain.domain.receiving_records_set : "${record.priority} ${record.value}"
+  ]
 }
 
 resource "aws_route53_record" "mailgun_dmarc" {
