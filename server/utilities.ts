@@ -12,7 +12,15 @@ import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-
 import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
+import Mailgun from 'mailgun.js';
+import type { Interfaces } from 'mailgun.js/definitions';
 import packageJson from '../package.json' assert { type: 'json' };
+import {
+  notifierEmailName,
+  notifierEmail,
+  replyEmailName,
+  replyEmail
+} from '../src/config/subscriptions';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -27,6 +35,12 @@ const s3AclOptions = [
   'bucket-owner-read',
   'bucket-owner-full-control'
 ];
+
+// Instantiate mailgun library with native FormData
+const mailgun = new Mailgun(FormData);
+// Store mailgun client so process uses same connection
+//  (only really relevant with notification job task)
+let mg: undefined | Interfaces.IMailgunClient;
 
 // Expected types from environment variables
 type ApportionmentEnvironment = {
@@ -62,7 +76,8 @@ type ApportionmentEnvironment = {
   awsContainerMetadata: boolean;
   sentryNodeDsn: string;
   environment: string;
-  notificationsServiceUri: string;
+  mailgunDomain: string;
+  mailgunSendKey: string;
 };
 
 // Export package.json
@@ -120,7 +135,8 @@ function environmentVariables(): ApportionmentEnvironment {
     awsContainerMetadata:
       !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
       process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false',
-    notificationsServiceUri: process.env['NOTIFICATIONS_SERVICE_URI'] || 'http://notifications:8080'
+    mailgunDomain: process.env['MAILGUN_DOMAIN'] || 'mg.openomb.org',
+    mailgunSendKey: process.env['MAILGUN_SEND_KEY'] || ''
   };
 }
 
@@ -370,6 +386,33 @@ async function putS3File(
   }
 }
 
+/**
+ * Sends an email via our configured service
+ *
+ * @param to The recepient email address.
+ * @param subject The email subject.
+ * @param html The email body html (as string).
+ */
+async function sendEmail(to: string, subject: string, html: string) {
+  const env = environmentVariables();
+  if (!mg) {
+    // if we do not already have a client instance, create one
+    mg = mailgun.client({
+      username: 'api',
+      key: env.mailgunSendKey,
+      useFetch: true
+    });
+  }
+
+  await mg.messages.create(env.mailgunDomain, {
+    to: to,
+    from: notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail,
+    subject: subject,
+    html: html,
+    'h:Reply-To': replyEmailName ? `${replyEmailName} <${replyEmail}>` : replyEmail
+  });
+}
+
 export {
   environmentVariables,
   unique,
@@ -382,5 +425,6 @@ export {
   listS3BucketObjects,
   parseBoolean,
   cleanString,
-  dbId
+  dbId,
+  sendEmail
 };

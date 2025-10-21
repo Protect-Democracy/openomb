@@ -62,6 +62,9 @@ The following are environment variables that can be set:
 - `PUBLIC_NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
 - `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
   - This variable is specific to the build process and is not needed in our actual container environment
+- `MAILGUN_DOMAIN` - Domain for our mailgun service to send emails from
+- `MAILGUN_SEND_KEY` - Api key value to authenticate our email send
+  - If you wish to test emails without this, see [docs/EMAILS.md](./EMAILS.md)
 
 This project uses [@dotenvx/dotenvx](https://dotenvx.com/docs) to parse our `.env` files.
 

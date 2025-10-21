@@ -6,6 +6,14 @@ data "aws_secretsmanager_secret_version" "sentry_config" {
   secret_id = data.aws_secretsmanager_secret.sentry_config.id
 }
 
+data "aws_secretsmanager_secret" "mailgun_auth" {
+  arn = "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:mailgun_auth"
+}
+
+data "aws_secretsmanager_secret_version" "mailgun_auth" {
+  secret_id = data.aws_secretsmanager_secret.mailgun_auth.id
+}
+
 data "aws_secretsmanager_secret" "auth_secret" {
   arn = "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:auth_secret"
 }

@@ -57,8 +57,13 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
-          "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value" : "http://localhost:8080"
+          "name" : "MAILGUN_DOMAIN",
+          "value" : "mg.openomb.org"
+        },
+        {
+          "name" : "MAILGUN_SEND_KEY",
+          # "value" : "${mailgun_api_key.send_key.secret}"
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
         },
         {
           "name" : "AUTH_SECRET",
@@ -103,113 +108,10 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "awslogs-stream-prefix" : "ecs"
         }
       }
-    },
-
-    # Notification service sidecar containers
-    # @todo - will eventually become their own service
-    {
-      "name" : "notifications-service",
-      "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
-      "essential" : true,
-      "portMappings" : [
-        {
-          "containerPort" : 8080
-        }
-      ],
-      "environment" : [
-        {
-          "name" : "DOMAIN",
-          "value" : "localhost"
-        },
-        {
-          "name" : "EMAIL_PROVIDER",
-          "value" : "aws"
-        },
-        {
-          "name" : "AWS_REGION",
-          "value" : "${var.region}"
-        },
-        {
-          "name" : "REDIS_HOST",
-          "value" : "localhost"
-        },
-        {
-          "name" : "REDIS_PORT",
-          "value" : "${tostring(6379)}"
-        },
-        {
-          "name" : "SENTRY_DSN",
-          "value" : jsondecode(data.aws_secretsmanager_secret_version.sentry_config.secret_string)["NOTIFICATIONS_SERVICE_SENTRY_DSN"]
-        },
-      ],
-      "logConfiguration" : {
-        "logDriver" : "awslogs",
-        "options" : {
-          "awslogs-region" : "${var.region}",
-          "awslogs-group" : "/ecs/notifications-service",
-          "awslogs-stream-prefix" : "ecs"
-        }
-      }
-    },
-    {
-      "name" : "notifications-queue-worker",
-      "image" : "${aws_ecr_repository.notifications.repository_url}:latest"
-      "essential" : false,
-      "environment" : [
-        {
-          "name" : "DOMAIN",
-          "value" : "localhost"
-        },
-        {
-          "name" : "EMAIL_PROVIDER",
-          "value" : "aws"
-        },
-        {
-          "name" : "AWS_REGION",
-          "value" : "${var.region}"
-        },
-        {
-          "name" : "REDIS_HOST",
-          "value" : "localhost"
-        },
-        {
-          "name" : "REDIS_PORT",
-          "value" : "${tostring(6379)}"
-        }
-      ],
-      "command" : ["rq", "worker", "--url", "redis://localhost:6379"],
-      "logConfiguration" : {
-        "logDriver" : "awslogs",
-        "options" : {
-          "awslogs-region" : "${var.region}",
-          "awslogs-group" : "/ecs/notifications-queue-worker",
-          "awslogs-stream-prefix" : "ecs"
-        }
-      }
-    },
-    {
-      "name" : "notifications-queue",
-      "image" : "redis:alpine"
-      "essential" : false,
-      "portMappings" : [
-        {
-          "containerPort" : 6379
-        }
-      ],
-      "command" : ["redis-server", "--bind", "localhost", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru", "--appendonly", "yes"],
-      "logConfiguration" : {
-        "logDriver" : "awslogs",
-        "options" : {
-          "awslogs-region" : "${var.region}",
-          "awslogs-group" : "/ecs/notifications-queue",
-          "awslogs-stream-prefix" : "ecs"
-        }
-      }
     }
   ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
-  task_role_arn      = aws_iam_role.send_email.arn
 
   # Minimum values for Fargate
   cpu                      = 1024
@@ -371,8 +273,13 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
           "value" : "${aws_rds_cluster.apportionments.database_name}"
         },
         {
-          "name" : "NOTIFICATIONS_SERVICE_URI",
-          "value" : "http://localhost:8080"
+          "name" : "MAILGUN_DOMAIN",
+          "value" : "mg.openomb.org"
+        },
+        {
+          "name" : "MAILGUN_SEND_KEY",
+          # "value" : "${mailgun_api_key.send_key.secret}"
+          "value" : jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["SEND_KEY"]
         },
         {
           "name" : "APPORTIONMENTS_SENTRY_NODE_DSN",
@@ -402,7 +309,7 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
   ])
 
   execution_role_arn = aws_iam_role.apportionments_app_task_execution_role.arn
-  task_role_arn      = aws_iam_role.db_migration.arn
+  task_role_arn      = aws_iam_role.notify.arn
 
   # Minimum values for Fargate
   cpu                      = 256

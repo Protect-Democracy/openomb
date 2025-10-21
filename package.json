@@ -70,6 +70,7 @@
     "lodash-es": "^4.17.21",
     "lru-cache": "^10.2.2",
     "luxon": "^3.7.1",
+    "mailgun.js": "^12.1.0",
     "modern-normalize": "^2.0.0",
     "multi-progress-bars": "^5.0.3",
     "node-html-parser": "^6.1.12",

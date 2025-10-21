@@ -12,6 +12,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
+provider "mailgun" {
+  api_key = jsondecode(data.aws_secretsmanager_secret_version.mailgun_auth.secret_string)["DEVELOPER_KEY"]
+}
+
 terraform {
   required_version = ">= 1.2.0"
 
@@ -26,6 +30,9 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
+    }
+    mailgun = {
+      source = "wgebis/mailgun"
     }
   }
 }
