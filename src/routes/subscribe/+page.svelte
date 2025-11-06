@@ -94,7 +94,7 @@
           You will be able to re-subscribe in the future.
         </p>
 
-        <form method="POST" action="/subscribe?/deactivate&redirectTo=/subscribe/deactivated">
+        <form method="POST" action="/subscribe?/deactivate">
           <button class="auth">Delete Account & Data</button>
         </form>
       </div>

@@ -91,16 +91,12 @@ export const actions = {
     await removeUser(user.email);
     await signOut(params);
 
-    return { deactivated: true };
+    // Redirecting to confirmation page
+    redirect(302, '/subscribe/deactivated');
   }
 };
 
-export const load: PageServerLoad = async ({ locals, url }) => {
-  // If we have a redirection, do that immediately
-  if (url.searchParams.has('redirectTo')) {
-    redirect(303, url.searchParams.get('redirectTo'));
-  }
-
+export const load: PageServerLoad = async ({ locals }) => {
   // Get user session
   const user = (await locals.auth())?.user;
 

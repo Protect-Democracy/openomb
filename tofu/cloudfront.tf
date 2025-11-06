@@ -63,7 +63,12 @@ resource "aws_cloudfront_cache_policy" "apportionments" {
       }
     }
     headers_config {
-      header_behavior = "none"
+      header_behavior = "whitelist"
+      headers {
+        # Sveltekit needs the 'Accept' header for form actions
+        # https://github.com/sveltejs/kit/issues/12812
+        items = ["Accept"]
+      }
     }
     query_strings_config {
       query_string_behavior = "all"
