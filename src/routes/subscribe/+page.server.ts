@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect, isRedirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { signOut } from '../../auth';
 import {
@@ -89,7 +89,16 @@ export const actions = {
     }
 
     await removeUser(user.email);
-    await signOut(params);
+    // Prevent signout redirect
+    try {
+      await signOut(params);
+    }
+    catch (e) {
+      if (!isRedirect(e)) {
+        // Only surface our error if it is not a redirect attempt
+        throw e;
+      }
+    }
 
     // Redirecting to confirmation page
     redirect(302, '/subscribe/deactivated');
