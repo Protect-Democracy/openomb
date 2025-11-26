@@ -120,7 +120,9 @@
       {#if addedSubscription}
         You are receiving email updates when new files are approved matching this search.
       {:else}
-        Receive email updates when new files are approved matching this search.
+        Receive email updates when new files are approved matching this search. <br />
+        By logging in or subscribing to updates, you agree to the
+        <a href="/privacy-policy">OpenOMB privacy policy</a>.
       {/if}
     </p>
 

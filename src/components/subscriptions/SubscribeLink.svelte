@@ -93,7 +93,11 @@
           {:else}
             Receive email updates when new files are approved for <em
               >{subItemFormatted || `this ${subType}`}</em
-            >.
+            >. <br />
+            <small
+              >By logging in or subscribing to updates, you agree to the
+              <a href="/privacy-policy">OpenOMB privacy policy</a>.</small
+            >
           {/if}
         </p>
       {/if}
