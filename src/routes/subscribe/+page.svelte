@@ -105,7 +105,9 @@
 
       <p>
         Log in using your email address; you will be sent a "magic link" that will log you into the
-        site. Once logged in, you can subscribe to different feeds of data.
+        site. Once logged in, you can subscribe to different feeds of data. By logging in or
+        subscribing to updates, you agree to the <a href="/privacy-policy">OpenOMB privacy policy</a
+        >.
       </p>
 
       <LogIn callbackUrl="/subscribe" />

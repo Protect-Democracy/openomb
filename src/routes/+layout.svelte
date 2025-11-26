@@ -208,6 +208,7 @@
         <li><a href="/developers">For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
         <li><a href="/terms">Terms of use</a></li>
+        <li><a href="/privacy-policy">Privacy policy</a></li>
         {#if subscribeFeatureEnabled}
           <li><a href="/subscribe">Subscriptions</a></li>
         {/if}
@@ -320,7 +321,7 @@
     justify-content: center;
     gap: var(--spacing-large);
 
-    @media (max-width: 400px) {
+    @media (max-width: 500px) {
       & {
         display: block;
       }

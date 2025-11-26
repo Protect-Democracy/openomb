@@ -6,6 +6,8 @@
   export let title: string;
   export let subscriptionsUrl: string = `${deployedBaseUrl}/subscribe`;
   export let unsubscribable: boolean = true;
+
+  const privacyPolicyUrl: string = `${deployedBaseUrl}/privacy-policy`;
 </script>
 
 <div
@@ -55,17 +57,19 @@
     style="margin-top: 3rem; background-color: var(--color-blue-lightest); padding: 1.5rem 1.5rem;"
   >
     <p class="font-small">
-      To {#if unsubscribable}unsubscribe from these emails and to
+      You are receiving this email because you signed up on our website. To {#if unsubscribable}unsubscribe
+        from these emails and to
       {/if} manage your account, visit the
       <a href={subscriptionsUrl} target="_blank">Subscriptions Page</a>
-      on {siteName}.
+      on {siteName}. You may view our <a href={privacyPolicyUrl}>Privacy Policy</a> on {siteName}.
     </p>
 
     <p class="font-small muted" style="line-height: 1.3; margin-bottom: 0;">
       {siteName} is not affiliated with the Office of Management and Budget (OMB), the Executive Office
       of the President, the U.S. Congress, or any component of the U.S. government. OpenOMB is a searchable
       database maintained by Protect Democracy Project, a registered 501(c)(3) charitable organization
-      and part of the Protect Democracy group.
+      and part of the Protect Democracy group. Our mailing address is: Protect Democracy Project, 2020
+      Pennsylvania Avenue, NW #163, Washington, D.C. 20006.
     </p>
   </div>
 </div>

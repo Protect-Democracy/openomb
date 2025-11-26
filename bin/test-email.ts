@@ -123,7 +123,7 @@ async function sendEmail(email: string, subject: string, body: string) {
     });
   }
   else {
-    console.error('Unkown email service or configuration in environment.');
+    console.error('Unknown email service or configuration in environment.');
     process.exit(1);
   }
 
