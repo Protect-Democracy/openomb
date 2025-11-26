@@ -321,7 +321,7 @@
     justify-content: center;
     gap: var(--spacing-large);
 
-    @media (max-width: 400px) {
+    @media (max-width: 500px) {
       & {
         display: block;
       }
