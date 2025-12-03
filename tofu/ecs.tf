@@ -111,10 +111,10 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         }
       },
       # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters-managed-instances.html#container_definition_healthcheck-managed-instances
-      "healthCheck": {
-        "command": [ "CMD-SHELL", "curl -f http://localhost:3000/api/v1/health || exit 1" ],
-        "interval": 300,
-        "startPeriod": 30
+      "healthCheck" : {
+        "command" : ["CMD-SHELL", "curl -f http://localhost:3000/api/v1/health || exit 1"],
+        "interval" : 300,
+        "startPeriod" : 30
       },
     }
   ])
