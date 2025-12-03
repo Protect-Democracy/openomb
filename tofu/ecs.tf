@@ -8,6 +8,8 @@ resource "aws_ecs_service" "apportionments_app" {
   cluster         = aws_ecs_cluster.apportionments_app.id
   launch_type     = "FARGATE"
   desired_count   = 1
+  # This grace period can prevent the service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.
+  health_check_grace_period_seconds = 300
 
   network_configuration {
     assign_public_ip = false
@@ -36,7 +38,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
   container_definitions = jsonencode([
     {
       "name" : "apportionments-app",
-      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest",
       "essential" : true,
       "portMappings" : [
         {
@@ -107,7 +109,13 @@ resource "aws_ecs_task_definition" "apportionments_app" {
           "awslogs-group" : "/ecs/apportionments-app",
           "awslogs-stream-prefix" : "ecs"
         }
-      }
+      },
+      # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters-managed-instances.html#container_definition_healthcheck-managed-instances
+      "healthCheck": {
+        "command": [ "CMD-SHELL", "curl -f http://localhost:3000/api/v1/health || exit 1" ],
+        "interval": 300,
+        "startPeriod": 30
+      },
     }
   ])
 
@@ -127,7 +135,7 @@ resource "aws_ecs_task_definition" "apportionments_collect" {
   container_definitions = jsonencode([
     {
       "name" : "apportionments-collect",
-      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest",
       "essential" : true,
       "environment" : [
         {
@@ -198,7 +206,7 @@ resource "aws_ecs_task_definition" "apportionments_migrate" {
   container_definitions = jsonencode([
     {
       "name" : "apportionments-migrate",
-      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest",
       "essential" : true,
       "environment" : [
         {
@@ -257,7 +265,7 @@ resource "aws_ecs_task_definition" "apportionments_notify" {
   container_definitions = jsonencode([
     {
       "name" : "apportionments-notify",
-      "image" : "${aws_ecr_repository.ecr.repository_url}:latest"
+      "image" : "${aws_ecr_repository.ecr.repository_url}:latest",
       "essential" : true,
       "environment" : [
         {
