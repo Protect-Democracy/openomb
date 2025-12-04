@@ -38,6 +38,16 @@ test('approvalDateFromPdfFileName()', () => {
     DateTime.fromISO('2024-09-27T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
   );
 
+  const date4 = approvalDateFromPdfFileName(
+    'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Defense--Military%20Programs/PDF/FY2026_Department_of_War_Apportionment_2025_11_13.pdf.pdf'.replace(
+      /(\.pdf)+$/,
+      ''
+    )
+  );
+  expect(date4).toEqual(
+    DateTime.fromISO('2025-11-13T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
+  );
+
   expect(approvalDateFromPdfFileName('_12.19.2024')).toEqual(
     DateTime.fromISO('2024-12-19T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
   );
