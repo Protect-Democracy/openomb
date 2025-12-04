@@ -9,7 +9,7 @@ resource "aws_ecs_service" "apportionments_app" {
   launch_type     = "FARGATE"
   desired_count   = 1
   # This grace period can prevent the service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.
-  health_check_grace_period_seconds = 300
+  health_check_grace_period_seconds = 60
 
   network_configuration {
     assign_public_ip = false
@@ -111,9 +111,11 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         }
       },
       # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters-managed-instances.html#container_definition_healthcheck-managed-instances
+      # With healthcheck on node env pulled from
+      #   https://muratcorlu.com/docker-healthcheck-without-curl-or-wget/
       "healthCheck" : {
-        "command" : ["CMD-SHELL", "curl -f http://localhost:3000/api/v1/health || exit 1"],
-        "interval" : 300,
+        "command" : ["CMD-SHELL", "node -e 'require(\"http\").get({host: \"localhost\", port: 3000, path: \"/api/v1/health\", headers: {\"X-Forwarded-Proto\": \"https\"}}, res => process.exit(res.statusCode === 200 ? 0 : 1)).on(\"error\", () => process.exit(1));'"],
+        "interval" : 60,
         "startPeriod" : 30
       },
     }
