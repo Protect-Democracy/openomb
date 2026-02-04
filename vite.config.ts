@@ -5,9 +5,12 @@ import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 import postcssCustomMedia from 'postcss-custom-media';
 import legacy from '@vitejs/plugin-legacy';
+import devtoolsJson from 'vite-plugin-devtools-json';
 
 export default defineConfig({
   plugins: [
+    devtoolsJson(),
+
     // Sentry configuration
     // Uses v8+ https://docs.sentry.io/platforms/javascript/guides/sveltekit/migration/v7-to-v8/#breaking-sentrysveltekit-changes
     // Must be before sveltkit plugin
