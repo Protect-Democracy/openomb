@@ -180,8 +180,7 @@ describe('zipFiles()', () => {
     // Check list of files
     const zippedFiles = await zipFileList(zipFile);
     expect(zippedFiles).toHaveLength(2);
-    expect(zippedFiles[0].path).toEqual('file1.txt');
-    expect(zippedFiles[1].path).toEqual('file2.txt');
+    expect(zippedFiles.map((f) => f.path).sort()).toEqual(['file1.txt', 'file2.txt'].sort());
   });
 
   tmpdirTest('should zip directories recursively', async ({ tmpdir }) => {

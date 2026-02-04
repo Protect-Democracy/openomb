@@ -30,5 +30,21 @@ module.exports = {
         'svelte/valid-compile': 'warn'
       }
     }
+  ],
+  ignorePatterns: [
+    '.DS_Store',
+    'node_modules',
+    'build',
+    'build-*',
+    '.svelte-kit',
+    'package',
+    '.env',
+    '.env.*',
+    '!.env.example',
+    '.cache',
+    // Ignore files for PNPM, NPM and YARN
+    'pnpm-lock.yaml',
+    'package-lock.json',
+    'yarn.lock'
   ]
 };
