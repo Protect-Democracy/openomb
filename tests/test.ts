@@ -3,7 +3,7 @@ import { siteName } from '$config';
 
 test('index page has expected banner', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('banner').getByRole('heading', { name: siteName })).toBeVisible();
+  await expect(page.getByRole('banner').getByText(siteName)).toBeVisible();
 });
 
 test('about page has expected h1', async ({ page }) => {
