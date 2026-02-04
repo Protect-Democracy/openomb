@@ -1,8 +1,9 @@
 <script lang="ts">
-  import '@fontsource/domine/';
+  import '@fontsource/domine/400.css';
+  import '@fontsource/domine/500.css';
   import '@fontsource/domine/600.css';
-  import '@fontsource/ibm-plex-sans';
   import '@fontsource/ibm-plex-sans/400.css';
+  import '@fontsource/ibm-plex-sans/500.css';
   import '@fontsource/ibm-plex-sans/600.css';
   import '@fontsource/ibm-plex-sans/700.css';
   import type { PageData } from './$types';
