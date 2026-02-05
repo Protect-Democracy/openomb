@@ -4,7 +4,11 @@
 
 // Dependencies
 import { expect, test, vi, afterEach } from 'vitest';
-import { approvalDateFromPdfFileName, readPdfText } from './load-file';
+import {
+  approvalDateFromPdfFileName,
+  readPdfText,
+  apportionmentListFromHomepage
+} from './load-file';
 import { DateTime } from 'luxon';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -90,4 +94,26 @@ test('readPdfText() basic functionality', async () => {
 
   const text = await readPdfText('http://example.com/mypdf.pdf');
   expect(text).toContain('Department of Defense');
+});
+
+test('apportionmentListFromHomepage() basic functionality', async () => {
+  const testHtmlPath = path.resolve(__dirname, './test-data/apportionment-homepage-test-data.html');
+  const testHtml = fs.readFileSync(testHtmlPath, 'utf-8');
+
+  // Mock the global fetch function
+  global.fetch = vi.fn(() =>
+    Promise.resolve({
+      ok: true,
+      status: 200,
+      text: () => Promise.resolve(testHtml),
+      headers: new Headers({ 'Content-Type': 'text/html' })
+    })
+  );
+
+  const urls = await apportionmentListFromHomepage('http://example.com');
+  expect(urls.length).toBe(55768);
+  // Find PDF URLs
+  expect(urls.filter((url) => url.match(/\.pdf$/)).length).toBe(20);
+  // Find JSON URLs
+  expect(urls.filter((url) => url.match(/\.json$/)).length).toBe(27873);
 });

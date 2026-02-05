@@ -14,7 +14,7 @@ import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import type { filesSelect } from '../db/schema/files';
 import { request } from '../server/request';
-import { loadJsonFile, loadPdfFile } from '../server/load-file';
+import { apportionmentListFromHomepage, loadJsonFile, loadPdfFile } from '../server/load-file';
 import {
   environmentVariables,
   unique,
@@ -136,7 +136,7 @@ async function cli(): Promise<void> {
     const fileIds: string[] = [];
 
     // Get list of apportionment URLs
-    const apportionmentUrls = await apportionmentList();
+    const apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
 
     // Load JSON files
     const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
@@ -260,34 +260,6 @@ async function cli(): Promise<void> {
   progress?.close();
 
   console.info('Finished collection');
-}
-
-/**
- * Get list of all apportionment URL/files (JSON, Excel, at least one PDF).
- */
-async function apportionmentList(): Promise<string[]> {
-  return await createSpan('apportionmentList', async () => {
-    // Set ttl to short so that it doesn't use cached version but still creates a
-    // file in the cache.
-    const homepage = await request(env.baseUrl, {}, { expectedType: 'text', ttl: 1, retries: 5 });
-
-    // Check response
-    if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
-      throw new Error(
-        `Homepage response was not valid | OK: ${homepage.meta.response.ok} | Status: ${homepage.meta.response.status}`
-      );
-    }
-
-    // Get links in the section
-    const parsedHtml = htmlParser(homepage.data.toString());
-    let links = parsedHtml.querySelectorAll('#hierarchy a').map((a) => a.getAttribute('href'));
-
-    // Add domain/url to relative links
-    links = links.map((link) => (link ? `${env.baseUrl}${link.replace(/^\//, '')}` : ''));
-    links = links.filter((link) => !!link);
-
-    return unique(links);
-  });
 }
 
 /**

@@ -5,10 +5,11 @@
 // Dependencies
 import { captureException } from '@sentry/node';
 import { groupBy } from 'lodash-es';
+import { parse as htmlParser } from 'node-html-parser';
 import { eq } from 'drizzle-orm';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { DateTime } from 'luxon';
-import { request, urlExists } from './request';
+import { request, urlExists, RequestOptions } from './request';
 import { files, computeFundsProvidedByParsed } from '../db/schema/files';
 import { lines } from '../db/schema/lines';
 import { mLineTypeFromLineNumber } from '../db/queries/line-types';
@@ -21,10 +22,12 @@ import {
   md5hash,
   parseBoolean,
   cleanString,
-  dbId
+  dbId,
+  unique
 } from './utilities';
 import { db } from '../db/connection';
 import pdfFixes from '../data/fixes/pdf-files';
+import { createSpan } from './sentry-custom';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {
@@ -565,5 +568,47 @@ async function readPdfText(url: string): Promise<string> {
   return fullText;
 }
 
+/**
+ * Parse Apportionment list page and get list of all apportionment URL/files
+ * (JSON, Excel, at least one PDF).
+ */
+async function apportionmentListFromHomepage(
+  homepageUrl: string,
+  requestOptions: RequestOptions = {}
+): Promise<string[]> {
+  return await createSpan('apportionmentList', async () => {
+    // Ideally we want the cache for this to be short so that our data is fresh, but the
+    // apportionment homepage can very slow, so we'll default to something that is a bit longer
+    requestOptions = requestOptions || {};
+    requestOptions.expectedType = requestOptions.expectedType || 'text';
+    requestOptions.ttl = requestOptions.ttl || 1000 * 60 * 60;
+    requestOptions.retries = requestOptions.retries || 5;
+    const homepage = await request(homepageUrl, {}, requestOptions);
+
+    // Check response
+    if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
+      throw new Error(
+        `Homepage response was not valid | OK: ${homepage.meta.response.ok} | Status: ${homepage.meta.response.status}`
+      );
+    }
+
+    // Get links in the section
+    const parsedHtml = htmlParser(homepage.data.toString());
+    let links = parsedHtml.querySelectorAll('#hierarchy a').map((a) => a.getAttribute('href'));
+
+    // Add domain/url to relative links
+    links = links.map((link) => (link ? `${homepageUrl}${link.replace(/^\//, '')}` : ''));
+    links = links.filter((link) => !!link);
+
+    return unique(links);
+  });
+}
+
 // Extra exports for testing
-export { loadJsonFile, loadPdfFile, approvalDateFromPdfFileName, readPdfText };
+export {
+  loadJsonFile,
+  loadPdfFile,
+  approvalDateFromPdfFileName,
+  readPdfText,
+  apportionmentListFromHomepage
+};
