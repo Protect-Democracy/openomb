@@ -566,4 +566,4 @@ async function readPdfText(url: string): Promise<string> {
 }
 
 // Extra exports for testing
-export { loadJsonFile, loadPdfFile, approvalDateFromPdfFileName };
+export { loadJsonFile, loadPdfFile, approvalDateFromPdfFileName, readPdfText };
