@@ -71,7 +71,7 @@
     "drizzle-orm": "^0.45.1",
     "fs-extra": "^11.3.3",
     "lodash-es": "^4.17.23",
-    "lru-cache": "^11.2.5",
+    "lru-cache": "^10.2.2",
     "luxon": "^3.7.2",
     "mailgun.js": "^12.7.0",
     "modern-normalize": "^3.0.1",
