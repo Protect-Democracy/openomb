@@ -7,8 +7,12 @@
 
 // Dependencies
 import { LRUCache } from 'lru-cache';
+import debug from 'debug';
 import { environmentVariables } from './utilities';
 import { secondsToCacheInvalidation } from '../src/lib/utilities';
+
+// Debugger
+const debugLogger = debug('apportionments:cache');
 
 // Types
 type JSONStringifyable =
@@ -112,9 +116,11 @@ export function memoizeAsync(fn: (...args: any[]) => any, options: SetCacheOptio
 
     const value = cacheGet(id);
     if (value) {
+      debugLogger(`Cache hit for ${id}`);
       return cacheGet(id);
     }
     else {
+      debugLogger(`Cache miss for ${id}, options: ${JSON.stringify(options)}`);
       const result = await fn(...args);
       cacheSet(id, result, options);
       return result;
