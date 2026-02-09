@@ -88,6 +88,7 @@
     "@sveltejs/kit": "^2.50.2",
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
     "@testcontainers/postgresql": "^11.11.0",
+    "@types/archiver": "^7.0.0",
     "@types/eslint": "^9.6.1",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
