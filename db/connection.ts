@@ -14,6 +14,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { tracer } from 'drizzle-orm/tracing';
 import { startSpan, captureException } from '@sentry/node';
 import pg from 'pg';
+import debug from 'debug';
 import { environmentVariables } from '../server/utilities';
 // Schemas
 import * as files from './schema/files';
@@ -26,6 +27,9 @@ import * as subscriptions from './schema/subscriptions';
 import * as searches from './schema/searches';
 import * as lineTypes from './schema/line-types';
 import * as lineDescriptions from './schema/line-descriptions';
+
+// Debugger
+const debugLogger = debug('apportionments:db');
 
 // Path to migrations
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -92,6 +96,7 @@ export function dbConnection() {
       ...lineDescriptions
     }
   });
+  debugLogger('Connected to database');
 
   return db;
 }
