@@ -49,8 +49,8 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@auth/sveltekit": "^1.11.1",
-    "@aws-sdk/client-s3": "^3.983.0",
-    "@aws-sdk/credential-providers": "^3.983.0",
+    "@aws-sdk/client-s3": "^3.985.0",
+    "@aws-sdk/credential-providers": "^3.985.0",
     "@dotenvx/dotenvx": "^1.52.0",
     "@fontsource/domine": "^5.2.8",
     "@fontsource/ibm-plex-sans": "^5.2.8",
@@ -64,7 +64,7 @@
     "chroma-js": "^3.2.0",
     "commander": "^14.0.3",
     "csv-parse": "^6.1.0",
-    "drizzle-orm": "^0.37.0",
+    "drizzle-orm": "^0.45.1",
     "fs-extra": "^11.3.3",
     "lodash-es": "^4.17.23",
     "lru-cache": "^10.2.2",
@@ -76,12 +76,12 @@
     "pdfjs-dist": "^5.4.624",
     "pg": "^8.18.0",
     "reduce-css-calc": "^2.1.8",
-    "svelte": "^5.49.2",
+    "svelte": "^5.50.0",
     "unzipper": "^0.10.14"
   },
   "devDependencies": {
     "@melt-ui/svelte": "^0.86.6",
-    "@playwright/test": "^1.58.1",
+    "@playwright/test": "^1.58.2",
     "@sentry/rollup-plugin": "^4.9.0",
     "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/adapter-node": "^5.5.2",
@@ -92,12 +92,12 @@
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^25.2.0",
+    "@types/node": "^25.2.2",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
     "@vitejs/plugin-legacy": "^7.2.1",
     "autoprefixer": "^10.4.24",
-    "drizzle-kit": "^0.29.1",
+    "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.14.0",
@@ -130,7 +130,7 @@
   ],
   "overrides": {
     "@melt-ui/svelte": {
-      "svelte": "^5.49.2"
+      "svelte": "^5.50.0"
     }
   }
 }
