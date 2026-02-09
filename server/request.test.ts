@@ -2,9 +2,10 @@
 import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expect, test, beforeEach, afterEach, vi } from 'vitest';
+import { expect, beforeEach, afterEach, describe, it, test } from 'vitest';
 import type { Mock } from 'vitest';
 import { removeSync, ensureDirSync } from 'fs-extra/esm';
+import { mockFetchResponse } from '../tests/helpers/fetch';
 
 // To test
 import { request, cacheKey, fetchWithRetries } from './request';
@@ -14,18 +15,6 @@ import type { RequestData } from './request';
 // test to pass.
 const _dirname = dirname(fileURLToPath(import.meta.url));
 const testCacheDir = join(_dirname, '.cache-test');
-
-// Make fetch mockable; TODO: move to a helper or setup
-global.fetch = vi.fn();
-function mockFetch(data: RequestData, response: object | undefined = undefined): Promise<object> {
-  response = response || { ok: true, status: 200, statusText: 'OK' };
-  const dataType = typeof data === 'string' ? 'text' : 'json';
-
-  return Promise.resolve({
-    ...response,
-    [dataType]: () => Promise.resolve(data)
-  });
-}
 
 // Clear cache before/after each
 beforeEach(() => {
@@ -41,7 +30,7 @@ test('fetch() mocking', async () => {
 
   // JSON
   const jsonData = { test: true };
-  (fetch as Mock).mockResolvedValue(mockFetch(jsonData));
+  mockFetchResponse(jsonData);
 
   const response = await fetch(url);
   const responseData = await response.json();
@@ -51,7 +40,7 @@ test('fetch() mocking', async () => {
 
   // Text
   const textData = 'test';
-  (fetch as Mock).mockResolvedValue(mockFetch(textData));
+  mockFetchResponse(textData);
 
   const textResponse = await fetch(url);
   const textResponseData = await textResponse.text();
@@ -60,148 +49,154 @@ test('fetch() mocking', async () => {
   expect(textResponseData).toEqual(textData);
 });
 
-test('request() basic fetch', async () => {
-  const url = 'https://apportionment-public.max.gov/';
-  const data = 'test';
-  (fetch as Mock).mockResolvedValue(mockFetch(data));
+describe('request()', async () => {
+  it('should fetch and return data', async () => {
+    const url = 'https://apportionment-public.max.gov/';
+    const data = 'test';
+    mockFetchResponse(data);
 
-  const scrape = await request(url, {}, { cacheDir: testCacheDir, expectedType: 'text' });
+    const scrape = await request(url, {}, { cacheDir: testCacheDir, expectedType: 'text' });
 
-  expect(fetch).toHaveBeenCalledWith(url, {});
-  expect(scrape.data).toEqual(data);
-  expect(scrape.meta.cacheHit).toEqual(false);
-  expect(scrape.meta.response.ok).toEqual(true);
-  expect(scrape.meta.response.status).toEqual(200);
-});
-
-test('request() error type mismatch', async () => {
-  const url = 'https://apportionment-public.max.gov/';
-  const data = '<not parsable json>';
-  (fetch as Mock).mockResolvedValue(mockFetch(data));
-
-  expect(async () => {
-    await request(url, {}, { cacheDir: testCacheDir, expectedType: 'json' });
-  }).rejects.toThrowError(/.*not a function.*/);
-});
-
-test('request() use cache', async () => {
-  const url = 'https://apportionment-public.max.gov/';
-  const data = 'test';
-  (fetch as Mock).mockResolvedValue(mockFetch(data));
-
-  // Create cache with specific contents
-  const cacheContents = 'cached test';
-  const cacheMetaContents = JSON.stringify({
-    created: Date.now(),
-    expires: Date.now() + 1000 * 60 * 60 * 24,
-    response: {
-      ok: true,
-      status: 200
-    }
+    expect(fetch).toHaveBeenCalledWith(url, {});
+    expect(scrape.data).toEqual(data);
+    expect(scrape.meta.cacheHit).toEqual(false);
+    expect(scrape.meta.response.ok).toEqual(true);
+    expect(scrape.meta.response.status).toEqual(200);
   });
-  const cachePath = `${testCacheDir}/homepage.data`;
-  const cacheMeta = `${testCacheDir}/homepage.meta`;
-  writeFileSync(cachePath, cacheContents);
-  writeFileSync(cacheMeta, cacheMetaContents);
 
-  // Make call
-  const scrape = await request(
-    url,
-    {},
-    {
-      expectedType: 'text',
-      cacheDir: testCacheDir,
-      ttl: 1000 * 60 * 60 * 24
-    }
-  );
+  it('should handle error type mismatch', async () => {
+    const url = 'https://apportionment-public.max.gov/';
+    const data = '<not parsable json>';
+    mockFetchResponse(data);
 
-  expect(fetch).toHaveBeenCalledWith(url, {});
-  expect(scrape.data).toEqual(cacheContents);
-  expect(scrape.meta.cacheHit).toEqual(true);
-  expect(scrape.meta.response.ok).toEqual(true);
-  expect(scrape.meta.response.status).toEqual(200);
-});
-
-test('request() expired cache', async () => {
-  const url = 'https://apportionment-public.max.gov/';
-  const data = 'test';
-  (fetch as Mock).mockResolvedValue(mockFetch(data));
-
-  // Create cache with specific contents
-  const cacheContents = 'cached test';
-  const cacheMetaContents = JSON.stringify({
-    created: Date.now() - 1000 * 60 * 60 * 24,
-    expires: Date.now() - 1000,
-    response: {
-      ok: true,
-      status: 200
-    }
+    expect(async () => {
+      await request(url, {}, { cacheDir: testCacheDir, expectedType: 'json' });
+    }).rejects.toThrowError(/.*not a function.*/);
   });
-  const cachePath = `${testCacheDir}/homepage.data`;
-  const cacheMeta = `${testCacheDir}/homepage.meta`;
-  writeFileSync(cachePath, cacheContents);
-  writeFileSync(cacheMeta, cacheMetaContents);
 
-  // Make call
-  const scrape = await request(
-    url,
-    {},
-    {
-      expectedType: 'text',
-      cacheDir: testCacheDir,
-      ttl: 1000
-    }
-  );
+  it('should use cache', async () => {
+    const url = 'https://apportionment-public.max.gov/';
+    const data = 'test';
+    mockFetchResponse(data);
 
-  expect(fetch).toHaveBeenCalledWith(url, {});
-  expect(scrape.data).toEqual(data);
-  expect(scrape.meta.cacheHit).toEqual(false);
-  expect(scrape.meta.response.ok).toEqual(true);
+    // Create cache with specific contents
+    const cacheContents = 'cached test';
+    const cacheMetaContents = JSON.stringify({
+      created: Date.now(),
+      expires: Date.now() + 1000 * 60 * 60 * 24,
+      response: {
+        ok: true,
+        status: 200
+      }
+    });
+    const cachePath = `${testCacheDir}/homepage.data`;
+    const cacheMeta = `${testCacheDir}/homepage.meta`;
+    writeFileSync(cachePath, cacheContents);
+    writeFileSync(cacheMeta, cacheMetaContents);
+
+    // Make call
+    const scrape = await request(
+      url,
+      {},
+      {
+        expectedType: 'text',
+        cacheDir: testCacheDir,
+        ttl: 1000 * 60 * 60 * 24
+      }
+    );
+
+    expect(fetch).toHaveBeenCalledWith(url, {});
+    expect(scrape.data).toEqual(cacheContents);
+    expect(scrape.meta.cacheHit).toEqual(true);
+    expect(scrape.meta.response.ok).toEqual(true);
+    expect(scrape.meta.response.status).toEqual(200);
+  });
+
+  it('should handle expired cache', async () => {
+    const url = 'https://apportionment-public.max.gov/';
+    const data = 'test';
+    mockFetchResponse(data);
+
+    // Create cache with specific contents
+    const cacheContents = 'cached test';
+    const cacheMetaContents = JSON.stringify({
+      created: Date.now() - 1000 * 60 * 60 * 24,
+      expires: Date.now() - 1000,
+      response: {
+        ok: true,
+        status: 200
+      }
+    });
+    const cachePath = `${testCacheDir}/homepage.data`;
+    const cacheMeta = `${testCacheDir}/homepage.meta`;
+    writeFileSync(cachePath, cacheContents);
+    writeFileSync(cacheMeta, cacheMetaContents);
+
+    // Make call
+    const scrape = await request(
+      url,
+      {},
+      {
+        expectedType: 'text',
+        cacheDir: testCacheDir,
+        ttl: 1000
+      }
+    );
+
+    expect(fetch).toHaveBeenCalledWith(url, {});
+    expect(scrape.data).toEqual(data);
+    expect(scrape.meta.cacheHit).toEqual(false);
+    expect(scrape.meta.response.ok).toEqual(true);
+  });
 });
 
-test('cacheKey()', () => {
-  // Basics
-  expect(cacheKey('https://example.com', 'https://example.com')).toEqual('');
-  expect(cacheKey('https://example.com/', 'https://example.com')).toEqual('---');
-  expect(cacheKey('https://example.com/test', 'https://example.com/')).toEqual('test');
-  expect(cacheKey('https://example.com/test and other     things', 'https://example.com/')).toEqual(
-    'test_and_other_things'
-  );
+describe('cacheKey()', () => {
+  it('should create cache key based on url', () => {
+    // Basics
+    expect(cacheKey('https://example.com', 'https://example.com')).toEqual('');
+    expect(cacheKey('https://example.com/', 'https://example.com')).toEqual('---');
+    expect(cacheKey('https://example.com/test', 'https://example.com/')).toEqual('test');
+    expect(
+      cacheKey('https://example.com/test and other     things', 'https://example.com/')
+    ).toEqual('test_and_other_things');
+  });
 });
 
-test('fetchWithRetries()', async () => {
-  // Note that this doesn't test if a fetch just fails with a network issue.
-  const url = 'https://example.com';
+describe('fetchWithRetries()', () => {
+  it('should fetch and handle retries', async () => {
+    // Note that this doesn't test if a fetch just fails with a network issue.
+    const url = 'https://example.com';
 
-  // JSON
-  const jsonData1 = { test: true, shouldRetry: true };
-  const responseBad = { ok: false, status: 404, statusText: '404' };
-  const jsonData2 = { test: true, shouldRetry: false };
-  const responseGood = { ok: true, status: 200, statusText: '200' };
+    // JSON
+    const jsonData1 = { test: true, shouldRetry: true };
+    const responseBad = { ok: false, status: 404, statusText: '404' };
+    const jsonData2 = { test: true, shouldRetry: false };
+    const responseGood = { ok: true, status: 200, statusText: '200' };
 
-  // No retry
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
-  const response1 = await fetchWithRetries(url, {}, 0);
-  const responseData1 = await response1.json();
-  expect(fetch).toHaveBeenCalledWith(url);
-  expect(responseData1).toEqual(jsonData1);
+    // No retry
+    mockFetchResponse(jsonData1, responseBad);
+    const response1 = await fetchWithRetries(url, {}, 0);
+    const responseData1 = await response1.json();
+    expect(fetch).toHaveBeenCalledWith(url);
+    expect(responseData1).toEqual(jsonData1);
 
-  // With retry
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData2, responseGood));
-  const response2 = await fetchWithRetries(url, {}, 3, 10);
-  const responseData2 = await response2.json();
-  expect(fetch).toHaveBeenCalledWith(url);
-  expect(responseData2).toEqual(jsonData2);
+    // With retry
+    mockFetchResponse(jsonData1, responseBad);
+    mockFetchResponse(jsonData2, responseGood);
+    const response2 = await fetchWithRetries(url, {}, 3, 10);
+    const responseData2 = await response2.json();
+    expect(fetch).toHaveBeenCalledWith(url);
+    expect(responseData2).toEqual(jsonData2);
 
-  // With not enough retries
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
-  (fetch as Mock).mockResolvedValueOnce(mockFetch(jsonData1, responseBad));
-  const response3 = await fetchWithRetries(url, {}, 3, 10);
-  const responseData3 = await response3.json();
-  expect(fetch).toHaveBeenCalledWith(url);
-  expect(responseData3).toEqual(jsonData1);
-  (fetch as Mock).mockClear();
+    // With not enough retries
+    mockFetchResponse(jsonData1, responseBad);
+    mockFetchResponse(jsonData1, responseBad);
+    mockFetchResponse(jsonData1, responseBad);
+    mockFetchResponse(jsonData1, responseBad);
+    const response3 = await fetchWithRetries(url, {}, 3, 10);
+    const responseData3 = await response3.json();
+    expect(fetch).toHaveBeenCalledWith(url);
+    expect(responseData3).toEqual(jsonData1);
+    (fetch as Mock).mockClear();
+  });
 });

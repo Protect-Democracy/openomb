@@ -4,7 +4,7 @@
 
 // Dependencies
 import { captureException } from '@sentry/node';
-import { groupBy } from 'lodash-es';
+import { groupBy, uniqBy } from 'lodash-es';
 import { parse as htmlParser } from 'node-html-parser';
 import { eq } from 'drizzle-orm';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
@@ -77,13 +77,16 @@ const collectionTimezone = 'America/New_York';
  * Load an apportionment file into the database.
  */
 // @todo - figure out how to get around sentry data limits to profile this (separate into transactions?)
-async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert | undefined> {
+async function loadJsonFile(
+  jsonUrl: string,
+  retries: number = 5
+): Promise<typeof files.$inferInsert | undefined> {
   // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
   // completely stop the process.
   let fileResponse;
   let sourceData;
   try {
-    fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries: 5 });
+    fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries });
     sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
   }
   catch (error) {
@@ -286,8 +289,16 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
       }
     }
 
-    if (footnoteRecords.length > 0) {
-      await db.insert(footnotes).values(footnoteRecords);
+    // There's at least one case where a duplicate footnote number is designated
+    // twice, so we need to make sure the records are unique by file, line, and
+    // footnote number
+    const uniqueFootnoteRecords = uniqBy(
+      footnoteRecords,
+      (r) => `${r.fileId}-${r.lineIndex}-${r.footnoteNumber}`
+    );
+
+    if (uniqueFootnoteRecords.length > 0) {
+      await db.insert(footnotes).values(uniqueFootnoteRecords);
     }
   }
 
@@ -302,12 +313,15 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
  * we simply make a basic entry in the DB using data from
  * the URL.
  */
-async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | undefined> {
+async function loadPdfFile(
+  pdfUrl: string,
+  retries: number = 5
+): Promise<typeof files.$inferInsert | undefined> {
   // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
   // completely stop the process.
   let fileResponse;
   try {
-    fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries: 5 });
+    fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
   }
   catch (error) {
     const e = new Error(

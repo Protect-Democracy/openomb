@@ -129,6 +129,8 @@ async function request(
       options.retries,
       options.waitTime
     );
+    console.log(response);
+    console.log(options.expectedType);
     const data = await response[options.expectedType]();
 
     return {
