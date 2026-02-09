@@ -128,14 +128,5 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"
-  },
-  "overrides-comment": [
-    "Overrides dependencies of dependencies.  Requires npm 8+",
-    "Fixes UI library version restriction for svelte 5 (warnings still present)"
-  ],
-  "overrides": {
-    "@melt-ui/svelte": {
-      "svelte": "^5.50.0"
-    }
   }
 }
