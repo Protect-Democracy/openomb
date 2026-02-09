@@ -14,7 +14,7 @@ import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
 import Mailgun from 'mailgun.js';
 import type { Interfaces } from 'mailgun.js/definitions';
-import packageJson from '../package.json' assert { type: 'json' };
+import packageJson from '../package.json' with { type: 'json' };
 import {
   notifierEmailName,
   notifierEmail,
