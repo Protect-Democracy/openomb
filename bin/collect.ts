@@ -48,6 +48,7 @@ async function cli(): Promise<void> {
   program
     .version(packageJson.version)
     .description('Collect OMB data')
+    .argument('[apportionment_url]', 'Optional URL for specific apportionment to collect')
     .option(
       '--new-records-only',
       'Only collect new records.  This will skip any archiving of the data.'
@@ -58,8 +59,15 @@ async function cli(): Promise<void> {
     .option('--show-progress', 'Show progress of collection.')
     .parse(process.argv);
   const options = program.opts();
+  const args = program.args;
+  const apportionmentUrl = args[0];
 
   console.info(`Started data collection - ${new Date()}`);
+
+  // If just a single URL, don't archive
+  if (apportionmentUrl) {
+    options.archive = false;
+  }
 
   // If new records only, don't archive
   if (options.newRecordsOnly) {
@@ -90,7 +98,7 @@ async function cli(): Promise<void> {
   const collectionId = `omb-${options.newRecordsOnly ? 'new-records-only' : 'full'}-${start.toISOString()}`;
 
   // Setup progress bars
-  let progress;
+  let progress: MultiProgressBars;
   if (options.showProgress) {
     // TODO: Move away from MultiProgressBars. It takes over the console object and
     // doesn't give it back until progress.close() is called.  This is bad in general,
@@ -118,7 +126,7 @@ async function cli(): Promise<void> {
     const collectionRecord = {
       collectionId,
       start,
-      url: env.baseUrl,
+      url: apportionmentUrl ? apportionmentUrl : env.baseUrl,
       status: 'started',
       createdAt: start,
       modifiedAt: start
@@ -136,7 +144,20 @@ async function cli(): Promise<void> {
     const fileIds: string[] = [];
 
     // Get list of apportionment URLs
-    const apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
+    let apportionmentUrls;
+    if (apportionmentUrl) {
+      apportionmentUrls = [apportionmentUrl];
+    }
+    else {
+      try {
+        apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
+      }
+      catch (error) {
+        throw new Error(
+          `IMPORTANT: Failed getting apportionment list from homepage: ${error?.message || error}`
+        );
+      }
+    }
 
     // Load JSON files
     const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
@@ -155,9 +176,18 @@ async function cli(): Promise<void> {
 
         // Add new record
         if (!existingRecord) {
-          const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
-          if (fileRecord) {
-            fileIds.push(fileRecord.fileId);
+          try {
+            const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
+            if (fileRecord) {
+              fileIds.push(fileRecord.fileId);
+            }
+          }
+          catch (error) {
+            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+            // but everything else will.
+            throw new Error(
+              `IMPORTANT: Failed loading JSON file from URL "${jsonUrls[urlIndex]}": ${error?.message || error}`
+            );
           }
         }
 
@@ -190,9 +220,18 @@ async function cli(): Promise<void> {
 
         // Add new record
         if (!existingRecord) {
-          const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
-          if (fileRecord) {
-            fileIds.push(fileRecord.fileId);
+          try {
+            const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
+            if (fileRecord) {
+              fileIds.push(fileRecord.fileId);
+            }
+          }
+          catch (error) {
+            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+            // but everything else will.
+            throw new Error(
+              `IMPORTANT: Failed loading PDF file from URL "${pdfUrls[urlIndex]}": ${error?.message || error}`
+            );
           }
         }
 
