@@ -520,6 +520,7 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
  * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf
  * MM.DD.YYYY
  * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf
+ * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf
  *
  * Approvals actually come in at specific times, so we default to noon.
  *
@@ -527,12 +528,15 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
  * @returns Approval date or null
  */
 function approvalDateFromPdfFileName(fileName: string): Date | null {
-  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy'];
+  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy', 'yyyy-M-d'];
   const assumedTime = '--12:00:00';
   const assumedFormat = '--HH:mm:ss';
 
+  // Remove any number of .pdf extensions at the end of the file name
+  fileName = fileName.replace(/(\.pdf)+$/, '');
+
   // Get date part
-  const datePart = fileName.match(/.*_(\d{2,4}[-_.]\d{2,4}[-_.]\d{2,4})$/);
+  const datePart = fileName.match(/.*_(\d{2,4}[-_.]\d{1,4}[-_.]\d{1,4})$/);
   if (!datePart || !datePart[1]) {
     return null;
   }
