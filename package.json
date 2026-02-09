@@ -72,7 +72,7 @@
     "mailgun.js": "^12.7.0",
     "modern-normalize": "^3.0.1",
     "multi-progress-bars": "^5.0.3",
-    "node-html-parser": "^6.1.12",
+    "node-html-parser": "^7.0.2",
     "pdfjs-dist": "^5.4.624",
     "pg": "^8.18.0",
     "reduce-css-calc": "^2.1.8",
