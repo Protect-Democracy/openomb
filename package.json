@@ -11,12 +11,14 @@
     "dev:collect": "dotenvx run -- tsx bin/collect.ts",
     "dev:notify": "npm run build:notify && dotenvx run -- node build-notify/notify.js",
     "dev:test-email": "npm run build:test-email && dotenvx run -- node build-test-email/test-email.js",
+    "dev:test-data": "npm run build:test-data && dotenvx run -- node build-test-data/test-data.js",
     "build:web": "vite build",
     "build:collect": "vite build --config vite-bin.config.ts --ssr bin/collect.ts --outDir build-collect",
     "build:migrate": "vite build --config vite-bin.config.ts --ssr bin/migrate.ts --outDir build-migrate",
     "build:notify": "vite build --config vite-bin.config.ts --ssr bin/notify.ts --outDir build-notify",
+    "build:test-data": "vite build --config vite-bin.config.ts --ssr bin/test-data.ts --outDir build-test-data",
     "build:test-email": "vite build --config vite-bin.config.ts --ssr bin/test-email.ts --outDir build-test-email",
-    "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify && npm run build:test-email",
+    "build": "npm run build:web && npm run build:collect && npm run build:migrate && npm run build:notify && npm run build:test-email && npm run build:test-data",
     "preview": "npm run preview:web",
     "preview:web": "dotenvx run -- vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -34,6 +36,7 @@
     "collect": "tsx bin/collect.ts",
     "notify": "npm run build:notify && node build-notify/notify.js",
     "test-email": "npm run build:test-email && node build-test-email/test-email.js",
+    "test-data": "npm run build:test-data && node build-test-data/test-data.js",
     "csv-to-ts": "tsx bin/csv-to-ts.ts"
   },
   "lint-staged": {

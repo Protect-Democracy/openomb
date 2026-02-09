@@ -1,7 +1,22 @@
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import pg from 'pg';
 import crypto from 'crypto';
+import { dirname, join as joinPath } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import fs from 'node:fs/promises';
+
 import { db, resetDbConnection, migrationsDir, closeDbConnection } from '../../db/connection';
+
+// Path to migrations
+const _dirname = dirname(fileURLToPath(import.meta.url));
+const defaultTestDataPath = joinPath(
+  _dirname,
+  '..',
+  '..',
+  'db',
+  'test-data',
+  'sample-test-data-10.sql'
+);
 
 /**
  * Create an isolated database for testing in the testcontainers Postgres instance.
@@ -9,8 +24,15 @@ import { db, resetDbConnection, migrationsDir, closeDbConnection } from '../../d
  * @returns Returns the connection URI and a teardown function to clean up after the test.
  */
 export async function createIsolatedDb(
-  options: { runMigrations: boolean } = { runMigrations: true }
+  options: { runMigrations?: boolean; loadDefaultSampleData?: boolean } = {
+    runMigrations: true,
+    loadDefaultSampleData: false
+  }
 ) {
+  // Default options
+  options.loadDefaultSampleData = options.loadDefaultSampleData ?? false;
+  options.runMigrations = options.runMigrations ?? true;
+
   // Get connection string that should have been setup by global-setup
   const adminConnString = process.env.TEST_CONTAINER_URI;
   const defaultDbName = process.env.TEST_DEFAULT_DB_NAME;
@@ -25,7 +47,7 @@ export async function createIsolatedDb(
   // Generate a unique name for this test's database
   const dbName = `test_db_${crypto.randomBytes(4).toString('hex')}`;
 
-  // 3. Create the new database
+  // Create the new database
   await adminClient.query(`CREATE DATABASE "${dbName}"`);
   await adminClient.end();
 
@@ -39,14 +61,23 @@ export async function createIsolatedDb(
   await resetDbConnection();
 
   // Run Migrations (if requested)
-  if (options.runMigrations) {
+  if (options.runMigrations || options.loadDefaultSampleData) {
     if (!db) {
       throw new Error('Database connection is not initialized.');
     }
     await migrate(db, { migrationsFolder: migrationsDir });
   }
 
-  // 7. Return cleanup function
+  // Load default sample data (if requested)
+  if (options.loadDefaultSampleData) {
+    const sql = await fs.readFile(defaultTestDataPath, 'utf-8');
+    if (!db) {
+      throw new Error('Database connection is not initialized.');
+    }
+    await db.execute(sql);
+  }
+
+  // Return cleanup function
   return {
     uri: isolatedUri,
     teardown: async () => {

@@ -92,7 +92,6 @@ export function dbConnection() {
       ...lineDescriptions
     }
   });
-  console.info('Database connected');
 
   return db;
 }
