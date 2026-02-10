@@ -24,6 +24,12 @@ To run only integration tests, run:
 npm run test:integration
 ```
 
+To see the browser out and for debugging, you can use the Playwright UI with:
+
+```bash
+npm run test:integration:ui
+```
+
 ## Writing tests
 
 ### Unit tests
@@ -57,7 +63,7 @@ If you need a database connection for your tests, you can use the `createIsolate
 Options include the following:
 
 - `runMigrations`: Whether to run migrations on the new database (default: `true`)
-- `loadDefaultSampleData`: Whether to load the default sample data on the new database. Note that loading the sample data is significant and will add seconds onto test runtime (default: `false`)
+- `loadDefaultSampleData`: Whether to load the default sample data on the new database. Note that loading the sample data is significant and will add seconds onto test runtime. The sample database may change, so your tests should not depend heavily on specific data being present in the database. (default: `false`)
 
 ```ts
 import createIsolatedDb from '../test/helpers/create-isolated-db';
@@ -106,3 +112,5 @@ test('example()', async () => {
 ### Integration tests
 
 Integration tests are meant to test the interaction between multiple components or modules. They should be placed in the `tests/integration` folder and can be named with the `.integration-test.ts` suffix.
+
+The integration tests use a test Postgres database that has the migrations and the sample data loaded by default. The sample database may change, so your tests should not depend heavily on specific data being present in the database.
