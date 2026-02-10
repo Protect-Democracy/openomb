@@ -31,8 +31,9 @@ async function globalSetup(config: FullConfig) {
     loadDefaultSampleData: true
   });
 
-  // Set our DB environment variable
+  // Set up the environment variables
   process.env.APPORTIONMENTS_DB_URI = uri;
+  process.env.AUTH_SECRET = 'test-secret';
 
   // Build the application
   try {

@@ -3,7 +3,7 @@
  * as well as to ensure that no real credentials are accidentally used in tests.
  */
 export function resetEnv() {
-  const prefixesToReset = ['APPORTIONMENTS_', 'SENTRY_', 'MAILGUN_'];
+  const prefixesToReset = ['APPORTIONMENTS_', 'SENTRY_', 'MAILGUN_', 'AUTH_', 'VITE_'];
   for (const key in process.env) {
     if (prefixesToReset.some((prefix) => key.startsWith(prefix))) {
       delete process.env[key];
