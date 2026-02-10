@@ -1,10 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { siteName } from '$config';
 
 test('index page has expected items', async ({ page }) => {
   // Make sure the banner has the site name
   await page.goto('/');
-  await expect(page.getByRole('banner').getByText(siteName)).toBeVisible();
+  await expect(page.getByRole('banner').getByText('OpenOMB')).toBeVisible();
 
   // Make sure stats exists
   await expect(page.locator('.stats').getByText('New apportionments approved')).toBeVisible();
