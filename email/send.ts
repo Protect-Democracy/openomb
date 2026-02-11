@@ -77,13 +77,18 @@ async function sendEmail(to: string, subject: string, html: string, forceClientR
     const smtpSecure = env.emailServiceType === 'gmail' ? true : env.emailSmtpSecure;
 
     // Check that we have the needed parts
-    if (!smtpHost || !env.emailSmtpUser || !env.emailSmtpPassword) {
+    if (!smtpHost) {
       throw new Error('Missing SMTP email configuration in environment variables.');
+    }
+
+    // If Gmail, we need user name and password
+    if (env.emailServiceType === 'gmail' && (!env.emailSmtpUser || !env.emailSmtpPassword)) {
+      throw new Error('Missing Gmail email configuration in environment variables.');
     }
 
     // Create SMTP transporter
     let transport = createTransport({
-      service: 'Gmail',
+      service: env.emailServiceType === 'gmail' ? 'gmail' : undefined,
       host: smtpHost,
       port: smtpPort,
       secure: smtpSecure,

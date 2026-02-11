@@ -20,8 +20,8 @@ export async function startDatabaseContainer() {
       .start();
 
     // Set the env vars required by your `createIsolatedDb` helper
-    process.env.TEST_CONTAINER_URI = globalContainer.getConnectionUri();
-    process.env.TEST_DEFAULT_DB_NAME = defaultDbName;
+    process.env.TEST_POSTGRES_CONTAINER_URI = globalContainer.getConnectionUri();
+    process.env.TEST_POSTGRES_DEFAULT_DB_NAME = defaultDbName;
 
     return globalContainer;
   }
