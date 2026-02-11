@@ -2,10 +2,69 @@
  * Methods for managing subscriptions and getting data.
  */
 import { DateTime } from 'luxon';
+import { map } from 'lodash-es';
 import { mFileSearchFullCount, mFileSearchPaged } from '../db/queries/search';
-import { userSubscriptionDetails, subscriptionsByUser } from '../db/queries/subscriptions';
-
+import {
+  userSubscriptionDetails,
+  subscriptionsByUser,
+  setSubscriptionAsNotified
+} from '../db/queries/subscriptions';
+import { filesSelect } from '../db/schema/files';
 import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '../src/config/subscriptions';
+import { renderTemplate } from '../email/render';
+import { sendEmail } from '../email/send';
+import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
+import type { subscriptionSelect } from '../db/schema/subscriptions';
+import type { SubscriptionDetails, ItemDetails } from '../db/queries/subscriptions';
+
+type SubscriptionWithFiles = subscriptionSelect & {
+  criterion: any;
+  itemDetails: ItemDetails;
+  fileCount: number;
+  files: filesSelect[];
+};
+
+/**
+ * Send notifications to users based on their subscriptions.
+ */
+export async function sendNotifications() {
+  const userSubscriptions = await subscriptionsByUser();
+
+  for (const email of Object.keys(userSubscriptions)) {
+    // For a user, find any relevant new files, then send the notification
+    const currentUserSubs = userSubscriptions[email];
+    const notifySubs: SubscriptionWithFiles[] = [];
+    for (const sub of currentUserSubs) {
+      // Check if our subscription is weekly or daily and, based on that, if it needs to run again
+      if (includeDailyNotification(sub) || includeWeeklyNotification(sub)) {
+        const notification = await getSubscriptionWithFiles(email, sub);
+        notification && notifySubs.push(notification);
+      }
+    }
+
+    if (notifySubs.length) {
+      // Send our notification email to the user
+      await sendNotificationEmail(email, notifySubs);
+      // Update our subscriptions to indicate notifications were sent
+      await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
+    }
+  }
+  console.info('Finished notification');
+}
+
+/**
+ * Send a specific notification email to a user.
+ *
+ * @param email Email address to send to.
+ * @param notifySubs Array of subscription data.
+ */
+export async function sendNotificationEmail(email: string, notifySubs: any[]) {
+  const emailBody = await renderTemplate(FileNotificationEmail, {
+    subscriptions: notifySubs
+  });
+
+  await sendEmail(email, 'OpenOMB Subscriptions', emailBody);
+}
 
 /**
  * Get files for a user and specific subscription.
@@ -18,9 +77,9 @@ import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '../src/config/s
  */
 export async function getSubscriptionWithFiles(
   email: string,
-  sub,
+  sub: SubscriptionDetails,
   lastNotified: Date | undefined = undefined
-) {
+): Promise<SubscriptionWithFiles | undefined> {
   let criterion;
   if (sub.type === 'search') {
     criterion = sub.itemDetails.criterion;
