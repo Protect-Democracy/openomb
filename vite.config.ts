@@ -63,12 +63,16 @@ export default defineConfig({
   },
 
   test: {
+    css: true,
     // Specifically needed because of the use of testcontainers
     hookTimeout: 60_000,
     testTimeout: 5_000,
     setupFiles: ['./tests/vitest.setup.ts'],
     // Unit tests should generally be in the same directory as code.
-    include: ['{src,server,db}/**/*.{test,spec}.{js,ts}', 'tests/unit/**/*.{test,spec}.{js,ts}']
+    include: [
+      '{src,server,db,email}/**/*.{test,spec}.{js,ts}',
+      'tests/unit/**/*.{test,spec}.{js,ts}'
+    ]
   },
 
   // TODO - this might impact older browsers, but allows our lib env
