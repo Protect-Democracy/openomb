@@ -114,3 +114,33 @@ test('example()', async () => {
 Integration tests are meant to test the interaction between multiple components or modules. They should be placed in the `tests/integration` folder and can be named with the `.integration-test.ts` suffix.
 
 The integration tests use a test Postgres database that has the migrations and the sample data loaded by default. The sample database may change, so your tests should not depend heavily on specific data being present in the database.
+
+#### Email handling
+
+A Mailpit server is started before the integration tests run, and any emails sent during the tests will be captured by Mailpit.
+
+If you want to do something that will send emails and want to check emails, do something like the following:
+
+```ts
+import { expect, test } from '@playwright/test';
+import { emailClient } from '../helpers/email';
+
+test('basic email authentication', async ({ page }) => {
+  const { client: mailClient, teardown: emailTeardown } = await emailClient();
+  const newEmailWatch = mailClient.waitForEvent('new');
+
+  // Subscribe / login
+  await page.goto('/subscribe');
+  await page.getByLabel('Email').fill('test@example.com');
+  await page.getByRole('button', { name: 'Send link' }).click();
+
+  // Wait for the confirmation email
+  const email = await newEmailWatch;
+
+  // Check subject
+  expect(email.Data.Subject).toContain('Subscribe to OpenOMB');
+
+  // Teardown email client
+  await emailTeardown();
+});
+```
