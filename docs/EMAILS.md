@@ -65,14 +65,11 @@ npm run dev:test-email -- --address test@example.com --template FileNotification
 This is setup for the automated testing, but for manual testing and development, you can set up a Mailpit server locally with something like the following. Where `1025` is the SMTP port and `8025` is the UI port:
 
 ```bash
-docker run -d \
---name=mailpit \
---restart unless-stopped \
--e MP_SMTP_AUTH_ACCEPT_ANY=1 \
--e MP_SMTP_AUTH_ALLOW_INSECURE=1 \
--p 8025:8025 \
--p 1025:1025 \
-axllent/mailpit
+# Start a simple development mail server with Mailpit
+npm run dev:mailpit
+
+# Stop with
+npm run dev:mailpit:stop
 ```
 
 Then use the following environment variables to configure the application to send emails to Mailpit:
