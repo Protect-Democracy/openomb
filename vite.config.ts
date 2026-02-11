@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 import postcssCustomMedia from 'postcss-custom-media';
+import postcssIsPseudoClass from '@csstools/postcss-is-pseudo-class';
 import legacy from '@vitejs/plugin-legacy';
 import devtoolsJson from 'vite-plugin-devtools-json';
 
@@ -52,7 +53,12 @@ export default defineConfig({
   css: {
     postcss: {
       // noIsPseudoSelector, is: doesn't play nice with juice (email css processor)
-      plugins: [postcssNesting({ noIsPseudoSelector: true }), postcssCustomMedia, autoprefixer]
+      plugins: [
+        postcssNesting({ noIsPseudoSelector: true }),
+        postcssCustomMedia,
+        postcssIsPseudoClass,
+        autoprefixer
+      ]
     }
   },
 

@@ -1,4 +1,3 @@
-import { recentlyApproved, recentlyRemoved, folders, approvers } from '$queries/files';
 import { userSubscriptionListDetails } from '$queries/subscriptions';
 import { renderTemplate } from '$email/render';
 import SubscriptionEmail from '$email/templates/SubscriptionEmail.svelte';
@@ -13,15 +12,20 @@ export async function load({ locals }) {
   const existingSubscriptions = user ? await userSubscriptionListDetails(user.email) : [];
 
   return {
-    recentlyRemoved: await recentlyRemoved(),
-    recentlyApproved: await recentlyApproved(),
-    folders: await folders(),
-    approvers: await approvers(),
+    pageMeta: {
+      title: 'Examples'
+    },
     user,
     existingSubscriptions,
     emailExamples: {
-      AuthenticationEmail: renderTemplate(AuthenticationEmail),
-      SubscriptionEmail: renderTemplate(SubscriptionEmail),
+      AuthenticationEmail: renderTemplate(AuthenticationEmail, {
+        authUrl: 'https://example.com/',
+        subscriptionsUrl: 'https://example.com/'
+      }),
+      SubscriptionEmail: renderTemplate(SubscriptionEmail, {
+        authUrl: 'https://example.com/',
+        subscriptionsUrl: 'https://example.com/'
+      }),
       FileNotificationEmail: renderTemplate(FileNotificationEmail, { subscriptions: previewData })
     }
   };
