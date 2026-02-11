@@ -1,7 +1,7 @@
 import { renderTemplate } from '$email/render';
 import AuthenticationEmail from '$email/templates/AuthenticationEmail.svelte';
 import SubscriptionEmail from '$email/templates/SubscriptionEmail.svelte';
-import { sendEmail } from '../../../server/utilities';
+import { sendEmail } from '../../../email/send';
 
 /**
  * Send the email that is used to verify and log in a user

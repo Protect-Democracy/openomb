@@ -6,10 +6,10 @@
 
 // Dependencies
 import { Command } from 'commander';
-import { createTransport } from 'nodemailer';
+import { environmentVariables } from '../server/utilities';
 import { renderTemplate } from '../email/render';
 import { getSubscriptionsWithFilesByUser } from '../server/subscriptions';
-import { sendEmail as notificationServiceSendEmail } from '../server/utilities';
+import { sendEmail } from '../email/send';
 import packageJson from '../package.json' assert { type: 'json' };
 
 import AuthenticationEmail from '../email/templates/AuthenticationEmail.svelte';
@@ -19,6 +19,8 @@ import SubscriptionEmail from '../email/templates/SubscriptionEmail.svelte';
  * Main CLI handler.
  */
 async function cli(): Promise<void> {
+  const env = environmentVariables();
+
   // Setup commander
   const program = new Command();
   program
@@ -37,10 +39,6 @@ async function cli(): Promise<void> {
     .option(
       '-l, --subscription-last-notified <data>',
       'for use with "user" option.  Last notified date to provide, i.e. 1970-01-01, otherwise uses what is in the database.'
-    )
-    .option(
-      '-s, --use-notification-service',
-      'Use our mailgun implementation.  Otherwise, will send email directly.'
     )
     .parse(process.argv);
 
@@ -83,56 +81,23 @@ async function cli(): Promise<void> {
   // Render template
   const emailBody = renderTemplate(emailTemplate, data);
 
-  // Send email
-  if (options.useNotificationService) {
-    notificationServiceSendEmail(
-      options.address,
-      `Testing template: "${options.template}"`,
-      emailBody
-    );
-  }
-  else {
-    await sendEmail(options.address, `Testing template: "${options.template}"`, emailBody);
-  }
-
-  console.info('Email sent.');
-}
-
-/**
- * Send email directly.
- *
- * This is only for testing.  In production, we should use the notifications service and queue.
- */
-async function sendEmail(email: string, subject: string, body: string) {
-  // Configure based on environment
-  let transport;
-  if (
-    process.env.DEV_EMAIL_SERVICE === 'Gmail' &&
-    process.env.DEV_EMAIL_USER &&
-    process.env.DEV_EMAIL_PASS
-  ) {
-    transport = createTransport({
-      service: 'Gmail',
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.DEV_EMAIL_USER,
-        pass: process.env.DEV_EMAIL_PASS
-      }
+  // Double check from the user if they want to send an email from mailgun
+  if (env.emailServiceType === 'mailgun') {
+    const confirm = await new Promise((resolve) => {
+      process.stdout.write(
+        `You are about to send an email through Mailgun to "${options.address}" using the "${options.template}" template. Are you sure? (y/n): `
+      );
+      process.stdin.setEncoding('utf-8');
+      process.stdin.on('data', (data) => {
+        resolve(data.toString().trim().toLowerCase() === 'y');
+      });
     });
   }
-  else {
-    console.error('Unknown email service or configuration in environment.');
-    process.exit(1);
-  }
 
-  await transport.sendMail({
-    from: process.env.DEV_EMAIL_USER,
-    to: email,
-    subject,
-    html: body
-  });
+  // Send email
+  await sendEmail(options.address, `Testing template: "${options.template}"`, emailBody);
+
+  console.info('Email sent.');
 }
 
 await cli();

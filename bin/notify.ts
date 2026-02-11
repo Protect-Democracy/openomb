@@ -6,7 +6,7 @@
 import { map } from 'lodash-es';
 import { Command } from 'commander';
 import { subscriptionsByUser, setSubscriptionAsNotified } from '../db/queries/subscriptions';
-import { sendEmail } from '../server/utilities';
+import { sendEmail } from '../email/send';
 import {
   includeDailyNotification,
   includeWeeklyNotification,

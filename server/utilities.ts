@@ -12,15 +12,7 @@ import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-
 import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
-import Mailgun from 'mailgun.js';
-import type { Interfaces } from 'mailgun.js/definitions';
 import packageJson from '../package.json' with { type: 'json' };
-import {
-  notifierEmailName,
-  notifierEmail,
-  replyEmailName,
-  replyEmail
-} from '../src/config/subscriptions';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -35,12 +27,6 @@ const s3AclOptions = [
   'bucket-owner-read',
   'bucket-owner-full-control'
 ];
-
-// Instantiate mailgun library with native FormData
-const mailgun = new Mailgun(FormData);
-// Store mailgun client so process uses same connection
-//  (only really relevant with notification job task)
-let mg: undefined | Interfaces.IMailgunClient;
 
 // Expected types from environment variables
 type ApportionmentEnvironment = {
@@ -76,6 +62,12 @@ type ApportionmentEnvironment = {
   awsContainerMetadata: boolean;
   sentryNodeDsn: string;
   environment: string;
+  emailServiceType?: 'mailgun' | 'gmail' | 'smtp';
+  emailSmtpHost: string;
+  emailSmtpPort?: number;
+  emailSmtpUser: string;
+  emailSmtpPassword: string;
+  emailSmtpSecure: boolean;
   mailgunDomain: string;
   mailgunSendKey: string;
 };
@@ -97,12 +89,16 @@ function environmentVariables(): ApportionmentEnvironment {
   // We use dotenvx to get our .env variables into the process
   return {
     baseUrl: process.env['APPORTIONMENTS_BASE_URL'] || 'https://apportionment-public.max.gov/',
+
+    // Caching
     cacheTtl: process.env['APPORTIONMENTS_CACHE_TTL']
       ? parseInt(process.env['APPORTIONMENTS_CACHE_TTL'])
       : 1000 * 60 * 60 * 24 * 1,
     cacheDir: process.env['APPORTIONMENTS_CACHE_DIR'] || defaultCacheDir,
     collectionCacheDir:
       process.env['APPORTIONMENTS_COLLECTION_CACHE_DIR'] || defaultCollectionCacheDir,
+
+    // Database configuration
     dbUri: process.env['APPORTIONMENTS_DB_URI'] || '',
     // DB parts will be used if URI is not provided.
     dbHost: process.env['APPORTIONMENTS_DB_HOST'] || '',
@@ -113,6 +109,8 @@ function environmentVariables(): ApportionmentEnvironment {
     dbAuth: process.env['APPORTIONMENTS_DB_AUTHENTICATION']
       ? JSON.parse(process.env['APPORTIONMENTS_DB_AUTHENTICATION'])
       : null,
+
+    // S3 configuration for file archiving
     archiveS3Bucket: process.env['APPORTIONMENTS_ARCHIVE_S3_BUCKET'] || '',
     archiveS3Region: process.env['APPORTIONMENTS_ARCHIVE_S3_REGION'] || 'us-east-1',
     archiveS3Acl:
@@ -120,8 +118,12 @@ function environmentVariables(): ApportionmentEnvironment {
       s3AclOptions.includes(process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'])
         ? (process.env['APPORTIONMENTS_ARCHIVE_S3_ACL'] as ApportionmentEnvironment['archiveS3Acl'])
         : undefined,
+
+    // Sentry configuration
     sentryNodeDsn: process.env['APPORTIONMENTS_SENTRY_NODE_DSN'] || '',
     environment: process.env['NODE_ENV'] === 'production' ? 'production' : 'development',
+
+    // AWS SSO
     awsSso:
       !!process.env['APPORTIONMENTS_AWS_SSO'] &&
       process.env['APPORTIONMENTS_AWS_SSO'].toLocaleLowerCase() !== 'false',
@@ -135,6 +137,23 @@ function environmentVariables(): ApportionmentEnvironment {
     awsContainerMetadata:
       !!process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'] &&
       process.env['APPORTIONMENTS_AWS_CONTAINER_METADATA'].toLocaleLowerCase() !== 'false',
+
+    // Email configuration.  Note that mailgun should be used in production.
+    emailServiceType: (['mailgun', 'gmail', 'smtp'].includes(
+      process.env['APPORTIONMENTS_EMAIL_SERVICE_TYPE'] || ''
+    )
+      ? process.env['APPORTIONMENTS_EMAIL_SERVICE_TYPE']
+      : 'mailgun') as ApportionmentEnvironment['emailServiceType'],
+    emailSmtpHost: process.env['APPORTIONMENTS_EMAIL_SMTP_HOST'] || '',
+    emailSmtpPort: process.env['APPORTIONMENTS_EMAIL_SMTP_PORT']
+      ? parseInt(process.env['APPORTIONMENTS_EMAIL_SMTP_PORT'])
+      : undefined,
+    emailSmtpUser: process.env['APPORTIONMENTS_EMAIL_SMTP_USER'] || '',
+    emailSmtpPassword: process.env['APPORTIONMENTS_EMAIL_SMTP_PASSWORD'] || '',
+    emailSmtpSecure:
+      !!process.env['APPORTIONMENTS_EMAIL_SMTP_SECURE'] &&
+      process.env['APPORTIONMENTS_EMAIL_SMTP_SECURE'].toLocaleLowerCase() !== 'false',
+    // TODO: This should be prefixed with APPORTIONMENTS_
     mailgunDomain: process.env['MAILGUN_DOMAIN'] || 'mg.openomb.org',
     mailgunSendKey: process.env['MAILGUN_SEND_KEY'] || ''
   };
@@ -386,33 +405,6 @@ async function putS3File(
   }
 }
 
-/**
- * Sends an email via our configured service
- *
- * @param to The recepient email address.
- * @param subject The email subject.
- * @param html The email body html (as string).
- */
-async function sendEmail(to: string, subject: string, html: string) {
-  const env = environmentVariables();
-  if (!mg) {
-    // if we do not already have a client instance, create one
-    mg = mailgun.client({
-      username: 'api',
-      key: env.mailgunSendKey,
-      useFetch: true
-    });
-  }
-
-  await mg.messages.create(env.mailgunDomain, {
-    to: to,
-    from: notifierEmailName ? `${notifierEmailName} <${notifierEmail}>` : notifierEmail,
-    subject: subject,
-    html: html,
-    'h:Reply-To': replyEmailName ? `${replyEmailName} <${replyEmail}>` : replyEmail
-  });
-}
-
 export {
   environmentVariables,
   unique,
@@ -425,6 +417,5 @@ export {
   listS3BucketObjects,
   parseBoolean,
   cleanString,
-  dbId,
-  sendEmail
+  dbId
 };
