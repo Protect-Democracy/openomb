@@ -1,5 +1,5 @@
 # Install dependencies and build
-FROM node:20-bullseye-slim AS build
+FROM node:24-bookworm-slim AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -8,7 +8,7 @@ RUN npm run build
 
 # Copy build artifacts to a minimal image
 # FROM gcr.io/distroless/nodejs20-debian12
-FROM node:20-bullseye-slim
+FROM node:24-bookworm-slim
 
 # Builds
 COPY --from=build /app/build-collect /app/build-collect
