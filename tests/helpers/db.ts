@@ -34,10 +34,12 @@ export async function createIsolatedDb(
   options.runMigrations = options.runMigrations ?? true;
 
   // Get connection string that should have been setup by global-setup
-  const adminConnString = process.env.TEST_CONTAINER_URI;
-  const defaultDbName = process.env.TEST_DEFAULT_DB_NAME;
+  const adminConnString = process.env.TEST_POSTGRES_CONTAINER_URI;
+  const defaultDbName = process.env.TEST_POSTGRES_DEFAULT_DB_NAME;
   if (!adminConnString || !defaultDbName) {
-    throw new Error('TEST_CONTAINER_URI or TEST_DEFAULT_DB_NAME not set. Did global-setup run?');
+    throw new Error(
+      'TEST_POSTGRES_CONTAINER_URI or TEST_POSTGRES_DEFAULT_DB_NAME not set. Did global-setup run?'
+    );
   }
 
   // Connect

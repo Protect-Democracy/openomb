@@ -37,7 +37,7 @@ const output = renderTemplate(SubscriptionEmail, { subscriptions: [] });
 ### Adding templates
 
 - Add actual templates to `email/templates/`.
-- Update previews in `src/routes/examples/+page.server.ts`.
+- (suggested) Update previews in `src/routes/examples/+page.server.ts`.
 
 ## Previewing
 
@@ -55,31 +55,39 @@ To send an example email to a real email address, run the following:
 
 ```bash
 # This will try to use some test data
-npm run test-email -- --address test@example.com --template FileNotificationEmail
+npm run dev:test-email -- --address test@example.com --template FileNotificationEmail
 # This will pull data from a user in the system and fake a last notified date
-npm run test-email -- --address test@example.com --template FileNotificationEmail --user example.user@example.com --subscription-last-notified 1970-01-01
+npm run dev:test-email -- --address test@example.com --template FileNotificationEmail --user example.user@example.com --subscription-last-notified 1970-01-01
 ```
 
-To send this directly, you can set the following environment variables:
+### Testing with Mailpit
+
+This is setup for the automated testing, but for manual testing and development, you can set up a Mailpit server locally with something like the following. Where `1025` is the SMTP port and `8025` is the UI port:
 
 ```bash
-# Only Gmail is supported at moment
-process.env.DEV_EMAIL_SERVICE=Gmail
-process.env.DEV_EMAIL_USER
-# Make sure to generate an app password for this
-process.env.DEV_EMAIL_PASS
+# Start a simple development mail server with Mailpit
+npm run dev:mailpit
+
+# Stop with
+npm run dev:mailpit:stop
 ```
 
-To use the notification service instead of directly sending an email, use the following flag: `--use-notification-service`. Note that this will require:
-
-- setting the `MAILGUN_SEND_KEY` environment variable
-- ensuring the process has access to your environment
+Then use the following environment variables to configure the application to send emails to Mailpit:
 
 ```bash
-# Set the key on the process environment directly
-process.env.MAILGUN_SEND_KEY=<key>
-npm run test-email -- --address test@example.com --template FileNotificationEmail --use-notification-service
+APPORTIONMENTS_EMAIL_SERVICE_TYPE=smtp
+APPORTIONMENTS_EMAIL_SMTP_HOST=localhost
+APPORTIONMENTS_EMAIL_SMTP_PORT=1025
+APPORTIONMENTS_EMAIL_SMTP_USER=test
+APPORTIONMENTS_EMAIL_SMTP_PASSWORD=test
+```
 
-# Or use dotenvx if you have it set within your .env
-npx dotenvx run -- npm run test-email -- --address test@example.com --template FileNotificationEmail --use-notification-service
+## Mailgun
+
+To use the Mailgun email service, set the following environment variables:
+
+```bash
+APPORTIONMENTS_EMAIL_SERVICE_TYPE=mailgun
+MAILGUN_DOMAIN=your-mailgun-domain
+MAILGUN_API_KEY=your-mailgun-api-key
 ```

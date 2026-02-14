@@ -1,5 +1,6 @@
-import { stopDatabaseContainer } from './helpers/db-container';
 import type { ChildProcess } from 'node:child_process';
+import { stopMailpitContainer } from './helpers/email-container';
+import { stopDatabaseContainer } from './helpers/db-container';
 
 async function globalTeardown() {
   // Kill the Web Server
@@ -13,6 +14,9 @@ async function globalTeardown() {
 
   // Stop the Docker Container
   await stopDatabaseContainer();
+
+  // Stop the mail server container
+  await stopMailpitContainer();
 }
 
 export default globalTeardown;

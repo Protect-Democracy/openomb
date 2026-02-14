@@ -51,11 +51,14 @@ export const searchesRelations = relations(searches, ({ one }) => ({
 export const descriptionParsed = (
   searchesRecord: typeof searches.$inferSelect | undefined
 ): string => {
+  const noFiltersDescription = '(no filters)';
+
   if (!searchesRecord?.criterion) {
-    return '';
+    return noFiltersDescription;
   }
   const criterionArray: Array<string> = [];
   const criterion = searchesRecord.criterion;
+
   if (criterion.term) {
     criterionArray.push(`'${criterion.term}'`);
   }
@@ -84,7 +87,7 @@ export const descriptionParsed = (
     criterionArray.push(`Footnote(s): ${criterion.footnoteNum}`);
   }
 
-  return criterionArray.join('; ');
+  return criterionArray.length >= 1 ? criterionArray.join('; ') : noFiltersDescription;
 };
 
 /**

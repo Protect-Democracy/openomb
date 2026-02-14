@@ -14,7 +14,7 @@ import { users } from '../schema/users';
 import { formatTafsFormattedId } from '../../src/lib/formatters';
 import { memoizeDataAsync } from '../../server/cache';
 
-type ItemDetails =
+export type ItemDetails =
   | filesSelect
   | tafsSelect
   | searchesSelect
@@ -27,6 +27,12 @@ type ItemDetails =
       accountId?: string;
     };
 
+export type SubscriptionDetails = {
+  itemDetails: ItemDetails;
+  description: string;
+  itemLink: string;
+};
+
 /**
  * Gets the item details for each individual subscription
  *  (fetching by type & itemId allows for caching)
@@ -34,14 +40,7 @@ type ItemDetails =
 async function getSubscriptionDetails(
   type: string,
   itemId: string
-): Promise<
-  | {
-      itemDetails: ItemDetails;
-      description: string;
-      itemLink: string;
-    }
-  | undefined
-> {
+): Promise<SubscriptionDetails | undefined> {
   if (!type || !itemId) {
     return;
   }

@@ -4,6 +4,7 @@ import { defineConfig } from 'vitest/config';
 import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 import postcssCustomMedia from 'postcss-custom-media';
+import postcssIsPseudoClass from '@csstools/postcss-is-pseudo-class';
 import legacy from '@vitejs/plugin-legacy';
 import devtoolsJson from 'vite-plugin-devtools-json';
 
@@ -52,17 +53,26 @@ export default defineConfig({
   css: {
     postcss: {
       // noIsPseudoSelector, is: doesn't play nice with juice (email css processor)
-      plugins: [postcssNesting({ noIsPseudoSelector: true }), postcssCustomMedia, autoprefixer]
+      plugins: [
+        postcssNesting({ noIsPseudoSelector: true }),
+        postcssCustomMedia,
+        postcssIsPseudoClass,
+        autoprefixer
+      ]
     }
   },
 
   test: {
+    css: true,
     // Specifically needed because of the use of testcontainers
     hookTimeout: 60_000,
     testTimeout: 5_000,
     setupFiles: ['./tests/vitest.setup.ts'],
     // Unit tests should generally be in the same directory as code.
-    include: ['{src,server,db}/**/*.{test,spec}.{js,ts}', 'tests/unit/**/*.{test,spec}.{js,ts}']
+    include: [
+      '{src,server,db,email}/**/*.{test,spec}.{js,ts}',
+      'tests/unit/**/*.{test,spec}.{js,ts}'
+    ]
   },
 
   // TODO - this might impact older browsers, but allows our lib env

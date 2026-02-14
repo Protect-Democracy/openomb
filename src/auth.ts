@@ -37,14 +37,14 @@ const authHandle: Handle = async (props) => {
   // If it is an email client verification request, bypass authentication handle
   // (an email client will not have visited the site before, so should not have this cookie in their headers)
   // Note: this will require the user to request the email and open the link within the same browser
-  if (
-    Boolean(props.event.url.pathname.match(/^\/(auth|subscribe)\/callback.*/)) &&
-    props.event.cookies.get('jsEnabled') == null
-  ) {
-    // We need to set our auth function to avoid reference errors
-    props.event.locals.auth = async () => Promise.resolve({ expires: '' });
-    return await props.resolve(props.event);
-  }
+  // if (
+  //   Boolean(props.event.url.pathname.match(/^\/(auth|subscribe)\/callback.*/)) &&
+  //   props.event.cookies.get('jsEnabled') == null
+  // ) {
+  //   // We need to set our auth function to avoid reference errors
+  //   props.event.locals.auth = async () => Promise.resolve({ expires: '' });
+  //   return await props.resolve(props.event);
+  // }
   return await handle(props);
 };
 

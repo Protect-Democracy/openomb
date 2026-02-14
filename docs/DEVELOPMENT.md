@@ -44,11 +44,9 @@ Utilize the following environment variables, optionally using a `.env` file:
 
 See [docs/CODING_STYLES_LINTING.md](./CODING_STYLES_LINTING.md).
 
-### Writing tests
+### Writing and running tests
 
-When writing code, you will likely want to write some tests:
-
-- (instructions here)
+See [docs/TESTING.md](./TESTING.md).
 
 ## Local development server
 
@@ -57,9 +55,3 @@ To start a development server and open web browser:
 ```bash
 npm run dev -- --open
 ```
-
-## Running tests
-
-To run tests, you should do the following:
-
-- (instructions here)

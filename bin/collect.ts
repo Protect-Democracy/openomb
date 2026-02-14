@@ -4,7 +4,6 @@
 
 // Dependencies
 import { join as joinPath } from 'node:path';
-import { parse as htmlParser } from 'node-html-parser';
 import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray, sql } from 'drizzle-orm';
@@ -13,11 +12,15 @@ import { db } from '../db/connection';
 import { collections } from '../db/schema/collections';
 import { files } from '../db/schema/files';
 import type { filesSelect } from '../db/schema/files';
-import { request } from '../server/request';
-import { apportionmentListFromHomepage, loadJsonFile, loadPdfFile } from '../server/load-file';
+import {
+  apportionmentListFromHomepage,
+  loadJsonFile,
+  loadPdfFile,
+  isApportionmentPdfUrl,
+  isSpendPlanPdfUrl
+} from '../server/load-file';
 import {
   environmentVariables,
-  unique,
   zipFiles,
   putS3File,
   listS3BucketObjects
@@ -203,16 +206,16 @@ async function cli(): Promise<void> {
       progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
     }
 
-    // Load PDF files
-    const pdfUrls = apportionmentUrls.filter((url) => url.match(/\.pdf$/));
+    // Load PDF Apportionment files.  Doesn't have "spend plan" in  the name
+    const pdfApportionmentUrls = apportionmentUrls.filter((url) => isApportionmentPdfUrl(url));
 
     // Go through each URL and collect data
     await createSpan('loadPdfFile[]', async () => {
-      for (let urlIndex = 0; urlIndex < pdfUrls.length; urlIndex++) {
+      for (let urlIndex = 0; urlIndex < pdfApportionmentUrls.length; urlIndex++) {
         // If new records only, check if file exists
         let existingRecord;
         if (options.newRecordsOnly) {
-          existingRecord = await findFileBySourceUrl(pdfUrls[urlIndex]);
+          existingRecord = await findFileBySourceUrl(pdfApportionmentUrls[urlIndex]);
           if (existingRecord) {
             fileIds.push(existingRecord.fileId);
           }
@@ -221,7 +224,7 @@ async function cli(): Promise<void> {
         // Add new record
         if (!existingRecord) {
           try {
-            const fileRecord = await loadPdfFile(pdfUrls[urlIndex]);
+            const fileRecord = await loadPdfFile(pdfApportionmentUrls[urlIndex]);
             if (fileRecord) {
               fileIds.push(fileRecord.fileId);
             }
@@ -230,13 +233,15 @@ async function cli(): Promise<void> {
             // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
             // but everything else will.
             throw new Error(
-              `IMPORTANT: Failed loading PDF file from URL "${pdfUrls[urlIndex]}": ${error?.message || error}`
+              `IMPORTANT: Failed loading PDF file from URL "${pdfApportionmentUrls[urlIndex]}": ${error?.message || error}`
             );
           }
         }
 
         if (options.showProgress) {
-          progress.updateTask(pdfProgressMessage, { percentage: (urlIndex + 1) / pdfUrls.length });
+          progress.updateTask(pdfProgressMessage, {
+            percentage: (urlIndex + 1) / pdfApportionmentUrls.length
+          });
         }
       }
     });
@@ -244,6 +249,10 @@ async function cli(): Promise<void> {
     if (options.showProgress) {
       progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
     }
+
+    // Load PDF Spend Plan files.  Has "spend plan" in the name
+    const pdfSpendPlanUrls = apportionmentUrls.filter((url) => isSpendPlanPdfUrl(url));
+    // TODO
 
     // Mark any files not in the list as removed
     await db

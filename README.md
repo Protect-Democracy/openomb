@@ -55,8 +55,30 @@ Configure using the following environment variables:
 - `APPORTIONMENTS_DB_URI`: Database URI to connect to attempt to load data into.
   - Optionally, instead of using the URI, you can use the variables: `APPORTIONMENTS_DB_HOST`, `APPORTIONMENTS_DB_PORT`, `APPORTIONMENTS_DB_USER`, `APPORTIONMENTS_DB_PASSWORD`, `APPORTIONMENTS_DB_NAME`.
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
-  - `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI`: The CSP header value from Sentry.
-  - `PUBLIC_SENTRY_SVELTE_DSN`: Sentry DSN for the Sveltekit application
+- `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI`: The CSP header value from Sentry.
+- `PUBLIC_SENTRY_SVELTE_DSN`: Sentry DSN for the Sveltekit application
+- `AUTH_SECRET`: Secret string used for authentication
+
+**TODO**: There are a lot of references to Sentry environment variables in the codebase and in the deployment, but it's unclear on what does what. For instance, these are defined when deploying the web application:
+
+```
+VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+VITE_SENTRY_SCRIPT: ${{ secrets.VITE_SENTRY_SCRIPT }}
+SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+```
+
+### Notifications
+
+Use the following command to send notification emails to users who have subscribed to updates:
+
+```bash
+npm run notify
+```
+
+Configuration needed:
+
+- `APPORTIONMENTS_DB_URI`: (see above)
+- TODO
 
 ## Setup
 

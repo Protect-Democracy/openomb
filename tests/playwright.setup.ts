@@ -1,14 +1,12 @@
-import fs from 'node:fs/promises';
-import { dirname, join as joinPath } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { startDatabaseContainer } from './helpers/db-container';
-import { resetEnv } from './helpers/reset-env';
-import { createIsolatedDb } from './helpers/db';
-import { spawn, execSync } from 'node:child_process';
 import { exec } from 'node:child_process';
 import util from 'node:util';
 import type { FullConfig } from '@playwright/test';
 import stringArgv from 'string-argv';
+import { startMailpitContainer } from './helpers/email-container';
+import { startDatabaseContainer } from './helpers/db-container';
+import { resetEnv } from './helpers/reset-env';
+import { createIsolatedDb } from './helpers/db';
+import { spawn, execSync } from 'node:child_process';
 
 const execAsync = util.promisify(exec);
 
@@ -31,9 +29,19 @@ async function globalSetup(config: FullConfig) {
     loadDefaultSampleData: true
   });
 
+  // Start mail server
+  console.log('Starting mail server container...');
+  await startMailpitContainer();
+  console.log('Mailpit UI', `http://localhost:${process.env.TEST_MAILPIT_UI_PORT}`);
+
   // Set up the environment variables
   process.env.APPORTIONMENTS_DB_URI = uri;
   process.env.AUTH_SECRET = 'test-secret';
+  process.env.APPORTIONMENTS_EMAIL_SERVICE_TYPE = 'smtp';
+  process.env.APPORTIONMENTS_EMAIL_SMTP_HOST = 'localhost';
+  process.env.APPORTIONMENTS_EMAIL_SMTP_PORT = process.env.TEST_MAILPIT_SMTP_PORT;
+  process.env.APPORTIONMENTS_EMAIL_SMTP_USER = 'test';
+  process.env.APPORTIONMENTS_EMAIL_SMTP_PASSWORD = 'test';
 
   // Build the application
   try {
