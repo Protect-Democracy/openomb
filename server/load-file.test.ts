@@ -366,7 +366,6 @@ describe('isApportionmentPdfUrl()', () => {
       'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20Operations%20Spend%20Plan.pdf'
     ];
     invalidUrls.forEach((url) => {
-      console.log('Testing URL:', url);
       expect(isApportionmentPdfUrl(url)).toBe(false);
     });
   });
@@ -403,7 +402,6 @@ describe('isSpendPlanPdfUrl()', () => {
       'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20Operations%20Spend%20Plan.pdf'
     ];
     validUrls.forEach((url) => {
-      console.log('Testing URL:', url);
       expect(isSpendPlanPdfUrl(url)).toBe(true);
     });
   });
