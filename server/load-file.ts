@@ -622,11 +622,26 @@ async function apportionmentListFromHomepage(
   });
 }
 
+// Is an apportionment PDF url.  All pdf files that don't have "spend plan"
+// in the name seem to be apportionment files
+function isApportionmentPdfUrl(url: string): boolean {
+  url = decodeURI(url);
+  return !!url.match(/\.pdf$/i) && !url.match(/spend\s+plan/i);
+}
+
+// Is a spend plan url.  These are PDFs that have "spend plan" in the name
+function isSpendPlanPdfUrl(url: string): boolean {
+  url = decodeURI(url);
+  return !!url.match(/spend\s+plan.*\.pdf$/i);
+}
+
 // Extra exports for testing
 export {
   loadJsonFile,
   loadPdfFile,
   approvalDateFromPdfFileName,
   readPdfText,
-  apportionmentListFromHomepage
+  apportionmentListFromHomepage,
+  isApportionmentPdfUrl,
+  isSpendPlanPdfUrl
 };
