@@ -17,134 +17,134 @@
 
 <script lang="ts">
   import { createCombobox } from '@melt-ui/svelte';
-  import { fly } from 'svelte/transition';
-  import { createEventDispatcher } from 'svelte';
-  import { groupBy, uniqBy } from 'lodash-es';
-  import ChevronDown from '$components/icons/ChevronDown.svelte';
+import { fly } from 'svelte/transition';
+import { createEventDispatcher } from 'svelte';
+import { groupBy, uniqBy } from 'lodash-es';
+import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-  export let options: string[] | Record<string, unknown>[];
-  export let multi = false;
-  export let id;
-  export let name;
-  export let value: string | string[];
+export let options: string[] | Record<string, unknown>[];
+export let multi = false;
+export let id;
+export let name;
+export let value: string | string[];
 
-  export let formatOptionLabel = (o) => o;
-  export let formatOptionValue = (o) => o;
-  export let formatGroupLabel;
-  export let formatGroupValue;
+export let formatOptionLabel = (o) => o;
+export let formatOptionValue = (o) => o;
+export let formatGroupLabel;
+export let formatGroupValue;
 
-  // Constants
-  const emptyOption = { value: '', label: 'None' };
+// Constants
+const emptyOption = { value: '', label: 'None' };
 
-  // Get our option(s) that correspond to the provided value
-  function getDefaultSelection() {
-    if (!multi && !value) {
-      return emptyOption;
-    }
-
-    const defaultSelected = options
-      .filter((o) =>
-        Array.isArray(value)
-          ? value.includes(formatGroupOptionValue(o))
-          : formatGroupOptionValue(o) === value
-      )
-      .map((o) => ({
-        value: formatGroupOptionValue(o),
-        label: formatOptionLabel(o)
-      }));
-    return multi ? defaultSelected : defaultSelected?.[0];
+// Get our option(s) that correspond to the provided value
+function getDefaultSelection() {
+  if (!multi && !value) {
+    return emptyOption;
   }
 
-  // Melt combobox
-  const dispatch = createEventDispatcher();
-  const {
-    elements: { menu, input, option, group, groupLabel },
-    states: { open, inputValue, touchedInput, selected },
-    helpers: { isSelected, isHighlighted }
-  } = createCombobox({
-    forceVisible: true,
-    multiple: multi,
-    defaultSelected: getDefaultSelection(),
-    ids: { label: id },
-    onSelectedChange: ({ next }) => {
-      dispatch('change', next);
-      return next;
-    },
-    onOpenChange: ({ next }) => {
-      if (!next) {
-        inputValue.set(''); //Clear input when options are chosen & dialog is closed
-      }
-      return next;
-    }
-  });
+  const defaultSelected = options
+    .filter((o) =>
+      Array.isArray(value)
+        ? value.includes(formatGroupOptionValue(o))
+        : formatGroupOptionValue(o) === value
+    )
+    .map((o) => ({
+      value: formatGroupOptionValue(o),
+      label: formatOptionLabel(o)
+    }));
+  return multi ? defaultSelected : defaultSelected?.[0];
+}
 
-  // Derived
-  // For some reason the store, $open, causes issues with sveltekit rendering,
-  // specifically it claims the $open store is undefined.
-  $: openProxy = typeof $open !== 'undefined' ? $open : false;
-  $: groupedOptions = formatGroupLabel
-    ? groupBy(uniqBy(options, formatGroupOptionValue), formatGroupLabel)
-    : {
-        Options: options
-      };
-
-  $: filteredGroupOptions = $touchedInput
-    ? Object.keys(groupedOptions).reduce((filteredGroupObject, groupName) => {
-        const normalizedInput = $inputValue.toLowerCase();
-        const filteredOptions = groupName.toLowerCase().includes(normalizedInput)
-          ? groupedOptions[groupName]
-          : groupedOptions[groupName].filter((o) =>
-              formatOptionLabel(o).toLowerCase().includes(normalizedInput)
-            );
-        if (filteredOptions.length) {
-          filteredGroupObject[groupName] = filteredOptions;
-        }
-        return filteredGroupObject;
-      }, {})
-    : groupedOptions;
-
-  function placeholderText(selectedOptions) {
-    // Option is empty (undefined or empty array)
-    if (
-      !selectedOptions ||
-      (!Array.isArray(selectedOptions) && !selectedOptions.value) ||
-      (Array.isArray(selectedOptions) && !selectedOptions.length)
-    ) {
-      return 'Type here to filter options';
+// Melt combobox
+const dispatch = createEventDispatcher();
+const {
+  elements: { menu, input, option, group, groupLabel },
+  states: { open, inputValue, touchedInput, selected },
+  helpers: { isSelected, isHighlighted }
+} = createCombobox({
+  forceVisible: true,
+  multiple: multi,
+  defaultSelected: getDefaultSelection(),
+  ids: { label: id },
+  onSelectedChange: ({ next }) => {
+    dispatch('change', next);
+    return next;
+  },
+  onOpenChange: ({ next }) => {
+    if (!next) {
+      inputValue.set(''); //Clear input when options are chosen & dialog is closed
     }
-    // Single option is selected
-    if (!Array.isArray(selectedOptions)) {
-      return selectedOptions.label;
-    }
-    // Array of options is selected
-    return `${selectedOptions.length} value(s) selected`;
+    return next;
   }
+});
 
-  function formatGroupOptionValue(option) {
-    // If we want our group value returned as well, return both
-    if (formatGroupValue) {
-      return `${formatGroupValue(option)},${formatOptionValue(option)}`;
-    }
-    return formatOptionValue(option);
-  }
-
-  // Our selected values do not properly clear on reset, so we need to
-  //  add an event to our form input(s)
-  //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
-  function fixFormReset(el) {
-    const form = el.form;
-    if (!form) return;
-    const handleReset = () => {
-      // Set timeout is needed since `el.value` is only updated on the next frame
-      setTimeout(() => selected.set(multi ? [] : emptyOption));
+// Derived
+// For some reason the store, $open, causes issues with sveltekit rendering,
+// specifically it claims the $open store is undefined.
+$: openProxy = typeof $open !== 'undefined' ? $open : false;
+$: groupedOptions = formatGroupLabel
+  ? groupBy(uniqBy(options, formatGroupOptionValue), formatGroupLabel)
+  : {
+      Options: options
     };
-    form.addEventListener('reset', handleReset);
-    return {
-      destroy() {
-        form.removeEventListener('reset', handleReset);
+
+$: filteredGroupOptions = $touchedInput
+  ? Object.keys(groupedOptions).reduce((filteredGroupObject, groupName) => {
+      const normalizedInput = $inputValue.toLowerCase();
+      const filteredOptions = groupName.toLowerCase().includes(normalizedInput)
+        ? groupedOptions[groupName]
+        : groupedOptions[groupName].filter((o) =>
+            formatOptionLabel(o).toLowerCase().includes(normalizedInput)
+          );
+      if (filteredOptions.length) {
+        filteredGroupObject[groupName] = filteredOptions;
       }
-    };
+      return filteredGroupObject;
+    }, {})
+  : groupedOptions;
+
+function placeholderText(selectedOptions) {
+  // Option is empty (undefined or empty array)
+  if (
+    !selectedOptions ||
+    (!Array.isArray(selectedOptions) && !selectedOptions.value) ||
+    (Array.isArray(selectedOptions) && !selectedOptions.length)
+  ) {
+    return 'Type here to filter options';
   }
+  // Single option is selected
+  if (!Array.isArray(selectedOptions)) {
+    return selectedOptions.label;
+  }
+  // Array of options is selected
+  return `${selectedOptions.length} value(s) selected`;
+}
+
+function formatGroupOptionValue(option) {
+  // If we want our group value returned as well, return both
+  if (formatGroupValue) {
+    return `${formatGroupValue(option)},${formatOptionValue(option)}`;
+  }
+  return formatOptionValue(option);
+}
+
+// Our selected values do not properly clear on reset, so we need to
+//  add an event to our form input(s)
+//  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
+function fixFormReset(el) {
+  const form = el.form;
+  if (!form) return;
+  const handleReset = () => {
+    // Set timeout is needed since `el.value` is only updated on the next frame
+    setTimeout(() => selected.set(multi ? [] : emptyOption));
+  };
+  form.addEventListener('reset', handleReset);
+  return {
+    destroy() {
+      form.removeEventListener('reset', handleReset);
+    }
+  };
+}
 </script>
 
 <div class="has-js-only-block">
@@ -315,6 +315,9 @@
   }
 
   /* The ul gets taken out of the flow when the menu is open. */
+  :global(ul.search-select-menu) {
+    z-index: 9999;
+  }
   :global(body:has(ul.search-select-menu[data-side='top'])) .is-open .input-wrapper input {
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);

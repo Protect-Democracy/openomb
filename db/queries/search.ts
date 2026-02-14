@@ -485,9 +485,7 @@ export const mTafsSearchFullCountQuery = memoizeDataAsync(tafsSearchFullCountQue
  * @returns
  */
 export async function tafsSearchFullCount(searchParams: SearchParams) {
-  console.time('tafsSearchFullCount');
   const fullCount = await tafsSearchFullCountQuery(searchParams);
-  console.timeEnd('tafsSearchFullCount');
 
   return fullCount[0].count || 0;
 }
@@ -528,9 +526,7 @@ export const mTafsSearchFullFileCountQuery = memoizeDataAsync(tafsSearchFullFile
  * @returns
  */
 export async function tafsSearchFullFileCount(searchParams: SearchParams) {
-  console.time('tafsSearchFullFileCount');
   const fullCount = await tafsSearchFullFileCountQuery(searchParams);
-  console.timeEnd('tafsSearchFullFileCount');
 
   return fullCount[0].count || 0;
 }
@@ -547,7 +543,6 @@ export async function tafsSearchPaged(searchParams: SearchParams & PaginationPar
   const { where, order, orderFields } = await searchSetup(searchParams, 'tafs');
 
   // Specific ids
-  console.time('tafsSearchPaged');
   const pagedResults = await db
     .selectDistinct({
       tafsTableId: tafs.tafsTableId,
@@ -561,10 +556,8 @@ export async function tafsSearchPaged(searchParams: SearchParams & PaginationPar
     .orderBy(...order)
     .offset(searchParams.offset)
     .limit(searchParams.limit);
-  console.timeEnd('tafsSearchPaged');
 
   // Details.
-  console.time('tafsSearchPaged DETAILS');
   const tafsDetails = [];
   for (const pagedResult of pagedResults) {
     const details = await db.query.tafs.findFirst({
@@ -576,7 +569,6 @@ export async function tafsSearchPaged(searchParams: SearchParams & PaginationPar
 
     tafsDetails.push(details);
   }
-  console.timeEnd('tafsSearchPaged DETAILS');
 
   return tafsDetails;
 }
@@ -618,9 +610,7 @@ export const mAccountSearchFullCountQuery = memoizeDataAsync(accountSearchFullCo
  * @returns
  */
 export async function accountSearchFullCount(searchParams: SearchParams) {
-  console.time('accountSearchFullCount');
   const fullCount = await accountSearchFullCountQuery(searchParams);
-  console.timeEnd('accountSearchFullCount');
 
   return fullCount[0].count || 0;
 }
@@ -640,7 +630,6 @@ export async function accountSearchPaged(searchParams: SearchPaginationParams) {
   // still searching many fields across multiple tables and also be able
   // to order and offset.  We're limited by having a sort as those fields
   // need to appear in a DISTINCT or in a GROUP BY
-  console.time('accountSearchPaged');
   // Subquery to filter the accounts
   const allAccounts = await db
     .select({
@@ -664,7 +653,6 @@ export async function accountSearchPaged(searchParams: SearchPaginationParams) {
     .orderBy(...accountOrder)
     .offset(searchParams.accountOffset || 0)
     .limit(searchParams.accountLimit || 10);
-  console.timeEnd('accountSearchPaged');
 
   return allAccounts;
 }
@@ -704,9 +692,7 @@ export const mFileSearchFullCountQuery = memoizeDataAsync(fileSearchFullCountQue
  * @returns
  */
 export async function fileSearchFullCount(searchParams: SearchPaginationParams) {
-  console.time('fileSearchFullCount');
   const fullCount = await fileSearchFullCountQuery(searchParams);
-  console.timeEnd('fileSearchFullCount');
 
   return fullCount[0].count || 0;
 }
@@ -732,7 +718,6 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
   // will cause more than one row to be returned for each File ID.
   //
   //
-  console.time('fileSearchPaged');
   const limitedIds = await db
     .select({
       fileId: files.fileId
@@ -748,10 +733,8 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     .orderBy(...order)
     .offset(searchParams.offset)
     .limit(searchParams.limit);
-  console.timeEnd('fileSearchPaged');
 
   // Details.  Is there a better way to do this
-  console.time('fileSearchPaged-details');
   const detailsWith = {
     tafs: {
       // Specifically when ordering by account, we want the account
@@ -782,7 +765,6 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     });
     fileDetails.push(details);
   }
-  console.timeEnd('fileSearchPaged-details');
 
   return fileDetails;
 }

@@ -5,9 +5,12 @@ import autoprefixer from 'autoprefixer';
 import postcssNesting from 'postcss-nesting';
 import postcssCustomMedia from 'postcss-custom-media';
 import legacy from '@vitejs/plugin-legacy';
+import devtoolsJson from 'vite-plugin-devtools-json';
 
 export default defineConfig({
   plugins: [
+    devtoolsJson(),
+
     // Sentry configuration
     // Uses v8+ https://docs.sentry.io/platforms/javascript/guides/sveltekit/migration/v7-to-v8/#breaking-sentrysveltekit-changes
     // Must be before sveltkit plugin
@@ -54,7 +57,12 @@ export default defineConfig({
   },
 
   test: {
-    include: ['{src,server,db}/**/*.{test,spec}.{js,ts}']
+    // Specifically needed because of the use of testcontainers
+    hookTimeout: 60_000,
+    testTimeout: 5_000,
+    setupFiles: ['./tests/vitest.setup.ts'],
+    // Unit tests should generally be in the same directory as code.
+    include: ['{src,server,db}/**/*.{test,spec}.{js,ts}', 'tests/unit/**/*.{test,spec}.{js,ts}']
   },
 
   // TODO - this might impact older browsers, but allows our lib env

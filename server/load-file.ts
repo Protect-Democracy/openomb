@@ -4,11 +4,12 @@
 
 // Dependencies
 import { captureException } from '@sentry/node';
-import { groupBy } from 'lodash-es';
+import { groupBy, uniqBy } from 'lodash-es';
+import { parse as htmlParser } from 'node-html-parser';
 import { eq } from 'drizzle-orm';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { DateTime } from 'luxon';
-import { request, urlExists } from './request';
+import { request, urlExists, RequestOptions } from './request';
 import { files, computeFundsProvidedByParsed } from '../db/schema/files';
 import { lines } from '../db/schema/lines';
 import { mLineTypeFromLineNumber } from '../db/queries/line-types';
@@ -21,10 +22,12 @@ import {
   md5hash,
   parseBoolean,
   cleanString,
-  dbId
+  dbId,
+  unique
 } from './utilities';
 import { db } from '../db/connection';
 import pdfFixes from '../data/fixes/pdf-files';
+import { createSpan } from './sentry-custom';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {
@@ -74,13 +77,16 @@ const collectionTimezone = 'America/New_York';
  * Load an apportionment file into the database.
  */
 // @todo - figure out how to get around sentry data limits to profile this (separate into transactions?)
-async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert | undefined> {
+async function loadJsonFile(
+  jsonUrl: string,
+  retries: number = 5
+): Promise<typeof files.$inferInsert | undefined> {
   // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
   // completely stop the process.
   let fileResponse;
   let sourceData;
   try {
-    fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries: 5 });
+    fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries });
     sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
   }
   catch (error) {
@@ -283,8 +289,16 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
       }
     }
 
-    if (footnoteRecords.length > 0) {
-      await db.insert(footnotes).values(footnoteRecords);
+    // There's at least one case where a duplicate footnote number is designated
+    // twice, so we need to make sure the records are unique by file, line, and
+    // footnote number
+    const uniqueFootnoteRecords = uniqBy(
+      footnoteRecords,
+      (r) => `${r.fileId}-${r.lineIndex}-${r.footnoteNumber}`
+    );
+
+    if (uniqueFootnoteRecords.length > 0) {
+      await db.insert(footnotes).values(uniqueFootnoteRecords);
     }
   }
 
@@ -299,12 +313,15 @@ async function loadJsonFile(jsonUrl: string): Promise<typeof files.$inferInsert 
  * we simply make a basic entry in the DB using data from
  * the URL.
  */
-async function loadPdfFile(pdfUrl: string): Promise<typeof files.$inferInsert | undefined> {
+async function loadPdfFile(
+  pdfUrl: string,
+  retries: number = 5
+): Promise<typeof files.$inferInsert | undefined> {
   // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
   // completely stop the process.
   let fileResponse;
   try {
-    fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries: 5 });
+    fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
   }
   catch (error) {
     const e = new Error(
@@ -503,6 +520,7 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
  * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf
  * MM.DD.YYYY
  * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf
+ * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf
  *
  * Approvals actually come in at specific times, so we default to noon.
  *
@@ -510,12 +528,15 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
  * @returns Approval date or null
  */
 function approvalDateFromPdfFileName(fileName: string): Date | null {
-  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy'];
+  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy', 'yyyy-M-d'];
   const assumedTime = '--12:00:00';
   const assumedFormat = '--HH:mm:ss';
 
+  // Remove any number of .pdf extensions at the end of the file name
+  fileName = fileName.replace(/(\.pdf)+$/, '');
+
   // Get date part
-  const datePart = fileName.match(/.*_(\d{2,4}[-_.]\d{2,4}[-_.]\d{2,4})$/);
+  const datePart = fileName.match(/.*_(\d{2,4}[-_.]\d{1,4}[-_.]\d{1,4})$/);
   if (!datePart || !datePart[1]) {
     return null;
   }
@@ -565,5 +586,47 @@ async function readPdfText(url: string): Promise<string> {
   return fullText;
 }
 
+/**
+ * Parse Apportionment list page and get list of all apportionment URL/files
+ * (JSON, Excel, at least one PDF).
+ */
+async function apportionmentListFromHomepage(
+  homepageUrl: string,
+  requestOptions: RequestOptions = {}
+): Promise<string[]> {
+  return await createSpan('apportionmentList', async () => {
+    // Ideally we want the cache for this to be short so that our data is fresh, but the
+    // apportionment homepage can very slow, so we'll default to something that is a bit longer
+    requestOptions = requestOptions || {};
+    requestOptions.expectedType = requestOptions.expectedType || 'text';
+    requestOptions.ttl = requestOptions.ttl || 1000 * 60 * 60;
+    requestOptions.retries = requestOptions.retries || 5;
+    const homepage = await request(homepageUrl, {}, requestOptions);
+
+    // Check response
+    if (!homepage.meta.response.ok || !homepage.data || homepage.meta.response.status >= 300) {
+      throw new Error(
+        `Homepage response was not valid | OK: ${homepage.meta.response.ok} | Status: ${homepage.meta.response.status}`
+      );
+    }
+
+    // Get links in the section
+    const parsedHtml = htmlParser(homepage.data.toString());
+    let links = parsedHtml.querySelectorAll('#hierarchy a').map((a) => a.getAttribute('href'));
+
+    // Add domain/url to relative links
+    links = links.map((link) => (link ? `${homepageUrl}${link.replace(/^\//, '')}` : ''));
+    links = links.filter((link) => !!link);
+
+    return unique(links);
+  });
+}
+
 // Extra exports for testing
-export { loadJsonFile, loadPdfFile, approvalDateFromPdfFileName };
+export {
+  loadJsonFile,
+  loadPdfFile,
+  approvalDateFromPdfFileName,
+  readPdfText,
+  apportionmentListFromHomepage
+};
