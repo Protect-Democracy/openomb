@@ -31,20 +31,25 @@ const { handle, signIn, signOut } = SvelteKitAuth({
   }
 });
 
+// TODO: A more robust solution here would be to override the link in the email to go to an
+// intermediate page that has a "Finish logging in" type of link that uses the login link from
+// Auth.  This way, if a client goes to the link it won't matter at all unless it's clicking
+// through on the button.
+
 // Replace the auth handle function so that we can handle
 //  email validation requests and prevent them using up access codes
 const authHandle: Handle = async (props) => {
   // If it is an email client verification request, bypass authentication handle
   // (an email client will not have visited the site before, so should not have this cookie in their headers)
   // Note: this will require the user to request the email and open the link within the same browser
-  // if (
-  //   Boolean(props.event.url.pathname.match(/^\/(auth|subscribe)\/callback.*/)) &&
-  //   props.event.cookies.get('jsEnabled') == null
-  // ) {
-  //   // We need to set our auth function to avoid reference errors
-  //   props.event.locals.auth = async () => Promise.resolve({ expires: '' });
-  //   return await props.resolve(props.event);
-  // }
+  if (
+    Boolean(props.event.url.pathname.match(/^\/(auth|subscribe)\/callback.*/)) &&
+    props.event.cookies.get('jsEnabled') == null
+  ) {
+    // We need to set our auth function to avoid reference errors
+    props.event.locals.auth = async () => Promise.resolve({ expires: '' });
+    return await props.resolve(props.event);
+  }
   return await handle(props);
 };
 

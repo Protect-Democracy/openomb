@@ -1,9 +1,19 @@
 import { expect, test } from '@playwright/test';
 import { emailClient } from '../helpers/email';
 
-test('basic email authentication', async ({ page }) => {
+test('basic email authentication', async ({ page, context, browser, baseURL }) => {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
   const newEmailWatch = mailClient.waitForEvent('new');
+
+  // Set a cookie to indicate that the user has JavaScript enabled, which is required for
+  // our email verification flow
+  await context.addCookies([
+    {
+      name: 'jsEnabled',
+      value: 'true',
+      url: baseURL
+    }
+  ]);
 
   // Subscribe / login
   await page.goto('/subscribe');
@@ -25,16 +35,13 @@ test('basic email authentication', async ({ page }) => {
     throw new Error('No link found in email');
   }
   let authLink = linkMatch[1];
-  console.log('Auth link:', authLink);
 
   // Check link
   expect(authLink).not.toBeNull();
   expect(authLink).toMatch(/^http/);
 
-  // Remove domain and port
+  // Ensure that any HTML entities in the link are decoded (e.g. &amp; to &)
   authLink = authLink.replace(/&amp;/g, '&');
-  console.log(authLink);
-  //authLink = authLink.replace(/^https?:\/\/[^/]+/, '');
 
   // Go to the link to log in
   await page.goto(authLink);
