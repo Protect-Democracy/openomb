@@ -9,26 +9,21 @@ import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray, sql } from 'drizzle-orm';
 import chalk from 'chalk';
 import { db } from '$db/connection';
-import { collections } from '../src/lib/server/db/schema/collections';
-import { files } from '../src/lib/server/db/schema/files';
-import type { filesSelect } from '../src/lib/server/db/schema/files';
+import { collections } from '$schema/collections';
+import { files } from '$schema/files';
+import type { filesSelect } from '$schema/files';
 import {
   apportionmentListFromHomepage,
   loadJsonFile,
   loadPdfFile,
   isApportionmentPdfUrl,
   isSpendPlanPdfUrl
-} from '../server/load-file';
-import {
-  environmentVariables,
-  zipFiles,
-  putS3File,
-  listS3BucketObjects
-} from '../server/utilities';
+} from '$server/load-file';
+import { environmentVariables, zipFiles, putS3File, listS3BucketObjects } from '$server/utilities';
+import { setupCustomSentry, createTransaction, createSpan } from '$server/sentry-custom';
+import { loadDefaultLineTypes } from '$queries/line-types';
+import { loadDefaultLineDescriptions } from '$queries/line-descriptions';
 import packageJson from '../package.json' assert { type: 'json' };
-import { setupCustomSentry, createTransaction, createSpan } from '../server/sentry-custom';
-import { loadDefaultLineTypes } from '../src/lib/server/db/queries/line-types';
-import { loadDefaultLineDescriptions } from '../src/lib/server/db/queries/line-descriptions';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();

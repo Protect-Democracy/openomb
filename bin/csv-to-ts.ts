@@ -4,10 +4,10 @@
 
 // Dependencies
 import { Command } from 'commander';
-import packageJson from '../package.json' assert { type: 'json' };
 import { keys } from 'lodash-es';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { parse } from 'csv-parse/sync';
+import packageJson from '../package.json' assert { type: 'json' };
 
 /**
  * Main CLI handler.
