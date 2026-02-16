@@ -12,7 +12,7 @@ import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-
 import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
-import packageJson from '../package.json' with { type: 'json' };
+import packageJson from '$package' with { type: 'json' };
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));

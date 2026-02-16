@@ -84,14 +84,19 @@ const config = {
     }),
 
     alias: {
-      $lib: 'src/lib',
-      $db: 'src/lib/server/db',
-      $schema: 'src/lib/server/db/schema',
-      $queries: 'src/lib/server/db/queries',
+      $src: 'src',
       $assets: 'src/assets',
       $components: 'src/components',
       $config: 'src/config',
-      $email: 'email'
+      $lib: 'src/lib',
+      $server: 'src/lib/server',
+      $email: 'src/lib/server/email',
+      $db: 'src/lib/server/db',
+      $schema: 'src/lib/server/db/schema',
+      $queries: 'src/lib/server/db/queries',
+      $tests: 'tests',
+      $data: 'data',
+      $package: 'package.json'
     },
 
     csp: {

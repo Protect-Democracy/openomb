@@ -15,7 +15,7 @@ import { tracer } from 'drizzle-orm/tracing';
 import { startSpan, captureException } from '@sentry/node';
 import pg from 'pg';
 import debug from 'debug';
-import { environmentVariables } from '../../../../server/utilities';
+import { environmentVariables } from '$server/utilities';
 // Schemas
 import * as files from './schema/files';
 import * as footnotes from './schema/footnotes';

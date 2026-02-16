@@ -4,12 +4,12 @@
 
 // Dependencies
 import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray, sql } from 'drizzle-orm';
-import { db } from '../connection';
-import { files } from '../schema/files';
-import { tafs } from '../schema/tafs';
+import { db } from '$db/connection';
+import { files } from '$schema/files';
+import { tafs } from '$schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
 import { DateTime } from 'luxon';
-import { memoizeDataAsync } from '../../../../../server/cache';
+import { memoizeDataAsync } from '$server/cache';
 
 /**
  * Get simple file record given file id

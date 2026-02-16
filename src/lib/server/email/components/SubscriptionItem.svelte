@@ -1,18 +1,18 @@
 <script lang="ts">
   import { DateTime } from 'luxon';
-  import { deployedBaseUrl } from '../../src/config/index';
-  import { maxFilesPerNotificationEntry } from '../../src/config/subscriptions';
-  import { formatFileTitle, formatDate, formatNumber } from '../../src/lib/formatters';
+import { deployedBaseUrl } from '$config/index';
+import { maxFilesPerNotificationEntry } from '$config/subscriptions';
+import { formatFileTitle, formatDate, formatNumber } from '$lib/formatters';
 
-  export let subscription = {};
+export let subscription = {};
 
-  $: searchParams = new URLSearchParams({
-    ...subscription.criterion,
-    agencyBureau: `${subscription.criterion.agency}${subscription.criterion.bureau && ','}${subscription.criterion.bureau}`,
-    createdStart: DateTime.fromJSDate(subscription.criterion.createdStart).toISODate()
-  });
-  $: searchParams.delete('agency');
-  $: searchParams.delete('bureau');
+$: searchParams = new URLSearchParams({
+  ...subscription.criterion,
+  agencyBureau: `${subscription.criterion.agency}${subscription.criterion.bureau && ','}${subscription.criterion.bureau}`,
+  createdStart: DateTime.fromJSDate(subscription.criterion.createdStart).toISODate()
+});
+$: searchParams.delete('agency');
+$: searchParams.delete('bureau');
 </script>
 
 <div>

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { expect, beforeEach, afterEach, describe, it, test } from 'vitest';
 import type { Mock } from 'vitest';
 import { removeSync, ensureDirSync } from 'fs-extra/esm';
-import { mockFetchResponse } from '../tests/helpers/fetch';
+import { mockFetchResponse } from '$tests/helpers/fetch';
 
 // To test
 import { request, cacheKey, fetchWithRetries } from './request';

@@ -2,13 +2,13 @@
 import Mailgun from 'mailgun.js';
 import type { Interfaces } from 'mailgun.js/definitions';
 import { createTransport } from 'nodemailer';
-import { environmentVariables } from '../server/utilities';
+import { environmentVariables } from '$server/utilities';
 import {
   notifierEmailName,
   notifierEmail,
   replyEmailName,
   replyEmail
-} from '../src/config/subscriptions';
+} from '$config/subscriptions';
 
 // Instantiate mailgun library with native FormData
 const mailgun = new Mailgun(FormData);

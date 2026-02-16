@@ -12,7 +12,7 @@ import { searches, descriptionParsed, type searchesSelect } from '../schema/sear
 import { subscriptions, type subscriptionSelect } from '../schema/subscriptions';
 import { users } from '../schema/users';
 import { formatTafsFormattedId } from '../../../formatters';
-import { memoizeDataAsync } from '../../../../../server/cache';
+import { memoizeDataAsync } from '../../cache';
 
 export type ItemDetails =
   | filesSelect

@@ -6,15 +6,15 @@
 
 // Dependencies
 import { Command } from 'commander';
-import { environmentVariables } from '../server/utilities';
-import { renderTemplate } from '../email/render';
-import { getSubscriptionsWithFilesByUser } from '../server/subscriptions';
-import { sendEmail } from '../email/send';
 import packageJson from '../package.json' assert { type: 'json' };
+import { environmentVariables } from '../src/lib/server/utilities';
+import { getSubscriptionsWithFilesByUser } from '../src/lib/server/subscriptions';
+import { renderTemplate } from '$email/render';
+import { sendEmail } from '$email/send';
 
-import AuthenticationEmail from '../email/templates/AuthenticationEmail.svelte';
-import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
-import SubscriptionEmail from '../email/templates/SubscriptionEmail.svelte';
+import AuthenticationEmail from '$email/templates/AuthenticationEmail.svelte';
+import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte';
+import SubscriptionEmail from '$email/templates/SubscriptionEmail.svelte';
 /**
  * Main CLI handler.
  */

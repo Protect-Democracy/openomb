@@ -4,8 +4,8 @@
 
 // Dependencies
 import { expect, test, vi, afterEach, describe, it, beforeEach } from 'vitest';
-import { createIsolatedDb } from '../tests/helpers/db';
-import { mockFetchResponse } from '../tests/helpers/fetch';
+import { createIsolatedDb } from '$tests/helpers/db';
+import { mockFetchResponse } from '$tests/helpers/fetch';
 import { DateTime } from 'luxon';
 import path from 'node:path';
 import fs from 'node:fs';

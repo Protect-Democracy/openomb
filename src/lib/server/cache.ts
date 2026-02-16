@@ -9,7 +9,7 @@
 import { LRUCache } from 'lru-cache';
 import debug from 'debug';
 import { environmentVariables } from './utilities';
-import { secondsToCacheInvalidation } from '../src/lib/utilities';
+import { secondsToCacheInvalidation } from '$lib/utilities';
 
 // Debugger
 const debugLogger = debug('apportionments:cache');

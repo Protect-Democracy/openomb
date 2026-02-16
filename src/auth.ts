@@ -3,7 +3,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import type { Handle } from '@sveltejs/kit';
 import { db } from '$db/connection';
 import { sendVerificationRequest } from '$lib/server/auth-notify';
-import { users, accounts, sessions, verificationTokens } from '$db/schema';
+import { users, accounts, sessions, verificationTokens } from '$schema';
 import env from '$lib/environment';
 
 const { handle, signIn, signOut } = SvelteKitAuth({

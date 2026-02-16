@@ -1,7 +1,7 @@
 // Dependencies
 import { uniqBy, orderBy, filter, sumBy } from 'lodash-es';
-import type { filesSelect } from '$db/schema/files';
-import type { tafsSelect } from '$db/schema/tafs';
+import type { filesSelect } from '$schema/files';
+import type { tafsSelect } from '$schema/tafs';
 
 // Types
 interface FileWithTafs extends filesSelect {

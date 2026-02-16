@@ -1,7 +1,7 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
 import { recentlyApproved } from '$db/queries/files';
-import { packageJson } from '../../../../../server/utilities';
+import { packageJson } from '../../../../lib/server/utilities';
 import env from '$lib/environment';
 
 /**
