@@ -15,6 +15,8 @@ const dependencies = Object.keys({
 
 export default defineConfig({
   plugins: [
+    // This should allow us to use the tsconfig for paths, which should use
+    // the paths defined in SvelteKit config.
     tsconfigPaths({
       projectDiscovery: 'lazy'
     }),

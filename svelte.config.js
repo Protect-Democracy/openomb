@@ -88,6 +88,7 @@ const config = {
       $assets: 'src/assets',
       $components: 'src/components',
       $config: 'src/config',
+      $styles: 'src/styles',
       $lib: 'src/lib',
       $server: 'src/lib/server',
       $email: 'src/lib/server/email',

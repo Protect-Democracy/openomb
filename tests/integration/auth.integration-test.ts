@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { emailClient } from '../helpers/email';
+import { emailClient } from '$tests/helpers/email';
 
 test('basic email authentication', async ({ page, context, browser, baseURL }) => {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();

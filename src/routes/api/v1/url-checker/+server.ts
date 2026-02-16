@@ -1,6 +1,6 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
-import { mUrlIsReachable } from '../../../../lib/server/urls';
+import { mUrlIsReachable } from '$server/urls';
 
 /**
  * Url Checker endpoint.  Used internally to check if a URL is
