@@ -8,10 +8,10 @@ import { Command } from 'commander';
 import { MultiProgressBars } from 'multi-progress-bars';
 import { eq, notInArray, sql } from 'drizzle-orm';
 import chalk from 'chalk';
-import { db } from '../db/connection';
-import { collections } from '../db/schema/collections';
-import { files } from '../db/schema/files';
-import type { filesSelect } from '../db/schema/files';
+import { db } from '$db/connection';
+import { collections } from '../src/lib/server/db/schema/collections';
+import { files } from '../src/lib/server/db/schema/files';
+import type { filesSelect } from '../src/lib/server/db/schema/files';
 import {
   apportionmentListFromHomepage,
   loadJsonFile,
@@ -27,8 +27,8 @@ import {
 } from '../server/utilities';
 import packageJson from '../package.json' assert { type: 'json' };
 import { setupCustomSentry, createTransaction, createSpan } from '../server/sentry-custom';
-import { loadDefaultLineTypes } from '../db/queries/line-types';
-import { loadDefaultLineDescriptions } from '../db/queries/line-descriptions';
+import { loadDefaultLineTypes } from '../src/lib/server/db/queries/line-types';
+import { loadDefaultLineDescriptions } from '../src/lib/server/db/queries/line-descriptions';
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();

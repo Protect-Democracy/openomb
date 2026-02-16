@@ -4,6 +4,7 @@
 import { defineConfig } from 'vite';
 import { sentryRollupPlugin } from '@sentry/rollup-plugin';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 import packageJson from './package.json';
 
@@ -13,21 +14,17 @@ const dependencies = Object.keys({
 });
 
 export default defineConfig({
-  // TODO: Unsure why these aliases are not being picked up via
-  // the tsconfig.json.  This is a workaround.
-  resolve: {
-    alias: {
-      $config: 'src/config/index.ts',
-      '$config/*': 'src/config/*'
-    }
-  },
   plugins: [
+    tsconfigPaths({
+      projectDiscovery: 'lazy'
+    }),
     svelte({
       compilerOptions: {
         css: 'injected'
       }
     })
   ],
+
   // TODO: This causes issues with running the built script, but specifically
   // for the email tool, we would like this to work so that there's parity.
   // css: {

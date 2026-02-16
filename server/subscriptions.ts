@@ -3,19 +3,19 @@
  */
 import { DateTime } from 'luxon';
 import { map } from 'lodash-es';
-import { mFileSearchFullCount, mFileSearchPaged } from '../db/queries/search';
+import { mFileSearchFullCount, mFileSearchPaged } from '$db/queries/search';
 import {
   userSubscriptionDetails,
   subscriptionsByUser,
   setSubscriptionAsNotified
-} from '../db/queries/subscriptions';
-import { filesSelect } from '../db/schema/files';
+} from '$db/queries/subscriptions';
+import { filesSelect } from '$db/schema/files';
 import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '../src/config/subscriptions';
 import { renderTemplate } from '../email/render';
 import { sendEmail } from '../email/send';
 import FileNotificationEmail from '../email/templates/FileNotificationEmail.svelte';
-import type { subscriptionSelect } from '../db/schema/subscriptions';
-import type { SubscriptionDetails, ItemDetails } from '../db/queries/subscriptions';
+import type { subscriptionSelect } from '$db/schema/subscriptions';
+import type { SubscriptionDetails, ItemDetails } from '$db/queries/subscriptions';
 
 type SubscriptionWithFiles = subscriptionSelect & {
   criterion: any;

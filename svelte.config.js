@@ -84,10 +84,10 @@ const config = {
     }),
 
     alias: {
-      $db: 'db',
-      $schema: 'db/schema',
-      $queries: 'db/queries',
       $lib: 'src/lib',
+      $db: 'src/lib/server/db',
+      $schema: 'src/lib/server/db/schema',
+      $queries: 'src/lib/server/db/queries',
       $assets: 'src/assets',
       $components: 'src/components',
       $config: 'src/config',

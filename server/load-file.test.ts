@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 import path from 'node:path';
 import fs from 'node:fs';
 
-import { fileDetails } from '../db/queries/files';
+import { fileDetails } from '$db/queries/files';
 
 import {
   approvalDateFromPdfFileName,
