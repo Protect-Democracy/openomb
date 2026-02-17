@@ -2,11 +2,15 @@
   import SubscriptionItem from './SubscriptionItem.svelte';
 import { subscriptionTypeTitles } from '$config/subscriptions';
 
-export let type = '';
-export let subscriptionGroup = [];
+// TODO: This type should be defined somewhere
+import type { SubscriptionWithFiles } from '$server/subscriptions';
+import type { SubscriptionDetails } from '$db/queries/subscriptions';
+
+export let type: keyof typeof subscriptionTypeTitles;
+export let subscriptionGroup: (SubscriptionWithFiles & SubscriptionDetails)[] = [];
 
 // Derived
-$: title = subscriptionTypeTitles[type];
+$: title = type && type in subscriptionTypeTitles ? subscriptionTypeTitles[type] : '';
 </script>
 
 <div>

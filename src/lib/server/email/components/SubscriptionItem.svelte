@@ -4,7 +4,11 @@ import { deployedBaseUrl } from '$config/index';
 import { maxFilesPerNotificationEntry } from '$config/subscriptions';
 import { formatFileTitle, formatDate, formatNumber } from '$lib/formatters';
 
-export let subscription = {};
+// TODO: This type should be defined somewhere
+import type { SubscriptionWithFiles } from '$server/subscriptions';
+import type { SubscriptionDetails } from '$db/queries/subscriptions';
+
+export let subscription: SubscriptionWithFiles & SubscriptionDetails;
 
 $: searchParams = new URLSearchParams({
   ...subscription.criterion,

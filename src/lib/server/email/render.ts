@@ -5,9 +5,13 @@
 import debug from 'debug';
 import { render as svelteRender } from 'svelte/server';
 import juice from 'juice';
+// Types not provided
+// @ts-ignore
 import reduceCssCalc from 'reduce-css-calc';
-import type { SvelteComponent } from 'svelte';
 import globalEmailStyles from '$src/styles/index-email.css?inline';
+
+// Types
+import type { Component } from 'svelte';
 
 const debugLogger = debug('apportionments:email');
 
@@ -26,7 +30,10 @@ const htmlTemplate = `
 /**
  * Render a component and handle any finessing.
  */
-export function renderTemplate(component: SvelteComponent, props) {
+export function renderTemplate<Props extends Record<string, any>>(
+  component: Component<Props>,
+  props: Props
+) {
   let processed;
   debugLogger(
     `Rendering email template: ${component.name} with props: ${JSON.stringify(Object.keys(props))}`

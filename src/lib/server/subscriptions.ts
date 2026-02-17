@@ -17,7 +17,7 @@ import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte
 import type { subscriptionSelect } from '$schema/subscriptions';
 import type { SubscriptionDetails, ItemDetails } from '$db/queries/subscriptions';
 
-type SubscriptionWithFiles = subscriptionSelect & {
+export type SubscriptionWithFiles = subscriptionSelect & {
   criterion: any;
   itemDetails: ItemDetails;
   fileCount: number;
