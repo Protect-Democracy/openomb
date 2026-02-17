@@ -9,17 +9,24 @@ import {
   subscriptionsByUser,
   setSubscriptionAsNotified
 } from '$db/queries/subscriptions';
-import { filesSelect } from '$schema/files';
 import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '$config/subscriptions';
 import { renderTemplate } from '$email/render';
 import { sendEmail } from '$email/send';
 import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte';
+
+// Types
 import type { subscriptionSelect } from '$schema/subscriptions';
-import type { SubscriptionDetails, ItemDetails } from '$db/queries/subscriptions';
+import type {
+  SubscriptionByUser,
+  SubscriptionDetails,
+  SubscriptionSelectDetails,
+  SubscriptionItemDetails
+} from '$db/queries/subscriptions';
+import type { filesSelect } from '$schema/files';
 
 export type SubscriptionWithFiles = subscriptionSelect & {
   criterion: any;
-  itemDetails: ItemDetails;
+  itemDetails: SubscriptionItemDetails;
   fileCount: number;
   files: filesSelect[];
 };
@@ -33,7 +40,7 @@ export async function sendNotifications() {
   for (const email of Object.keys(userSubscriptions)) {
     // For a user, find any relevant new files, then send the notification
     const currentUserSubs = userSubscriptions[email];
-    const notifySubs: SubscriptionWithFiles[] = [];
+    const notifySubs: subscriptionSelect[] = [];
     for (const sub of currentUserSubs) {
       // Check if our subscription is weekly or daily and, based on that, if it needs to run again
       if (includeDailyNotification(sub) || includeWeeklyNotification(sub)) {
@@ -49,7 +56,6 @@ export async function sendNotifications() {
       await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
     }
   }
-  console.info('Finished notification');
 }
 
 /**
@@ -77,11 +83,12 @@ export async function sendNotificationEmail(email: string, notifySubs: any[]) {
  */
 export async function getSubscriptionWithFiles(
   email: string,
-  sub: SubscriptionDetails,
+  sub: SubscriptionSelectDetails,
   lastNotified: Date | undefined = undefined
 ): Promise<SubscriptionWithFiles | undefined> {
   let criterion;
-  if (sub.type === 'search') {
+
+  if (sub.type === 'search' && 'criterion' in sub.itemDetails) {
     criterion = sub.itemDetails.criterion;
   }
   else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
@@ -100,6 +107,10 @@ export async function getSubscriptionWithFiles(
       tafs: detailRecord?.itemDetails.tafsId,
       year: `${detailRecord?.itemDetails.fiscalYear}`
     };
+  }
+  else {
+    // Unrecognized subscription type, throw error
+    throw new Error(`Unrecognized subscription type ${sub.type}`);
   }
 
   // Use specific last notified if provided which should only be for testing

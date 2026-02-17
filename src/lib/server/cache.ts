@@ -98,8 +98,10 @@ export function cacheId(identifiers: JSONStringifyable | [] | null | undefined) 
   try {
     return JSON.stringify(identifiers);
   }
-  catch (e) {
-    throw new Error(`Could not stringify identifiers to make cache Id: ${e.message}`);
+  catch (e: Error | unknown) {
+    throw new Error(
+      `Could not stringify identifiers to make cache Id: ${e instanceof Error ? e.message : String(e)}`
+    );
   }
 }
 

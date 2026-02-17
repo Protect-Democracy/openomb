@@ -6,15 +6,19 @@
 import { map, transform } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
-import { files, type filesSelect } from '$schema/files';
-import { tafs, type tafsSelect } from '$schema/tafs';
+import { files } from '$schema/files';
+import { tafs } from '$schema/tafs';
 import { searches, descriptionParsed, type searchesSelect } from '$schema/searches';
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
 import { memoizeDataAsync } from '$server/cache';
 
-export type ItemDetails =
+// Types
+import type { filesSelect } from '$schema/files';
+import type { tafsSelect } from '$schema/tafs';
+
+export type SubscriptionItemDetails =
   | filesSelect
   | tafsSelect
   | searchesSelect
@@ -28,10 +32,14 @@ export type ItemDetails =
     };
 
 export type SubscriptionDetails = {
-  itemDetails: ItemDetails;
+  itemDetails: SubscriptionItemDetails;
   description: string;
   itemLink: string;
 };
+
+export type SubscriptionSelectDetails = subscriptionSelect & SubscriptionDetails;
+
+export type SubscriptionByUser = Record<string, Array<SubscriptionSelectDetails>>;
 
 /**
  * Gets the item details for each individual subscription
@@ -149,10 +157,8 @@ const mGetSubscriptionDetails = memoizeDataAsync(getSubscriptionDetails);
 /**
  * Gets all subscriptions, with details, grouped by user
  */
-export const subscriptionsByUser = async function (): Promise<
-  Record<string, Array<subscriptionSelect>>
-> {
-  const userSubs: Record<string, Array<subscriptionSelect>> = {};
+export const subscriptionsByUser = async function (): Promise<SubscriptionByUser> {
+  const userSubs: SubscriptionByUser = {};
   const subscriptionResults = await db
     .select()
     .from(subscriptions)
@@ -210,7 +216,7 @@ export const userSubscriptionDetails = async function (
   email: string,
   type: string,
   itemId: string
-) {
+): Promise<SubscriptionSelectDetails | undefined> {
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
@@ -242,7 +248,9 @@ export const userSubscriptionList = async function (
  * Get all subscriptions associated with the provided email
  * Also provide details for the item(s) that were subscribed to
  */
-export const userSubscriptionListDetails = async function (email: string) {
+export const userSubscriptionListDetails = async function (
+  email: string
+): Promise<Array<SubscriptionSelectDetails>> {
   const subscriptionResults = await userSubscriptionList(email);
   return await Promise.all(
     map(subscriptionResults, async (result) => {
