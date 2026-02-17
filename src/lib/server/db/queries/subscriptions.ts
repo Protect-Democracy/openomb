@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { map } from 'lodash-es';
+import { map, transform } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files, type filesSelect } from '$schema/files';
@@ -121,10 +121,22 @@ async function getSubscriptionDetails(
     const item = await db.query.searches.findFirst({
       where: eq(searches.id, itemId)
     });
+
+    // Make sure that the criterion is correct for params
+    const transformedCriterion = transform(
+      item?.criterion || {},
+      (result: Record<string, string>, value, key) => {
+        if (key && value) {
+          result[key.toString()] = value?.toString();
+        }
+      },
+      {}
+    );
+
     return {
       itemDetails: item || {},
       description: `Saved Search: ${descriptionParsed(item)}`,
-      itemLink: `/search?${new URLSearchParams(item?.criterion).toString()}`
+      itemLink: `/search?${new URLSearchParams(transformedCriterion).toString()}`
     };
   }
 }

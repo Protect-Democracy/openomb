@@ -405,18 +405,18 @@ export async function searchSetup(
   // by aggregate values.  Default is just to order by approval.
   let order = [desc(files.approvalTimestamp)];
   // TODO: Unsure why this throws the type issue
-  if (searchParams?.sort === 'approved_asc') {
+  if ('sort' in searchParams && searchParams.sort === 'approved_asc') {
     order = [asc(files.approvalTimestamp)];
   }
-  if (searchParams?.sort === 'account_asc') {
+  if ('sort' in searchParams && searchParams?.sort === 'account_asc') {
     const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
-  else if (searchParams?.sort === 'bureau_asc') {
+  else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
-  else if (searchParams?.sort === 'agency_asc') {
+  else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
@@ -426,13 +426,13 @@ export async function searchSetup(
     sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
     sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
   ];
-  if (searchParams?.accountSort === 'account_desc') {
+  if ('accountSort' in searchParams && searchParams?.accountSort === 'account_desc') {
     accountOrder = [
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
       sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
     ];
   }
-  else if (searchParams?.accountSort === 'file_count_desc') {
+  else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
     accountOrder = [
       desc(countDistinct(tafs.fileId)),
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`
@@ -540,13 +540,12 @@ export const mTafsSearchFullFileCount = memoizeDataAsync(tafsSearchFullFileCount
  * @returns
  */
 export async function tafsSearchPaged(searchParams: SearchParams & PaginationParams) {
-  const { where, order, orderFields } = await searchSetup(searchParams, 'tafs');
+  const { where, order } = await searchSetup(searchParams, 'tafs');
 
   // Specific ids
   const pagedResults = await db
     .selectDistinct({
-      tafsTableId: tafs.tafsTableId,
-      ...orderFields
+      tafsTableId: tafs.tafsTableId
     })
     .from(tafs)
     .leftJoin(files, eq(tafs.fileId, files.fileId))
@@ -739,21 +738,24 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     tafs: {
       // Specifically when ordering by account, we want the account
       // titles to be in alphabetical order.
-      orderBy: (tafs, { asc }) => [asc(tafs.accountTitle)]
-    }
-  };
-  if (hasLines) {
-    detailsWith.tafs.with = {
-      lines: {
-        orderBy: (lines, { asc }) => [asc(lines.lineNumber)]
+      orderBy: [asc(tafs.accountTitle)],
+      // Check lines
+      ...(hasLines && {
+        with: {
+          lines: {
+            orderBy: [asc(lines.lineNumber)]
+          }
+        }
+      })
+    },
+    // Footnotes
+    ...(hasFootnotes && {
+      footnotes: {
+        orderBy: [asc(footnotes.footnoteNumber)]
       }
-    };
-  }
-  if (hasFootnotes) {
-    detailsWith.footnotes = {
-      orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
-    };
-  }
+    })
+  };
+
   const fileDetails = [];
   for (const limitedId of limitedIds) {
     const details = await db.query.files.findFirst({

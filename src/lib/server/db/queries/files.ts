@@ -59,23 +59,30 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
     return null;
   }
 
-  // Include references to iterations
-  const tafsWithIterations = file.tafs || [];
-  for (const t of tafsWithIterations) {
-    t.iterations = await db
-      .select({
-        fileId: tafs.fileId,
-        tafsId: tafs.tafsId,
-        fiscalYear: tafs.fiscalYear,
-        iteration: tafs.iteration,
-        tafsTableId: tafs.tafsTableId,
-        approvalTimestamp: files.approvalTimestamp
-      })
-      .from(tafs)
-      .leftJoin(files, eq(tafs.fileId, files.fileId))
-      .where(and(eq(tafs.tafsId, t.tafsId), eq(tafs.fiscalYear, t.fiscalYear)))
-      .orderBy(asc(tafs.iteration));
-  }
+  // Get tafs with iterations concurrently
+  const tafsWithIterations = await Promise.all(
+    (file.tafs || []).map(async (t) => {
+      const iterations = await db
+        .select({
+          fileId: tafs.fileId,
+          tafsId: tafs.tafsId,
+          fiscalYear: tafs.fiscalYear,
+          iteration: tafs.iteration,
+          tafsTableId: tafs.tafsTableId,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(tafs)
+        .leftJoin(files, eq(tafs.fileId, files.fileId))
+        .where(and(eq(tafs.tafsId, t.tafsId), eq(tafs.fiscalYear, t.fiscalYear)))
+        .orderBy(asc(tafs.iteration));
+
+      // Return the original TAFS data, plus the newly attached iterations array
+      return {
+        ...t,
+        iterations
+      };
+    })
+  );
 
   // Pull out footnotes
   const uniqFootnotes = orderBy(

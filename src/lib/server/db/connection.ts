@@ -11,11 +11,14 @@
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { drizzle } from 'drizzle-orm/node-postgres';
+// For some reason Drizzle doesn't provide types for this
+// @ts-ignore
 import { tracer } from 'drizzle-orm/tracing';
 import { startSpan, captureException } from '@sentry/node';
 import pg from 'pg';
 import debug from 'debug';
 import { environmentVariables } from '$server/utilities';
+
 // Schemas
 import * as files from './schema/files';
 import * as footnotes from './schema/footnotes';
@@ -28,12 +31,29 @@ import * as searches from './schema/searches';
 import * as lineTypes from './schema/line-types';
 import * as lineDescriptions from './schema/line-descriptions';
 
+// Types
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
+
 // Debugger
 const debugLogger = debug('apportionments:db');
 
 // Path to migrations
 const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
+
+// The combined schema at the module level
+const schemas = {
+  ...files,
+  ...footnotes,
+  ...lines,
+  ...tafs,
+  ...collections,
+  ...users,
+  ...subscriptions,
+  ...searches,
+  ...lineTypes,
+  ...lineDescriptions
+};
 
 // Track pool connection
 let pool: pg.Pool | undefined;
@@ -54,7 +74,9 @@ export function dbConnection() {
   //
   // TODO: This sucks, find a better way.
   if (process.env.NODE_ENV === 'test' && connectionString === 'postgresql:///') {
-    return null;
+    // For this type so that we don't have to change the return type of this function
+    // for testing.
+    return null as unknown as NodePgDatabase<typeof schemas>;
   }
 
   // Reuse pool if already created.
@@ -83,18 +105,7 @@ export function dbConnection() {
   // Drizzle connection
   // NOTE: Debug with { schema: ..., logger: true }
   const db = drizzle(pool, {
-    schema: {
-      ...files,
-      ...footnotes,
-      ...lines,
-      ...tafs,
-      ...collections,
-      ...users,
-      ...subscriptions,
-      ...searches,
-      ...lineTypes,
-      ...lineDescriptions
-    }
+    schema: schemas
   });
   debugLogger('Connected to database');
 
@@ -151,13 +162,17 @@ export function dbConnectionString() {
  * This allows us to tap into drizzle's tracer
  *  implementation and track our own queries.
  *
+ * Note: Drizzle doesn't have this types for some reason
+ *
  * @todo - We can hopefully remove this if opentelemetry fixes
  *  their own pgsql implementation
  */
 export function overrideDrizzleTracer() {
   const env = environmentVariables();
 
+  // @ts-ignore
   let query;
+  // @ts-ignore
   tracer.startActiveSpan = (name, fn) => {
     // Drizzle prepares queries, then executes them.
     //    We need to get the SQL from the prepared query
@@ -172,6 +187,7 @@ export function overrideDrizzleTracer() {
     if (name == 'drizzle.execute') {
       return startSpan(
         {
+          // @ts-ignore
           name: query || name,
           op: 'db.sql.execute',
           attributes: {

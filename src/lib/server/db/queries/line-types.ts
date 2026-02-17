@@ -20,7 +20,7 @@ import type { lineTypesSelect } from '$schema/line-types';
  */
 export const loadDefaultLineTypes = async () => {
   // Check if there are any line types
-  const existingLineTypes = await db.query.lineTypes.findMany();
+  const existingLineTypes = await db.select().from(lineTypes);
   if (existingLineTypes?.length > 0) {
     return;
   }

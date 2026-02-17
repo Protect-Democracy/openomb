@@ -7,6 +7,21 @@ import { timestamp, pgTable, text, json, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { users } from './users';
 
+// Criterion fields.
+// TODO: This should actually be aligned/shared with the search parameter
+// fields that are supported.
+export interface SearchCriterion {
+  term?: string;
+  tafs?: string;
+  agency?: string;
+  bureau?: string;
+  account?: string;
+  approver?: string;
+  year?: string | number;
+  lineNum?: string | number;
+  footnoteNum?: string | number;
+}
+
 // Table
 export const searches = pgTable(
   'searches',
@@ -18,7 +33,7 @@ export const searches = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     // Criterion for search is saved in JSON format for future flexibility
-    criterion: json('criterion'),
+    criterion: json('criterion').$type<SearchCriterion>(),
 
     // Meta
     createdAt: timestamp('created_at').defaultNow(),
@@ -56,6 +71,7 @@ export const descriptionParsed = (
   if (!searchesRecord?.criterion) {
     return noFiltersDescription;
   }
+
   const criterionArray: Array<string> = [];
   const criterion = searchesRecord.criterion;
 

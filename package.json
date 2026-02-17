@@ -100,6 +100,7 @@
     "@testcontainers/postgresql": "^11.11.0",
     "@thednp/dommatrix": "^3.0.2",
     "@types/archiver": "^7.0.0",
+    "@types/debug": "^4.1.12",
     "@types/eslint": "^9.6.1",
     "@types/fs-extra": "^11.0.4",
     "@types/lodash-es": "^4.17.12",
