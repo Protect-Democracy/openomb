@@ -101,3 +101,9 @@ export const footnotesRelations = relations(footnotes, ({ one }) => ({
     references: [lines.fileId, lines.lineIndex]
   })
 }));
+
+/**
+ * Export some types
+ */
+export type footnotesSelect = typeof footnotes.$inferSelect;
+export type footnotesInsert = typeof footnotes.$inferInsert;
