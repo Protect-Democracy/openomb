@@ -3,6 +3,7 @@
  */
 
 // Dependencies
+import { isDate } from 'lodash';
 import { timestamp, pgTable, text, json, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { formatDate } from '$lib/formatters';
@@ -16,7 +17,7 @@ export interface SavedSearchCriterion {
   // In the search interface
 
   // General keyword search across multiple fields
-  term?: string;
+  term?: string | string[];
   // TAFS keyword search
   tafs?: string;
   // Account keyword
@@ -33,6 +34,22 @@ export interface SavedSearchCriterion {
   approvedStart?: string | Date;
   approvedEnd?: string | Date;
 }
+
+// Parsed Criterion.  This is the ideal format.
+export type ParsedSavedSearchCriterion = {
+  term?: string[];
+  tafs?: string;
+  account?: string;
+  agency?: string;
+  bureau?: string;
+  approver?: string[];
+  year?: number[];
+  lineNum?: string[];
+  footnoteNum?: string[];
+  apportionmentType?: string[];
+  approvedStart?: Date;
+  approvedEnd?: Date;
+};
 
 export type SavedSearchCriterionKeys = keyof SavedSearchCriterion;
 
@@ -82,35 +99,68 @@ export const searchesRelations = relations(searches, ({ one }) => ({
 }));
 
 /**
- * Parse the criterion from string to the appropriate type.
+ * Make sure the criterion is in the correct format for saving.
  */
-export function urlToCriterion(
-  criterion: SavedSearchCriterionUrl | undefined
-): SavedSearchCriterion {
+export function parseCriterion(
+  criterion: SavedSearchCriterionUrl | SavedSearchCriterion | ParsedSavedSearchCriterion | undefined
+): ParsedSavedSearchCriterion {
   if (!criterion) {
     return {};
   }
 
-  // Take away agencyBureau from criterion
-  const agencyBureau = criterion.agencyBureau ? criterion.agencyBureau.split(',') : [];
+  // The URL version could have agencyBureau
+  const agencyBureau =
+    'agencyBureau' in criterion && typeof criterion?.agencyBureau === 'string'
+      ? criterion.agencyBureau?.split(',')
+      : [];
 
   return {
-    term: criterion.term,
+    term: Array.isArray(criterion?.term)
+      ? criterion.term
+      : criterion.term
+        ? criterion.term.split(',').map((s) => s.trim())
+        : undefined,
     tafs: criterion.tafs,
     account: criterion.account,
-    agency: agencyBureau?.[0] || undefined,
-    bureau: agencyBureau?.[1] || undefined,
-    approver: criterion.approver ? criterion.approver.split(',').map((s) => s.trim()) : undefined,
-    year: criterion.year ? criterion.year.split(',').map((y) => parseInt(y.trim())) : undefined,
-    lineNum: criterion.lineNum ? criterion.lineNum.split(',').map((s) => s.trim()) : undefined,
-    footnoteNum: criterion.footnoteNum
-      ? criterion.footnoteNum.split(',').map((s) => s.trim())
-      : undefined,
-    apportionmentType: criterion.apportionmentType
-      ? criterion.apportionmentType.split(',').map((s) => s.trim())
-      : undefined,
-    approvedStart: criterion.approvedStart ? new Date(criterion.approvedStart) : undefined,
-    approvedEnd: criterion.approvedEnd ? new Date(criterion.approvedEnd) : undefined
+    agency:
+      'agency' in criterion && criterion.agency ? criterion.agency : agencyBureau?.[0] || undefined,
+    bureau:
+      'bureau' in criterion && criterion.bureau ? criterion.bureau : agencyBureau?.[1] || undefined,
+    approver: Array.isArray(criterion?.approver)
+      ? criterion.approver
+      : criterion.approver
+        ? criterion.approver.split(',').map((s) => s.trim())
+        : undefined,
+    year: Array.isArray(criterion?.year)
+      ? criterion.year
+      : criterion.year
+        ? criterion.year.split(',').map((y) => parseInt(y.trim()))
+        : undefined,
+    lineNum: Array.isArray(criterion?.lineNum)
+      ? criterion.lineNum
+      : criterion.lineNum
+        ? criterion.lineNum.split(',').map((s) => s.trim())
+        : undefined,
+    footnoteNum: Array.isArray(criterion?.footnoteNum)
+      ? criterion.footnoteNum
+      : criterion.footnoteNum
+        ? criterion.footnoteNum.split(',').map((s) => s.trim())
+        : undefined,
+    apportionmentType: Array.isArray(criterion?.apportionmentType)
+      ? criterion.apportionmentType
+      : criterion.apportionmentType
+        ? criterion.apportionmentType.split(',').map((s) => s.trim())
+        : undefined,
+    approvedStart: isDate(criterion.approvedStart)
+      ? criterion.approvedStart
+      : criterion.approvedStart
+        ? new Date(criterion.approvedStart)
+        : undefined,
+    approvedEnd: isDate(criterion.approvedEnd)
+      ? criterion.approvedEnd
+      : criterion.approvedEnd
+        ? new Date(criterion.approvedEnd)
+        : undefined
   };
 }
 
@@ -122,6 +172,11 @@ export function urlToCriterion(
 export function criterionToUrl(criterion: SavedSearchCriterion): SavedSearchCriterionUrl {
   return {
     ...criterion,
+    term: criterion.term
+      ? Array.isArray(criterion.term)
+        ? criterion.term.join(',')
+        : criterion.term
+      : undefined,
     agencyBureau: [criterion.agency, criterion.bureau].filter(Boolean).join(',') || undefined,
     approver: Array.isArray(criterion.approver) ? criterion.approver.join(',') : criterion.approver,
     year: Array.isArray(criterion.year) ? criterion.year.join(',') : criterion.year,
@@ -132,14 +187,12 @@ export function criterionToUrl(criterion: SavedSearchCriterion): SavedSearchCrit
     apportionmentType: Array.isArray(criterion.apportionmentType)
       ? criterion.apportionmentType.join(',')
       : criterion.apportionmentType,
-    approvedStart:
-      criterion.approvedStart instanceof Date
-        ? criterion.approvedStart.toISOString().split('T')[0]
-        : undefined,
-    approvedEnd:
-      criterion.approvedEnd instanceof Date
-        ? criterion.approvedEnd.toISOString().split('T')[0]
-        : undefined
+    approvedStart: isDate(criterion.approvedStart)
+      ? criterion.approvedStart.toISOString().split('T')[0]
+      : undefined,
+    approvedEnd: isDate(criterion.approvedEnd)
+      ? criterion.approvedEnd.toISOString().split('T')[0]
+      : undefined
   };
 }
 
@@ -149,7 +202,7 @@ export function criterionToUrl(criterion: SavedSearchCriterion): SavedSearchCrit
  * Describes the criterion in text
  *
  */
-export const descriptionParsed = (
+export const searchCriterionDescription = (
   searchesRecord: typeof searches.$inferSelect | undefined
 ): string => {
   const noFiltersDescription = '(no filters)';

@@ -8,7 +8,7 @@ import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
-import { searches, descriptionParsed, type searchesSelect } from '$schema/searches';
+import { searches, searchCriterionDescription, type searchesSelect } from '$schema/searches';
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
@@ -143,7 +143,7 @@ async function getSubscriptionDetails(
 
     return {
       itemDetails: item || {},
-      description: `Saved Search: ${descriptionParsed(item)}`,
+      description: `Saved Search: ${searchCriterionDescription(item)}`,
       itemLink: `/search?${new URLSearchParams(transformedCriterion).toString()}`
     };
   }
