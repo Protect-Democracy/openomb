@@ -35,6 +35,13 @@ export type ColumnObject = {
   [key: string]: PgColumn | SelectedFields | SQL;
 };
 
+export type TODO = {
+  // Not in the search UI, but used for subscriptions and notifications
+  folder?: string;
+  createdStart?: Date;
+  createdEnd?: Date;
+};
+
 export type PaginationParams = {
   offset: number;
   limit: number;
