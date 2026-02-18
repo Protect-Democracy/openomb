@@ -3,12 +3,12 @@
  */
 
 // Dependencies
-import { lineDescriptions } from '../schema/line-descriptions';
-import type { lineDescriptionsSelect } from '../schema/line-descriptions';
-import { db } from '../connection';
+import { lineDescriptions } from '$schema/line-descriptions';
+import type { lineDescriptionsSelect } from '$schema/line-descriptions';
+import { db } from '$db/connection';
 import { mLineTypeFromLineNumber } from './line-types';
-import { memoizeDataAsync } from '../../server/cache';
-import defaultLineDescriptions from '../../data/line-descriptions';
+import { memoizeDataAsync } from '$server/cache';
+import defaultLineDescriptions from '$data/line-descriptions';
 
 // Types
 type lineDescriptionCsvRecord = {

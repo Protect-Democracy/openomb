@@ -5,13 +5,13 @@
  */
 
 // Dependencies
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { Command } from 'commander';
-import { overrideDrizzleTracer, db } from '../db/connection';
-import packageJson from '../package.json' with { type: 'json' };
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { setupCustomSentry, createTransaction, createSpan } from '../server/sentry-custom';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
+import { Command } from 'commander';
+import { overrideDrizzleTracer, db } from '$db/connection';
+import { setupCustomSentry, createTransaction, createSpan } from '$server/sentry-custom';
+import packageJson from '../package.json' with { type: 'json' };
 
 // Make sure Sentry is setup if DSN is provided
 setupCustomSentry();

@@ -5,13 +5,13 @@
 // Dependencies
 import { eq, gte, lte, and } from 'drizzle-orm';
 import { isInteger } from 'lodash-es';
-import { lineTypes } from '../schema/line-types';
-import { db } from '../connection';
-import defaultLineTypes from '../../data/line-types';
-import { memoizeDataAsync } from '../../server/cache';
+import { lineTypes } from '$schema/line-types';
+import { db } from '$db/connection';
+import defaultLineTypes from '$data/line-types';
+import { memoizeDataAsync } from '$server/cache';
 
 // Types
-import type { lineTypesSelect } from '../schema/line-types';
+import type { lineTypesSelect } from '$schema/line-types';
 
 /**
  * Load default file types if there is nothing in the table already.

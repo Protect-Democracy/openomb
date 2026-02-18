@@ -7,7 +7,7 @@ import { PgDialect } from 'drizzle-orm/pg-core';
 import { TypedQueryBuilder } from 'drizzle-orm/query-builders/query-builder';
 
 import { db } from './connection';
-import { allSchemas } from '../db/schema';
+import { allSchemas } from './schema';
 
 // Path to migrations
 const _dirname = dirname(fileURLToPath(import.meta.url));

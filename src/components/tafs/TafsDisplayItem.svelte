@@ -1,15 +1,15 @@
 <script lang="ts">
-  import type { tafsDetails } from '$db/schema/tafs';
-  import { formatTafsFormattedId, formatDateISO, formatDate } from '$lib/formatters';
+  import type { tafsDetails } from '$schema/tafs';
+import { formatTafsFormattedId, formatDateISO, formatDate } from '$lib/formatters';
 
-  // Props
-  export let tafs: tafsDetails;
-  export let headingElement = 'h3';
+// Props
+export let tafs: tafsDetails;
+export let headingElement = 'h3';
 
-  // Derived
-  $: fileId = tafs.fileId;
-  $: hasFile = !!tafs.file;
-  $: file = hasFile ? tafs.file : null;
+// Derived
+$: fileId = tafs.fileId;
+$: hasFile = !!tafs.file;
+$: file = hasFile ? tafs.file : null;
 </script>
 
 <article class="tafs-display-item">

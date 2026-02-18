@@ -4,8 +4,8 @@
 
 // Dependencies
 import { Command } from 'commander';
-import { sendNotifications } from '../server/subscriptions';
-import { setupCustomSentry, createTransaction } from '../server/sentry-custom';
+import { sendNotifications } from '$server/subscriptions';
+import { setupCustomSentry, createTransaction } from '$server/sentry-custom';
 import packageJson from '../package.json' assert { type: 'json' };
 
 // Make sure Sentry is setup if DSN is provided

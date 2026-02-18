@@ -1,4 +1,4 @@
-import { mUrlIsReachable } from '../../server/urls';
+import { mUrlIsReachable } from '$server/urls';
 import { sourceDataUrl } from '$config';
 
 // Turn off prerendering for all pages by default so that authentication runs

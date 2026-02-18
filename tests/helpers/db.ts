@@ -5,7 +5,12 @@ import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs/promises';
 
-import { db, resetDbConnection, migrationsDir, closeDbConnection } from '../../db/connection';
+import {
+  db,
+  resetDbConnection,
+  migrationsDir,
+  closeDbConnection
+} from '../../src/lib/server/db/connection';
 
 // Path to migrations
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -13,6 +18,9 @@ const defaultTestDataPath = joinPath(
   _dirname,
   '..',
   '..',
+  'src',
+  'lib',
+  'server',
   'db',
   'test-data',
   'sample-test-data-10.sql'

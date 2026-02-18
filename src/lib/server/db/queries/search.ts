@@ -17,16 +17,16 @@ import {
   SQL
 } from 'drizzle-orm';
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
-import { db } from '../connection';
-import { files } from '../schema/files';
-import { tafs } from '../schema/tafs';
-import { lines } from '../schema/lines';
-import { footnotes } from '../schema/footnotes';
-import { searches, type searchesSelect } from '../schema/searches';
-import { users } from '../schema/users';
-import { lineTypes } from '../schema/line-types';
-import { lineDescriptions } from '../schema/line-descriptions';
-import { memoizeDataAsync } from '../../server/cache';
+import { db } from '$db/connection';
+import { files } from '$schema/files';
+import { tafs } from '$schema/tafs';
+import { lines } from '$schema/lines';
+import { footnotes } from '$schema/footnotes';
+import { searches, type searchesSelect } from '$schema/searches';
+import { users } from '$schema/users';
+import { lineTypes } from '$schema/line-types';
+import { lineDescriptions } from '$schema/line-descriptions';
+import { memoizeDataAsync } from '$server/cache';
 
 // Types
 export type ColumnObject = {

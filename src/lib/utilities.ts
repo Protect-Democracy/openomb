@@ -3,7 +3,7 @@
  */
 
 import { DateTime } from 'luxon';
-import { collectionHour, collectionMinute, collectionTimezone } from '../config';
+import { collectionHour, collectionMinute, collectionTimezone } from '$config';
 
 /**
  * Get seconds to the next specific time in a timezone.

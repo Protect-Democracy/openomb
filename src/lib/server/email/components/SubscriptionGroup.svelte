@@ -1,12 +1,12 @@
 <script lang="ts">
   import SubscriptionItem from './SubscriptionItem.svelte';
-  import { subscriptionTypeTitles } from '../../src/config/subscriptions';
+import { subscriptionTypeTitles } from '$config/subscriptions';
 
-  export let type = '';
-  export let subscriptionGroup = [];
+export let type = '';
+export let subscriptionGroup = [];
 
-  // Derived
-  $: title = subscriptionTypeTitles[type];
+// Derived
+$: title = subscriptionTypeTitles[type];
 </script>
 
 <div>

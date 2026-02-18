@@ -26,7 +26,7 @@ import type { Handle } from '@sveltejs/kit';
 import { dateForCacheInvalidation } from '$lib/utilities';
 import { cacheRevalidateSeconds, securityHeaders } from '$config';
 import { overrideDrizzleTracer } from '$db/connection';
-import { authHandle } from './auth';
+import { authHandle } from '$server/auth';
 
 // Is production
 export const isProduction = (): boolean => env.environment == 'production' || import.meta.env.PROD;

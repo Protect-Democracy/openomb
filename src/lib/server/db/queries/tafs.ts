@@ -5,10 +5,10 @@
 // Dependencies
 import { groupBy, orderBy } from 'lodash-es';
 import { eq, and, countDistinct, asc, max, count, avg } from 'drizzle-orm';
-import { db } from '../connection';
-import { files } from '../schema/files';
-import { tafs } from '../schema/tafs';
-import { memoizeDataAsync } from '../../server/cache';
+import { db } from '$db/connection';
+import { files } from '$schema/files';
+import { tafs } from '$schema/tafs';
+import { memoizeDataAsync } from '$server/cache';
 
 /**
  * TAFS statistics

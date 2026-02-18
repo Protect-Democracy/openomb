@@ -5,7 +5,7 @@
 // Dependencies
 import { Command } from 'commander';
 import packageJson from '../package.json' assert { type: 'json' };
-import { generateTestData } from '../db/test-data';
+import { generateTestData } from '$db/test-data';
 
 /**
  * Main CLI handler.

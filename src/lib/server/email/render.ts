@@ -7,7 +7,7 @@ import { render as svelteRender } from 'svelte/server';
 import juice from 'juice';
 import reduceCssCalc from 'reduce-css-calc';
 import type { SvelteComponent } from 'svelte';
-import globalEmailStyles from '../src/styles/index-email.css?inline';
+import globalEmailStyles from '$src/styles/index-email.css?inline';
 
 const debugLogger = debug('apportionments:email');
 

@@ -1,6 +1,6 @@
 import { error, redirect, isRedirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { signOut } from '../../auth';
+import { signOut } from '$server/auth';
 import {
   addSubscription,
   removeSubscriptions,

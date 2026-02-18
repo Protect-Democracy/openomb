@@ -1,11 +1,11 @@
 /**
- * Queries centered around files.
+ * Queries centered around collections.
  */
 
 // Dependencies
 import { desc, eq, isNotNull } from 'drizzle-orm';
-import { db } from '../connection';
-import { collections } from '../schema/collections';
+import { db } from '$db/connection';
+import { collections } from '$schema/collections';
 
 /**
  * Get complete list of completed collections.

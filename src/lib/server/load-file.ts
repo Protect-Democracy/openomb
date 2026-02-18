@@ -9,12 +9,12 @@ import { parse as htmlParser } from 'node-html-parser';
 import { eq } from 'drizzle-orm';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { DateTime } from 'luxon';
-import { request, urlExists, RequestOptions } from './request';
-import { files, computeFundsProvidedByParsed } from '../db/schema/files';
-import { lines } from '../db/schema/lines';
-import { mLineTypeFromLineNumber } from '../db/queries/line-types';
-import { footnotes } from '../db/schema/footnotes';
-import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '../db/schema/tafs';
+import { request, urlExists } from './request';
+import { files, computeFundsProvidedByParsed } from './db/schema/files';
+import { lines } from './db/schema/lines';
+import { mLineTypeFromLineNumber } from './db/queries/line-types';
+import { footnotes } from './db/schema/footnotes';
+import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from './db/schema/tafs';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -25,9 +25,11 @@ import {
   dbId,
   unique
 } from './utilities';
-import { db } from '../db/connection';
-import pdfFixes from '../data/fixes/pdf-files';
+import { db } from './db/connection';
+import pdfFixes from '$data/fixes/pdf-files';
 import { createSpan } from './sentry-custom';
+
+import type { RequestOptions } from './request';
 
 // Apportionment schedule data from API
 export type ApportionmentScheduleApi = {

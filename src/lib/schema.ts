@@ -10,8 +10,8 @@ import type {
 import { siteName, siteDescription, siteKeywords, deployedBaseUrl } from '$config';
 import { isArray } from 'lodash-es';
 import { formatFileTitle, formatTafsFormattedId } from './formatters';
-import type { filesSelect } from '$db/schema/files';
-import type { tafsSelect } from '$db/schema/tafs';
+import type { filesSelect } from '$schema/files';
+import type { tafsSelect } from '$schema/tafs';
 import pdLogo from '$assets/logos/pd-white-words-logo.svg';
 
 // General schema handler
