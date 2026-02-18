@@ -15,103 +15,107 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { deserialize } from '$app/forms';
-  import Spinner from '$components/icons/Spinner.svelte';
-  import LogIn from './LogIn.svelte';
-  import { subscribeFeatureEnabled, sessionCookieName } from '$config/subscriptions';
-  import { clientGetUser, clientGetSubscriptionBySearchParams } from '$lib/users';
-  import { cookieHasValue } from '$lib/utilities';
+import { deserialize } from '$app/forms';
+import Spinner from '$components/icons/Spinner.svelte';
+import LogIn from './LogIn.svelte';
+import { subscribeFeatureEnabled, sessionCookieName } from '$config/subscriptions';
+import { clientGetUser, clientGetSubscriptionBySearchParams } from '$lib/users';
+import { cookieHasValue } from '$lib/utilities';
 
-  import type { User } from '$lib/users';
+// Typess
+import type { User } from '$lib/users';
+import type { SearchCriterion, SearchCriterionUnparsed } from '$schema/searches';
 
-  // Props
-  export let user: User;
-  export let url;
-  export let variant: 'small' | 'full' | null = 'full';
-  export let existingSubscription;
-  export let overrideFeatureFlag = false;
+// Props
+export let user: User;
+export let url: URL;
+export let variant: 'small' | 'full' | null = 'full';
+export let existingSubscription;
+export let overrideFeatureFlag = false;
 
-  let addedSubscription = existingSubscription;
-  let loading = false;
+let addedSubscription = existingSubscription;
+let loading = false;
 
-  onMount(async () => {
-    // To be able to keep general routes able to use browser caching, we
-    // utilize some client side JS to fetch the user data.  Ideally,
-    // we could have SvelteKit just make this component client only, but
-    // unsure if there is a way to do that.
-    if (cookieHasValue(sessionCookieName)) {
-      user = user || (await clientGetUser());
-      addedSubscription =
-        addedSubscription || (await clientGetSubscriptionBySearchParams(url.searchParams));
-    }
+onMount(async () => {
+  // To be able to keep general routes able to use browser caching, we
+  // utilize some client side JS to fetch the user data.  Ideally,
+  // we could have SvelteKit just make this component client only, but
+  // unsure if there is a way to do that.
+  if (await cookieHasValue(sessionCookieName)) {
+    user = user || (await clientGetUser());
+    addedSubscription =
+      addedSubscription || (await clientGetSubscriptionBySearchParams(url.searchParams));
+  }
+});
+
+// Subscribe
+async function subscribe() {
+  loading = true;
+
+  // Shortcuts
+  const u = (p: string) => url.searchParams.get(p);
+  const ga = (p: string) => url.searchParams.getAll(p);
+
+  const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
+  const criterion: SearchCriterion = {
+    term: u('term') || '',
+    tafs: u('tafs') || '',
+    bureau: agencyBureau?.[1] || '',
+    agency: agencyBureau?.[0] || '',
+    account: u('account') || '',
+    approver: ga('approver').join(',') || '',
+    year: ga('year').join(','),
+    approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
+    approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
+    lineNum: ga('lineNum').join(','),
+    footnoteNum: ga('footnoteNum').join(',')
+  };
+
+  const searchResp = await fetch('/search?/add', {
+    method: 'POST',
+    headers: {
+      'x-sveltekit-action': 'true'
+    },
+    body: JSON.stringify({ criterion })
   });
 
-  async function subscribe() {
-    loading = true;
-
-    // Shortcuts
-    const u = (p: string) => url.searchParams.get(p);
-    const ga = (p: string) => url.searchParams.getAll(p);
-
-    const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-    const criterion = {
-      term: u('term') || '',
-      tafs: u('tafs') || '',
-      bureau: agencyBureau?.[1] || '',
-      agency: agencyBureau?.[0] || '',
-      account: u('account') || '',
-      approver: ga('approver').join(',') || '',
-      year: ga('year').join(','),
-      approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
-      approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-      lineNum: ga('lineNum').join(','),
-      footnoteNum: ga('footnoteNum').join(',')
-    };
-
-    const searchResp = await fetch('/search?/add', {
+  const savedSearch = deserialize(await searchResp.text())?.data;
+  if (savedSearch) {
+    const subResp = await fetch('/subscribe?/add', {
       method: 'POST',
       headers: {
         'x-sveltekit-action': 'true'
       },
-      body: JSON.stringify({ criterion })
+      body: JSON.stringify({ type: 'search', itemId: savedSearch.id })
     });
-    const savedSearch = deserialize(await searchResp.text())?.data;
-    if (savedSearch) {
-      const subResp = await fetch('/subscribe?/add', {
+    addedSubscription = deserialize(await subResp.text())?.data;
+  }
+  loading = false;
+}
+
+async function unsubscribe() {
+  loading = true;
+  if (addedSubscription) {
+    await Promise.all([
+      fetch('/subscribe?/remove', {
         method: 'POST',
         headers: {
           'x-sveltekit-action': 'true'
         },
-        body: JSON.stringify({ type: 'search', itemId: savedSearch.id })
-      });
-      addedSubscription = deserialize(await subResp.text())?.data;
-    }
-    loading = false;
+        body: JSON.stringify({ subId: addedSubscription.id })
+      }),
+      fetch('/search?/remove', {
+        method: 'POST',
+        headers: {
+          'x-sveltekit-action': 'true'
+        },
+        body: JSON.stringify({ searchId: addedSubscription.itemId })
+      })
+    ]);
+    addedSubscription = null;
   }
-
-  async function unsubscribe() {
-    loading = true;
-    if (addedSubscription) {
-      await Promise.all([
-        fetch('/subscribe?/remove', {
-          method: 'POST',
-          headers: {
-            'x-sveltekit-action': 'true'
-          },
-          body: JSON.stringify({ subId: addedSubscription.id })
-        }),
-        fetch('/search?/remove', {
-          method: 'POST',
-          headers: {
-            'x-sveltekit-action': 'true'
-          },
-          body: JSON.stringify({ searchId: addedSubscription.itemId })
-        })
-      ]);
-      addedSubscription = null;
-    }
-    loading = false;
-  }
+  loading = false;
+}
 </script>
 
 {#if overrideFeatureFlag || subscribeFeatureEnabled || user}

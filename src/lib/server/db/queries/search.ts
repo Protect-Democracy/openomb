@@ -16,7 +16,6 @@ import {
   sql,
   SQL
 } from 'drizzle-orm';
-import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
@@ -29,28 +28,11 @@ import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
+import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
+import type { SearchCriterion } from '$schema/searches';
+
 export type ColumnObject = {
   [key: string]: PgColumn | SelectedFields | SQL;
-};
-
-export type SearchParams = {
-  term: string;
-  tafs: string;
-  agency: string;
-  bureau: string;
-  account: string;
-  approver: string;
-  approvedStart?: Date;
-  approvedEnd?: Date;
-  apportionmentType: string;
-  year: string;
-  lineNum: string;
-  footnoteNum: string;
-
-  // Notification specific fields
-  folder?: string;
-  createdStart?: Date;
-  createdEnd?: Date;
 };
 
 export type PaginationParams = {
@@ -65,7 +47,7 @@ export type AccountPaginationParams = {
   accountSort?: string;
 };
 
-export type SearchPaginationParams = SearchParams & PaginationParams & AccountPaginationParams;
+export type SearchPaginationParams = SearchCriterion & PaginationParams & AccountPaginationParams;
 
 export type FormattedSearchParamsFields = {
   years: number[];
@@ -76,7 +58,7 @@ export type FormattedSearchParamsFields = {
   apportionmentTypes: string[];
 };
 
-export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
+export type FormattedSearchParams = SearchCriterion & FormattedSearchParamsFields;
 export type FormattedSearchPaginationParams = SearchPaginationParams & FormattedSearchParamsFields;
 
 /**
@@ -152,19 +134,21 @@ export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
  * @returns
  */
 export function formatSearchParams(
-  searchParams: SearchPaginationParams | SearchParams
+  searchParams: SearchPaginationParams | SearchCriterion
 ): FormattedSearchParams {
   // Format
-  const years = (searchParams.year ? searchParams.year.split(',') : [])
+  const years = (searchParams.year ? searchParams.year.toString().split(',') : [])
     .map((v) => parseInt(v))
     .filter((t) => !!t);
-  const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
+  const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.toString().split(',') : [])
     .map((v) => (v.match(/[0-9]+/) ? v.trim() : ''))
     .filter((t) => !!t);
   const approverIds = (searchParams.approver ? searchParams.approver.split(',') : [])
     .map((v) => v.trim())
     .filter((t) => !!t);
-  const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
+  const footnoteNumbers = (
+    searchParams.footnoteNum ? searchParams.footnoteNum.toString().split(',') : []
+  )
     .map((v) => v.trim())
     .filter((t) => !!t);
   const keywordTerms = (searchParams.term ? searchParams.term.split(',') : [])
@@ -390,7 +374,7 @@ function generalSearchFilters(
  * @returns
  */
 export async function searchSetup(
-  searchParams: SearchPaginationParams | SearchParams,
+  searchParams: SearchPaginationParams | SearchCriterion,
   mainTable: 'files' | 'tafs' = 'files'
 ) {
   const formattedSearchParams = formatSearchParams(searchParams);
@@ -459,7 +443,7 @@ export const mSearchSetup = memoizeDataAsync(searchSetup);
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullCountQuery(searchParams: SearchParams) {
+export async function tafsSearchFullCountQuery(searchParams: SearchCriterion) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
@@ -484,7 +468,7 @@ export const mTafsSearchFullCountQuery = memoizeDataAsync(tafsSearchFullCountQue
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullCount(searchParams: SearchParams) {
+export async function tafsSearchFullCount(searchParams: SearchCriterion) {
   const fullCount = await tafsSearchFullCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -500,7 +484,7 @@ export const mTafsSearchFullCount = memoizeDataAsync(tafsSearchFullCount);
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullFileCountQuery(searchParams: SearchParams) {
+export async function tafsSearchFullFileCountQuery(searchParams: SearchCriterion) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
@@ -525,7 +509,7 @@ export const mTafsSearchFullFileCountQuery = memoizeDataAsync(tafsSearchFullFile
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullFileCount(searchParams: SearchParams) {
+export async function tafsSearchFullFileCount(searchParams: SearchCriterion) {
   const fullCount = await tafsSearchFullFileCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -539,7 +523,7 @@ export const mTafsSearchFullFileCount = memoizeDataAsync(tafsSearchFullFileCount
  * @param searchParams Search and pagination options
  * @returns
  */
-export async function tafsSearchPaged(searchParams: SearchParams & PaginationParams) {
+export async function tafsSearchPaged(searchParams: SearchCriterion & PaginationParams) {
   const { where, order } = await searchSetup(searchParams, 'tafs');
 
   // Specific ids
@@ -581,7 +565,7 @@ export const mTafsSearchPaged = memoizeDataAsync(tafsSearchPaged);
  * @param searchParams
  * @returns
  */
-export async function accountSearchFullCountQuery(searchParams: SearchParams) {
+export async function accountSearchFullCountQuery(searchParams: SearchCriterion) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
@@ -608,7 +592,7 @@ export const mAccountSearchFullCountQuery = memoizeDataAsync(accountSearchFullCo
  *   as this will allow for better caching)
  * @returns
  */
-export async function accountSearchFullCount(searchParams: SearchParams) {
+export async function accountSearchFullCount(searchParams: SearchCriterion) {
   const fullCount = await accountSearchFullCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -777,7 +761,7 @@ export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
  * Save a search for the specified user
  * (Currently used only by subscriptions)
  */
-export async function saveUserSearch(email: string, criterion: SearchParams) {
+export async function saveUserSearch(email: string, criterion: SearchCriterion) {
   // Cut out of saving the search if it has already been saved
   const existingSearch = await userSearch(email, criterion);
   if (existingSearch) {
@@ -824,7 +808,7 @@ export async function removeUserSearches(email: string, searchId: string | Array
  */
 export async function userSearch(
   email: string,
-  criterion: SearchParams
+  criterion: SearchCriterion
 ): Promise<searchesSelect | undefined> {
   const userResults = await db.select().from(users).where(eq(users.email, email));
   // If we have no user, exit early
