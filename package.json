@@ -58,8 +58,8 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.1",
     "@auth/sveltekit": "^1.11.1",
-    "@aws-sdk/client-s3": "^3.985.0",
-    "@aws-sdk/credential-providers": "^3.985.0",
+    "@aws-sdk/client-s3": "^3.992.0",
+    "@aws-sdk/credential-providers": "^3.992.0",
     "@dotenvx/dotenvx": "^1.52.0",
     "@fontsource/domine": "^5.2.8",
     "@fontsource/ibm-plex-sans": "^5.2.8",
