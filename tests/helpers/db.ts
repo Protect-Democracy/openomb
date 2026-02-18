@@ -13,6 +13,9 @@ const defaultTestDataPath = joinPath(
   _dirname,
   '..',
   '..',
+  'src',
+  'lib',
+  'server',
   'db',
   'test-data',
   'sample-test-data-10.sql'
