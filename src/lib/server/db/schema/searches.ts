@@ -28,8 +28,11 @@ export type SavedSearchCriterion = {
   lineNum?: string[];
   footnoteNum?: string[];
   apportionmentType?: ('letter' | 'spreadsheet')[];
-  approvedStart?: Date;
-  approvedEnd?: Date;
+  // Dates don't exist in JS, and JS's datetime can be very difficult to deal with given that
+  // it the timezone is dependent on the users browser, so getting the correct date can be tricky,
+  // let's just use ISO date strings
+  approvedStart?: string;
+  approvedEnd?: string;
 };
 
 // We have to support this old version of data in the database where things
