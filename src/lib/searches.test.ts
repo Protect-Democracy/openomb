@@ -69,25 +69,22 @@ describe('parseCriterion', () => {
 
   describe('date Handling', () => {
     it('should parse valid Date objects', () => {
-      const startDate = new Date('2023-01-01T00:00:00Z');
       const input = {
-        approvedStart: startDate
+        approvedStart: new Date('2023-01-01T00:00:00Z')
       };
 
       const result = parseCriterion(input);
 
-      expect(result.approvedStart).toBeInstanceOf(Date);
-      expect(result.approvedStart?.toISOString()).toBe(startDate.toISOString());
+      expect(result.approvedStart).toBe('2023-01-01');
     });
 
-    it('should try to parse date strings', () => {
+    it('should keep date strings', () => {
       const input = {
         approvedStart: '2023-01-01'
       };
 
       const result = parseCriterion(input);
-      expect(result.approvedStart).toBeInstanceOf(Date);
-      expect(result.approvedStart?.toISOString().split('T')[0]).toBe('2023-01-01');
+      expect(result.approvedStart).toBe('2023-01-01');
     });
   });
 
@@ -284,12 +281,9 @@ describe('criterionToUrlSearchParams', () => {
   });
 
   it('should correctly format Date objects using the iso-date formatter', () => {
-    const start = new Date('2023-01-01T12:00:00Z');
-    const end = new Date('2023-12-31T12:00:00Z');
-
     const criterion: SavedSearchCriterion = {
-      approvedStart: start,
-      approvedEnd: end
+      approvedStart: '2023-01-01',
+      approvedEnd: '2023-12-31'
     };
 
     const result = criterionToUrlSearchParams(criterion);
@@ -303,7 +297,7 @@ describe('criterionToUrlSearchParams', () => {
       term: ['test'],
       tafs: '012-3456',
       year: [2024],
-      approvedStart: new Date('2024-05-01T00:00:00Z'),
+      approvedStart: '2024-05-01',
       account: undefined
     };
 

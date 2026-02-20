@@ -300,11 +300,13 @@ function generalSearchFilters(
   );
   where.push(
     searchParams.approvedStart
-      ? gte(files.approvalTimestamp, searchParams.approvedStart)
+      ? gte(files.approvalTimestamp, new Date(`${searchParams.approvedStart}T00:00:00Z`))
       : undefined
   );
   where.push(
-    searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
+    searchParams.approvedEnd
+      ? lte(files.approvalTimestamp, new Date(`${searchParams.approvedEnd}T23:59:59Z`))
+      : undefined
   );
   where.push(
     searchParams.createdStart ? gte(files.createdAt, searchParams.createdStart) : undefined

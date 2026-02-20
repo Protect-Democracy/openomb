@@ -109,13 +109,15 @@ export function parseCriterion(
     }
   };
 
-  const parseDate = (value: string | Date | undefined): Date | undefined => {
+  const parseDate = (value: string | Date | undefined): string | undefined => {
     if (isDate(value)) {
-      return value;
+      // Cutout the date portion as ISO
+      return value.toISOString().split('T')[0];
     }
     else if (typeof value === 'string') {
+      // Try parsing as ISO date string, and if it's valid, return the date portion as ISO
       const parsed = DateTime.fromISO(value);
-      return parsed.isValid ? parsed.toJSDate() : undefined;
+      return parsed.isValid ? parsed.toFormat('yyyy-MM-dd') : undefined;
     }
     else {
       return undefined;
@@ -188,9 +190,6 @@ export function criterionToUrlSearchParams(criterion: SavedSearchCriterion): URL
     if (value !== undefined) {
       if (Array.isArray(value)) {
         value.forEach((v) => searchParams.append(key, v.toString()));
-      }
-      else if (value instanceof Date) {
-        searchParams.append(key, formatDate(value, 'iso-date'));
       }
       else {
         searchParams.append(key, value.toString());

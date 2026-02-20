@@ -51,15 +51,15 @@ describe('searchCriterionDescription', () => {
     );
   });
 
-  it('should format date fields using the formatDate helper', () => {
+  it('should format date fields correctly', () => {
     const record = {
       criterion: {
-        approvedStart: new Date('2023-01-01T00:00:00Z'),
-        approvedEnd: new Date('2023-12-31T00:00:00Z')
+        approvedStart: '2023-01-01',
+        approvedEnd: '2023-12-31'
       }
     } as any;
 
     const result = searchCriterionDescription(record);
-    expect(result).toBe('Approved After: 12/31/22; Approved Before: 12/30/23');
+    expect(result).toBe('Approved After: 1/1/23; Approved Before: 12/31/23');
   });
 });
