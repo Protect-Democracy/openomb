@@ -24,14 +24,14 @@ import ChevronDown from '$components/icons/ChevronDown.svelte';
 
 export let options: string[] | Record<string, unknown>[];
 export let multi = false;
-export let id;
-export let name;
+export let id: string;
+export let name: string;
 export let value: string | string[];
 
-export let formatOptionLabel = (o) => o;
-export let formatOptionValue = (o) => o;
-export let formatGroupLabel;
-export let formatGroupValue;
+export let formatOptionLabel: (option: any) => string = (o) => o;
+export let formatOptionValue: (option: any) => string = (o) => o;
+export let formatGroupLabel: ((option: any) => string) | undefined = undefined;
+export let formatGroupValue: ((option: any) => string) | undefined = undefined;
 
 // Constants
 const emptyOption = { value: '', label: 'None' };

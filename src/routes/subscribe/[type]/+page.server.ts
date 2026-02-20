@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 // We have to use the devalue library directly
 // since deserialize is only available within .svelte files
 import { parse } from 'devalue';
+import { parseUrlSearchParams } from '$lib/searches';
 
 export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
   // Get user session
@@ -20,25 +21,7 @@ export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
     redirect(303, '/');
   }
 
-  // Shortcuts
-  const u = (p: string) => url.searchParams.get(p);
-  const ga = (p: string) => url.searchParams.getAll(p);
-
-  const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-  const criterion = {
-    term: u('term') || '',
-    tafs: u('tafs') || '',
-    bureau: agencyBureau?.[1] || '',
-    agency: agencyBureau?.[0] || '',
-    account: u('account') || '',
-    approver: ga('approver').join(',') || '',
-    year: ga('year').join(','),
-    approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
-    approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-    lineNum: ga('lineNum').join(','),
-    footnoteNum: ga('footnoteNum').join(',')
-  };
-
+  const criterion = parseUrlSearchParams(url.searchParams);
   const resp = await fetch('/search?/add', {
     method: 'POST',
     headers: {

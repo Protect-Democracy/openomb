@@ -1,105 +1,65 @@
-import { describe, it, expect, vi } from 'vitest';
-import { parseCriterion, type SavedSearchCriterionUrl } from './searches';
+import { describe, it, expect } from 'vitest';
+import { searchCriterionDescription } from './searches';
 
-describe('parseCriterion', () => {
-  it('should return an empty object when criterion is undefined', () => {
-    expect(parseCriterion(undefined)).toEqual({});
+describe('searchCriterionDescription', () => {
+  it('should return "(no filters)" when the record or criterion is missing', () => {
+    expect(searchCriterionDescription(undefined)).toBe('(no filters)');
+    expect(searchCriterionDescription({ id: '123' } as any)).toBe('(no filters)');
+    expect(searchCriterionDescription({ criterion: {} } as any)).toBe('(no filters)');
   });
 
-  describe('url parsing (SavedSearchCriterionUrl)', () => {
-    it('should split comma-separated strings into arrays', () => {
-      const urlInput: SavedSearchCriterionUrl = {
-        term: '    apple    , banana  ',
-        year: '2023, 2024',
-        lineNum: '101, 102'
-      };
+  it('should format single text fields correctly', () => {
+    const recordWithTerm = { criterion: { term: ['budget'] } } as any;
+    expect(searchCriterionDescription(recordWithTerm)).toBe("Keyword: 'budget'");
 
-      const result = parseCriterion(urlInput);
-
-      expect(result.term).toEqual(['apple', 'banana']);
-      expect(result.year).toEqual([2023, 2024]); // Note: parsed to numbers
-      expect(result.lineNum).toEqual(['101', '102']);
-    });
-
-    it('should split agencyBureau into separate agency and bureau fields', () => {
-      const urlInput: SavedSearchCriterionUrl = {
-        agencyBureau: '011,04'
-      };
-
-      const result = parseCriterion(urlInput);
-
-      expect(result.agency).toBe('011');
-      expect(result.bureau).toBe('04');
-    });
-
-    it('should handle partial agencyBureau strings', () => {
-      const urlInput: SavedSearchCriterionUrl = {
-        agencyBureau: '011'
-      };
-
-      const result = parseCriterion(urlInput);
-
-      expect(result.agency).toBe('011');
-      expect(result.bureau).toBeUndefined();
-    });
-
-    it('should handle empty strings in agencyBureau', () => {
-      const input = { agencyBureau: '' };
-      const result = parseCriterion(input);
-      expect(result.agency).toBeUndefined();
-      expect(result.bureau).toBeUndefined();
-    });
+    const recordWithTafs = { criterion: { tafs: '011-2024' } } as any;
+    expect(searchCriterionDescription(recordWithTafs)).toBe('TAFS: 011-2024');
   });
 
-  describe('legacy handling (SavedSearchCriterion)', () => {
-    it('should preserve existing arrays without modification', () => {
-      const input = {
-        term: ['existing', 'array'],
-        year: [2021, 2022]
-      };
+  it('should combine multiple criteria joined by semicolons', () => {
+    const record = {
+      criterion: {
+        agencyBureau: '011,04',
+        account: '1234'
+      }
+    } as any;
 
-      const result = parseCriterion(input);
-
-      expect(result.term).toEqual(['existing', 'array']);
-      expect(result.year).toEqual([2021, 2022]);
-    });
-
-    it('should prefer explicit agency/bureau over agencyBureau if both exist', () => {
-      // Testing the "agency" in criterion check
-      const input = {
-        agency: '020',
-        bureau: '01',
-        agencyBureau: '999,99' // Should be ignored
-      } as any;
-
-      const result = parseCriterion(input);
-
-      expect(result.agency).toBe('020');
-      expect(result.bureau).toBe('01');
-    });
+    expect(searchCriterionDescription(record)).toBe('Agency / Bureau: 011 / 04; Account: 1234');
   });
 
-  describe('date Handling', () => {
-    it('should parse valid Date objects', () => {
-      const startDate = new Date('2023-01-01T00:00:00Z');
-      const input = {
-        approvedStart: startDate
-      };
+  it('should format array values correctly (e.g., multiple years or line numbers)', () => {
+    const record = {
+      criterion: {
+        year: [2023, 2024],
+        lineNum: ['101', '102']
+      }
+    } as any;
 
-      const result = parseCriterion(input);
+    expect(searchCriterionDescription(record)).toBe('Year(s): 2023, 2024; Line(s): 101, 102');
+  });
 
-      expect(result.approvedStart).toBeInstanceOf(Date);
-      expect(result.approvedStart?.toISOString()).toBe(startDate.toISOString());
-    });
+  it('should gracefully handle legacy string formats instead of arrays', () => {
+    const record = {
+      criterion: {
+        year: '2022',
+        apportionmentType: 'spreadsheet'
+      }
+    } as any;
 
-    it('should try to parse date strings', () => {
-      const input = {
-        approvedStart: '2023-01-01'
-      };
+    expect(searchCriterionDescription(record)).toBe(
+      'Year: 2022; Apportionment Type: Standard (Excel)'
+    );
+  });
 
-      const result = parseCriterion(input);
-      expect(result.approvedStart).toBeInstanceOf(Date);
-      expect(result.approvedStart?.toISOString().split('T')[0]).toBe('2023-01-01');
-    });
+  it('should format date fields using the formatDate helper', () => {
+    const record = {
+      criterion: {
+        approvedStart: new Date('2023-01-01T00:00:00Z'),
+        approvedEnd: new Date('2023-12-31T00:00:00Z')
+      }
+    } as any;
+
+    const result = searchCriterionDescription(record);
+    expect(result).toBe('Approved After: 12/31/22; Approved Before: 12/30/23');
   });
 });

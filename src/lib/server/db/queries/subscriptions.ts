@@ -12,6 +12,7 @@ import { searches, searchCriterionDescription, type searchesSelect } from '$sche
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
+import { criterionToUrlSearchParams, parseCriterion } from '$lib/searches';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
@@ -130,21 +131,13 @@ async function getSubscriptionDetails(
       where: eq(searches.id, itemId)
     });
 
-    // Make sure that the criterion is correct for params
-    const transformedCriterion = transform(
-      item?.criterion || {},
-      (result: Record<string, string>, value, key) => {
-        if (key && value) {
-          result[key.toString()] = value?.toString();
-        }
-      },
-      {}
-    );
+    // Search params
+    const searchParams = criterionToUrlSearchParams(parseCriterion(item?.criterion || undefined));
 
     return {
       itemDetails: item || {},
       description: `Saved Search: ${searchCriterionDescription(item)}`,
-      itemLink: `/search?${new URLSearchParams(transformedCriterion).toString()}`
+      itemLink: `/search?${searchParams.toString()}`
     };
   }
 }
@@ -216,7 +209,7 @@ export const userSubscriptionDetails = async function (
   email: string,
   type: string,
   itemId: string
-): Promise<SubscriptionSelectDetails | undefined> {
+): Promise<(subscriptionSelect & SubscriptionSelectDetails) | undefined> {
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {

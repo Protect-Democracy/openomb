@@ -45,6 +45,7 @@ export const tafsStats = async function () {
     averageIterations: averageIterations[0].avg
   };
 };
+export type TafsStatsResult = Awaited<ReturnType<typeof tafsStats>>;
 
 /**
  * Distinct agencies with file counts
@@ -135,6 +136,7 @@ export const agenciesWithChildren = async function (
     };
   });
 };
+export type AgenciesWithChildrenResult = Awaited<ReturnType<typeof agenciesWithChildren>>;
 
 /**
  * Get agencies for a specifc folder (file)
@@ -152,6 +154,7 @@ export const agenciesByFolder = async function (folderId: string) {
     .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId)
     .orderBy(tafs.budgetAgencyTitle);
 };
+export type AgenciesByFolderResult = Awaited<ReturnType<typeof agenciesByFolder>>;
 
 /**
  * Get details for an agency
@@ -194,6 +197,7 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
     folder: foldersFromAgency[0]
   };
 };
+export type AgencyDetailsResult = Awaited<ReturnType<typeof agencyDetails>>;
 
 /**
  * Distinct bureaus with file counts (used for search options)
@@ -217,6 +221,7 @@ export const bureaus = async function () {
     )
     .orderBy(tafs.budgetBureauTitle);
 };
+export type BureausResult = Awaited<ReturnType<typeof bureaus>>;
 
 /**
  * Get bureaus for a specifc agency.
@@ -234,7 +239,7 @@ export const bureausByAgency = async function (budgetAgencyTitleId: string) {
     .groupBy(tafs.budgetBureauTitle, tafs.budgetBureauTitleId)
     .orderBy(tafs.budgetBureauTitle);
 };
-
+export type BureausByAgencyResult = Awaited<ReturnType<typeof bureausByAgency>>;
 /**
  * Bureau details.  Requires agency id as well.
  */
@@ -280,6 +285,7 @@ export const bureauDetails = async function (
     agency
   };
 };
+export type BureauDetailsResult = Awaited<ReturnType<typeof bureauDetails>>;
 
 /**
  * All accounts
@@ -297,6 +303,7 @@ export const accounts = async function () {
     .from(tafs)
     .orderBy(tafs.budgetAgencyTitle, tafs.budgetBureauTitle, tafs.accountTitle);
 };
+export type AccountsResult = Awaited<ReturnType<typeof accounts>>;
 
 /**
  * Get accounts for a bureau (and agency).
@@ -322,6 +329,7 @@ export const accountsByBureau = async function (
     .groupBy(tafs.accountTitle, tafs.accountTitleId)
     .orderBy(tafs.accountTitle);
 };
+export type AccountsByBureauResult = Awaited<ReturnType<typeof accountsByBureau>>;
 
 /**
  * Account details given an account title ID.

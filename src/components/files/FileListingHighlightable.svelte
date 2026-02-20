@@ -11,7 +11,7 @@
 import { uniqBy, flatMap, filter } from 'lodash-es';
 import type { filesSelect } from '$schema/files';
 import type { tafsSelect } from '$schema/tafs';
-import type { SearchParams } from '$db/queries/search';
+import type { SearchPaginationParams } from '$db/queries/search';
 
 // Types
 interface File extends filesSelect {
@@ -22,7 +22,7 @@ interface File extends filesSelect {
 export let headerElement = 'h3';
 export let headerClasses = '';
 export let file: File;
-export let highlightParams: SearchParams;
+export let highlightParams: SearchPaginationParams;
 
 // Constants
 const tafsLimit = 1;
@@ -32,9 +32,12 @@ const footnotesLimit = 3;
 let hasTafs: boolean;
 $: hasTafs = file.tafs && file.tafs.length > 0 ? true : false;
 $: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
-$: highlightedApproverTitle = highlight(file.approverTitle, [highlightParams?.approver]);
+$: highlightedApproverTitle = highlight(
+  file.approverTitle,
+  highlightParams?.approver ? highlightParams?.approver : []
+);
 $: hasHighlightedApproverTitle = hasHighlight(highlightedApproverTitle);
-$: searchTerms = highlightParams?.term?.split(',') || [];
+$: searchTerms = highlightParams?.term;
 $: agencies = highlightOrder(
   uniqBy(
     file?.tafs?.map((t) => ({
@@ -62,7 +65,10 @@ $: tafs = highlightOrder(
     file?.tafs?.map((t) => ({
       id: t.tafsId,
       title: formatTafsFormattedId(t),
-      highlightedTitle: highlight(formatTafsFormattedId(t), [highlightParams?.tafs])
+      highlightedTitle: highlight(
+        formatTafsFormattedId(t),
+        highlightParams?.tafs ? [highlightParams?.tafs] : []
+      )
     })) || [],
     'id'
   ),
@@ -98,7 +104,7 @@ $: hasHighlightedFootnotes = footnotes.some((f) => f.hasHighlight);
     <svelte:element this={headerElement} class="main-heading {headerClasses}">
       <a href="/file/{file.fileId}">
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        {@html formatFileTitle(file, [...searchTerms, highlightParams?.account])}</a
+        {@html formatFileTitle(file, [...(searchTerms || []), highlightParams?.account || ''])}</a
       >
     </svelte:element>
 

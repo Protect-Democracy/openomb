@@ -1,5 +1,6 @@
 // Dependencies
-import { uniqBy, orderBy, filter, sumBy } from 'lodash-es';
+import { DateTime } from 'luxon';
+import { uniqBy, orderBy, filter, sumBy, isDate } from 'lodash-es';
 import type { filesSelect } from '$schema/files';
 import type { tafsSelect } from '$schema/tafs';
 
@@ -32,28 +33,50 @@ export function formatCurrency(value: number): string {
 }
 
 /**
-
  * Format a Date (or date string) into standard date format
+ *
+ * TODO: Lean more on Luxon for this.
+ *
  * @param {Date | string} value
  * @returns {string}
  */
 export function formatDate(
   value?: Date | string | null,
-  format: 'full' | 'long' | 'medium' | 'short' = 'short'
+  format: 'full' | 'long' | 'medium' | 'short' | 'iso' | 'iso-date' = 'short'
 ): string {
   if (!value) {
     return '';
   }
 
-  const date = typeof value === 'object' ? value : new Date(value);
-  return new Intl.DateTimeFormat('en-US', { dateStyle: format }).format(date);
+  let parsed;
+  if (isDate(value)) {
+    parsed = value as Date;
+  }
+  else {
+    const dt = DateTime.fromISO(value as string);
+    if (dt.isValid) {
+      parsed = dt.toJSDate();
+    }
+    else {
+      return '';
+    }
+  }
+
+  if (format === 'iso') {
+    return parsed.toISOString();
+  }
+  else if (format === 'iso-date') {
+    return parsed.toISOString().split('T')[0];
+  }
+
+  return new Intl.DateTimeFormat('en-US', { dateStyle: format }).format(parsed);
 }
 
 /**
  * Format a date to ISO
  */
 export function formatDateISO(date?: Date | string | null): string {
-  return date ? new Date(date).toISOString() : '';
+  return formatDate(date, 'iso') || '';
 }
 
 /**

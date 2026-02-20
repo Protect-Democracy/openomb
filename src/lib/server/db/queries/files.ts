@@ -240,6 +240,7 @@ export const folders = async function () {
       .orderBy(files.folder)) || []
   );
 };
+export type FoldersResult = Awaited<ReturnType<typeof folders>>;
 
 /**
  * Distinct approvers with file counts
@@ -253,6 +254,7 @@ export const approvers = async function () {
       .orderBy(files.approverTitle)) || []
   );
 };
+export type ApproversResult = Awaited<ReturnType<typeof approvers>>;
 
 /**
  * Details for specific approver.
@@ -275,6 +277,7 @@ export const approverDetails = async function (approverTitleId: string) {
     fileCount: filesFromApprover.length
   };
 };
+export type ApproverDetailsResult = Awaited<ReturnType<typeof approverDetails>>;
 
 /**
  * Get details of a single folder.
@@ -296,6 +299,7 @@ export const folderDetails = async function (folderId: string) {
     fileCount: filesFromFolder.length
   };
 };
+export type FolderDetailsResult = Awaited<ReturnType<typeof folderDetails>>;
 
 /**
  * Get files without any tafs entries (i.e. not agencies)

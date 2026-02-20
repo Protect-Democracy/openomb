@@ -16,12 +16,14 @@ import {
   sql,
   SQL
 } from 'drizzle-orm';
+import debug from 'debug';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
 import { lines } from '$schema/lines';
 import { footnotes } from '$schema/footnotes';
-import { searches, parseCriterion } from '$schema/searches';
+import { searches } from '$schema/searches';
+import { parseCriterion } from '$lib/searches';
 import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
@@ -29,11 +31,7 @@ import { memoizeDataAsync } from '$server/cache';
 
 // Types
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
-import type {
-  SavedSearchCriterion,
-  ParsedSavedSearchCriterion,
-  searchesSelect
-} from '$schema/searches';
+import type { LegacySearchCriterion, SavedSearchCriterion, searchesSelect } from '$schema/searches';
 
 export type ColumnObject = {
   [key: string]: PgColumn | SelectedFields | SQL;
@@ -48,13 +46,13 @@ export type SupplementalSearchCriterion = {
   createdEnd?: Date;
 };
 
-export type CombinedSearchCriterion = ParsedSavedSearchCriterion & SupplementalSearchCriterion;
+export type CombinedSearchCriterion = SavedSearchCriterion & SupplementalSearchCriterion;
 
 // Paging and sorting
 export type PaginationParams = {
   offset: number;
   limit: number;
-  sort: string;
+  sort?: string;
 };
 
 export type AccountPaginationParams = {
@@ -68,6 +66,9 @@ export type CombinedPaginationParams = PaginationParams & AccountPaginationParam
 // Search and paging
 export type SearchPaginationParams = CombinedSearchCriterion & CombinedPaginationParams;
 
+// Debugger
+const debugLogger = debug('apportionments:queries-search');
+
 /**
  * Get all existing fiscal year values
  */
@@ -77,9 +78,9 @@ export async function yearOptions() {
     .from(files)
     .where(isNotNull(files.fiscalYear));
 
-  return yearOptions.map((v) => v.data);
+  return yearOptions.map((v) => v.data).filter(Boolean) as number[];
 }
-
+export type YearOptionsResult = Awaited<ReturnType<typeof yearOptions>>;
 export const mYearOptions = memoizeDataAsync(yearOptions);
 
 /**
@@ -94,7 +95,7 @@ export async function approverTitleOptions() {
 
   return approverOptions;
 }
-
+export type ApproverTitleOptionsResult = Awaited<ReturnType<typeof approverTitleOptions>>;
 export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
 
 /**
@@ -131,7 +132,7 @@ export const lineNumberOptions = async function () {
     };
   });
 };
-
+export type LineNumberOptionsResult = Awaited<ReturnType<typeof lineNumberOptions>>;
 export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
 
 /**
@@ -227,10 +228,19 @@ function generalSearchFilters(
     searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
   );
 
+  // Agency bureau field.
+  if (searchParams.agencyBureau) {
+    const [agency, bureau] = searchParams.agencyBureau.split(',').map((s) => s.trim());
+    if (agency) {
+      where.push(eq(tafs.budgetAgencyTitleId, agency));
+      if (bureau) {
+        where.push(eq(tafs.budgetBureauTitleId, bureau));
+      }
+    }
+  }
+
   // Identifiers
   where.push(searchParams.folder ? eq(files.folderId, searchParams.folder) : undefined);
-  where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
-  where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
   where.push(
     searchParams.approver?.length && searchParams.approver?.length > 0
       ? inArray(files.approverTitleId, searchParams.approver)
@@ -283,7 +293,6 @@ function generalSearchFilters(
   );
 
   // Specific values
-  where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
   where.push(
     searchParams.year?.length && searchParams.year?.length > 0
       ? inArray(files.fiscalYear, searchParams.year)
@@ -666,6 +675,7 @@ export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
  * @returns
  */
 export async function fileSearchPaged(searchParams: SearchPaginationParams) {
+  debugLogger('File searchParams:', searchParams);
   const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
 
   // The meat of the query is that we want to find a set of distinct File IDs
@@ -739,9 +749,13 @@ export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
  * (Currently used only by subscriptions)
  */
 export async function saveUserSearch(
-  email: string,
-  criterion: SavedSearchCriterion | ParsedSavedSearchCriterion
+  email: string | undefined,
+  criterion: LegacySearchCriterion | SavedSearchCriterion
 ) {
+  if (!email) {
+    return null;
+  }
+
   // Cut out of saving the search if it has already been saved
   const existingSearch = await userSearch(email, criterion);
   if (existingSearch) {
@@ -788,25 +802,48 @@ export async function removeUserSearches(email: string, searchId: string | Array
 
 /**
  * Get a user's saved search with a given criterion
+ *
  * (Currently used only by subscriptions)
+ *
+ * Because the criterion could be in a legacy format, we get all the searches for
+ * the user, parse the criterion, and then compare the parsed criterion to the input
+ * criterion.  This is not super efficient but should be fine for the expected number
+ * of saved searches per user and allows us to avoid having to update all existing
+ * saved searches to have a parsed criterion column.
  */
 export async function userSearch(
-  email: string,
-  criterion: SavedSearchCriterion | ParsedSavedSearchCriterion
+  email: string | undefined,
+  criterion: LegacySearchCriterion | SavedSearchCriterion
 ): Promise<searchesSelect | undefined> {
+  if (!email) {
+    return;
+  }
+
+  // Get the user
   const userResults = await db.select().from(users).where(eq(users.email, email));
+
   // If we have no user, exit early
   if (!userResults?.[0]) {
     return;
   }
-  const newRecords = await db
+
+  // Get all searches for the user
+  const searchesForUser = await db
     .select()
     .from(searches)
-    .where(
-      and(
-        eq(searches.userId, userResults[0].id),
-        sql`${searches.criterion}::json::text = ${criterion}::json::text`
-      )
-    );
-  return newRecords[0];
+    .where(eq(searches.userId, userResults[0].id));
+
+  // If no searches, exit early
+  if (!searchesForUser || searchesForUser.length === 0) {
+    return;
+  }
+
+  // Find a search with a criterion that matches the input criterion
+  const parsedInputCriterion = parseCriterion(criterion);
+  const matchingSearch = searchesForUser.find((search) => {
+    const parsedSearchCriterion = parseCriterion(search.criterion || {});
+    return JSON.stringify(parsedSearchCriterion) === JSON.stringify(parsedInputCriterion);
+  });
+
+  return matchingSearch;
 }

@@ -21,10 +21,10 @@ import LogIn from './LogIn.svelte';
 import { subscribeFeatureEnabled, sessionCookieName } from '$config/subscriptions';
 import { clientGetUser, clientGetSubscriptionBySearchParams } from '$lib/users';
 import { cookieHasValue } from '$lib/utilities';
+import { parseUrlSearchParams } from '$lib/searches';
 
 // Typess
 import type { User } from '$lib/users';
-import type { SearchCriterion, SearchCriterionUnparsed } from '$schema/searches';
 
 // Props
 export let user: User;
@@ -52,24 +52,7 @@ onMount(async () => {
 async function subscribe() {
   loading = true;
 
-  // Shortcuts
-  const u = (p: string) => url.searchParams.get(p);
-  const ga = (p: string) => url.searchParams.getAll(p);
-
-  const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-  const criterion: SearchCriterion = {
-    term: u('term') || '',
-    tafs: u('tafs') || '',
-    bureau: agencyBureau?.[1] || '',
-    agency: agencyBureau?.[0] || '',
-    account: u('account') || '',
-    approver: ga('approver').join(',') || '',
-    year: ga('year').join(','),
-    approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
-    approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-    lineNum: ga('lineNum').join(','),
-    footnoteNum: ga('footnoteNum').join(',')
-  };
+  const criterion = parseUrlSearchParams(url.searchParams);
 
   const searchResp = await fetch('/search?/add', {
     method: 'POST',

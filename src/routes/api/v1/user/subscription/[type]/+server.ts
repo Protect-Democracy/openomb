@@ -3,6 +3,7 @@ import { json } from '@sveltejs/kit';
 import { filter } from 'lodash-es';
 import { userSubscriptionDetails, userSubscriptionListDetails } from '$queries/subscriptions';
 import { userSearch } from '$queries/search';
+import { parseUrlSearchParams } from '$lib/searches';
 
 /**
  * Subscription info endpoint
@@ -26,29 +27,11 @@ export async function GET({ locals, params, url }) {
   }
 
   // If we have search terms, return a subscription that matches
-  // Shortcuts
-  const u = (p: string) => url.searchParams.get(p);
-  const ga = (p: string) => url.searchParams.getAll(p);
-
-  const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-  const criterion = {
-    term: u('term') || '',
-    tafs: u('tafs') || '',
-    bureau: agencyBureau?.[1] || '',
-    agency: agencyBureau?.[0] || '',
-    account: u('account') || '',
-    approver: ga('approver').join(',') || '',
-    year: ga('year').join(','),
-    approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
-    approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-    lineNum: ga('lineNum').join(','),
-    footnoteNum: ga('footnoteNum').join(',')
-  };
-
-  const userSearchResult = user ? await userSearch(user.email, criterion) : undefined;
+  const criterion = parseUrlSearchParams(url.searchParams);
+  const userSearchResult = user ? await userSearch(user.email || undefined, criterion) : undefined;
   const subscription =
     user && userSearchResult
-      ? await userSubscriptionDetails(user.email, 'search', userSearchResult.id)
+      ? await userSubscriptionDetails(user.email || '', 'search', userSearchResult.id)
       : undefined;
 
   return json({

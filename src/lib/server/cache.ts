@@ -14,13 +14,6 @@ import { secondsToCacheInvalidation } from '$lib/utilities';
 // Debugger
 const debugLogger = debug('apportionments:cache');
 
-// Types
-type JSONStringifyable =
-  | string
-  | number
-  | { [key: string]: JSONStringifyable[] }
-  | JSONStringifyable[];
-
 type SetCacheOptions = {
   ttl?: number;
 };
@@ -35,22 +28,20 @@ const cacheOptions = {
   // 200MB
   maxSize: 1000000 * 200,
   // Convert items to bytes
-  sizeCalculation: (value: JSONStringifyable) => {
+  sizeCalculation: (value: unknown) => {
     let stringified;
     try {
-      stringified = JSON.stringify(value);
+      return Buffer.byteLength(JSON.stringify(value));
     }
     catch {
       throw new Error(`Could not stringify cache value`);
     }
-
-    return Buffer.byteLength(stringified);
   },
   allowStale: false,
   // At most check time every second
   ttlResolution: 1000
 };
-export const cache = new LRUCache(cacheOptions);
+export const cache = new LRUCache<string, any>(cacheOptions);
 
 /**
  * Default TTL for anything
@@ -73,14 +64,14 @@ export function defaultTtlData() {
 /**
  * Wrapper around cache get
  */
-export function cacheGet(key: string) {
-  return cache.get(key);
+export function cacheGet<T>(key: string): T | undefined {
+  return cache.get(key) as T | undefined;
 }
 
 /**
  * Wrapper around cache set
  */
-export function cacheSet(key: string, value: JSONStringifyable, options: SetCacheOptions = {}) {
+export function cacheSet<T>(key: string, value: T, options: SetCacheOptions = {}) {
   options.ttl = options.ttl || defaultTtl();
   return cache.set(key, value, options);
 }
@@ -90,7 +81,7 @@ export function cacheSet(key: string, value: JSONStringifyable, options: SetCach
  *
  * This will not create a unique id necessarily.
  */
-export function cacheId(identifiers: JSONStringifyable | [] | null | undefined) {
+export function cacheId(identifiers: unknown) {
   if (!identifiers || (Array.isArray(identifiers) && identifiers.length === 0)) {
     return '';
   }
@@ -110,16 +101,17 @@ export function cacheId(identifiers: JSONStringifyable | [] | null | undefined) 
  *
  * Make sure any function that is memoized
  */
-/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
-export function memoizeAsync(fn: (...args: any[]) => any, options: SetCacheOptions = {}) {
-  /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
-  return async (...args: any[]) => {
+export function memoizeAsync<Args extends any[], Return>(
+  fn: (...args: Args) => Promise<Return> | Return,
+  options: SetCacheOptions = {}
+) {
+  return async (...args: Args): Promise<Return> => {
     const id = `${fn.name}-${cacheId(args)}`;
 
-    const value = cacheGet(id);
-    if (value) {
+    const cachedValue = cacheGet<Return>(id);
+    if (cachedValue) {
       debugLogger(`Cache hit for ${id}`);
-      return cacheGet(id);
+      return cachedValue;
     }
     else {
       debugLogger(`Cache miss for ${id}, options: ${JSON.stringify(options)}`);
@@ -135,10 +127,12 @@ export function memoizeAsync(fn: (...args: any[]) => any, options: SetCacheOptio
  *
  * Defaults TTL to our daily time.
  */
-/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
-export function memoizeDataAsync(fn: (...args: any[]) => any, options: SetCacheOptions = {}) {
+export function memoizeDataAsync<Args extends any[], Return>(
+  fn: (...args: Args) => Promise<Return> | Return,
+  options: SetCacheOptions = {}
+) {
   const ttl = defaultTtlData();
-  return memoizeAsync(fn, { ...options, ttl });
+  return memoizeAsync<Args, Return>(fn, { ...options, ttl });
 }
 
 /**
