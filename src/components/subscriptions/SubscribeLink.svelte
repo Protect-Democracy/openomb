@@ -17,68 +17,67 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { deserialize } from '$app/forms';
-  import Spinner from '$components/icons/Spinner.svelte';
-  import LogIn from './LogIn.svelte';
-  import { subscribeFeatureEnabled, sessionCookieName } from '$config/subscriptions';
-  import { clientGetUser, clientGetSubscriptionById } from '$lib/users';
-  import { cookieHasValue } from '$lib/utilities';
+import { deserialize } from '$app/forms';
+import Spinner from '$components/icons/Spinner.svelte';
+import LogIn from './LogIn.svelte';
+import { subscribeFeatureEnabled, sessionCookieName } from '$config/subscriptions';
+import { clientGetUser, clientGetSubscriptionById } from '$lib/users';
+import { cookieHasValue } from '$lib/utilities';
 
-  import type { User } from '$lib/users';
+import type { User } from '$lib/users';
 
-  // Props
-  export let user: User;
-  export let variant: 'small' | 'full' | null = 'full';
-  export let subType: 'folder' | 'account' | 'agency' | 'bureau' | 'search' | 'file' | 'tafs';
-  export let subItemId: string | null;
-  export let subItemFormatted: string | null;
-  export let existingSubscription;
-  export let hideText = false;
-  export let overrideFeatureFlag = false;
+// Props
+export let user: User;
+export let variant: 'small' | 'full' | null = 'full';
+export let subType: 'folder' | 'account' | 'agency' | 'bureau' | 'search' | 'file' | 'tafs';
+export let subItemId: string | null;
+export let subItemFormatted: string | null;
+export let existingSubscription;
+export let hideText = false;
+export let overrideFeatureFlag = false;
 
-  let addedSubscription = existingSubscription;
-  let loading = false;
+let addedSubscription = existingSubscription;
+let loading = false;
 
-  onMount(async () => {
-    // To be able to keep general routes able to use browser caching, we
-    // utilize some client side JS to fetch the user data.  Ideally,
-    // we could have SvelteKit just make this component client only, but
-    // unsure if there is a way to do that.
-    if (cookieHasValue(sessionCookieName)) {
-      user = user || (await clientGetUser());
-      addedSubscription =
-        addedSubscription || (await clientGetSubscriptionById(subType, subItemId));
-    }
+onMount(async () => {
+  // To be able to keep general routes able to use browser caching, we
+  // utilize some client side JS to fetch the user data.  Ideally,
+  // we could have SvelteKit just make this component client only, but
+  // unsure if there is a way to do that.
+  if (cookieHasValue(sessionCookieName)) {
+    user = user || (await clientGetUser());
+    addedSubscription = addedSubscription || (await clientGetSubscriptionById(subType, subItemId));
+  }
+});
+
+async function subscribe() {
+  loading = true;
+
+  const subResp = await fetch('/subscribe?/add', {
+    method: 'POST',
+    headers: {
+      'x-sveltekit-action': 'true'
+    },
+    body: JSON.stringify({ type: subType, itemId: subItemId })
   });
+  addedSubscription = deserialize(await subResp.text())?.data;
+  loading = false;
+}
 
-  async function subscribe() {
-    loading = true;
-
-    const subResp = await fetch('/subscribe?/add', {
+async function unsubscribe() {
+  loading = true;
+  if (addedSubscription) {
+    await fetch('/subscribe?/remove', {
       method: 'POST',
       headers: {
         'x-sveltekit-action': 'true'
       },
-      body: JSON.stringify({ type: subType, itemId: subItemId })
+      body: JSON.stringify({ subId: addedSubscription.id })
     });
-    addedSubscription = deserialize(await subResp.text())?.data;
-    loading = false;
+    addedSubscription = null;
   }
-
-  async function unsubscribe() {
-    loading = true;
-    if (addedSubscription) {
-      await fetch('/subscribe?/remove', {
-        method: 'POST',
-        headers: {
-          'x-sveltekit-action': 'true'
-        },
-        body: JSON.stringify({ subId: addedSubscription.id })
-      });
-      addedSubscription = null;
-    }
-    loading = false;
-  }
+  loading = false;
+}
 </script>
 
 {#if overrideFeatureFlag || subscribeFeatureEnabled || user}

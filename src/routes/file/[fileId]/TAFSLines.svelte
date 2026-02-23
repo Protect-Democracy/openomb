@@ -1,83 +1,83 @@
 <script lang="ts">
   import { sortBy, forEach, maxBy } from 'lodash-es';
-  import { slide } from 'svelte/transition';
-  import { formatCurrency } from '$lib/formatters';
-  import { prefersReducedMotion } from '$lib/utilities';
+import { slide } from 'svelte/transition';
+import { formatCurrency } from '$lib/formatters';
+import { prefersReducedMotion } from '$lib/utilities';
 
-  // Props
-  export let currentTafs: object;
-  export let prevIterationTafs: object;
-  export let showPrevious: boolean;
+// Props
+export let currentTafs: object;
+export let prevIterationTafs: object;
+export let showPrevious: boolean;
 
-  // Constants
-  const transitionTime = 300;
+// Constants
+const transitionTime = 300;
 
-  // Combine lines
-  function combinedTafsLines(tafs) {
-    const lines = {};
-    forEach(tafs, (taf) => {
-      if (taf) {
-        forEach(taf.lines, (line, index) => {
-          const lineId = `${line.lineNumber} ${line.lineSplit}`;
-          if (!lines[lineId]) {
-            lines[lineId] = { order: index };
-          }
-          lines[lineId][taf.iteration] = line;
-        });
-      }
-    });
-    return sortBy(lines, ['order']);
-  }
-  $: lineIterationMap = combinedTafsLines([currentTafs, prevIterationTafs]);
-
-  // Keep track of if footnote is expanded.  Default to false.
-  let footnotesExpanded: Record<string, boolean> = {};
-  $: forEach(currentTafs.lines, (line) => {
-    const id = `${line.lineNumber}-${line.lineSplit}`;
-    footnotesExpanded[id] =
-      footnotesExpanded[id] === undefined ? false : footnotesExpanded[id] === false ? false : true;
-  });
-  $: forEach(prevIterationTafs?.lines, (line) => {
-    const id = `${prevIterationTafs.tafsTableId}-${line.lineIndex}`;
-    footnotesExpanded[id] =
-      footnotesExpanded[id] === undefined ? false : footnotesExpanded[id] === false ? false : true;
-  });
-
-  // Derived
-  $: showingPrevious = showPrevious && !!prevIterationTafs;
-  $: isLatestIteration =
-    currentTafs &&
-    currentTafs.iterations &&
-    currentTafs.iteration === maxBy(currentTafs.iterations, 'iteration').iteration;
-
-  // Reactivity
-  $: {
-    if (showPrevious === false) {
-      toggleOffAllFootnotes();
+// Combine lines
+function combinedTafsLines(tafs) {
+  const lines = {};
+  forEach(tafs, (taf) => {
+    if (taf) {
+      forEach(taf.lines, (line, index) => {
+        const lineId = `${line.lineNumber} ${line.lineSplit}`;
+        if (!lines[lineId]) {
+          lines[lineId] = { order: index };
+        }
+        lines[lineId][taf.iteration] = line;
+      });
     }
-  }
+  });
+  return sortBy(lines, ['order']);
+}
+$: lineIterationMap = combinedTafsLines([currentTafs, prevIterationTafs]);
 
-  // Methods
-  function toggleFootnote(id: string, event: Event): void {
-    event?.preventDefault();
-    footnotesExpanded = {
-      ...footnotesExpanded,
-      [id]: !footnotesExpanded[id]
-    };
-    return;
-  }
+// Keep track of if footnote is expanded.  Default to false.
+let footnotesExpanded: Record<string, boolean> = {};
+$: forEach(currentTafs.lines, (line) => {
+  const id = `${line.lineNumber}-${line.lineSplit}`;
+  footnotesExpanded[id] =
+    footnotesExpanded[id] === undefined ? false : footnotesExpanded[id] === false ? false : true;
+});
+$: forEach(prevIterationTafs?.lines, (line) => {
+  const id = `${prevIterationTafs.tafsTableId}-${line.lineIndex}`;
+  footnotesExpanded[id] =
+    footnotesExpanded[id] === undefined ? false : footnotesExpanded[id] === false ? false : true;
+});
 
-  function toggleOffAllFootnotes() {
-    let updated = {};
-    Object.keys(footnotesExpanded).forEach((key) => {
-      updated[key] = false;
-    });
-    footnotesExpanded = updated;
-  }
+// Derived
+$: showingPrevious = showPrevious && !!prevIterationTafs;
+$: isLatestIteration =
+  currentTafs &&
+  currentTafs.iterations &&
+  currentTafs.iteration === maxBy(currentTafs.iterations, 'iteration').iteration;
 
-  function isTotalRow(line: object): boolean {
-    return line.lineNumber.match(/^(1920|6190)$/);
+// Reactivity
+$: {
+  if (showPrevious === false) {
+    toggleOffAllFootnotes();
   }
+}
+
+// Methods
+function toggleFootnote(id: string, event: Event): void {
+  event?.preventDefault();
+  footnotesExpanded = {
+    ...footnotesExpanded,
+    [id]: !footnotesExpanded[id]
+  };
+  return;
+}
+
+function toggleOffAllFootnotes() {
+  let updated = {};
+  Object.keys(footnotesExpanded).forEach((key) => {
+    updated[key] = false;
+  });
+  footnotesExpanded = updated;
+}
+
+function isTotalRow(line: object): boolean {
+  return line.lineNumber.match(/^(1920|6190)$/);
+}
 </script>
 
 <div class="responsive-table">

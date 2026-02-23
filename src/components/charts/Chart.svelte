@@ -1,75 +1,75 @@
 <script lang="ts">
   // Component that wraps around chart js and handles updates.
-  import { onMount } from 'svelte';
-  import { Chart, registerables, type ChartConfiguration } from 'chart.js';
+import { onMount } from 'svelte';
+import { Chart, registerables, type ChartConfiguration } from 'chart.js';
 
-  // Plugin to draw vertical line on hover.  Unsure if there is a better way to do this,
-  // or maybe a better place for this.
-  const verticalHoverLinePlugin = {
-    id: 'verticalHoverLine',
-    beforeDatasetDraw(chart) {
-      const {
-        ctx,
-        chartArea: { top, bottom }
-      } = chart;
-      ctx.save();
+// Plugin to draw vertical line on hover.  Unsure if there is a better way to do this,
+// or maybe a better place for this.
+const verticalHoverLinePlugin = {
+  id: 'verticalHoverLine',
+  beforeDatasetDraw(chart) {
+    const {
+      ctx,
+      chartArea: { top, bottom }
+    } = chart;
+    ctx.save();
 
-      // Have to look through each dataset and find any active points
-      chart.data.datasets.find((dataset, i) => {
-        const meta = chart.getDatasetMeta(i);
-        let found = meta.data.find((point) => {
-          if (point.active) {
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.strokeWidth = 2;
-            ctx.moveTo(point.x, top);
-            ctx.lineTo(point.x, bottom);
-            ctx.stroke();
-            return true;
-          }
-        });
-        return !!found;
+    // Have to look through each dataset and find any active points
+    chart.data.datasets.find((dataset, i) => {
+      const meta = chart.getDatasetMeta(i);
+      let found = meta.data.find((point) => {
+        if (point.active) {
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.strokeWidth = 2;
+          ctx.moveTo(point.x, top);
+          ctx.lineTo(point.x, bottom);
+          ctx.stroke();
+          return true;
+        }
       });
+      return !!found;
+    });
+  }
+};
+
+// Register all Chart.js components
+Chart.register(...registerables);
+Chart.register(verticalHoverLinePlugin);
+
+// Define props.  Using a height here is not ideal, but given the nesting of <Chart> components, it's necessary.
+let {
+  options,
+  align,
+  height = '15rem'
+}: { options: ChartConfiguration; align: 'left' | 'center' | 'right'; height: string } = $props();
+
+// Add types for the canvas element and chart instance
+let canvasElement: HTMLCanvasElement | undefined;
+let chart: Chart | undefined;
+
+onMount(() => {
+  if (canvasElement) {
+    const ctx = canvasElement.getContext('2d');
+    if (ctx) {
+      chart = new Chart(ctx, options);
     }
+  }
+
+  // Cleanup
+  return () => {
+    chart?.destroy();
   };
+});
 
-  // Register all Chart.js components
-  Chart.register(...registerables);
-  Chart.register(verticalHoverLinePlugin);
-
-  // Define props.  Using a height here is not ideal, but given the nesting of <Chart> components, it's necessary.
-  let {
-    options,
-    align,
-    height = '15rem'
-  }: { options: ChartConfiguration; align: 'left' | 'center' | 'right'; height: string } = $props();
-
-  // Add types for the canvas element and chart instance
-  let canvasElement: HTMLCanvasElement | undefined;
-  let chart: Chart | undefined;
-
-  onMount(() => {
-    if (canvasElement) {
-      const ctx = canvasElement.getContext('2d');
-      if (ctx) {
-        chart = new Chart(ctx, options);
-      }
-    }
-
-    // Cleanup
-    return () => {
-      chart?.destroy();
-    };
-  });
-
-  $effect(() => {
-    if (chart) {
-      // If options are provided, update the chart
-      chart.options = options.options ?? {};
-      chart.data = options.data;
-      chart.update();
-    }
-  });
+$effect(() => {
+  if (chart) {
+    // If options are provided, update the chart
+    chart.options = options.options ?? {};
+    chart.data = options.data;
+    chart.update();
+  }
+});
 </script>
 
 <div class="align-{align}" style="height: {height}">

@@ -17,18 +17,18 @@
 
 <script lang="ts">
   import { createAccordion } from '@melt-ui/svelte';
-  import { slide } from 'svelte/transition';
-  import ChevronDown from '$components/icons/ChevronDown.svelte';
+import { slide } from 'svelte/transition';
+import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-  export let id = (Math.random() + 1).toString(36).substring(7);
-  export let defaultOpen = false;
+export let id = (Math.random() + 1).toString(36).substring(7);
+export let defaultOpen = false;
 
-  const {
-    elements: { content, item, trigger, root },
-    helpers: { isSelected }
-  } = createAccordion({
-    defaultValue: defaultOpen ? id : undefined
-  });
+const {
+  elements: { content, item, trigger, root },
+  helpers: { isSelected }
+} = createAccordion({
+  defaultValue: defaultOpen ? id : undefined
+});
 </script>
 
 <div class="accordion" {...$root}>

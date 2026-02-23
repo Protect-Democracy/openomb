@@ -11,25 +11,25 @@
 <script lang="ts">
   import { getContext, onMount } from 'svelte';
 
-  // Props
-  export let label = '';
-  export let id = '';
+// Props
+export let label = '';
+export let id = '';
 
-  // Get tabs context
-  const { tabs, content } = getContext('tabs');
+// Get tabs context
+const { tabs, content } = getContext('tabs');
 
-  // Add tab data to context
-  onMount(() => {
-    if ($tabs && !$tabs.find((tab) => tab.id === id)) {
-      $tabs = [
-        ...$tabs,
-        {
-          label,
-          id
-        }
-      ];
-    }
-  });
+// Add tab data to context
+onMount(() => {
+  if ($tabs && !$tabs.find((tab) => tab.id === id)) {
+    $tabs = [
+      ...$tabs,
+      {
+        label,
+        id
+      }
+    ];
+  }
+});
 </script>
 
 <div class="has-js-only-block">

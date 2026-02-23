@@ -10,14 +10,14 @@
 
 <script lang="ts">
   import { createTreeView } from '@melt-ui/svelte';
-  import { setContext } from 'svelte';
+import { setContext } from 'svelte';
 
-  const treeContext = createTreeView();
-  setContext('tree', treeContext);
+const treeContext = createTreeView();
+setContext('tree', treeContext);
 
-  const {
-    elements: { tree }
-  } = treeContext;
+const {
+  elements: { tree }
+} = treeContext;
 </script>
 
 <ul {...$tree}>

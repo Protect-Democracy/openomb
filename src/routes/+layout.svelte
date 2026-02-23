@@ -1,75 +1,75 @@
 <script lang="ts">
   import '@fontsource/domine/400.css';
-  import '@fontsource/domine/500.css';
-  import '@fontsource/domine/600.css';
-  import '@fontsource/ibm-plex-sans/400.css';
-  import '@fontsource/ibm-plex-sans/500.css';
-  import '@fontsource/ibm-plex-sans/600.css';
-  import '@fontsource/ibm-plex-sans/700.css';
-  import type { PageData } from './$types';
-  import { onMount } from 'svelte';
-  import { derived } from 'svelte/store';
-  import { DateTime } from 'luxon';
-  import { page } from '$app/stores';
-  import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
-  import { setCookie } from '$lib/utilities';
-  import env from '$lib/environment';
-  import { formatJsonLdScript, pageSchema } from '$lib/schema';
-  import {
-    isBeta,
-    siteName,
-    siteAuthor,
-    siteDescription,
-    siteKeywords,
-    contactEmail,
-    deployedBaseUrl,
-    sourceDataUrl,
-    socialOgImgWidth,
-    socialOgImgHeight,
-    socialTwitterCard,
-    socialTwitterSite,
-    socialTwitterCreator,
-    googleAnalyticsId
-  } from '$config';
-  import { subscribeFeatureEnabled } from '$config/subscriptions';
-  import pdLogo from '$assets/logos/pd-white-words-logo.svg';
-  import favAppleTouch from '$assets/favicon/apple-touch-icon.png';
-  import fav16 from '$assets/favicon/favicon-16x16.png';
-  import fav32 from '$assets/favicon/favicon-32x32.png';
-  import favIco from '$assets/favicon/favicon.ico';
-  import favSafari from '$assets/favicon/safari-pinned-tab.svg';
-  import horizontalSocialImage from '$assets/social/OpenOMB-Share-Horiz.png';
+import '@fontsource/domine/500.css';
+import '@fontsource/domine/600.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-sans/700.css';
+import type { PageData } from './$types';
+import { onMount } from 'svelte';
+import { derived } from 'svelte/store';
+import { DateTime } from 'luxon';
+import { page } from '$app/stores';
+import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
+import { setCookie } from '$lib/utilities';
+import env from '$lib/environment';
+import { formatJsonLdScript, pageSchema } from '$lib/schema';
+import {
+  isBeta,
+  siteName,
+  siteAuthor,
+  siteDescription,
+  siteKeywords,
+  contactEmail,
+  deployedBaseUrl,
+  sourceDataUrl,
+  socialOgImgWidth,
+  socialOgImgHeight,
+  socialTwitterCard,
+  socialTwitterSite,
+  socialTwitterCreator,
+  googleAnalyticsId
+} from '$config';
+import { subscribeFeatureEnabled } from '$config/subscriptions';
+import pdLogo from '$assets/logos/pd-white-words-logo.svg';
+import favAppleTouch from '$assets/favicon/apple-touch-icon.png';
+import fav16 from '$assets/favicon/favicon-16x16.png';
+import fav32 from '$assets/favicon/favicon-32x32.png';
+import favIco from '$assets/favicon/favicon.ico';
+import favSafari from '$assets/favicon/safari-pinned-tab.svg';
+import horizontalSocialImage from '$assets/social/OpenOMB-Share-Horiz.png';
 
-  // Styles
-  import '../styles/index.css';
+// Styles
+import '../styles/index.css';
 
-  // Constants
-  const socialOgImgPath = horizontalSocialImage;
-  const socialTwitterImgPath = horizontalSocialImage;
-  const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
-  const url = derived(page, ($page) => $page.url);
-  const productionCheck = env.environment == 'production' || import.meta.env.PROD;
-  const betaCheck = isBeta;
+// Constants
+const socialOgImgPath = horizontalSocialImage;
+const socialTwitterImgPath = horizontalSocialImage;
+const pageMeta = derived(page, ($page) => $page.data?.pageMeta || {});
+const url = derived(page, ($page) => $page.url);
+const productionCheck = env.environment == 'production' || import.meta.env.PROD;
+const betaCheck = isBeta;
 
-  // Props
-  export let data: PageData;
+// Props
+export let data: PageData;
 
-  // On Mount
-  onMount(() => {
-    // Google Analytics setup
-    if (googleAnalyticsId && typeof window !== 'undefined') {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function () {
-        window.dataLayer.push(arguments);
-      };
-      window.gtag('js', new Date());
-      window.gtag('config', googleAnalyticsId);
-    }
-  });
+// On Mount
+onMount(() => {
+  // Google Analytics setup
+  if (googleAnalyticsId && typeof window !== 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag('js', new Date());
+    window.gtag('config', googleAnalyticsId);
+  }
+});
 
-  // Set cookie that JS is enabled which is useful
-  // if the server needs to know if JS is enabled.
-  setCookie('jsEnabled', 'true', { expires: DateTime.now().plus({ days: 30 }).toJSDate() });
+// Set cookie that JS is enabled which is useful
+// if the server needs to know if JS is enabled.
+setCookie('jsEnabled', 'true', { expires: DateTime.now().plus({ days: 30 }).toJSDate() });
 </script>
 
 <svelte:head>

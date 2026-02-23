@@ -21,13 +21,12 @@ export let options: string[] | Record<string, unknown>[];
 export let multi = false;
 export let id;
 export let name;
-
 let defaultValue;
 export { defaultValue as value };
 
 export let buttonClass = '';
-export let formatOptionLabel = (o: string) => o;
-export let formatOptionValue = (o: string) => o;
+export let formatOptionLabel = (o) => o;
+export let formatOptionValue = (o) => o;
 
 const dispatch = createEventDispatcher();
 const {

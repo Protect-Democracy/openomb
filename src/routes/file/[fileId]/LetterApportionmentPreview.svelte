@@ -1,8 +1,8 @@
 <script lang="ts">
   import { formatFileTitle } from '$lib/formatters';
 
-  // Props
-  export let file;
+// Props
+export let file;
 </script>
 
 <div class="letter-apportionment-preview">

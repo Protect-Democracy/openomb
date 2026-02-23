@@ -1,16 +1,16 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { siteName } from '$config';
-  import { formatNumber } from '$lib/formatters';
-  import SearchForm from './SearchForm.svelte';
-  import RecentFiles from './RecentFiles.svelte';
-  import TopRightArrow from '$components/icons/TopRightArrow.svelte';
-  import Check from '$components/icons/Check.svelte';
-  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
-  import graphIllustration from '$assets/graph-illustration.svg';
+import { siteName } from '$config';
+import { formatNumber } from '$lib/formatters';
+import SearchForm from './SearchForm.svelte';
+import RecentFiles from './RecentFiles.svelte';
+import TopRightArrow from '$components/icons/TopRightArrow.svelte';
+import Check from '$components/icons/Check.svelte';
+import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
+import graphIllustration from '$assets/graph-illustration.svg';
 
-  export let data: PageData;
-  const currentYear = new Date().getFullYear();
+export let data: PageData;
+const currentYear = new Date().getFullYear();
 </script>
 
 <section class="intro">
@@ -46,9 +46,9 @@
         >, implements Congress&apos;s spending laws. Apportionments set the pace at which agencies
         may spend funds by specifying what money an agency may spend, when, and subject to what
         conditions. This is the second step in the life cycle of federal funds: Congress
-        appropriates, <acronym title="Office of Management and Budget">OMB</acronym> apportions, and
-        agencies spend. Administrations of both parties have abused this authority to halt or cut off
-        funding for enacted programs, making oversight of apportionments vital.
+        appropriates, <acronym title="Office of Management and Budget">OMB</acronym> apportions, and agencies
+        spend. Administrations of both parties have abused this authority to halt or cut off funding for
+        enacted programs, making oversight of apportionments vital.
       </p>
 
       <a href="/faq"
@@ -75,8 +75,8 @@
       <p>
         <span class="inline-icon"><Check /></span>
         <span
-          >Whether <acronym title="Office of Management and Budget">OMB</acronym> is delaying access
-          to, or withholding, funds.</span
+          >Whether <acronym title="Office of Management and Budget">OMB</acronym> is delaying access to,
+          or withholding, funds.</span
         >
       </p>
     </div>

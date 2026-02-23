@@ -15,17 +15,17 @@
 
 <script lang="ts">
   import { groupBy, orderBy } from 'lodash-es';
-  import { formatDate, formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
+import { formatDate, formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
 
-  export let tafs;
-  export let headerElement = 'h3';
-  export let subheaderElement = 'h4';
-  export let groupByAccount = false;
-  export let hideAccountHeader = false;
-  export let groupByFile = false;
-  export let hideFileHeader = false;
+export let tafs;
+export let headerElement = 'h3';
+export let subheaderElement = 'h4';
+export let groupByAccount = false;
+export let hideAccountHeader = false;
+export let groupByFile = false;
+export let hideFileHeader = false;
 
-  $: tafsArray = Array.isArray(tafs) ? tafs : [tafs];
+$: tafsArray = Array.isArray(tafs) ? tafs : [tafs];
 </script>
 
 <div class="tafs-block">

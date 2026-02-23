@@ -11,20 +11,20 @@
 
 <script lang="ts">
   import { createDropdownMenu } from '@melt-ui/svelte';
-  import { derived } from 'svelte/store';
-  import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
-  import ChevronDown from '$components/icons/ChevronDown.svelte';
+import { derived } from 'svelte/store';
+import { goto } from '$app/navigation';
+import { page } from '$app/stores';
+import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-  // Props
-  export let title = '';
-  export let fallbackHref = '';
-  export let links: { title: string; href: string }[] = [];
+// Props
+export let title = '';
+export let fallbackHref = '';
+export let links: { title: string; href: string }[] = [];
 
-  const url = derived(page, ($page) => $page.url);
-  const {
-    elements: { menu, item, trigger, arrow }
-  } = createDropdownMenu();
+const url = derived(page, ($page) => $page.url);
+const {
+  elements: { menu, item, trigger, arrow }
+} = createDropdownMenu();
 </script>
 
 <button class="like-text dropdown-toggle has-js-only-inline" {...$trigger} use:trigger tabindex="0">

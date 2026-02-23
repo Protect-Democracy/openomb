@@ -1,27 +1,27 @@
 <script lang="ts">
   import { createDialog } from '@melt-ui/svelte';
-  import { fade, fly } from 'svelte/transition';
-  import XSymbol from '$components/icons/XSymbol.svelte';
-  import { setContext } from 'svelte';
+import { fade, fly } from 'svelte/transition';
+import XSymbol from '$components/icons/XSymbol.svelte';
+import { setContext } from 'svelte';
 
-  // Allow for easy title and description without slots
-  export let contentTitle = '';
-  export let contentDescription = '';
-  export let triggerProps = {};
+// Allow for easy title and description without slots
+export let contentTitle = '';
+export let contentDescription = '';
+export let triggerProps = {};
 
-  const {
-    elements: { trigger, overlay, content, title, description, close, portalled },
-    states: { open }
-  } = createDialog({
-    forceVisible: true
-  });
+const {
+  elements: { trigger, overlay, content, title, description, close, portalled },
+  states: { open }
+} = createDialog({
+  forceVisible: true
+});
 
-  // Context to allow for closing
-  setContext('drawer', {
-    close: () => {
-      open.set(false);
-    }
-  });
+// Context to allow for closing
+setContext('drawer', {
+  close: () => {
+    open.set(false);
+  }
+});
 </script>
 
 <button {...$trigger} use:trigger {...triggerProps}>

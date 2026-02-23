@@ -9,8 +9,8 @@
 -->
 <script lang="ts">
   // Props
-  export let callbackUrl;
-  export let action = 'Log Out';
+export let callbackUrl;
+export let action = 'Log Out';
 </script>
 
 <!-- Form setup copied from auth.js's sveltekit component -->

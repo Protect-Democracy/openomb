@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { PageData } from './$types';
 
-  export let data: PageData;
-  $: ({ type, subscription } = data);
+export let data: PageData;
+$: ({ type, subscription } = data);
 </script>
 
 <div class="page-container content-container">

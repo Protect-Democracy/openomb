@@ -87,7 +87,7 @@ async function sendEmail(to: string, subject: string, html: string, forceClientR
     }
 
     // Create SMTP transporter
-    let transport = createTransport({
+    const transport = createTransport({
       service: env.emailServiceType === 'gmail' ? 'gmail' : undefined,
       host: smtpHost,
       port: smtpPort,
