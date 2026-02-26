@@ -1,15 +1,23 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { formatNumber } from '$lib/formatters';
-  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
-  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
-  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
-  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
+import { formatNumber } from '$lib/formatters';
+import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
+import { Tab, Tabs } from '$components/tabs';
+import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
-  export let data: PageData;
-  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved, user, existingSubscription } =
-    data);
+export let data: PageData;
+$: ({
+  folder,
+  agenciesByFolder,
+  filesWithoutTafs,
+  recentlyApproved,
+  recentSpendPlans,
+  user,
+  existingSubscription
+} = data);
 </script>
 
 <div class="page-container">
@@ -26,7 +34,11 @@
 <div class="page-container content-container">
   <h1>Folder: {folder.folder}</h1>
 
-  <p>There are <strong>{formatNumber(folder.fileCount)} files</strong> in this folder.</p>
+  <p>
+    There are <strong>{formatNumber(folder.fileCount)} files</strong
+    >{#if folder.spendPlanCount > 0}{' '}and
+      <strong>{formatNumber(folder.spendPlanCount)} spend plans</strong>{/if} in this folder.
+  </p>
 
   <SubscribeLink
     {user}
@@ -45,6 +57,7 @@
           <li>
             <a href="/agency/{agency.budgetAgencyTitleId}">{agency.budgetAgencyTitle}</a>
             ({formatNumber(agency.fileCount)}{aIndex === 0 ? ' files' : ''})
+            {#if agency.spendPlanCount > 0}({formatNumber(agency.spendPlanCount)} spend plans){/if}
           </li>
         {/each}
       </ul>
@@ -79,13 +92,38 @@
   {/if}
 
   <section class="page-section">
-    <h2>Recently approved files</h2>
+    {#if recentSpendPlans && recentSpendPlans.length > 0}
+      {#if recentlyApproved && recentlyApproved.length > 0}
+        <Tabs defaultTabId="recent-files">
+          <Tab label="Recently approved" id="recent-files">
+            <div class="recently-approved-files">
+              {#each recentlyApproved as file}
+                <FileListingHighlightable {file} />
+              {/each}
+            </div>
+          </Tab>
+          <Tab label="Recent Spend Plans" id="recent-spend-plans">
+            {#each recentSpendPlans as spendPlan}
+              <FileListingHighlightable file={spendPlan} />
+            {/each}
+          </Tab>
+        </Tabs>
+      {:else}
+        <h2>Recent Spend Plans</h2>
 
-    <div class="recently-approved-files">
-      {#each recentlyApproved as file}
-        <FileListingHighlightable {file} />
-      {/each}
-    </div>
+        {#each recentSpendPlans as spendPlan}
+          <FileListingHighlightable file={spendPlan} />
+        {/each}
+      {/if}
+    {:else}
+      <h2>Recently approved</h2>
+
+      <div class="recently-approved-files">
+        {#each recentlyApproved as file}
+          <FileListingHighlightable {file} />
+        {/each}
+      </div>
+    {/if}
   </section>
 </div>
 

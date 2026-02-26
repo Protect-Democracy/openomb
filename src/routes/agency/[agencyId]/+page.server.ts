@@ -1,5 +1,6 @@
 import { mRecentlyApprovedWithTafs, mFileCountByMonthByYear } from '$queries/files';
-import { agencyDetails, bureausByAgency } from '$queries/tafs';
+import { agencyDetails, bureausByAgency } from '$queries/agencies';
+import { mRecentlyAdded } from '$queries/spend-plans';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
@@ -19,6 +20,9 @@ export async function load({ params, locals }) {
     agency,
     bureausByAgency: await bureausByAgency(params.agencyId),
     recentlyApproved: await mRecentlyApprovedWithTafs(20, {
+      agencyId: params.agencyId
+    }),
+    recentSpendPlans: await mRecentlyAdded(20, {
       agencyId: params.agencyId
     }),
     fileCountByMonthByYear: mFileCountByMonthByYear({

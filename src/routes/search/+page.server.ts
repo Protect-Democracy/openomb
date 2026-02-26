@@ -12,8 +12,8 @@ import {
   userSearch
 } from '$queries/search';
 import { parseUrlSearchParams } from '$lib/searches';
-import { mBureaus } from '$queries/tafs';
-import { mFolders } from '$queries/files';
+import { mBureaus } from '$queries/agencies';
+import { mFolders } from '$queries/folders';
 import { userSubscription } from '$queries/subscriptions';
 
 // Types

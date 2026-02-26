@@ -225,24 +225,6 @@ export const fileStats = async function () {
 };
 
 /**
- * Distinct folders with file counts
- */
-export const folders = async function () {
-  return (
-    (await db
-      .select({
-        folder: files.folder,
-        folderId: files.folderId,
-        fileCount: countDistinct(files.fileId)
-      })
-      .from(files)
-      .groupBy(files.folder, files.folderId)
-      .orderBy(files.folder)) || []
-  );
-};
-export type FoldersResult = Awaited<ReturnType<typeof folders>>;
-
-/**
  * Distinct approvers with file counts
  */
 export const approvers = async function () {
@@ -278,28 +260,6 @@ export const approverDetails = async function (approverTitleId: string) {
   };
 };
 export type ApproverDetailsResult = Awaited<ReturnType<typeof approverDetails>>;
-
-/**
- * Get details of a single folder.
- */
-export const folderDetails = async function (folderId: string) {
-  const filesFromFolder = await db
-    .select({ folder: files.folder })
-    .from(files)
-    .where(eq(files.folderId, folderId));
-
-  // If none found
-  if (!filesFromFolder || filesFromFolder.length === 0) {
-    return null;
-  }
-
-  return {
-    folderId,
-    folder: filesFromFolder[0].folder,
-    fileCount: filesFromFolder.length
-  };
-};
-export type FolderDetailsResult = Awaited<ReturnType<typeof folderDetails>>;
 
 /**
  * Get files without any tafs entries (i.e. not agencies)
@@ -385,7 +345,6 @@ export const fileCountByMonthByYear = async function (filters?: {
 
 // Memoized
 export const mFileStats = memoizeDataAsync(fileStats);
-export const mFolders = memoizeDataAsync(folders);
 export const mAllFiles = memoizeDataAsync(allFiles);
 export const mFilesWithoutTafs = memoizeDataAsync(filesWithoutTafs);
 export const mRecentlyApprovedWithTafs = memoizeDataAsync(recentlyApprovedWithTafs);

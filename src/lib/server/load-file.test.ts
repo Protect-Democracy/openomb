@@ -11,13 +11,19 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 import { fileDetails } from '$db/queries/files';
+import { spendPlanRecord } from '$db/queries/spend-plans';
 
 import {
   approvalDateFromPdfFileName,
   readPdfText,
   apportionmentListFromHomepage,
+  parseSpendPlanFilename,
   loadJsonFile,
+  loadJsonSpendPlan,
+  loadPdfSpendPlan,
+  isApportionmentJsonUrl,
   isApportionmentPdfUrl,
+  isSpendPlanJsonUrl,
   isSpendPlanPdfUrl
 } from './load-file';
 
@@ -56,6 +62,13 @@ describe('approvalDateFromPdfFileName()', () => {
     );
     expect(date5).toEqual(
       DateTime.fromISO('2026-02-03T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
+    );
+
+    const date6 = approvalDateFromPdfFileName(
+      'https://apportionment-public.max.gov/Fiscal%20Year%202022/Department%20of%20Education/PDF/FY2022_Department%20of%20Education 2022-07-13.pdf'
+    );
+    expect(date6).toEqual(
+      DateTime.fromISO('2022-07-13T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
     );
 
     expect(approvalDateFromPdfFileName('20240501')).toEqual(null);
@@ -113,6 +126,129 @@ describe('apportionmentListFromHomepage()', async () => {
     expect(urls.filter((url) => url.match(/\.pdf$/)).length).toBe(20);
     // Find JSON URLs
     expect(urls.filter((url) => url.match(/\.json$/)).length).toBe(27873);
+  });
+});
+
+describe('parseSpendPlanFilename()', () => {
+  it('should parse name variations as expected', () => {
+    expect(parseSpendPlanFilename('FY 2025 DHS FLETC OS Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Homeland Security',
+      bureau: 'Federal Law Enforcement Training Center'
+    });
+    expect(parseSpendPlanFilename('FY 2026 DHS FLETC PCI Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'Department of Homeland Security',
+      bureau: 'Federal Law Enforcement Training Center'
+    });
+    expect(parseSpendPlanFilename('FY 2025 HHS AHRQ Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Agency for Healthcare Research and Quality'
+    });
+    expect(parseSpendPlanFilename('FY25 State Diplomatic Engagement Spend Plan.pdf')).toMatchObject(
+      {
+        fiscalYear: '2025',
+        agency: 'Department of State'
+      }
+    );
+    expect(parseSpendPlanFilename('FY 2025 CNCS Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Corporation for National and Community Service'
+    });
+    expect(parseSpendPlanFilename('FY25 State Diplomatic Engagement Spend Plan.pdf')).toMatchObject(
+      {
+        fiscalYear: '2025',
+        agency: 'Department of State'
+      }
+    );
+    expect(
+      parseSpendPlanFilename(
+        'FY25 State Embassy Security, Construction, and Maintenance Spend Plan.pdf'
+      )
+    ).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of State'
+    });
+    expect(
+      parseSpendPlanFilename(
+        'FY25 State Embassy Security, Construction, and Maintenance Spend Plan 2.pdf'
+      )
+    ).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of State'
+    });
+    expect(parseSpendPlanFilename('FY25 State CIO Operating Plan Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of State'
+    });
+    expect(parseSpendPlanFilename('FY25 State Diplomatic Engagement Spend Plan.pdf')).toMatchObject(
+      {
+        fiscalYear: '2025',
+        agency: 'Department of State'
+      }
+    );
+    expect(parseSpendPlanFilename('FY25 IBWC Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'International Boundary and Water Commission, United States and Mexico'
+    });
+    expect(parseSpendPlanFilename('FY 2025 HHS GDM TPP Evaluation Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services'
+    });
+    expect(parseSpendPlanFilename('FY 2025 HHS CDC Chronic Diseases Spend Plan.pdf')).toMatchObject(
+      {
+        fiscalYear: '2025',
+        agency: 'Department of Health and Human Services',
+        bureau: 'Centers for Disease Control and Prevention'
+      }
+    );
+    expect(
+      parseSpendPlanFilename('FY 2025 HHS CDC Injury Prevention Spend Plan.pdf')
+    ).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Centers for Disease Control and Prevention'
+    });
+    expect(parseSpendPlanFilename('FY 2025 HHS CDC PHPR Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Centers for Disease Control and Prevention'
+    });
+    expect(parseSpendPlanFilename('FY 2025 HHS SAMHSA Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Substance Abuse and Mental Health Services Administration'
+    });
+    expect(parseSpendPlanFilename('FY 2025 HHS HRSA Operating Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Health Resources and Services Administration'
+    });
+    expect(parseSpendPlanFilename('PY 2023 DOL OJC CRA Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2023',
+      agency: 'Department of Labor'
+    });
+    expect(parseSpendPlanFilename('PY 2024 DOL OJC CRA Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2024',
+      agency: 'Department of Labor'
+    });
+    expect(parseSpendPlanFilename('PY 2025 DOL OJC CRA Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Labor'
+    });
+    expect(parseSpendPlanFilename('PY 2025 DOL OJC Operations Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Labor'
+    });
+    expect(parseSpendPlanFilename('PY25 DOL SCSEP Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Labor'
+    });
+    expect(parseSpendPlanFilename('FY 2026 VA RETF Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'Department of Veterans Affairs'
+    });
   });
 });
 
@@ -335,6 +471,204 @@ describe('loadJsonFile()', async () => {
   });
 });
 
+describe('loadJsonSpendPlan()', async () => {
+  let dbSetup: Awaited<ReturnType<typeof createIsolatedDb>>;
+
+  beforeEach(async () => {
+    dbSetup = await createIsolatedDb();
+  });
+
+  afterEach(async () => {
+    await dbSetup.teardown();
+  });
+
+  it('should handle http error silently', async () => {
+    const url = 'http://example.com/404.json';
+
+    // Mock response
+    mockFetchResponse('Not Found', {
+      ok: false,
+      status: 404,
+      headers: new Headers({ 'Content-Type': 'application/json' })
+    });
+
+    // Spy on console.error to check if the error is logged
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await loadJsonFile(url, 0);
+
+    // Check if the error was logged
+    expect(JSON.stringify(consoleErrorSpy.mock.calls[0])).toMatch(/LoadJsonFileError/);
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('saves as spend plan entry', async () => {
+    const testJsonPath = path.resolve(__dirname, './test-data/spend-plan-json-mock.json');
+    const testJson = JSON.parse(fs.readFileSync(testJsonPath, 'utf-8'));
+    const testUrl = 'http://example.com/spend-plan-data.json';
+
+    // Mock response
+    mockFetchResponse(testJson, testJson, 'json');
+
+    const result = await loadJsonSpendPlan(testUrl, 0);
+
+    if (!result) {
+      throw new Error('Expected loadJsonFile to return a result, but got null');
+    }
+
+    // Get the details of the file
+    const spendPlan = await spendPlanRecord(result.fileId);
+
+    if (!spendPlan) {
+      throw new Error('Expected spendPlanDetails to return a spend plan, but got null');
+    }
+
+    // Basic file
+    expect(result).toBeDefined();
+    expect(result).toMatchObject({
+      fileId: '10000001',
+      fileName: 'FY 2026 DHS FLETC PCI Spend Plan',
+      fiscalYear: 2026,
+      folder: 'Spend Plans',
+      folderId: 'spend-plans',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Federal Law Enforcement Training Center',
+      budgetBureauTitleId: 'federal-law-enforcement-training-center',
+      excelUrl: null,
+      pdfUrl: null,
+      sourceUrl: testUrl,
+      sourceData: JSON.stringify(testJson),
+      sourceText: null,
+      removed: false
+    });
+  });
+});
+
+describe('loadPdfSpendPlan()', async () => {
+  let dbSetup: Awaited<ReturnType<typeof createIsolatedDb>>;
+
+  beforeEach(async () => {
+    dbSetup = await createIsolatedDb();
+  });
+
+  afterEach(async () => {
+    await dbSetup.teardown();
+  });
+
+  it('should handle http error silently', async () => {
+    const url = 'http://example.com/404.json';
+
+    // Mock response
+    mockFetchResponse('Not Found', {
+      ok: false,
+      status: 404,
+      headers: new Headers({ 'Content-Type': 'application/pdf' })
+    });
+
+    // Spy on console.error to check if the error is logged
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await loadPdfSpendPlan(url, 0);
+
+    // Check if the error was logged
+    expect(JSON.stringify(consoleErrorSpy.mock.calls[0])).toMatch(/LoadPdfFileError/);
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('saves as spend plan entry', async () => {
+    const testPdfPath = path.resolve(__dirname, './test-data/spend-plan-pdf-test.pdf');
+    const testBlob = new Blob([fs.readFileSync(testPdfPath)], { type: 'application/pdf' });
+    const testUrl = 'http://example.com/PY 2024 DOL OJC CRA Spend Plan.pdf';
+
+    // Mock response
+    mockFetchResponse(
+      testBlob,
+      {
+        headers: new Headers({ 'Content-Type': 'application/pdf' }),
+        arrayBuffer: () => testBlob.arrayBuffer()
+      },
+      'blob'
+    );
+
+    const result = await loadPdfSpendPlan(testUrl, 0);
+
+    if (!result) {
+      throw new Error('Expected loadPdfSpendPlan to return a result, but got null');
+    }
+
+    // Get the details of the file
+    const spendPlan = await spendPlanRecord(result.fileId);
+
+    if (!spendPlan) {
+      throw new Error('Expected spendPlanDetails to return a spend plan, but got null');
+    }
+
+    // Basic file
+    expect(result).toBeDefined();
+    expect(result).toMatchObject({
+      fileId: expect.stringMatching(/^pdf-.*/),
+      fileName: 'PY 2024 DOL OJC CRA Spend Plan',
+      fiscalYear: 2024,
+      folder: 'Spend Plans',
+      folderId: 'spend-plans',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: null,
+      budgetBureauTitleId: null,
+      excelUrl: null,
+      pdfUrl: testUrl,
+      sourceUrl: testUrl,
+      sourceData: null,
+      sourceText: expect.any(String),
+      removed: false
+    });
+  });
+});
+
+describe('isApportionmentJsonUrl()', () => {
+  it('should identify apportionment JSON URLs', () => {
+    const validUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-X-8862_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-2025-2026-3126_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-096-X-8863_Iteration%3D2_2025-10-27-12.14.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Transportation/JSON/FY2026_Agency%3DDOT_Bureau%3DFAA_TAFS%3D069-2025-2026-8107_Iteration%3D1_2025-09-15-17.18.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20State/JSON/FY2023_Agency%3DSTATE_Bureau%3DOTHER_TAFS%3D019-X-5116_Iteration%3D1_2022-08-25-14.24.json'
+    ];
+    validUrls.forEach((url) => {
+      expect(isApportionmentJsonUrl(url)).toBe(true);
+    });
+
+    const invalidUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202024/Department%20of%20Defense/PDF/FY2024_Department%20of%20Defense_Apportionment_2023-09-30.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Defense--Military%20Programs/PDF/FY2026_Department_of_War_Apportionment_2025_11_13.pdf.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf',
+      'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS Spend Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Chronic%20Diseases%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Injury%20Prevention%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20PHPR%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20GDM%20TPP%20Evaluation%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20HRSA%20Operating%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20SAMHSA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20DHS%20FLETC%20PCI%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202023%20DOL%20OJC%20CRA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20CRA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20Operations%20Spend%20Plan.pdf'
+    ];
+    invalidUrls.forEach((url) => {
+      expect(isApportionmentJsonUrl(url)).toBe(false);
+    });
+  });
+});
+
 describe('isApportionmentPdfUrl()', () => {
   it('should identify apportionment PDF URLs', () => {
     const validUrls = [
@@ -349,6 +683,11 @@ describe('isApportionmentPdfUrl()', () => {
     });
 
     const invalidUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-X-8862_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-2025-2026-3126_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-096-X-8863_Iteration%3D2_2025-10-27-12.14.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Transportation/JSON/FY2026_Agency%3DDOT_Bureau%3DFAA_TAFS%3D069-2025-2026-8107_Iteration%3D1_2025-09-15-17.18.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20State/JSON/FY2023_Agency%3DSTATE_Bureau%3DOTHER_TAFS%3D019-X-5116_Iteration%3D1_2022-08-25-14.24.json',
       'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS Spend Plan.pdf',
       'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf',
       'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ%20Spend%20Plan.pdf',
@@ -371,20 +710,98 @@ describe('isApportionmentPdfUrl()', () => {
   });
 });
 
-describe('isSpendPlanPdfUrl()', () => {
-  it('should identify spend plan PDF URLs', () => {
+describe('isSpendPlanJsonUrl()', () => {
+  it('should identify spend plan JSON URLs', () => {
+    const validUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/JSON/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/JSON/FY%202025%20HHS%20CDC%20Injury%20Prevention%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ.json',
+      'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS Spend Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Chronic%20Diseases%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Injury%20Prevention%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20PHPR%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20GDM%20TPP%20Evaluation%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20HRSA%20Operating%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20SAMHSA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20DHS%20FLETC%20PCI%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202023%20DOL%20OJC%20CRA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20CRA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20Operations%20Spend%20Plan.json'
+    ];
+    validUrls.forEach((url) => {
+      expect(isSpendPlanJsonUrl(url)).toBe(true);
+    });
+
     const invalidUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-X-8862_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-2025-2026-3126_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-096-X-8863_Iteration%3D2_2025-10-27-12.14.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Transportation/JSON/FY2026_Agency%3DDOT_Bureau%3DFAA_TAFS%3D069-2025-2026-8107_Iteration%3D1_2025-09-15-17.18.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20State/JSON/FY2023_Agency%3DSTATE_Bureau%3DOTHER_TAFS%3D019-X-5116_Iteration%3D1_2022-08-25-14.24.json',
       'https://apportionment-public.max.gov/Fiscal%20Year%202024/Department%20of%20Defense/PDF/FY2024_Department%20of%20Defense_Apportionment_2023-09-30.pdf',
       'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf',
       'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf',
       'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Defense--Military%20Programs/PDF/FY2026_Department_of_War_Apportionment_2025_11_13.pdf.pdf',
-      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf'
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf',
+      'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS Spend Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Chronic%20Diseases%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Injury%20Prevention%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20PHPR%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20GDM%20TPP%20Evaluation%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20HRSA%20Operating%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20SAMHSA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20DHS%20FLETC%20PCI%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202023%20DOL%20OJC%20CRA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20CRA%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20Operations%20Spend%20Plan.pdf'
+    ];
+    invalidUrls.forEach((url) => {
+      expect(isSpendPlanJsonUrl(url)).toBe(false);
+    });
+  });
+});
+
+describe('isSpendPlanPdfUrl()', () => {
+  it('should identify spend plan PDF URLs', () => {
+    const invalidUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-X-8862_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-2025-2026-3126_Iteration%3D1_2025-09-16-17.07.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Corps%20of%20Engineers--Civil%20Works/JSON/FY2026_Agency%3DCOE_Bureau%3DCOE_TAFS%3D096-096-X-8863_Iteration%3D2_2025-10-27-12.14.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Transportation/JSON/FY2026_Agency%3DDOT_Bureau%3DFAA_TAFS%3D069-2025-2026-8107_Iteration%3D1_2025-09-15-17.18.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202023/Department%20of%20State/JSON/FY2023_Agency%3DSTATE_Bureau%3DOTHER_TAFS%3D019-X-5116_Iteration%3D1_2022-08-25-14.24.json',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202024/Department%20of%20Defense/PDF/FY2024_Department%20of%20Defense_Apportionment_2023-09-30.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Apportionment_2024_09_27.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Defense--Military%20Programs/PDF/FY2026_Department_of_War_Apportionment_2025_11_13.pdf.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20SAMHSA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20DHS%20FLETC%20PCI%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202023%20DOL%20OJC%20CRA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20CRA%20Spend%20Plan.json',
+      'https://apportionment-public.max.gov/Spend%20Plans/PY%202025%20DOL%20OJC%20Operations%20Spend%20Plan.json'
     ];
     invalidUrls.forEach((url) => {
       expect(isSpendPlanPdfUrl(url)).toBe(false);
     });
 
     const validUrls = [
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY%202025%20HHS%20CDC%20Injury%20Prevention%20Spend%20Plan.pdf',
+      'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS.pdf',
+      'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ.pdf',
       'https://apportionment-public.max.gov/Spend Plans/FY 2025 CNCS Spend Plan.pdf',
       'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf',
       'https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20AHRQ%20Spend%20Plan.pdf',

@@ -1,5 +1,6 @@
 import { sortBy } from 'lodash-es';
 import { fileDetails } from '$queries/files';
+import { spendPlanRecord } from '$queries/spend-plans';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 import { formatFileTitle } from '$lib/formatters';
@@ -7,7 +8,7 @@ import { fileSchema } from '$lib/schema';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals }) {
-  const file = await fileDetails(params.fileId);
+  const file = (await fileDetails(params.fileId)) || (await spendPlanRecord(params.fileId));
 
   const user = (await locals.auth())?.user;
 

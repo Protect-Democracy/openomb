@@ -1,22 +1,25 @@
 <script lang="ts">
   import { uniqBy, isString } from 'lodash-es';
-  import { formatDate, deconstructLaws } from '$lib/formatters';
-  import ExternalLink from '$components/links/ExternalLink.svelte';
+import { formatDate, deconstructLaws } from '$lib/formatters';
+import ExternalLink from '$components/links/ExternalLink.svelte';
 
-  // Props
-  export let file;
+// Props
+export let file;
 
-  // Derived
-  $: ({ tafs } = file);
-  $: letterApportionment = !!file.pdfUrl;
-  $: uniqueAgencies = uniqBy(
-    tafs.map((tafsGroup) => ({
-      id: tafsGroup.budgetAgencyTitleId,
-      title: tafsGroup.budgetAgencyTitle
-    })),
-    'id'
-  );
-  $: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
+// Derived
+$: ({ tafs } = file);
+$: letterApportionment = !!file.pdfUrl;
+$: spendPlan = file.budgetAgencyTitle && file.budgetAgencyTitleId;
+$: uniqueAgencies = tafs
+  ? uniqBy(
+      tafs.map((tafsGroup) => ({
+        id: tafsGroup.budgetAgencyTitleId,
+        title: tafsGroup.budgetAgencyTitle
+      })),
+      'id'
+    )
+  : [];
+$: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
 </script>
 
 <div class="file-metadata">
@@ -31,7 +34,9 @@
 
     <li class="grid-value">
       <strong>File approved<span class="sr-only">:</span></strong>
-      <span>{formatDate(file.approvalTimestamp, 'medium')}</span>
+      {#if file.approvalTimestamp}
+        <span>{formatDate(file.approvalTimestamp, 'medium')}</span>
+      {/if}
     </li>
 
     <li class="grid-value">
@@ -53,18 +58,27 @@
       </span>
     </li>
 
-    <li class="grid-value">
-      <strong
-        >{uniqueAgencies.length > 1 ? 'Agencies' : 'Agency'}<span class="sr-only">:</span></strong
-      >
-      <span>
-        {#each uniqueAgencies as agency, li (agency.id)}
-          <a href="/agency/{agency.id}">{agency.title}</a>{li > 0 && li < uniqueAgencies.length
-            ? ', '
-            : ''}
-        {/each}
-      </span>
-    </li>
+    {#if spendPlan}
+      <li class="grid-value">
+        <strong>Agency<span class="sr-only">:</span></strong>
+        <span>
+          <a href="/agency/{file.budgetAgencyTitleId}">{file.budgetAgencyTitle}</a>
+        </span>
+      </li>
+    {:else}
+      <li class="grid-value">
+        <strong
+          >{uniqueAgencies.length > 1 ? 'Agencies' : 'Agency'}<span class="sr-only">:</span></strong
+        >
+        <span>
+          {#each uniqueAgencies as agency, li (agency.id)}
+            <a href="/agency/{agency.id}">{agency.title}</a>{li > 0 && li < uniqueAgencies.length
+              ? ', '
+              : ''}
+          {/each}
+        </span>
+      </li>
+    {/if}
 
     <li class="grid-value grid-span-2">
       <strong

@@ -11,12 +11,17 @@ import chalk from 'chalk';
 import { db } from '$db/connection';
 import { collections } from '$schema/collections';
 import { files } from '$schema/files';
+import { spendPlans, type spendPlansSelect } from '$schema/spend-plans';
 import type { filesSelect } from '$schema/files';
 import {
   apportionmentListFromHomepage,
   loadJsonFile,
+  loadJsonSpendPlan,
   loadPdfFile,
+  loadPdfSpendPlan,
+  isApportionmentJsonUrl,
   isApportionmentPdfUrl,
+  isSpendPlanJsonUrl,
   isSpendPlanPdfUrl
 } from '$server/load-file';
 import { environmentVariables, zipFiles, putS3File, listS3BucketObjects } from '$server/utilities';
@@ -112,12 +117,22 @@ async function cli(): Promise<void> {
   // Collection
   if (options.collection) {
     const jsonProgressMessage = 'Loading JSON files';
+    const jsonSpendPlanProgressMessage = 'Loading JSON spend plans';
     const pdfProgressMessage = 'Loading PDF files';
+    const pdfSpendPlanProgressMessage = 'Loading PDF spend plans';
 
     // Progress for collection parts
     if (options.showProgress) {
       progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
+      progress.addTask(jsonSpendPlanProgressMessage, {
+        type: 'percentage',
+        barTransformFn: chalk.cyan
+      });
       progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
+      progress.addTask(pdfSpendPlanProgressMessage, {
+        type: 'percentage',
+        barTransformFn: chalk.yellow
+      });
     }
 
     // Save start of collection
@@ -140,6 +155,7 @@ async function cli(): Promise<void> {
 
     // Keep track of file ids to mark any as removed
     const fileIds: string[] = [];
+    const spendPlanIds: string[] = [];
 
     // Get list of apportionment URLs
     let apportionmentUrls;
@@ -158,7 +174,7 @@ async function cli(): Promise<void> {
     }
 
     // Load JSON files
-    const jsonUrls = apportionmentUrls.filter((url) => url.match(/\.json$/));
+    const jsonUrls = apportionmentUrls.filter((url) => isApportionmentJsonUrl(url));
 
     // Go through each JSON URL and collect data
     await createSpan('loadJsonFile[]', async () => {
@@ -199,6 +215,50 @@ async function cli(): Promise<void> {
 
     if (options.showProgress) {
       progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
+    }
+
+    // Load JSON spend plans
+    const jsonSpendPlanUrls = apportionmentUrls.filter((url) => isSpendPlanJsonUrl(url));
+
+    // Go through each JSON URL and collect data
+    await createSpan('loadJsonSpendPlan[]', async () => {
+      for (let urlIndex = 0; urlIndex < jsonSpendPlanUrls.length; urlIndex++) {
+        // If new records only, check if file exists
+        let existingRecord;
+        if (options.newRecordsOnly) {
+          existingRecord = await findSpendPlanBySourceUrl(jsonSpendPlanUrls[urlIndex]);
+          if (existingRecord) {
+            spendPlanIds.push(existingRecord.fileId);
+          }
+        }
+
+        // Add new record
+        if (!existingRecord) {
+          try {
+            const spendPlanRecord = await loadJsonSpendPlan(jsonSpendPlanUrls[urlIndex]);
+            if (spendPlanRecord) {
+              spendPlanIds.push(spendPlanRecord.fileId);
+            }
+          }
+          catch (error) {
+            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+            // but everything else will.
+            throw new Error(
+              `IMPORTANT: Failed loading JSON spend plan from URL "${jsonSpendPlanUrls[urlIndex]}": ${error?.message || error}`
+            );
+          }
+        }
+
+        if (options.showProgress) {
+          progress.updateTask(jsonSpendPlanProgressMessage, {
+            percentage: (urlIndex + 1) / jsonSpendPlanUrls.length
+          });
+        }
+      }
+    });
+
+    if (options.showProgress) {
+      progress.done(jsonSpendPlanProgressMessage, { message: chalk.green('Loaded') });
     }
 
     // Load PDF Apportionment files.  Doesn't have "spend plan" in  the name
@@ -247,13 +307,56 @@ async function cli(): Promise<void> {
 
     // Load PDF Spend Plan files.  Has "spend plan" in the name
     const pdfSpendPlanUrls = apportionmentUrls.filter((url) => isSpendPlanPdfUrl(url));
-    // TODO
+
+    await createSpan('loadPdfSpendPlan[]', async () => {
+      for (let urlIndex = 0; urlIndex < pdfSpendPlanUrls.length; urlIndex++) {
+        // If new records only, check if file exists
+        let existingRecord;
+        if (options.newRecordsOnly) {
+          existingRecord = await findSpendPlanBySourceUrl(pdfSpendPlanUrls[urlIndex]);
+          if (existingRecord) {
+            spendPlanIds.push(existingRecord.fileId);
+          }
+        }
+
+        // Add new record
+        if (!existingRecord) {
+          try {
+            const spendPlanRecord = await loadPdfSpendPlan(pdfSpendPlanUrls[urlIndex]);
+            if (spendPlanRecord) {
+              spendPlanIds.push(spendPlanRecord.fileId);
+            }
+          }
+          catch (error) {
+            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+            // but everything else will.
+            throw new Error(
+              `IMPORTANT: Failed loading PDF spend plan from URL "${pdfSpendPlanUrls[urlIndex]}": ${error?.message || error}`
+            );
+          }
+        }
+
+        if (options.showProgress) {
+          progress.updateTask(pdfSpendPlanProgressMessage, {
+            percentage: (urlIndex + 1) / pdfSpendPlanUrls.length
+          });
+        }
+      }
+    });
+
+    if (options.showProgress) {
+      progress.done(pdfSpendPlanProgressMessage, { message: chalk.green('Loaded') });
+    }
 
     // Mark any files not in the list as removed
     await db
       .update(files)
       .set({ removed: true, modifiedAt: new Date() })
       .where(notInArray(files.fileId, fileIds));
+    await db
+      .update(spendPlans)
+      .set({ removed: true, modifiedAt: new Date() })
+      .where(notInArray(spendPlans.fileId, spendPlanIds));
 
     // Save end of collection
     const complete = new Date();
@@ -314,6 +417,19 @@ async function cli(): Promise<void> {
 async function findFileBySourceUrl(sourceUrl: string): Promise<filesSelect | null> {
   const existingRecords = await db.query.files.findFirst({
     where: eq(files.sourceUrl, sourceUrl)
+  });
+  return existingRecords ? existingRecords : null;
+}
+
+/**
+ * Check database for existing record by source URL.
+ *
+ * @param sourceUrl Source URL to check for
+ * @returns Existing record or null
+ */
+async function findSpendPlanBySourceUrl(sourceUrl: string): Promise<spendPlansSelect | null> {
+  const existingRecords = await db.query.spendPlans.findFirst({
+    where: eq(spendPlans.sourceUrl, sourceUrl)
   });
   return existingRecords ? existingRecords : null;
 }

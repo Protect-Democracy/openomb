@@ -1,10 +1,11 @@
+import { folderDetails } from '$queries/folders';
+import { agenciesByFolder } from '$queries/agencies';
 import {
-  folderDetails,
   mFilesWithoutTafs,
   mRecentlyApprovedWithTafs,
   mFileCountByMonthByYear
 } from '$queries/files';
-import { agenciesByFolder } from '$queries/tafs';
+import { mRecentlyAdded } from '$queries/spend-plans';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
@@ -26,6 +27,7 @@ export async function load({ params, locals }) {
     agenciesByFolder: await agenciesByFolder(params.folderId),
     filesWithoutTafs: await mFilesWithoutTafs(folder.folderId),
     recentlyApproved: await mRecentlyApprovedWithTafs(20, { folderId: folder.folderId }),
+    recentSpendPlans: await mRecentlyAdded(20, { folderId: folder.folderId }),
     fileCountByMonthByYear: mFileCountByMonthByYear({ folderId: folder.folderId }),
     user,
     existingSubscription,

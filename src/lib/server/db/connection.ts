@@ -28,6 +28,7 @@ import * as collections from './schema/collections';
 import * as users from './schema/users';
 import * as subscriptions from './schema/subscriptions';
 import * as searches from './schema/searches';
+import * as spendPlans from './schema/spend-plans';
 import * as lineTypes from './schema/line-types';
 import * as lineDescriptions from './schema/line-descriptions';
 
@@ -42,7 +43,8 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
 // The combined schema at the module level
-const schemas = {
+// This captures relations as well
+export const schemas = {
   ...files,
   ...footnotes,
   ...lines,
@@ -51,6 +53,7 @@ const schemas = {
   ...users,
   ...subscriptions,
   ...searches,
+  ...spendPlans,
   ...lineTypes,
   ...lineDescriptions
 };

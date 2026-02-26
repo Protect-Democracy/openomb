@@ -1,5 +1,5 @@
 import { deployedBaseUrl } from '$config';
-import { mAgencies } from '$queries/tafs';
+import { mAgencies } from '$queries/agencies';
 
 export async function GET() {
   const agencyRecords = (await mAgencies('approval')) || [];

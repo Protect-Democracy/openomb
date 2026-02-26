@@ -57,6 +57,13 @@
       "when": 1739899045744,
       "tag": "0007_purple_shadow_king",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1772040613982,
+      "tag": "0008_migration_statements",
+      "breakpoints": true
     }
   ]
 }

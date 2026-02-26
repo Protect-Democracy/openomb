@@ -1,5 +1,5 @@
 import { deployedBaseUrl } from '$config';
-import { mBureaus } from '$queries/tafs';
+import { mBureaus } from '$queries/agencies';
 
 export async function GET() {
   const bureauRecords = (await mBureaus('approval')) || [];

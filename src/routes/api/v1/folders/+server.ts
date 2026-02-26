@@ -1,6 +1,6 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
-import { folders } from '$queries/files';
+import { folders } from '$queries/folders';
 
 /**
  * Get a specific file by ID

@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { formatNumber } from '$lib/formatters';
+import { formatNumber } from '$lib/formatters';
 
-  export let data: PageData;
-  $: ({ folders } = data);
+export let data: PageData;
+$: ({ folders } = data);
 </script>
 
 <div class="page-container content-container">
@@ -19,9 +19,11 @@
   <ul>
     {#each folders as folder, fIndex}
       <li>
-        <a href="/folder/{folder.folderId}">{folder.folder}</a> ({formatNumber(
-          folder.fileCount
-        )}{fIndex === 0 ? ' files' : ''})
+        <a href="/folder/{folder.folderId}">{folder.folder}</a>
+        {#if folder.fileCount > 0}({formatNumber(folder.fileCount || 0)}{fIndex === 0
+            ? ' files'
+            : ''})
+        {/if}{#if folder.spendPlanCount > 0}({formatNumber(folder.spendPlanCount)} spend plans){/if}
       </li>
     {/each}
   </ul>

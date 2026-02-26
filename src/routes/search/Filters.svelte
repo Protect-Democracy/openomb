@@ -9,7 +9,7 @@ import Spinner from '$components/icons/Spinner.svelte';
 import Form from './Form.svelte';
 
 // Types
-import type { BureausResult } from '$queries/tafs';
+import type { BureausResult } from '$queries/agencies';
 import type {
   YearOptionsResult,
   ApproverTitleOptionsResult,
@@ -24,7 +24,7 @@ export let lineOptions: LineNumberOptionsResult = [];
 export let approverTitleOptions: ApproverTitleOptionsResult = [];
 
 // Derived
-// eslint-disable-next-line svelte/valid-compile
+
 $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 $: parsedSearchParams = parseUrlSearchParams(url.searchParams);
 
