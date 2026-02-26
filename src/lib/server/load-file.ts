@@ -15,7 +15,7 @@ import { lines } from './db/schema/lines';
 import { mLineTypeFromLineNumber } from './db/queries/line-types';
 import { footnotes } from './db/schema/footnotes';
 import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from './db/schema/tafs';
-import { spendPlans } from './db/schema/spend-plans';
+import { spendPlans, type spendPlansInsert } from './db/schema/spend-plans';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -34,7 +34,7 @@ import { createSpan } from './sentry-custom';
 // Types
 import type { filesSelect, filesInsert } from '$schema/files';
 import type { linesInsert } from '$schema/lines';
-import type { tafsInsert } from '$schema/tafs';
+import type { tafsInsert, tafsSelect } from '$schema/tafs';
 import type { RequestOptions } from './request';
 
 // Apportionment schedule data from API
@@ -398,7 +398,7 @@ async function loadPdfFile(
   const folder = parts[1].replace(/_/g, ' ').trim();
 
   // Create file record
-  const fileRecord = {
+  const fileRecord: filesInsert = {
     fileId: `pdf-${md5hash(pdfUrl)}`,
     fileName: cleanString(fileName),
     fiscalYear: parseIntegerFromString(fiscalYear),
@@ -418,7 +418,7 @@ async function loadPdfFile(
   }
   catch (error) {
     const e = new Error(
-      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${error?.message || error}`
+      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
     e.name = 'ParsePdfFileError';
     console.error(e);
@@ -502,7 +502,9 @@ async function loadJsonSpendPlan(
   const spendPlanRecord: spendPlansInsert = {
     fileId: cleanString(sourceData.FileId.toString()) || `json-${md5hash(jsonUrl)}`,
     fileName: cleanString(sourceData.FileName),
-    fiscalYear: sourceData.FiscalYear ? parseIntegerFromString(sourceData.FiscalYear) : fiscalYear,
+    fiscalYear: sourceData.FiscalYear
+      ? parseIntegerFromString(sourceData.FiscalYear)
+      : parseIntegerFromString(fiscalYear),
     folder: formatFolder(folder),
     folderId: dbId(formatFolder(folder)),
     budgetAgencyTitle: agency ? formatBudgetAgency(agency) : undefined,
@@ -553,7 +555,7 @@ async function loadPdfSpendPlan(
   }
   catch (error) {
     const e = new Error(
-      `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
+      `PDF File could not be loaded from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
     e.name = 'LoadPdfFileError';
     console.error(e);
@@ -594,12 +596,16 @@ async function loadPdfSpendPlan(
   const { fiscalYear, agency, bureau } = parseSpendPlanFilename(fileName);
 
   // Throw error if we do not have an approval date in the title or fixes
-  if (!agency && !pdfFixes[pdfUrl]?.agency) {
+  if (
+    !agency &&
+    (!(<spendPlansInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
+      !(<spendPlansInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
+  ) {
     throw new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
   }
 
   // Create spend plan record
-  const spendPlanRecord = {
+  const spendPlanRecord: spendPlansInsert = {
     fileId: `pdf-${md5hash(pdfUrl)}`,
     fileName: cleanString(fileName),
     fiscalYear: parseIntegerFromString(fiscalYear),
@@ -622,7 +628,7 @@ async function loadPdfSpendPlan(
   }
   catch (error) {
     const e = new Error(
-      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${error?.message || error}`
+      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
     e.name = 'ParsePdfFileError';
     console.error(e);
@@ -742,14 +748,16 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
 /**
  * Parse information from spend plan file name
  */
-export function parseSpendPlanFilename(fileName: string): Record<{
-  fiscalYear: string;
-  agency: string;
+export function parseSpendPlanFilename(fileName: string): {
+  fiscalYear: string | undefined;
+  agency: string | undefined;
   bureau: string | undefined;
-}> {
+} {
   const yearParts = fileName.match(/^.Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
   const results = {
-    fiscalYear: yearParts ? yearParts[1].padStart(4, '20') : undefined
+    fiscalYear: yearParts ? yearParts[1].padStart(4, '20') : undefined,
+    agency: <string | undefined>undefined,
+    bureau: <string | undefined>undefined
   };
   const fileNameRest = yearParts ? yearParts[2] : fileName;
 
@@ -780,7 +788,7 @@ export function parseSpendPlanFilename(fileName: string): Record<{
     //  (This will add a new agency/bureau that has no apportionments
     //    within it, only spend plans)
     if (!results['agency']) {
-      let agencyId;
+      let agencyId: number;
       acronymParts.forEach((acronym) => {
         if (!results['agency']) {
           const agencyResult = agencyMatches.leftoverAgencies.find((a) =>

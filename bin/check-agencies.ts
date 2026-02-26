@@ -19,7 +19,41 @@ import packageJson from '../package.json' assert { type: 'json' };
 
 const filterWords = ['of', 'and', 'for', 'on', 'the'];
 
-function wordMatch(initialWord, comparisonWord) {
+type AgencyApiResult = {
+  id: number;
+  name: string;
+  short_name: string;
+  slug: string;
+  parent_id: number | null;
+};
+
+type BudgetAgency = {
+  budgetAgencyTitle: string;
+  budgetAgencyTitleId: string;
+  budgetBureauTitle?: string;
+  budgetBureauTitleId?: string;
+};
+
+type ComparisonResult = {
+  id: AgencyApiResult['id'];
+  name: AgencyApiResult['name'];
+  comparing: BudgetAgency['budgetAgencyTitle'] | BudgetAgency['budgetBureauTitle'];
+  rank: number;
+  parent: AgencyApiResult['name'] | undefined;
+  comparingParent:
+    | BudgetAgency['budgetAgencyTitle']
+    | BudgetAgency['budgetBureauTitle']
+    | undefined;
+};
+
+type AgencyMatches = AgencyApiResult &
+  BudgetAgency & {
+    exact?: boolean;
+    matchLevel?: ComparisonResult['rank'];
+    matches?: Array<ComparisonResult>;
+  };
+
+function wordMatch(initialWord: string, comparisonWord: string) {
   const parts = initialWord?.split(' ').filter((p) => !filterWords.includes(p)) || [];
   return {
     same: parts.filter((p) => !!comparisonWord.includes(p)),
@@ -27,7 +61,10 @@ function wordMatch(initialWord, comparisonWord) {
   };
 }
 
-function buildAgencyComparison(agencies, budgetAgency) {
+function buildAgencyComparison(
+  agencies: Array<AgencyApiResult>,
+  budgetAgency: BudgetAgency
+): Array<ComparisonResult> {
   const results = agencies
     .map((agency) => {
       const comparing = budgetAgency.budgetBureauTitle || budgetAgency.budgetAgencyTitle;
@@ -49,7 +86,7 @@ function buildAgencyComparison(agencies, budgetAgency) {
         name: agency.name,
         comparing,
         rank:
-          (!!agency.parent_id === !!budgetAgency.budgetBureauTitleId) * 1 +
+          Number(!!agency.parent_id === !!budgetAgency.budgetBureauTitleId) * 1 +
           (budgetMatch.same.length + referenceMatch.same.length) +
           (budgetMatch.extra.length + referenceMatch.extra.length) * -1 +
           ((budgetParentMatch?.same.length || 0) + (referenceParentMatch?.same.length || 0)) +
@@ -62,7 +99,7 @@ function buildAgencyComparison(agencies, budgetAgency) {
     })
     .filter((match) => !!match && match.rank > 0);
 
-  return orderBy(results, 'rank', 'desc');
+  return orderBy(<Array<ComparisonResult>>results, 'rank', 'desc');
 }
 
 /**
@@ -76,10 +113,12 @@ async function cli(): Promise<void> {
     .description('Check our agencies/bureaus against data.')
     .parse(process.argv);
 
-  const agencies = await (await fetch('https://www.federalregister.gov/api/v1/agencies')).json();
+  const agencies: Array<AgencyApiResult> = await (
+    await fetch('https://www.federalregister.gov/api/v1/agencies')
+  ).json();
 
-  const orphanAgencies = [];
-  const agencyMatches = [];
+  const orphanAgencies: Array<BudgetAgency> = [];
+  const agencyMatches: Array<AgencyMatches> = [];
   (await getAgencies()).forEach((agency) => {
     const match = agencies.find((a) => {
       return (
@@ -98,7 +137,7 @@ async function cli(): Promise<void> {
       const comparisonResults = buildAgencyComparison(agencies, agency);
       if (comparisonResults.length) {
         agencyMatches.push({
-          ...agencies.find((a) => a.id === comparisonResults[0].id),
+          ...(<AgencyApiResult>agencies.find((a) => a.id === comparisonResults[0].id)),
           budgetAgencyTitle: agency.budgetAgencyTitle,
           budgetAgencyTitleId: agency.budgetAgencyTitleId,
           matchLevel: comparisonResults[0].rank,
@@ -114,8 +153,8 @@ async function cli(): Promise<void> {
     }
   });
 
-  const orphanBureaus = [];
-  const bureauMatches = [];
+  const orphanBureaus: Array<BudgetAgency> = [];
+  const bureauMatches: Array<AgencyMatches> = [];
   (await getBureaus()).forEach((bureau) => {
     const match = agencies.find((a) => {
       return (
@@ -137,7 +176,7 @@ async function cli(): Promise<void> {
       const comparisonResults = buildAgencyComparison(agencies, bureau);
       if (comparisonResults.length) {
         bureauMatches.push({
-          ...agencies.find((a) => a.id === comparisonResults[0].id),
+          ...(<AgencyApiResult>agencies.find((a) => a.id === comparisonResults[0].id)),
           budgetAgencyTitle: bureau.budgetAgencyTitle,
           budgetAgencyTitleId: bureau.budgetAgencyTitleId,
           budgetBureauTitle: bureau.budgetBureauTitle,
