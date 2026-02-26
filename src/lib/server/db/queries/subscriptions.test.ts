@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { searchCriterionDescription } from './searches';
+import { searchCriterionDescription } from './subscriptions';
 
 describe('searchCriterionDescription', () => {
   it('should return "(no filters)" when the record or criterion is missing', () => {
@@ -61,5 +61,46 @@ describe('searchCriterionDescription', () => {
 
     const result = searchCriterionDescription(record);
     expect(result).toBe('Approved After: 1/1/23; Approved Before: 12/31/23');
+  });
+
+  it('should handle agency bureau options', () => {
+    const record = {
+      criterion: {
+        agencyBureau: '011,04'
+      }
+    } as any;
+
+    expect(
+      searchCriterionDescription(record, {
+        agencyBureauOptions: [
+          {
+            budgetAgencyTitleId: '011',
+            budgetBureauTitleId: '04',
+            budgetAgencyTitle: 'Department of State',
+            budgetBureauTitle: 'Diplomatic Security',
+            fileCount: 10
+          }
+        ]
+      })
+    ).toBe('Agency / Bureau: Department of State / Diplomatic Security');
+  });
+
+  it('should handle approver title options', () => {
+    const record = {
+      criterion: {
+        approver: ['deputy-associate-director-for-health-programs']
+      }
+    } as any;
+
+    expect(
+      searchCriterionDescription(record, {
+        approverTitleOptions: [
+          {
+            value: 'deputy-associate-director-for-health-programs',
+            label: 'Deputy Associate Director for Health Programs'
+          }
+        ]
+      })
+    ).toBe('Approver: Deputy Associate Director for Health Programs');
   });
 });

@@ -3,16 +3,22 @@
  */
 
 // Dependencies
-import { map, transform } from 'lodash-es';
+import { map } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
-import { searches, searchCriterionDescription, type searchesSelect } from '$schema/searches';
+import { searches, type searchesSelect } from '$schema/searches';
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
-import { criterionToUrlSearchParams, parseCriterion } from '$lib/searches';
+import {
+  criterionToUrlSearchParams,
+  parseCriterion,
+  searchCriterionDescriptions
+} from '$lib/searches';
+import { mApproverTitleOptions, type ApproverTitleOptionsResult } from '$queries/search';
+import { mBureaus, type BureausResult } from '$queries/tafs';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
@@ -136,7 +142,10 @@ async function getSubscriptionDetails(
 
     return {
       itemDetails: item || {},
-      description: `Saved Search: ${searchCriterionDescription(item)}`,
+      description: `Saved Search: ${searchCriterionDescription(item, {
+        agencyBureauOptions: await mBureaus(),
+        approverTitleOptions: await mApproverTitleOptions()
+      })}`,
       itemLink: `/search?${searchParams.toString()}`
     };
   }
@@ -348,3 +357,29 @@ export const removeUser = async function (email: string) {
   // Deletion cascades, so when user is removed, all entries that reference user id will be removed
   await db.delete(users).where(eq(users.email, email));
 };
+
+/**
+ * Compute parsed description value.
+ *
+ * Describes the criterion in text
+ *
+ */
+export function searchCriterionDescription(
+  searchesRecord: searchesSelect | undefined,
+  options?: {
+    agencyBureauOptions?: BureausResult;
+    approverTitleOptions?: ApproverTitleOptionsResult;
+  }
+): string {
+  const noFiltersDescription = '(no filters)';
+
+  if (!searchesRecord?.criterion) {
+    return noFiltersDescription;
+  }
+
+  const descriptions = searchCriterionDescriptions(
+    parseCriterion(searchesRecord.criterion),
+    options
+  );
+  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
+}
