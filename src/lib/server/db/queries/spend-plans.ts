@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { eq, desc, countDistinct, and } from 'drizzle-orm';
+import { eq, desc, and } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { spendPlans } from '$schema/spend-plans';
 import { memoizeDataAsync } from '$server/cache';
@@ -88,61 +88,6 @@ export const spendPlansByBureau = async function (budgetBureauTitleId: string) {
 };
 
 /**
- * Distinct folders with spend plan counts
- * (as written currently, will only be one)
- */
-export const folders = async function () {
-  return (
-    (await db
-      .select({
-        folder: spendPlans.folder,
-        folderId: spendPlans.folderId,
-        spendPlanCount: countDistinct(spendPlans.fileId)
-      })
-      .from(spendPlans)
-      .groupBy(spendPlans.folder, spendPlans.folderId)
-      .orderBy(spendPlans.folder)) || []
-  );
-};
-
-/**
- * Get details of a single folder.
- */
-export const folderDetails = async function (folderId: string) {
-  const spendPlansFromFolder = await db
-    .select({ folder: spendPlans.folder })
-    .from(spendPlans)
-    .where(eq(spendPlans.folderId, folderId));
-
-  // If none found
-  if (!spendPlansFromFolder || spendPlansFromFolder.length === 0) {
-    return null;
-  }
-
-  return {
-    folderId,
-    folder: spendPlansFromFolder[0].folder,
-    fileCount: spendPlansFromFolder.length
-  };
-};
-
-/**
- * Get agencies for a specifc folder
- */
-export const agenciesByFolder = async function (folderId: string) {
-  return db
-    .select({
-      budgetAgencyTitle: spendPlans.budgetAgencyTitle,
-      budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-      spendPlanCount: countDistinct(spendPlans.fileId)
-    })
-    .from(spendPlans)
-    .where(eq(spendPlans.folderId, folderId))
-    .groupBy(spendPlans.budgetAgencyTitle, spendPlans.budgetAgencyTitleId)
-    .orderBy(spendPlans.budgetAgencyTitle);
-};
-
-/**
  * All spend plans
  */
 export const allSpendPlans = async function () {
@@ -153,6 +98,5 @@ export const allSpendPlans = async function () {
 };
 
 // Memoized
-export const mFolders = memoizeDataAsync(folders);
 export const mAllSpendPlans = memoizeDataAsync(allSpendPlans);
 export const mRecentlyAdded = memoizeDataAsync(recentlyAdded);

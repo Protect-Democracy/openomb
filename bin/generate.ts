@@ -1,7 +1,7 @@
 import { generateDrizzleJson, generateMigration } from 'drizzle-kit/api';
 
 /**
- * Run DB migrations.
+ * Generate new DB migration.
  *
  * @see: https://orm.drizzle.team/docs/migrations
  */
