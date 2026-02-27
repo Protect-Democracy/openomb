@@ -26,6 +26,10 @@ async function cli(): Promise<void> {
     .parse(process.argv);
 
   console.info(`Started subscription notification - ${new Date()}`);
-  await sendNotifications();
-  console.info('Finished notification');
+  const sent = await sendNotifications();
+  console.info(`Finished notification - ${new Date()}`);
+  console.info(
+    'Notifications sent:',
+    sent.reduce((acc, curr) => acc + curr.subscriptionsNotified, 0)
+  );
 }
