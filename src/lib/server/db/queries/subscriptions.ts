@@ -171,7 +171,7 @@ export const subscriptionsByUser = async function (): Promise<SubscriptionByUser
       if (!userSubs[result.users.email]) {
         userSubs[result.users.email] = [];
       }
-      const subDetails = await mGetSubscriptionDetails(
+      const subDetails = await getSubscriptionDetails(
         result.subscriptions.type,
         result.subscriptions.itemId
       );
@@ -222,7 +222,7 @@ export const userSubscriptionDetails = async function (
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
-    const subscriptionDetails = await mGetSubscriptionDetails(
+    const subscriptionDetails = await getSubscriptionDetails(
       subscriptionResults.type,
       subscriptionResults.itemId
     );
@@ -256,7 +256,7 @@ export const userSubscriptionListDetails = async function (
   const subscriptionResults = await userSubscriptionList(email);
   return await Promise.all(
     map(subscriptionResults, async (result) => {
-      const details = await mGetSubscriptionDetails(result.type, result.itemId);
+      const details = await getSubscriptionDetails(result.type, result.itemId);
       return { ...result, ...details };
     })
   );
