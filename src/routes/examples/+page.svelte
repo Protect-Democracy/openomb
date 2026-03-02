@@ -2,8 +2,6 @@
   import type { PageData } from './$types';
 import { derived } from 'svelte/store';
 import { page } from '$app/stores';
-import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
-import SearchSubscribe from '$components/subscriptions/SearchSubscribe.svelte';
 
 export let data: PageData;
 let emailTemplates = [];
