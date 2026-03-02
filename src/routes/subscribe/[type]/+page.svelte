@@ -2,7 +2,6 @@
   import type { PageData } from './$types';
 import { derived } from 'svelte/store';
 import { page } from '$app/stores';
-import SearchSubscribe from '$components/subscriptions/SearchSubscribe.svelte';
 import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
 import type { User } from '$lib/users';
