@@ -158,6 +158,7 @@ $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
           return lineOptions.find((o) => o.value === v)?.groupLabel || '(unknown)';
         }}
         value={parsedSearchParams.lineNum || ''}
+        combineGroupValue={false}
         multi
       />
     </div>

@@ -267,7 +267,6 @@ export function searchCriterionDescriptions(
   }
 
   if (criterion.approver && criterion.approver.length > 0) {
-    console.log(options);
     if (options?.approverTitleOptions) {
       const approverTitles = criterion.approver
         .map((approverId) => {

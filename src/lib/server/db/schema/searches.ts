@@ -6,7 +6,6 @@
 import { isDate } from 'lodash-es';
 import { timestamp, pgTable, text, json, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { searchCriterionDescriptions, parseCriterion } from '$lib/searches';
 import { users } from './users';
 
 // This should be the source of truth for search fields.
@@ -93,25 +92,6 @@ export const searchesRelations = relations(searches, ({ one }) => ({
     references: [users.id]
   })
 }));
-
-/**
- * Compute parsed description value.
- *
- * Describes the criterion in text
- *
- */
-export function searchCriterionDescription(
-  searchesRecord: typeof searches.$inferSelect | undefined
-): string {
-  const noFiltersDescription = '(no filters)';
-
-  if (!searchesRecord?.criterion) {
-    return noFiltersDescription;
-  }
-
-  const descriptions = searchCriterionDescriptions(parseCriterion(searchesRecord.criterion));
-  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
-}
 
 /**
  * Export some types

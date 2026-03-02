@@ -36,6 +36,7 @@ export type SubscriptionWithFiles = subscriptionSelect & {
  */
 export async function sendNotifications() {
   const userSubscriptions = await subscriptionsByUser();
+  const notificationsSent = [];
 
   for (const email of Object.keys(userSubscriptions)) {
     // For a user, find any relevant new files, then send the notification
@@ -54,8 +55,16 @@ export async function sendNotifications() {
       await sendNotificationEmail(email, notifySubs);
       // Update our subscriptions to indicate notifications were sent
       await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
+
+      notificationsSent.push({
+        email,
+        notifySubs,
+        subscriptionsNotified: notifySubs.length
+      });
     }
   }
+
+  return notificationsSent;
 }
 
 /**

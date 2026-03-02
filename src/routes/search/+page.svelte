@@ -12,7 +12,7 @@ import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 import { Tabs, Tab } from '$components/tabs';
 import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
 import AccountListingHiglightable from '$components/accounts/AccountListingHiglightable.svelte';
-import SearchSubscribe from '$components/subscriptions/SearchSubscribe.svelte';
+import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 import ResultSort from './ResultSort.svelte';
 import ResultCount from './ResultCount.svelte';
 import ResultPaging from './ResultPaging.svelte';
@@ -146,7 +146,13 @@ $: currentAccountsPage = $url.searchParams.get('accountPage')
             </aside>
 
             <div class="subscription-action">
-              <SearchSubscribe {user} url={$url} {existingSubscription} variant="small" />
+              <SubscribeLink
+                subscriptionType="search"
+                {user}
+                url={$url}
+                {existingSubscription}
+                variant="small"
+              />
             </div>
 
             <div class="file-list page-container">
