@@ -1,79 +1,90 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import { formatDate } from '$lib/formatters';
-  import Drawer from '$components/drawer/Drawer.svelte';
-  import XSymbol from '$components/icons/XSymbol.svelte';
-  import Spinner from '$components/icons/Spinner.svelte';
-  import { submitting } from './form-store';
-  import Form from './Form.svelte';
+import { formatDate } from '$lib/formatters';
+import { parseUrlSearchParams, searchCriterionDescriptions } from '$lib/searches';
+import { submitting } from './form-store';
+import Drawer from '$components/drawer/Drawer.svelte';
+import XSymbol from '$components/icons/XSymbol.svelte';
+import Spinner from '$components/icons/Spinner.svelte';
+import Form from './Form.svelte';
 
-  // Props
-  export let url: URL;
-  export let user;
-  export let folders = [];
-  export let agencyBureauOptions = [];
-  export let yearOptions: number[] = [];
-  export let lineOptions: string[] = [];
-  export let approverTitleOptions: Record<'value' | 'label', string>[] = [];
+// Types
+import type { BureausResult } from '$queries/tafs';
+import type {
+  YearOptionsResult,
+  ApproverTitleOptionsResult,
+  LineNumberOptionsResult
+} from '$queries/search';
 
-  // Derived
-  // eslint-disable-next-line svelte/valid-compile
-  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
+// Props
+export let url: URL;
+export let agencyBureauOptions: BureausResult = [];
+export let yearOptions: YearOptionsResult = [];
+export let lineOptions: LineNumberOptionsResult = [];
+export let approverTitleOptions: ApproverTitleOptionsResult = [];
 
-  // It might make sense to just use links instead of buttons, but given
-  // that this filter version doesn't show up for non-js users,
-  // it's not really necessary.
-  function removeFilter(filterParam: string, filterValue: string) {
-    const newParams = new URLSearchParams(url.searchParams.toString());
-    newParams.delete(filterParam, filterValue);
-    goto(`${url.pathname}?${newParams.toString()}`, { noScroll: true });
+// Derived
+// eslint-disable-next-line svelte/valid-compile
+$: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
+$: parsedSearchParams = parseUrlSearchParams(url.searchParams);
+
+// It might make sense to just use links instead of buttons, but given
+// that this filter version doesn't show up for non-js users,
+// it's not really necessary.
+function removeFilter(filterParam: string, filterValue: string | number | Date) {
+  const newParams = new URLSearchParams(url.searchParams.toString());
+
+  // Custom param handling.  Term is an input with comma separated list of values.
+  if (filterParam === 'term') {
+    const terms =
+      newParams
+        .get(filterParam)
+        ?.split(',')
+        .map((t) => t.trim()) || [];
+    const newTerms = terms.filter((t) => t !== filterValue);
+    if (newTerms.length > 0) {
+      newParams.set(filterParam, newTerms.join(', '));
+    }
+    else {
+      newParams.delete(filterParam);
+    }
+  }
+  else {
+    newParams.delete(filterParam, filterValue.toString());
   }
 
-  // Label for our filter toggle where %s is the current filter value
-  function getFilterLabel(key, value) {
-    if (key === 'term') {
-      return `Keyword "${value}"`;
-    } else if (key === 'folder') {
-      // Include folder for email results (view all link)
-      return `Folder "${folders.find((f) => f.folderId === value)?.folder}"`;
-    } else if (key === 'agencyBureau') {
-      const ids = value.split(',');
-      // Handle just Agency or Agency/Bureau
-      return ids.length === 1
-        ? agencyBureauOptions.find((option) => option.budgetAgencyTitleId == ids[0])
-            ?.budgetAgencyTitle
-        : ids.length === 2
-          ? agencyBureauOptions.find(
-              (option) =>
-                option.budgetAgencyTitleId == ids[0] && option.budgetBureauTitleId == ids[1]
-            )?.budgetBureauTitle
-          : undefined;
-    } else if (key === 'tafs') {
-      return `TAFS "${value}"`;
-    } else if (key === 'account') {
-      return `Account "${value}"`;
-    } else if (key === 'approver') {
-      return `Approved by "${value.split(',').map((v) => approverTitleOptions.find((o) => o.value === v)?.label)}"`;
-    } else if (key === 'year') {
-      return `Fiscal year ${value}`;
-    } else if (key === 'approvedStart') {
-      return `Approved after ${formatDate(value)}`;
-    } else if (key === 'approvedEnd') {
-      return `Approved before ${formatDate(value)}`;
-    } else if (key === 'apportionmentType') {
-      return `Apportionment Type ${value}`;
-    } else if (key === 'lineNum') {
-      return `Line ${value.replace(/[^0-9]+/g, '')}`;
-    } else if (key === 'footnoteNum') {
-      return `Has Footnote ${value}`;
-    } else if (key === 'createdStart') {
-      return `Added to OpenOMB after ${formatDate(value)}`;
-    } else if (key === 'createdEnd') {
-      return `Added to OpenOMB before ${formatDate(value)}`;
-    }
+  goto(`${url.pathname}?${newParams.toString()}`, { noScroll: true });
+}
 
+// Label for our filter toggle where %s is the current filter value
+function getFilterLabel(
+  key: string,
+  value: string | number | Date | undefined | (string | number | Date)[]
+) {
+  if (value === null || value === undefined) {
     return false;
   }
+
+  // See if the value is in the search criterion.
+  let criterion = { [key]: value };
+  const criterionDescription = searchCriterionDescriptions(criterion, {
+    agencyBureauOptions: agencyBureauOptions,
+    approverTitleOptions: approverTitleOptions
+  });
+  if (criterionDescription) {
+    return criterionDescription[0];
+  }
+
+  // Things that may not be in the search criterion descriptions, but we still want to show a label for.
+  else if (key === 'createdStart' && (value instanceof Date || typeof value === 'string')) {
+    return `Added to OpenOMB after: ${formatDate(value)}`;
+  }
+  else if (key === 'createdEnd' && (value instanceof Date || typeof value === 'string')) {
+    return `Added to OpenOMB before: ${formatDate(value)}`;
+  }
+
+  return false;
+}
 </script>
 
 <div class="bar">
@@ -99,29 +110,28 @@
       >
 
       <svelte:fragment slot="content">
-        <Form
-          {url}
-          {user}
-          {agencyBureauOptions}
-          {yearOptions}
-          {lineOptions}
-          {approverTitleOptions}
-        />
+        <Form {url} {agencyBureauOptions} {yearOptions} {lineOptions} {approverTitleOptions} />
       </svelte:fragment>
     </Drawer>
   </div>
 
   <div class="filters">
-    {#each url.searchParams.entries() as [key, value]}
-      {#if value?.length && value !== '[]' && getFilterLabel(key, value)}
-        <button class="alt" on:click={() => removeFilter(key, value)}>
-          <span class="sr-only"> Remove filter</span>
-          {getFilterLabel(key, value)}
-          <span class="icon">
-            <XSymbol />
-          </span>
-        </button>
-      {/if}
+    {#each Object.entries(parsedSearchParams) as [key, param] (key)}
+      {@const params = Array.isArray(param) ? param : [param]}
+      {#each params as value (value)}
+        {@const formattedValue = Array.isArray(param) ? [value] : value}
+        {#if value && getFilterLabel(key, formattedValue)}
+          <button class="alt" on:click={() => removeFilter(key, value)}>
+            <span class="sr-only"> Remove filter</span>
+
+            {getFilterLabel(key, formattedValue)}
+
+            <span class="icon">
+              <XSymbol />
+            </span>
+          </button>
+        {/if}
+      {/each}
     {/each}
   </div>
 </div>

@@ -6,7 +6,11 @@ import { sendEmail } from '$email/send';
 /**
  * Send the email that is used to verify and log in a user
  */
-export async function sendVerificationRequest(params) {
+export async function sendVerificationRequest(params: {
+  identifier: string;
+  url: string;
+  token: string;
+}) {
   const { identifier: to, url, token } = params;
   const urlRef = new URL(url);
 
@@ -16,7 +20,9 @@ export async function sendVerificationRequest(params) {
   // If they are trying to auth via a subscribe link, we need to send a different email
   const template = isSubscribeLink(urlRef) ? SubscriptionEmail : AuthenticationEmail;
 
-  // Render the email
+  // Render the email.
+  // TODO: Unsure how to type the template correctly
+  // @ts-expect-error
   const htmlRender = renderTemplate(template, {
     authUrl: url,
     subscriptionsUrl: manageSubscriptionsUrl
@@ -30,7 +36,7 @@ export async function sendVerificationRequest(params) {
  *
  * TODO: This seems a little brittle.
  */
-function isSubscribeLink(url) {
+function isSubscribeLink(url: URL) {
   const callbackUrl = url?.searchParams.get('callbackUrl');
   return callbackUrl && callbackUrl.match(/\/subscribe\/[a-z]+/);
 }

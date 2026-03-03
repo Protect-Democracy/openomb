@@ -9,6 +9,9 @@ import { TypedQueryBuilder } from 'drizzle-orm/query-builders/query-builder';
 import { db } from './connection';
 import { allSchemas } from './schema';
 
+// Types
+import type { Table, InferInsertModel } from 'drizzle-orm';
+
 // Path to migrations
 const _dirname = dirname(fileURLToPath(import.meta.url));
 export const testDataDir = joinPath(_dirname, '..', 'db', 'test-data');
@@ -38,7 +41,7 @@ export async function generateTestData(
   ];
 
   // Get all the files
-  const allFiles = await db?.select().from(allSchemas.files);
+  const allFiles = await db.select().from(allSchemas.files);
 
   // Sample the files
   const sampleFileIds = sampleSize(
@@ -59,22 +62,26 @@ export async function generateTestData(
   // Go through all schemas that we want to keep and write an SQL insert statement for each row
   for (const schema of schemasToKeep) {
     // .where(inArray(schema.fileId, fileIdsToKeep));
-    const rows = await db?.select().from(schema);
+    const rows = await db.select().from(schema);
     await writeInsertStatement(outputPath, schema, rows);
   }
 
   // Go through all file schemas
   for (const schema of schemasToSample) {
-    const rows = await db?.select().from(schema).where(inArray(schema.fileId, fileIdsToKeep));
+    const rows = await db.select().from(schema).where(inArray(schema.fileId, fileIdsToKeep));
     await writeInsertStatement(outputPath, schema, rows);
   }
 }
 
-async function writeInsertStatement(outputPath: string, schema, rows: []): Promise<void> {
+async function writeInsertStatement<T extends Table>(
+  outputPath: string,
+  schema: T,
+  rows: InferInsertModel<T>[]
+): Promise<void> {
   await fs.appendFile(outputPath, '-- Table: ' + getTableName(schema) + '\n');
 
   for (const row of rows || []) {
-    const insert = db?.insert(schema).values(row);
+    const insert = db.insert(schema).values(row);
     const sql = drizzleQueryToSQLString(insert!);
 
     await fs.appendFile(outputPath, `${sql};\n`);

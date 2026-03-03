@@ -1,6 +1,10 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
 import { mFileSearchFullCount, mFileSearchPaged } from '$queries/search';
+import { parseUrlSearchParams } from '$lib/searches';
+
+// Types
+import type { SearchPaginationParams } from '$queries/search';
 
 /**
  * Get a specific file by ID
@@ -14,26 +18,11 @@ export async function GET({ url }) {
   const filePageSize = Math.min(u('limit') ? Number(u('limit')) : 50, 100);
   const filePageIndex = h('page') ? Number(u('page')) : 1;
 
-  const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-  const searchArgs = {
-    term: u('term') || '',
-    tafs: u('tafs') || '',
-    bureau: agencyBureau?.[1] || '',
-    agency: agencyBureau?.[0] || '',
-    account: u('account') || '',
-    approver: ga('approver').join(',') || '',
-    year: ga('year').join(','),
-    approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
-    approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-    apportionmentType: ga('apportionmentType').join(',') || '',
-    lineNum: ga('lineNum').join(','),
-    footnoteNum: ga('footnoteNum').join(','),
-    folder: u('folder') || ''
-  };
-  const pagedSearchArgs = {
+  const searchArgs = parseUrlSearchParams(url.searchParams);
+  const pagedSearchArgs: SearchPaginationParams = {
     offset: (filePageIndex - 1) * filePageSize,
     limit: filePageSize,
-    sort: u('sort'),
+    sort: u('sort') || undefined,
     ...searchArgs
   };
 

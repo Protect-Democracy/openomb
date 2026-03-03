@@ -24,14 +24,19 @@ import ChevronDown from '$components/icons/ChevronDown.svelte';
 
 export let options: string[] | Record<string, unknown>[];
 export let multi = false;
-export let id;
-export let name;
+export let id: string;
+export let name: string;
 export let value: string | string[];
 
-export let formatOptionLabel = (o) => o;
-export let formatOptionValue = (o) => o;
-export let formatGroupLabel;
-export let formatGroupValue;
+export let formatOptionLabel: (option: any) => string = (o) => o;
+export let formatOptionValue: (option: any) => string = (o) => o;
+export let formatGroupLabel: ((option: any) => string) | undefined = undefined;
+export let formatGroupValue: ((option: any) => string) | undefined = undefined;
+// Used to combine the group and option value together separated by comma.  This
+// has been the default, so default to true.  If false, then just the
+// formatOptionValue will determine the value regardless if a formatGroupValue
+// is set.
+export let combineGroupValue = true;
 
 // Constants
 const emptyOption = { value: '', label: 'None' };
@@ -122,9 +127,11 @@ function placeholderText(selectedOptions) {
 
 function formatGroupOptionValue(option) {
   // If we want our group value returned as well, return both
-  if (formatGroupValue) {
+  if (formatGroupValue && combineGroupValue) {
     return `${formatGroupValue(option)},${formatOptionValue(option)}`;
   }
+
+  // Otherwise just return the option value
   return formatOptionValue(option);
 }
 

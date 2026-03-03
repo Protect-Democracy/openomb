@@ -22,12 +22,10 @@ import { createEventDispatcher } from 'svelte';
 import { groupBy, uniqBy } from 'lodash-es';
 import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-export let bureaus: Array<{
-  budgetAgencyTitle: string;
-  budgetAgencyTitleId: string;
-  budgetBureauTitle: string;
-  budgetBureauTitleId: string;
-}>;
+// Types
+import type { BureausResult } from '$queries/tafs';
+
+export let bureaus: BureausResult;
 export let id: string;
 export let name: string;
 export let value: string;

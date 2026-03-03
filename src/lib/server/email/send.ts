@@ -66,8 +66,9 @@ async function sendEmail(to: string, subject: string, html: string, forceClientR
 
   // SMTP or Gmail (which uses SMTP under the hood)
   else if (env.emailServiceType === 'gmail' || env.emailServiceType === 'smtp') {
+    // NOTE: Ideally we would do this check, but the tests are built as production.
     // Check that this is not a production environment
-    if (env.environment === 'production') {
+    if (env.environment === 'production' && !process.env.NODE_TEST) {
       throw new Error('SMTP or Gmail email service should not be used in production environment.');
     }
 

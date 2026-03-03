@@ -16,47 +16,43 @@ import {
   sql,
   SQL
 } from 'drizzle-orm';
-import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
+import debug from 'debug';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
 import { lines } from '$schema/lines';
 import { footnotes } from '$schema/footnotes';
-import { searches, type searchesSelect } from '$schema/searches';
+import { searches } from '$schema/searches';
+import { parseCriterion } from '$lib/searches';
 import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
+import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
+import type { LegacySearchCriterion, SavedSearchCriterion, searchesSelect } from '$schema/searches';
+
 export type ColumnObject = {
   [key: string]: PgColumn | SelectedFields | SQL;
 };
 
-export type SearchParams = {
-  term: string;
-  tafs: string;
-  agency: string;
-  bureau: string;
-  account: string;
-  approver: string;
-  approvedStart?: Date;
-  approvedEnd?: Date;
-  apportionmentType: string;
-  year: string;
-  lineNum: string;
-  footnoteNum: string;
-
-  // Notification specific fields
+// Search fields
+export type SupplementalSearchCriterion = {
+  // Search criterion that is not saved in the search model and may
+  // or may not be in the UI itself.
   folder?: string;
   createdStart?: Date;
   createdEnd?: Date;
 };
 
+export type CombinedSearchCriterion = SavedSearchCriterion & SupplementalSearchCriterion;
+
+// Paging and sorting
 export type PaginationParams = {
   offset: number;
   limit: number;
-  sort: string;
+  sort?: string;
 };
 
 export type AccountPaginationParams = {
@@ -65,19 +61,13 @@ export type AccountPaginationParams = {
   accountSort?: string;
 };
 
-export type SearchPaginationParams = SearchParams & PaginationParams & AccountPaginationParams;
+export type CombinedPaginationParams = PaginationParams & AccountPaginationParams;
 
-export type FormattedSearchParamsFields = {
-  years: number[];
-  lineNumbers: string[];
-  approverIds: string[];
-  footnoteNumbers: string[];
-  keywordTerms: string[];
-  apportionmentTypes: string[];
-};
+// Search and paging
+export type SearchPaginationParams = CombinedSearchCriterion & CombinedPaginationParams;
 
-export type FormattedSearchParams = SearchParams & FormattedSearchParamsFields;
-export type FormattedSearchPaginationParams = SearchPaginationParams & FormattedSearchParamsFields;
+// Debugger
+const debugLogger = debug('apportionments:queries-search');
 
 /**
  * Get all existing fiscal year values
@@ -88,9 +78,9 @@ export async function yearOptions() {
     .from(files)
     .where(isNotNull(files.fiscalYear));
 
-  return yearOptions.map((v) => v.data);
+  return yearOptions.map((v) => v.data).filter(Boolean) as number[];
 }
-
+export type YearOptionsResult = Awaited<ReturnType<typeof yearOptions>>;
 export const mYearOptions = memoizeDataAsync(yearOptions);
 
 /**
@@ -105,7 +95,7 @@ export async function approverTitleOptions() {
 
   return approverOptions;
 }
-
+export type ApproverTitleOptionsResult = Awaited<ReturnType<typeof approverTitleOptions>>;
 export const mApproverTitleOptions = memoizeDataAsync(approverTitleOptions);
 
 /**
@@ -142,54 +132,8 @@ export const lineNumberOptions = async function () {
     };
   });
 };
-
+export type LineNumberOptionsResult = Awaited<ReturnType<typeof lineNumberOptions>>;
 export const mLineNumberOptions = memoizeDataAsync(lineNumberOptions);
-
-/**
- * Format the search parameters to make it easier to turn into query.
- *
- * @param searchParams Search params (optionally including pagination)
- * @returns
- */
-export function formatSearchParams(
-  searchParams: SearchPaginationParams | SearchParams
-): FormattedSearchParams {
-  // Format
-  const years = (searchParams.year ? searchParams.year.split(',') : [])
-    .map((v) => parseInt(v))
-    .filter((t) => !!t);
-  const lineNumbers = (searchParams.lineNum ? searchParams.lineNum.split(',') : [])
-    .map((v) => (v.match(/[0-9]+/) ? v.trim() : ''))
-    .filter((t) => !!t);
-  const approverIds = (searchParams.approver ? searchParams.approver.split(',') : [])
-    .map((v) => v.trim())
-    .filter((t) => !!t);
-  const footnoteNumbers = (searchParams.footnoteNum ? searchParams.footnoteNum.split(',') : [])
-    .map((v) => v.trim())
-    .filter((t) => !!t);
-  const keywordTerms = (searchParams.term ? searchParams.term.split(',') : [])
-    .map((v) => v.trim())
-    .filter((t) => !!t);
-  const apportionmentTypes = (
-    searchParams.apportionmentType ? searchParams.apportionmentType.split(',') : []
-  )
-    .map((v) => {
-      return v.match(/letter/i) ? 'letter' : 'spreadsheet';
-    })
-    .filter((t) => !!t);
-
-  const formattedSearchParams: FormattedSearchParams | FormattedSearchPaginationParams = {
-    ...searchParams,
-    years,
-    lineNumbers,
-    approverIds,
-    footnoteNumbers,
-    keywordTerms,
-    apportionmentTypes
-  };
-
-  return formattedSearchParams;
-}
 
 /**
  * Ensure that our file contains all keywords at least once.
@@ -269,18 +213,14 @@ function keywordSearch(keywordTerms: string[], mainTable: 'files' | 'tafs' = 'fi
  * @returns
  */
 function generalSearchFilters(
-  searchParams: FormattedSearchParams | FormattedSearchPaginationParams,
+  searchParams: CombinedSearchCriterion | SearchPaginationParams,
   mainTable: 'files' | 'tafs' = 'files'
 ) {
   // Collect filters
   const where = [];
 
   // General search term
-  where.push(
-    searchParams.keywordTerms.length
-      ? keywordSearch(searchParams.keywordTerms, mainTable)
-      : undefined
-  );
+  where.push(searchParams.term?.length ? keywordSearch(searchParams.term, mainTable) : undefined);
 
   // Other search terms
   where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);
@@ -288,27 +228,38 @@ function generalSearchFilters(
     searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
   );
 
+  // Agency bureau field.
+  if (searchParams.agencyBureau) {
+    const [agency, bureau] = searchParams.agencyBureau.split(',').map((s) => s.trim());
+    if (agency) {
+      where.push(eq(tafs.budgetAgencyTitleId, agency));
+      if (bureau) {
+        where.push(eq(tafs.budgetBureauTitleId, bureau));
+      }
+    }
+  }
+
   // Identifiers
   where.push(searchParams.folder ? eq(files.folderId, searchParams.folder) : undefined);
-  where.push(searchParams.agency ? eq(tafs.budgetAgencyTitleId, searchParams.agency) : undefined);
-  where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
   where.push(
-    searchParams.approverIds?.length > 0
-      ? inArray(files.approverTitleId, searchParams.approverIds)
+    searchParams.approver?.length && searchParams.approver?.length > 0
+      ? inArray(files.approverTitleId, searchParams.approver)
       : undefined
   );
   where.push(
-    searchParams.lineNumbers?.length > 0
-      ? inArray(lines.lineNumber, searchParams.lineNumbers)
+    searchParams.lineNum?.length && searchParams.lineNum?.length > 0
+      ? inArray(lines.lineNumber, searchParams.lineNum)
       : undefined
   );
 
   // Joining footnotes in our search is expensive, so we do a subquery
-  const footnoteNumberFilters = (searchParams.footnoteNumbers || []).map((n) => {
+  const footnoteNumberFilters = (searchParams.footnoteNum || []).map((n) => {
     return ilike(footnotes.footnoteNumber, `${n}%`);
   });
   where.push(
-    searchParams.footnoteNumbers?.length >= 1 && mainTable === 'tafs'
+    searchParams.footnoteNum?.length &&
+      searchParams.footnoteNum?.length >= 1 &&
+      mainTable === 'tafs'
       ? inArray(
           tafs.tafsTableId,
           db
@@ -324,7 +275,9 @@ function generalSearchFilters(
                 : footnoteNumberFilters[0]
             )
         )
-      : searchParams.footnoteNumbers?.length >= 1 && mainTable === 'files'
+      : searchParams.footnoteNum?.length &&
+          searchParams.footnoteNum?.length >= 1 &&
+          mainTable === 'files'
         ? inArray(
             files.fileId,
             db
@@ -340,17 +293,20 @@ function generalSearchFilters(
   );
 
   // Specific values
-  where.push(searchParams.bureau ? eq(tafs.budgetBureauTitleId, searchParams.bureau) : undefined);
   where.push(
-    searchParams.years?.length > 0 ? inArray(files.fiscalYear, searchParams.years) : undefined
-  );
-  where.push(
-    searchParams.approvedStart
-      ? gte(files.approvalTimestamp, searchParams.approvedStart)
+    searchParams.year?.length && searchParams.year?.length > 0
+      ? inArray(files.fiscalYear, searchParams.year)
       : undefined
   );
   where.push(
-    searchParams.approvedEnd ? lte(files.approvalTimestamp, searchParams.approvedEnd) : undefined
+    searchParams.approvedStart
+      ? gte(files.approvalTimestamp, new Date(`${searchParams.approvedStart}T00:00:00Z`))
+      : undefined
+  );
+  where.push(
+    searchParams.approvedEnd
+      ? lte(files.approvalTimestamp, new Date(`${searchParams.approvedEnd}T23:59:59Z`))
+      : undefined
   );
   where.push(
     searchParams.createdStart ? gte(files.createdAt, searchParams.createdStart) : undefined
@@ -359,14 +315,16 @@ function generalSearchFilters(
 
   // Apportionemnt type.  Only need to search on a single one
   if (
-    searchParams.apportionmentTypes.length === 1 &&
-    searchParams.apportionmentTypes[0] === 'letter'
+    searchParams.apportionmentType?.length &&
+    searchParams.apportionmentType?.length === 1 &&
+    searchParams.apportionmentType[0] === 'letter'
   ) {
     where.push(isNotNull(files.pdfUrl));
   }
   if (
-    searchParams.apportionmentTypes.length === 1 &&
-    searchParams.apportionmentTypes[0] === 'spreadsheet'
+    searchParams.apportionmentType?.length &&
+    searchParams.apportionmentType?.length === 1 &&
+    searchParams.apportionmentType[0] === 'spreadsheet'
   ) {
     where.push(isNull(files.pdfUrl));
   }
@@ -390,33 +348,31 @@ function generalSearchFilters(
  * @returns
  */
 export async function searchSetup(
-  searchParams: SearchPaginationParams | SearchParams,
+  searchParams: CombinedSearchCriterion | SearchPaginationParams,
   mainTable: 'files' | 'tafs' = 'files'
 ) {
-  const formattedSearchParams = formatSearchParams(searchParams);
-  const searchHasLines = !!formattedSearchParams.term || !!formattedSearchParams.lineNumbers.length;
-  const searchHasFootnotes =
-    !!formattedSearchParams.term || !!formattedSearchParams.footnoteNumbers.length;
+  const searchHasLines = !!searchParams.term || !!searchParams.lineNum?.length;
+  const searchHasFootnotes = !!searchParams.term || !!searchParams.footnoteNum?.length;
 
   // Where
-  const finalWhere = generalSearchFilters(formattedSearchParams, mainTable);
+  const finalWhere = generalSearchFilters(searchParams, mainTable);
 
   // File order parameters.  Since we are grouping, we need to  order
   // by aggregate values.  Default is just to order by approval.
   let order = [desc(files.approvalTimestamp)];
   // TODO: Unsure why this throws the type issue
-  if (searchParams?.sort === 'approved_asc') {
+  if ('sort' in searchParams && searchParams.sort === 'approved_asc') {
     order = [asc(files.approvalTimestamp)];
   }
-  if (searchParams?.sort === 'account_asc') {
+  if ('sort' in searchParams && searchParams?.sort === 'account_asc') {
     const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
-  else if (searchParams?.sort === 'bureau_asc') {
+  else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
-  else if (searchParams?.sort === 'agency_asc') {
+  else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
@@ -426,13 +382,13 @@ export async function searchSetup(
     sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
     sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
   ];
-  if (searchParams?.accountSort === 'account_desc') {
+  if ('accountSort' in searchParams && searchParams?.accountSort === 'account_desc') {
     accountOrder = [
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
       sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
     ];
   }
-  else if (searchParams?.accountSort === 'file_count_desc') {
+  else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
     accountOrder = [
       desc(countDistinct(tafs.fileId)),
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`
@@ -440,7 +396,7 @@ export async function searchSetup(
   }
 
   return {
-    searchParams: formattedSearchParams,
+    searchParams: searchParams,
     hasLines: searchHasLines,
     hasFootnotes: searchHasFootnotes,
     where: finalWhere,
@@ -459,7 +415,9 @@ export const mSearchSetup = memoizeDataAsync(searchSetup);
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullCountQuery(searchParams: SearchParams) {
+export async function tafsSearchFullCountQuery(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
@@ -484,7 +442,9 @@ export const mTafsSearchFullCountQuery = memoizeDataAsync(tafsSearchFullCountQue
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullCount(searchParams: SearchParams) {
+export async function tafsSearchFullCount(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const fullCount = await tafsSearchFullCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -500,7 +460,9 @@ export const mTafsSearchFullCount = memoizeDataAsync(tafsSearchFullCount);
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullFileCountQuery(searchParams: SearchParams) {
+export async function tafsSearchFullFileCountQuery(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
@@ -525,7 +487,9 @@ export const mTafsSearchFullFileCountQuery = memoizeDataAsync(tafsSearchFullFile
  *   as this will allow for better caching)
  * @returns
  */
-export async function tafsSearchFullFileCount(searchParams: SearchParams) {
+export async function tafsSearchFullFileCount(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const fullCount = await tafsSearchFullFileCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -539,14 +503,13 @@ export const mTafsSearchFullFileCount = memoizeDataAsync(tafsSearchFullFileCount
  * @param searchParams Search and pagination options
  * @returns
  */
-export async function tafsSearchPaged(searchParams: SearchParams & PaginationParams) {
-  const { where, order, orderFields } = await searchSetup(searchParams, 'tafs');
+export async function tafsSearchPaged(searchParams: SearchPaginationParams) {
+  const { where, order } = await searchSetup(searchParams, 'tafs');
 
   // Specific ids
   const pagedResults = await db
     .selectDistinct({
-      tafsTableId: tafs.tafsTableId,
-      ...orderFields
+      tafsTableId: tafs.tafsTableId
     })
     .from(tafs)
     .leftJoin(files, eq(tafs.fileId, files.fileId))
@@ -582,7 +545,9 @@ export const mTafsSearchPaged = memoizeDataAsync(tafsSearchPaged);
  * @param searchParams
  * @returns
  */
-export async function accountSearchFullCountQuery(searchParams: SearchParams) {
+export async function accountSearchFullCountQuery(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
   const countSubquery = db
@@ -609,7 +574,9 @@ export const mAccountSearchFullCountQuery = memoizeDataAsync(accountSearchFullCo
  *   as this will allow for better caching)
  * @returns
  */
-export async function accountSearchFullCount(searchParams: SearchParams) {
+export async function accountSearchFullCount(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const fullCount = await accountSearchFullCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -665,7 +632,9 @@ export const mAccountSearchPaged = memoizeDataAsync(accountSearchPaged);
  * @param searchParams
  * @returns
  */
-export async function fileSearchFullCountQuery(searchParams: SearchPaginationParams) {
+export async function fileSearchFullCountQuery(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const { where } = await searchSetup(searchParams, 'files');
 
   const countSubquery = db
@@ -691,7 +660,9 @@ export const mFileSearchFullCountQuery = memoizeDataAsync(fileSearchFullCountQue
  * @param searchParams
  * @returns
  */
-export async function fileSearchFullCount(searchParams: SearchPaginationParams) {
+export async function fileSearchFullCount(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+) {
   const fullCount = await fileSearchFullCountQuery(searchParams);
 
   return fullCount[0].count || 0;
@@ -706,6 +677,7 @@ export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
  * @returns
  */
 export async function fileSearchPaged(searchParams: SearchPaginationParams) {
+  debugLogger('File searchParams:', searchParams);
   const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
 
   // The meat of the query is that we want to find a set of distinct File IDs
@@ -739,21 +711,24 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     tafs: {
       // Specifically when ordering by account, we want the account
       // titles to be in alphabetical order.
-      orderBy: (tafs, { asc }) => [asc(tafs.accountTitle)]
-    }
-  };
-  if (hasLines) {
-    detailsWith.tafs.with = {
-      lines: {
-        orderBy: (lines, { asc }) => [asc(lines.lineNumber)]
+      orderBy: [asc(tafs.accountTitle)],
+      // Check lines
+      ...(hasLines && {
+        with: {
+          lines: {
+            orderBy: [asc(lines.lineNumber)]
+          }
+        }
+      })
+    },
+    // Footnotes
+    ...(hasFootnotes && {
+      footnotes: {
+        orderBy: [asc(footnotes.footnoteNumber)]
       }
-    };
-  }
-  if (hasFootnotes) {
-    detailsWith.footnotes = {
-      orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
-    };
-  }
+    })
+  };
+
   const fileDetails = [];
   for (const limitedId of limitedIds) {
     const details = await db.query.files.findFirst({
@@ -775,7 +750,14 @@ export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
  * Save a search for the specified user
  * (Currently used only by subscriptions)
  */
-export async function saveUserSearch(email: string, criterion: SearchParams) {
+export async function saveUserSearch(
+  email: string | undefined,
+  criterion: LegacySearchCriterion | SavedSearchCriterion
+) {
+  if (!email) {
+    return null;
+  }
+
   // Cut out of saving the search if it has already been saved
   const existingSearch = await userSearch(email, criterion);
   if (existingSearch) {
@@ -787,6 +769,10 @@ export async function saveUserSearch(email: string, criterion: SearchParams) {
   if (!userResults?.[0]) {
     return null;
   }
+
+  // Make sure criterion is in the correct format for saving
+  const criterionToSave = parseCriterion(criterion);
+
   const newSearch = {
     userId: userResults[0].id,
     criterion
@@ -818,25 +804,48 @@ export async function removeUserSearches(email: string, searchId: string | Array
 
 /**
  * Get a user's saved search with a given criterion
+ *
  * (Currently used only by subscriptions)
+ *
+ * Because the criterion could be in a legacy format, we get all the searches for
+ * the user, parse the criterion, and then compare the parsed criterion to the input
+ * criterion.  This is not super efficient but should be fine for the expected number
+ * of saved searches per user and allows us to avoid having to update all existing
+ * saved searches to have a parsed criterion column.
  */
 export async function userSearch(
-  email: string,
-  criterion: SearchParams
+  email: string | undefined,
+  criterion: LegacySearchCriterion | SavedSearchCriterion
 ): Promise<searchesSelect | undefined> {
+  if (!email) {
+    return;
+  }
+
+  // Get the user
   const userResults = await db.select().from(users).where(eq(users.email, email));
+
   // If we have no user, exit early
   if (!userResults?.[0]) {
     return;
   }
-  const newRecords = await db
+
+  // Get all searches for the user
+  const searchesForUser = await db
     .select()
     .from(searches)
-    .where(
-      and(
-        eq(searches.userId, userResults[0].id),
-        sql`${searches.criterion}::json::text = ${criterion}::json::text`
-      )
-    );
-  return newRecords[0];
+    .where(eq(searches.userId, userResults[0].id));
+
+  // If no searches, exit early
+  if (!searchesForUser || searchesForUser.length === 0) {
+    return;
+  }
+
+  // Find a search with a criterion that matches the input criterion
+  const parsedInputCriterion = parseCriterion(criterion);
+  const matchingSearch = searchesForUser.find((search) => {
+    const parsedSearchCriterion = parseCriterion(search.criterion || {});
+    return JSON.stringify(parsedSearchCriterion) === JSON.stringify(parsedInputCriterion);
+  });
+
+  return matchingSearch;
 }

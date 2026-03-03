@@ -1,43 +1,60 @@
 <script lang="ts">
-  import Spinner from '$components/icons/Spinner.svelte';
-  import SearchSelect from '$components/inputs/SearchSelect.svelte';
-  import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
-  import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
   import { submitting } from './form-store';
-  import { getContext } from 'svelte';
+import { getContext } from 'svelte';
+import { parseUrlSearchParams } from '$lib/searches';
+import { formatDate } from '$lib/formatters';
 
-  // Props
-  export let url;
-  export let agencyBureauOptions = [];
-  export let yearOptions: number[] = [];
-  export let lineOptions: string[] = [];
-  export let approverTitleOptions: Record<'value' | 'label', string>[] = [];
+import Spinner from '$components/icons/Spinner.svelte';
+import SearchSelect from '$components/inputs/SearchSelect.svelte';
+import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
+import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
 
-  // Context
-  const drawerContext = getContext('drawer');
+// Types
+import type { BureausResult } from '$queries/tafs';
+import type {
+  YearOptionsResult,
+  ApproverTitleOptionsResult,
+  LineNumberOptionsResult
+} from '$queries/search';
 
-  // Submit handler
-  function submitHandler() {
-    submitting.set(true);
+// Props
+export let url: URL;
+export let agencyBureauOptions: BureausResult = [];
+export let yearOptions: YearOptionsResult = [];
+export let lineOptions: LineNumberOptionsResult = [];
+export let approverTitleOptions: ApproverTitleOptionsResult = [];
 
-    if (drawerContext) {
-      drawerContext.close();
-    }
+// Context
+// TODO: Type this
+const drawerContext = getContext('drawer');
+
+// Derived
+$: parsedSearchParams = parseUrlSearchParams(url.searchParams);
+
+// Submit handler
+function submitHandler() {
+  submitting.set(true);
+
+  if (drawerContext) {
+    // TODO: Need to type the drawer context
+    // @ts-expect-error
+    drawerContext.close();
   }
+}
 
-  // Derived
-  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
+// Derived
+$: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 
-  // TODO: It would be good to align this markup with the global styles,
-  // specifically the use of .form-item.  The global styles could be
-  // updated to reflect this, as they are not agreed upon yet.
+// TODO: It would be good to align this markup with the global styles,
+// specifically the use of .form-item.  The global styles could be
+// updated to reflect this, as they are not agreed upon yet.
 </script>
 
 <form method="get" on:submit={submitHandler}>
   <div class="field-col">
     <div class="field">
       <label for="term">Keyword</label>
-      <input type="text" id="term" name="term" value={url.searchParams.get('term')} />
+      <input type="text" id="term" name="term" value={parsedSearchParams.term?.join(', ')} />
       <small
         >Multiple keywords are inclusive and must be separated by commas. E.g. <i
           >navy, department of defense, medical</i
@@ -52,18 +69,18 @@
         id="agencyBureau"
         name="agencyBureau"
         bureaus={agencyBureauOptions}
-        value={url.searchParams.get('agencyBureau') || ''}
+        value={parsedSearchParams.agencyBureau || ''}
       />
     </div>
 
     <div class="field">
       <label for="tafs">Account number (Treasury Account Symbol)</label>
-      <input type="text" id="tafs" name="tafs" value={url.searchParams.get('tafs')} />
+      <input type="text" id="tafs" name="tafs" value={parsedSearchParams.tafs} />
     </div>
 
     <div class="field">
       <label for="account">Account name</label>
-      <input type="text" id="account" name="account" value={url.searchParams.get('account')} />
+      <input type="text" id="account" name="account" value={parsedSearchParams.account} />
     </div>
 
     <div class="field">
@@ -72,11 +89,11 @@
       <SearchSelect
         id="approver"
         name="approver"
-        options={approverTitleOptions.map((o) => o.value)}
+        options={approverTitleOptions.map((o) => o.value || '').filter(Boolean)}
         formatOptionLabel={(v) => {
-          return approverTitleOptions.find((o) => o.value === v)?.label;
+          return approverTitleOptions.find((o) => o.value === v)?.label || '(unknown)';
         }}
-        value={url.searchParams.getAll('approver')}
+        value={parsedSearchParams.approver || ''}
         multi
       />
     </div>
@@ -89,8 +106,8 @@
       <CheckboxButtons
         id="year"
         name="year"
-        options={yearOptions}
-        value={url.searchParams.getAll('year')}
+        options={yearOptions.map(String)}
+        value={parsedSearchParams.year?.map(String) || []}
         multi
       />
     </div>
@@ -107,7 +124,7 @@
           id="approvedStart"
           name="approvedStart"
           type="date"
-          value={url.searchParams.get('approvedStart')}
+          value={formatDate(parsedSearchParams.approvedStart, 'iso-date')}
         />
 
         <span class="date-through">
@@ -119,7 +136,7 @@
           id="approvedEnd"
           name="approvedEnd"
           type="date"
-          value={url.searchParams.get('approvedEnd')}
+          value={formatDate(parsedSearchParams.approvedEnd, 'iso-date')}
         />
       </div>
     </div>
@@ -130,17 +147,18 @@
       <SearchSelect
         id="lineNum"
         name="lineNum"
-        options={lineOptions.map((o) => o.value)}
+        options={lineOptions.map((o) => o.value || '').filter(Boolean)}
         formatOptionLabel={(v) => {
-          return lineOptions.find((o) => o.value === v)?.label;
+          return lineOptions.find((o) => o.value === v)?.label || '(unknown)';
         }}
         formatGroupValue={(v) => {
-          return lineOptions.find((o) => o.value === v)?.groupValue;
+          return lineOptions.find((o) => o.value === v)?.groupValue || '(unknown)';
         }}
         formatGroupLabel={(v) => {
-          return lineOptions.find((o) => o.value === v)?.groupLabel;
+          return lineOptions.find((o) => o.value === v)?.groupLabel || '(unknown)';
         }}
-        value={url.searchParams.getAll('lineNum')}
+        value={parsedSearchParams.lineNum || ''}
+        combineGroupValue={false}
         multi
       />
     </div>
@@ -152,7 +170,7 @@
         id="footnoteNum"
         name="footnoteNum"
         options={['A', 'B']}
-        value={url.searchParams.getAll('footnoteNum')}
+        value={parsedSearchParams.footnoteNum}
         multi
       />
     </div>
@@ -163,8 +181,12 @@
       <CheckboxButtons
         id="apportionmentType"
         name="apportionmentType"
-        options={['Standard (Excel)', 'Letter (PDF)']}
-        value={url.searchParams.getAll('apportionmentType')}
+        options={['spreadsheet', 'letter']}
+        formatOptionLabel={(v) => {
+          const formatted = { spreadsheet: 'Standard (Excel)', letter: 'Letter (PDF)' }[v];
+          return formatted || '(unknown)';
+        }}
+        value={parsedSearchParams.apportionmentType}
         multi
       />
     </div>

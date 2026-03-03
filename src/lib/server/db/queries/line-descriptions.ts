@@ -82,12 +82,8 @@ export const loadDefaultLineDescriptions = async (): Promise<void> => {
 /**
  * Get all line descriptions and include types.
  */
-export const allLineDescriptions = async (): Promise<Array<lineDescriptionsSelect> | null> => {
-  return db.query.lineDescriptions.findMany({
-    with: {
-      lineType: true
-    }
-  });
+export const allLineDescriptions = async () => {
+  return db.select().from(lineDescriptions);
 };
 
 // Memoized version

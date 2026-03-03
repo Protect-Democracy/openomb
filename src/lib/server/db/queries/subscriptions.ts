@@ -6,15 +6,26 @@
 import { map } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
-import { files, type filesSelect } from '$schema/files';
-import { tafs, type tafsSelect } from '$schema/tafs';
-import { searches, descriptionParsed, type searchesSelect } from '$schema/searches';
+import { files } from '$schema/files';
+import { tafs } from '$schema/tafs';
+import { searches, type searchesSelect } from '$schema/searches';
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
+import {
+  criterionToUrlSearchParams,
+  parseCriterion,
+  searchCriterionDescriptions
+} from '$lib/searches';
+import { mApproverTitleOptions, type ApproverTitleOptionsResult } from '$queries/search';
+import { mBureaus, type BureausResult } from '$queries/tafs';
 import { memoizeDataAsync } from '$server/cache';
 
-export type ItemDetails =
+// Types
+import type { filesSelect } from '$schema/files';
+import type { tafsSelect } from '$schema/tafs';
+
+export type SubscriptionItemDetails =
   | filesSelect
   | tafsSelect
   | searchesSelect
@@ -28,10 +39,14 @@ export type ItemDetails =
     };
 
 export type SubscriptionDetails = {
-  itemDetails: ItemDetails;
+  itemDetails: SubscriptionItemDetails;
   description: string;
   itemLink: string;
 };
+
+export type SubscriptionSelectDetails = subscriptionSelect & SubscriptionDetails;
+
+export type SubscriptionByUser = Record<string, Array<SubscriptionSelectDetails>>;
 
 /**
  * Gets the item details for each individual subscription
@@ -121,10 +136,17 @@ async function getSubscriptionDetails(
     const item = await db.query.searches.findFirst({
       where: eq(searches.id, itemId)
     });
+
+    // Search params
+    const searchParams = criterionToUrlSearchParams(parseCriterion(item?.criterion || undefined));
+
     return {
       itemDetails: item || {},
-      description: `Saved Search: ${descriptionParsed(item)}`,
-      itemLink: `/search?${new URLSearchParams(item?.criterion).toString()}`
+      description: `Saved Search: ${searchCriterionDescription(item, {
+        agencyBureauOptions: await mBureaus(),
+        approverTitleOptions: await mApproverTitleOptions()
+      })}`,
+      itemLink: `/search?${searchParams.toString()}`
     };
   }
 }
@@ -137,10 +159,8 @@ const mGetSubscriptionDetails = memoizeDataAsync(getSubscriptionDetails);
 /**
  * Gets all subscriptions, with details, grouped by user
  */
-export const subscriptionsByUser = async function (): Promise<
-  Record<string, Array<subscriptionSelect>>
-> {
-  const userSubs: Record<string, Array<subscriptionSelect>> = {};
+export const subscriptionsByUser = async function (): Promise<SubscriptionByUser> {
+  const userSubs: SubscriptionByUser = {};
   const subscriptionResults = await db
     .select()
     .from(subscriptions)
@@ -151,7 +171,7 @@ export const subscriptionsByUser = async function (): Promise<
       if (!userSubs[result.users.email]) {
         userSubs[result.users.email] = [];
       }
-      const subDetails = await mGetSubscriptionDetails(
+      const subDetails = await getSubscriptionDetails(
         result.subscriptions.type,
         result.subscriptions.itemId
       );
@@ -198,11 +218,11 @@ export const userSubscriptionDetails = async function (
   email: string,
   type: string,
   itemId: string
-) {
+): Promise<(subscriptionSelect & SubscriptionSelectDetails) | undefined> {
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
-    const subscriptionDetails = await mGetSubscriptionDetails(
+    const subscriptionDetails = await getSubscriptionDetails(
       subscriptionResults.type,
       subscriptionResults.itemId
     );
@@ -230,11 +250,13 @@ export const userSubscriptionList = async function (
  * Get all subscriptions associated with the provided email
  * Also provide details for the item(s) that were subscribed to
  */
-export const userSubscriptionListDetails = async function (email: string) {
+export const userSubscriptionListDetails = async function (
+  email: string
+): Promise<Array<SubscriptionSelectDetails>> {
   const subscriptionResults = await userSubscriptionList(email);
   return await Promise.all(
     map(subscriptionResults, async (result) => {
-      const details = await mGetSubscriptionDetails(result.type, result.itemId);
+      const details = await getSubscriptionDetails(result.type, result.itemId);
       return { ...result, ...details };
     })
   );
@@ -335,3 +357,29 @@ export const removeUser = async function (email: string) {
   // Deletion cascades, so when user is removed, all entries that reference user id will be removed
   await db.delete(users).where(eq(users.email, email));
 };
+
+/**
+ * Compute parsed description value.
+ *
+ * Describes the criterion in text
+ *
+ */
+export function searchCriterionDescription(
+  searchesRecord: searchesSelect | undefined,
+  options?: {
+    agencyBureauOptions?: BureausResult;
+    approverTitleOptions?: ApproverTitleOptionsResult;
+  }
+): string {
+  const noFiltersDescription = '(no filters)';
+
+  if (!searchesRecord?.criterion) {
+    return noFiltersDescription;
+  }
+
+  const descriptions = searchCriterionDescriptions(
+    parseCriterion(searchesRecord.criterion),
+    options
+  );
+  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
+}

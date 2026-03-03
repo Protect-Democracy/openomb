@@ -5,12 +5,7 @@ import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs/promises';
 
-import {
-  db,
-  resetDbConnection,
-  migrationsDir,
-  closeDbConnection
-} from '../../src/lib/server/db/connection';
+import { db, resetDbConnection, migrationsDir, closeDbConnection } from '$db/connection';
 
 // Path to migrations
 const _dirname = dirname(fileURLToPath(import.meta.url));

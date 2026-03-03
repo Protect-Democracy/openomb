@@ -6,10 +6,12 @@
 
 // Dependencies
 import { boolean, timestamp, pgTable, text, primaryKey, integer } from 'drizzle-orm/pg-core';
-import type { AdapterAccountType } from 'next-auth/adapters';
 import { relations } from 'drizzle-orm';
 import { searches } from './searches';
 import { subscriptions } from './subscriptions';
+
+// Types
+import type { AdapterAccountType } from '@auth/core/adapters';
 
 // User Table
 export const users = pgTable('users', {

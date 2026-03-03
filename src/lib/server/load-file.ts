@@ -29,6 +29,11 @@ import { db } from './db/connection';
 import pdfFixes from '$data/fixes/pdf-files';
 import { createSpan } from './sentry-custom';
 
+// Types
+import type { filesSelect, filesInsert } from '$schema/files';
+import type { linesSelect, linesInsert } from '$schema/lines';
+import type { tafsSelect, tafsInsert } from '$schema/tafs';
+import type { footnotesSelect, footnotesInsert } from '$schema/footnotes';
 import type { RequestOptions } from './request';
 
 // Apportionment schedule data from API
@@ -71,6 +76,9 @@ export type ApportionmentFileJson = {
   FootnoteData: Array<ApportionmentFootnoteApi>;
 };
 
+// Intermediate schedule record type used for processing data before inserting into DB
+type ScheduleRecord = linesInsert | tafsInsert;
+
 // Constants
 const env = environmentVariables();
 const collectionTimezone = 'America/New_York';
@@ -82,7 +90,7 @@ const collectionTimezone = 'America/New_York';
 async function loadJsonFile(
   jsonUrl: string,
   retries: number = 5
-): Promise<typeof files.$inferInsert | undefined> {
+): Promise<filesInsert | undefined> {
   // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
   // completely stop the process.
   let fileResponse;
@@ -93,7 +101,7 @@ async function loadJsonFile(
   }
   catch (error) {
     const e = new Error(
-      `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error?.message || error}`
+      `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error instanceof Error ? error.message : error}`
     );
     e.name = 'LoadJsonFileError';
     console.error(e);
@@ -123,8 +131,9 @@ async function loadJsonFile(
   }
 
   // Create file record
-  const fileRecord = {
-    fileId: cleanString(sourceData.FileId.toString()),
+  // TODO: I think
+  const fileRecord: filesInsert = {
+    fileId: cleanString(sourceData.FileId.toString()) || `json-${md5hash(jsonUrl)}`,
     fileName: cleanString(sourceData.FileName),
     fiscalYear: parseIntegerFromString(sourceData.FiscalYear),
     approvalTimestamp: parseTimestampFromString(sourceData.ApprovalTimestamp),
@@ -133,14 +142,17 @@ async function loadJsonFile(
     approverTitle: formatApproverTitle(sourceData.ApproverTitle),
     approverTitleId: dbId(formatApproverTitle(sourceData.ApproverTitle)),
     fundsProvidedBy: cleanString(sourceData.FundsProvidedBy),
+    fundsProvidedByParsed: null,
     excelUrl: hasExcelUrl ? expectedExcelUrl : null,
     sourceUrl: jsonUrl,
+    pdfUrl: null,
+    sourceText: null,
     sourceData: JSON.stringify(sourceData),
     createdAt: new Date(),
     modifiedAt: new Date(),
     removed: false
   };
-  fileRecord.fundsProvidedByParsed = computeFundsProvidedByParsed(fileRecord);
+  fileRecord.fundsProvidedByParsed = computeFundsProvidedByParsed(fileRecord as filesSelect);
 
   // Upsert file
   const savedFileRecords = await db
@@ -154,14 +166,14 @@ async function loadJsonFile(
     .returning();
 
   // Remove all data for this file.
-  // TODO: Ideallly we could use transactions so that this could be undone
+  // TODO: Ideally we could use transactions so that this could be undone
   // if something happened downstream
   await db.delete(footnotes).where(eq(footnotes.fileId, fileRecord.fileId));
   await db.delete(lines).where(eq(lines.fileId, fileRecord.fileId));
   await db.delete(tafs).where(eq(tafs.fileId, fileRecord.fileId));
 
   // Go through the schedule data
-  const scheduleRecords = [];
+  const scheduleRecords: ScheduleRecord[] = [];
   for (const [di, d] of sourceData.ScheduleData.entries()) {
     const line = {
       fileId: cleanString(sourceData.FileId.toString()),
@@ -188,7 +200,12 @@ async function loadJsonFile(
       approvedAmount: d.ApprovedAmount || null,
       footnoteNumbers: parseFootnotes(d.FootnoteNumber),
       createdAt: new Date(),
-      modifiedAt: new Date()
+      modifiedAt: new Date(),
+      // Add these properties to match downstream usage
+      lineTypeId: undefined as string | undefined,
+      tafsId: undefined as string | undefined,
+      tafsTableId: undefined as string | undefined,
+      accountId: undefined as string | undefined
     };
     line.lineTypeId =
       (await mLineTypeFromLineNumber(cleanString(d.LineNumber)))?.lineTypeId || 'other';
@@ -574,9 +591,13 @@ async function readPdfText(url: string): Promise<string> {
 
   // Get text from all pages
   const pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
-    return (await (await doc.getPage(i + 1)).getTextContent()).items
-      .map((token) => token.str)
-      .join(' ');
+    return (
+      (await (await doc.getPage(i + 1)).getTextContent()).items
+        // TODO: Unsure about this typing issue
+        // @ts-expect-error
+        .map((token) => token.str)
+        .join(' ')
+    );
   });
 
   // Put together

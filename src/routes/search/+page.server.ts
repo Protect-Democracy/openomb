@@ -3,7 +3,6 @@ import {
   mYearOptions,
   mLineNumberOptions,
   mApproverTitleOptions,
-  formatSearchParams,
   mFileSearchPaged,
   mFileSearchFullCount,
   mAccountSearchPaged,
@@ -12,15 +11,20 @@ import {
   removeUserSearches,
   userSearch
 } from '$queries/search';
+import { parseUrlSearchParams } from '$lib/searches';
 import { mBureaus } from '$queries/tafs';
 import { mFolders } from '$queries/files';
 import { userSubscription } from '$queries/subscriptions';
 
+// Types
+import type { SearchPaginationParams, CombinedSearchCriterion } from '$queries/search';
+
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
+  // Add a saved search
   add: async ({ locals, request }) => {
     const user = (await locals.auth())?.user;
-    if (!user) {
+    if (!user || !user.email) {
       error(401, 'Must be authenticated to access this page');
     }
 
@@ -30,14 +34,16 @@ export const actions = {
       return await saveUserSearch(user.email, data.criterion);
     }
   },
+
+  // Remove a saved search
   remove: async ({ locals, request }) => {
     const user = (await locals.auth())?.user;
-    if (!user) {
+    if (!user || !user.email) {
       error(401, 'Must be authenticated to access this page');
     }
 
     const data = await request.json();
-    // Add subscription
+    // Remove subscription
     if (data.searchId) {
       return await removeUserSearches(user.email, data.searchId);
     }
@@ -49,7 +55,6 @@ export const load = async ({ url, cookies, locals }) => {
   // Shortcuts
   const u = (p: string) => url.searchParams.get(p);
   const h = (p: string) => url.searchParams.has(p);
-  const ga = (p: string) => url.searchParams.getAll(p);
   const jsEnabled = !!cookies.get('jsEnabled');
 
   // Paging values
@@ -59,7 +64,7 @@ export const load = async ({ url, cookies, locals }) => {
   const accountPageIndex = h('accountPage') ? Number(u('accountPage')) : 1;
 
   // Values we will only get when a search is done
-  let formattedSearchParams, fileCount, fileResults, accountCount, accountResults;
+  let combinedSearchParams, fileCount, fileResults, accountCount, accountResults;
 
   // Only perform our search once the form is submitted.  From the landing page, an
   // empty query is in the form ?term= so we don't need to perform a search.
@@ -69,51 +74,42 @@ export const load = async ({ url, cookies, locals }) => {
   const user = (await locals.auth())?.user;
   let existingSubscription;
 
+  // Only do the search if we have search parameters, and not just an empty term, which happens
+  // if the home page gets submitted without a search term.
   if (searchString && searchString !== 'term=') {
-    // Get our arguments for our search queries.
-    //
-    // Note: Make sure to update the values in search/+page.svelte if the arguments
-    // change.
-    const agencyBureau = url.searchParams.get('agencyBureau')?.split(',');
-    const searchArgs = {
-      term: u('term') || '',
-      tafs: u('tafs') || '',
-      bureau: agencyBureau?.[1] || '',
-      agency: agencyBureau?.[0] || '',
-      account: u('account') || '',
-      approver: ga('approver').join(',') || '',
-      year: ga('year').join(','),
-      approvedStart: u('approvedStart') ? new Date(`${u('approvedStart')}T00:00:00`) : undefined,
-      approvedEnd: u('approvedEnd') ? new Date(`${u('approvedEnd')}T23:59:59`) : undefined,
-      apportionmentType: ga('apportionmentType').join(',') || '',
-      lineNum: ga('lineNum').join(','),
-      footnoteNum: ga('footnoteNum').join(','),
+    // Saved search criterion
+    const saveableSearchArgs = parseUrlSearchParams(url.searchParams);
+
+    // Add supplemental search (not in the UI)
+    const searchArgs: CombinedSearchCriterion = {
+      ...saveableSearchArgs,
 
       // Included for email notification link, not used in form
       folder: u('folder') || '',
       createdStart: u('createdStart') ? new Date(`${u('createdStart')}T00:00:00`) : undefined,
       createdEnd: u('createdEnd') ? new Date(`${u('createdEnd')}T23:59:59`) : undefined
     };
-    const pagedSearchArgs = {
+
+    const pagedSearchArgs: SearchPaginationParams = {
       offset: (filePageIndex - 1) * filePageSize,
       limit: filePageSize,
-      sort: u('sort'),
+      sort: u('sort') || undefined,
       accountOffset: (accountPageIndex - 1) * accountPageSize,
       accountLimit: accountPageSize,
-      accountSort: u('accountSort'),
+      accountSort: u('accountSort') || undefined,
       ...searchArgs
     };
 
-    // Formatted search params
-    formattedSearchParams = formatSearchParams(pagedSearchArgs);
-
     // If we have search parameters, try getting an existing subscription
-    const existingSearch = user ? await userSearch(user.email, searchArgs) : null;
-    if (existingSearch) {
+    // TODO: This needs to happen on the client as well, since the search can change with
+    // out a page reload.
+    const existingSearch = user && user.email ? await userSearch(user.email, searchArgs) : null;
+    if (existingSearch && user && user.email) {
       existingSubscription = await userSubscription(user.email, 'search', existingSearch.id);
     }
 
     // Execute queries.  Important to memoize counts, less so for search.
+    combinedSearchParams = pagedSearchArgs;
     fileResults = await mFileSearchPaged(pagedSearchArgs);
     fileCount = jsEnabled
       ? mFileSearchFullCount(searchArgs)
@@ -126,7 +122,7 @@ export const load = async ({ url, cookies, locals }) => {
 
   return {
     // Options/params
-    searchParams: formattedSearchParams,
+    searchParams: combinedSearchParams,
     folders: await mFolders(),
     yearOptions: await mYearOptions(),
     lineOptions: await mLineNumberOptions(),
@@ -151,7 +147,7 @@ export const load = async ({ url, cookies, locals }) => {
 
     // Page info
     pageMeta: {
-      title: fileCount && fileCount > 0 ? 'Search results' : 'Search apportionments',
+      title: combinedSearchParams ? 'Search results' : 'Search apportionments',
       description:
         'Search apportionments by contents, tafs, bureau, fiscal year, footnotes, and more',
       includeSearch: true

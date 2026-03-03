@@ -24,8 +24,12 @@ export const completed = async function () {
  * Last updated date of collections
  */
 export const lastUpdated = async function () {
-  return await db.query.collections.findFirst({
-    where: eq(collections.status, 'completed'),
-    orderBy: desc(collections.complete)
-  });
+  const result = await db
+    .select()
+    .from(collections)
+    .where(eq(collections.status, 'completed'))
+    .orderBy(desc(collections.complete))
+    .limit(1);
+
+  return result[0];
 };

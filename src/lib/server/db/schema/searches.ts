@@ -3,9 +3,60 @@
  */
 
 // Dependencies
+import { isDate } from 'lodash-es';
 import { timestamp, pgTable, text, json, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { users } from './users';
+
+// This should be the source of truth for search fields.
+//
+// When changing search criterion, also refer to the parsing functions in src/lib/searches.ts.
+export type SavedSearchCriterion = {
+  // General keyword search across multiple fields
+  term?: string[];
+  // TAFS keyword search
+  tafs?: string;
+  // Account keyword
+  account?: string;
+  // This is an ID that combines agency and bureau, split with a comma, and can just
+  // be agency.
+  agencyBureau?: string;
+  // Approver Ids
+  approver?: string[];
+  year?: number[];
+  lineNum?: string[];
+  footnoteNum?: string[];
+  apportionmentType?: ('letter' | 'spreadsheet')[];
+  // Dates don't exist in JS, and JS's datetime can be very difficult to deal with given that
+  // it the timezone is dependent on the users browser, so getting the correct date can be tricky,
+  // let's just use ISO date strings
+  approvedStart?: string;
+  approvedEnd?: string;
+};
+
+// We have to support this old version of data in the database where things
+// were strings.  Note that this should allow for the SavedSearchCriterion
+// types in here as well.
+export interface LegacySearchCriterion {
+  term?: string | string[];
+  tafs?: string;
+  account?: string;
+  agencyBureau?: string;
+  approver?: string | string[];
+  year?: string | number[];
+  lineNum?: string | string[];
+  footnoteNum?: string | string[];
+  apportionmentType?: string | string[];
+  approvedStart?: string | Date;
+  approvedEnd?: string | Date;
+}
+
+export type SavedSearchCriterionKeys = keyof SavedSearchCriterion;
+
+// What a search criterion looks like in the URL.
+export type SavedSearchCriterionUrl = {
+  [K in keyof SavedSearchCriterion]: string;
+};
 
 // Table
 export const searches = pgTable(
@@ -18,7 +69,7 @@ export const searches = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     // Criterion for search is saved in JSON format for future flexibility
-    criterion: json('criterion'),
+    criterion: json('criterion').$type<LegacySearchCriterion>(),
 
     // Meta
     createdAt: timestamp('created_at').defaultNow(),
@@ -41,54 +92,6 @@ export const searchesRelations = relations(searches, ({ one }) => ({
     references: [users.id]
   })
 }));
-
-/**
- * Compute parsed description value.
- *
- * Describes the criterion in text
- *
- */
-export const descriptionParsed = (
-  searchesRecord: typeof searches.$inferSelect | undefined
-): string => {
-  const noFiltersDescription = '(no filters)';
-
-  if (!searchesRecord?.criterion) {
-    return noFiltersDescription;
-  }
-  const criterionArray: Array<string> = [];
-  const criterion = searchesRecord.criterion;
-
-  if (criterion.term) {
-    criterionArray.push(`'${criterion.term}'`);
-  }
-  if (criterion.tafs) {
-    criterionArray.push(`TAFS: ${criterion.tafs}`);
-  }
-  if (criterion.agency) {
-    criterionArray.push(`Agency: ${criterion.agency}`);
-  }
-  if (criterion.bureau) {
-    criterionArray.push(`Bureau: ${criterion.bureau}`);
-  }
-  if (criterion.account) {
-    criterionArray.push(`Account: ${criterion.account}`);
-  }
-  if (criterion.approver) {
-    criterionArray.push(`Approver: ${criterion.approver}`);
-  }
-  if (criterion.year) {
-    criterionArray.push(`Year(s): ${criterion.year}`);
-  }
-  if (criterion.lineNum) {
-    criterionArray.push(`Line #: ${criterion.lineNum}`);
-  }
-  if (criterion.footnoteNum) {
-    criterionArray.push(`Footnote(s): ${criterion.footnoteNum}`);
-  }
-
-  return criterionArray.length >= 1 ? criterionArray.join('; ') : noFiltersDescription;
-};
 
 /**
  * Export some types

@@ -9,10 +9,13 @@ import { createHash } from 'node:crypto';
 import { createWriteStream, createReadStream, statSync } from 'node:fs';
 import archiver from 'archiver';
 import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
-import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
 import packageJson from '$package' with { type: 'json' };
+
+// Types
+import type { Readable } from 'node:stream';
+import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
@@ -366,7 +369,7 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
     // Catch errors because the stack trace for these don't
     // reference back to these lines
     throw new Error(
-      `Unable to list objects on S3 bucket "${s3Bucket || env.archiveS3Bucket}": ${error?.message || error}`
+      `Unable to list objects on S3 bucket "${s3Bucket || env.archiveS3Bucket}": ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }
@@ -379,7 +382,7 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
  * @param s3Bucket Optional name of bucket
  */
 async function putS3File(
-  file: string | ReadableStream | Buffer,
+  file: string | Readable | Buffer | Uint8Array,
   s3Path: string,
   s3Bucket: string | undefined = undefined
 ): Promise<void> {
@@ -391,6 +394,8 @@ async function putS3File(
     const params: PutObjectRequest = {
       Bucket: s3Bucket || env.archiveS3Bucket,
       Key: s3Path,
+      // TODO: Still unsure how to get file typed correct.
+      // @ts-expect-error
       Body: typeof file === 'string' ? createReadStream(file) : file,
       ACL: env.archiveS3Acl
     };
@@ -400,7 +405,7 @@ async function putS3File(
     // Catch errors because the stack trace for these don't
     // reference back to these lines
     throw new Error(
-      `Unable to put object to S3 path "${s3Bucket || env.archiveS3Bucket}/${s3Path}": ${error?.message || error}`
+      `Unable to put object to S3 path "${s3Bucket || env.archiveS3Bucket}/${s3Path}": ${error instanceof Error ? error.message : String(error)}`
     );
   }
 }
