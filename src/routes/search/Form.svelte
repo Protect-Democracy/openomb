@@ -42,14 +42,13 @@
       drawerContext.close();
     }
   }
-}
 
-// Derived
-$: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
+  // Derived
+  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 
-// TODO: It would be good to align this markup with the global styles,
-// specifically the use of .form-item.  The global styles could be
-// updated to reflect this, as they are not agreed upon yet.
+  // TODO: It would be good to align this markup with the global styles,
+  // specifically the use of .form-item.  The global styles could be
+  // updated to reflect this, as they are not agreed upon yet.
 </script>
 
 <form method="get" on:submit={submitHandler}>

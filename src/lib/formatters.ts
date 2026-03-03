@@ -51,21 +51,18 @@ export function formatDate(
   let parsed;
   if (isDate(value)) {
     parsed = value as Date;
-  }
-  else {
+  } else {
     const dt = DateTime.fromISO(value as string);
     if (dt.isValid) {
       parsed = dt.toJSDate();
-    }
-    else {
+    } else {
       return '';
     }
   }
 
   if (format === 'iso') {
     return parsed.toISOString();
-  }
-  else if (format === 'iso-date') {
+  } else if (format === 'iso-date') {
     return parsed.toISOString().split('T')[0];
   }
 
@@ -169,8 +166,7 @@ export const highlight = function (text?: string | null, terms?: string[], trim?
   if (!trim) {
     const regex = new RegExp(terms.join('|'), 'gi');
     return text.replace(regex, '<mark>$&</mark>');
-  }
-  else {
+  } else {
     // This is pretty hacky.  Ideally we could make this kind of like Google results and have multiple
     // highlights for each search, but for now, just make a single highlight.
     const wordLength = Math.round(sumBy(terms, (t) => t.length) / terms.length);

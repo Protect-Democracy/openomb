@@ -1,11 +1,11 @@
 <script>
   import Wrapper from '$email/components/Wrapper.svelte';
-import { contactEmail, deployedBaseUrl, siteName } from '$config';
+  import { contactEmail, deployedBaseUrl, siteName } from '$config';
 
-export let title = 'Subscribe to apportionments';
-export let subscriptionsUrl = undefined;
-export let subscriptionItemDescription;
-export let authUrl;
+  export let title = 'Subscribe to apportionments';
+  export let subscriptionsUrl = undefined;
+  export let subscriptionItemDescription;
+  export let authUrl;
 </script>
 
 <Wrapper {title} {subscriptionsUrl} unsubscribable={false}>

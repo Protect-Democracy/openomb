@@ -150,13 +150,6 @@
     // @ts-expect-error Unsure how to type the deserialize output.
     hasSubscription = deserialize(await subResp.text())?.data;
   }
-  catch (err) {
-    console.error('Error subscribing to search updates', err);
-    captureException(err);
-    error = true;
-    loading = false;
-  }
-}
 
   async function subscribe() {
     loading = true;
@@ -233,7 +226,6 @@
       }
     }
   }
-}
 </script>
 
 {#if overrideFeatureFlag || subscribeFeatureEnabled || user}

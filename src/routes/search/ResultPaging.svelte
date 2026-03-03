@@ -1,12 +1,12 @@
 <script lang="ts">
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
-import Spinner from '$components/icons/Spinner.svelte';
+  import Spinner from '$components/icons/Spinner.svelte';
 
-// Props
-export let count: number | Promise<number>;
-export let pageSize: number;
-export let id: string;
-export let anchor: string;
+  // Props
+  export let count: number | Promise<number>;
+  export let pageSize: number;
+  export let id: string;
+  export let anchor: string;
 </script>
 
 <div class="pagination">

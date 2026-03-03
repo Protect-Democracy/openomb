@@ -1,16 +1,16 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { derived } from 'svelte/store';
-import { page } from '$app/stores';
+  import { derived } from 'svelte/store';
+  import { page } from '$app/stores';
 
-export let data: PageData;
-let emailTemplates = [];
-let emailTemplate = '';
+  export let data: PageData;
+  let emailTemplates = [];
+  let emailTemplate = '';
 
-// Stores
-const url = derived(page, ($page) => $page.url);
-$: emailTemplates = Object.keys(data.emailExamples);
-$: emailTemplate = emailTemplate || emailTemplates[0];
+  // Stores
+  const url = derived(page, ($page) => $page.url);
+  $: emailTemplates = Object.keys(data.emailExamples);
+  $: emailTemplate = emailTemplate || emailTemplates[0];
 </script>
 
 <svelte:head>

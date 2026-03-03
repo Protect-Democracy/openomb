@@ -1,7 +1,7 @@
 <script lang="ts">
   import AltDirectoryTree from '$components/navigation/AltDirectoryTree.svelte';
-import AltDirectoryTreeItem from '$components/navigation/AltDirectoryTreeItem.svelte';
-export let agencies = [];
+  import AltDirectoryTreeItem from '$components/navigation/AltDirectoryTreeItem.svelte';
+  export let agencies = [];
 </script>
 
 <noscript>

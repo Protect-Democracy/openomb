@@ -145,8 +145,7 @@ export function dbConnectionString() {
   let possibleDbAuth = '';
   if (env.dbAuth && env.dbAuth.username) {
     possibleDbAuth = `${env.dbAuth.username}:${env.dbAuth.password}@`;
-  }
-  else if (env.dbUser) {
+  } else if (env.dbUser) {
     possibleDbAuth = `${env.dbUser}:${env.dbPassword}@`;
   }
 

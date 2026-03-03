@@ -1,8 +1,8 @@
 <script lang="ts">
   import { formatDate } from '$lib/formatters';
 
-// Props
-export let tafsGroup;
+  // Props
+  export let tafsGroup;
 </script>
 
 <div class="tafs-meta grid-values">

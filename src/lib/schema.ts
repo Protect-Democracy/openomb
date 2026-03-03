@@ -143,8 +143,7 @@ export function formatJsonLdScript(schema: Schema) {
       '@context': 'http://schema.org',
       '@graph': schema
     };
-  }
-  else {
+  } else {
     schema['@context'] = 'https://schema.org';
   }
 

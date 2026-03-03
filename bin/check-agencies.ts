@@ -132,8 +132,7 @@ async function cli(): Promise<void> {
         budgetAgencyTitleId: agency.budgetAgencyTitleId,
         exact: true
       });
-    }
-    else {
+    } else {
       const comparisonResults = buildAgencyComparison(agencies, agency);
       if (comparisonResults.length) {
         agencyMatches.push({
@@ -143,8 +142,7 @@ async function cli(): Promise<void> {
           matchLevel: comparisonResults[0].rank,
           matches: comparisonResults
         });
-      }
-      else {
+      } else {
         orphanAgencies.push({
           ...agency,
           matches: comparisonResults
@@ -171,8 +169,7 @@ async function cli(): Promise<void> {
         budgetBureauTitleId: bureau.budgetBureauTitleId,
         exact: true
       });
-    }
-    else {
+    } else {
       const comparisonResults = buildAgencyComparison(agencies, bureau);
       if (comparisonResults.length) {
         bureauMatches.push({
@@ -184,8 +181,7 @@ async function cli(): Promise<void> {
           matchLevel: comparisonResults[0].rank,
           matches: comparisonResults
         });
-      }
-      else {
+      } else {
         orphanBureaus.push({
           ...bureau,
           matches: comparisonResults

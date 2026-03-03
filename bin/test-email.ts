@@ -72,8 +72,7 @@ async function cli(): Promise<void> {
       new Date(options.subscriptionLastNotified)
     );
     data = { subscriptions: data };
-  }
-  else {
+  } else {
     // TODO: Maybe use test data in email/previews/ ?
     data = {};
   }

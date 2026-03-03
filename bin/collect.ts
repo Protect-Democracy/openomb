@@ -81,16 +81,14 @@ async function cli(): Promise<void> {
     try {
       await listS3BucketObjects();
       console.info('Success listing S3 bucket.');
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(`Failed listing S3 bucket: ${error?.message || error}`);
     }
 
     try {
       await putS3File(testFileStream, `test/test-file-${+new Date()}.txt`);
       console.info('Success testing put to S3.');
-    }
-    catch (error) {
+    } catch (error) {
       throw new Error(`Failed testing put to S3: ${error?.message || error}`);
     }
   }
@@ -159,12 +157,10 @@ async function cli(): Promise<void> {
     let apportionmentUrls;
     if (apportionmentUrl) {
       apportionmentUrls = [apportionmentUrl];
-    }
-    else {
+    } else {
       try {
         apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
-      }
-      catch (error) {
+      } catch (error) {
         throw new Error(
           `IMPORTANT: Failed getting apportionment list from homepage: ${error?.message || error}`
         );
@@ -193,8 +189,7 @@ async function cli(): Promise<void> {
             if (fileRecord) {
               fileIds.push(fileRecord.fileId);
             }
-          }
-          catch (error) {
+          } catch (error) {
             // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
             // but everything else will.
             throw new Error(
@@ -237,8 +232,7 @@ async function cli(): Promise<void> {
             if (spendPlanRecord) {
               fileIds.push(spendPlanRecord.fileId);
             }
-          }
-          catch (error) {
+          } catch (error) {
             // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
             // but everything else will.
             throw new Error(
@@ -281,8 +275,7 @@ async function cli(): Promise<void> {
             if (fileRecord) {
               fileIds.push(fileRecord.fileId);
             }
-          }
-          catch (error) {
+          } catch (error) {
             // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
             // but everything else will.
             throw new Error(
@@ -324,8 +317,7 @@ async function cli(): Promise<void> {
             if (spendPlanRecord) {
               fileIds.push(spendPlanRecord.fileId);
             }
-          }
-          catch (error) {
+          } catch (error) {
             // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
             // but everything else will.
             throw new Error(

@@ -20,8 +20,7 @@ export async function startMailpitContainer() {
     process.env.TEST_MAILPIT_SMTP_PORT = globalContainer.getMappedPort(1025).toString();
 
     return globalContainer;
-  }
-  catch (error: any) {
+  } catch (error: any) {
     if (error.message?.includes('Could not find a working container runtime strategy')) {
       throw new Error('Docker not found. Please ensure Docker is running.');
     }

@@ -6,11 +6,11 @@
 
   import type { User } from '$lib/users';
 
-export let data: PageData;
-$: ({ type, user } = data);
+  export let data: PageData;
+  $: ({ type, user } = data);
 
-// Stores
-const url = derived(page, ($page) => $page.url);
+  // Stores
+  const url = derived(page, ($page) => $page.url);
 </script>
 
 <div class="page-container content-container">

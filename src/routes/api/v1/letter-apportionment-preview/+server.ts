@@ -25,8 +25,7 @@ export async function GET({ url }) {
   let urlObj;
   try {
     urlObj = new URL(urlToProxy);
-  }
-  catch (error) {
+  } catch (error) {
     return json({ error: true, status: 400, message: error.toString() }, { status: 400 });
   }
 

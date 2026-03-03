@@ -1,22 +1,22 @@
 <script lang="ts">
   import { DateTime } from 'luxon';
-import { deployedBaseUrl } from '$config/index';
-import { maxFilesPerNotificationEntry } from '$config/subscriptions';
-import { formatFileTitle, formatDate, formatNumber } from '$lib/formatters';
+  import { deployedBaseUrl } from '$config/index';
+  import { maxFilesPerNotificationEntry } from '$config/subscriptions';
+  import { formatFileTitle, formatDate, formatNumber } from '$lib/formatters';
 
-// TODO: This type should be defined somewhere
-import type { SubscriptionWithFiles } from '$server/subscriptions';
-import type { SubscriptionDetails } from '$db/queries/subscriptions';
+  // TODO: This type should be defined somewhere
+  import type { SubscriptionWithFiles } from '$server/subscriptions';
+  import type { SubscriptionDetails } from '$db/queries/subscriptions';
 
-export let subscription: SubscriptionWithFiles & SubscriptionDetails;
+  export let subscription: SubscriptionWithFiles & SubscriptionDetails;
 
-$: searchParams = new URLSearchParams({
-  ...subscription.criterion,
-  agencyBureau: `${subscription.criterion.agency}${subscription.criterion.bureau && ','}${subscription.criterion.bureau}`,
-  createdStart: DateTime.fromJSDate(subscription.criterion.createdStart).toISODate()
-});
-$: searchParams.delete('agency');
-$: searchParams.delete('bureau');
+  $: searchParams = new URLSearchParams({
+    ...subscription.criterion,
+    agencyBureau: `${subscription.criterion.agency}${subscription.criterion.bureau && ','}${subscription.criterion.bureau}`,
+    createdStart: DateTime.fromJSDate(subscription.criterion.createdStart).toISODate()
+  });
+  $: searchParams.delete('agency');
+  $: searchParams.delete('bureau');
 </script>
 
 <div>

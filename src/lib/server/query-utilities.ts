@@ -29,8 +29,7 @@ export function reduceByFileType(
         prevRecord[`${record.fileType}`] = record.fileCount;
         (prevRecord.fileCount as number) += record.fileCount;
         return accum;
-      }
-      else {
+      } else {
         return [
           ...accum,
           {

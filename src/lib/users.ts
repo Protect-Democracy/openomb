@@ -26,12 +26,10 @@ export async function clientGetUser(quiet = true): Promise<User | null> {
     if (userJson && userJson.results) {
       return userJson.results.user || null;
     }
-  }
-  catch (e) {
+  } catch (e) {
     if (quiet) {
       console.error('Error fetching user data', e);
-    }
-    else {
+    } else {
       throw e;
     }
   }
@@ -50,12 +48,10 @@ export async function clientGetSubscriptionById(
     if (subJson && subJson.results) {
       return subJson.results.subscription || null;
     }
-  }
-  catch (e) {
+  } catch (e) {
     if (quiet) {
       console.error('Error fetching subscription data', e);
-    }
-    else {
+    } else {
       throw e;
     }
   }
@@ -73,12 +69,10 @@ export async function clientGetSubscriptionBySearchParams(
     if (subJson && subJson.results) {
       return subJson.results.subscription || null;
     }
-  }
-  catch (e) {
+  } catch (e) {
     if (quiet) {
       console.error('Error fetching subscription data', e);
-    }
-    else {
+    } else {
       throw e;
     }
   }

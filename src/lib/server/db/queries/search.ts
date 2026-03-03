@@ -318,8 +318,7 @@ function generalSearchFilters(
   // Prioritizes PDF specification (we don't need or want to apply both)
   if (searchParams.apportionmentType?.length && searchParams.apportionmentType.includes('letter')) {
     where.push(isNotNull(files.pdfUrl));
-  }
-  else if (
+  } else if (
     searchParams.apportionmentType?.length &&
     searchParams.apportionmentType.includes('spreadsheet')
   ) {
@@ -368,12 +367,10 @@ export async function searchSetup(
   if ('sort' in searchParams && searchParams?.sort === 'account_asc') {
     const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
-  }
-  else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
+  } else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
-  }
-  else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
+  } else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
     order = [asc(aggField), desc(files.approvalTimestamp)];
   }
@@ -388,8 +385,7 @@ export async function searchSetup(
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
       sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
     ];
-  }
-  else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
+  } else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
     accountOrder = [
       desc(countDistinct(tafs.fileId)),
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`

@@ -117,10 +117,6 @@ export async function getSubscriptionWithFiles(
     // Unrecognized subscription type, throw error
     throw new Error(`Unrecognized subscription type ${sub.type}`);
   }
-  else {
-    // Unrecognized subscription type, throw error
-    throw new Error(`Unrecognized subscription type ${sub.type}`);
-  }
 
   // Use specific last notified if provided which should only be for testing
   criterion['createdStart'] = lastNotified ? lastNotified : sub.lastNotifiedAt;

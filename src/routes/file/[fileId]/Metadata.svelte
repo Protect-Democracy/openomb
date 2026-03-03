@@ -1,25 +1,25 @@
 <script lang="ts">
   import { uniqBy, isString } from 'lodash-es';
-import { formatDate, deconstructLaws } from '$lib/formatters';
-import { isSpendPlanFile } from '$lib/utilities';
-import ExternalLink from '$components/links/ExternalLink.svelte';
+  import { formatDate, deconstructLaws } from '$lib/formatters';
+  import { isSpendPlanFile } from '$lib/utilities';
+  import ExternalLink from '$components/links/ExternalLink.svelte';
 
-// Props
-export let file;
+  // Props
+  export let file;
 
-// Derived
-$: ({ tafs } = file);
-$: letterApportionment = !!file.pdfUrl;
-$: uniqueAgencies = tafs
-  ? uniqBy(
-      tafs.map((tafsGroup) => ({
-        id: tafsGroup.budgetAgencyTitleId,
-        title: tafsGroup.budgetAgencyTitle
-      })),
-      'id'
-    )
-  : [];
-$: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
+  // Derived
+  $: ({ tafs } = file);
+  $: letterApportionment = !!file.pdfUrl;
+  $: uniqueAgencies = tafs
+    ? uniqBy(
+        tafs.map((tafsGroup) => ({
+          id: tafsGroup.budgetAgencyTitleId,
+          title: tafsGroup.budgetAgencyTitle
+        })),
+        'id'
+      )
+    : [];
+  $: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
 </script>
 
 <div class="file-metadata">

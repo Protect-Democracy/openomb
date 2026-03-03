@@ -214,8 +214,7 @@ function parseBoolean(input?: string): boolean | null {
 
   if (input.trim().match(/^true|yes|1|y|x|on$/i)) {
     return true;
-  }
-  else if (input.trim().match(/^false|no|0|n|off$/i)) {
+  } else if (input.trim().match(/^false|no|0|n|off$/i)) {
     return false;
   }
 
@@ -285,8 +284,7 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
     archive.on('warning', function (error: archiver.ArchiverError) {
       if (error.code === 'ENOENT') {
         console.warn(error);
-      }
-      else {
+      } else {
         reject(error);
       }
     });
@@ -297,8 +295,7 @@ async function zipFiles(sources: string[], outputFilename: string): Promise<void
       const sourcePath = resolvePath(source);
       if (statSync(sourcePath).isDirectory()) {
         archive.directory(sourcePath, basename(sourcePath));
-      }
-      else {
+      } else {
         archive.file(sourcePath, { name: basename(sourcePath) });
       }
     });
@@ -364,8 +361,7 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
       Bucket: s3Bucket || env.archiveS3Bucket
     };
     return await s3.send(new ListObjectsCommand(params));
-  }
-  catch (error) {
+  } catch (error) {
     // Catch errors because the stack trace for these don't
     // reference back to these lines
     throw new Error(
@@ -400,8 +396,7 @@ async function putS3File(
       ACL: env.archiveS3Acl
     };
     await s3.send(new PutObjectCommand(params));
-  }
-  catch (error) {
+  } catch (error) {
     // Catch errors because the stack trace for these don't
     // reference back to these lines
     throw new Error(

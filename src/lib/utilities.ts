@@ -45,8 +45,7 @@ export const secondsToZonedTime = function (
   let diffSeconds = 0;
   if (currentSeconds > targetSeconds) {
     diffSeconds = 24 * 60 * 60 - currentSeconds + targetSeconds;
-  }
-  else {
+  } else {
     diffSeconds = targetSeconds - currentSeconds;
   }
 

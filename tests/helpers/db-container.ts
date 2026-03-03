@@ -24,8 +24,7 @@ export async function startDatabaseContainer() {
     process.env.TEST_POSTGRES_DEFAULT_DB_NAME = defaultDbName;
 
     return globalContainer;
-  }
-  catch (error: any) {
+  } catch (error: any) {
     if (error.message?.includes('Could not find a working container runtime strategy')) {
       throw new Error('Docker not found. Please ensure Docker is running.');
     }

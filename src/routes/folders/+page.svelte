@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { formatNumber } from '$lib/formatters';
+  import { formatNumber } from '$lib/formatters';
 
-export let data: PageData;
-$: ({ folders } = data);
+  export let data: PageData;
+  $: ({ folders } = data);
 </script>
 
 <div class="page-container content-container">

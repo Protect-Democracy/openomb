@@ -1,7 +1,7 @@
 <script lang="ts">
   import { formatFileTitle, formatDate } from '$lib/formatters';
 
-export let files = [];
+  export let files = [];
 </script>
 
 <ul>

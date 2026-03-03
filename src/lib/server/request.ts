@@ -120,8 +120,7 @@ async function request(
     writeFileSync(cacheMeta, JSON.stringify(meta));
 
     return { data, meta: { cacheHit: false, ...meta } };
-  }
-  else {
+  } else {
     // Make fetch request and no save since TTL is nothing
     const response = await fetchWithRetries(
       fetchResource,
@@ -165,8 +164,7 @@ async function fetchWithRetries(
   for (let i = 1; i <= retries; i++) {
     try {
       response = await fetch(fetchResource, fetchOptions);
-    }
-    catch (error) {
+    } catch (error) {
       console.error(`fetchWithRetries failure [Attempt ${i}] (${error}) for "${fetchResource}"`);
     }
 
@@ -182,8 +180,7 @@ async function fetchWithRetries(
     // Unsure why, but Typescript seems to think response could be undefined here
     // so making sure it is not.
     return response || (await fetch(fetchResource, fetchOptions));
-  }
-  catch (error) {
+  } catch (error) {
     // This is a critical error for scraping, so let's make sure we get some
     // good info.
     const newError = new Error(
@@ -207,11 +204,9 @@ async function fetchWithRetries(
 function readDataFromExpectedType(path: string, expectedType: ExpectedFetchTypes): RequestData {
   if (expectedType === 'json') {
     return JSON.parse(readFileSync(path, 'utf-8'));
-  }
-  else if (expectedType === 'blob') {
+  } else if (expectedType === 'blob') {
     return readFileSync(path, { encoding: 'binary' });
-  }
-  else {
+  } else {
     return readFileSync(path, 'utf-8');
   }
 }
@@ -228,14 +223,11 @@ async function writeDataFromExpectedType(
 ): Promise<void> {
   if (!data) {
     writeFileSync(path, '');
-  }
-  else if (expectedType === 'json') {
+  } else if (expectedType === 'json') {
     writeFileSync(path, JSON.stringify(data));
-  }
-  else if (expectedType === 'blob' && data instanceof Blob) {
+  } else if (expectedType === 'blob' && data instanceof Blob) {
     writeFileSync(path, Buffer.from(await data.arrayBuffer()));
-  }
-  else {
+  } else {
     // @ts-expect-error: TODO
     writeFileSync(path, data);
   }
@@ -248,8 +240,7 @@ async function urlExists(url: string, options: RequestOptions = {}): Promise<boo
   try {
     const response = await request(url, {}, { ...options, cacheMissOnNot200: true });
     return response.meta.response.status === 200;
-  }
-  catch (error) {
+  } catch (error) {
     // TODO: We probably only want to catch network errors here.
     console.error(error);
     return false;

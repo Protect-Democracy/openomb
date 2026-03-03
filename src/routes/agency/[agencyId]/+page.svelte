@@ -1,15 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { formatNumber } from '$lib/formatters';
-import { SPEND_PLAN_TYPE } from '$config/files';
-import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
-import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
-import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
-import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
+  import { formatNumber } from '$lib/formatters';
+  import { SPEND_PLAN_TYPE } from '$config/files';
+  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
+  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
-export let data: PageData;
-$: ({ agency, bureausByAgency, recentApportionments, user, existingSubscription } = data);
+  export let data: PageData;
+  $: ({ agency, bureausByAgency, recentApportionments, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">

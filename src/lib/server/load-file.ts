@@ -107,8 +107,7 @@ async function loadJsonFile(
   try {
     fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries });
     sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error instanceof Error ? error.message : error}`
     );
@@ -350,8 +349,7 @@ async function loadPdfFile(
   let fileResponse;
   try {
     fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
     );
@@ -416,8 +414,7 @@ async function loadPdfFile(
   // Read text from PDF
   try {
     fileRecord.sourceText = await readPdfText(pdfUrl);
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `PDF File could not be parsed from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
@@ -461,8 +458,7 @@ async function loadJsonSpendPlan(
   try {
     fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries });
     sourceData = (fileResponse.data || {}) as SpendPlanJson;
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error instanceof Error ? error.message : error}`
     );
@@ -554,8 +550,7 @@ async function loadPdfSpendPlan(
   let fileResponse;
   try {
     fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `PDF File could not be loaded from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
@@ -628,8 +623,7 @@ async function loadPdfSpendPlan(
   // Read text from PDF
   try {
     spendPlanRecord.sourceText = await readPdfText(pdfUrl);
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `PDF File could not be parsed from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
@@ -775,8 +769,7 @@ export function parseSpendPlanFilename(fileName: string): {
         if (agencyResult) {
           results['agency'] = agencyResult.budgetAgencyTitle;
         }
-      }
-      else if (!results['bureau']) {
+      } else if (!results['bureau']) {
         const bureauResult = agencyMatches.bureaus.find((a) =>
           a.short_name?.split('/').some((p) => p === acronym)
         );
@@ -801,8 +794,7 @@ export function parseSpendPlanFilename(fileName: string): {
             results['agency'] = agencyResult.name;
             agencyId = agencyResult.id;
           }
-        }
-        else if (!results['bureau']) {
+        } else if (!results['bureau']) {
           const bureauResult = agencyMatches.leftoverBureaus.find((a) =>
             a.short_name?.split('/').some((p) => p === acronym)
           );

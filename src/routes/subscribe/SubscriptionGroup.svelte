@@ -1,10 +1,10 @@
 <script lang="ts">
   import { capitalize } from 'lodash-es';
-import type { subscriptionSelect } from '$schema/subscriptions';
-import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
+  import type { subscriptionSelect } from '$schema/subscriptions';
+  import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
 
-export let title: string;
-export let subs: Array<subscriptionSelect>;
+  export let title: string;
+  export let subs: Array<subscriptionSelect>;
 </script>
 
 {#if subs && subs.length}

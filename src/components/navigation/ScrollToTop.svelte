@@ -1,16 +1,16 @@
 <script lang="ts">
   import { fade } from 'svelte/transition';
 
-export let threshold = 2000;
+  export let threshold = 2000;
 
-let scrollY: number;
-let totalHeight: number;
+  let scrollY: number;
+  let totalHeight: number;
 
-function scrollToTop() {
-  // Note that this should automatically respect the users
-  // reduced motion preference.
-  document.body.scrollIntoView();
-}
+  function scrollToTop() {
+    // Note that this should automatically respect the users
+    // reduced motion preference.
+    document.body.scrollIntoView();
+  }
 </script>
 
 <svelte:body bind:offsetHeight={totalHeight} />

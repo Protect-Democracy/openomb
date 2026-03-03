@@ -15,7 +15,7 @@
 
 <script lang="ts">
   import { createToggleGroup } from '@melt-ui/svelte';
-import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let options: string[];
   export let multi = false;
@@ -29,19 +29,19 @@ import { createEventDispatcher } from 'svelte';
   export let formatOptionLabel = (o: string) => o;
   export let formatOptionValue = (o: string) => o;
 
-const dispatch = createEventDispatcher();
-const {
-  elements: { root, item },
-  states: { value },
-  helpers: { isPressed }
-} = createToggleGroup({
-  type: multi ? 'multiple' : 'single',
-  defaultValue,
-  onValueChange: ({ next }) => {
-    dispatch('change', next);
-    return next;
-  }
-});
+  const dispatch = createEventDispatcher();
+  const {
+    elements: { root, item },
+    states: { value },
+    helpers: { isPressed }
+  } = createToggleGroup({
+    type: multi ? 'multiple' : 'single',
+    defaultValue,
+    onValueChange: ({ next }) => {
+      dispatch('change', next);
+      return next;
+    }
+  });
 
   // Our selected values do not properly clear on reset, so we need to
   //  add an event to our form input(s)
@@ -52,18 +52,18 @@ const {
       return;
     }
 
-  const handleReset = () => {
-    // Set timeout is needed since `el.value` is only updated on the next frame
-    setTimeout(() => value.set(multi ? [] : ''));
-  };
-  form.addEventListener('reset', handleReset);
+    const handleReset = () => {
+      // Set timeout is needed since `el.value` is only updated on the next frame
+      setTimeout(() => value.set(multi ? [] : ''));
+    };
+    form.addEventListener('reset', handleReset);
 
-  return {
-    destroy() {
-      form.removeEventListener('reset', handleReset);
-    }
-  };
-}
+    return {
+      destroy() {
+        form.removeEventListener('reset', handleReset);
+      }
+    };
+  }
 </script>
 
 <div class="has-js-only-block">

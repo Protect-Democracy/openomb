@@ -1,20 +1,20 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { filter } from 'lodash-es';
-import LogIn from '$components/subscriptions/LogIn.svelte';
-import LogOut from '$components/subscriptions/LogOut.svelte';
-import SubscriptionGroup from './SubscriptionGroup.svelte';
+  import { filter } from 'lodash-es';
+  import LogIn from '$components/subscriptions/LogIn.svelte';
+  import LogOut from '$components/subscriptions/LogOut.svelte';
+  import SubscriptionGroup from './SubscriptionGroup.svelte';
 
-export let data: PageData;
-export let form;
-$: ({ userSubscriptions, user } = data);
+  export let data: PageData;
+  export let form;
+  $: ({ userSubscriptions, user } = data);
 
-$: folderSubs = filter(userSubscriptions, (sub) => sub.type === 'folder');
-$: tafsSubs = filter(userSubscriptions, (sub) => sub.type === 'tafs');
-$: agencySubs = filter(userSubscriptions, (sub) => sub.type === 'agency');
-$: bureauSubs = filter(userSubscriptions, (sub) => sub.type === 'bureau');
-$: accountSubs = filter(userSubscriptions, (sub) => sub.type === 'account');
-$: searchSubs = filter(userSubscriptions, (sub) => sub.type === 'search');
+  $: folderSubs = filter(userSubscriptions, (sub) => sub.type === 'folder');
+  $: tafsSubs = filter(userSubscriptions, (sub) => sub.type === 'tafs');
+  $: agencySubs = filter(userSubscriptions, (sub) => sub.type === 'agency');
+  $: bureauSubs = filter(userSubscriptions, (sub) => sub.type === 'bureau');
+  $: accountSubs = filter(userSubscriptions, (sub) => sub.type === 'account');
+  $: searchSubs = filter(userSubscriptions, (sub) => sub.type === 'search');
 </script>
 
 <div class="page-container">

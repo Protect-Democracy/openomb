@@ -1,16 +1,16 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { siteName } from '$config';
-import { formatNumber } from '$lib/formatters';
-import SearchForm from './SearchForm.svelte';
-import RecentFiles from './RecentFiles.svelte';
-import TopRightArrow from '$components/icons/TopRightArrow.svelte';
-import Check from '$components/icons/Check.svelte';
-import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
-import graphIllustration from '$assets/graph-illustration.svg';
+  import { siteName } from '$config';
+  import { formatNumber } from '$lib/formatters';
+  import SearchForm from './SearchForm.svelte';
+  import RecentFiles from './RecentFiles.svelte';
+  import TopRightArrow from '$components/icons/TopRightArrow.svelte';
+  import Check from '$components/icons/Check.svelte';
+  import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
+  import graphIllustration from '$assets/graph-illustration.svg';
 
-export let data: PageData;
-const currentYear = new Date().getFullYear();
+  export let data: PageData;
+  const currentYear = new Date().getFullYear();
 </script>
 
 <section class="intro">

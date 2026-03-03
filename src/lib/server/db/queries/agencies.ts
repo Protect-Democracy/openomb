@@ -222,8 +222,7 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
   // Just some data sanity
   if (!foldersFromAgency || foldersFromAgency.length === 0) {
     throw new Error(`Agency "${budgetAgencyTitleId}" has not folder`);
-  }
-  else if (foldersFromAgency.length > 1) {
+  } else if (foldersFromAgency.length > 1) {
     throw new Error(`Agency "${budgetAgencyTitleId}" has more than 1 folder`);
   }
 

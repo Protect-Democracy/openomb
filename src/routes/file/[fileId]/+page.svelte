@@ -1,39 +1,39 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { uniqBy, reduce } from 'lodash-es';
-import { writable } from 'svelte/store';
-import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
-import { isSpendPlanFile } from '$lib/utilities';
-import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
-import Switch from '$components/inputs/Switch.svelte';
-import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
-import TAFSLines from './TAFSLines.svelte';
-import Metadata from './Metadata.svelte';
-import TAFSMeta from './TAFSMeta.svelte';
-import FootnoteTable from './FootnoteTable.svelte';
-import LetterApportionmentPreview from './LetterApportionmentPreview.svelte';
+  import { uniqBy, reduce } from 'lodash-es';
+  import { writable } from 'svelte/store';
+  import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
+  import { isSpendPlanFile } from '$lib/utilities';
+  import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+  import Switch from '$components/inputs/Switch.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+  import TAFSLines from './TAFSLines.svelte';
+  import Metadata from './Metadata.svelte';
+  import TAFSMeta from './TAFSMeta.svelte';
+  import FootnoteTable from './FootnoteTable.svelte';
+  import LetterApportionmentPreview from './LetterApportionmentPreview.svelte';
 
-// Props
-export let data: PageData;
+  // Props
+  export let data: PageData;
 
-// States/stores
-let showPrevious = writable(true);
+  // States/stores
+  let showPrevious = writable(true);
 
-// Derived
-$: letterApportionment = !!file.pdfUrl;
-$: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
-$: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
-$: prevIterationFootnotes = uniqBy(
-  reduce(
-    Object.values(prevIterationFiles),
-    (accum, iterFile) => {
-      return [...accum, ...(iterFile.footnotes || [])];
-    },
-    []
-  ),
-  (f) => `${f.fileId}-${f.footnoteNumber}`
-);
-$: ({ tafs, footnotes } = file);
+  // Derived
+  $: letterApportionment = !!file.pdfUrl;
+  $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
+  $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
+  $: prevIterationFootnotes = uniqBy(
+    reduce(
+      Object.values(prevIterationFiles),
+      (accum, iterFile) => {
+        return [...accum, ...(iterFile.footnotes || [])];
+      },
+      []
+    ),
+    (f) => `${f.fileId}-${f.footnoteNumber}`
+  );
+  $: ({ tafs, footnotes } = file);
 </script>
 
 <article class="page-container content-container" class:has-previous={hasPreviousFiles}>
