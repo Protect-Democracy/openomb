@@ -24,7 +24,8 @@ export default defineConfig({
       $db: path.resolve('./src/lib/server/db'),
       $server: path.resolve('./src/lib/server'),
       $queries: path.resolve('./src/lib/server/db/queries'),
-      $schema: path.resolve('./src/lib/server/db/schema')
+      $schema: path.resolve('./src/lib/server/db/schema'),
+      $config: path.resolve('./src/config')
     }
   },
 

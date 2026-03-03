@@ -1,16 +1,15 @@
 <script lang="ts">
   import type { PageData } from './$types';
 import { formatNumber } from '$lib/formatters';
+import { SPEND_PLAN_TYPE } from '$config/files';
 import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
 import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-import { Tab, Tabs } from '$components/tabs';
 import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
 import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
 export let data: PageData;
-$: ({ agency, bureausByAgency, recentlyApproved, recentSpendPlans, user, existingSubscription } =
-  data);
+$: ({ agency, bureausByAgency, recentApportionments, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -31,9 +30,7 @@ $: ({ agency, bureausByAgency, recentlyApproved, recentSpendPlans, user, existin
   <h1>Agency: {agency.budgetAgencyTitle}</h1>
 
   <p>
-    There are <strong>{formatNumber(agency.fileCount)} files</strong
-    >{#if agency.spendPlanCount > 0}{' '}and
-      <strong>{formatNumber(agency.spendPlanCount)} spend plans</strong>{/if} associated with this agency.
+    There are <strong>{formatNumber(agency.fileCount)} files</strong> associated with this agency.
   </p>
 
   <SubscribeLink
@@ -48,61 +45,37 @@ $: ({ agency, bureausByAgency, recentlyApproved, recentSpendPlans, user, existin
     <h2>Bureaus</h2>
 
     <ul>
-      {#each bureausByAgency as bureau, bIndex}
+      {#each bureausByAgency as bureau, bIndex (bureau.budgetBureauTitleId)}
         <li>
           <a href="/agency/{agency.budgetAgencyTitleId}/bureau/{bureau.budgetBureauTitleId}"
             >{bureau.budgetBureauTitle}</a
           >
           ({formatNumber(bureau.fileCount)}{bIndex === 0 ? ' files' : ''})
-          {#if bureau.spendPlanCount > 0}({formatNumber(bureau.spendPlanCount)} spend plans){/if}
+          {#if bureau[SPEND_PLAN_TYPE] > 0}({formatNumber(bureau[SPEND_PLAN_TYPE])} spend plans){/if}
         </li>
       {/each}
     </ul>
   </section>
 
   {#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
-    <section class="page-section">
-      <h2>Files approved by month</h2>
+    {#if fileCountByMonthByYearData && fileCountByMonthByYearData.length > 0}
+      <section class="page-section">
+        <h2>Files approved by month</h2>
 
-      <div class="chart-container">
-        <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
-      </div>
-    </section>
+        <div class="chart-container">
+          <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
+        </div>
+      </section>
+    {/if}
   {/await}
 
   <section class="page-section">
-    {#if recentSpendPlans && recentSpendPlans.length > 0}
-      {#if recentlyApproved && recentlyApproved.length > 0}
-        <Tabs defaultTabId="recent-files">
-          <Tab label="Recently approved" id="recent-files">
-            <div class="recently-approved-files">
-              {#each recentlyApproved as file}
-                <FileListingHighlightable {file} />
-              {/each}
-            </div>
-          </Tab>
-          <Tab label="Recent Spend Plans" id="recent-spend-plans">
-            {#each recentSpendPlans as spendPlan}
-              <FileListingHighlightable file={spendPlan} />
-            {/each}
-          </Tab>
-        </Tabs>
-      {:else}
-        <h2>Recent Spend Plans</h2>
-
-        {#each recentSpendPlans as spendPlan}
-          <FileListingHighlightable file={spendPlan} />
-        {/each}
-      {/if}
-    {:else}
-      <h2>Recently approved</h2>
-
-      <div class="recently-approved-files">
-        {#each recentlyApproved as file}
-          <FileListingHighlightable {file} />
-        {/each}
-      </div>
-    {/if}
+    <h2>Recent Apportionments</h2>
+    <div class="recently-approved-files">
+      {#each recentApportionments as file (file.fileId)}
+        <FileListingHighlightable {file} />
+      {/each}
+    </div>
   </section>
 </div>
 

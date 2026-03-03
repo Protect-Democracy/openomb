@@ -15,7 +15,6 @@ import { lines } from './db/schema/lines';
 import { mLineTypeFromLineNumber } from './db/queries/line-types';
 import { footnotes } from './db/schema/footnotes';
 import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from './db/schema/tafs';
-import { spendPlans, type spendPlansInsert } from './db/schema/spend-plans';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -28,8 +27,10 @@ import {
 } from './utilities';
 import { db } from './db/connection';
 import pdfFixes from '$data/fixes/pdf-files';
-import agencyMatches from '$data/agencyMatches';
+import spendPlanAgencyMatchFixes from '$data/fixes/spend-plan-agency-match';
+import agencyMatches from '$data/agency-reference';
 import { createSpan } from './sentry-custom';
+import { SPEND_PLAN_TYPE } from '$config/files';
 
 // Types
 import type { filesSelect, filesInsert } from '$schema/files';
@@ -499,9 +500,10 @@ async function loadJsonSpendPlan(
 
   // Create file record
   // TODO: I think
-  const spendPlanRecord: spendPlansInsert = {
+  const spendPlanRecord: filesInsert = {
     fileId: cleanString(sourceData.FileId.toString()) || `json-${md5hash(jsonUrl)}`,
     fileName: cleanString(sourceData.FileName),
+    fileType: SPEND_PLAN_TYPE,
     fiscalYear: sourceData.FiscalYear
       ? parseIntegerFromString(sourceData.FiscalYear)
       : parseIntegerFromString(fiscalYear),
@@ -523,10 +525,10 @@ async function loadJsonSpendPlan(
 
   // Upsert file
   const savedSpendPlanRecords = await db
-    .insert(spendPlans)
+    .insert(files)
     .values(spendPlanRecord)
     .onConflictDoUpdate({
-      target: spendPlans.fileId,
+      target: files.fileId,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       set: (({ createdAt, ...o }) => o)(spendPlanRecord)
     })
@@ -546,7 +548,7 @@ async function loadJsonSpendPlan(
 async function loadPdfSpendPlan(
   pdfUrl: string,
   retries: number = 5
-): Promise<typeof spendPlans.$inferInsert | undefined> {
+): Promise<filesInsert | undefined> {
   // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
   // completely stop the process.
   let fileResponse;
@@ -598,16 +600,17 @@ async function loadPdfSpendPlan(
   // Throw error if we do not have an approval date in the title or fixes
   if (
     !agency &&
-    (!(<spendPlansInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
-      !(<spendPlansInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
+    (!(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
+      !(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
   ) {
     throw new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
   }
 
   // Create spend plan record
-  const spendPlanRecord: spendPlansInsert = {
+  const spendPlanRecord: filesInsert = {
     fileId: `pdf-${md5hash(pdfUrl)}`,
     fileName: cleanString(fileName),
+    fileType: SPEND_PLAN_TYPE,
     fiscalYear: parseIntegerFromString(fiscalYear),
     folder: formatFolder(folder),
     folderId: dbId(formatFolder(folder)),
@@ -644,10 +647,10 @@ async function loadPdfSpendPlan(
 
   // Upsert file
   const records = await db
-    .insert(spendPlans)
+    .insert(files)
     .values(spendPlanRecord)
     .onConflictDoUpdate({
-      target: spendPlans.fileId,
+      target: files.fileId,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       set: (({ createdAt, ...o }) => o)(spendPlanRecord)
     })
@@ -815,8 +818,10 @@ export function parseSpendPlanFilename(fileName: string): {
   // If we didn't find an agency yet, check against filename patterns we know
   if (!results['agency']) {
     // Department of state
-    if (/State (Diplomatic|Embassy|CIO)/.test(fileName)) {
-      results['agency'] = 'Department of State';
+    const match = spendPlanAgencyMatchFixes.find((fix) => fix.pattern.test(fileName));
+    if (match) {
+      results['agency'] = match.agency;
+      results['bureau'] = match.bureau;
     }
   }
 

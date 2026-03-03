@@ -148,13 +148,15 @@ $: hasHighlightedFootnotes = footnotes.some((f) => f.hasHighlight);
         <li>
           <span class="tag"><acronym title="Fiscal Year">FY</acronym> {file.fiscalYear}</span>
         </li>
-        <li>
-          <span class="tag">
-            Approved <time datetime={formatDateISO(file.approvalTimestamp)}
-              >{formatDate(file.approvalTimestamp, 'medium')}</time
-            >
-          </span>
-        </li>
+        {#if file.approvalTimestamp}
+          <li>
+            <span class="tag">
+              Approved <time datetime={formatDateISO(file.approvalTimestamp)}
+                >{formatDate(file.approvalTimestamp, 'medium')}</time
+              >
+            </span>
+          </li>
+        {/if}
       </ul>
     </div>
 

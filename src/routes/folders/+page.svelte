@@ -17,13 +17,10 @@ $: ({ folders } = data);
   </p>
 
   <ul>
-    {#each folders as folder, fIndex}
+    {#each folders as folder, fIndex (folder.folderId)}
       <li>
         <a href="/folder/{folder.folderId}">{folder.folder}</a>
-        {#if folder.fileCount > 0}({formatNumber(folder.fileCount || 0)}{fIndex === 0
-            ? ' files'
-            : ''})
-        {/if}{#if folder.spendPlanCount > 0}({formatNumber(folder.spendPlanCount)} spend plans){/if}
+        ({formatNumber(folder.fileCount || 0)}{fIndex === 0 ? ' files' : ''})
       </li>
     {/each}
   </ul>

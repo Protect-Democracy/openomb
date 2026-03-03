@@ -18,6 +18,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "file_type": {
+          "name": "file_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'standard'"
+        },
         "fiscal_year": {
           "name": "fiscal_year",
           "type": "integer",
@@ -62,6 +69,30 @@
         },
         "funds_provided_by_parsed": {
           "name": "funds_provided_by_parsed",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "budget_agency_title": {
+          "name": "budget_agency_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "budget_bureau_title": {
+          "name": "budget_bureau_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "budget_agency_title_id": {
+          "name": "budget_agency_title_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "budget_bureau_title_id": {
+          "name": "budget_bureau_title_id",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false
@@ -124,6 +155,21 @@
           "columns": [
             {
               "expression": "file_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_file_type_index": {
+          "name": "file_file_type_index",
+          "columns": [
+            {
+              "expression": "file_type",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -244,6 +290,66 @@
           "columns": [
             {
               "expression": "funds_provided_by_parsed",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_budget_agency_title_index": {
+          "name": "file_budget_agency_title_index",
+          "columns": [
+            {
+              "expression": "budget_agency_title",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_budget_bureau_title_index": {
+          "name": "file_budget_bureau_title_index",
+          "columns": [
+            {
+              "expression": "budget_bureau_title",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_budget_agency_title_id_index": {
+          "name": "file_budget_agency_title_id_index",
+          "columns": [
+            {
+              "expression": "budget_agency_title_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_budget_bureau_title_id_index": {
+          "name": "file_budget_bureau_title_id_index",
+          "columns": [
+            {
+              "expression": "budget_bureau_title_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1751,350 +1857,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.spend_plans": {
-      "name": "spend_plans",
-      "schema": "",
-      "columns": {
-        "file_id": {
-          "name": "file_id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "file_name": {
-          "name": "file_name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "folder": {
-          "name": "folder",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "folder_id": {
-          "name": "folder_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "fiscal_year": {
-          "name": "fiscal_year",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "budget_agency_title": {
-          "name": "budget_agency_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "budget_bureau_title": {
-          "name": "budget_bureau_title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "budget_agency_title_id": {
-          "name": "budget_agency_title_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "budget_bureau_title_id": {
-          "name": "budget_bureau_title_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "excel_url": {
-          "name": "excel_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "pdf_url": {
-          "name": "pdf_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "source_url": {
-          "name": "source_url",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "source_data": {
-          "name": "source_data",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "source_text": {
-          "name": "source_text",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "modified_at": {
-          "name": "modified_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "removed": {
-          "name": "removed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        }
-      },
-      "indexes": {
-        "spend_plan_file_name_index": {
-          "name": "spend_plan_file_name_index",
-          "columns": [
-            {
-              "expression": "file_name",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_folder_index": {
-          "name": "spend_plan_folder_index",
-          "columns": [
-            {
-              "expression": "folder",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_folder_id_index": {
-          "name": "spend_plan_folder_id_index",
-          "columns": [
-            {
-              "expression": "folder_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_fiscal_year_index": {
-          "name": "spend_plan_fiscal_year_index",
-          "columns": [
-            {
-              "expression": "fiscal_year",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_budget_agency_title_index": {
-          "name": "spend_plan_budget_agency_title_index",
-          "columns": [
-            {
-              "expression": "budget_agency_title",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_budget_bureau_title_index": {
-          "name": "spend_plan_budget_bureau_title_index",
-          "columns": [
-            {
-              "expression": "budget_bureau_title",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_budget_agency_title_id_index": {
-          "name": "spend_plan_budget_agency_title_id_index",
-          "columns": [
-            {
-              "expression": "budget_agency_title_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_budget_bureau_title_id_index": {
-          "name": "spend_plan_budget_bureau_title_id_index",
-          "columns": [
-            {
-              "expression": "budget_bureau_title_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_excel_url_index": {
-          "name": "spend_plan_excel_url_index",
-          "columns": [
-            {
-              "expression": "excel_url",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_pdf_url_index": {
-          "name": "spend_plan_pdf_url_index",
-          "columns": [
-            {
-              "expression": "pdf_url",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_source_url_index": {
-          "name": "spend_plan_source_url_index",
-          "columns": [
-            {
-              "expression": "source_url",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_removed_index": {
-          "name": "spend_plan_removed_index",
-          "columns": [
-            {
-              "expression": "removed",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_created_at_index": {
-          "name": "spend_plan_created_at_index",
-          "columns": [
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_modified_at_index": {
-          "name": "spend_plan_modified_at_index",
-          "columns": [
-            {
-              "expression": "modified_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "spend_plan_source_text_index": {
-          "name": "spend_plan_source_text_index",
-          "columns": [
-            {
-              "expression": "source_text gin_trgm_ops",
-              "asc": true,
-              "isExpression": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "gin",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.line_types": {
       "name": "line_types",
       "schema": "",
@@ -2275,6 +2037,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "c116d6f3-b501-450d-93eb-11ac16249e63",
+  "id": "0a5e17cc-103d-48c7-9460-508c66bef7d4",
   "prevId": "2dd074df-a427-4802-8b3e-6167469e47cc"
 }

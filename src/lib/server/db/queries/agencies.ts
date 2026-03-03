@@ -1,11 +1,10 @@
-import { groupBy, orderBy } from 'lodash-es';
-import { eq, and, countDistinct, max, sql, inArray, isNotNull } from 'drizzle-orm';
-import { union } from 'drizzle-orm/pg-core';
+import { groupBy } from 'lodash-es';
+import { eq, and, asc, desc, countDistinct, max, sql, isNotNull } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
-import { spendPlans } from '$schema/spend-plans';
 import { tafs } from '$schema/tafs';
 import { memoizeDataAsync } from '$server/cache';
+import { reduceByFileType } from '$server/query-utilities';
 
 /**
  * Distinct agencies with file counts
@@ -13,49 +12,48 @@ import { memoizeDataAsync } from '$server/cache';
  * @param {['approval', 'names']} orderBy - How to order results
  */
 export const agencies = async function (orderResultsBy: 'approval' | 'names' = 'names') {
-  const fileAgencies = db
-    .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId], {
+  const agencyFiles = db
+    .selectDistinctOn([tafs.budgetAgencyTitle, files.fileId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      fileCount: countDistinct(tafs.fileId).as('fileCount'),
-      latestApprovalTimestamp: max(files.approvalTimestamp).as('latestApprovalTimestamp')
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId)
-    .orderBy(tafs.budgetAgencyTitle)
-    .as('fileAgencies');
+    .union(
+      db
+        .selectDistinctOn([files.budgetAgencyTitle, files.fileId], {
+          budgetAgencyTitle: files.budgetAgencyTitle,
+          budgetAgencyTitleId: files.budgetAgencyTitleId,
+          fileId: files.fileId,
+          fileType: files.fileType,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(files)
+        .where(isNotNull(files.budgetAgencyTitle))
+    )
+    .as('agencyFiles');
 
-  const spendPlanAgencies = db
-    .selectDistinctOn([spendPlans.budgetAgencyTitle, spendPlans.budgetAgencyTitleId], {
-      budgetAgencyTitle: spendPlans.budgetAgencyTitle,
-      budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-      spendPlanCount: countDistinct(spendPlans.fileId).as('spendPlanCount')
+  const orderTerms =
+    orderResultsBy === 'names'
+      ? asc(agencyFiles.budgetAgencyTitle)
+      : desc(sql.identifier('latestApprovalTimestamp'));
+
+  const results = await db
+    .select({
+      budgetAgencyTitle: agencyFiles.budgetAgencyTitle,
+      budgetAgencyTitleId: agencyFiles.budgetAgencyTitleId,
+      fileType: agencyFiles.fileType,
+      fileCount: countDistinct(agencyFiles.fileId),
+      latestApprovalTimestamp: max(agencyFiles.approvalTimestamp).as('latestApprovalTimestamp')
     })
-    .from(spendPlans)
-    .groupBy(spendPlans.budgetAgencyTitle, spendPlans.budgetAgencyTitleId)
-    .orderBy(spendPlans.budgetAgencyTitle)
-    .as('spendPlanAgencies');
+    .from(agencyFiles)
+    .groupBy(agencyFiles.budgetAgencyTitle, agencyFiles.budgetAgencyTitleId, agencyFiles.fileType)
+    .orderBy(orderTerms);
 
-  const results =
-    (await db
-      .select({
-        budgetAgencyTitle: sql`COALESCE(${fileAgencies.budgetAgencyTitle}, ${spendPlanAgencies.budgetAgencyTitle})`,
-        budgetAgencyTitleId: sql`COALESCE(${fileAgencies.budgetAgencyTitleId}, ${spendPlanAgencies.budgetAgencyTitleId})`,
-        fileCount: sql`cast(COALESCE(${fileAgencies.fileCount}, 0) as int)`,
-        spendPlanCount: sql`cast(COALESCE(${spendPlanAgencies.spendPlanCount}, 0) as int)`,
-        latestApprovalTimestamp: fileAgencies.latestApprovalTimestamp
-      })
-      .from(fileAgencies)
-      .fullJoin(
-        spendPlanAgencies,
-        eq(fileAgencies.budgetAgencyTitleId, spendPlanAgencies.budgetAgencyTitleId)
-      )) || [];
-
-  // Have to manually order results
-  const orderByField = orderResultsBy === 'names' ? 'budgetAgencyTitle' : 'latestApprovalTimestamp';
-  const orderByDirection = orderResultsBy === 'names' ? 'asc' : 'desc';
-  return orderBy(results, orderByField, [orderByDirection]);
+  return reduceByFileType(results);
 };
 
 /**
@@ -66,64 +64,7 @@ export const agenciesWithChildren = async function (
 ) {
   const agencyResults = await agencies(orderResultsBy);
 
-  const fileBureaus = db
-    .selectDistinctOn(
-      [tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle],
-      {
-        budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-        budgetBureauTitleId: tafs.budgetBureauTitleId,
-        budgetBureauTitle: tafs.budgetBureauTitle,
-        fileCount: countDistinct(tafs.fileId).as('fileCount')
-      }
-    )
-    .from(tafs)
-    .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle)
-    .orderBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.budgetBureauTitle)
-    .as('fileBureaus');
-
-  const spendPlanBureaus = db
-    .selectDistinctOn(
-      [
-        spendPlans.budgetAgencyTitleId,
-        spendPlans.budgetBureauTitleId,
-        spendPlans.budgetBureauTitle
-      ],
-      {
-        budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-        budgetBureauTitleId: spendPlans.budgetBureauTitleId,
-        budgetBureauTitle: spendPlans.budgetBureauTitle,
-        spendPlanCount: countDistinct(spendPlans.fileId).as('spendPlanCount')
-      }
-    )
-    .from(spendPlans)
-    .where(isNotNull(spendPlans.budgetBureauTitle))
-    .groupBy(
-      spendPlans.budgetAgencyTitleId,
-      spendPlans.budgetBureauTitleId,
-      spendPlans.budgetBureauTitle
-    )
-    .orderBy(
-      spendPlans.budgetAgencyTitleId,
-      spendPlans.budgetBureauTitleId,
-      spendPlans.budgetBureauTitle
-    )
-    .as('spendPlanBureaus');
-
-  const bureauResults =
-    (await db
-      .select({
-        budgetAgencyTitleId: sql`COALESCE(${fileBureaus.budgetAgencyTitleId}, ${spendPlanBureaus.budgetAgencyTitleId})`,
-        budgetBureauTitle: sql`COALESCE(${fileBureaus.budgetBureauTitle}, ${spendPlanBureaus.budgetBureauTitle})`,
-        budgetBureauTitleId: sql`COALESCE(${fileBureaus.budgetBureauTitleId}, ${spendPlanBureaus.budgetBureauTitleId})`,
-        fileCount: sql`cast(COALESCE(${fileBureaus.fileCount}, 0) as int)`,
-        spendPlanCount: sql`cast(COALESCE(${spendPlanBureaus.spendPlanCount}, 0) as int)`
-      })
-      .from(fileBureaus)
-      .fullJoin(
-        spendPlanBureaus,
-        eq(fileBureaus.budgetBureauTitleId, spendPlanBureaus.budgetBureauTitleId)
-      )) || [];
+  const bureauResults = await bureaus();
   const groupedBureaus = groupBy(bureauResults, 'budgetAgencyTitleId');
 
   const accountResults = await db
@@ -174,62 +115,47 @@ export type AgenciesWithChildrenResult = Awaited<ReturnType<typeof agenciesWithC
  * Get agencies for a specifc folder (file)
  */
 export const agenciesByFolder = async function (folderId: string) {
-  const agencyIds = (
-    await union(
-      db
-        .select({
-          budgetAgencyTitleId: tafs.budgetAgencyTitleId
-        })
-        .from(tafs)
-        .innerJoin(files, eq(tafs.fileId, files.fileId))
-        .where(eq(files.folderId, folderId)),
-      db
-        .select({
-          budgetAgencyTitleId: spendPlans.budgetAgencyTitleId
-        })
-        .from(spendPlans)
-        .where(eq(spendPlans.folderId, folderId))
-    )
-  ).map((entry) => entry.budgetAgencyTitleId);
-
-  const fileAgencies = db
-    .select({
+  const agencyFiles = db
+    .selectDistinctOn([tafs.budgetAgencyTitle, files.fileId], {
+      folderId: files.folderId,
+      folder: files.folder,
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      fileCount: countDistinct(tafs.fileId).as('fileCount')
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
-    .where(inArray(tafs.budgetAgencyTitleId, agencyIds))
-    .groupBy(tafs.budgetAgencyTitle, tafs.budgetAgencyTitleId)
-    .orderBy(tafs.budgetAgencyTitle)
-    .as('fileAgencies');
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .union(
+      db
+        .selectDistinctOn([files.budgetAgencyTitle, files.fileId], {
+          folderId: files.folderId,
+          folder: files.folder,
+          budgetAgencyTitle: files.budgetAgencyTitle,
+          budgetAgencyTitleId: files.budgetAgencyTitleId,
+          fileId: files.fileId,
+          fileType: files.fileType,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(files)
+        .where(isNotNull(files.budgetAgencyTitle))
+    )
+    .as('agencyFiles');
 
-  const spendPlanAgencies = db
+  const results = await db
     .select({
-      budgetAgencyTitle: spendPlans.budgetAgencyTitle,
-      budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-      spendPlanCount: countDistinct(spendPlans.fileId).as('spendPlanCount')
+      budgetAgencyTitle: agencyFiles.budgetAgencyTitle,
+      budgetAgencyTitleId: agencyFiles.budgetAgencyTitleId,
+      fileType: agencyFiles.fileType,
+      fileCount: countDistinct(agencyFiles.fileId)
     })
-    .from(spendPlans)
-    .where(inArray(spendPlans.budgetAgencyTitleId, agencyIds))
-    .groupBy(spendPlans.budgetAgencyTitle, spendPlans.budgetAgencyTitleId)
-    .orderBy(spendPlans.budgetAgencyTitle)
-    .as('spendPlanAgencies');
+    .from(agencyFiles)
+    .where(eq(agencyFiles.folderId, folderId))
+    .groupBy(agencyFiles.budgetAgencyTitle, agencyFiles.budgetAgencyTitleId, agencyFiles.fileType)
+    .orderBy(agencyFiles.budgetAgencyTitle);
 
-  return (
-    (await db
-      .select({
-        budgetAgencyTitle: sql`COALESCE(${fileAgencies.budgetAgencyTitle}, ${spendPlanAgencies.budgetAgencyTitle})`,
-        budgetAgencyTitleId: sql`COALESCE(${fileAgencies.budgetAgencyTitleId}, ${spendPlanAgencies.budgetAgencyTitleId})`,
-        fileCount: sql`cast(COALESCE(${fileAgencies.fileCount}, 0) as int)`,
-        spendPlanCount: sql`cast(COALESCE(${spendPlanAgencies.spendPlanCount}, 0) as int)`
-      })
-      .from(fileAgencies)
-      .fullJoin(
-        spendPlanAgencies,
-        eq(fileAgencies.budgetAgencyTitleId, spendPlanAgencies.budgetAgencyTitleId)
-      )) || []
-  );
+  return reduceByFileType(results);
 };
 export type AgenciesByFolderResult = Awaited<ReturnType<typeof agenciesByFolder>>;
 
@@ -237,47 +163,61 @@ export type AgenciesByFolderResult = Awaited<ReturnType<typeof agenciesByFolder>
  * Get details for an agency
  */
 export const agencyDetails = async function (budgetAgencyTitleId: string) {
-  const filesFromAgency = await db
-    .selectDistinct({
+  const agencyFiles = db
+    .selectDistinctOn([tafs.budgetAgencyTitle, files.fileId], {
+      folderId: files.folderId,
+      folder: files.folder,
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      fileId: tafs.fileId
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
-    .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId));
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .union(
+      db
+        .selectDistinctOn([files.budgetAgencyTitle, files.fileId], {
+          folderId: files.folderId,
+          folder: files.folder,
+          budgetAgencyTitle: files.budgetAgencyTitle,
+          budgetAgencyTitleId: files.budgetAgencyTitleId,
+          fileId: files.fileId,
+          fileType: files.fileType,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(files)
+        .where(isNotNull(files.budgetAgencyTitle))
+    )
+    .as('agencyFiles');
 
-  const spendPlansFromAgency = await db
+  const filesFromAgency = await db
     .selectDistinct({
-      budgetAgencyTitle: spendPlans.budgetAgencyTitle,
-      budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-      fileId: spendPlans.fileId
+      budgetAgencyTitle: agencyFiles.budgetAgencyTitle,
+      budgetAgencyTitleId: agencyFiles.budgetAgencyTitleId,
+      fileId: agencyFiles.fileId,
+      fileType: agencyFiles.fileType
     })
-    .from(spendPlans)
-    .where(eq(spendPlans.budgetAgencyTitleId, budgetAgencyTitleId));
+    .from(agencyFiles)
+    .where(eq(agencyFiles.budgetAgencyTitleId, budgetAgencyTitleId));
 
   // If none found
-  if (
-    (!filesFromAgency || filesFromAgency.length === 0) &&
-    (!spendPlansFromAgency || spendPlansFromAgency.length === 0)
-  ) {
+  if (!filesFromAgency || filesFromAgency.length === 0) {
     return null;
   }
 
   // Get folders
-  let foldersFromAgency = await db
-    .selectDistinct({ folder: files.folder, folderId: files.folderId })
-    .from(files)
-    .innerJoin(tafs, eq(files.fileId, tafs.fileId))
-    .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId))
-    .orderBy(files.folder);
-
-  if (!!foldersFromAgency || foldersFromAgency.length === 0) {
-    foldersFromAgency = await db
-      .selectDistinct({ folder: spendPlans.folder, folderId: spendPlans.folderId })
-      .from(spendPlans)
-      .where(eq(spendPlans.budgetAgencyTitleId, budgetAgencyTitleId))
-      .orderBy(spendPlans.folder);
-  }
+  const foldersFromAgency = await db
+    .selectDistinct({
+      folder: agencyFiles.folder,
+      folderId: agencyFiles.folderId,
+      fileType: agencyFiles.fileType
+    })
+    .from(agencyFiles)
+    .where(eq(agencyFiles.budgetAgencyTitleId, budgetAgencyTitleId))
+    // Ensure we get non spend plan folders first
+    .orderBy(agencyFiles.fileType, agencyFiles.folder)
+    .limit(1);
 
   // Just some data sanity
   if (!foldersFromAgency || foldersFromAgency.length === 0) {
@@ -289,10 +229,8 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
 
   return {
     budgetAgencyTitleId,
-    budgetAgencyTitle:
-      filesFromAgency?.at(0)?.budgetAgencyTitle || spendPlansFromAgency?.at(0)?.budgetAgencyTitle,
+    budgetAgencyTitle: filesFromAgency?.at(0)?.budgetAgencyTitle,
     fileCount: filesFromAgency?.length || 0,
-    spendPlanCount: spendPlansFromAgency?.length || 0,
     folder: foldersFromAgency[0]
   };
 };
@@ -302,60 +240,54 @@ export type AgencyDetailsResult = Awaited<ReturnType<typeof agencyDetails>>;
  * Distinct bureaus with file counts (used for search options)
  */
 export const bureaus = async function () {
-  const fileBureaus = db
-    .select({
+  const bureauFiles = db
+    .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetBureauTitle, files.fileId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
       budgetBureauTitle: tafs.budgetBureauTitle,
       budgetBureauTitleId: tafs.budgetBureauTitleId,
-      fileCount: countDistinct(tafs.fileId).as('fileCount')
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .groupBy(
-      tafs.budgetAgencyTitle,
-      tafs.budgetAgencyTitleId,
-      tafs.budgetBureauTitle,
-      tafs.budgetBureauTitleId
+    .union(
+      db
+        .selectDistinctOn([files.budgetAgencyTitle, files.budgetBureauTitle, files.fileId], {
+          budgetAgencyTitle: files.budgetAgencyTitle,
+          budgetAgencyTitleId: files.budgetAgencyTitleId,
+          budgetBureauTitle: files.budgetBureauTitle,
+          budgetBureauTitleId: files.budgetBureauTitleId,
+          fileId: files.fileId,
+          fileType: files.fileType,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(files)
+        .where(isNotNull(files.budgetBureauTitle))
     )
-    .orderBy(tafs.budgetBureauTitle)
-    .as('fileBureaus');
+    .as('bureauFiles');
 
-  const spendPlanBureaus = db
+  const results = await db
     .select({
-      budgetAgencyTitle: spendPlans.budgetAgencyTitle,
-      budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-      budgetBureauTitle: spendPlans.budgetBureauTitle,
-      budgetBureauTitleId: spendPlans.budgetBureauTitleId,
-      spendPlanCount: countDistinct(spendPlans.fileId).as('spendPlanCount')
+      budgetAgencyTitle: bureauFiles.budgetAgencyTitle,
+      budgetAgencyTitleId: bureauFiles.budgetAgencyTitleId,
+      budgetBureauTitle: bureauFiles.budgetBureauTitle,
+      budgetBureauTitleId: bureauFiles.budgetBureauTitleId,
+      fileType: bureauFiles.fileType,
+      fileCount: countDistinct(bureauFiles.fileId),
+      latestApprovalTimestamp: max(bureauFiles.approvalTimestamp).as('latestApprovalTimestamp')
     })
-    .from(spendPlans)
-    .where(isNotNull(spendPlans.budgetBureauTitle))
+    .from(bureauFiles)
     .groupBy(
-      spendPlans.budgetAgencyTitle,
-      spendPlans.budgetAgencyTitleId,
-      spendPlans.budgetBureauTitle,
-      spendPlans.budgetBureauTitleId
-    )
-    .orderBy(spendPlans.budgetBureauTitle)
-    .as('spendPlanBureaus');
+      bureauFiles.budgetAgencyTitle,
+      bureauFiles.budgetAgencyTitleId,
+      bureauFiles.budgetBureauTitle,
+      bureauFiles.budgetBureauTitleId,
+      bureauFiles.fileType
+    );
 
-  return (
-    (await db
-      .select({
-        budgetAgencyTitle: sql`COALESCE(${fileBureaus.budgetAgencyTitle}, ${spendPlanBureaus.budgetAgencyTitle})`,
-        budgetAgencyTitleId: sql`COALESCE(${fileBureaus.budgetAgencyTitleId}, ${spendPlanBureaus.budgetAgencyTitleId})`,
-        budgetBureauTitle: sql`COALESCE(${fileBureaus.budgetBureauTitle}, ${spendPlanBureaus.budgetBureauTitle})`,
-        budgetBureauTitleId: sql`COALESCE(${fileBureaus.budgetBureauTitleId}, ${spendPlanBureaus.budgetBureauTitleId})`,
-        fileCount: sql`cast(COALESCE(${fileBureaus.fileCount}, 0) as int)`,
-        spendPlanCount: sql`cast(COALESCE(${spendPlanBureaus.spendPlanCount}, 0) as int)`
-      })
-      .from(fileBureaus)
-      .fullJoin(
-        spendPlanBureaus,
-        eq(fileBureaus.budgetBureauTitleId, spendPlanBureaus.budgetBureauTitleId)
-      )) || []
-  );
+  return reduceByFileType(results);
 };
 export type BureausResult = Awaited<ReturnType<typeof bureaus>>;
 
@@ -363,50 +295,47 @@ export type BureausResult = Awaited<ReturnType<typeof bureaus>>;
  * Get bureaus for a specifc agency.
  */
 export const bureausByAgency = async function (budgetAgencyTitleId: string) {
-  const fileBureaus = db
-    .select({
+  const bureauFiles = db
+    .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetBureauTitle, files.fileId], {
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId,
       budgetBureauTitle: tafs.budgetBureauTitle,
       budgetBureauTitleId: tafs.budgetBureauTitleId,
-      fileCount: countDistinct(tafs.fileId).as('fileCount')
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId))
-    .groupBy(tafs.budgetBureauTitle, tafs.budgetBureauTitleId)
-    .orderBy(tafs.budgetBureauTitle)
-    .as('fileBureaus');
-
-  const spendPlanBureaus = db
-    .select({
-      budgetBureauTitle: spendPlans.budgetBureauTitle,
-      budgetBureauTitleId: spendPlans.budgetBureauTitleId,
-      spendPlanCount: countDistinct(spendPlans.fileId).as('spendPlanCount')
-    })
-    .from(spendPlans)
-    .where(
-      and(
-        eq(spendPlans.budgetAgencyTitleId, budgetAgencyTitleId),
-        isNotNull(spendPlans.budgetBureauTitle)
-      )
+    .union(
+      db
+        .selectDistinctOn([files.budgetAgencyTitle, files.budgetBureauTitle, files.fileId], {
+          budgetAgencyTitle: files.budgetAgencyTitle,
+          budgetAgencyTitleId: files.budgetAgencyTitleId,
+          budgetBureauTitle: files.budgetBureauTitle,
+          budgetBureauTitleId: files.budgetBureauTitleId,
+          fileId: files.fileId,
+          fileType: files.fileType,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(files)
+        .where(isNotNull(files.budgetBureauTitle))
     )
-    .groupBy(spendPlans.budgetBureauTitle, spendPlans.budgetBureauTitleId)
-    .orderBy(spendPlans.budgetBureauTitle)
-    .as('spendPlanBureaus');
+    .as('bureauFiles');
 
-  return (
-    (await db
-      .select({
-        budgetBureauTitle: sql`COALESCE(${fileBureaus.budgetBureauTitle}, ${spendPlanBureaus.budgetBureauTitle})`,
-        budgetBureauTitleId: sql`COALESCE(${fileBureaus.budgetBureauTitleId}, ${spendPlanBureaus.budgetBureauTitleId})`,
-        fileCount: sql`cast(COALESCE(${fileBureaus.fileCount}, 0) as int)`,
-        spendPlanCount: sql`cast(COALESCE(${spendPlanBureaus.spendPlanCount}, 0) as int)`
-      })
-      .from(fileBureaus)
-      .fullJoin(
-        spendPlanBureaus,
-        eq(fileBureaus.budgetBureauTitleId, spendPlanBureaus.budgetBureauTitleId)
-      )) || []
-  );
+  const results = await db
+    .select({
+      budgetBureauTitle: bureauFiles.budgetBureauTitle,
+      budgetBureauTitleId: bureauFiles.budgetBureauTitleId,
+      fileType: bureauFiles.fileType,
+      fileCount: countDistinct(bureauFiles.fileId)
+    })
+    .from(bureauFiles)
+    .where(eq(bureauFiles.budgetAgencyTitleId, budgetAgencyTitleId))
+    .groupBy(bureauFiles.budgetBureauTitle, bureauFiles.budgetBureauTitleId, bureauFiles.fileType)
+    .orderBy(bureauFiles.budgetBureauTitle);
+
+  return reduceByFileType(results);
 };
 export type BureausByAgencyResult = Awaited<ReturnType<typeof bureausByAgency>>;
 
@@ -417,43 +346,52 @@ export const bureauDetails = async function (
   budgetAgencyTitleId: string,
   budgetBureauTitleId: string
 ) {
-  const filesFromBureau = await db
-    .selectDistinct({
-      budgetBureauTitle: tafs.budgetBureauTitle,
-      budgetBureauTitleId: tafs.budgetBureauTitleId,
+  const bureauFiles = db
+    .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetBureauTitle, files.fileId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
-      fileId: tafs.fileId
+      budgetBureauTitle: tafs.budgetBureauTitle,
+      budgetBureauTitleId: tafs.budgetBureauTitleId,
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
-    .where(
-      and(
-        eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),
-        eq(tafs.budgetBureauTitleId, budgetBureauTitleId)
-      )
-    );
+    .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .union(
+      db
+        .selectDistinctOn([files.budgetAgencyTitle, files.budgetBureauTitle, files.fileId], {
+          budgetAgencyTitle: files.budgetAgencyTitle,
+          budgetAgencyTitleId: files.budgetAgencyTitleId,
+          budgetBureauTitle: files.budgetBureauTitle,
+          budgetBureauTitleId: files.budgetBureauTitleId,
+          fileId: files.fileId,
+          fileType: files.fileType,
+          approvalTimestamp: files.approvalTimestamp
+        })
+        .from(files)
+        .where(isNotNull(files.budgetBureauTitle))
+    )
+    .as('bureauFiles');
 
-  const spendPlansFromBureau = await db
+  const filesFromBureau = await db
     .selectDistinct({
-      budgetBureauTitle: spendPlans.budgetBureauTitle,
-      budgetBureauTitleId: spendPlans.budgetBureauTitleId,
-      budgetAgencyTitle: spendPlans.budgetAgencyTitle,
-      budgetAgencyTitleId: spendPlans.budgetAgencyTitleId,
-      fileId: spendPlans.fileId
+      budgetBureauTitle: bureauFiles.budgetBureauTitle,
+      budgetBureauTitleId: bureauFiles.budgetBureauTitleId,
+      budgetAgencyTitle: bureauFiles.budgetAgencyTitle,
+      budgetAgencyTitleId: bureauFiles.budgetAgencyTitleId,
+      fileId: bureauFiles.fileId
     })
-    .from(spendPlans)
+    .from(bureauFiles)
     .where(
       and(
-        eq(spendPlans.budgetAgencyTitleId, budgetAgencyTitleId),
-        eq(spendPlans.budgetBureauTitleId, budgetBureauTitleId)
+        eq(bureauFiles.budgetAgencyTitleId, budgetAgencyTitleId),
+        eq(bureauFiles.budgetBureauTitleId, budgetBureauTitleId)
       )
     );
 
   // If none found
-  if (
-    (!filesFromBureau || filesFromBureau.length === 0) &&
-    (!spendPlansFromBureau || spendPlansFromBureau.length === 0)
-  ) {
+  if (!filesFromBureau || filesFromBureau.length === 0) {
     return null;
   }
 
@@ -466,18 +404,11 @@ export const bureauDetails = async function (
   }
 
   return {
-    budgetBureauTitle:
-      filesFromBureau?.at(0)?.budgetBureauTitle || spendPlansFromBureau?.at(0)?.budgetBureauTitle,
-    budgetBureauTitleId:
-      filesFromBureau?.at(0)?.budgetBureauTitleId ||
-      spendPlansFromBureau?.at(0)?.budgetBureauTitleId,
-    budgetAgencyTitle:
-      filesFromBureau?.at(0)?.budgetAgencyTitle || spendPlansFromBureau?.at(0)?.budgetAgencyTitle,
-    budgetAgencyTitleId:
-      filesFromBureau?.at(0)?.budgetAgencyTitleId ||
-      spendPlansFromBureau?.at(0)?.budgetAgencyTitleId,
-    fileCount: filesFromBureau?.length || 0,
-    spendPlanCount: spendPlansFromBureau?.length || 0,
+    budgetBureauTitle: filesFromBureau[0].budgetBureauTitle,
+    budgetBureauTitleId: filesFromBureau[0].budgetBureauTitleId,
+    budgetAgencyTitle: filesFromBureau[0].budgetAgencyTitle,
+    budgetAgencyTitleId: filesFromBureau[0].budgetAgencyTitleId,
+    fileCount: filesFromBureau.length,
     agency
   };
 };

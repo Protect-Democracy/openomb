@@ -18,7 +18,7 @@ import {
   searchCriterionDescriptions
 } from '$lib/searches';
 import { mApproverTitleOptions, type ApproverTitleOptionsResult } from '$queries/search';
-import { mBureaus, type BureausResult } from '$queries/tafs';
+import { mBureaus, type BureausResult } from '$queries/agencies';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types

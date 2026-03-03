@@ -28,7 +28,6 @@ import * as collections from './schema/collections';
 import * as users from './schema/users';
 import * as subscriptions from './schema/subscriptions';
 import * as searches from './schema/searches';
-import * as spendPlans from './schema/spend-plans';
 import * as lineTypes from './schema/line-types';
 import * as lineDescriptions from './schema/line-descriptions';
 
@@ -53,7 +52,6 @@ export const schemas = {
   ...users,
   ...subscriptions,
   ...searches,
-  ...spendPlans,
   ...lineTypes,
   ...lineDescriptions
 };

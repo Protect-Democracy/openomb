@@ -1,15 +1,15 @@
 <script lang="ts">
   import { highlight } from '$lib/formatters';
-import type { SearchParams } from '$db/queries/search';
+import type { SearchPaginationParams } from '$db/queries/search';
 
 // Props
 export let headerElement = 'h3';
 export let headerClasses = '';
 export let account: object;
-export let highlightParams: SearchParams;
+export let highlightParams: SearchPaginationParams;
 
 // Derived
-$: searchTerms = highlightParams?.term?.split(',') || [];
+$: searchTerms = highlightParams?.term || [];
 $: highlightedAccount = account
   ? {
       ...account,

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { uniqBy, isString } from 'lodash-es';
 import { formatDate, deconstructLaws } from '$lib/formatters';
+import { isSpendPlanFile } from '$lib/utilities';
 import ExternalLink from '$components/links/ExternalLink.svelte';
 
 // Props
@@ -9,7 +10,6 @@ export let file;
 // Derived
 $: ({ tafs } = file);
 $: letterApportionment = !!file.pdfUrl;
-$: spendPlan = file.budgetAgencyTitle && file.budgetAgencyTitleId;
 $: uniqueAgencies = tafs
   ? uniqBy(
       tafs.map((tafsGroup) => ({
@@ -58,7 +58,7 @@ $: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
       </span>
     </li>
 
-    {#if spendPlan}
+    {#if isSpendPlanFile(file)}
       <li class="grid-value">
         <strong>Agency<span class="sr-only">:</span></strong>
         <span>
@@ -86,7 +86,7 @@ $: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
         ></strong
       >
       <span>
-        {#each fundsParts as part}
+        {#each fundsParts as part, partIndex (`law-${partIndex}`)}
           {#if isString(part)}
             {part}{' '}
           {:else}

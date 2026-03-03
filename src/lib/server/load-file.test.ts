@@ -11,7 +11,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 import { fileDetails } from '$db/queries/files';
-import { spendPlanRecord } from '$db/queries/spend-plans';
+import { DEFAULT_TYPE, SPEND_PLAN_TYPE } from '$config/files';
 
 import {
   approvalDateFromPdfFileName,
@@ -313,6 +313,7 @@ describe('loadJsonFile()', async () => {
     expect(result).toMatchObject({
       fileId: '11496188',
       fileName: 'FY2026_Agency=DOD_Bureau=O&M_TAFS=097-2025-2029-0100_Iteration=4_2026-01-28-15.14',
+      fileType: DEFAULT_TYPE,
       fiscalYear: 2026,
       approvalTimestamp: new Date('2026-01-28T15:14:31.000Z'),
       folder: 'Department of Defense (Military Programs)',
@@ -518,7 +519,7 @@ describe('loadJsonSpendPlan()', async () => {
     }
 
     // Get the details of the file
-    const spendPlan = await spendPlanRecord(result.fileId);
+    const spendPlan = await fileDetails(result.fileId);
 
     if (!spendPlan) {
       throw new Error('Expected spendPlanDetails to return a spend plan, but got null');
@@ -529,6 +530,7 @@ describe('loadJsonSpendPlan()', async () => {
     expect(result).toMatchObject({
       fileId: '10000001',
       fileName: 'FY 2026 DHS FLETC PCI Spend Plan',
+      fileType: SPEND_PLAN_TYPE,
       fiscalYear: 2026,
       folder: 'Spend Plans',
       folderId: 'spend-plans',
@@ -600,7 +602,7 @@ describe('loadPdfSpendPlan()', async () => {
     }
 
     // Get the details of the file
-    const spendPlan = await spendPlanRecord(result.fileId);
+    const spendPlan = await fileDetails(result.fileId);
 
     if (!spendPlan) {
       throw new Error('Expected spendPlanDetails to return a spend plan, but got null');
@@ -611,6 +613,7 @@ describe('loadPdfSpendPlan()', async () => {
     expect(result).toMatchObject({
       fileId: expect.stringMatching(/^pdf-.*/),
       fileName: 'PY 2024 DOL OJC CRA Spend Plan',
+      fileType: SPEND_PLAN_TYPE,
       fiscalYear: 2024,
       folder: 'Spend Plans',
       folderId: 'spend-plans',

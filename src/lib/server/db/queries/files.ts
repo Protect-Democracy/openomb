@@ -3,13 +3,27 @@
  */
 
 // Dependencies
-import { eq, gte, desc, asc, count, countDistinct, and, isNull, inArray, sql } from 'drizzle-orm';
+import {
+  eq,
+  gte,
+  desc,
+  asc,
+  count,
+  countDistinct,
+  and,
+  or,
+  isNull,
+  inArray,
+  sql,
+  isNotNull
+} from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
 import { DateTime } from 'luxon';
 import { memoizeDataAsync } from '$server/cache';
+import { DEFAULT_TYPE } from '$config/files';
 
 /**
  * Get simple file record given file id
@@ -143,6 +157,7 @@ export const recentlyApprovedWithTafs = async function (
 
   const tafsFilters = filters?.agencyId || filters?.bureauId;
   const whereClauses = [
+    isNotNull(files.approvalTimestamp),
     tafsFilters ? inArray(files.fileId, findFilesByTafsFiltersQuery) : undefined,
     filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,
     filters?.approverId ? eq(files.approverTitleId, filters?.approverId) : undefined
@@ -163,6 +178,76 @@ export const recentlyApprovedWithTafs = async function (
       }
     },
     orderBy: desc(files.approvalTimestamp),
+    limit: limit
+  });
+
+  return recentFiles || [];
+};
+
+/**
+ * Recently added or approved with tafs (with optional filters).
+ */
+export const recentlyAddedOrApprovedWithTafs = async function (
+  limit: number = 20,
+  filters?: { folderId?: string; approverId?: string; agencyId?: string; bureauId?: string }
+) {
+  // Check that we have both agency and bureau if bureau provided
+  if (filters?.bureauId && !filters?.agencyId) {
+    throw new Error('Must provide both agency and bureau identifiers.');
+  }
+
+  // This doesn't seem like the best way to do this, i.e. with subqueries and IN, but doesn't seem like
+  // you can limit the top level findMany based on joined (with) where.  We could do a manualy query, but
+  // the findMany and with paradigm creates a preferred way and output.
+  const findFilesByTafsFiltersQuery = db
+    .selectDistinct({ fileId: tafs.fileId })
+    .from(tafs)
+    .where(
+      filters?.bureauId
+        ? and(
+            eq(tafs.budgetAgencyTitleId, filters?.agencyId || ''),
+            eq(tafs.budgetBureauTitleId, filters?.bureauId || '')
+          )
+        : eq(tafs.budgetAgencyTitleId, filters?.agencyId || '')
+    );
+
+  const tafsFilters = filters?.agencyId || filters?.bureauId;
+  const whereClauses = [
+    tafsFilters
+      ? or(
+          inArray(files.fileId, findFilesByTafsFiltersQuery),
+          filters?.bureauId
+            ? and(
+                eq(files.budgetAgencyTitleId, filters?.agencyId),
+                eq(files.budgetBureauTitleId, filters?.bureauId)
+              )
+            : eq(files.budgetAgencyTitleId, filters?.agencyId)
+        )
+      : undefined,
+    filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,
+    filters?.approverId ? eq(files.approverTitleId, filters?.approverId) : undefined
+  ].filter((w) => w !== undefined);
+  const where =
+    whereClauses.length === 1
+      ? whereClauses[0]
+      : whereClauses.length > 1
+        ? and(...whereClauses)
+        : undefined;
+
+  const recentFiles = await db.query.files.findMany({
+    columns: { sourceData: false },
+    where: where,
+    with: {
+      tafs: {
+        orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
+      }
+    },
+    extras: {
+      addedOrApproved: sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt})`.as(
+        'addedOrApproved'
+      )
+    },
+    orderBy: desc(sql.identifier('addedOrApproved')),
     limit: limit
   });
 
@@ -266,8 +351,8 @@ export type ApproverDetailsResult = Awaited<ReturnType<typeof approverDetails>>;
  */
 export const filesWithoutTafs = async function (folderId: string | undefined = undefined) {
   const where = folderId
-    ? and(eq(files.folderId, folderId), isNull(tafs.fileId))
-    : isNull(tafs.fileId);
+    ? and(eq(files.folderId, folderId), isNull(tafs.fileId), eq(files.fileType, DEFAULT_TYPE))
+    : and(isNull(tafs.fileId), eq(files.fileType, DEFAULT_TYPE));
 
   const foundFiles = await db
     .select()
@@ -318,6 +403,7 @@ export const fileCountByMonthByYear = async function (filters?: {
 
   const tafsFilters = filters?.agencyId || filters?.bureauId;
   const whereClauses = [
+    isNotNull(files.approvalTimestamp),
     tafsFilters ? inArray(files.fileId, findFilesByTafsFiltersQuery) : undefined,
     filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,
     filters?.approverId ? eq(files.approverTitleId, filters?.approverId) : undefined
@@ -348,4 +434,5 @@ export const mFileStats = memoizeDataAsync(fileStats);
 export const mAllFiles = memoizeDataAsync(allFiles);
 export const mFilesWithoutTafs = memoizeDataAsync(filesWithoutTafs);
 export const mRecentlyApprovedWithTafs = memoizeDataAsync(recentlyApprovedWithTafs);
+export const mRecentlyAddedOrApprovedWithTafs = memoizeDataAsync(recentlyAddedOrApprovedWithTafs);
 export const mFileCountByMonthByYear = memoizeDataAsync(fileCountByMonthByYear);

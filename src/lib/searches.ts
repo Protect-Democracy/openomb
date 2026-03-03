@@ -13,16 +13,9 @@ import type {
   SavedSearchCriterionUrl,
   LegacySearchCriterion
 } from '$schema/searches';
-import type { BureausResult } from '$queries/tafs';
+import { apportionmentTypeDescriptions } from '$config/search';
+import type { BureausResult } from '$queries/agencies';
 import type { ApproverTitleOptionsResult } from '$queries/search';
-
-/**
- * Manual descriptions for apportionment types
- */
-export const apportionmentTypeDescriptions: Record<string, string> = {
-  spreadsheet: 'Standard (Excel)',
-  letter: 'Letter (PDF)'
-};
 
 /**
  * Make sure the criterion is in the correct format for saving and comparing.

@@ -3,6 +3,7 @@
 import { uniqBy, reduce } from 'lodash-es';
 import { writable } from 'svelte/store';
 import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
+import { isSpendPlanFile } from '$lib/utilities';
 import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 import Switch from '$components/inputs/Switch.svelte';
 import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
@@ -20,7 +21,6 @@ let showPrevious = writable(true);
 
 // Derived
 $: letterApportionment = !!file.pdfUrl;
-$: spendPlan = file.budgetAgencyTitle && file.budgetAgencyTitleId;
 $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
 $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
 $: prevIterationFootnotes = uniqBy(
@@ -46,7 +46,7 @@ $: ({ tafs, footnotes } = file);
   </div>
 
   {#if letterApportionment}
-    <h2>Apportionment {spendPlan ? 'spend plan' : 'letter'}</h2>
+    <h2>Apportionment {isSpendPlanFile(file) ? 'spend plan' : 'letter'}</h2>
 
     <LetterApportionmentPreview {file} />
   {/if}
@@ -66,7 +66,7 @@ $: ({ tafs, footnotes } = file);
     {#if tafs?.length}
       <h2 class="sr-only">Schedules</h2>
 
-      {#each tafs as tafsGroup}
+      {#each tafs as tafsGroup (tafs.tafsTableId)}
         {@const prevIterationTafs = prevIterationFiles[tafsGroup.tafsTableId]?.tafs?.find(
           (taf) => taf.tafsId === tafsGroup.tafsId
         )}

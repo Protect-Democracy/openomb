@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('search page has basic expected items', async ({ page }) => {
   await page.goto('/search');
 
-  // Make sure title is Search Appor­tion­ments
+  // Make sure title is Search Appotionments
   await expect(
     page.locator('main').getByRole('heading', { name: 'Search Apportionments' })
   ).toBeVisible();

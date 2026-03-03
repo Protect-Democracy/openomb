@@ -4,6 +4,8 @@
 
 import { DateTime } from 'luxon';
 import { collectionHour, collectionMinute, collectionTimezone } from '$config';
+import { SPEND_PLAN_TYPE } from '$config/files';
+import type { filesSelect } from '$schema/files';
 
 /**
  * Get seconds to the next specific time in a timezone.
@@ -137,4 +139,11 @@ export function secondsToCacheInvalidation() {
  */
 export function dateForCacheInvalidation() {
   return DateTime.now().plus({ seconds: secondsToCacheInvalidation() }).toJSDate();
+}
+
+/**
+ * Determine if file is spend plan
+ */
+export function isSpendPlanFile(file: filesSelect): boolean {
+  return file.fileType === SPEND_PLAN_TYPE;
 }

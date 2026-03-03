@@ -28,6 +28,7 @@ import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
+import { SPEND_PLAN_TYPE } from '$config/files';
 
 // Types
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
@@ -313,20 +314,20 @@ function generalSearchFilters(
   );
   where.push(searchParams.createdEnd ? lte(files.createdAt, searchParams.createdEnd) : undefined);
 
-  // Apportionemnt type.  Only need to search on a single one
-  if (
-    searchParams.apportionmentType?.length &&
-    searchParams.apportionmentType?.length === 1 &&
-    searchParams.apportionmentType[0] === 'letter'
-  ) {
+  // Apportionemnt type.
+  // Prioritizes PDF specification (we don't need or want to apply both)
+  if (searchParams.apportionmentType?.length && searchParams.apportionmentType.includes('letter')) {
     where.push(isNotNull(files.pdfUrl));
   }
-  if (
+  else if (
     searchParams.apportionmentType?.length &&
-    searchParams.apportionmentType?.length === 1 &&
-    searchParams.apportionmentType[0] === 'spreadsheet'
+    searchParams.apportionmentType.includes('spreadsheet')
   ) {
     where.push(isNull(files.pdfUrl));
+  }
+  // There could be excel/json spend plans in the future
+  if (searchParams.apportionmentType?.length && searchParams.apportionmentType.includes('spend')) {
+    where.push(eq(files.fileType, SPEND_PLAN_TYPE));
   }
 
   // Complete AND wheres

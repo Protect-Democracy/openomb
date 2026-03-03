@@ -108,9 +108,9 @@ export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): 
     return `${file.folder}, Letter Apportionment - ${formatDate(file.approvalTimestamp, 'medium')}`;
   }
 
-  // Spend Plan
+  // Spend Plan (or any file without an approval timestamp)
   if (file?.pdfUrl && !file.approvalTimestamp) {
-    return `Spend Plan - ${file.fileName}`;
+    return `${file.fileName}`;
   }
 
   // No tafs information

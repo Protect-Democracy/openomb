@@ -229,9 +229,9 @@ async function cli(): Promise<void> {
   )};`;
 
   const _dirname = dirname(fileURLToPath(import.meta.url));
-  const filePath = joinPath(_dirname, '..', 'data', 'agencyMatches.ts');
+  const filePath = joinPath(_dirname, '..', 'data', 'agency-reference.ts');
   fs.writeFile(filePath, matchData, 'utf8', () => {
-    console.log('Matches written to /data/agencyMatches.ts');
+    console.log('Matches written to /data/agency-reference.ts');
   });
 }
 

@@ -1021,86 +1021,6 @@ export default {
       ]
     },
     {
-      agency_url: '',
-      child_ids: [55, 159, 170, 181, 185, 193, 282, 345, 389, 408, 450, 451, 462, 495, 609],
-      child_slugs: [
-        'commercial-space-transportation-office',
-        'federal-aviation-administration',
-        'federal-highway-administration',
-        'federal-motor-carrier-safety-administration',
-        'federal-railroad-administration',
-        'federal-transit-administration',
-        'maritime-administration',
-        'national-highway-traffic-safety-administration',
-        'office-of-motor-carrier-safety',
-        'pipeline-and-hazardous-materials-safety-administration',
-        'research-and-innovative-technology-administration',
-        'research-and-special-programs-administration',
-        'saint-lawrence-seaway-development-corporation',
-        'transportation-statistics-bureau',
-        'great-lakes-st-lawrence-seaway-development-corporation'
-      ],
-      description:
-        'The Department of Transportation (DOT) was established by an act of Congress on October 15, 1966. The Department’s first official day of operation was April 1, 1967. [http://www.dot.gov/about.html]\r\n\r\nThe mission of the Department of Transportation is to ensure a fast, safe, efficient, accessible and convenient transportation system that meets our vital national interests and enhances the quality of life of the American people.\r\n\r\nOrganizations within the DOT include the Federal Highway Administration, the Federal Aviation Administration, the National Highway Traffic Safety Administration, the Federal Transit Administration, the Federal Railroad Administration and the Maritime Administration.  \r\n\r\nFor further information about the functions, organization, and activities, of the U.S. Department of Transportation, please visit http://www.dot.gov/.\r\n\r\n__________\r\nSource:\r\nhttp://www.whitehouse.gov/our-government/executive-branch',
-      id: 492,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/492/thumb.png?1279149106',
-        small_url: 'https://agency-logos.federalregister.gov/492/small.png?1279149106',
-        medium_url: 'https://agency-logos.federalregister.gov/492/medium.png?1279149106'
-      },
-      name: 'Transportation Department',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=492&order=newest',
-      short_name: 'DOT',
-      slug: 'transportation-department',
-      url: 'https://www.federalregister.gov/agencies/transportation-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/492',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      matchLevel: 5,
-      matches: [
-        {
-          id: 492,
-          name: 'Transportation Department',
-          comparing: 'Department of Transportation',
-          rank: 5
-        }
-      ]
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The establishment of the Veterans Administration (VA) came in 1930 when Congress authorized the President to "consolidate and coordinate Government activities affecting war veterans." The three component agencies (the Veterans Bureau, the Bureau of Pensions of the Interior Department, and the National Home for Disabled Volunteer Soldiers) became bureaus within the Veterans Administration.  \r\n\r\nThe VA is responsible for administering benefit programs for veterans, their families, and their survivors. These benefits include pension, education, disability compensation, home loans, life insurance, vocational rehabilitation, survivor support, medical care, and burial benefits. \r\n\r\nOf the 25 million veterans currently alive, nearly three of every four served during a war or an official period of hostility. About a quarter of the nation\'s population — approximately 70 million people — are potentially eligible for V.A. benefits and services because they are veterans, family members, or survivors of veterans. \r\n\r\nFor further information about the functions, organization, and activities, of the Veterans Administration, please visit http://www.va.gov/.\r\n\r\n__________\r\nSources:\r\nhttp://www4.va.gov/about_va/vahistory.asp\r\nhttp://www.whitehouse.gov/our-government/executive-branch',
-      id: 520,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/520/thumb.png?1279151669',
-        small_url: 'https://agency-logos.federalregister.gov/520/small.png?1279151669',
-        medium_url: 'https://agency-logos.federalregister.gov/520/medium.png?1279151669'
-      },
-      name: 'Veterans Affairs Department',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=520&order=newest',
-      short_name: 'VA',
-      slug: 'veterans-affairs-department',
-      url: 'https://www.federalregister.gov/agencies/veterans-affairs-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/520',
-      budgetAgencyTitle: 'Department of Veterans Affairs',
-      budgetAgencyTitleId: 'department-of-veterans-affairs',
-      matchLevel: 7,
-      matches: [
-        {
-          id: 520,
-          name: 'Veterans Affairs Department',
-          comparing: 'Department of Veterans Affairs',
-          rank: 7
-        }
-      ]
-    },
-    {
       agency_url: 'http://www.doi.gov/',
       child_ids: [
         197, 212, 223, 234, 238, 275, 289, 290, 306, 309, 347, 362, 446, 475, 480, 568, 575, 576,
@@ -1219,6 +1139,86 @@ export default {
           comparing: 'Department of the Treasury',
           rank: 1,
           parent: 'Treasury Department'
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [55, 159, 170, 181, 185, 193, 282, 345, 389, 408, 450, 451, 462, 495, 609],
+      child_slugs: [
+        'commercial-space-transportation-office',
+        'federal-aviation-administration',
+        'federal-highway-administration',
+        'federal-motor-carrier-safety-administration',
+        'federal-railroad-administration',
+        'federal-transit-administration',
+        'maritime-administration',
+        'national-highway-traffic-safety-administration',
+        'office-of-motor-carrier-safety',
+        'pipeline-and-hazardous-materials-safety-administration',
+        'research-and-innovative-technology-administration',
+        'research-and-special-programs-administration',
+        'saint-lawrence-seaway-development-corporation',
+        'transportation-statistics-bureau',
+        'great-lakes-st-lawrence-seaway-development-corporation'
+      ],
+      description:
+        'The Department of Transportation (DOT) was established by an act of Congress on October 15, 1966. The Department’s first official day of operation was April 1, 1967. [http://www.dot.gov/about.html]\r\n\r\nThe mission of the Department of Transportation is to ensure a fast, safe, efficient, accessible and convenient transportation system that meets our vital national interests and enhances the quality of life of the American people.\r\n\r\nOrganizations within the DOT include the Federal Highway Administration, the Federal Aviation Administration, the National Highway Traffic Safety Administration, the Federal Transit Administration, the Federal Railroad Administration and the Maritime Administration.  \r\n\r\nFor further information about the functions, organization, and activities, of the U.S. Department of Transportation, please visit http://www.dot.gov/.\r\n\r\n__________\r\nSource:\r\nhttp://www.whitehouse.gov/our-government/executive-branch',
+      id: 492,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/492/thumb.png?1279149106',
+        small_url: 'https://agency-logos.federalregister.gov/492/small.png?1279149106',
+        medium_url: 'https://agency-logos.federalregister.gov/492/medium.png?1279149106'
+      },
+      name: 'Transportation Department',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=492&order=newest',
+      short_name: 'DOT',
+      slug: 'transportation-department',
+      url: 'https://www.federalregister.gov/agencies/transportation-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/492',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      matchLevel: 5,
+      matches: [
+        {
+          id: 492,
+          name: 'Transportation Department',
+          comparing: 'Department of Transportation',
+          rank: 5
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The establishment of the Veterans Administration (VA) came in 1930 when Congress authorized the President to "consolidate and coordinate Government activities affecting war veterans." The three component agencies (the Veterans Bureau, the Bureau of Pensions of the Interior Department, and the National Home for Disabled Volunteer Soldiers) became bureaus within the Veterans Administration.  \r\n\r\nThe VA is responsible for administering benefit programs for veterans, their families, and their survivors. These benefits include pension, education, disability compensation, home loans, life insurance, vocational rehabilitation, survivor support, medical care, and burial benefits. \r\n\r\nOf the 25 million veterans currently alive, nearly three of every four served during a war or an official period of hostility. About a quarter of the nation\'s population — approximately 70 million people — are potentially eligible for V.A. benefits and services because they are veterans, family members, or survivors of veterans. \r\n\r\nFor further information about the functions, organization, and activities, of the Veterans Administration, please visit http://www.va.gov/.\r\n\r\n__________\r\nSources:\r\nhttp://www4.va.gov/about_va/vahistory.asp\r\nhttp://www.whitehouse.gov/our-government/executive-branch',
+      id: 520,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/520/thumb.png?1279151669',
+        small_url: 'https://agency-logos.federalregister.gov/520/small.png?1279151669',
+        medium_url: 'https://agency-logos.federalregister.gov/520/medium.png?1279151669'
+      },
+      name: 'Veterans Affairs Department',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=520&order=newest',
+      short_name: 'VA',
+      slug: 'veterans-affairs-department',
+      url: 'https://www.federalregister.gov/agencies/veterans-affairs-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/520',
+      budgetAgencyTitle: 'Department of Veterans Affairs',
+      budgetAgencyTitleId: 'department-of-veterans-affairs',
+      matchLevel: 7,
+      matches: [
+        {
+          id: 520,
+          name: 'Veterans Affairs Department',
+          comparing: 'Department of Veterans Affairs',
+          rank: 7
         }
       ]
     },
@@ -2616,6 +2616,1412 @@ export default {
   ],
   bureaus: [
     {
+      agency_url: 'http://www.acus.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Administrative Conference of the United States (ACUS) was established under the Administrative Conference Act (5 U.S.C. 591-96), as a permanent independent agency of the Federal Government.\r\n\r\nACUS provides suitable arrangements through which Federal agencies, assisted by outside experts, may cooperatively study mutual problems, exchange information, and develop recommendations for action by proper authorities to the end that private rights may be fully protected and regulatory activities and other Federal responsibilities may be carried out expeditiously in the public interest.\r\n\r\nOther purposes of the ACUS include the promotion of effective public participation and efficiency in the rulemaking process; The reduction of unnecessary litigation in the regulatory process; the improvement of the use of science in the regulatory process; and the improvement of the effectiveness of laws applicable to the regulatory process.',
+      id: 566,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/566/thumb.gif?1308250528',
+        small_url: 'https://agency-logos.federalregister.gov/566/small.gif?1308250528',
+        medium_url: 'https://agency-logos.federalregister.gov/566/medium.gif?1308250528'
+      },
+      name: 'Administrative Conference of the United States',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=566&order=newest',
+      short_name: 'ACUS',
+      slug: 'administrative-conference-of-the-united-states',
+      url: 'https://www.federalregister.gov/agencies/administrative-conference-of-the-united-states',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/566',
+      budgetAgencyTitle: 'Administrative Conference of the United States',
+      budgetAgencyTitleId: 'administrative-conference-of-the-united-states',
+      budgetBureauTitle: 'Administrative Conference of the United States',
+      budgetBureauTitleId: 'administrative-conference-of-the-united-states',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.achp.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Advisory Council on Historic Preservation (ACHP) is an independent federal agency that promotes the preservation, enhancement, and productive use of our nation's historic resources, and advises the President and Congress on national historic preservation policy. \r\n\r\nThe goal of the National Historic Preservation Act (NHPA), which established the ACHP in 1966, is to have federal agencies act as responsible stewards of our nation's resources when their actions affect historic properties. The ACHP is the only entity with the legal responsibility to encourage federal agencies to factor historic preservation into federal project requirements. ",
+      id: 225,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/225/thumb.gif?1322513916',
+        small_url: 'https://agency-logos.federalregister.gov/225/small.gif?1322513916',
+        medium_url: 'https://agency-logos.federalregister.gov/225/medium.gif?1322513916'
+      },
+      name: 'Advisory Council on Historic Preservation',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=225&order=newest',
+      short_name: 'ACHP',
+      slug: 'advisory-council-on-historic-preservation',
+      url: 'https://www.federalregister.gov/agencies/advisory-council-on-historic-preservation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/225',
+      budgetAgencyTitle: 'Advisory Council on Historic Preservation',
+      budgetAgencyTitleId: 'advisory-council-on-historic-preservation',
+      budgetBureauTitle: 'Advisory Council on Historic Preservation',
+      budgetBureauTitleId: 'advisory-council-on-historic-preservation',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.arc.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Appalachian Regional Commission (ARC) is a regional economic development agency that represents a partnership of federal, state, and local government. Established by an act of Congress in 1965, ARC is composed of the governors of the 13 Appalachian states and a federal co-chair, who is appointed by the president. Local participation is provided through multi-county local development districts.\r\n\r\nARC funds projects that address the four goals identified in the Commission's strategic plan:\r\n\r\n(1) Increase job opportunities and per capita income in Appalachia to reach parity with the nation. \r\n(2) Strengthen the capacity of the people of Appalachia to compete in the global economy. \r\n(3) Develop and improve Appalachia's infrastructure to make the Region economically competitive. \r\n(4) Build the Appalachian Development Highway System to reduce Appalachia's isolation. \r\n\r\nEach year ARC provides funding for several hundred projects in the Appalachian Region, in areas such as business development, education and job training, telecommunications, infrastructure, community development, housing, and transportation. These projects create thousands of new jobs; improve local water and sewer systems; increase school readiness; expand access to health care; assist local communities with strategic planning; and provide technical and managerial assistance to emerging businesses.",
+      id: 25,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/25/thumb.jpg?1321308918',
+        small_url: 'https://agency-logos.federalregister.gov/25/small.jpg?1321308918',
+        medium_url: 'https://agency-logos.federalregister.gov/25/medium.jpg?1321308918'
+      },
+      name: 'Appalachian Regional Commission',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=25&order=newest',
+      short_name: 'ARC',
+      slug: 'appalachian-regional-commission',
+      url: 'https://www.federalregister.gov/agencies/appalachian-regional-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/25',
+      budgetAgencyTitle: 'Appalachian Regional Commission',
+      budgetAgencyTitleId: 'appalachian-regional-commission',
+      budgetBureauTitle: 'Appalachian Regional Commission',
+      budgetBureauTitleId: 'appalachian-regional-commission',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.act.org/goldwater/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Barry M. Goldwater Scholarship and Excellence in Education Program was established by the United States Congress in 1986 in honor of former United States Senator and 1964 Presidential candidate Barry Goldwater (R-Arizona). Its goal is to provide a continuing source of highly qualified scientists, mathematicians, and engineers by awarding scholarships to college students who intend to pursue careers in these fields. ',
+      id: 36,
+      logo: null,
+      name: 'Barry M. Goldwater Scholarship and Excellence in Education Foundation',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=36&order=newest',
+      short_name: 'BGSEEF',
+      slug: 'barry-m-goldwater-scholarship-and-excellence-in-education-foundation',
+      url: 'https://www.federalregister.gov/agencies/barry-m-goldwater-scholarship-and-excellence-in-education-foundation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/36',
+      budgetAgencyTitle: 'Barry Goldwater Scholarship and Excellence in Education Foundati',
+      budgetAgencyTitleId: 'barry-goldwater-scholarship-and-excellence-in-education-foundati',
+      budgetBureauTitle: 'Barry Goldwater Scholarship and Excellence in Education Foundati',
+      budgetBureauTitleId: 'barry-goldwater-scholarship-and-excellence-in-education-foundati',
+      matchLevel: 11,
+      matches: [
+        {
+          id: 36,
+          name: 'Barry M. Goldwater Scholarship and Excellence in Education Foundation',
+          comparing: 'Barry Goldwater Scholarship and Excellence in Education Foundati',
+          rank: 11,
+          comparingParent: 'Barry Goldwater Scholarship and Excellence in Education Foundati'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.cia.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Central Intelligence Agency was established by the National Security Act of 1947, as amended (50 U.S.C. 401 et seq.). It now functions under that statute, Executive Order 12333 of December 4, 1981, the Intelligence Reform and Terrorism Prevention Act of 2004 (50 U.S.C. 401 note), and other laws, Executive orders, regulations, and directives.\r\n\r\nThe Central Intelligence Agency (CIA) collects intelligence from human sources and other appropriate means, but, it does not carry out internal security functions nor exercise police, subpoena, or law enforcement powers. The Agency also correlates, evaluates, and disseminates intelligence related to national security; provides overall direction for and coordination of intelligence collecting outside the United States by U.S. Intelligence Community elements authorized to engage in human source collection. In coordination with other departments, agencies, or authorized elements of the United States Government, the CIA ensures that resources are used effectively and that adequate consideration is given to the risks to those involved in such collection and to the United States; it also carries out other intelligence-related functions and duties necessary for safeguarding national security as the President or the Director of National Intelligence (DNI) may direct; and it coordinates, under the direction of the DNI and consistent with section 207 of the Foreign Service Act of 1980, relationships between elements of the U.S. Intelligence Community and the intelligence or security services of foreign governments or international organizations in matters of national security or intelligence that is acquired clandestinely.',
+      id: 46,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/46/thumb.png?1279143943',
+        small_url: 'https://agency-logos.federalregister.gov/46/small.png?1279143943',
+        medium_url: 'https://agency-logos.federalregister.gov/46/medium.png?1279143943'
+      },
+      name: 'Central Intelligence Agency',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=46&order=newest',
+      short_name: 'CIA',
+      slug: 'central-intelligence-agency',
+      url: 'https://www.federalregister.gov/agencies/central-intelligence-agency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/46',
+      budgetAgencyTitle: 'Central Intelligence Agency',
+      budgetAgencyTitleId: 'central-intelligence-agency',
+      budgetBureauTitle: 'Central Intelligence Agency',
+      budgetBureauTitleId: 'central-intelligence-agency',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.csb.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The CSB is an independent federal agency charged with investigating industrial chemical accidents. The agency's board members are appointed by the President and confirmed by the Senate.\r\n\r\nThe CSB conducts root cause investigations of chemical accidents at fixed industrial facilities. Root causes are usually deficiencies in safety management systems, but can be any factor that would have prevented the accident if that factor had not occurred. Other accident causes often involve equipment failures, human errors, unforeseen chemical reactions or other hazards. The agency does not issue fines or citations, but does make recommendations to plants, regulatory agencies such as the Occupational Safety and Health Administration (OSHA) and the Environmental Protection Agency (EPA), industry organizations, and labor groups. Congress designed the CSB to be non-regulatory and independent of other agencies so that its investigations might, where appropriate, review the effectiveness of regulations and regulatory enforcement. [http://www.csb.gov]",
+      id: 47,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/47/thumb.png?1321381108',
+        small_url: 'https://agency-logos.federalregister.gov/47/small.png?1321381108',
+        medium_url: 'https://agency-logos.federalregister.gov/47/medium.png?1321381108'
+      },
+      name: 'Chemical Safety and Hazard Investigation Board',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=47&order=newest',
+      short_name: 'CSB',
+      slug: 'chemical-safety-and-hazard-investigation-board',
+      url: 'https://www.federalregister.gov/agencies/chemical-safety-and-hazard-investigation-board',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/47',
+      budgetAgencyTitle: 'Chemical Safety and Hazard Investigation Board',
+      budgetAgencyTitleId: 'chemical-safety-and-hazard-investigation-board',
+      budgetBureauTitle: 'Chemical Safety and Hazard Investigation Board',
+      budgetBureauTitleId: 'chemical-safety-and-hazard-investigation-board',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description: '',
+      id: 618,
+      logo: null,
+      name: 'Civil Rights Cold Case Records Review Board',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=618&order=newest',
+      short_name: 'CRCCRRB',
+      slug: 'civil-rights-cold-case-records-review-board',
+      url: 'https://www.federalregister.gov/agencies/civil-rights-cold-case-records-review-board',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/618',
+      budgetAgencyTitle: 'Civil Rights Cold Case Records Review Board',
+      budgetAgencyTitleId: 'civil-rights-cold-case-records-review-board',
+      budgetBureauTitle: 'Civil Rights Cold Case Records Review Board',
+      budgetBureauTitleId: 'civil-rights-cold-case-records-review-board',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.cfa.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The U.S. Commission of Fine Arts, established in 1910 by Act of Congress, is charged with giving expert advice to the President, Congress and the heads of departments and agencies of the Federal and District of Columbia governments on matters of design and aesthetics, as they affect the Federal interest and preserve the dignity of the nation\'s capital. The Commission consists of seven "well qualified judges of the fine arts" who are appointed by the President and serve for a term of four years; they may also be reappointed.\r\n\r\nThe Commission provides advice to the U. S. Mint on the design of coins and medals, and approves the site and design of national memorials, both in the United States and on foreign soil, in accordance with the Commemorative Works Act or the American Battle Monuments Act, whichever applies.',
+      id: 57,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/57/thumb.png?1279150002',
+        small_url: 'https://agency-logos.federalregister.gov/57/small.png?1279150002',
+        medium_url: 'https://agency-logos.federalregister.gov/57/medium.png?1279150002'
+      },
+      name: 'Commission of Fine Arts',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=57&order=newest',
+      short_name: 'CFA',
+      slug: 'commission-of-fine-arts',
+      url: 'https://www.federalregister.gov/agencies/commission-of-fine-arts',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/57',
+      budgetAgencyTitle: 'Commission of Fine Arts',
+      budgetAgencyTitleId: 'commission-of-fine-arts',
+      budgetBureauTitle: 'Commission of Fine Arts',
+      budgetBureauTitleId: 'commission-of-fine-arts',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.usccr.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The U.S. Commission on Civil Rights (USCCR)  was created under the Civil Rights Act of 1957, as amended, and reestablished by the United States Commission on Civil Rights Act of 1994, as amended (42 U.S.C. 1975).\r\n\r\nThe Commission on Civil Rights collects and studies information on discrimination or denials of equal protection of the laws because of race, color, religion, sex, age, disability, national origin, or in the administration of justice in such areas as voting rights, enforcement of Federal civil rights laws, and equal opportunity in education, employment, and housing.\r\n',
+      id: 52,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/52/thumb.png?1321382257',
+        small_url: 'https://agency-logos.federalregister.gov/52/small.png?1321382257',
+        medium_url: 'https://agency-logos.federalregister.gov/52/medium.png?1321382257'
+      },
+      name: 'Civil Rights Commission',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=52&order=newest',
+      short_name: 'CRC',
+      slug: 'civil-rights-commission',
+      url: 'https://www.federalregister.gov/agencies/civil-rights-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/52',
+      budgetAgencyTitle: 'Commission on Civil Rights',
+      budgetAgencyTitleId: 'commission-on-civil-rights',
+      budgetBureauTitle: 'Commission on Civil Rights',
+      budgetBureauTitleId: 'commission-on-civil-rights',
+      matchLevel: 6,
+      matches: [
+        {
+          id: 52,
+          name: 'Civil Rights Commission',
+          comparing: 'Commission on Civil Rights',
+          rank: 6,
+          comparingParent: 'Commission on Civil Rights'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.abilityone.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Committee for Purchase From People Who Are Blind or Severely Disabled (CITA)  was established as an independent Federal agency by the Javits-Wagner-O'Day  (JWOD) amendments of 1971. The function of the Committee was to provide \r\nemployment opportunities for people who were blind or severely disabled. In 2006 JWOD was re-named AbilityOne.\r\n\r\nThe AbilityOne Program uses the purchasing power of the federal government to buy products and services from participating, community-based nonprofit agencies nationwide dedicated to training and employing individuals with disabilities.\r\n\r\nCurrently, AbilityOne employs more than 40,000 Americans who are blind or have other severe disabilities, making it the single largest source of jobs for such individuals in the United States. ",
+      id: 74,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/74/thumb.gif?1321395456',
+        small_url: 'https://agency-logos.federalregister.gov/74/small.gif?1321395456',
+        medium_url: 'https://agency-logos.federalregister.gov/74/medium.gif?1321395456'
+      },
+      name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=74&order=newest',
+      short_name: 'CPPBSD',
+      slug: 'committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
+      url: 'https://www.federalregister.gov/agencies/committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/74',
+      budgetAgencyTitle: 'Committee for Purchase From People Who Are Blind/Disabled',
+      budgetAgencyTitleId: 'committee-for-purchase-from-people-who-are-blinddisabled',
+      budgetBureauTitle: 'Comm. for Purchase fm People Who Are Blind or Severely Disabled',
+      budgetBureauTitleId: 'comm-for-purchase-fm-people-who-are-blind-or-severely-disabled',
+      matchLevel: 12,
+      matches: [
+        {
+          id: 74,
+          name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
+          comparing: 'Comm. for Purchase fm People Who Are Blind or Severely Disabled',
+          rank: 12,
+          comparingParent: 'Committee for Purchase From People Who Are Blind/Disabled'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.abilityone.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Committee for Purchase From People Who Are Blind or Severely Disabled (CITA)  was established as an independent Federal agency by the Javits-Wagner-O'Day  (JWOD) amendments of 1971. The function of the Committee was to provide \r\nemployment opportunities for people who were blind or severely disabled. In 2006 JWOD was re-named AbilityOne.\r\n\r\nThe AbilityOne Program uses the purchasing power of the federal government to buy products and services from participating, community-based nonprofit agencies nationwide dedicated to training and employing individuals with disabilities.\r\n\r\nCurrently, AbilityOne employs more than 40,000 Americans who are blind or have other severe disabilities, making it the single largest source of jobs for such individuals in the United States. ",
+      id: 74,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/74/thumb.gif?1321395456',
+        small_url: 'https://agency-logos.federalregister.gov/74/small.gif?1321395456',
+        medium_url: 'https://agency-logos.federalregister.gov/74/medium.gif?1321395456'
+      },
+      name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=74&order=newest',
+      short_name: 'CPPBSD',
+      slug: 'committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
+      url: 'https://www.federalregister.gov/agencies/committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/74',
+      budgetAgencyTitle: 'Committee for Purchase From People Who Are Blind/Disabled',
+      budgetAgencyTitleId: 'committee-for-purchase-from-people-who-are-blinddisabled',
+      budgetBureauTitle: 'Committee for Purchase from People Who Are Blind or Severely Dis',
+      budgetBureauTitleId: 'committee-for-purchase-from-people-who-are-blind-or-severely-dis',
+      matchLevel: 14,
+      matches: [
+        {
+          id: 74,
+          name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
+          comparing: 'Committee for Purchase from People Who Are Blind or Severely Dis',
+          rank: 14,
+          comparingParent: 'Committee for Purchase From People Who Are Blind/Disabled'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.cftc.gov/index.htm',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Commodity Futures Trading Commission, the Federal regulatory agency for futures trading, was established by the Commodity Futures Trading Commission Act of 1974 (7 U.S.C. 4a). The Commission began operation in April 1975, and its authority to regulate futures trading was renewed by Congress in 1978, 1982, 1986, 1992, 1995, and 2000.\r\n\r\nThe mission of the Commodity Futures Trading Commission is to protect market users and the public from fraud, manipulation, and abusive practices related to the sale of commodity futures and options, and to foster open, competitive, and financially sound commodity futures and option markets.\r\n\r\nThe Commission consists of five Commissioners who are appointed by the President, with the advice and consent of the Senate. One \r\nCommissioner is designated by the President to serve as Chairman. The \r\nCommissioners serve staggered 5-year terms, and by law no more than three Commissioners can belong to the same political party.\r\n\r\nThe Commission has six major operating components: the Divisions of Market Oversight, Clearing and Intermediary Oversight, and Enforcement and the Offices of the Executive Director, General Counsel, and Chief Economist.',
+      id: 77,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/77/thumb.png?1321454775',
+        small_url: 'https://agency-logos.federalregister.gov/77/small.png?1321454775',
+        medium_url: 'https://agency-logos.federalregister.gov/77/medium.png?1321454775'
+      },
+      name: 'Commodity Futures Trading Commission',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=77&order=newest',
+      short_name: 'CFTC',
+      slug: 'commodity-futures-trading-commission',
+      url: 'https://www.federalregister.gov/agencies/commodity-futures-trading-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/77',
+      budgetAgencyTitle: 'Commodity Futures Trading Commission',
+      budgetAgencyTitleId: 'commodity-futures-trading-commission',
+      budgetBureauTitle: 'Commodity Futures Trading Commission',
+      budgetBureauTitleId: 'commodity-futures-trading-commission',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.cpsc.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Consumer Product Safety Commission was established as an independent regulatory agency by the Consumer Product Safety Act (15 U.S.C. 2051 et seq.) in 1973 and reauthorized by the Consumer Product Safety Improvement Act of 2008. The Commission consists of up to five members, who are appointed by the President with the advice and consent of the Senate, for 7-year terms.\r\n\r\nThe Commission implements provisions of the Flammable Fabrics Act (15 U.S.C. 1191); Poison Prevention Packaging Act of 1970 (15 U.S.C. 1471); Federal Hazardous Substances Act (15 U.S.C. 1261); act of August 2, 1956 (15 U.S.C. 1211), prohibiting the transportation of refrigerators without door safety devices; Children's Gasoline Burn Prevention Act (15 U.S.C. 2056 note); and Virginia Graeme Baker Pool and Spa Safety Act (15 U.S.C. 8001 et seq.).",
+      id: 84,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/84/thumb.png?1678399317',
+        small_url: 'https://agency-logos.federalregister.gov/84/small.png?1678399317',
+        medium_url: 'https://agency-logos.federalregister.gov/84/medium.png?1678399317'
+      },
+      name: 'Consumer Product Safety Commission',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=84&order=newest',
+      short_name: 'CPSC',
+      slug: 'consumer-product-safety-commission',
+      url: 'https://www.federalregister.gov/agencies/consumer-product-safety-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/84',
+      budgetAgencyTitle: 'Consumer Product Safety Commission',
+      budgetAgencyTitleId: 'consumer-product-safety-commission',
+      budgetBureauTitle: 'Consumer Product Safety Commission',
+      budgetBureauTitleId: 'consumer-product-safety-commission',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.nationalservice.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Corporation for National and Community Service engages Americans of all ages and backgrounds in community-based service that addresses the Nation's educational, public safety, environmental, and other human needs to achieve direct and demonstrable results. In so doing, the Corporation fosters civic responsibility, strengthens the ties that bind us together as a people, and provides educational opportunity for those who make a substantial commitment to service.\r\n\r\nThe Corporation was established on October 1, 1993, by the National and Community Service Trust Act of 1993 (42 U.S.C. 12651 et seq.). In addition to creating several new service programs, the Act consolidated the functions and activities of the former Commission on National and Community Service and the Federal agency ACTION.",
+      id: 91,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/91/thumb.jpg?1321482046',
+        small_url: 'https://agency-logos.federalregister.gov/91/small.jpg?1321482046',
+        medium_url: 'https://agency-logos.federalregister.gov/91/medium.jpg?1321482046'
+      },
+      name: 'Corporation for National and Community Service',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=91&order=newest',
+      short_name: 'CORP/CNCS',
+      slug: 'corporation-for-national-and-community-service',
+      url: 'https://www.federalregister.gov/agencies/corporation-for-national-and-community-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/91',
+      budgetAgencyTitle: 'Corporation for National and Community Service',
+      budgetAgencyTitleId: 'corporation-for-national-and-community-service',
+      budgetBureauTitle: 'Corporation for National and Community Service',
+      budgetBureauTitleId: 'corporation-for-national-and-community-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.ignet.gov/cigie1.html',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Council of the Inspectors General on Integrity and Efficiency (CIGIE) was established as an independent entity within the Executive branch under the Inspector General Reform Act of 2008.\r\n\r\nPrior to its establishment of the CIGIE, the Federal Inspectors General operated under the auspices of the President's Council on Integrity and Efficiency (PCIE) and the Executive Council on Integrity and Efficiency (ECIE)\r\n\r\nThe mission of the CIGIE is to address integrity, economy and effectiveness issues that transcend individual Government agencies; and to increase the professionalism and effectiveness of personnel by developing policies, standards, and approaches to aid in the establishment of a well-trained and highly skilled workforce in the offices of the Inspectors General.",
+      id: 578,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/578/thumb.jpg?1323193024',
+        small_url: 'https://agency-logos.federalregister.gov/578/small.jpg?1323193024',
+        medium_url: 'https://agency-logos.federalregister.gov/578/medium.jpg?1323193024'
+      },
+      name: 'Council of the Inspectors General on Integrity and Efficiency',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=578&order=newest',
+      short_name: 'CIGIE',
+      slug: 'council-of-the-inspectors-general-on-integrity-and-efficiency',
+      url: 'https://www.federalregister.gov/agencies/council-of-the-inspectors-general-on-integrity-and-efficiency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/578',
+      budgetAgencyTitle: 'Council of the Inspectors General on Integrity and Efficiency',
+      budgetAgencyTitleId: 'council-of-the-inspectors-general-on-integrity-and-efficiency',
+      budgetBureauTitle: 'Council of the Inspectors General on Integrity and Efficiency',
+      budgetBureauTitleId: 'council-of-the-inspectors-general-on-integrity-and-efficiency',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.csosa.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Court Services and Offender Supervision Agency for the District of Columbia (CSOSA) is a Federal, Executive branch agency, created by Congress in 1997 to perform the offender supervision function for D.C. Code offenders. It does so in coordination with the Superior Court of the District of Columbia and the U.S. Parole Commission. CSOSA's mission is to increase public safety, prevent crime, reduce recidivism, and support the fair administration of justice in close collaboration with the community. With a budget of $140 million and nearly 1,000 employees, CSOSA provides community supervision to 15,000 individuals on probation, parole or supervised release each day. [http://www.csosa.gov/about.aspx]",
+      id: 94,
+      logo: null,
+      name: 'Court Services and Offender Supervision Agency for the District of Columbia',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=94&order=newest',
+      short_name: 'CSOSA',
+      slug: 'court-services-and-offender-supervision-agency-for-the-district-of-columbia',
+      url: 'https://www.federalregister.gov/agencies/court-services-and-offender-supervision-agency-for-the-district-of-columbia',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/94',
+      budgetAgencyTitle: 'Court Services and Offender Supervision Agency for the District',
+      budgetAgencyTitleId: 'court-services-and-offender-supervision-agency-for-the-district',
+      budgetBureauTitle: 'Court Services and Offender Supervision Agency for the District',
+      budgetBureauTitleId: 'court-services-and-offender-supervision-agency-for-the-district',
+      matchLevel: 11,
+      matches: [
+        {
+          id: 94,
+          name: 'Court Services and Offender Supervision Agency for the District of Columbia',
+          comparing: 'Court Services and Offender Supervision Agency for the District',
+          rank: 11,
+          comparingParent: 'Court Services and Offender Supervision Agency for the District'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.dnfsb.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Defense Nuclear Facilities Safety Board reviews and evaluates the content and implementation of standards relating to the design, construction, operation, and decommissioning of defense nuclear facilities of the Department of Energy (DOE). The Defense Nuclear Facilities Safety Board was established as an independent agency on September 29, 1988, by the Atomic Energy Act of 1954, as amended (42 U.S.C. 2286-2286i).\r\n\r\nThe Board is composed of five members appointed by the President with the advice and consent of the Senate. Members of the Board are appointed from among United States citizens who are respected experts in the field of nuclear safety.',
+      id: 109,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/109/thumb.jpg?1321487533',
+        small_url: 'https://agency-logos.federalregister.gov/109/small.jpg?1321487533',
+        medium_url: 'https://agency-logos.federalregister.gov/109/medium.jpg?1321487533'
+      },
+      name: 'Defense Nuclear Facilities Safety Board',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=109&order=newest',
+      short_name: 'DNFSB',
+      slug: 'defense-nuclear-facilities-safety-board',
+      url: 'https://www.federalregister.gov/agencies/defense-nuclear-facilities-safety-board',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/109',
+      budgetAgencyTitle: 'Defense Nuclear Facilities Safety Board',
+      budgetAgencyTitleId: 'defense-nuclear-facilities-safety-board',
+      budgetBureauTitle: 'Defense Nuclear Facilities Safety Board',
+      budgetBureauTitleId: 'defense-nuclear-facilities-safety-board',
+      exact: true
+    },
+    {
+      agency_url: 'https://dra.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The DRA was established in 2000 as a formal framework for joint federal-state collaboration to promote and encourage the economic development of the lower Mississippi River and Alabama Black Belt regions. To fulfill this purpose, DRA invests in projects supporting transportation infrastructure, basic public infrastructure, workforce training, and business development. DRA works to create jobs, build communities, and improve the lives of those that reside in the region. DRA’s region encompasses 255 counties and parishes in parts of Alabama, Arkansas, Illinois, Kentucky, Louisiana, Mississippi, Missouri, and Tennessee.\r\n \r\nDRA’s enabling legislation dictates that at least 75% of DRA’s funds must be invested in economically distressed counties and parishes and isolated areas within non-distressed counties and parishes. In addition, half of DRA’s funds must support transportation infrastructure and basic public infrastructure.',
+      id: 624,
+      logo: null,
+      name: 'Delta Regional Authority',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=624&order=newest',
+      short_name: 'DRA',
+      slug: 'delta-regional-authority',
+      url: 'https://www.federalregister.gov/agencies/delta-regional-authority',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/624',
+      budgetAgencyTitle: 'Delta Regional Authority',
+      budgetAgencyTitleId: 'delta-regional-authority',
+      budgetBureauTitle: 'Delta Regional Authority',
+      budgetBureauTitleId: 'delta-regional-authority',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Denali Commission is an independent federal agency with its office in Anchorage, Alaska. Congress created it in 1998 through the Denali Commission Act (P.L. 105-277, 42 U.S.C. 3121.\r\n\r\nThe Commission was designed to provide critical utilities, infrastructure, and economic support throughout Alaska. With the creation of the Denali Commission, Congress acknowledged the need for increased inter-agency cooperation and focus on Alaska’s remote communities. Since its first meeting in April 1999, the Commission is credited with providing numerous cost-shared infrastructure projects across the State that exemplify effective and efficient partnership between federal and state agencies, and the private sector.\r\n',
+      id: 113,
+      logo: null,
+      name: 'Denali Commission',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=113&order=newest',
+      short_name: 'DC',
+      slug: 'denali-commission',
+      url: 'https://www.federalregister.gov/agencies/denali-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/113',
+      budgetAgencyTitle: 'Denali Commission',
+      budgetAgencyTitleId: 'denali-commission',
+      budgetBureauTitle: 'Denali Commission',
+      budgetBureauTitleId: 'denali-commission',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.ams.usda.gov',
+      child_ids: [218],
+      child_slugs: ['grain-inspection-packers-and-stockyards-administration'],
+      description:
+        'The Agricultural Marketing Service (AMS) was established by the Secretary of Agriculture on April 2, 1972, under the authority of Reorganization Plan No. 2 of 1953 (5 U.S.C. app.) and other authorities. The Service administers standardization, grading, certification, market news, marketing orders, research and promotion, and regulatory programs.\r\n\r\nThe Agricultural Marketing Service includes five commodity programs--Dairy, Fruit and Vegetable, Livestock and Seed, Poultry, and Cotton and Tobacco. The programs provide standardization, grading and market news services for those commodities. They enforce such Federal Laws as the Perishable Agricultural Commodities Act and the Federal Seed Act. AMS commodity programs also oversee marketing agreements and orders, administer research and promotion programs, and purchase commodities for Federal food programs.\r\n\r\nThe AMS National Organic Program (NOP) develops, implements, and administers national production, handling, and labeling standards for organic agricultural products. The NOP also accredits the certifying agents (foreign and domestic) who inspect organic production and handling operations to certify that they meet USDA standards.\r\n\r\nThe AMS Science and Technology Program lends centralized scientific support to AMS programs, including laboratory analyses, laboratory quality assurance, coordination of scientific research conducted by other agencies for AMS, and statistical and mathematical consulting services.\r\n\r\nThe AMS Transportation and Marketing Program brings together a unique combination of traffic managers, engineers, rural policy analysts, international trade specialists, and agricultural marketing specialists to help solve problems of U.S. and world agricultural transportation., provides better quality products to the consumer at reasonable cost, improves market access for growers with small-to medium sized farms, and promotes regional economic development.\r\n\r\nAMS is part of the Marketing and Regulatory Programs (MRP) mission area. MRP agencies facilitate the domestic and international marketing of U.S. agricultural products and ensure the health and care of animals and plants. MRP agencies are active participants in setting national and international standards.\r\n',
+      id: 9,
+      logo: null,
+      name: 'Agricultural Marketing Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=9&order=newest',
+      short_name: 'AMS',
+      slug: 'agricultural-marketing-service',
+      url: 'https://www.federalregister.gov/agencies/agricultural-marketing-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/9',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Agricultural Marketing Service',
+      budgetBureauTitleId: 'agricultural-marketing-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.ars.usda.gov/main/main.htm',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Agricultural Research Service (ARS) was established on November 2, 1953 under the Secretary of Agriculture’s Reorganization Plan No. 2 of 1953. ARS is the principal in-house research agency of the U.S. Department of Agriculture (USDA).\r\n\r\nARS conducts research to develop and transfer solutions to agricultural problems of high national priority. It provides information access and dissemination to ensure high-quality safe food and other agricultural products; assess the nutritional needs of Americans; sustain a competitive agricultural economy; enhance the natural resource base and the environment; and provide economic opportunities for rural citizens, communities, and society as a whole.\r\n\r\nResearch activities are carried out at 103 domestic locations (including Puerto Rico and the U.S. Virgin Islands) and 5 overseas locations. Much of this research is conducted in cooperation with partners in State universities and experiment stations, other Federal agencies, and private organizations. National Programs, headquartered in Beltsville, MD, is the focal point in the overall planning and coordination of ARS' research programs. Day-to-day management of the respective programs for specific field locations is assigned to eight area offices.\r\n\r\nARS also includes the National Agricultural Library (NAL), which is the primary resource in the United States for information about food, agriculture, and natural resources, and serves as an electronic gateway to a widening array of scientific literature, printed text, and agricultural images. NAL serves USDA and a broad customer base including policymakers, agricultural specialists, research scientists, and the general public. NAL works with other agricultural libraries and institutions to advance open and democratic access to information about agriculture and the Nation's agricultural knowledge.\r\n\r\n\r\n\r\n",
+      id: 10,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/10/thumb.png?1308257666',
+        small_url: 'https://agency-logos.federalregister.gov/10/small.png?1308257666',
+        medium_url: 'https://agency-logos.federalregister.gov/10/medium.png?1308257666'
+      },
+      name: 'Agricultural Research Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=10&order=newest',
+      short_name: 'ARS',
+      slug: 'agricultural-research-service',
+      url: 'https://www.federalregister.gov/agencies/agricultural-research-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/10',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Agricultural Research Service',
+      budgetBureauTitleId: 'agricultural-research-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.aphis.usda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Animal and Plant Health Inspection Service was reestablished by the Secretary of Agriculture on March 14, 1977, pursuant to authority contained in 5 U.S.C. 301 and Reorganization Plan No. 2 of 1953 (5 U.S.C. app.).\r\n\r\nThe Service was established to conduct regulatory and control programs to protect and improve animal and plant health for the benefit of man and the environment. In cooperation with State governments, the agency administers Federal laws and regulations pertaining to animal and plant health and quarantine, humane treatment of animals, and the control and eradication of pests and diseases. Regulations to prevent the introduction or interstate spread of certain animal or plant pests or diseases are also enforced by the Service. It also carries out research and operational activities to reduce crop and livestock depredation caused by birds, rodents, and predators.\r\n\r\n',
+      id: 22,
+      logo: null,
+      name: 'Animal and Plant Health Inspection Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=22&order=newest',
+      short_name: 'APHIS',
+      slug: 'animal-and-plant-health-inspection-service',
+      url: 'https://www.federalregister.gov/agencies/animal-and-plant-health-inspection-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/22',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Animal and Plant Health Inspection Service',
+      budgetBureauTitleId: 'animal-and-plant-health-inspection-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.ers.usda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The mission of the Economic Research Service (ERS) is to inform and enhance public and private decisionmaking on economic and policy issues related to agriculture, food, the environment, and rural development.  \r\n\r\nActivities to support this mission and the following goals involve research and development of economic and statistical indicators on a broad range of topics including, but not limited to, global agricultural market conditions, trade restrictions, agribusiness concentration, farm and retail food prices, foodborne illnesses, food labeling, nutrition, food assistance programs, worker safety, agrichemical usage, livestock waste management, conservation, sustainability, genetic diversity, technology transfer, rural infrastructure, and rural employment. Research results and economic indicators on such important agricultural, food, natural resource, and rural issues are fully disseminated to \r\npublic and private decisionmakers through published and electronic reports and articles; special staff analyses, briefings, presentations, and papers; databases; and individual contacts. Through such activities, ERS provides public and private decisionmakers with economic and related social science information and analysis in support of the department's goals of enhancing economic opportunities for agricultural producers; \r\nsupporting economic opportunities and quality of life in rural America; enhancing the protection and safety of U.S. agriculture and food; improving U.S. nutrition and health; and enhancing the natural resource base and environment. ",
+      id: 123,
+      logo: null,
+      name: 'Economic Research Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=123&order=newest',
+      short_name: 'ERS',
+      slug: 'economic-research-service',
+      url: 'https://www.federalregister.gov/agencies/economic-research-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/123',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Economic Research Service',
+      budgetBureauTitleId: 'economic-research-service',
+      exact: true
+    },
+    {
+      agency_url: 'https://www.fpacbc.usda.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The FPAC Business Center is a first-of-its-kind organization at USDA, combining the talent of employees from all three FPAC agencies into specialized teams that serve employees and customers across the Farm Service Agency (FSA), the Natural Resource Conservation Service (NRCS) and the Risk Management Agency (RMA). This new business approach helps agencies improve operations and efficiency at USDA and boosts support for America’s farmers, ranchers and foresters.',
+      id: 619,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/619/thumb.png?1730229220',
+        small_url: 'https://agency-logos.federalregister.gov/619/small.png?1730229220',
+        medium_url: 'https://agency-logos.federalregister.gov/619/medium.png?1730229220'
+      },
+      name: 'Farm Production and Conservation Business Center',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=619&order=newest',
+      short_name: 'FPACBC',
+      slug: 'farm-production-and-conservation-business-center',
+      url: 'https://www.federalregister.gov/agencies/farm-production-and-conservation-business-center',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/619',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Farm Production and Conservation',
+      budgetBureauTitleId: 'farm-production-and-conservation',
+      matchLevel: 9,
+      matches: [
+        {
+          id: 619,
+          name: 'Farm Production and Conservation Business Center',
+          comparing: 'Farm Production and Conservation',
+          rank: 9,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Agriculture'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.fsa.usda.gov/FSA/webapp?area=home&subject=landing&topic=landing',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Farm Service Agency (FSA) administers farm commodity, disaster, and conservation programs for farmers and ranchers, and makes and guarantees farm emergency, ownership, and operating loans through a network of State and county offices.\r\n',
+      id: 157,
+      logo: null,
+      name: 'Farm Service Agency',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=157&order=newest',
+      short_name: 'FSA',
+      slug: 'farm-service-agency',
+      url: 'https://www.federalregister.gov/agencies/farm-service-agency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/157',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Farm Service Agency',
+      budgetBureauTitleId: 'farm-service-agency',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Food and Nutrition Service (FNS) administers the USDA food assistance programs. These programs, which serve one in six Americans, represent our Nation's commitment to the principle that no one in this country should fear hunger or experience want. They provide a Federal safety net to people in need. The goals of the programs are to provide needy persons with access to a more nutritious diet, to improve the eating habits of the Nation's children, and to help America's farmers by providing an outlet for distributing foods purchased under farmer assistance authorities.\r\n\r\n  The Service works in partnership with the States in all its programs. State and local agencies determine most administrative details regarding distribution of food benefits and eligibility of participants, and FNS provides commodities and funding for additional food and to cover administrative costs.",
+      id: 200,
+      logo: null,
+      name: 'Food and Nutrition Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=200&order=newest',
+      short_name: 'FNS',
+      slug: 'food-and-nutrition-service',
+      url: 'https://www.federalregister.gov/agencies/food-and-nutrition-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/200',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Food and Nutrition Service',
+      budgetBureauTitleId: 'food-and-nutrition-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fsis.usda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Food Safety and Inspection Service (FSIS) was established by the Secretary of Agriculture on June 17, 1981, pursuant to authority contained in 5 U.S.C. 301 and Reorganization Plan No. 2 of 1953 (5 U.S.C. app.). FSIS is responsible for ensuring that the nation's commercial supply of meat, poultry, and egg products is safe, wholesome, and correctly labeled and packaged.\r\n\r\nMeat, Poultry, and Egg Products Inspection Federal meat and poultry inspection is mandatory for cattle, calves, swine, goats, sheep, lambs, horses (and other equines), chickens, turkeys, ducks, geese, and guineas used for human food. FSIS provides for the inspection of each animal or bird at slaughter and processed products during various stages of production.\r\n\r\nFSIS inspects all raw meat and poultry sold in interstate and foreign commerce, including imported products. It monitors meat and poultry products after they leave federally inspected plants. FSIS tests samples of egg products and meat and poultry products for microbial and chemical contaminants to monitor trends for enforcement purposes.\r\n\r\nFSIS provides inspection at Federal facilities for meat, poultry, and egg products, as well as voluntary inspection for animals not covered under mandatory inspection regulations such as buffalo, rabbit, and deer. It monitors meat and poultry products in storage, distribution, and retail channels; and takes necessary compliance actions to protect the public, including detention of products, voluntary product recalls, court-ordered seizures of products, administrative withdrawal of inspection, and referral for criminal prosecution. FSIS also monitors state inspection programs which inspect meat and poultry products sold only within the state in which they were produced.",
+      id: 201,
+      logo: null,
+      name: 'Food Safety and Inspection Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=201&order=newest',
+      short_name: 'FSIS',
+      slug: 'food-safety-and-inspection-service',
+      url: 'https://www.federalregister.gov/agencies/food-safety-and-inspection-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/201',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Food Safety and Inspection Service',
+      budgetBureauTitleId: 'food-safety-and-inspection-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fas.usda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Foreign Agricultural Service (FAS) works to improve foreign market access for U.S. products, to build new markets, to improve the competitive position of U.S. agriculture in the global marketplace, and to provide food aid and technical assistance to foreign countries.\r\n\r\nFAS has the primary responsibility for USDA's activities in the areas of international marketing, trade agreements and negotiations, and the collection and analysis of international statistics and market information. It also administers the USDA's export credit guarantee and food aid programs. FAS helps increase income and food availability in developing nations by mobilizing expertise for agriculturally led economic growth.\r\n\r\nFAS also enhances U.S. agricultural competitiveness through a global network of agricultural economists, marketing experts, negotiators, and other specialists. FAS agricultural counselors, attaches, trade officers, and locally employed FAS staff stationed in over 90 countries support U.S. agricultural interests and cover 140 countries.\r\n\r\nIn addition to agricultural affairs offices in U.S. embassies, agricultural trade offices also have been established in a number of key foreign markets and function as service centers for U.S. exporters and foreign buyers seeking market information.\r\n\r\nReports prepared by our overseas offices cover changes in policies and other developments that could affect U.S. agricultural exports. FAS staff in U.S. embassies around the world assess U.S. export marketing opportunities and respond to the daily informational needs of those who develop, initiate, monitor, and evaluate U.S. food and agricultural policies and programs.\r\n\r\nIn addition to data collection, FAS also maintains a worldwide agricultural reporting system based on information from U.S. agricultural traders, remote sensing systems, and other sources. Analysts in Washington, DC, prepare production forecasts, assess export marketing opportunities, and track changes in policies affecting U.S. agricultural exports and imports.\r\n\r\nFAS programs help U.S. exporters develop and maintain markets for hundreds of food and agricultural products, from bulk commodities to brand name items. Formal market promotion activities are carried out chiefly in cooperation with agricultural trade associations, State-regional trade groups, small businesses, and cooperatives that plan, manage, and contribute staff resources and funds to support these efforts. FAS also provides guidance to help exporters locate buyers and provides assistance through a variety of other methods. This includes supporting U.S. participation in several major trade shows and a number of single-industry exhibitions each year.",
+      id: 202,
+      logo: null,
+      name: 'Foreign Agricultural Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=202&order=newest',
+      short_name: 'FAS',
+      slug: 'foreign-agricultural-service',
+      url: 'https://www.federalregister.gov/agencies/foreign-agricultural-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/202',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Foreign Agricultural Service',
+      budgetBureauTitleId: 'foreign-agricultural-service',
+      exact: true
+    },
+    {
+      agency_url: 'https://www.fs.usda.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The U.S.Forest Service was established in 1905 under the Transfer Act of February 1, 1905 (16 U.S.C. 472) which transferred the Federal forest reserves and the responsibility for their management from the Department of the Interior to the Department of Agriculture. The mission of the USDA Forest Service is to sustain the health, diversity, and productivity of the Nation’s forests and grasslands to meet the needs of present and future generations.\r\n',
+      id: 209,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/209/thumb.tif?1322497125',
+        small_url: 'https://agency-logos.federalregister.gov/209/small.tif?1322497125',
+        medium_url: 'https://agency-logos.federalregister.gov/209/medium.tif?1322497125'
+      },
+      name: 'Forest Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=209&order=newest',
+      short_name: 'FS',
+      slug: 'forest-service',
+      url: 'https://www.federalregister.gov/agencies/forest-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/209',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Forest Service',
+      budgetBureauTitleId: 'forest-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.nass.usda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Agricultural Statistics Service (NASS) prepares estimates and reports on production, supply, price, chemical use, and other items necessary for the orderly operation of the U.S. agricultural economy.\r\n\r\nThe reports include statistics on field crops, fruits and vegetables, dairy, cattle, hogs, sheep, poultry, aquaculture, and related commodities or processed products. Other estimates concern farm numbers, farm production expenditures, agricultural chemical use, prices received by farmers for products sold, prices paid for commodities and services, indexes of prices received and paid, parity prices, farm employment, and farm wage rates.\r\n\r\nThe Service prepares these estimates through a complex system of sample surveys of producers, processors, buyers, and others associated with agriculture. Information is gathered by mail, telephone, personal interviews, and field visits.\r\n\r\nNASS is responsible for conducting the Census of Agriculture. The Census of Agriculture is taken every 5 years and provides comprehensive data on the agricultural economy down to the county level. Periodic reports are also issued on aquacultures, irrigation, and horticultural specialties.\r\n\r\nThe Service performs reimbursable survey work and statistical consulting services for other Federal and State agencies and provides technical assistance for developing agricultural data systems in other countries.',
+      id: 303,
+      logo: null,
+      name: 'National Agricultural Statistics Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=303&order=newest',
+      short_name: 'NASS',
+      slug: 'national-agricultural-statistics-service',
+      url: 'https://www.federalregister.gov/agencies/national-agricultural-statistics-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/303',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'National Agricultural Statistics Service',
+      budgetBureauTitleId: 'national-agricultural-statistics-service',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Institute of Food and Agriculture (NIFA) is an agency within the U.S. Department of Agriculture (USDA), part of the executive branch of the Federal Government. Congress created NIFA through the Food, Conservation, and Energy Act of 2008. NIFA replaced the former Cooperative State Research, Education, and Extension Service (CSREES), which had been in existence since 1994.',
+      id: 350,
+      logo: null,
+      name: 'National Institute of Food and Agriculture',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=350&order=newest',
+      short_name: 'NIFA',
+      slug: 'national-institute-of-food-and-agriculture',
+      url: 'https://www.federalregister.gov/agencies/national-institute-of-food-and-agriculture',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/350',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'National Institute of Food and Agriculture',
+      budgetBureauTitleId: 'national-institute-of-food-and-agriculture',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Natural Resources Conservation Service (NCRS) was originally established by Congress in 1935 as the Soil Conservation Service (SCS), NRCS has expanded to become a conservation leader for all natural resources, ensuring private lands are conserved, restored, and more resilient to environmental challenges, like climate change.\r\rNRCS works with landowners through conservation planning and assistance designed to benefit the soil, water, air, plants, and animals that result in productive lands and healthy ecosystems. [http://www.nrcs.usda.gov/about/]',
+      id: 376,
+      logo: null,
+      name: 'Natural Resources Conservation Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=376&order=newest',
+      short_name: 'NRCS',
+      slug: 'natural-resources-conservation-service',
+      url: 'https://www.federalregister.gov/agencies/natural-resources-conservation-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/376',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Natural Resources Conservation Service',
+      budgetBureauTitleId: 'natural-resources-conservation-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.usda.gov/oig/index.htm',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
+      id: 244,
+      logo: null,
+      name: 'Inspector General Office, Agriculture Department',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
+      short_name: 'OIG USDA',
+      slug: 'inspector-general-office-agriculture-department',
+      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Office of Inspector General',
+      budgetBureauTitleId: 'office-of-inspector-general',
+      matchLevel: 7,
+      matches: [
+        {
+          id: 244,
+          name: 'Inspector General Office, Agriculture Department',
+          comparing: 'Office of Inspector General',
+          rank: 7,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Agriculture'
+        },
+        {
+          id: 622,
+          name: 'Inspector General Office, Treasury Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Agriculture'
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The role of USDA's Risk Management Agency (RMA) is to help producers manage their business risks through effective, market-based risk management solutions. RMA's mission is to promote, support, and regulate sound risk management solutions to preserve and strengthen the economic stability of America's agricultural producers. As part of this mission, RMA operates and manages the Federal Crop Insurance Corporation (FCIC). RMA was created in 1996; the FCIC was founded in 1938. ",
+      id: 454,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/454/thumb.png?1279151351',
+        small_url: 'https://agency-logos.federalregister.gov/454/small.png?1279151351',
+        medium_url: 'https://agency-logos.federalregister.gov/454/medium.png?1279151351'
+      },
+      name: 'Risk Management Agency',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=454&order=newest',
+      short_name: 'RMA',
+      slug: 'risk-management-agency',
+      url: 'https://www.federalregister.gov/agencies/risk-management-agency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/454',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Risk Management Agency',
+      budgetBureauTitleId: 'risk-management-agency',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The mission of the Rural Business-Cooperative Service (RBS) is to enhance the quality of life for all rural Americans by providing leadership in building competitive businesses and sustainable cooperatives that can prosper in the global marketplace. To meet business credit needs in under-served areas, RBS business programs are usually leveraged with commercial, cooperative, or other private sector lenders.',
+      id: 456,
+      logo: null,
+      name: 'Rural Business-Cooperative Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=456&order=newest',
+      short_name: 'RBS',
+      slug: 'rural-business-cooperative-service',
+      url: 'https://www.federalregister.gov/agencies/rural-business-cooperative-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/456',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Rural Business-Cooperative Service',
+      budgetBureauTitleId: 'rural-business-cooperative-service',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Rural Housing and Community Development Service (RHCDS) was established by an act of October 13, 1994 (108 Stat. 3219). The Service operated under the Consolidated Farm and Rural Development Act (7 U.S.C. 1921) and title V of the Housing Act of 1949 (42 U.S.C. 1471).\r\n\r\nRHCDS provided loans to rural residents who were unable to get credit \r\nfrom commercial sources at reasonable rates and terms and who had a \r\nreasonable chance for success. In addition, The Service guaranteed loans made by commercial lenders for modest rural housing. RHCDS also made direct loans to low-income rural residents.\r\n\r\nRHCDS was renamed Rural Housing Service as of January 30, 1996.\r\n',
+      id: 457,
+      logo: null,
+      name: 'Rural Housing and Community Development Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=457&order=newest',
+      short_name: 'RHCDS',
+      slug: 'rural-housing-and-community-development-service',
+      url: 'https://www.federalregister.gov/agencies/rural-housing-and-community-development-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/457',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Rural Development',
+      budgetBureauTitleId: 'rural-development',
+      matchLevel: 6,
+      matches: [
+        {
+          id: 457,
+          name: 'Rural Housing and Community Development Service',
+          comparing: 'Rural Development',
+          rank: 6,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Agriculture'
+        }
+      ]
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Rural Housing Service (RHS) provides affordable rental housing, homeownership opportunities, and essential community facilities to rural Americans through a broad array of direct loan, guarantee, and grant programs. Rural residents and communities may inquire about any of these programs through local and State rural development offices.',
+      id: 458,
+      logo: null,
+      name: 'Rural Housing Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=458&order=newest',
+      short_name: 'RHS',
+      slug: 'rural-housing-service',
+      url: 'https://www.federalregister.gov/agencies/rural-housing-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/458',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Rural Housing Service',
+      budgetBureauTitleId: 'rural-housing-service',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Rural Utilities Service (RUS) is a credit agency that assists rural electric and telecommunications utilities in obtaining financing and administers a nationwide water and waste loan and grant program to improve the quality of life and promote economic development in rural America. A total of 890 rural electric and 800 rural telecommunications utilities in 47 States, Puerto Rico, the Virgin Islands, Guam, the Republic of the Marshall Islands, the Northern Mariana Islands, and the Federated States of Micronesia have received financial assistance. Approximately 7,200 rural communities are currently served through financial assistance received from water and waste loans and grants.',
+      id: 460,
+      logo: null,
+      name: 'Rural Utilities Service',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=460&order=newest',
+      short_name: 'RUS',
+      slug: 'rural-utilities-service',
+      url: 'https://www.federalregister.gov/agencies/rural-utilities-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/460',
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Rural Utilities Service',
+      budgetBureauTitleId: 'rural-utilities-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.bea.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Bureau of Economic Analysis (BEA) promotes a better understanding of the U.S. economy by providing the most timely, relevant, and accurate economic accounts data in an objective and cost-effective manner. BEA's economic statistics are closely watched and provide a comprehensive picture of the U.S. economy. BEA prepares national, regional, industry, and international accounts that present essential information on such issues in the world economy.\r\n\r\nBEA's national economic statistics provide a comprehensive look at U.S. production, consumption, investment, exports and imports, and income and saving. The international transactions accounts provide information on trade in goods and services (including the balance of payments and trade), investment income, and government and private finances. In addition, the accounts measure the value of U.S. international assets and liabilities and direct investment by multinational companies.\r\n\r\nThe regional accounts provide data on total and per capita personal income by region, State, metropolitan area, and county, and on gross State product. The industry economic account provides a detailed view of the interrelationships between U.S. producers and users and the contribution to production across industries.",
+      id: 118,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/118/thumb.png?1321564848',
+        small_url: 'https://agency-logos.federalregister.gov/118/small.png?1321564848',
+        medium_url: 'https://agency-logos.federalregister.gov/118/medium.png?1321564848'
+      },
+      name: 'Economic Analysis Bureau',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=118&order=newest',
+      short_name: 'EAB',
+      slug: 'economic-analysis-bureau',
+      url: 'https://www.federalregister.gov/agencies/economic-analysis-bureau',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/118',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'Bureau of Economic Analysis',
+      budgetBureauTitleId: 'bureau-of-economic-analysis',
+      matchLevel: 11,
+      matches: [
+        {
+          id: 118,
+          name: 'Economic Analysis Bureau',
+          comparing: 'Bureau of Economic Analysis',
+          rank: 11,
+          parent: 'Commerce Department',
+          comparingParent: 'Department of Commerce'
+        },
+        {
+          id: 119,
+          name: 'Economic Analysis Staff',
+          comparing: 'Bureau of Economic Analysis',
+          rank: 3,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Commerce'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.bis.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The mission of the Bureau of Industry and Security (BIS) is to advance U.S. national security, foreign policy, and economic objectives by ensuring an effective export control and treaty compliance system and promoting continued U.S. strategic technology leadership. BIS activities include regulating the export of sensitive goods and technologies in an effective and efficient manner; enforcing export control, antiboycott, and public safety laws; cooperating with and assisting other countries on export control and strategic trade issues; assisting U.S. industry to comply with international arms control agreements; and monitoring the viability of the U.S. defense industrial base and seeking to ensure that it is capable of satisfying U.S. national and homeland security needs.',
+      id: 241,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/241/thumb.png?1322519408',
+        small_url: 'https://agency-logos.federalregister.gov/241/small.png?1322519408',
+        medium_url: 'https://agency-logos.federalregister.gov/241/medium.png?1322519408'
+      },
+      name: 'Industry and Security Bureau',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=241&order=newest',
+      short_name: 'BIS',
+      slug: 'industry-and-security-bureau',
+      url: 'https://www.federalregister.gov/agencies/industry-and-security-bureau',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/241',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'Bureau of Industry and Security',
+      budgetBureauTitleId: 'bureau-of-industry-and-security',
+      matchLevel: 11,
+      matches: [
+        {
+          id: 241,
+          name: 'Industry and Security Bureau',
+          comparing: 'Bureau of Industry and Security',
+          rank: 11,
+          parent: 'Commerce Department',
+          comparingParent: 'Department of Commerce'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.census.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The U.S.Census Bureau was established as a permanent office by act of March 6, 1902 (32 Stat. 51). The major functions of the Census Bureau are authorized by the Constitution, which provides that a census of population shall be taken every 10 years, and by laws codified as title 13 of the United States Code. The law also provides that the information collected by the Census Bureau from individual persons, households, or establishments be kept strictly confidential and be used only for statistical purposes. \r\n\r\nThe Census Bureau is responsible for the the decennial censuses of population and housing; the quinquennial censuses of State and local governments, manufacturers, mineral industries, distributive trades, construction industries, and transportation; current surveys that provide information on many of the subjects covered in the censuses at monthly, quarterly, annual, or other intervals; the compilation of current statistics on U.S. foreign trade, including data on imports, exports, and shipping; special censuses at the request and expense of State and local government units; publication of estimates and projections of the population; publication of current data on population and housing characteristics; and current reports on manufacturing, retail and wholesale trade, services, construction, imports and exports, State and local government finances and employment, and other subjects.',
+      id: 42,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/42/thumb.png?1279143873',
+        small_url: 'https://agency-logos.federalregister.gov/42/small.png?1279143873',
+        medium_url: 'https://agency-logos.federalregister.gov/42/medium.png?1279143873'
+      },
+      name: 'Census Bureau',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=42&order=newest',
+      short_name: 'USBC',
+      slug: 'census-bureau',
+      url: 'https://www.federalregister.gov/agencies/census-bureau',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/42',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'Bureau of the Census',
+      budgetBureauTitleId: 'bureau-of-the-census',
+      matchLevel: 9,
+      matches: [
+        {
+          id: 42,
+          name: 'Census Bureau',
+          comparing: 'Bureau of the Census',
+          rank: 9,
+          parent: 'Commerce Department',
+          comparingParent: 'Department of Commerce'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.eda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Economic Development Administration (EDA) was created in 1965 under the Public Works and Economic Development Act (42 U.S.C. 3121) as part of an effort to target Federal resources to economically distressed areas and to help develop local economies in the United States. It was mandated to assist rural and urban communities that were outside the mainstream economy and that lagged in economic development, industrial growth, and personal income.\r\n\r\nEDA provides grants to States, regions, and communities across the Nation to help create wealth and minimize poverty by promoting a favorable business environment to attract private capital investment and higher skill, higher wage jobs through capacity building, planning, infrastructure, research grants, and strategic initiatives. Through its grant program, EDA utilizes public sector resources to create an environment where the private sector risks capital and job opportunities are created.',
+      id: 120,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/120/thumb.png?1322066164',
+        small_url: 'https://agency-logos.federalregister.gov/120/small.png?1322066164',
+        medium_url: 'https://agency-logos.federalregister.gov/120/medium.png?1322066164'
+      },
+      name: 'Economic Development Administration',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=120&order=newest',
+      short_name: 'EDA',
+      slug: 'economic-development-administration',
+      url: 'https://www.federalregister.gov/agencies/economic-development-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/120',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'Economic Development Administration',
+      budgetBureauTitleId: 'economic-development-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://trade.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The International Trade Administration (ITA) was established on January \r\n2, 1980, by the Secretary of Commerce to promote world trade and to strengthen the international trade and investment position of the United States. ITA is responsible for nonagricultural trade operations of the U.S. Government and supports the trade policy negotiation efforts of the U.S. Trade Representative.\r\n\r\nITA strengthens the competitiveness of U.S. industry, promotes trade and investment, and ensures fair trade through the rigorous enforcement of our trade laws and agreements.  ITA works to improve the global business environment and helps U.S. organizations compete at home and abroad.',
+      id: 261,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/261/thumb.png?1323293066',
+        small_url: 'https://agency-logos.federalregister.gov/261/small.png?1323293066',
+        medium_url: 'https://agency-logos.federalregister.gov/261/medium.png?1323293066'
+      },
+      name: 'International Trade Administration',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=261&order=newest',
+      short_name: 'ITA',
+      slug: 'international-trade-administration',
+      url: 'https://www.federalregister.gov/agencies/international-trade-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/261',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'International Trade Administration',
+      budgetBureauTitleId: 'international-trade-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.mbda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Minority Business Development Agency was established by Executive order in 1969. The Agency develops and coordinates a national program for minority business enterprise.\r\n\r\nThe Agency was created to assist minority businesses in achieving effective and equitable participation in the American free enterprise system and in overcoming social and economic disadvantages that have limited their participation in the past. The Agency provides national policies and leadership in forming and strengthening a partnership of business, industry, and government with the Nation's minority businesses.\r\n\r\nBusiness development services are provided to the minority business community through three vehicles: the minority business opportunity committees which disseminate information on business opportunities; the minority business development centers that provide management and technical assistance and other business development services; and electronic commerce which includes a Web page on the Internet that will show how to start a business and use the service to electronically match business with contract opportunities.\r\n\r\nThe Agency promotes and coordinates the efforts of other Federal agencies in assisting or providing market opportunities for minority business. It coordinates opportunities for minority firms in the private sector. Through such public and private cooperative activities, the Agency promotes the participation of Federal, State, and local governments, and business and industry in directing resources for the development of strong minority businesses.",
+      id: 291,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/291/thumb.png?1279150884',
+        small_url: 'https://agency-logos.federalregister.gov/291/small.png?1279150884',
+        medium_url: 'https://agency-logos.federalregister.gov/291/medium.png?1279150884'
+      },
+      name: 'Minority Business Development Agency',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=291&order=newest',
+      short_name: 'MBDA',
+      slug: 'minority-business-development-agency',
+      url: 'https://www.federalregister.gov/agencies/minority-business-development-agency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/291',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'Minority Business Development Agency',
+      budgetBureauTitleId: 'minority-business-development-agency',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Institute of Standards and Technology (NIST) operates under the authority of the National Institute of Standards and Technology Act (15 U.S.C. 271), which amends the Organic Act of March 3, 1901 (ch. 872), that created the National Bureau of Standards (NBS) in 1901. In 1988, Congress renamed NBS as NIST and expanded its activities and responsibilities.\r\rNIST is a nonregulatory Federal agency within the Commerce Department. Its mission is to promote measurement science, standards, and technology to enhance productivity, facilitate trade, and improve the quality of life. NIST carries out its mission through the NIST laboratories, which conduct research to advance the U.S. technological infrastructure; the Baldrige National Quality Program, which helps U.S. businesses and other organizations improve the performance and quality of their operations; the Hollings Manufacturing Extension Partnership, which helps smaller firms adopt new manufacturing and management technologies; and the Technology Innovative Program, which provides cost-shared awards to industry and other institutions for high-risk, high-reward research in areas of critical national need.',
+      id: 352,
+      logo: null,
+      name: 'National Institute of Standards and Technology',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=352&order=newest',
+      short_name: 'NIST',
+      slug: 'national-institute-of-standards-and-technology',
+      url: 'https://www.federalregister.gov/agencies/national-institute-of-standards-and-technology',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/352',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'National Institute of Standards and Technology',
+      budgetBureauTitleId: 'national-institute-of-standards-and-technology',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The National Oceanic and Atmospheric Administration (NOAA) was formed on October 3, 1970, by Reorganization Plan No. 4 of 1970 (5 U.S.C. app.).\r\n\r\nNOAA's mission entails environmental assessment, prediction, and stewardship. It is dedicated to monitoring and assessing the state of the environment in order to make accurate and timely forecasts to protect life, property, and natural resources, as well as to promote the economic well-being of the United States and to enhance its environmental security. NOAA is committed to protecting America's ocean, coastal, and living marine resources while promoting sustainable economic development.",
+      id: 361,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/361/thumb.png?1306288142',
+        small_url: 'https://agency-logos.federalregister.gov/361/small.png?1306288142',
+        medium_url: 'https://agency-logos.federalregister.gov/361/medium.png?1306288142'
+      },
+      name: 'National Oceanic and Atmospheric Administration',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=361&order=newest',
+      short_name: 'NOAA',
+      slug: 'national-oceanic-and-atmospheric-administration',
+      url: 'https://www.federalregister.gov/agencies/national-oceanic-and-atmospheric-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/361',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'National Oceanic and Atmospheric Administration',
+      budgetBureauTitleId: 'national-oceanic-and-atmospheric-administration',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Technical Information Service (NTIS) operates a central clearinghouse of scientific and technical information that is useful to U.S. business and industry. NTIS collects scientific and technical information; catalogs, abstracts, indexes, and permanently archives the information; disseminates products in the forms and formats most useful to its customers; develops electronic and other media to disseminate information; and provides information processing services to other Federal agencies. NTIS receives no appropriations. Its revenue comes from two sources: the sale of technical reports to business and industry, schools and universities, State and local government offices, and the public at large and from services to Federal agencies that help them communicate more effectively with their employees and constituents.\r\rThe NTIS collection of approximately 2.5 million works covers a broad array of subjects and includes reports on the results of research and development and scientific studies on manufacturing processes, current events, and foreign and domestic trade; business and management studies; social, economic, and trade statistics; computer software and databases; health care reports, manuals, and data; environmental handbooks, regulations, economic studies, and applied technologies; directories to Federal laboratory and technical resources; and global competitive intelligence. The collection also includes audiovisual training materials in such areas as foreign languages, workplace safety and health, law enforcement, and fire services.\r',
+      id: 372,
+      logo: null,
+      name: 'National Technical Information Service',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=372&order=newest',
+      short_name: 'NTIS',
+      slug: 'national-technical-information-service',
+      url: 'https://www.federalregister.gov/agencies/national-technical-information-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/372',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'National Technical Information Service',
+      budgetBureauTitleId: 'national-technical-information-service',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [584],
+      child_slugs: ['first-responder-network-authority'],
+      description:
+        "The National Telecommunications and Information Administration (NTIA) was established in 1978 by Reorganization Plan No. 1 of 1977 (5 U.S.C. app.) and Executive Order 12046 of March 27, 1978 (3 CFR, 1978 Comp., p. 158), by combining the Office of Telecommunications Policy of the Executive Office of the President and the Office of Telecommunications of the Department of Commerce to form a new agency reporting to the Secretary of Commerce. NTIA operates under the authority of the National Telecommunications and Information Administration Organization Act (47 U.S.C. 901).\r\rNTIA's principal responsibilities and functions include:\r\r--serving as the principal executive branch adviser to the President on telecommunications and information policy;\r--developing and presenting U.S. plans and policies at international communications conferences and related meetings;\r--prescribing policies for and managing Federal use of the radio frequency spectrum;\r--serving as the principal Federal telecommunications research and engineering laboratory, through NTIA's Institute for Telecommunication \rSciences, headquartered in Boulder, CO;\r--administering Federal programs to assist telecommunication facilities, public safety organizations, and the general public with the transition to digital broadcasting;\r--providing grants through the Broadband Technology Opportunities \rProgram to increase broadband accessibility in underserved areas of the \rUnited States; and\r--providing grants through the Public Telecommunications Facilities \rProgram to extend delivery or public telecommunications services to U.S. citizens, to increase ownership and management by women and minorities, and to strengthen the capabilities of existing public broadcasting stations to provide telecommunications services.",
+      id: 373,
+      logo: null,
+      name: 'National Telecommunications and Information Administration',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=373&order=newest',
+      short_name: 'NTIA',
+      slug: 'national-telecommunications-and-information-administration',
+      url: 'https://www.federalregister.gov/agencies/national-telecommunications-and-information-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/373',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'National Telecommunications and Information Administration',
+      budgetBureauTitleId: 'national-telecommunications-and-information-administration',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The United States Patent and Trademark Office (USPTO) was established by the act of July 19, 1952 (35 U.S.C. 1) \"to promote the progress of science and the useful arts by securing for limited times to inventors the exclusive right to their respective discoveries for a certain period of time'' (Article I, Section 8 of the United States Constitution). The registration of trademarks is based on the commerce clause of the U.S. Constitution.\r\rUSPTO examines and issues patents. There are three major patent categories: utility patents, design patents, and plant patents. USPTO also issues statutory invention registrations and processes international patent applications.\r\rThrough the registration of trademarks, USPTO assists businesses in protecting their investments, promoting goods and services, and safeguarding consumers against confusion and deception in the marketplace. A trademark includes any distinctive word, name, symbol, device, or any combination thereof adopted and used or intended to be used by a manufacturer or merchant to identify his goods or services and distinguish them from those manufactured or sold by others. Trademarks are examined by the Office for compliance with various statutory requirements to prevent unfair competition and consumer deception.\r\rIn addition to the examination of patent and trademark applications, issuance of patents, and registration of trademarks, USPTO advises and assists government agencies and officials in matters involving all domestic and global aspects of intellectual property. USPTO also promotes an understanding of intellectual property protection.",
+      id: 402,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/402/thumb.png?1279151273',
+        small_url: 'https://agency-logos.federalregister.gov/402/small.png?1279151273',
+        medium_url: 'https://agency-logos.federalregister.gov/402/medium.png?1279151273'
+      },
+      name: 'Patent and Trademark Office',
+      parent_id: 54,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=402&order=newest',
+      short_name: 'PTO',
+      slug: 'patent-and-trademark-office',
+      url: 'https://www.federalregister.gov/agencies/patent-and-trademark-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/402',
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'U.S. Patent and Trademark Office',
+      budgetBureauTitleId: 'us-patent-and-trademark-office',
+      matchLevel: 10,
+      matches: [
+        {
+          id: 402,
+          name: 'Patent and Trademark Office',
+          comparing: 'U.S. Patent and Trademark Office',
+          rank: 10,
+          parent: 'Commerce Department',
+          comparingParent: 'Department of Commerce'
+        },
+        {
+          id: 597,
+          name: 'U.S. Codex Office',
+          comparing: 'U.S. Patent and Trademark Office',
+          rank: 2,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Commerce'
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The National Nuclear Security Administration (NNSA) was created by Congress through the National Defense Authorization Act for Fiscal Year 2000 (113 Stat. 512) to bring focus to the management of the Nation's defense nuclear security programs. Three existing organizations within the Department of Energy--Defense Programs, Defense Nuclear Nonproliferation, and Naval Reactors--were combined into a new, separately organized and managed agency within DOE, headed by an Administrator who reports to the Secretary. NNSA is responsible for strengthening United States security through military application of nuclear energy and by reducing the global threat from terrorism and weapons of mass destruction.\r\rNNSA's service center and eight site offices provide operations oversight and contract administration for NNSA site activities, acting as the agency's risk acceptance for the site. The site offices are responsible for the following functions: the safe and secure operation of facilities under the purview of NNSA; supporting NNSA programs to ensure their success in accordance with their expectations; and ensuring the long-term viability of the site to support NNSA programs and projects.",
+      id: 359,
+      logo: null,
+      name: 'National Nuclear Security Administration',
+      parent_id: 136,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=359&order=newest',
+      short_name: 'NNSA',
+      slug: 'national-nuclear-security-administration',
+      url: 'https://www.federalregister.gov/agencies/national-nuclear-security-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/359',
+      budgetAgencyTitle: 'Department of Energy',
+      budgetAgencyTitleId: 'department-of-energy',
+      budgetBureauTitle: 'National Nuclear Security Administration',
+      budgetBureauTitleId: 'national-nuclear-security-administration',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Alaska Power Administration was established by the Secretary of the Interior in 1967. The Administration was abolished and its responsibilities transferred to the Department of Energy by act of August 4, 1977 (91 Stat. 578).',
+      id: 17,
+      logo: null,
+      name: 'Alaska Power Administration',
+      parent_id: 136,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=17&order=newest',
+      short_name: 'APA',
+      slug: 'alaska-power-administration',
+      url: 'https://www.federalregister.gov/agencies/alaska-power-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/17',
+      budgetAgencyTitle: 'Department of Energy',
+      budgetAgencyTitleId: 'department-of-energy',
+      budgetBureauTitle: 'Power Marketing Administration',
+      budgetBureauTitleId: 'power-marketing-administration',
+      matchLevel: 7,
+      matches: [
+        {
+          id: 17,
+          name: 'Alaska Power Administration',
+          comparing: 'Power Marketing Administration',
+          rank: 7,
+          parent: 'Energy Department',
+          comparingParent: 'Department of Energy'
+        },
+        {
+          id: 40,
+          name: 'Bonneville Power Administration',
+          comparing: 'Power Marketing Administration',
+          rank: 7,
+          parent: 'Energy Department',
+          comparingParent: 'Department of Energy'
+        },
+        {
+          id: 471,
+          name: 'Southeastern Power Administration',
+          comparing: 'Power Marketing Administration',
+          rank: 7,
+          parent: 'Energy Department',
+          comparingParent: 'Department of Energy'
+        },
+        {
+          id: 472,
+          name: 'Southwestern Power Administration',
+          comparing: 'Power Marketing Administration',
+          rank: 7,
+          parent: 'Energy Department',
+          comparingParent: 'Department of Energy'
+        },
+        {
+          id: 525,
+          name: 'Western Area Power Administration',
+          comparing: 'Power Marketing Administration',
+          rank: 6,
+          parent: 'Energy Department',
+          comparingParent: 'Department of Energy'
+        }
+      ]
+    },
+    {
       agency_url: 'http://www.acf.hhs.gov/',
       child_ids: [],
       child_slugs: [],
@@ -2720,93 +4126,6 @@ export default {
       ]
     },
     {
-      agency_url: 'http://www.acus.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Administrative Conference of the United States (ACUS) was established under the Administrative Conference Act (5 U.S.C. 591-96), as a permanent independent agency of the Federal Government.\r\n\r\nACUS provides suitable arrangements through which Federal agencies, assisted by outside experts, may cooperatively study mutual problems, exchange information, and develop recommendations for action by proper authorities to the end that private rights may be fully protected and regulatory activities and other Federal responsibilities may be carried out expeditiously in the public interest.\r\n\r\nOther purposes of the ACUS include the promotion of effective public participation and efficiency in the rulemaking process; The reduction of unnecessary litigation in the regulatory process; the improvement of the use of science in the regulatory process; and the improvement of the effectiveness of laws applicable to the regulatory process.',
-      id: 566,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/566/thumb.gif?1308250528',
-        small_url: 'https://agency-logos.federalregister.gov/566/small.gif?1308250528',
-        medium_url: 'https://agency-logos.federalregister.gov/566/medium.gif?1308250528'
-      },
-      name: 'Administrative Conference of the United States',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=566&order=newest',
-      short_name: 'ACUS',
-      slug: 'administrative-conference-of-the-united-states',
-      url: 'https://www.federalregister.gov/agencies/administrative-conference-of-the-united-states',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/566',
-      budgetAgencyTitle: 'Administrative Conference of the United States',
-      budgetAgencyTitleId: 'administrative-conference-of-the-united-states',
-      budgetBureauTitle: 'Administrative Conference of the United States',
-      budgetBureauTitleId: 'administrative-conference-of-the-united-states',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.achp.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Advisory Council on Historic Preservation (ACHP) is an independent federal agency that promotes the preservation, enhancement, and productive use of our nation's historic resources, and advises the President and Congress on national historic preservation policy. \r\n\r\nThe goal of the National Historic Preservation Act (NHPA), which established the ACHP in 1966, is to have federal agencies act as responsible stewards of our nation's resources when their actions affect historic properties. The ACHP is the only entity with the legal responsibility to encourage federal agencies to factor historic preservation into federal project requirements. ",
-      id: 225,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/225/thumb.gif?1322513916',
-        small_url: 'https://agency-logos.federalregister.gov/225/small.gif?1322513916',
-        medium_url: 'https://agency-logos.federalregister.gov/225/medium.gif?1322513916'
-      },
-      name: 'Advisory Council on Historic Preservation',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=225&order=newest',
-      short_name: 'ACHP',
-      slug: 'advisory-council-on-historic-preservation',
-      url: 'https://www.federalregister.gov/agencies/advisory-council-on-historic-preservation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/225',
-      budgetAgencyTitle: 'Advisory Council on Historic Preservation',
-      budgetAgencyTitleId: 'advisory-council-on-historic-preservation',
-      budgetBureauTitle: 'Advisory Council on Historic Preservation',
-      budgetBureauTitleId: 'advisory-council-on-historic-preservation',
-      exact: true
-    },
-    {
-      agency_url: 'https://www.usadf.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The United States African Development Foundation (USADF) was established under the African Development Foundation Act of 1980 (22 U.S.C. 290h) as an Independent Federal agency created to support African-designed and African-driven solutions addressing grass-roots economic and social problems.\r\n\r\nUSADF provides grants to community groups and small enterprises that benefit under served and marginalized groups in Africa.  Marginalized groups are people that have significant needs that are not being currently addressed by existing governments programs, NGOs, or other international development efforts. USADF measures grant success in terms of jobs, increased incomes levels, and improved social conditions.\r\n\r\nThe United States African Development Foundation was formerly the African Development Foundation (See Pub. L. 113-76).\r\n\r\n',
-      id: 4,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/4/thumb.jpg?1308254131',
-        small_url: 'https://agency-logos.federalregister.gov/4/small.jpg?1308254131',
-        medium_url: 'https://agency-logos.federalregister.gov/4/medium.jpg?1308254131'
-      },
-      name: 'United States African Development Foundation',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=4&order=newest',
-      short_name: 'USADF',
-      slug: 'african-development-foundation',
-      url: 'https://www.federalregister.gov/agencies/african-development-foundation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/4',
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'African Development Foundation',
-      budgetBureauTitleId: 'african-development-foundation',
-      matchLevel: 4,
-      matches: [
-        {
-          id: 4,
-          name: 'United States African Development Foundation',
-          comparing: 'African Development Foundation',
-          rank: 4,
-          comparingParent: 'International Assistance Programs'
-        }
-      ]
-    },
-    {
       agency_url: 'http://www.ahrq.gov/about/ahrqfact.htm',
       child_ids: [],
       child_slugs: [],
@@ -2833,233 +4152,798 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.usaid.gov',
-      child_ids: [258],
-      child_slugs: ['international-development-cooperation-agency'],
+      agency_url: 'http://www.cdc.gov/',
+      child_ids: [],
+      child_slugs: [],
       description:
-        'The United States Agency for International Development (USAID) is an independent Federal agency established by 22 U.S.C. 6563 that receives overall foreign policy guidance from the Secretary of State. Its principal statutory authority is the Foreign Assistance Act of 1961, as amended (22 U.S.C. 2151 et seq.). \r\n\r\nUSAID serves as the focal point within the Government for economic matters affecting U.S. relations with developing countries. USAID administers international economic and humanitarian assistance programs. The Administrator is under the direct authority and foreign policy guidance of the Secretary of State.\r\n\r\nFor more information on the U.S. Agency for International Development’s organization  and activities, please visit the agency homepage at http://www.usaid.gov/.\r\n\r\n\r\n',
-      id: 6,
+        'The Centers for Disease Control and Prevention (CDC), as part of the Public Health Service, is charged with protecting the public health of the Nation by providing leadership and direction in the prevention of and control of diseases and other preventable conditions and responding to public health emergencies. Within the CDC, there are four coordinating centers, two coordinating offices, and the National Institute for Occupational Safety and Health.',
+      id: 44,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/6/thumb.tif?1333045732',
-        small_url: 'https://agency-logos.federalregister.gov/6/small.tif?1333045732',
-        medium_url: 'https://agency-logos.federalregister.gov/6/medium.tif?1333045732'
+        thumb_url: 'https://agency-logos.federalregister.gov/44/thumb.png?1279143855',
+        small_url: 'https://agency-logos.federalregister.gov/44/small.png?1279143855',
+        medium_url: 'https://agency-logos.federalregister.gov/44/medium.png?1279143855'
       },
-      name: 'Agency for International Development',
-      parent_id: null,
+      name: 'Centers for Disease Control and Prevention',
+      parent_id: 221,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=6&order=newest',
-      short_name: 'USAID',
-      slug: 'agency-for-international-development',
-      url: 'https://www.federalregister.gov/agencies/agency-for-international-development',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/6',
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'Agency for International Development',
-      budgetBureauTitleId: 'agency-for-international-development',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=44&order=newest',
+      short_name: 'CDC',
+      slug: 'centers-for-disease-control-and-prevention',
+      url: 'https://www.federalregister.gov/agencies/centers-for-disease-control-and-prevention',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/44',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Centers for Disease Control and Prevention',
+      budgetBureauTitleId: 'centers-for-disease-control-and-prevention',
       exact: true
     },
     {
-      agency_url: 'http://www.ams.usda.gov',
-      child_ids: [218],
-      child_slugs: ['grain-inspection-packers-and-stockyards-administration'],
-      description:
-        'The Agricultural Marketing Service (AMS) was established by the Secretary of Agriculture on April 2, 1972, under the authority of Reorganization Plan No. 2 of 1953 (5 U.S.C. app.) and other authorities. The Service administers standardization, grading, certification, market news, marketing orders, research and promotion, and regulatory programs.\r\n\r\nThe Agricultural Marketing Service includes five commodity programs--Dairy, Fruit and Vegetable, Livestock and Seed, Poultry, and Cotton and Tobacco. The programs provide standardization, grading and market news services for those commodities. They enforce such Federal Laws as the Perishable Agricultural Commodities Act and the Federal Seed Act. AMS commodity programs also oversee marketing agreements and orders, administer research and promotion programs, and purchase commodities for Federal food programs.\r\n\r\nThe AMS National Organic Program (NOP) develops, implements, and administers national production, handling, and labeling standards for organic agricultural products. The NOP also accredits the certifying agents (foreign and domestic) who inspect organic production and handling operations to certify that they meet USDA standards.\r\n\r\nThe AMS Science and Technology Program lends centralized scientific support to AMS programs, including laboratory analyses, laboratory quality assurance, coordination of scientific research conducted by other agencies for AMS, and statistical and mathematical consulting services.\r\n\r\nThe AMS Transportation and Marketing Program brings together a unique combination of traffic managers, engineers, rural policy analysts, international trade specialists, and agricultural marketing specialists to help solve problems of U.S. and world agricultural transportation., provides better quality products to the consumer at reasonable cost, improves market access for growers with small-to medium sized farms, and promotes regional economic development.\r\n\r\nAMS is part of the Marketing and Regulatory Programs (MRP) mission area. MRP agencies facilitate the domestic and international marketing of U.S. agricultural products and ensure the health and care of animals and plants. MRP agencies are active participants in setting national and international standards.\r\n',
-      id: 9,
-      logo: null,
-      name: 'Agricultural Marketing Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=9&order=newest',
-      short_name: 'AMS',
-      slug: 'agricultural-marketing-service',
-      url: 'https://www.federalregister.gov/agencies/agricultural-marketing-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/9',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Agricultural Marketing Service',
-      budgetBureauTitleId: 'agricultural-marketing-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.ars.usda.gov/main/main.htm',
+      agency_url: 'http://www.cms.gov/',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Agricultural Research Service (ARS) was established on November 2, 1953 under the Secretary of Agriculture’s Reorganization Plan No. 2 of 1953. ARS is the principal in-house research agency of the U.S. Department of Agriculture (USDA).\r\n\r\nARS conducts research to develop and transfer solutions to agricultural problems of high national priority. It provides information access and dissemination to ensure high-quality safe food and other agricultural products; assess the nutritional needs of Americans; sustain a competitive agricultural economy; enhance the natural resource base and the environment; and provide economic opportunities for rural citizens, communities, and society as a whole.\r\n\r\nResearch activities are carried out at 103 domestic locations (including Puerto Rico and the U.S. Virgin Islands) and 5 overseas locations. Much of this research is conducted in cooperation with partners in State universities and experiment stations, other Federal agencies, and private organizations. National Programs, headquartered in Beltsville, MD, is the focal point in the overall planning and coordination of ARS' research programs. Day-to-day management of the respective programs for specific field locations is assigned to eight area offices.\r\n\r\nARS also includes the National Agricultural Library (NAL), which is the primary resource in the United States for information about food, agriculture, and natural resources, and serves as an electronic gateway to a widening array of scientific literature, printed text, and agricultural images. NAL serves USDA and a broad customer base including policymakers, agricultural specialists, research scientists, and the general public. NAL works with other agricultural libraries and institutions to advance open and democratic access to information about agriculture and the Nation's agricultural knowledge.\r\n\r\n\r\n\r\n",
-      id: 10,
+        'The Centers for Medicare and Medicaid Services, originally designated the Health Care Finance Administration (HCFA), was established as a subagency under the Department of Health and Human Services by the Reorganization Order of march 9, 1977.\r\nThe Centers for Medicare and Medicaid Services (CMS) was created to administer oversight of the Medicare Program and the federal portion of the Medicaid Program. It also ensures that program beneficiaries are aware of the services for which they are eligible and that those services are accessible and of high quality and develops health and safety standards for providers of health care services authorized by Medicare and Medicaid legislation. CMS is also responsible for administering the State Children’s Health Insurance Program (SCHIP), the Health Insurance Portability and Accountability Act (HIPAA), and several other health-related programs. \r\n\r\n ',
+      id: 45,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/10/thumb.png?1308257666',
-        small_url: 'https://agency-logos.federalregister.gov/10/small.png?1308257666',
-        medium_url: 'https://agency-logos.federalregister.gov/10/medium.png?1308257666'
+        thumb_url: 'https://agency-logos.federalregister.gov/45/thumb.jpg?1279148862',
+        small_url: 'https://agency-logos.federalregister.gov/45/small.jpg?1279148862',
+        medium_url: 'https://agency-logos.federalregister.gov/45/medium.jpg?1279148862'
       },
-      name: 'Agricultural Research Service',
-      parent_id: 12,
+      name: 'Centers for Medicare & Medicaid Services',
+      parent_id: 221,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=10&order=newest',
-      short_name: 'ARS',
-      slug: 'agricultural-research-service',
-      url: 'https://www.federalregister.gov/agencies/agricultural-research-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/10',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Agricultural Research Service',
-      budgetBureauTitleId: 'agricultural-research-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.ttb.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Alcohol and Tobacco Tax and Trade Bureau, statutorily named the Tax and Trade Bureau (TTB) was established under the Homeland Security Act of 2002 (the Act) on January 24, 2003. Rendering the functions of the Bureau of Alcohol, Tobacco and Firearms (ATF) into two new organizations with separate functions, the Act created a new tax and trade bureau within the Department of the Treasury, and shifted certain law enforcement functions of ATF to the Department of Justice. The Act called for the tax collection functions to remain with the Department of the Treasury; and the new organization was called the “Alcohol and Tobacco Tax and Trade Bureau.”\r\n\r\nThe mission of TTB is to collect alcohol, tobacco, firearms, and ammunition excise taxes that are rightfully due; to protect the consumer of alcohol beverages through compliance programs that are based upon education and enforcement of the industry to ensure an effectively regulated marketplace; and to assist industry members to understand and comply with Federal tax, product, and marketing requirements associated with the commodities we regulate.\r\n\r\n\r\n',
-      id: 18,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/18/thumb.png?1321298190',
-        small_url: 'https://agency-logos.federalregister.gov/18/small.png?1321298190',
-        medium_url: 'https://agency-logos.federalregister.gov/18/medium.png?1321298190'
-      },
-      name: 'Alcohol and Tobacco Tax and Trade Bureau',
-      parent_id: 497,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=18&order=newest',
-      short_name: 'TTB',
-      slug: 'alcohol-and-tobacco-tax-and-trade-bureau',
-      url: 'https://www.federalregister.gov/agencies/alcohol-and-tobacco-tax-and-trade-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/18',
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Alcohol and Tobacco Tax and Trade Bureau',
-      budgetBureauTitleId: 'alcohol-and-tobacco-tax-and-trade-bureau',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.abmc.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The American Battle Monuments Commission (ABMC) was established by Congress in 1923 to commemorate the service, achievements, and sacrifice of U.S. armed forces where they have served overseas since 1917, and within the U.S. when directed by public law.\r\n\r\nThe ABMC commemorative mission is reflected in 24 overseas military cemeteries that serve as resting places for almost 125,000 American war dead; on Tablets of the Missing that memorialize more than 94,000 U.S. servicemen and women; and through 25 memorials, monuments and markers.',
-      id: 20,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/20/thumb.png?1306287839',
-        small_url: 'https://agency-logos.federalregister.gov/20/small.png?1306287839',
-        medium_url: 'https://agency-logos.federalregister.gov/20/medium.png?1306287839'
-      },
-      name: 'American Battle Monuments Commission',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=20&order=newest',
-      short_name: 'ABMC',
-      slug: 'american-battle-monuments-commission',
-      url: 'https://www.federalregister.gov/agencies/american-battle-monuments-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/20',
-      budgetAgencyTitle: 'Other Defense (Civil Programs)',
-      budgetAgencyTitleId: 'other-defense-civil-programs',
-      budgetBureauTitle: 'American Battle Monuments Commission',
-      budgetBureauTitleId: 'american-battle-monuments-commission',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.aphis.usda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Animal and Plant Health Inspection Service was reestablished by the Secretary of Agriculture on March 14, 1977, pursuant to authority contained in 5 U.S.C. 301 and Reorganization Plan No. 2 of 1953 (5 U.S.C. app.).\r\n\r\nThe Service was established to conduct regulatory and control programs to protect and improve animal and plant health for the benefit of man and the environment. In cooperation with State governments, the agency administers Federal laws and regulations pertaining to animal and plant health and quarantine, humane treatment of animals, and the control and eradication of pests and diseases. Regulations to prevent the introduction or interstate spread of certain animal or plant pests or diseases are also enforced by the Service. It also carries out research and operational activities to reduce crop and livestock depredation caused by birds, rodents, and predators.\r\n\r\n',
-      id: 22,
-      logo: null,
-      name: 'Animal and Plant Health Inspection Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=22&order=newest',
-      short_name: 'APHIS',
-      slug: 'animal-and-plant-health-inspection-service',
-      url: 'https://www.federalregister.gov/agencies/animal-and-plant-health-inspection-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/22',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Animal and Plant Health Inspection Service',
-      budgetBureauTitleId: 'animal-and-plant-health-inspection-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.arc.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Appalachian Regional Commission (ARC) is a regional economic development agency that represents a partnership of federal, state, and local government. Established by an act of Congress in 1965, ARC is composed of the governors of the 13 Appalachian states and a federal co-chair, who is appointed by the president. Local participation is provided through multi-county local development districts.\r\n\r\nARC funds projects that address the four goals identified in the Commission's strategic plan:\r\n\r\n(1) Increase job opportunities and per capita income in Appalachia to reach parity with the nation. \r\n(2) Strengthen the capacity of the people of Appalachia to compete in the global economy. \r\n(3) Develop and improve Appalachia's infrastructure to make the Region economically competitive. \r\n(4) Build the Appalachian Development Highway System to reduce Appalachia's isolation. \r\n\r\nEach year ARC provides funding for several hundred projects in the Appalachian Region, in areas such as business development, education and job training, telecommunications, infrastructure, community development, housing, and transportation. These projects create thousands of new jobs; improve local water and sewer systems; increase school readiness; expand access to health care; assist local communities with strategic planning; and provide technical and managerial assistance to emerging businesses.",
-      id: 25,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/25/thumb.jpg?1321308918',
-        small_url: 'https://agency-logos.federalregister.gov/25/small.jpg?1321308918',
-        medium_url: 'https://agency-logos.federalregister.gov/25/medium.jpg?1321308918'
-      },
-      name: 'Appalachian Regional Commission',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=25&order=newest',
-      short_name: 'ARC',
-      slug: 'appalachian-regional-commission',
-      url: 'https://www.federalregister.gov/agencies/appalachian-regional-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/25',
-      budgetAgencyTitle: 'Appalachian Regional Commission',
-      budgetAgencyTitleId: 'appalachian-regional-commission',
-      budgetBureauTitle: 'Appalachian Regional Commission',
-      budgetBureauTitleId: 'appalachian-regional-commission',
-      exact: true
-    },
-    {
-      agency_url: 'https://www.afrh.gov/afrh/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Armed Forces Retirement Home is the nation's oldest retirement community for enlisted military veterans. Established by Congress in 1851, a permanent trust fund was established and was fed by monthly, by active duty payroll deductions of 25 cents, when the average pay of a soldier was $7 a month. Fines and forfeitures from the armed forces and the monthly withholding have provided the principal support for the Home throughout its history. \r\n\r\nIn 1991, Congress incorporated the U.S. Naval Home in Gulfport, MS, and U.S. Soldiers' and Airmen's Home into an independent establishment in the Executive Branch of the Federal government known as the Armed Forces Retirement Home (AFRH). Each facility was maintained as a separate entity of the Retirement Home for administrative purposes. \r\n\r\nIn 2001, Congress renamed the U.S. Naval Home and the U.S. Soldiers' and Airmen's Home the Armed Forces Retirement Home - Gulfport and the Armed Forces Retirement Home - Washington, respectively. ",
-      id: 30,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/30/thumb.png?1321309497',
-        small_url: 'https://agency-logos.federalregister.gov/30/small.png?1321309497',
-        medium_url: 'https://agency-logos.federalregister.gov/30/medium.png?1321309497'
-      },
-      name: 'Armed Forces Retirement Home',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=30&order=newest',
-      short_name: 'AFRH',
-      slug: 'armed-forces-retirement-home',
-      url: 'https://www.federalregister.gov/agencies/armed-forces-retirement-home',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/30',
-      budgetAgencyTitle: 'Other Defense (Civil Programs)',
-      budgetAgencyTitleId: 'other-defense-civil-programs',
-      budgetBureauTitle: 'Armed Forces Retirement Home',
-      budgetBureauTitleId: 'armed-forces-retirement-home',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.act.org/goldwater/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Barry M. Goldwater Scholarship and Excellence in Education Program was established by the United States Congress in 1986 in honor of former United States Senator and 1964 Presidential candidate Barry Goldwater (R-Arizona). Its goal is to provide a continuing source of highly qualified scientists, mathematicians, and engineers by awarding scholarships to college students who intend to pursue careers in these fields. ',
-      id: 36,
-      logo: null,
-      name: 'Barry M. Goldwater Scholarship and Excellence in Education Foundation',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=36&order=newest',
-      short_name: 'BGSEEF',
-      slug: 'barry-m-goldwater-scholarship-and-excellence-in-education-foundation',
-      url: 'https://www.federalregister.gov/agencies/barry-m-goldwater-scholarship-and-excellence-in-education-foundation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/36',
-      budgetAgencyTitle: 'Barry Goldwater Scholarship and Excellence in Education Foundati',
-      budgetAgencyTitleId: 'barry-goldwater-scholarship-and-excellence-in-education-foundati',
-      budgetBureauTitle: 'Barry Goldwater Scholarship and Excellence in Education Foundati',
-      budgetBureauTitleId: 'barry-goldwater-scholarship-and-excellence-in-education-foundati',
-      matchLevel: 11,
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=45&order=newest',
+      short_name: 'CMS',
+      slug: 'centers-for-medicare-medicaid-services',
+      url: 'https://www.federalregister.gov/agencies/centers-for-medicare-medicaid-services',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/45',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Centers for Medicare and Medicaid Services',
+      budgetBureauTitleId: 'centers-for-medicare-and-medicaid-services',
+      matchLevel: 16,
       matches: [
         {
-          id: 36,
-          name: 'Barry M. Goldwater Scholarship and Excellence in Education Foundation',
-          comparing: 'Barry Goldwater Scholarship and Excellence in Education Foundati',
-          rank: 11,
-          comparingParent: 'Barry Goldwater Scholarship and Excellence in Education Foundati'
+          id: 45,
+          name: 'Centers for Medicare & Medicaid Services',
+          comparing: 'Centers for Medicare and Medicaid Services',
+          rank: 16,
+          parent: 'Health and Human Services Department',
+          comparingParent: 'Department of Health and Human Services'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.fda.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Food and Drug Administration (FDA) is responsible for protecting the public health by ensuring the safety, efficacy, and security of human and veterinary drugs, biological products, medical devices, the Nation's food supply, cosmetics, and products that emit radiation. FDA is also responsible for advancing the public health by accelerating innovations to make medicines more effective and providing the public with accurate, science-based information on medicines and food to improve their health. FDA plays a significant role in addressing the Nation's counterterrorism capability and ensuring the security of the food supply.",
+      id: 199,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/199/thumb.png?1279161805',
+        small_url: 'https://agency-logos.federalregister.gov/199/small.png?1279161805',
+        medium_url: 'https://agency-logos.federalregister.gov/199/medium.png?1279161805'
+      },
+      name: 'Food and Drug Administration',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=199&order=newest',
+      short_name: 'FDA',
+      slug: 'food-and-drug-administration',
+      url: 'https://www.federalregister.gov/agencies/food-and-drug-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/199',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Food and Drug Administration',
+      budgetBureauTitleId: 'food-and-drug-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.hrsa.gov/index.html',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Health Resources and Services Administration (HRSA) was created in 1982 as a subagency of the Department of the Health and Human Services. Formed from the merger of the Health Resources Administration and Health Services Administration, HRSA is the primary Federal agency for improving access to health care services for people who are uninsured, isolated or medically vulnerable. \r\n\r\nAmong its duties, HRSA provides leadership and financial support to health care providers in every State and U.S. Territory; it oversees organ, bone marrow and cord blood donation; it supports programs that prepare against bioterrorism, compensates individuals harmed by vaccination, and maintains databases that protect against health care malpractice and health care waste, fraud and abuse.\r\n',
+      id: 222,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/222/thumb.gif?1322511940',
+        small_url: 'https://agency-logos.federalregister.gov/222/small.gif?1322511940',
+        medium_url: 'https://agency-logos.federalregister.gov/222/medium.gif?1322511940'
+      },
+      name: 'Health Resources and Services Administration',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=222&order=newest',
+      short_name: 'HRSA',
+      slug: 'health-resources-and-services-administration',
+      url: 'https://www.federalregister.gov/agencies/health-resources-and-services-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/222',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Health Resources and Services Administration',
+      budgetBureauTitleId: 'health-resources-and-services-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.ihs.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Indian Health Service, as part of the Public Health Service, provides a comprehensive health services delivery system for American Indians and Alaska Natives. It assists Native American tribes in developing their health programs; facilitates and assists tribes in coordinating health planning, obtaining and utilizing health resources available through Federal, State, and local programs, operating comprehensive health programs, and evaluating health programs; and provides comprehensive health care services including hospital and ambulatory medical care, preventive and rehabilitative services, and development of community sanitation facilities.',
+      id: 237,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/237/thumb.png?1322518554',
+        small_url: 'https://agency-logos.federalregister.gov/237/small.png?1322518554',
+        medium_url: 'https://agency-logos.federalregister.gov/237/medium.png?1322518554'
+      },
+      name: 'Indian Health Service',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=237&order=newest',
+      short_name: 'IHS',
+      slug: 'indian-health-service',
+      url: 'https://www.federalregister.gov/agencies/indian-health-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/237',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Indian Health Service',
+      budgetBureauTitleId: 'indian-health-service',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Institutes of Health (NIH) supports biomedical and behavioral research domestically and abroad, conducts research in its own laboratories and clinics, trains research scientists, and develops and disseminates credible, science-based health information to the public.',
+      id: 353,
+      logo: null,
+      name: 'National Institutes of Health',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=353&order=newest',
+      short_name: 'NIH',
+      slug: 'national-institutes-of-health',
+      url: 'https://www.federalregister.gov/agencies/national-institutes-of-health',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/353',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'National Institutes of Health',
+      budgetBureauTitleId: 'national-institutes-of-health',
+      exact: true
+    },
+    {
+      agency_url: 'http://oig.hhs.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The mission of the Office of Inspector General (OIG), as mandated by Public Law 95-452 (as amended), is to protect the integrity of Department of Health and Human Services (HHS) programs, as well as the health and welfare of the beneficiaries of those programs.\r\nOIG has a responsibility to report both to the Secretary and to the Congress program and management problems and recommendations to correct them. OIG's duties are carried out through a nationwide network of audits, investigations, evaluations and other mission related functions performed by OIG components.",
+      id: 245,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/245/thumb.png?1763761941',
+        small_url: 'https://agency-logos.federalregister.gov/245/small.png?1763761941',
+        medium_url: 'https://agency-logos.federalregister.gov/245/medium.png?1763761941'
+      },
+      name: 'Inspector General Office, Health and Human Services Department',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=245&order=newest',
+      short_name: 'OIG HHS',
+      slug: 'inspector-general-office-health-and-human-services-department',
+      url: 'https://www.federalregister.gov/agencies/inspector-general-office-health-and-human-services-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/245',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Office of the Inspector General',
+      budgetBureauTitleId: 'office-of-the-inspector-general',
+      matchLevel: 9,
+      matches: [
+        {
+          id: 245,
+          name: 'Inspector General Office, Health and Human Services Department',
+          comparing: 'Office of the Inspector General',
+          rank: 9,
+          parent: 'Health and Human Services Department',
+          comparingParent: 'Department of Health and Human Services'
+        },
+        {
+          id: 244,
+          name: 'Inspector General Office, Agriculture Department',
+          comparing: 'Office of the Inspector General',
+          rank: 1,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Health and Human Services'
+        },
+        {
+          id: 622,
+          name: 'Inspector General Office, Treasury Department',
+          comparing: 'Office of the Inspector General',
+          rank: 1,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Health and Human Services'
+        }
+      ]
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Program Support Center provides information concerning fee-for-service activities in the areas of acquisitions, occupational health, information technology support, human resources, financial management, and administrative operations.',
+      id: 439,
+      logo: null,
+      name: 'Program Support Center',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=439&order=newest',
+      short_name: 'PSC',
+      slug: 'program-support-center',
+      url: 'https://www.federalregister.gov/agencies/program-support-center',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/439',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Program Support Center',
+      budgetBureauTitleId: 'program-support-center',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Substance Abuse and Mental Health Services Administration (SAMHSA) funds and administers grant programs and contracts that support, expand, enhance, and improve the quality, availability, and range of substance abuse treatment and mental health services. SAMHSA has a matrix management system that outlines and guides its activities to improve the accountability, capacity, and effectiveness of the Nation's substance abuse prevention, addictions treatment, and mental health service delivery systems. The system includes 11 program priority areas: co-occurring disorders, substance abuse treatment capacity, seclusion and restraint, children and families, mental health system transformation, suicide prevention, homelessness, older adults, HIV/AIDS and Hepatitis, criminal and juvenile, and workforce development.",
+      id: 479,
+      logo: null,
+      name: 'Substance Abuse and Mental Health Services Administration',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=479&order=newest',
+      short_name: 'SAMHSA',
+      slug: 'substance-abuse-and-mental-health-services-administration',
+      url: 'https://www.federalregister.gov/agencies/substance-abuse-and-mental-health-services-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/479',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Substance Abuse and Mental Health Services Administration',
+      budgetBureauTitleId: 'substance-abuse-and-mental-health-services-administration',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Substance Abuse and Mental Health Services Administration (SAMHSA) funds and administers grant programs and contracts that support, expand, enhance, and improve the quality, availability, and range of substance abuse treatment and mental health services. SAMHSA has a matrix management system that outlines and guides its activities to improve the accountability, capacity, and effectiveness of the Nation's substance abuse prevention, addictions treatment, and mental health service delivery systems. The system includes 11 program priority areas: co-occurring disorders, substance abuse treatment capacity, seclusion and restraint, children and families, mental health system transformation, suicide prevention, homelessness, older adults, HIV/AIDS and Hepatitis, criminal and juvenile, and workforce development.",
+      id: 479,
+      logo: null,
+      name: 'Substance Abuse and Mental Health Services Administration',
+      parent_id: 221,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=479&order=newest',
+      short_name: 'SAMHSA',
+      slug: 'substance-abuse-and-mental-health-services-administration',
+      url: 'https://www.federalregister.gov/agencies/substance-abuse-and-mental-health-services-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/479',
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Substance use And Mental Health Services Administration',
+      budgetBureauTitleId: 'substance-use-and-mental-health-services-administration',
+      matchLevel: 18,
+      matches: [
+        {
+          id: 479,
+          name: 'Substance Abuse and Mental Health Services Administration',
+          comparing: 'Substance use And Mental Health Services Administration',
+          rank: 18,
+          parent: 'Health and Human Services Department',
+          comparingParent: 'Department of Health and Human Services'
+        },
+        {
+          id: 222,
+          name: 'Health Resources and Services Administration',
+          comparing: 'Substance use And Mental Health Services Administration',
+          rank: 10,
+          parent: 'Health and Human Services Department',
+          comparingParent: 'Department of Health and Human Services'
+        },
+        {
+          id: 559,
+          name: 'Health Care Finance Administration',
+          comparing: 'Substance use And Mental Health Services Administration',
+          rank: 6,
+          parent: 'Health and Human Services Department',
+          comparingParent: 'Department of Health and Human Services'
+        },
+        {
+          id: 245,
+          name: 'Inspector General Office, Health and Human Services Department',
+          comparing: 'Substance use And Mental Health Services Administration',
+          rank: 3,
+          parent: 'Health and Human Services Department',
+          comparingParent: 'Department of Health and Human Services'
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'On March 1, 2003, U.S. Citizenship and Immigration Services (USCIS) officially assumed responsibility for the immigration service functions of the federal government. The USCIS was formed to enhance the security and improve the efficiency of national immigration services by exclusively focusing on the administration of benefit applications. Immigration and Customs Enforcement (ICE) and Customs and Border Protection (CBP), components within DHS, handle immigration enforcement and border security functions.[http://www.uscis.gov/portal/site/uscis/]',
+      id: 499,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/499/thumb.jpg?1279151590',
+        small_url: 'https://agency-logos.federalregister.gov/499/small.jpg?1279151590',
+        medium_url: 'https://agency-logos.federalregister.gov/499/medium.jpg?1279151590'
+      },
+      name: 'U.S. Citizenship and Immigration Services',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=499&order=newest',
+      short_name: 'USCIS',
+      slug: 'u-s-citizenship-and-immigration-services',
+      url: 'https://www.federalregister.gov/agencies/u-s-citizenship-and-immigration-services',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/499',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Citizenship and Immigration Services',
+      budgetBureauTitleId: 'citizenship-and-immigration-services',
+      matchLevel: 12,
+      matches: [
+        {
+          id: 499,
+          name: 'U.S. Citizenship and Immigration Services',
+          comparing: 'Citizenship and Immigration Services',
+          rank: 12,
+          parent: 'Homeland Security Department',
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.fema.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Federal Emergency Management Agency coordinates the federal government's role in preparing for, preventing, mitigating the effects of, responding to, and recovering from all domestic disasters, whether natural or man-made, including acts of terror. FEMA can trace its beginnings to the Congressional Act of 1803. This act, generally considered the first piece of disaster legislation, provided assistance to a New Hampshire town following an extensive fire. In the century that followed, ad hoc legislation was passed more than 100 times in response to hurricanes, earthquakes, floods and other natural disasters.\r\nIn 2001, the terrorist attacks of Sept. 11th focused the agency on issues of national preparedness and homeland security, and tested the agency in unprecedented ways. The agency coordinated its activities with the newly formed Office of Homeland Security, and FEMA's Office of National Preparedness was given responsibility for helping to ensure that the nation's first responders were trained and equipped to deal with weapons of mass destruction.\r\nIn March 2003, FEMA joined 22 other federal agencies, programs and offices in becoming the Department of Homeland Security. The new department, headed by Secretary Tom Ridge, brought a coordinated approach to national security from emergencies and disasters - both natural and man-made.\r\nOn October 4, 2006, President George W. Bush signed into law the Post-Katrina Emergency Reform Act. The act significantly reorganized FEMA, provided it substantial new authority to remedy gaps that became apparent in the response to Hurricane Katrina in August 2005, the most devastating natural disaster in U.S. history, and included a more robust preparedness mission for FEMA. \r\n",
+      id: 166,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/166/thumb.jpg?1321991907',
+        small_url: 'https://agency-logos.federalregister.gov/166/small.jpg?1321991907',
+        medium_url: 'https://agency-logos.federalregister.gov/166/medium.jpg?1321991907'
+      },
+      name: 'Federal Emergency Management Agency',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=166&order=newest',
+      short_name: 'FEMA',
+      slug: 'federal-emergency-management-agency',
+      url: 'https://www.federalregister.gov/agencies/federal-emergency-management-agency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/166',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Federal Emergency Management Agency',
+      budgetBureauTitleId: 'federal-emergency-management-agency',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fletc.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The FLETC serves as an interagency law enforcement training organization for 88 Federal agencies. The FLETC also provides services to state, local, tribal, and international law enforcement agencies. The FLETC is headquartered at Glynco, Ga., near the port city of Brunswick, halfway between Savannah, Ga., and Jacksonville, Fla.\r\nIn addition to Glynco, the FLETC operates two other residential training sites in Artesia, N.M., and Charleston, S.C. The FLETC also operates a non-residential in-service re-qualification and advanced training facility in Cheltenham, Md., for use by agencies with large concentrations of personnel in the Washington, D.C., area.\r\nThe FLETC has oversight and program management responsibilities at the International Law Enforcement Academies (ILEA) in Gaborone, Botswana, and Bangkok, Thailand. The FLETC also supports training at other ILEAs in Hungary and El Salvador.',
+      id: 177,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/177/thumb.jpg?1324408371',
+        small_url: 'https://agency-logos.federalregister.gov/177/small.jpg?1324408371',
+        medium_url: 'https://agency-logos.federalregister.gov/177/medium.jpg?1324408371'
+      },
+      name: 'Federal Law Enforcement Training Center',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=177&order=newest',
+      short_name: 'FLETC',
+      slug: 'federal-law-enforcement-training-center',
+      url: 'https://www.federalregister.gov/agencies/federal-law-enforcement-training-center',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/177',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Federal Law Enforcement Training Center',
+      budgetBureauTitleId: 'federal-law-enforcement-training-center',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fletc.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The FLETC serves as an interagency law enforcement training organization for 88 Federal agencies. The FLETC also provides services to state, local, tribal, and international law enforcement agencies. The FLETC is headquartered at Glynco, Ga., near the port city of Brunswick, halfway between Savannah, Ga., and Jacksonville, Fla.\r\nIn addition to Glynco, the FLETC operates two other residential training sites in Artesia, N.M., and Charleston, S.C. The FLETC also operates a non-residential in-service re-qualification and advanced training facility in Cheltenham, Md., for use by agencies with large concentrations of personnel in the Washington, D.C., area.\r\nThe FLETC has oversight and program management responsibilities at the International Law Enforcement Academies (ILEA) in Gaborone, Botswana, and Bangkok, Thailand. The FLETC also supports training at other ILEAs in Hungary and El Salvador.',
+      id: 177,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/177/thumb.jpg?1324408371',
+        small_url: 'https://agency-logos.federalregister.gov/177/small.jpg?1324408371',
+        medium_url: 'https://agency-logos.federalregister.gov/177/medium.jpg?1324408371'
+      },
+      name: 'Federal Law Enforcement Training Center',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=177&order=newest',
+      short_name: 'FLETC',
+      slug: 'federal-law-enforcement-training-center',
+      url: 'https://www.federalregister.gov/agencies/federal-law-enforcement-training-center',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/177',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Federal Law Enforcement Training Centers',
+      budgetBureauTitleId: 'federal-law-enforcement-training-centers',
+      matchLevel: 15,
+      matches: [
+        {
+          id: 177,
+          name: 'Federal Law Enforcement Training Center',
+          comparing: 'Federal Law Enforcement Training Centers',
+          rank: 15,
+          parent: 'Homeland Security Department',
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 69,
+          name: 'Commission on the Advancement of Federal Law Enforcement',
+          comparing: 'Federal Law Enforcement Training Centers',
+          rank: 2,
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.usda.gov/oig/index.htm',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
+      id: 244,
+      logo: null,
+      name: 'Inspector General Office, Agriculture Department',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
+      short_name: 'OIG USDA',
+      slug: 'inspector-general-office-agriculture-department',
+      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Office of the Inspector General',
+      budgetBureauTitleId: 'office-of-the-inspector-general',
+      matchLevel: 2,
+      matches: [
+        {
+          id: 244,
+          name: 'Inspector General Office, Agriculture Department',
+          comparing: 'Office of the Inspector General',
+          rank: 2,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 622,
+          name: 'Inspector General Office, Treasury Department',
+          comparing: 'Office of the Inspector General',
+          rank: 2,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov/eop/',
+      child_ids: [2, 92, 93, 390, 611, 612, 613],
+      child_slugs: [
+        'administration-office-executive-office-of-the-president',
+        'council-on-environmental-quality',
+        'counsel-to-the-president',
+        'office-of-national-drug-control-policy',
+        'intellectual-property-enforcement-coordinator-office',
+        'national-space-council',
+        'office-of-the-national-cyber-director'
+      ],
+      description:
+        "Under authority of the Reorganization Act of 1939 (5 U.S.C. 133-133r, 133t note), various agencies were transferred to the Executive Office of the President by the President's Reorganization Plans I and II of 1939 (5 U.S.C. app.), effective July 1, 1939. Executive Order 8248 of September 8, 1939, established the divisions of the Executive Office and defined their functions. Subsequently, Presidents have used Executive orders, reorganization plans, and legislative initiatives to reorganize the Executive Office to make its composition compatible with the goals of their administrations.",
+      id: 538,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/538/thumb.jpg?1321893883',
+        small_url: 'https://agency-logos.federalregister.gov/538/small.jpg?1321893883',
+        medium_url: 'https://agency-logos.federalregister.gov/538/medium.jpg?1321893883'
+      },
+      name: 'Executive Office of the President',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=538&order=newest',
+      short_name: 'EOP',
+      slug: 'executive-office-of-the-president',
+      url: 'https://www.federalregister.gov/agencies/executive-office-of-the-president',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/538',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Office of the Secretary and Executive Management',
+      budgetBureauTitleId: 'office-of-the-secretary-and-executive-management',
+      matchLevel: 1,
+      matches: [
+        {
+          id: 538,
+          name: 'Executive Office of the President',
+          comparing: 'Office of the Secretary and Executive Management',
+          rank: 1,
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 280,
+          name: 'Management and Budget Office',
+          comparing: 'Office of the Secretary and Executive Management',
+          rank: 1,
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 406,
+          name: 'Personnel Management Office',
+          comparing: 'Office of the Secretary and Executive Management',
+          rank: 1,
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'Congress established the Office of Science and Technology Policy in 1976 with a broad mandate to advise the President and others within the Executive Office of the President on the effects of science and technology on domestic and international affairs. The 1976 Act also authorizes OSTP to lead interagency efforts to develop and implement sound science and technology policies and budgets, and to work with the private sector, state and local governments, the science and higher education communities, and other nations toward this end.\r\rThe mission of the Office of Science and Technology Policy is threefold; first, to provide the President and his senior staff with accurate, relevant, and timely scientific and technical advice on all matters of consequence; second, to ensure that the policies of the Executive Branch are informed by sound science; and third, to ensure that the scientific and technical work of the Executive Branch is properly coordinated so as to provide the greatest benefit to society.',
+      id: 464,
+      logo: null,
+      name: 'Science and Technology Policy Office',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=464&order=newest',
+      short_name: 'OSTP',
+      slug: 'science-and-technology-policy-office',
+      url: 'https://www.federalregister.gov/agencies/science-and-technology-policy-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/464',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Science and Technology',
+      budgetBureauTitleId: 'science-and-technology',
+      matchLevel: 2,
+      matches: [
+        {
+          id: 464,
+          name: 'Science and Technology Policy Office',
+          comparing: 'Science and Technology',
+          rank: 2,
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.tsa.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Transportation Security Administration (TSA) was created in the wake of 9/11 to strengthen the security of the nation’s transportation systems while ensuring the freedom of movement for people and commerce. Originally established as a subagency of  the Department of Transportation, TSA was transferred to the Department of Homeland Security in March of 2003.\r\n\r\nIn March 2003, TSA transferred from the Department of Transportation to the Department of Homeland Security.\r\n\r\nTSA employs a risk-based strategy to secure U.S. transportation systems, working closely with stakeholders in aviation, rail, transit, highway, and pipeline sectors, as well as the partners in the law enforcement and intelligence community. The agency will continuously set the standard for excellence in transportation security through its people, processes, technologies and use of intelligence to drive operations.\r\n\r\n \r\n',
+      id: 494,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/494/thumb.png?1324408023',
+        small_url: 'https://agency-logos.federalregister.gov/494/small.png?1324408023',
+        medium_url: 'https://agency-logos.federalregister.gov/494/medium.png?1324408023'
+      },
+      name: 'Transportation Security Administration',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=494&order=newest',
+      short_name: 'TSA',
+      slug: 'transportation-security-administration',
+      url: 'https://www.federalregister.gov/agencies/transportation-security-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/494',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Transportation Security Administration',
+      budgetBureauTitleId: 'transportation-security-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.cbp.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The U.S. Customs and Border Protection was established on March 1, 2003 in the Directorate for Border and Transportation Security, Department of Homeland Security.\r\n\r\nU.S. Customs and Border Protection is responsible for guarding nearly 7,000 miles of land border the United States shares with Canada and Mexico and 2,000 miles of coastal waters surrounding the Florida peninsula and off the coast of Southern California. The agency also protects 95,000 miles of maritime border in partnership with the United States Coast Guard.\r\n \r\nCBP’s priority mission is to prevent terrorists and terrorist weapons from entering the United States and ensuring the security of our nation at America's borders and ports of entry. We must maintain this line of defense while allowing legitimate travel and trade that is vital to our economy and way of life. \r\nCBP is responsible for apprehending individuals attempting to enter the United States illegally; stemming the flow of illegal drugs and other contraband; protecting our agricultural and economic interests from harmful pests and diseases; protecting American businesses from theft of their intellectual property; and regulating and facilitating international trade, collecting import duties, and enforcing U.S. trade laws.\r\n__________\r\n\r\nSource:  https://www.cbp.gov/about.\r\n",
+      id: 501,
+      logo: null,
+      name: 'U.S. Customs and Border Protection',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=501&order=newest',
+      short_name: 'USCBP',
+      slug: 'u-s-customs-and-border-protection',
+      url: 'https://www.federalregister.gov/agencies/u-s-customs-and-border-protection',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/501',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'U.S. Customs and Border Protection',
+      budgetBureauTitleId: 'us-customs-and-border-protection',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.ice.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'Immigration and Customs Enforcement (ICE) was created in 2003 pursuant to the Homeland Security Act of 2002. \r\n\r\nFormed by the merger of the U.S. Customs Service and the Immigration and Naturalization Service, ICE is the principal investigative arm of the U.S. Department of Homeland Security (DHS) and the second largest investigative agency in the federal government. Its primary responsibility is the identification and elimination of border, economic, transportation, and infrastructure security vulnerabilities.\r\n',
+      id: 503,
+      logo: null,
+      name: 'U.S. Immigration and Customs Enforcement',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=503&order=newest',
+      short_name: 'ICE',
+      slug: 'u-s-immigration-and-customs-enforcement',
+      url: 'https://www.federalregister.gov/agencies/u-s-immigration-and-customs-enforcement',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/503',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'U.S. Immigration and Customs Enforcement',
+      budgetBureauTitleId: 'us-immigration-and-customs-enforcement',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.uscg.mil/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The United States Coast Guard was established by act of January 28, 1915 (14 U.S.C. 1) and became a component of the Department of Transportation on April 1, 1967, pursuant to the Department of Transportation Act of October 15, 1966. Following the enactment of the Homeland Security Act of 2002, The Coast Guard was transferred from Department of Transportation to the Department of Homeland Security on March 1, 2003 (116 Stat. 2135).\r\n\r\nThe Coast Guard protects the public, the environment, and U.S. economic interests in the Nation's ports and waterways, along the coast, on international waters, or in any maritime region, as required, to support national security. Among its duties are: search and rescue operations in and over the high seas and navigable waters, maritime law enforcement, marine inspection and licensing, pilotage of the Great Lakes, protection of the marine environment by enforcing the Federal Water Pollution Control Act, ensuring the safety and security of ports and anchorages, maintaining the management of waterways, providing navigational aids, and regulating the construction, maintenance and operation of bridges and causeways across navigable waters.",
+      id: 53,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/53/thumb.jpg?1321388388',
+        small_url: 'https://agency-logos.federalregister.gov/53/small.jpg?1321388388',
+        medium_url: 'https://agency-logos.federalregister.gov/53/medium.jpg?1321388388'
+      },
+      name: 'Coast Guard',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=53&order=newest',
+      short_name: 'USCG',
+      slug: 'coast-guard',
+      url: 'https://www.federalregister.gov/agencies/coast-guard',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/53',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'United States Coast Guard',
+      budgetBureauTitleId: 'united-states-coast-guard',
+      matchLevel: 9,
+      matches: [
+        {
+          id: 53,
+          name: 'Coast Guard',
+          comparing: 'United States Coast Guard',
+          rank: 9,
+          parent: 'Homeland Security Department',
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 513,
+          name: 'United States Mint',
+          comparing: 'United States Coast Guard',
+          rank: 1,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.secretservice.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Secret Service protects the President and other high-level officials and investigates counterfeiting and other financial crimes, including financial institution fraud, identity theft, and computer fraud and computer-based attacks on our Nation's financial, banking, and telecommunications infrastructure.",
+      id: 465,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/465/thumb.png?1279151412',
+        small_url: 'https://agency-logos.federalregister.gov/465/small.png?1279151412',
+        medium_url: 'https://agency-logos.federalregister.gov/465/medium.png?1279151412'
+      },
+      name: 'Secret Service',
+      parent_id: 227,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=465&order=newest',
+      short_name: 'USSS',
+      slug: 'secret-service',
+      url: 'https://www.federalregister.gov/agencies/secret-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/465',
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'United States Secret Service',
+      budgetBureauTitleId: 'united-states-secret-service',
+      matchLevel: 9,
+      matches: [
+        {
+          id: 465,
+          name: 'Secret Service',
+          comparing: 'United States Secret Service',
+          rank: 9,
+          parent: 'Homeland Security Department',
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 512,
+          name: 'United States Marshals Service',
+          comparing: 'United States Secret Service',
+          rank: 4,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Homeland Security'
+        },
+        {
+          id: 513,
+          name: 'United States Mint',
+          comparing: 'United States Secret Service',
+          rank: 1,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Homeland Security'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://ginniemae.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Government National Mortgage Association (GNMA) was created in 1968 under the National Housing Act of 1934 and its subsequent amendments. GNMA, also known as 'Ginnie Mae' was created as a Government-owned corporation within the Department of Housing and Urban Development. \r\n\r\nThe mission of Ginnie Mae, is to support expanded affordable housing by providing an efficient Government-guaranteed secondary market vehicle to link the capital markets with Federal housing markets. Ginnie Mae guarantees mortgage-backed securities composed of FHA-insured or VA-guaranteed mortgage loans that are issued by private lenders and guaranteed by GNMA with the full faith and credit of the United States. Through these programs, Ginnie Mae increases the overall supply of credit available for housing by providing a vehicle for channeling funds from the securities market into the mortgage market.",
+      id: 216,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/216/thumb.jpg?1322500015',
+        small_url: 'https://agency-logos.federalregister.gov/216/small.jpg?1322500015',
+        medium_url: 'https://agency-logos.federalregister.gov/216/medium.jpg?1322500015'
+      },
+      name: 'Government National Mortgage Association',
+      parent_id: 228,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=216&order=newest',
+      short_name: 'GinnieMae',
+      slug: 'government-national-mortgage-association',
+      url: 'https://www.federalregister.gov/agencies/government-national-mortgage-association',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/216',
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Government National Mortgage Association',
+      budgetBureauTitleId: 'government-national-mortgage-association',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'In 1970, President Richard M. Nixon issued an executive order that created the Office of Policy Development, with jurisdiction over economic and domestic policy. \r\n \r\nThe Office of Policy Development is comprised of the Domestic Policy Council and the National Economic Council, which are responsible for advising and assisting the President in the formulation, coordination, and implementation of domestic and economic policy. The Office of Policy Development also provides support for other policy development and implementation activities as directed by the President.\r\nIn 1993, President William J. Clinton split the Office of Policy Development, forming the present Domestic Policy Council and the National Economic Council.\r\n\r\nSource: http://system.uslegal.com/executive-branch/office-of-policy-development\r\n',
+      id: 391,
+      logo: null,
+      name: 'Office of Policy Development',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=391&order=newest',
+      short_name: null,
+      slug: 'office-of-policy-development',
+      url: 'https://www.federalregister.gov/agencies/office-of-policy-development',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/391',
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Policy Development and Research',
+      budgetBureauTitleId: 'policy-development-and-research',
+      matchLevel: 2,
+      matches: [
+        {
+          id: 391,
+          name: 'Office of Policy Development',
+          comparing: 'Policy Development and Research',
+          rank: 2,
+          comparingParent: 'Department of Housing and Urban Development'
         }
       ]
     },
@@ -3100,120 +4984,802 @@ export default {
       ]
     },
     {
-      agency_url: 'http://www.atf.gov/',
+      agency_url: 'http://www.justice.gov/dea/',
       child_ids: [],
       child_slugs: [],
       description:
-        'The Bureau of Alcohol, Tobacco, Firearms and Explosives (ATF) is responsible for enforcing Federal criminal laws and regulating the firearms and explosives industries. \r\n\r\nATF, formerly known as the Bureau of Alcohol, Tobacco, and Firearms, was initially established by Department of Treasury Order No. 221, effective July 1, 1972, which transferred the functions, powers, and duties arising under laws relating to alcohol, tobacco, firearms, and explosives from the Internal Revenue Service to ATF. The Homeland Security Act of 2002 (6 U.S.C. 531) transferred certain functions and authorities of ATF to the Department of Justice and established it under its current name. ATF works, directly and through partnerships, to investigate and reduce violent crime involving firearms and explosives, acts of arson, and illegal trafficking of alcohol and tobacco products. \r\n\r\nThe Bureau provides training and support to its Federal, State, local, and international law enforcement partners and works primarily in 23 field divisions across the 50 States, Puerto Rico, the U.S. Virgin Islands, and Guam. It also has foreign offices in Mexico, Canada, Colombia, and France.',
-      id: 19,
+        'The Drug Enforcement Administration (DEA) is the lead Federal agency in enforcing narcotics and controlled substances laws and regulations. DEA also enforces the Federal money laundering and bulk currency smuggling statutes when the funds involved in the transactions or smuggling are derived from the sale of narcotics. It was created in July 1973 by Reorganization Plan No. 2 of 1973 (5 U.S.C. app.).\r\n\r\nDEA enforces the provisions of the controlled substances and chemical diversion and trafficking laws and regulations of the United States, and operates on a worldwide basis. It presents cases to the criminal and civil justice systems of the United States--or any other competent jurisdiction--on those significant organizations and their members involved in cultivation, production, smuggling, distribution, laundering of proceeds, or diversion of controlled substances appearing in or destined for illegal traffic in the United States. DEA disrupts and dismantles these organizations by arresting their members, confiscating their drugs, and seizing their assets; and creates, manages, and supports enforcement-related programs--domestically and internationally--aimed at reducing the availability of and demand for illicit controlled substances.',
+      id: 116,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/19/thumb.png?1279143727',
-        small_url: 'https://agency-logos.federalregister.gov/19/small.png?1279143727',
-        medium_url: 'https://agency-logos.federalregister.gov/19/medium.png?1279143727'
+        thumb_url: 'https://agency-logos.federalregister.gov/116/thumb.png?1321564326',
+        small_url: 'https://agency-logos.federalregister.gov/116/small.png?1321564326',
+        medium_url: 'https://agency-logos.federalregister.gov/116/medium.png?1321564326'
       },
-      name: 'Alcohol, Tobacco, Firearms, and Explosives Bureau',
+      name: 'Drug Enforcement Administration',
       parent_id: 268,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=19&order=newest',
-      short_name: 'ATF',
-      slug: 'alcohol-tobacco-firearms-and-explosives-bureau',
-      url: 'https://www.federalregister.gov/agencies/alcohol-tobacco-firearms-and-explosives-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/19',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=116&order=newest',
+      short_name: 'DEA',
+      slug: 'drug-enforcement-administration',
+      url: 'https://www.federalregister.gov/agencies/drug-enforcement-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/116',
       budgetAgencyTitle: 'Department of Justice',
       budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Bureau of Alcohol, Tobacco, Firearms, and Explosives',
-      budgetBureauTitleId: 'bureau-of-alcohol-tobacco-firearms-and-explosives',
-      matchLevel: 15,
+      budgetBureauTitle: 'Drug Enforcement Administration',
+      budgetBureauTitleId: 'drug-enforcement-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fbi.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Federal Bureau of Investigation (FBI) is the principal investigative arm of the United States Department of Justice. It is primarily charged with gathering and reporting facts, locating witnesses, and compiling evidence in cases involving Federal jurisdiction. It also provides law enforcement leadership and assistance to State and international law enforcement agencies.\r\n\r\nThe Federal Bureau of Investigation was established in 1908 by the Attorney General, who directed that Department of Justice investigations be handled by its own staff. The Bureau is charged with investigating all violations of Federal law except those that have been assigned by legislative enactment or otherwise to another Federal agency. Its jurisdiction includes a wide range of responsibilities in the national security, criminal, and civil fields. Priority has been assigned to areas such as counterterrorism, counterintelligence, cyber-crimes, internationally and nationally organized crime/drug matters, and financial crimes.\r\n\r\nThe FBI also offers cooperative services to local, State, and international law enforcement agencies. These services include fingerprint identification, laboratory examination, police training, the Law Enforcement Online communication and information service for use by the law enforcement community, the National Crime Information Center, and the National Center for the Analysis of Violent Crime.',
+      id: 160,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/160/thumb.png?1321992917',
+        small_url: 'https://agency-logos.federalregister.gov/160/small.png?1321992917',
+        medium_url: 'https://agency-logos.federalregister.gov/160/medium.png?1321992917'
+      },
+      name: 'Federal Bureau of Investigation',
+      parent_id: 268,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=160&order=newest',
+      short_name: 'FBI',
+      slug: 'federal-bureau-of-investigation',
+      url: 'https://www.federalregister.gov/agencies/federal-bureau-of-investigation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/160',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Federal Bureau of Investigation',
+      budgetBureauTitleId: 'federal-bureau-of-investigation',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.unicor.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "Federal Prison Industries (commonly referred to as FPI, or by its trade name UNICOR), is a wholly-owned government corporation established by the Congress June 23, 1934. Its mission is to employ and provide job skills training to the greatest practicable number of inmates confined within the Federal Bureau of Prisons; contribute to the safety and security of our Nation's federal correctional facilities by keeping inmates constructively occupied; provide market-quality products and services; operate in a self-sustaining manner; and to minimize FPI's impact on private sector business and labor. [http://www.unicor.gov/about/faqs/faqsgeneral.cfm]",
+      id: 183,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/183/thumb.png?1322070530',
+        small_url: 'https://agency-logos.federalregister.gov/183/small.png?1322070530',
+        medium_url: 'https://agency-logos.federalregister.gov/183/medium.png?1322070530'
+      },
+      name: 'Federal Prison Industries',
+      parent_id: 268,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=183&order=newest',
+      short_name: 'FPI',
+      slug: 'federal-prison-industries',
+      url: 'https://www.federalregister.gov/agencies/federal-prison-industries',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/183',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Federal Prison System',
+      budgetBureauTitleId: 'federal-prison-system',
+      matchLevel: 7,
       matches: [
         {
-          id: 19,
-          name: 'Alcohol, Tobacco, Firearms, and Explosives Bureau',
-          comparing: 'Bureau of Alcohol, Tobacco, Firearms, and Explosives',
-          rank: 15,
+          id: 183,
+          name: 'Federal Prison Industries',
+          comparing: 'Federal Prison System',
+          rank: 7,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 188,
+          name: 'Federal Reserve System',
+          comparing: 'Federal Prison System',
+          rank: 2,
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 539,
+          name: 'Federal Acquisition Regulation System',
+          comparing: 'Federal Prison System',
+          rank: 1,
+          comparingParent: 'Department of Justice'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.gsa.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The General Services Administration (GSA) was established by section 101 of the Federal Property and Administrative Services Act of 1949 (40 U.S.C. 751).\r\n\r\nThe General Services Administration establishes policy for and provides economical and efficient management of Government property and records, including construction and operation of buildings; procurement and distribution of supplies; utilization and disposal of real and personal property; transportation, travel, fleet, and communications management; and management of the governmentwide automatic data processing resources program.\r\n \r\n',
+      id: 210,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/210/thumb.jpeg?1322497553',
+        small_url: 'https://agency-logos.federalregister.gov/210/small.jpeg?1322497553',
+        medium_url: 'https://agency-logos.federalregister.gov/210/medium.jpeg?1322497553'
+      },
+      name: 'General Services Administration',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=210&order=newest',
+      short_name: 'GSA',
+      slug: 'general-services-administration',
+      url: 'https://www.federalregister.gov/agencies/general-services-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/210',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'General Administration',
+      budgetBureauTitleId: 'general-administration',
+      matchLevel: 3,
+      matches: [
+        {
+          id: 210,
+          name: 'General Services Administration',
+          comparing: 'General Administration',
+          rank: 3,
+          comparingParent: 'Department of Justice'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.nsa.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The National Security Agency (NSA) was established in 1952, and the Central Security Service (CSS) was established in 1972. NSA/CSS is under the authority, direction, and control of the Under Secretary of Defense for Intelligence. As the Nation's cryptologic organization, NSA/CSS employs the Nation's premier codemakers and codebreakers. It ensures an informed, alert, and secure environment for U.S. warfighters and policymakers. The cryptologic resources of NSA/CSS unite to provide U.S. policymakers with intelligence information derived from America's adversaries while protecting U.S. Government signals and information systems from exploitation by those same adversaries.",
+      id: 367,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/367/thumb.bmp?1321891152',
+        small_url: 'https://agency-logos.federalregister.gov/367/small.bmp?1321891152',
+        medium_url: 'https://agency-logos.federalregister.gov/367/medium.bmp?1321891152'
+      },
+      name: 'National Security Agency/Central Security Service',
+      parent_id: 103,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=367&order=newest',
+      short_name: 'NSA/CSS',
+      slug: 'national-security-agency-central-security-service',
+      url: 'https://www.federalregister.gov/agencies/national-security-agency-central-security-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/367',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'National Security Division',
+      budgetBureauTitleId: 'national-security-division',
+      matchLevel: 3,
+      matches: [
+        {
+          id: 367,
+          name: 'National Security Agency/Central Security Service',
+          comparing: 'National Security Division',
+          rank: 3,
+          parent: 'Defense Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 359,
+          name: 'National Nuclear Security Administration',
+          comparing: 'National Security Division',
+          rank: 2,
+          parent: 'Energy Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 368,
+          name: 'National Security Council',
+          comparing: 'National Security Division',
+          rank: 2,
+          comparingParent: 'Department of Justice'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.ojp.usdoj.gov/',
+      child_ids: [523],
+      child_slugs: ['victims-of-crime-office'],
+      description:
+        'The Office of Justice Programs (OJP) provides innovative leadership to federal, state, local, and tribal justice systems, by disseminating state-of-the art knowledge and practices across America, and providing grants for the implementation of these crime fighting strategies. Because most of the responsibility for crime control and prevention falls to law enforcement officers in states, cities, and neighborhoods, the federal government can be effective in these areas only to the extent that it can enter into partnerships with these officers. Therefore, OJP does not directly carry out law enforcement and justice activities. Instead, OJP works in partnership with the justice community to identify the most pressing crime-related challenges confronting the justice system and to provide information, training, coordination, and innovative strategies and approaches for addressing these challenges.',
+      id: 269,
+      logo: null,
+      name: 'Justice Programs Office',
+      parent_id: 268,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=269&order=newest',
+      short_name: 'OJP',
+      slug: 'justice-programs-office',
+      url: 'https://www.federalregister.gov/agencies/justice-programs-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/269',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Office of Justice Programs',
+      budgetBureauTitleId: 'office-of-justice-programs',
+      matchLevel: 11,
+      matches: [
+        {
+          id: 269,
+          name: 'Justice Programs Office',
+          comparing: 'Office of Justice Programs',
+          rank: 11,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 270,
+          name: 'Juvenile Justice and Delinquency Prevention Office',
+          comparing: 'Office of Justice Programs',
+          rank: 5,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 530,
+          name: "Workers' Compensation Programs Office",
+          comparing: 'Office of Justice Programs',
+          rank: 2,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 162,
+          name: 'Federal Contract Compliance Programs Office',
+          comparing: 'Office of Justice Programs',
+          rank: 1,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Justice'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.ojp.usdoj.gov/',
+      child_ids: [523],
+      child_slugs: ['victims-of-crime-office'],
+      description:
+        'The Office of Justice Programs (OJP) provides innovative leadership to federal, state, local, and tribal justice systems, by disseminating state-of-the art knowledge and practices across America, and providing grants for the implementation of these crime fighting strategies. Because most of the responsibility for crime control and prevention falls to law enforcement officers in states, cities, and neighborhoods, the federal government can be effective in these areas only to the extent that it can enter into partnerships with these officers. Therefore, OJP does not directly carry out law enforcement and justice activities. Instead, OJP works in partnership with the justice community to identify the most pressing crime-related challenges confronting the justice system and to provide information, training, coordination, and innovative strategies and approaches for addressing these challenges.',
+      id: 269,
+      logo: null,
+      name: 'Justice Programs Office',
+      parent_id: 268,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=269&order=newest',
+      short_name: 'OJP',
+      slug: 'justice-programs-office',
+      url: 'https://www.federalregister.gov/agencies/justice-programs-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/269',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'State, Local, and Tribal Justice Assistance Programs',
+      budgetBureauTitleId: 'state-local-and-tribal-justice-assistance-programs',
+      matchLevel: 4,
+      matches: [
+        {
+          id: 269,
+          name: 'Justice Programs Office',
+          comparing: 'State, Local, and Tribal Justice Assistance Programs',
+          rank: 4,
           parent: 'Justice Department',
           comparingParent: 'Department of Justice'
         }
       ]
     },
     {
-      agency_url: 'http://www.bea.gov/',
+      agency_url: null,
       child_ids: [],
       child_slugs: [],
       description:
-        "The Bureau of Economic Analysis (BEA) promotes a better understanding of the U.S. economy by providing the most timely, relevant, and accurate economic accounts data in an objective and cost-effective manner. BEA's economic statistics are closely watched and provide a comprehensive picture of the U.S. economy. BEA prepares national, regional, industry, and international accounts that present essential information on such issues in the world economy.\r\n\r\nBEA's national economic statistics provide a comprehensive look at U.S. production, consumption, investment, exports and imports, and income and saving. The international transactions accounts provide information on trade in goods and services (including the balance of payments and trade), investment income, and government and private finances. In addition, the accounts measure the value of U.S. international assets and liabilities and direct investment by multinational companies.\r\n\r\nThe regional accounts provide data on total and per capita personal income by region, State, metropolitan area, and county, and on gross State product. The industry economic account provides a detailed view of the interrelationships between U.S. producers and users and the contribution to production across industries.",
-      id: 118,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/118/thumb.png?1321564848',
-        small_url: 'https://agency-logos.federalregister.gov/118/small.png?1321564848',
-        medium_url: 'https://agency-logos.federalregister.gov/118/medium.png?1321564848'
-      },
-      name: 'Economic Analysis Bureau',
-      parent_id: 54,
+        "The United States Parole Commission (USPC) makes parole release decisions for eligible Federal and District of Columbia prisoners; authorizes methods of release and conditions under which release occurs; prescribes, modifies, and monitors compliance with the terms and conditions governing offenders' behavior while on parole or mandatory or supervised release; issues warrants for violation of supervision; determines probable cause for the revocation process; revokes parole, mandatory, or supervised release; releases from supervision those offenders who are no longer a risk to public safety; and promulgates the rules, regulations, and guidelines for the exercise of USPC's authority and the implementation of a national parole policy.\r  \rUSPC has sole jurisdiction over the following: Federal offenders who committed offenses before November 1, 1987; D.C. Code offenders who committed offenses before August 5, 2000; D.C. Code offenders sentenced to a term of supervised release; Uniform Code of Military Justice offenders who are in Bureau of Prison's custody; transfer treaty cases; and State probationers and parolees in the Federal Witness Protection Program.",
+      id: 401,
+      logo: null,
+      name: 'Parole Commission',
+      parent_id: 268,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=118&order=newest',
-      short_name: 'EAB',
-      slug: 'economic-analysis-bureau',
-      url: 'https://www.federalregister.gov/agencies/economic-analysis-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/118',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'Bureau of Economic Analysis',
-      budgetBureauTitleId: 'bureau-of-economic-analysis',
-      matchLevel: 11,
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=401&order=newest',
+      short_name: 'USPC',
+      slug: 'parole-commission',
+      url: 'https://www.federalregister.gov/agencies/parole-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/401',
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'United States Parole Commission',
+      budgetBureauTitleId: 'united-states-parole-commission',
+      matchLevel: 7,
       matches: [
         {
-          id: 118,
-          name: 'Economic Analysis Bureau',
-          comparing: 'Bureau of Economic Analysis',
-          rank: 11,
-          parent: 'Commerce Department',
-          comparingParent: 'Department of Commerce'
+          id: 401,
+          name: 'Parole Commission',
+          comparing: 'United States Parole Commission',
+          rank: 7,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Justice'
         },
         {
-          id: 119,
-          name: 'Economic Analysis Staff',
-          comparing: 'Bureau of Economic Analysis',
+          id: 512,
+          name: 'United States Marshals Service',
+          comparing: 'United States Parole Commission',
+          rank: 5,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 515,
+          name: 'United States Sentencing Commission',
+          comparing: 'United States Parole Commission',
+          rank: 4,
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 70,
+          name: 'Commission on the Bicentennial of the United States Constitution',
+          comparing: 'United States Parole Commission',
           rank: 3,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Commerce'
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 71,
+          name: 'Commission on the Future of the United States Aerospace Industry',
+          comparing: 'United States Parole Commission',
+          rank: 2,
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 264,
+          name: 'Japan-United States Friendship Commission',
+          comparing: 'United States Parole Commission',
+          rank: 2,
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 513,
+          name: 'United States Mint',
+          comparing: 'United States Parole Commission',
+          rank: 2,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Justice'
+        },
+        {
+          id: 325,
+          name: 'National Commission on Terrorist Attacks Upon the United States',
+          comparing: 'United States Parole Commission',
+          rank: 1,
+          comparingParent: 'Department of Justice'
         }
       ]
     },
     {
-      agency_url: 'http://www.moneyfactory.gov/',
+      agency_url: 'http://www.bls.gov/',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Bureau of Engraving and Printing operates on basic authorities conferred by act of July 11, 1862 (31 U.S.C. 303), and additional authorities contained in past appropriations made to the Bureau that are still in force. Operations are financed by a revolving fund established in 1950 in accordance with Public Law 81-656. The Bureau is headed by a Director who is selected by the Secretary of the Treasury.\r\n\r\nThe Bureau designs, prints, and finishes all of the Nation's paper currency and many other security documents, including White House invitations and military identification cards. It also is responsible for advising and assisting Federal agencies in the design and production of other Government documents that, because of their innate value or for other reasons, require security or counterfeit-deterrence characteristics.",
-      id: 143,
+        'The Bureau of Labor Statistics (BLS) was originally established under the Department of the Interior as the Bureau of Labor under the Bureau of Labor Act (23 Stat. 60) of  June 27, 1884. After several reorganizations and transfers, the agency was renamed the Bureau of Labor Statistics and transferred to the Department of Labor in 1913. \r\n\r\nThe BLS is an independent national statistical agency that collects, processes, analyzes, and disseminates essential statistical data to the American public, the U.S. Congress, other Federal agencies, State and local governments, business, and labor. The BLS also serves as a statistical resource to the Department of Labor.\r\n\r\nBLS data must satisfy a number of criteria, including relevance to current social and economic issues, timeliness in reflecting today’s rapidly changing economic conditions, accuracy and consistently high statistical quality, and impartiality in both subject matter and presentation.\r\n',
+      id: 272,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/143/thumb.png?1321892188',
-        small_url: 'https://agency-logos.federalregister.gov/143/small.png?1321892188',
-        medium_url: 'https://agency-logos.federalregister.gov/143/medium.png?1321892188'
+        thumb_url: 'https://agency-logos.federalregister.gov/272/thumb.png?1323297764',
+        small_url: 'https://agency-logos.federalregister.gov/272/small.png?1323297764',
+        medium_url: 'https://agency-logos.federalregister.gov/272/medium.png?1323297764'
       },
-      name: 'Engraving and Printing Bureau',
-      parent_id: 497,
+      name: 'Labor Statistics Bureau',
+      parent_id: 271,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=143&order=newest',
-      short_name: 'BEP',
-      slug: 'engraving-and-printing-bureau',
-      url: 'https://www.federalregister.gov/agencies/engraving-and-printing-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/143',
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Bureau of Engraving and Printing',
-      budgetBureauTitleId: 'bureau-of-engraving-and-printing',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=272&order=newest',
+      short_name: 'BLS',
+      slug: 'labor-statistics-bureau',
+      url: 'https://www.federalregister.gov/agencies/labor-statistics-bureau',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/272',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Bureau of Labor Statistics',
+      budgetBureauTitleId: 'bureau-of-labor-statistics',
       matchLevel: 11,
       matches: [
         {
-          id: 143,
-          name: 'Engraving and Printing Bureau',
-          comparing: 'Bureau of Engraving and Printing',
+          id: 272,
+          name: 'Labor Statistics Bureau',
+          comparing: 'Bureau of Labor Statistics',
           rank: 11,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of the Treasury'
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 495,
+          name: 'Transportation Statistics Bureau',
+          comparing: 'Bureau of Labor Statistics',
+          rank: 3,
+          parent: 'Transportation Department',
+          comparingParent: 'Department of Labor'
         }
       ]
+    },
+    {
+      agency_url: 'http://www.dol.gov/ebsa/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Employee Benefits Security Administration (EBSA) promotes and protects the pension, health, and other benefits of the over 150 million participants and beneficiaries in over 6 million private sector employee benefit plans. In administering its responsibilities, EBSA assists workers in understanding their rights and protecting their benefits; facilitates compliance by plan sponsors, plan officials, service providers, and other members of the regulated community; encourages the growth of employment-based benefits; and deters and corrects violations of the relevant statutes. The Employee Retirement Income Security Act (ERISA) is enforced through 15 EBSA field offices nationwide and the national office in Washington, DC.',
+      id: 131,
+      logo: null,
+      name: 'Employee Benefits Security Administration',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=131&order=newest',
+      short_name: 'EBSA',
+      slug: 'employee-benefits-security-administration',
+      url: 'https://www.federalregister.gov/agencies/employee-benefits-security-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/131',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Employee Benefits Security Administration',
+      budgetBureauTitleId: 'employee-benefits-security-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.doleta.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Employment and Training Administration (ETA) was originally established as the Manpower Administration, a subagency of the Department of Labor by General Order No. 63 on August 25, 1954. Renamed Employment and Training Administration  by Secretarial Order 14-75 of November12, 1975\r\n\r\nETA fulfills responsibilities assigned to the Secretary of Labor that relate to employment services, job training, and unemployment insurance. Component offices and services administer a Federal/State employment security system; fund and oversee programs to provide work experience and training for groups having difficulty entering or returning to the work force; formulate and promote apprenticeship standards and programs; and conduct continuing programs of research development, and evaluation.\r\n',
+      id: 133,
+      logo: null,
+      name: 'Employment and Training Administration',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=133&order=newest',
+      short_name: 'ETA',
+      slug: 'employment-and-training-administration',
+      url: 'https://www.federalregister.gov/agencies/employment-and-training-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/133',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Employment and Training Administration',
+      budgetBureauTitleId: 'employment-and-training-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.msha.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Mine Safety and Health Administration (MSHA) is responsible for safety and health in the Nation's mines. MSHA develops and promulgates mandatory safety and health standards, ensures compliance with such standards, assesses civil penalties for violations, and investigates accidents. It cooperates with and provides assistance to the States in the development of effective State mine safety and health programs; improves and expands training programs in cooperation with the States and the mining industry; and contributes to the improvement and expansion of mine safety and health research and development. All of these activities are aimed at preventing and reducing mine accidents and occupational diseases in the mining industry.",
+      id: 288,
+      logo: null,
+      name: 'Mine Safety and Health Administration',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=288&order=newest',
+      short_name: 'MSHA',
+      slug: 'mine-safety-and-health-administration',
+      url: 'https://www.federalregister.gov/agencies/mine-safety-and-health-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/288',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Mine Safety and Health Administration',
+      budgetBureauTitleId: 'mine-safety-and-health-administration',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Occupational Safety and Health Administration (OSHA) was created pursuant to the Occupational Safety and Health Act of 1970 (29 U.S.C. 651 et seq.). \rBy concentrating on four areas: \r(1) firm enforcement of workplace safety and health rules;\r(2) swift promulgation of strong, protective health and safety standards;\r(3) increased outreach and help for workers and their employers in their efforts to eliminate and control workplace hazards; and\r(4) partnership with the States that are running their own OSHA-approved programs.\rOSHA sets and enforces workplace safety and health standards and assists employers in complying with those standards. ',
+      id: 386,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/386/thumb.png?1279151253',
+        small_url: 'https://agency-logos.federalregister.gov/386/small.png?1279151253',
+        medium_url: 'https://agency-logos.federalregister.gov/386/medium.png?1279151253'
+      },
+      name: 'Occupational Safety and Health Administration',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=386&order=newest',
+      short_name: 'OSHA',
+      slug: 'occupational-safety-and-health-administration',
+      url: 'https://www.federalregister.gov/agencies/occupational-safety-and-health-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/386',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Occupational Safety and Health Administration',
+      budgetBureauTitleId: 'occupational-safety-and-health-administration',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Disability Employment (ODEP) is a sub-cabinet level policy agency within the Department of Labor authorized by Congress in the Department of Labor's FY 2001 appropriation. \r\n\r\nODEP provides national leadership on disability employment policy by developing and influencing the use of evidence-based disability employment policies and practices, building collaborative partnerships, and delivering authoritative and credible data on employment of people with disabilities.\r\n\r\nWith the ultimate goal of increasing the number of people with disabilities who work, either as employees or entrepreneurs, ODEP provides policy analysis, technical assistance, development of innovative practices and strategies, and education and outreach to employers, employees, and the disability community. Related to these efforts, ODEP also conducts a variety of employment-related programs and initiatives. \r\n",
+      id: 115,
+      logo: null,
+      name: 'Disability Employment Policy Office',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=115&order=newest',
+      short_name: 'ODEP',
+      slug: 'disability-employment-policy-office',
+      url: 'https://www.federalregister.gov/agencies/disability-employment-policy-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/115',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Office of Disability Employment Policy',
+      budgetBureauTitleId: 'office-of-disability-employment-policy',
+      matchLevel: 13,
+      matches: [
+        {
+          id: 115,
+          name: 'Disability Employment Policy Office',
+          comparing: 'Office of Disability Employment Policy',
+          rank: 13,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 620,
+          name: 'Energy and Environmental Policy Office',
+          comparing: 'Office of Disability Employment Policy',
+          rank: 1,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 391,
+          name: 'Office of Policy Development',
+          comparing: 'Office of Disability Employment Policy',
+          rank: 1,
+          comparingParent: 'Department of Labor'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.dol.gov/ofccp/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Federal Contract Compliance Programs (OFCCP) administers and enforces three equal opportunity mandates: Executive Order 11246, as amended; section 503 of the Rehabilitation Act of 1973, as amended; and the Vietnam Era Veterans' Readjustment Assistance Act of 1974, as amended, 38 U.S.C. 4212. These mandates prohibit Federal contractors and subcontractors from discriminating on the basis of race, color, religion, sex, national origin, disability, or veteran status. They also require Federal contractors and subcontractors to take affirmative steps to ensure equal opportunity in their employment processes. OFCCP also shares responsibility with the U.S. Equal Opportunity Employment Commission in enforcing Title I of the Americans with Disabilities Act.",
+      id: 162,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/162/thumb.jpg?1321992489',
+        small_url: 'https://agency-logos.federalregister.gov/162/small.jpg?1321992489',
+        medium_url: 'https://agency-logos.federalregister.gov/162/medium.jpg?1321992489'
+      },
+      name: 'Federal Contract Compliance Programs Office',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=162&order=newest',
+      short_name: 'OFCCP',
+      slug: 'federal-contract-compliance-programs-office',
+      url: 'https://www.federalregister.gov/agencies/federal-contract-compliance-programs-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/162',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Office of Federal Contract Compliance Programs',
+      budgetBureauTitleId: 'office-of-federal-contract-compliance-programs',
+      matchLevel: 15,
+      matches: [
+        {
+          id: 162,
+          name: 'Federal Contract Compliance Programs Office',
+          comparing: 'Office of Federal Contract Compliance Programs',
+          rank: 15,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 530,
+          name: "Workers' Compensation Programs Office",
+          comparing: 'Office of Federal Contract Compliance Programs',
+          rank: 4,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 269,
+          name: 'Justice Programs Office',
+          comparing: 'Office of Federal Contract Compliance Programs',
+          rank: 1,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Labor'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.usda.gov/oig/index.htm',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
+      id: 244,
+      logo: null,
+      name: 'Inspector General Office, Agriculture Department',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
+      short_name: 'OIG USDA',
+      slug: 'inspector-general-office-agriculture-department',
+      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Office of Inspector General',
+      budgetBureauTitleId: 'office-of-inspector-general',
+      matchLevel: 3,
+      matches: [
+        {
+          id: 244,
+          name: 'Inspector General Office, Agriculture Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 622,
+          name: 'Inspector General Office, Treasury Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Labor'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.dol.gov/olms/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Labor-Management Standards (OLMS) can trace its origin back to the passage of the Labor-Management Reporting and Disclosure Act of 1959, as amended (LMRDA) on September 14, 1959. LMRDA was enacted by Congress to ensure certain basic standards of democracy and fiscal responsibility in labor organizations representing employees in private industry. The organization's original name was the Bureau of Labor-Management Reports (BLMR). It was re-named the Labor-Management Services Administration (LMSA) in 1963.\r\n\r\nAt one time or another LMSA had responsibilities which included pension and welfare plans, Federal labor relations, veterans reemployment rights, and an anti-racketeering/organized crime strike force. Through reorganizations and the creation of new agencies through legislation, these functions were subsequently transferred to other Federal agencies.\r\n\r\nWith the passage of the Civil Service Reform Act (CSRA) in 1978, the federal labor relations program was transferred to the newly created Federal Labor Relations Authority. However, the Standard of Conduct provisions of the CSRA which regulate internal affairs of federal-sector unions remained in LMSA. In 1980, the Foreign Service Act (FSA) was passed and unions representing employees of the Department of State and U.S. Information Agency (USIA) became subject to Standards of Conduct requirements.\r\n\r\nThe agency became known as OLMS in 1984. In 1992, OLMS became part of the Employment Standards Administration (ESA). In 1993, OLMS was transferred to the newly created Office of the American Workplace (OAW). In 1996, OAW ceased to exist and OLMS was transferred back to ESA. In 2009, ESA was eliminated and OLMS became an independent agency reporting directly to the Secretary of Labor.\r\n",
+      id: 274,
+      logo: null,
+      name: 'Labor-Management Standards Office',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=274&order=newest',
+      short_name: 'LMSO',
+      slug: 'labor-management-standards-office',
+      url: 'https://www.federalregister.gov/agencies/labor-management-standards-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/274',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Office of Labor Management Standards',
+      budgetBureauTitleId: 'office-of-labor-management-standards',
+      matchLevel: 10,
+      matches: [
+        {
+          id: 274,
+          name: 'Labor-Management Standards Office',
+          comparing: 'Office of Labor Management Standards',
+          rank: 10,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 280,
+          name: 'Management and Budget Office',
+          comparing: 'Office of Labor Management Standards',
+          rank: 1,
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 406,
+          name: 'Personnel Management Office',
+          comparing: 'Office of Labor Management Standards',
+          rank: 1,
+          comparingParent: 'Department of Labor'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.dol.gov/agencies/owcp',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Workers' Compensation Programs administers four major disability compensation programs which provide wage replacement benefits, medical treatment, vocational rehabilitation and other benefits to certain workers or their dependents who experience work-related injury or occupational disease. The program areas are:\r\n\r\nDivision of Federal Employees' Compensation. The Federal Employees' Compensation Act provides workers' compensation coverage to federal and postal workers around the world for employment-related injuries and occupational diseases. \r\nDivision of Energy Employees Occupational Illness Compensation. The Energy Employees Occupational Illness Compensation Program Act (EEOICPA) provides compensation and medical benefits to employees of the Department of Energy (DOE), its predecessor agencies, and its contractors and subcontractors, and employees of DOE designated Atomic Weapons Employers (AWE) and Beryllium Vendors who became ill as a result of work performed in the production and testing of nuclear weapons. Uranium miners, millers and ore transporters (or their eligible survivors) under Section 5 of the Radiation Exposure Compensation Act (RECA) administered by the Department of Justice may also be eligible for benefits under the EEOICPA under both Part B and Part E.\r\nDivision of Longshore and Harbor Workers' Compensation. Under the provisions of the Longshore and Harbor Workers' Compensation Act and its extensions (including the Defense Base Act) the Office provide information, technical and compliance assistance, support, and informal dispute resolution services to workers, employers, and insurers, and ensures that benefits are promptly and properly paid to minimize the impact of employment injuries and deaths on employees and their families.\r\nDivision of Coal Mine Workers' Compensation. The Black Lung Benefits Act provides benefits to coal miners who are totally disabled by black lung disease, and to their eligible survivors. Benefits include monthly compensation for disabled miners and survivors of miners whose deaths are attributable to black lung, and medical coverage for disabled miners' lung disease.",
+      id: 530,
+      logo: null,
+      name: "Workers' Compensation Programs Office",
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=530&order=newest',
+      short_name: 'OWCP',
+      slug: 'workers-compensation-programs-office',
+      url: 'https://www.federalregister.gov/agencies/workers-compensation-programs-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/530',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: "Office of Workers' Compensation Programs",
+      budgetBureauTitleId: 'office-of-workers-compensation-programs',
+      matchLevel: 13,
+      matches: [
+        {
+          id: 530,
+          name: "Workers' Compensation Programs Office",
+          comparing: "Office of Workers' Compensation Programs",
+          rank: 13,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 162,
+          name: 'Federal Contract Compliance Programs Office',
+          comparing: "Office of Workers' Compensation Programs",
+          rank: 4,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Labor'
+        },
+        {
+          id: 269,
+          name: 'Justice Programs Office',
+          comparing: "Office of Workers' Compensation Programs",
+          rank: 2,
+          parent: 'Justice Department',
+          comparingParent: 'Department of Labor'
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Pension Benefit Guaranty Corporation protects the pension benefits of nearly 44 million Americans who participate in defined-benefit \rpension plans sponsored by private-sector employees.\r\rThe Pension Benefit Guaranty Corporation (PBGC) is a self-financing, wholly owned Government corporation subject to the Government \rCorporation Control Act (31 U.S.C. 9101-9109). The Corporation, established by title IV of the Employee Retirement Income Security Act \rof 1974 (29 U.S.C. 1301-1461), operates in accordance with policies established by its Board of Directors, which consists of the Secretaries \rof Labor, Commerce, and the Treasury. The Secretary of Labor is Chairman of the Board. A seven-member Advisory Committee, composed of two labor, two business, and three public members appointed by the President, advises the agency on investment issues.',
+      id: 405,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/405/thumb.png?1279162140',
+        small_url: 'https://agency-logos.federalregister.gov/405/small.png?1279162140',
+        medium_url: 'https://agency-logos.federalregister.gov/405/medium.png?1279162140'
+      },
+      name: 'Pension Benefit Guaranty Corporation',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=405&order=newest',
+      short_name: 'PBGC',
+      slug: 'pension-benefit-guaranty-corporation',
+      url: 'https://www.federalregister.gov/agencies/pension-benefit-guaranty-corporation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/405',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Pension Benefit Guaranty Corporation',
+      budgetBureauTitleId: 'pension-benefit-guaranty-corporation',
+      exact: true
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Veterans Employment and Training Service (VETS) was established in 1974 \r\nas an office under the Employment and Training Administration to focus specifically on the education and training of veterans. In 1984 VETS was reestablished as an independent agency and is one of several government units (including the Department of Veterans Affairs and the Small Business Bureau) addressing and executing improvement of employment, training and other work-force issues and scenarios for veterans. VETS works to secure the greatest number of employment opportunities possible for veterans, which it realizes through a variety of avenues and financial plans and policies, for veterans and those who hire them,\r\n',
+      id: 521,
+      logo: null,
+      name: 'Veterans Employment and Training Service',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=521&order=newest',
+      short_name: 'VETS',
+      slug: 'veterans-employment-and-training-service',
+      url: 'https://www.federalregister.gov/agencies/veterans-employment-and-training-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/521',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: "Veterans' Employment and Training Service",
+      budgetBureauTitleId: 'veterans-employment-and-training-service',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Wage and Hour Division is responsible for planning, directing, and administering programs dealing with a variety of Federal labor legislation. These programs are designed to protect low-wage incomes; safeguard the health and welfare of workers by discouraging excessively long work hours; safeguard the health and well-being of minors; prevent curtailment of employment and earnings for students, trainees, and handicapped workers; minimize losses of income and job rights caused by indebtedness; and direct a program of farm labor contractor registration designed to protect the health, safety, and welfare of migrant and seasonal agricultural workers.',
+      id: 524,
+      logo: null,
+      name: 'Wage and Hour Division',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=524&order=newest',
+      short_name: 'WHD',
+      slug: 'wage-and-hour-division',
+      url: 'https://www.federalregister.gov/agencies/wage-and-hour-division',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/524',
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Wage and Hour Division',
+      budgetBureauTitleId: 'wage-and-hour-division',
+      exact: true
     },
     {
       agency_url: 'http://www.bia.gov/',
@@ -3284,86 +5850,6 @@ export default {
           rank: 7,
           parent: 'Interior Department',
           comparingParent: 'Department of the Interior'
-        }
-      ]
-    },
-    {
-      agency_url: 'https://www.bis.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The mission of the Bureau of Industry and Security (BIS) is to advance U.S. national security, foreign policy, and economic objectives by ensuring an effective export control and treaty compliance system and promoting continued U.S. strategic technology leadership. BIS activities include regulating the export of sensitive goods and technologies in an effective and efficient manner; enforcing export control, antiboycott, and public safety laws; cooperating with and assisting other countries on export control and strategic trade issues; assisting U.S. industry to comply with international arms control agreements; and monitoring the viability of the U.S. defense industrial base and seeking to ensure that it is capable of satisfying U.S. national and homeland security needs.',
-      id: 241,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/241/thumb.png?1322519408',
-        small_url: 'https://agency-logos.federalregister.gov/241/small.png?1322519408',
-        medium_url: 'https://agency-logos.federalregister.gov/241/medium.png?1322519408'
-      },
-      name: 'Industry and Security Bureau',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=241&order=newest',
-      short_name: 'BIS',
-      slug: 'industry-and-security-bureau',
-      url: 'https://www.federalregister.gov/agencies/industry-and-security-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/241',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'Bureau of Industry and Security',
-      budgetBureauTitleId: 'bureau-of-industry-and-security',
-      matchLevel: 11,
-      matches: [
-        {
-          id: 241,
-          name: 'Industry and Security Bureau',
-          comparing: 'Bureau of Industry and Security',
-          rank: 11,
-          parent: 'Commerce Department',
-          comparingParent: 'Department of Commerce'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.bls.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Bureau of Labor Statistics (BLS) was originally established under the Department of the Interior as the Bureau of Labor under the Bureau of Labor Act (23 Stat. 60) of  June 27, 1884. After several reorganizations and transfers, the agency was renamed the Bureau of Labor Statistics and transferred to the Department of Labor in 1913. \r\n\r\nThe BLS is an independent national statistical agency that collects, processes, analyzes, and disseminates essential statistical data to the American public, the U.S. Congress, other Federal agencies, State and local governments, business, and labor. The BLS also serves as a statistical resource to the Department of Labor.\r\n\r\nBLS data must satisfy a number of criteria, including relevance to current social and economic issues, timeliness in reflecting today’s rapidly changing economic conditions, accuracy and consistently high statistical quality, and impartiality in both subject matter and presentation.\r\n',
-      id: 272,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/272/thumb.png?1323297764',
-        small_url: 'https://agency-logos.federalregister.gov/272/small.png?1323297764',
-        medium_url: 'https://agency-logos.federalregister.gov/272/medium.png?1323297764'
-      },
-      name: 'Labor Statistics Bureau',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=272&order=newest',
-      short_name: 'BLS',
-      slug: 'labor-statistics-bureau',
-      url: 'https://www.federalregister.gov/agencies/labor-statistics-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/272',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Bureau of Labor Statistics',
-      budgetBureauTitleId: 'bureau-of-labor-statistics',
-      matchLevel: 11,
-      matches: [
-        {
-          id: 272,
-          name: 'Labor Statistics Bureau',
-          comparing: 'Bureau of Labor Statistics',
-          rank: 11,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 495,
-          name: 'Transportation Statistics Bureau',
-          comparing: 'Bureau of Labor Statistics',
-          rank: 3,
-          parent: 'Transportation Department',
-          comparingParent: 'Department of Labor'
         }
       ]
     },
@@ -3548,42 +6034,6 @@ export default {
       ]
     },
     {
-      agency_url: 'http://www.census.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The U.S.Census Bureau was established as a permanent office by act of March 6, 1902 (32 Stat. 51). The major functions of the Census Bureau are authorized by the Constitution, which provides that a census of population shall be taken every 10 years, and by laws codified as title 13 of the United States Code. The law also provides that the information collected by the Census Bureau from individual persons, households, or establishments be kept strictly confidential and be used only for statistical purposes. \r\n\r\nThe Census Bureau is responsible for the the decennial censuses of population and housing; the quinquennial censuses of State and local governments, manufacturers, mineral industries, distributive trades, construction industries, and transportation; current surveys that provide information on many of the subjects covered in the censuses at monthly, quarterly, annual, or other intervals; the compilation of current statistics on U.S. foreign trade, including data on imports, exports, and shipping; special censuses at the request and expense of State and local government units; publication of estimates and projections of the population; publication of current data on population and housing characteristics; and current reports on manufacturing, retail and wholesale trade, services, construction, imports and exports, State and local government finances and employment, and other subjects.',
-      id: 42,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/42/thumb.png?1279143873',
-        small_url: 'https://agency-logos.federalregister.gov/42/small.png?1279143873',
-        medium_url: 'https://agency-logos.federalregister.gov/42/medium.png?1279143873'
-      },
-      name: 'Census Bureau',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=42&order=newest',
-      short_name: 'USBC',
-      slug: 'census-bureau',
-      url: 'https://www.federalregister.gov/agencies/census-bureau',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/42',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'Bureau of the Census',
-      budgetBureauTitleId: 'bureau-of-the-census',
-      matchLevel: 9,
-      matches: [
-        {
-          id: 42,
-          name: 'Census Bureau',
-          comparing: 'Bureau of the Census',
-          rank: 9,
-          parent: 'Commerce Department',
-          comparingParent: 'Department of Commerce'
-        }
-      ]
-    },
-    {
       agency_url: '',
       child_ids: [],
       child_slugs: [],
@@ -3616,117 +6066,25 @@ export default {
       ]
     },
     {
-      agency_url: 'http://www.cdc.gov/',
+      agency_url: null,
       child_ids: [],
       child_slugs: [],
       description:
-        'The Centers for Disease Control and Prevention (CDC), as part of the Public Health Service, is charged with protecting the public health of the Nation by providing leadership and direction in the prevention of and control of diseases and other preventable conditions and responding to public health emergencies. Within the CDC, there are four coordinating centers, two coordinating offices, and the National Institute for Occupational Safety and Health.',
-      id: 44,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/44/thumb.png?1279143855',
-        small_url: 'https://agency-logos.federalregister.gov/44/small.png?1279143855',
-        medium_url: 'https://agency-logos.federalregister.gov/44/medium.png?1279143855'
-      },
-      name: 'Centers for Disease Control and Prevention',
-      parent_id: 221,
+        'As an independent federal regulatory agency of the United States, the National Indian Gaming Commission (Commission) was established pursuant to the Indian Gaming Regulatory Act of 1988 (Act). The Commission comprises a Chairman and two Commissioners, each of whom serves on a full-time basis for a three-year term. The Chairman is appointed by the President and must be confirmed by the Senate. The Secretary of the Interior appoints the other two Commissioners. Under the Act, at least two of the three Commissioners must be enrolled members of a federally recognized Indian tribe, and no more than two members may be of the same political party. [http://www.nigc.gov/About_Us.aspx]',
+      id: 347,
+      logo: null,
+      name: 'National Indian Gaming Commission',
+      parent_id: 253,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=44&order=newest',
-      short_name: 'CDC',
-      slug: 'centers-for-disease-control-and-prevention',
-      url: 'https://www.federalregister.gov/agencies/centers-for-disease-control-and-prevention',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/44',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Centers for Disease Control and Prevention',
-      budgetBureauTitleId: 'centers-for-disease-control-and-prevention',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.cms.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Centers for Medicare and Medicaid Services, originally designated the Health Care Finance Administration (HCFA), was established as a subagency under the Department of Health and Human Services by the Reorganization Order of march 9, 1977.\r\nThe Centers for Medicare and Medicaid Services (CMS) was created to administer oversight of the Medicare Program and the federal portion of the Medicaid Program. It also ensures that program beneficiaries are aware of the services for which they are eligible and that those services are accessible and of high quality and develops health and safety standards for providers of health care services authorized by Medicare and Medicaid legislation. CMS is also responsible for administering the State Children’s Health Insurance Program (SCHIP), the Health Insurance Portability and Accountability Act (HIPAA), and several other health-related programs. \r\n\r\n ',
-      id: 45,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/45/thumb.jpg?1279148862',
-        small_url: 'https://agency-logos.federalregister.gov/45/small.jpg?1279148862',
-        medium_url: 'https://agency-logos.federalregister.gov/45/medium.jpg?1279148862'
-      },
-      name: 'Centers for Medicare & Medicaid Services',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=45&order=newest',
-      short_name: 'CMS',
-      slug: 'centers-for-medicare-medicaid-services',
-      url: 'https://www.federalregister.gov/agencies/centers-for-medicare-medicaid-services',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/45',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Centers for Medicare and Medicaid Services',
-      budgetBureauTitleId: 'centers-for-medicare-and-medicaid-services',
-      matchLevel: 16,
-      matches: [
-        {
-          id: 45,
-          name: 'Centers for Medicare & Medicaid Services',
-          comparing: 'Centers for Medicare and Medicaid Services',
-          rank: 16,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        }
-      ]
-    },
-    {
-      agency_url: 'https://www.cia.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Central Intelligence Agency was established by the National Security Act of 1947, as amended (50 U.S.C. 401 et seq.). It now functions under that statute, Executive Order 12333 of December 4, 1981, the Intelligence Reform and Terrorism Prevention Act of 2004 (50 U.S.C. 401 note), and other laws, Executive orders, regulations, and directives.\r\n\r\nThe Central Intelligence Agency (CIA) collects intelligence from human sources and other appropriate means, but, it does not carry out internal security functions nor exercise police, subpoena, or law enforcement powers. The Agency also correlates, evaluates, and disseminates intelligence related to national security; provides overall direction for and coordination of intelligence collecting outside the United States by U.S. Intelligence Community elements authorized to engage in human source collection. In coordination with other departments, agencies, or authorized elements of the United States Government, the CIA ensures that resources are used effectively and that adequate consideration is given to the risks to those involved in such collection and to the United States; it also carries out other intelligence-related functions and duties necessary for safeguarding national security as the President or the Director of National Intelligence (DNI) may direct; and it coordinates, under the direction of the DNI and consistent with section 207 of the Foreign Service Act of 1980, relationships between elements of the U.S. Intelligence Community and the intelligence or security services of foreign governments or international organizations in matters of national security or intelligence that is acquired clandestinely.',
-      id: 46,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/46/thumb.png?1279143943',
-        small_url: 'https://agency-logos.federalregister.gov/46/small.png?1279143943',
-        medium_url: 'https://agency-logos.federalregister.gov/46/medium.png?1279143943'
-      },
-      name: 'Central Intelligence Agency',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=46&order=newest',
-      short_name: 'CIA',
-      slug: 'central-intelligence-agency',
-      url: 'https://www.federalregister.gov/agencies/central-intelligence-agency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/46',
-      budgetAgencyTitle: 'Central Intelligence Agency',
-      budgetAgencyTitleId: 'central-intelligence-agency',
-      budgetBureauTitle: 'Central Intelligence Agency',
-      budgetBureauTitleId: 'central-intelligence-agency',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.csb.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The CSB is an independent federal agency charged with investigating industrial chemical accidents. The agency's board members are appointed by the President and confirmed by the Senate.\r\n\r\nThe CSB conducts root cause investigations of chemical accidents at fixed industrial facilities. Root causes are usually deficiencies in safety management systems, but can be any factor that would have prevented the accident if that factor had not occurred. Other accident causes often involve equipment failures, human errors, unforeseen chemical reactions or other hazards. The agency does not issue fines or citations, but does make recommendations to plants, regulatory agencies such as the Occupational Safety and Health Administration (OSHA) and the Environmental Protection Agency (EPA), industry organizations, and labor groups. Congress designed the CSB to be non-regulatory and independent of other agencies so that its investigations might, where appropriate, review the effectiveness of regulations and regulatory enforcement. [http://www.csb.gov]",
-      id: 47,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/47/thumb.png?1321381108',
-        small_url: 'https://agency-logos.federalregister.gov/47/small.png?1321381108',
-        medium_url: 'https://agency-logos.federalregister.gov/47/medium.png?1321381108'
-      },
-      name: 'Chemical Safety and Hazard Investigation Board',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=47&order=newest',
-      short_name: 'CSB',
-      slug: 'chemical-safety-and-hazard-investigation-board',
-      url: 'https://www.federalregister.gov/agencies/chemical-safety-and-hazard-investigation-board',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/47',
-      budgetAgencyTitle: 'Chemical Safety and Hazard Investigation Board',
-      budgetAgencyTitleId: 'chemical-safety-and-hazard-investigation-board',
-      budgetBureauTitle: 'Chemical Safety and Hazard Investigation Board',
-      budgetBureauTitleId: 'chemical-safety-and-hazard-investigation-board',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=347&order=newest',
+      short_name: 'NIGC',
+      slug: 'national-indian-gaming-commission',
+      url: 'https://www.federalregister.gov/agencies/national-indian-gaming-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/347',
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'National Indian Gaming Commission',
+      budgetBureauTitleId: 'national-indian-gaming-commission',
       exact: true
     },
     {
@@ -3734,265 +6092,524 @@ export default {
       child_ids: [],
       child_slugs: [],
       description:
-        'On March 1, 2003, U.S. Citizenship and Immigration Services (USCIS) officially assumed responsibility for the immigration service functions of the federal government. The USCIS was formed to enhance the security and improve the efficiency of national immigration services by exclusively focusing on the administration of benefit applications. Immigration and Customs Enforcement (ICE) and Customs and Border Protection (CBP), components within DHS, handle immigration enforcement and border security functions.[http://www.uscis.gov/portal/site/uscis/]',
-      id: 499,
+        'The National Park Service was established in the Department of the Interior on August 25, 1916 (16 U.S.C. 1).\r\n\r\nThere are close to 400 units in the National Park System, including national parks, monuments and memorials, scenic parkways, preserves, reserves, trails, riverways, wild and scenic rivers, seashores, lakeshores, recreation areas, battlefields and battlefield parks and sites, national military parks, international historic sites, and historic sites associated with important movements, events, and personalities of the American past.\r\n\r\nThe National Park Service is dedicated to conserving unimpaired the Natural and cultural resources and values of the National Park System for the enjoyment, education, and inspiration of this and future generations. ',
+      id: 362,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/499/thumb.jpg?1279151590',
-        small_url: 'https://agency-logos.federalregister.gov/499/small.jpg?1279151590',
-        medium_url: 'https://agency-logos.federalregister.gov/499/medium.jpg?1279151590'
+        thumb_url: 'https://agency-logos.federalregister.gov/362/thumb.png?1279162047',
+        small_url: 'https://agency-logos.federalregister.gov/362/small.png?1279162047',
+        medium_url: 'https://agency-logos.federalregister.gov/362/medium.png?1279162047'
       },
-      name: 'U.S. Citizenship and Immigration Services',
-      parent_id: 227,
+      name: 'National Park Service',
+      parent_id: 253,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=499&order=newest',
-      short_name: 'USCIS',
-      slug: 'u-s-citizenship-and-immigration-services',
-      url: 'https://www.federalregister.gov/agencies/u-s-citizenship-and-immigration-services',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/499',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Citizenship and Immigration Services',
-      budgetBureauTitleId: 'citizenship-and-immigration-services',
-      matchLevel: 12,
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=362&order=newest',
+      short_name: 'NPS',
+      slug: 'national-park-service',
+      url: 'https://www.federalregister.gov/agencies/national-park-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/362',
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'National Park Service',
+      budgetBureauTitleId: 'national-park-service',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.usda.gov/oig/index.htm',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
+      id: 244,
+      logo: null,
+      name: 'Inspector General Office, Agriculture Department',
+      parent_id: 12,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
+      short_name: 'OIG USDA',
+      slug: 'inspector-general-office-agriculture-department',
+      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Office of Inspector General',
+      budgetBureauTitleId: 'office-of-inspector-general',
+      matchLevel: 3,
       matches: [
         {
-          id: 499,
-          name: 'U.S. Citizenship and Immigration Services',
-          comparing: 'Citizenship and Immigration Services',
-          rank: 12,
-          parent: 'Homeland Security Department',
-          comparingParent: 'Department of Homeland Security'
+          id: 244,
+          name: 'Inspector General Office, Agriculture Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of the Interior'
+        },
+        {
+          id: 622,
+          name: 'Inspector General Office, Treasury Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of the Interior'
         }
       ]
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Surface Mining Reclamation and Enforcement (OSM) was established in the Department of the Interior by the Surface Mining Control and Reclamation Act of 1977 (30 U.S.C. 1211).\r\rThe Office's primary goal is to assist States in operating a nationwide program that protects society and the environment from the adverse effects of coal mining, while ensuring that surface coal mining can be done without permanent damage to land and water resources. With most coal mining States responsible for regulating coal mining and reclamation activities within their borders, OSM's main objectives are to oversee State mining regulatory and abandoned-mine reclamation programs, assist States in meeting the objectives of the surface mining law, and regulate mining and reclamation activities on Federal and Indian lands, and in those States choosing not to assume primary responsibility.",
+      id: 480,
+      logo: null,
+      name: 'Surface Mining Reclamation and Enforcement Office',
+      parent_id: 253,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=480&order=newest',
+      short_name: 'OSM',
+      slug: 'surface-mining-reclamation-and-enforcement-office',
+      url: 'https://www.federalregister.gov/agencies/surface-mining-reclamation-and-enforcement-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/480',
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Office of Surface Mining Reclamation and Enforcement',
+      budgetBureauTitleId: 'office-of-surface-mining-reclamation-and-enforcement',
+      matchLevel: 15,
+      matches: [
+        {
+          id: 480,
+          name: 'Surface Mining Reclamation and Enforcement Office',
+          comparing: 'Office of Surface Mining Reclamation and Enforcement',
+          rank: 15,
+          parent: 'Interior Department',
+          comparingParent: 'Department of the Interior'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.fws.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The U.S. Fish and Wildlife Service is the only agency in the Federal government whose primary responsibility is the conservation and management of fish, wildlife, plants and their habitats for the American people. Its origins date back to 1871 when Congress established the U.S. Commission of Fish and Fisheries to study why the nation’s food fishes were decreasing and recommend ways to reverse that decline. A second predecessor agency, the Bureau of Biological Survey, was established in 1885. In 1939, Fisheries and Biological Survey were moved to the Department of the Interior, and on June 30, 1940, they were combined to create the U.S. Fish and Wildlife Service.',
+      id: 197,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/197/thumb.png?1322081285',
+        small_url: 'https://agency-logos.federalregister.gov/197/small.png?1322081285',
+        medium_url: 'https://agency-logos.federalregister.gov/197/medium.png?1322081285'
+      },
+      name: 'Fish and Wildlife Service',
+      parent_id: 253,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=197&order=newest',
+      short_name: 'FWS',
+      slug: 'fish-and-wildlife-service',
+      url: 'https://www.federalregister.gov/agencies/fish-and-wildlife-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/197',
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'United States Fish and Wildlife Service',
+      budgetBureauTitleId: 'united-states-fish-and-wildlife-service',
+      matchLevel: 9,
+      matches: [
+        {
+          id: 197,
+          name: 'Fish and Wildlife Service',
+          comparing: 'United States Fish and Wildlife Service',
+          rank: 9,
+          parent: 'Interior Department',
+          comparingParent: 'Department of the Interior'
+        },
+        {
+          id: 512,
+          name: 'United States Marshals Service',
+          comparing: 'United States Fish and Wildlife Service',
+          rank: 4,
+          parent: 'Justice Department',
+          comparingParent: 'Department of the Interior'
+        },
+        {
+          id: 513,
+          name: 'United States Mint',
+          comparing: 'United States Fish and Wildlife Service',
+          rank: 1,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of the Interior'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.usgs.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The U.S. Geological Survey (USGS) was established by the Organic Act of March 3, 1879 (43 U.S.C. 31). USGS classifies public lands, examines the geological structure, and assesses the energy, mineral, water, and biology resources and products within and outside the national domain.\r\n\r\nUSGS provides relevant, objective scientific studies and information used to help address issues and solve problems dealing with natural resources, natural hazards, and the environmental effects on human and wildlife health. ',
+      id: 212,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/212/thumb.png?1279150544',
+        small_url: 'https://agency-logos.federalregister.gov/212/small.png?1279150544',
+        medium_url: 'https://agency-logos.federalregister.gov/212/medium.png?1279150544'
+      },
+      name: 'Geological Survey',
+      parent_id: 253,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=212&order=newest',
+      short_name: 'USGS',
+      slug: 'geological-survey',
+      url: 'https://www.federalregister.gov/agencies/geological-survey',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/212',
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'United States Geological Survey',
+      budgetBureauTitleId: 'united-states-geological-survey',
+      matchLevel: 7,
+      matches: [
+        {
+          id: 212,
+          name: 'Geological Survey',
+          comparing: 'United States Geological Survey',
+          rank: 7,
+          parent: 'Interior Department',
+          comparingParent: 'Department of the Interior'
+        },
+        {
+          id: 513,
+          name: 'United States Mint',
+          comparing: 'United States Geological Survey',
+          rank: 2,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of the Interior'
+        },
+        {
+          id: 512,
+          name: 'United States Marshals Service',
+          comparing: 'United States Geological Survey',
+          rank: 1,
+          parent: 'Justice Department',
+          comparingParent: 'Department of the Interior'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.ttb.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Alcohol and Tobacco Tax and Trade Bureau, statutorily named the Tax and Trade Bureau (TTB) was established under the Homeland Security Act of 2002 (the Act) on January 24, 2003. Rendering the functions of the Bureau of Alcohol, Tobacco and Firearms (ATF) into two new organizations with separate functions, the Act created a new tax and trade bureau within the Department of the Treasury, and shifted certain law enforcement functions of ATF to the Department of Justice. The Act called for the tax collection functions to remain with the Department of the Treasury; and the new organization was called the “Alcohol and Tobacco Tax and Trade Bureau.”\r\n\r\nThe mission of TTB is to collect alcohol, tobacco, firearms, and ammunition excise taxes that are rightfully due; to protect the consumer of alcohol beverages through compliance programs that are based upon education and enforcement of the industry to ensure an effectively regulated marketplace; and to assist industry members to understand and comply with Federal tax, product, and marketing requirements associated with the commodities we regulate.\r\n\r\n\r\n',
+      id: 18,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/18/thumb.png?1321298190',
+        small_url: 'https://agency-logos.federalregister.gov/18/small.png?1321298190',
+        medium_url: 'https://agency-logos.federalregister.gov/18/medium.png?1321298190'
+      },
+      name: 'Alcohol and Tobacco Tax and Trade Bureau',
+      parent_id: 497,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=18&order=newest',
+      short_name: 'TTB',
+      slug: 'alcohol-and-tobacco-tax-and-trade-bureau',
+      url: 'https://www.federalregister.gov/agencies/alcohol-and-tobacco-tax-and-trade-bureau',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/18',
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Alcohol and Tobacco Tax and Trade Bureau',
+      budgetBureauTitleId: 'alcohol-and-tobacco-tax-and-trade-bureau',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.moneyfactory.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Bureau of Engraving and Printing operates on basic authorities conferred by act of July 11, 1862 (31 U.S.C. 303), and additional authorities contained in past appropriations made to the Bureau that are still in force. Operations are financed by a revolving fund established in 1950 in accordance with Public Law 81-656. The Bureau is headed by a Director who is selected by the Secretary of the Treasury.\r\n\r\nThe Bureau designs, prints, and finishes all of the Nation's paper currency and many other security documents, including White House invitations and military identification cards. It also is responsible for advising and assisting Federal agencies in the design and production of other Government documents that, because of their innate value or for other reasons, require security or counterfeit-deterrence characteristics.",
+      id: 143,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/143/thumb.png?1321892188',
+        small_url: 'https://agency-logos.federalregister.gov/143/small.png?1321892188',
+        medium_url: 'https://agency-logos.federalregister.gov/143/medium.png?1321892188'
+      },
+      name: 'Engraving and Printing Bureau',
+      parent_id: 497,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=143&order=newest',
+      short_name: 'BEP',
+      slug: 'engraving-and-printing-bureau',
+      url: 'https://www.federalregister.gov/agencies/engraving-and-printing-bureau',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/143',
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Bureau of Engraving and Printing',
+      budgetBureauTitleId: 'bureau-of-engraving-and-printing',
+      matchLevel: 11,
+      matches: [
+        {
+          id: 143,
+          name: 'Engraving and Printing Bureau',
+          comparing: 'Bureau of Engraving and Printing',
+          rank: 11,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of the Treasury'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.fincen.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The U.S. Department of the Treasury established the Financial Crimes Enforcement Network in 1990 to provide a government-wide multisource financial intelligence and analysis network. The organization's operation was broadened in 1994 to include regulatory responsibilities for administering the Bank Secrecy Act, one of the nation's most potent weapons for preventing corruption of the U.S. financial system.\r\n\r\nThe mission of the Financial Crimes Enforcement Network is to enhance U.S. national security, deter and detect criminal activity, and safeguard financial systems from abuse by promoting transparency in the U.S. and international financial systems.\r\n",
+      id: 194,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/194/thumb.png?1322076999',
+        small_url: 'https://agency-logos.federalregister.gov/194/small.png?1322076999',
+        medium_url: 'https://agency-logos.federalregister.gov/194/medium.png?1322076999'
+      },
+      name: 'Financial Crimes Enforcement Network',
+      parent_id: 497,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=194&order=newest',
+      short_name: 'TD',
+      slug: 'financial-crimes-enforcement-network',
+      url: 'https://www.federalregister.gov/agencies/financial-crimes-enforcement-network',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/194',
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Financial Crimes Enforcement Network',
+      budgetBureauTitleId: 'financial-crimes-enforcement-network',
+      exact: true
     },
     {
       agency_url: '',
       child_ids: [],
       child_slugs: [],
       description: '',
-      id: 618,
+      id: 585,
       logo: null,
-      name: 'Civil Rights Cold Case Records Review Board',
-      parent_id: null,
+      name: 'Fiscal Service',
+      parent_id: 497,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=618&order=newest',
-      short_name: 'CRCCRRB',
-      slug: 'civil-rights-cold-case-records-review-board',
-      url: 'https://www.federalregister.gov/agencies/civil-rights-cold-case-records-review-board',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/618',
-      budgetAgencyTitle: 'Civil Rights Cold Case Records Review Board',
-      budgetAgencyTitleId: 'civil-rights-cold-case-records-review-board',
-      budgetBureauTitle: 'Civil Rights Cold Case Records Review Board',
-      budgetBureauTitleId: 'civil-rights-cold-case-records-review-board',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=585&order=newest',
+      short_name: 'FS',
+      slug: 'fiscal-service',
+      url: 'https://www.federalregister.gov/agencies/fiscal-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/585',
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Fiscal Service',
+      budgetBureauTitleId: 'fiscal-service',
       exact: true
     },
     {
-      agency_url: 'http://www.abilityone.gov/',
+      agency_url: 'http://www.irs.gov/',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Committee for Purchase From People Who Are Blind or Severely Disabled (CITA)  was established as an independent Federal agency by the Javits-Wagner-O'Day  (JWOD) amendments of 1971. The function of the Committee was to provide \r\nemployment opportunities for people who were blind or severely disabled. In 2006 JWOD was re-named AbilityOne.\r\n\r\nThe AbilityOne Program uses the purchasing power of the federal government to buy products and services from participating, community-based nonprofit agencies nationwide dedicated to training and employing individuals with disabilities.\r\n\r\nCurrently, AbilityOne employs more than 40,000 Americans who are blind or have other severe disabilities, making it the single largest source of jobs for such individuals in the United States. ",
-      id: 74,
+        'The Office of the Commissioner of Internal Revenue was established by act of July 1, 1862 (26 U.S.C. 7802). The Internal Revenue Service (IRS) is responsible for administering and enforcing the internal revenue laws and related statutes, except those relating to alcohol, tobacco, firearms, and explosives. Its mission is to collect the proper amount of tax revenue, at the least cost to the public, by efficiently applying the tax law with integrity and fairness. ',
+      id: 254,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/74/thumb.gif?1321395456',
-        small_url: 'https://agency-logos.federalregister.gov/74/small.gif?1321395456',
-        medium_url: 'https://agency-logos.federalregister.gov/74/medium.gif?1321395456'
+        thumb_url: 'https://agency-logos.federalregister.gov/254/thumb.png?1322603485',
+        small_url: 'https://agency-logos.federalregister.gov/254/small.png?1322603485',
+        medium_url: 'https://agency-logos.federalregister.gov/254/medium.png?1322603485'
       },
-      name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
-      parent_id: null,
+      name: 'Internal Revenue Service',
+      parent_id: 497,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=74&order=newest',
-      short_name: 'CPPBSD',
-      slug: 'committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
-      url: 'https://www.federalregister.gov/agencies/committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/74',
-      budgetAgencyTitle: 'Committee for Purchase From People Who Are Blind/Disabled',
-      budgetAgencyTitleId: 'committee-for-purchase-from-people-who-are-blinddisabled',
-      budgetBureauTitle: 'Comm. for Purchase fm People Who Are Blind or Severely Disabled',
-      budgetBureauTitleId: 'comm-for-purchase-fm-people-who-are-blind-or-severely-disabled',
-      matchLevel: 12,
-      matches: [
-        {
-          id: 74,
-          name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
-          comparing: 'Comm. for Purchase fm People Who Are Blind or Severely Disabled',
-          rank: 12,
-          comparingParent: 'Committee for Purchase From People Who Are Blind/Disabled'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.cfa.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The U.S. Commission of Fine Arts, established in 1910 by Act of Congress, is charged with giving expert advice to the President, Congress and the heads of departments and agencies of the Federal and District of Columbia governments on matters of design and aesthetics, as they affect the Federal interest and preserve the dignity of the nation\'s capital. The Commission consists of seven "well qualified judges of the fine arts" who are appointed by the President and serve for a term of four years; they may also be reappointed.\r\n\r\nThe Commission provides advice to the U. S. Mint on the design of coins and medals, and approves the site and design of national memorials, both in the United States and on foreign soil, in accordance with the Commemorative Works Act or the American Battle Monuments Act, whichever applies.',
-      id: 57,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/57/thumb.png?1279150002',
-        small_url: 'https://agency-logos.federalregister.gov/57/small.png?1279150002',
-        medium_url: 'https://agency-logos.federalregister.gov/57/medium.png?1279150002'
-      },
-      name: 'Commission of Fine Arts',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=57&order=newest',
-      short_name: 'CFA',
-      slug: 'commission-of-fine-arts',
-      url: 'https://www.federalregister.gov/agencies/commission-of-fine-arts',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/57',
-      budgetAgencyTitle: 'Commission of Fine Arts',
-      budgetAgencyTitleId: 'commission-of-fine-arts',
-      budgetBureauTitle: 'Commission of Fine Arts',
-      budgetBureauTitleId: 'commission-of-fine-arts',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=254&order=newest',
+      short_name: 'IRS',
+      slug: 'internal-revenue-service',
+      url: 'https://www.federalregister.gov/agencies/internal-revenue-service',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/254',
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Internal Revenue Service',
+      budgetBureauTitleId: 'internal-revenue-service',
       exact: true
     },
     {
-      agency_url: 'http://www.usccr.gov/',
+      agency_url: null,
       child_ids: [],
       child_slugs: [],
       description:
-        'The U.S. Commission on Civil Rights (USCCR)  was created under the Civil Rights Act of 1957, as amended, and reestablished by the United States Commission on Civil Rights Act of 1994, as amended (42 U.S.C. 1975).\r\n\r\nThe Commission on Civil Rights collects and studies information on discrimination or denials of equal protection of the laws because of race, color, religion, sex, age, disability, national origin, or in the administration of justice in such areas as voting rights, enforcement of Federal civil rights laws, and equal opportunity in education, employment, and housing.\r\n',
-      id: 52,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/52/thumb.png?1321382257',
-        small_url: 'https://agency-logos.federalregister.gov/52/small.png?1321382257',
-        medium_url: 'https://agency-logos.federalregister.gov/52/medium.png?1321382257'
-      },
-      name: 'Civil Rights Commission',
-      parent_id: null,
+        "The establishment of a mint was authorized by act of April 2, 1792 (1 Stat. 246). The Bureau of the Mint was established by act of February 12, 1873 (17 Stat. 424), and recodified on September 13, 1982 (31 U.S.C. 304, 5131). The name was changed to United States Mint by Secretarial order dated January 9, 1984.\r\rThe primary mission of the Mint is to produce an adequate volume of circulating coinage for the Nation to conduct its trade and commerce. The Mint also produces and sells numismatic coins, American Eagle gold and silver bullion coins, and national medals. In addition, the Fort Knox Bullion Depository is the primary storage facility for the Nation's gold bullion.\r\rThe U.S. Mint maintains sales centers at the Philadelphia and Denver Mints and at Union Station in Washington, DC. Public tours are conducted, with free admission, at the Philadelphia and Denver Mints.",
+      id: 513,
+      logo: null,
+      name: 'United States Mint',
+      parent_id: 497,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=52&order=newest',
-      short_name: 'CRC',
-      slug: 'civil-rights-commission',
-      url: 'https://www.federalregister.gov/agencies/civil-rights-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/52',
-      budgetAgencyTitle: 'Commission on Civil Rights',
-      budgetAgencyTitleId: 'commission-on-civil-rights',
-      budgetBureauTitle: 'Commission on Civil Rights',
-      budgetBureauTitleId: 'commission-on-civil-rights',
-      matchLevel: 6,
-      matches: [
-        {
-          id: 52,
-          name: 'Civil Rights Commission',
-          comparing: 'Commission on Civil Rights',
-          rank: 6,
-          comparingParent: 'Commission on Civil Rights'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.abilityone.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Committee for Purchase From People Who Are Blind or Severely Disabled (CITA)  was established as an independent Federal agency by the Javits-Wagner-O'Day  (JWOD) amendments of 1971. The function of the Committee was to provide \r\nemployment opportunities for people who were blind or severely disabled. In 2006 JWOD was re-named AbilityOne.\r\n\r\nThe AbilityOne Program uses the purchasing power of the federal government to buy products and services from participating, community-based nonprofit agencies nationwide dedicated to training and employing individuals with disabilities.\r\n\r\nCurrently, AbilityOne employs more than 40,000 Americans who are blind or have other severe disabilities, making it the single largest source of jobs for such individuals in the United States. ",
-      id: 74,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/74/thumb.gif?1321395456',
-        small_url: 'https://agency-logos.federalregister.gov/74/small.gif?1321395456',
-        medium_url: 'https://agency-logos.federalregister.gov/74/medium.gif?1321395456'
-      },
-      name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=74&order=newest',
-      short_name: 'CPPBSD',
-      slug: 'committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
-      url: 'https://www.federalregister.gov/agencies/committee-for-purchase-from-people-who-are-blind-or-severely-disabled',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/74',
-      budgetAgencyTitle: 'Committee for Purchase From People Who Are Blind/Disabled',
-      budgetAgencyTitleId: 'committee-for-purchase-from-people-who-are-blinddisabled',
-      budgetBureauTitle: 'Committee for Purchase from People Who Are Blind or Severely Dis',
-      budgetBureauTitleId: 'committee-for-purchase-from-people-who-are-blind-or-severely-dis',
-      matchLevel: 14,
-      matches: [
-        {
-          id: 74,
-          name: 'Committee for Purchase From People Who Are Blind or Severely Disabled',
-          comparing: 'Committee for Purchase from People Who Are Blind or Severely Dis',
-          rank: 14,
-          comparingParent: 'Committee for Purchase From People Who Are Blind/Disabled'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.cftc.gov/index.htm',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Commodity Futures Trading Commission, the Federal regulatory agency for futures trading, was established by the Commodity Futures Trading Commission Act of 1974 (7 U.S.C. 4a). The Commission began operation in April 1975, and its authority to regulate futures trading was renewed by Congress in 1978, 1982, 1986, 1992, 1995, and 2000.\r\n\r\nThe mission of the Commodity Futures Trading Commission is to protect market users and the public from fraud, manipulation, and abusive practices related to the sale of commodity futures and options, and to foster open, competitive, and financially sound commodity futures and option markets.\r\n\r\nThe Commission consists of five Commissioners who are appointed by the President, with the advice and consent of the Senate. One \r\nCommissioner is designated by the President to serve as Chairman. The \r\nCommissioners serve staggered 5-year terms, and by law no more than three Commissioners can belong to the same political party.\r\n\r\nThe Commission has six major operating components: the Divisions of Market Oversight, Clearing and Intermediary Oversight, and Enforcement and the Offices of the Executive Director, General Counsel, and Chief Economist.',
-      id: 77,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/77/thumb.png?1321454775',
-        small_url: 'https://agency-logos.federalregister.gov/77/small.png?1321454775',
-        medium_url: 'https://agency-logos.federalregister.gov/77/medium.png?1321454775'
-      },
-      name: 'Commodity Futures Trading Commission',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=77&order=newest',
-      short_name: 'CFTC',
-      slug: 'commodity-futures-trading-commission',
-      url: 'https://www.federalregister.gov/agencies/commodity-futures-trading-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/77',
-      budgetAgencyTitle: 'Commodity Futures Trading Commission',
-      budgetAgencyTitleId: 'commodity-futures-trading-commission',
-      budgetBureauTitle: 'Commodity Futures Trading Commission',
-      budgetBureauTitleId: 'commodity-futures-trading-commission',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=513&order=newest',
+      short_name: 'USMINT',
+      slug: 'united-states-mint',
+      url: 'https://www.federalregister.gov/agencies/united-states-mint',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/513',
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'United States Mint',
+      budgetBureauTitleId: 'united-states-mint',
       exact: true
     },
     {
-      agency_url: 'http://www.cpsc.gov/',
+      agency_url: 'http://www.faa.gov/',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Consumer Product Safety Commission was established as an independent regulatory agency by the Consumer Product Safety Act (15 U.S.C. 2051 et seq.) in 1973 and reauthorized by the Consumer Product Safety Improvement Act of 2008. The Commission consists of up to five members, who are appointed by the President with the advice and consent of the Senate, for 7-year terms.\r\n\r\nThe Commission implements provisions of the Flammable Fabrics Act (15 U.S.C. 1191); Poison Prevention Packaging Act of 1970 (15 U.S.C. 1471); Federal Hazardous Substances Act (15 U.S.C. 1261); act of August 2, 1956 (15 U.S.C. 1211), prohibiting the transportation of refrigerators without door safety devices; Children's Gasoline Burn Prevention Act (15 U.S.C. 2056 note); and Virginia Graeme Baker Pool and Spa Safety Act (15 U.S.C. 8001 et seq.).",
-      id: 84,
+        'The Federal Aviation Administration (FAA), formerly the Federal Aviation Agency, was established by the Federal Aviation Act of 1958 (72 Stat. 731). The agency became a component of the Department of Transportation in 1967 pursuant to the Department of Transportation Act (49 U.S.C. 106). The mission of the FAA is to regulate civil aviation and U.S. commercial space transportation, maintain and operate air traffic control and navigation systems for both civil and military aircrafts, and develop and administer programs relating to aviation safety and the National Airspace System.',
+      id: 159,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/84/thumb.png?1678399317',
-        small_url: 'https://agency-logos.federalregister.gov/84/small.png?1678399317',
-        medium_url: 'https://agency-logos.federalregister.gov/84/medium.png?1678399317'
+        thumb_url: 'https://agency-logos.federalregister.gov/159/thumb.png?1321993036',
+        small_url: 'https://agency-logos.federalregister.gov/159/small.png?1321993036',
+        medium_url: 'https://agency-logos.federalregister.gov/159/medium.png?1321993036'
       },
-      name: 'Consumer Product Safety Commission',
-      parent_id: null,
+      name: 'Federal Aviation Administration',
+      parent_id: 492,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=84&order=newest',
-      short_name: 'CPSC',
-      slug: 'consumer-product-safety-commission',
-      url: 'https://www.federalregister.gov/agencies/consumer-product-safety-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/84',
-      budgetAgencyTitle: 'Consumer Product Safety Commission',
-      budgetAgencyTitleId: 'consumer-product-safety-commission',
-      budgetBureauTitle: 'Consumer Product Safety Commission',
-      budgetBureauTitleId: 'consumer-product-safety-commission',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=159&order=newest',
+      short_name: 'FAA',
+      slug: 'federal-aviation-administration',
+      url: 'https://www.federalregister.gov/agencies/federal-aviation-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/159',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Federal Aviation Administration',
+      budgetBureauTitleId: 'federal-aviation-administration',
       exact: true
     },
     {
-      agency_url: 'http://www.nationalservice.gov/',
+      agency_url: 'http://www.fhwa.dot.gov/',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Corporation for National and Community Service engages Americans of all ages and backgrounds in community-based service that addresses the Nation's educational, public safety, environmental, and other human needs to achieve direct and demonstrable results. In so doing, the Corporation fosters civic responsibility, strengthens the ties that bind us together as a people, and provides educational opportunity for those who make a substantial commitment to service.\r\n\r\nThe Corporation was established on October 1, 1993, by the National and Community Service Trust Act of 1993 (42 U.S.C. 12651 et seq.). In addition to creating several new service programs, the Act consolidated the functions and activities of the former Commission on National and Community Service and the Federal agency ACTION.",
-      id: 91,
+        "The Federal Highway Administration (FHWA) was established as an agency of the Department of Transportation by the Department of Transportation Act (49 U.S.C. 104). Title 23 of the United States Code and other supporting legislation authorize the Administration's various activities.\r\nFHWA's mission is to improve mobility on our Nation's highways through national leadership, innovation, and program delivery. The \r\nAdministration works with Federal, State, and local agencies as well as other stakeholders and partners to preserve and improve the National \r\nHighway System, which includes the Interstate System and other roads of importance for national defense and mobility. The FHWA works to improve highway safety and minimize traffic congestion on these and other key facilities. The FHWA bears the responsibility of ensuring that America's roads and highways remain safe, technologically up-to-date, and environmentally-friendly. Through surface transportation programs, innovative and traditional financing mechanisms, and new types of pavement and operational technology, FHWA increases the efficiency by which people and goods move throughout the Nation. The Administration also works to improve the efficiency of highway and road connections to other modes of transportation. The Federal-aid Highway Program's budget is primarily divided between Federal-aid funding and the Federal Lands Highway Program.",
+      id: 170,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/91/thumb.jpg?1321482046',
-        small_url: 'https://agency-logos.federalregister.gov/91/small.jpg?1321482046',
-        medium_url: 'https://agency-logos.federalregister.gov/91/medium.jpg?1321482046'
+        thumb_url: 'https://agency-logos.federalregister.gov/170/thumb.png?1321991143',
+        small_url: 'https://agency-logos.federalregister.gov/170/small.png?1321991143',
+        medium_url: 'https://agency-logos.federalregister.gov/170/medium.png?1321991143'
       },
-      name: 'Corporation for National and Community Service',
-      parent_id: null,
+      name: 'Federal Highway Administration',
+      parent_id: 492,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=91&order=newest',
-      short_name: 'CORP/CNCS',
-      slug: 'corporation-for-national-and-community-service',
-      url: 'https://www.federalregister.gov/agencies/corporation-for-national-and-community-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/91',
-      budgetAgencyTitle: 'Corporation for National and Community Service',
-      budgetAgencyTitleId: 'corporation-for-national-and-community-service',
-      budgetBureauTitle: 'Corporation for National and Community Service',
-      budgetBureauTitleId: 'corporation-for-national-and-community-service',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=170&order=newest',
+      short_name: 'FHWA',
+      slug: 'federal-highway-administration',
+      url: 'https://www.federalregister.gov/agencies/federal-highway-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/170',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Federal Highway Administration',
+      budgetBureauTitleId: 'federal-highway-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fmcsa.dot.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Federal Motor Carrier Safety Administration was established within the Department of Transportation on January 1, 2000, pursuant to the Motor Carrier Safety Improvement Act of 1999 (49 U.S.C. 113).\r\nFormerly a part of the Federal Highway Administration, the Federal Motor Carrier Safety Administration's primary mission is to prevent commercial motor vehicle-related fatalities and injuries. Activities of the Administration contribute to ensuring safety in motor carrier operations through strong enforcement of safety regulations, targeting high-risk carriers and commercial motor vehicle drivers; improving safety information systems and commercial motor vehicle technologies; strengthening commercial motor vehicle equipment and operating standards; and increasing safety awareness. To accomplish these activities, the Administration works with Federal, State, and local enforcement agencies, the motor carrier industry, labor safety interest groups, and others.",
+      id: 181,
+      logo: null,
+      name: 'Federal Motor Carrier Safety Administration',
+      parent_id: 492,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=181&order=newest',
+      short_name: 'FMCSA',
+      slug: 'federal-motor-carrier-safety-administration',
+      url: 'https://www.federalregister.gov/agencies/federal-motor-carrier-safety-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/181',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Federal Motor Carrier Safety Administration',
+      budgetBureauTitleId: 'federal-motor-carrier-safety-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fra.dot.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Federal Railroad Administration was created pursuant to section 3(e)(1) of the Department of Transportation Act of 1966 (49 U.S.C. 103). \r\nThe purpose of the Administration is to promulgate and enforce rail safety regulations, administer railroad financial assistance programs, \r\nconduct research and development in support of improved railroad safety and national rail transportation policy, provide for the rehabilitation \r\nof Northeast Corridor rail passenger service, and consolidate government support of rail transportation activities.',
+      id: 185,
+      logo: null,
+      name: 'Federal Railroad Administration',
+      parent_id: 492,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=185&order=newest',
+      short_name: 'FRA',
+      slug: 'federal-railroad-administration',
+      url: 'https://www.federalregister.gov/agencies/federal-railroad-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/185',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Federal Railroad Administration',
+      budgetBureauTitleId: 'federal-railroad-administration',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.fta.dot.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Federal Transit Administration (FTA) (formerly the Urban Mass Transportation Administration) was established as an operating administration of the Department of Transportation by section 1 of Reorganization Plan No. 2 of 1968 (5 U.S.C. app. 1), effective July 1, 1968. FTA's mission is to assist in developing improved mass transportation, encourage the planning and establishment of areawide mass transportation systems, and provide financial assistance to State and local governments to finance mass transportation systems and carry \r\nout national transit goals and policy.",
+      id: 193,
+      logo: null,
+      name: 'Federal Transit Administration',
+      parent_id: 492,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=193&order=newest',
+      short_name: 'FTA',
+      slug: 'federal-transit-administration',
+      url: 'https://www.federalregister.gov/agencies/federal-transit-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/193',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Federal Transit Administration',
+      budgetBureauTitleId: 'federal-transit-administration',
+      exact: true
+    },
+    {
+      agency_url: 'https://www.seaway.dot.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Great Lakes St. Lawrence Seaway Development Corporation (GLS) is a wholly owned government corporation created by statute May 13, 1954, to construct, operate and maintain that part of the St. Lawrence Seaway between the Port of Montreal and Lake Erie, within the territorial limits of the United States.\r\n\r\nThe mission of the Corporation is to serve the U.S. intermodal and international transportation system by improving the operation and maintenance of a safe, reliable, efficient, and environmentally responsible deep-draft waterway, in cooperation with its Canadian counterpart. The GLS also encourages the development of trade through the Great Lakes Seaway System, which contributes to the comprehensive economic and environmental development of the entire Great Lakes region.\r\n\r\nThe Great Lakes St. Lawrence Seaway Development Corporation was formerly the St. Lawrence Seaway Development Corporation (See Pub. L. 116-260).',
+      id: 609,
+      logo: null,
+      name: 'Great Lakes St. Lawrence Seaway Development Corporation',
+      parent_id: 492,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=609&order=newest',
+      short_name: 'SAINT',
+      slug: 'great-lakes-st-lawrence-seaway-development-corporation',
+      url: 'https://www.federalregister.gov/agencies/great-lakes-st-lawrence-seaway-development-corporation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/609',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Great Lakes St. Lawrence Seaway Development Corporation',
+      budgetBureauTitleId: 'great-lakes-st-lawrence-seaway-development-corporation',
+      exact: true
+    },
+    {
+      agency_url: 'http://www.marad.dot.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Maritime Administration was established by Reorganization Plan No. 21 of 1950 (5 U.S.C. app.). The Maritime Act of 1981 (46 U.S.C. 1601) transferred the Maritime Administration to the Department of Transportation. \r\n\r\nPrograms of the Maritime Administration promote the development and maintenance of an adequate, well-balanced United States merchant marine, sufficient to carry the Nation's domestic waterborne commerce and a substantial portion of its waterborne foreign commerce, and capable of service as a naval and military auxiliary in time of war or national emergency. The Maritime Administration also seeks to ensure that the United States maintains adequate shipbuilding and repair services, efficient ports, effective inter-modal water and land transportation systems, and reserve shipping capacity for use in time of national emergency.",
+      id: 282,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/282/thumb.png?1279150830',
+        small_url: 'https://agency-logos.federalregister.gov/282/small.png?1279150830',
+        medium_url: 'https://agency-logos.federalregister.gov/282/medium.png?1279150830'
+      },
+      name: 'Maritime Administration',
+      parent_id: 492,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=282&order=newest',
+      short_name: 'MARAD',
+      slug: 'maritime-administration',
+      url: 'https://www.federalregister.gov/agencies/maritime-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/282',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Maritime Administration',
+      budgetBureauTitleId: 'maritime-administration',
       exact: true
     },
     {
@@ -4000,268 +6617,124 @@ export default {
       child_ids: [],
       child_slugs: [],
       description:
-        "The National Economic Council was established as a Presidential advisory council under the Executive Office of the President by Executive Order 12835 of January 25, 1993.\r\n\r\nThe National Economic Council (NEC) was established in 1993 to advise the President on U.S. and global economic policy. It resides within the Office of Policy Development and is part of the Executive Office of the President. By Executive Order, the NEC has four principal functions: to coordinate policy-making for domestic and international economic issues, to coordinate economic policy advice for the President, to ensure that policy decisions and programs are consistent with the President's economic goals, and to monitor implementation of the President's economic policy agenda.\r\n\r\nThe NEC is comprised of numerous department and agency heads within the administration, whose policy jurisdictions impact the nation's economy. The NEC Director works in conjunction with these officials to coordinate and implement the President's economic policy objectives. The Director is supported by a staff of policy specialists in various fields including: agriculture, commerce, energy, financial markets, fiscal policy, healthcare, labor, and Social Security.\r\n\r\nSource: http://www.whitehouse.gov/administration/eop/nec/\r\n",
-      id: 340,
+        "The National Highway Traffic Safety Administration (NHTSA) was established by the Highway Safety Act of 1970 (23 U.S.C. 401 note) to help reduce the number of deaths, injuries, and economic losses resulting from motor vehicle crashes on the Nation's highways.\rThe Administration carries out programs relating to the safety performance of motor vehicles and related equipment; administers the State and community highway safety program with the FHWA; regulates the Corporate Average Fuel Economy program; investigates and prosecutes odometer fraud; carries out the National Driver Register Program to facilitate the exchange of State records on problem drivers; conducts studies and operates programs aimed at reducing economic losses in motor vehicle crashes and repairs; performs studies, conducts demonstration projects, and promotes programs to reduce impaired driving, increase seat belt use, and reduce risky driver behaviors; and issues theft prevention standards for passenger and nonpassenger motor vehicles.",
+      id: 345,
       logo: null,
-      name: 'National Economic Council',
-      parent_id: null,
+      name: 'National Highway Traffic Safety Administration',
+      parent_id: 492,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=340&order=newest',
-      short_name: 'NEC',
-      slug: 'national-economic-council',
-      url: 'https://www.federalregister.gov/agencies/national-economic-council',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/340',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Council of Economic Advisers',
-      budgetBureauTitleId: 'council-of-economic-advisers',
-      matchLevel: 2,
-      matches: [
-        {
-          id: 340,
-          name: 'National Economic Council',
-          comparing: 'Council of Economic Advisers',
-          rank: 2,
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.ignet.gov/cigie1.html',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Council of the Inspectors General on Integrity and Efficiency (CIGIE) was established as an independent entity within the Executive branch under the Inspector General Reform Act of 2008.\r\n\r\nPrior to its establishment of the CIGIE, the Federal Inspectors General operated under the auspices of the President's Council on Integrity and Efficiency (PCIE) and the Executive Council on Integrity and Efficiency (ECIE)\r\n\r\nThe mission of the CIGIE is to address integrity, economy and effectiveness issues that transcend individual Government agencies; and to increase the professionalism and effectiveness of personnel by developing policies, standards, and approaches to aid in the establishment of a well-trained and highly skilled workforce in the offices of the Inspectors General.",
-      id: 578,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/578/thumb.jpg?1323193024',
-        small_url: 'https://agency-logos.federalregister.gov/578/small.jpg?1323193024',
-        medium_url: 'https://agency-logos.federalregister.gov/578/medium.jpg?1323193024'
-      },
-      name: 'Council of the Inspectors General on Integrity and Efficiency',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=578&order=newest',
-      short_name: 'CIGIE',
-      slug: 'council-of-the-inspectors-general-on-integrity-and-efficiency',
-      url: 'https://www.federalregister.gov/agencies/council-of-the-inspectors-general-on-integrity-and-efficiency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/578',
-      budgetAgencyTitle: 'Council of the Inspectors General on Integrity and Efficiency',
-      budgetAgencyTitleId: 'council-of-the-inspectors-general-on-integrity-and-efficiency',
-      budgetBureauTitle: 'Council of the Inspectors General on Integrity and Efficiency',
-      budgetBureauTitleId: 'council-of-the-inspectors-general-on-integrity-and-efficiency',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=345&order=newest',
+      short_name: 'NHTSA',
+      slug: 'national-highway-traffic-safety-administration',
+      url: 'https://www.federalregister.gov/agencies/national-highway-traffic-safety-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/345',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'National Highway Traffic Safety Administration',
+      budgetBureauTitleId: 'national-highway-traffic-safety-administration',
       exact: true
     },
     {
-      agency_url: 'https://www.whitehouse.gov/ceq/',
+      agency_url: 'http://www.usda.gov/oig/index.htm',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Council on Environmental Quality (CEQ) was established within the Executive Office of the President by the National Environmental Policy Act of 1969 (NEPA) (42 U.S.C. 4321 et seq.). The Environmental Quality Improvement Act of 1970 (42 U.S.C. 4371 et seq.) established the Office of Environmental Quality (OEQ) to provide professional and administrative support for the Council. The Council and OEQ are collectively referred to as the Council on Environmental Quality, and the CEQ Chair, who is appointed by the President, serves as the Director of OEQ.\r\n\r\nThe Council develops policies which bring into productive harmony the Nation's social, economic, and environmental priorities, with the goal of improving the quality of Federal decisionmaking. As required by NEPA, CEQ evaluates, coordinates, and mediates Federal activities; advises and assists the President on both national and international environmental policy matters; and prepares the President's annual environmental quality report to Congress. In addition, it oversees Federal agency and department implementation of NEPA.",
-      id: 92,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/92/thumb.jpg?1651504823',
-        small_url: 'https://agency-logos.federalregister.gov/92/small.jpg?1651504823',
-        medium_url: 'https://agency-logos.federalregister.gov/92/medium.jpg?1651504823'
-      },
-      name: 'Council on Environmental Quality',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=92&order=newest',
-      short_name: 'CEQ',
-      slug: 'council-on-environmental-quality',
-      url: 'https://www.federalregister.gov/agencies/council-on-environmental-quality',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/92',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Council on Environmental Quality and Office of Environmental Qua',
-      budgetBureauTitleId: 'council-on-environmental-quality-and-office-of-environmental-qua',
-      matchLevel: 14,
-      matches: [
-        {
-          id: 92,
-          name: 'Council on Environmental Quality',
-          comparing: 'Council on Environmental Quality and Office of Environmental Qua',
-          rank: 14,
-          parent: 'Executive Office of the President',
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.csosa.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Court Services and Offender Supervision Agency for the District of Columbia (CSOSA) is a Federal, Executive branch agency, created by Congress in 1997 to perform the offender supervision function for D.C. Code offenders. It does so in coordination with the Superior Court of the District of Columbia and the U.S. Parole Commission. CSOSA's mission is to increase public safety, prevent crime, reduce recidivism, and support the fair administration of justice in close collaboration with the community. With a budget of $140 million and nearly 1,000 employees, CSOSA provides community supervision to 15,000 individuals on probation, parole or supervised release each day. [http://www.csosa.gov/about.aspx]",
-      id: 94,
+        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
+      id: 244,
       logo: null,
-      name: 'Court Services and Offender Supervision Agency for the District of Columbia',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=94&order=newest',
-      short_name: 'CSOSA',
-      slug: 'court-services-and-offender-supervision-agency-for-the-district-of-columbia',
-      url: 'https://www.federalregister.gov/agencies/court-services-and-offender-supervision-agency-for-the-district-of-columbia',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/94',
-      budgetAgencyTitle: 'Court Services and Offender Supervision Agency for the District',
-      budgetAgencyTitleId: 'court-services-and-offender-supervision-agency-for-the-district',
-      budgetBureauTitle: 'Court Services and Offender Supervision Agency for the District',
-      budgetBureauTitleId: 'court-services-and-offender-supervision-agency-for-the-district',
-      matchLevel: 11,
-      matches: [
-        {
-          id: 94,
-          name: 'Court Services and Offender Supervision Agency for the District of Columbia',
-          comparing: 'Court Services and Offender Supervision Agency for the District',
-          rank: 11,
-          comparingParent: 'Court Services and Offender Supervision Agency for the District'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.dnfsb.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Defense Nuclear Facilities Safety Board reviews and evaluates the content and implementation of standards relating to the design, construction, operation, and decommissioning of defense nuclear facilities of the Department of Energy (DOE). The Defense Nuclear Facilities Safety Board was established as an independent agency on September 29, 1988, by the Atomic Energy Act of 1954, as amended (42 U.S.C. 2286-2286i).\r\n\r\nThe Board is composed of five members appointed by the President with the advice and consent of the Senate. Members of the Board are appointed from among United States citizens who are respected experts in the field of nuclear safety.',
-      id: 109,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/109/thumb.jpg?1321487533',
-        small_url: 'https://agency-logos.federalregister.gov/109/small.jpg?1321487533',
-        medium_url: 'https://agency-logos.federalregister.gov/109/medium.jpg?1321487533'
-      },
-      name: 'Defense Nuclear Facilities Safety Board',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=109&order=newest',
-      short_name: 'DNFSB',
-      slug: 'defense-nuclear-facilities-safety-board',
-      url: 'https://www.federalregister.gov/agencies/defense-nuclear-facilities-safety-board',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/109',
-      budgetAgencyTitle: 'Defense Nuclear Facilities Safety Board',
-      budgetAgencyTitleId: 'defense-nuclear-facilities-safety-board',
-      budgetBureauTitle: 'Defense Nuclear Facilities Safety Board',
-      budgetBureauTitleId: 'defense-nuclear-facilities-safety-board',
-      exact: true
-    },
-    {
-      agency_url: 'https://dra.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The DRA was established in 2000 as a formal framework for joint federal-state collaboration to promote and encourage the economic development of the lower Mississippi River and Alabama Black Belt regions. To fulfill this purpose, DRA invests in projects supporting transportation infrastructure, basic public infrastructure, workforce training, and business development. DRA works to create jobs, build communities, and improve the lives of those that reside in the region. DRA’s region encompasses 255 counties and parishes in parts of Alabama, Arkansas, Illinois, Kentucky, Louisiana, Mississippi, Missouri, and Tennessee.\r\n \r\nDRA’s enabling legislation dictates that at least 75% of DRA’s funds must be invested in economically distressed counties and parishes and isolated areas within non-distressed counties and parishes. In addition, half of DRA’s funds must support transportation infrastructure and basic public infrastructure.',
-      id: 624,
-      logo: null,
-      name: 'Delta Regional Authority',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=624&order=newest',
-      short_name: 'DRA',
-      slug: 'delta-regional-authority',
-      url: 'https://www.federalregister.gov/agencies/delta-regional-authority',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/624',
-      budgetAgencyTitle: 'Delta Regional Authority',
-      budgetAgencyTitleId: 'delta-regional-authority',
-      budgetBureauTitle: 'Delta Regional Authority',
-      budgetBureauTitleId: 'delta-regional-authority',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Denali Commission is an independent federal agency with its office in Anchorage, Alaska. Congress created it in 1998 through the Denali Commission Act (P.L. 105-277, 42 U.S.C. 3121.\r\n\r\nThe Commission was designed to provide critical utilities, infrastructure, and economic support throughout Alaska. With the creation of the Denali Commission, Congress acknowledged the need for increased inter-agency cooperation and focus on Alaska’s remote communities. Since its first meeting in April 1999, the Commission is credited with providing numerous cost-shared infrastructure projects across the State that exemplify effective and efficient partnership between federal and state agencies, and the private sector.\r\n',
-      id: 113,
-      logo: null,
-      name: 'Denali Commission',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=113&order=newest',
-      short_name: 'DC',
-      slug: 'denali-commission',
-      url: 'https://www.federalregister.gov/agencies/denali-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/113',
-      budgetAgencyTitle: 'Denali Commission',
-      budgetAgencyTitleId: 'denali-commission',
-      budgetBureauTitle: 'Denali Commission',
-      budgetBureauTitleId: 'denali-commission',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.justice.gov/dea/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Drug Enforcement Administration (DEA) is the lead Federal agency in enforcing narcotics and controlled substances laws and regulations. DEA also enforces the Federal money laundering and bulk currency smuggling statutes when the funds involved in the transactions or smuggling are derived from the sale of narcotics. It was created in July 1973 by Reorganization Plan No. 2 of 1973 (5 U.S.C. app.).\r\n\r\nDEA enforces the provisions of the controlled substances and chemical diversion and trafficking laws and regulations of the United States, and operates on a worldwide basis. It presents cases to the criminal and civil justice systems of the United States--or any other competent jurisdiction--on those significant organizations and their members involved in cultivation, production, smuggling, distribution, laundering of proceeds, or diversion of controlled substances appearing in or destined for illegal traffic in the United States. DEA disrupts and dismantles these organizations by arresting their members, confiscating their drugs, and seizing their assets; and creates, manages, and supports enforcement-related programs--domestically and internationally--aimed at reducing the availability of and demand for illicit controlled substances.',
-      id: 116,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/116/thumb.png?1321564326',
-        small_url: 'https://agency-logos.federalregister.gov/116/small.png?1321564326',
-        medium_url: 'https://agency-logos.federalregister.gov/116/medium.png?1321564326'
-      },
-      name: 'Drug Enforcement Administration',
-      parent_id: 268,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=116&order=newest',
-      short_name: 'DEA',
-      slug: 'drug-enforcement-administration',
-      url: 'https://www.federalregister.gov/agencies/drug-enforcement-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/116',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Drug Enforcement Administration',
-      budgetBureauTitleId: 'drug-enforcement-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.eda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Economic Development Administration (EDA) was created in 1965 under the Public Works and Economic Development Act (42 U.S.C. 3121) as part of an effort to target Federal resources to economically distressed areas and to help develop local economies in the United States. It was mandated to assist rural and urban communities that were outside the mainstream economy and that lagged in economic development, industrial growth, and personal income.\r\n\r\nEDA provides grants to States, regions, and communities across the Nation to help create wealth and minimize poverty by promoting a favorable business environment to attract private capital investment and higher skill, higher wage jobs through capacity building, planning, infrastructure, research grants, and strategic initiatives. Through its grant program, EDA utilizes public sector resources to create an environment where the private sector risks capital and job opportunities are created.',
-      id: 120,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/120/thumb.png?1322066164',
-        small_url: 'https://agency-logos.federalregister.gov/120/small.png?1322066164',
-        medium_url: 'https://agency-logos.federalregister.gov/120/medium.png?1322066164'
-      },
-      name: 'Economic Development Administration',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=120&order=newest',
-      short_name: 'EDA',
-      slug: 'economic-development-administration',
-      url: 'https://www.federalregister.gov/agencies/economic-development-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/120',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'Economic Development Administration',
-      budgetBureauTitleId: 'economic-development-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.ers.usda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The mission of the Economic Research Service (ERS) is to inform and enhance public and private decisionmaking on economic and policy issues related to agriculture, food, the environment, and rural development.  \r\n\r\nActivities to support this mission and the following goals involve research and development of economic and statistical indicators on a broad range of topics including, but not limited to, global agricultural market conditions, trade restrictions, agribusiness concentration, farm and retail food prices, foodborne illnesses, food labeling, nutrition, food assistance programs, worker safety, agrichemical usage, livestock waste management, conservation, sustainability, genetic diversity, technology transfer, rural infrastructure, and rural employment. Research results and economic indicators on such important agricultural, food, natural resource, and rural issues are fully disseminated to \r\npublic and private decisionmakers through published and electronic reports and articles; special staff analyses, briefings, presentations, and papers; databases; and individual contacts. Through such activities, ERS provides public and private decisionmakers with economic and related social science information and analysis in support of the department's goals of enhancing economic opportunities for agricultural producers; \r\nsupporting economic opportunities and quality of life in rural America; enhancing the protection and safety of U.S. agriculture and food; improving U.S. nutrition and health; and enhancing the natural resource base and environment. ",
-      id: 123,
-      logo: null,
-      name: 'Economic Research Service',
+      name: 'Inspector General Office, Agriculture Department',
       parent_id: 12,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=123&order=newest',
-      short_name: 'ERS',
-      slug: 'economic-research-service',
-      url: 'https://www.federalregister.gov/agencies/economic-research-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/123',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Economic Research Service',
-      budgetBureauTitleId: 'economic-research-service',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
+      short_name: 'OIG USDA',
+      slug: 'inspector-general-office-agriculture-department',
+      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Office of Inspector General',
+      budgetBureauTitleId: 'office-of-inspector-general',
+      matchLevel: 3,
+      matches: [
+        {
+          id: 244,
+          name: 'Inspector General Office, Agriculture Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Agriculture Department',
+          comparingParent: 'Department of Transportation'
+        },
+        {
+          id: 622,
+          name: 'Inspector General Office, Treasury Department',
+          comparing: 'Office of Inspector General',
+          rank: 3,
+          parent: 'Treasury Department',
+          comparingParent: 'Department of Transportation'
+        }
+      ]
+    },
+    {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Pipeline and Hazardous Materials Safety Administration (PHMSA) was established on November 20, 2004 under the Norman Y. Mineta Research and Special Programs Improvement Act of 2004 (Pub. L. 108-426).\r\n\r\n PHMSA was created to protect the American public and the environment by ensuring the safe and secure movement of hazardous materials to industry and consumers by all transportation modes, including the nation's pipelines. Through PHMSA, the Department develops and enforces regulations for the safe, reliable, and environmentally sound operation of the nation's 2.3 million mile pipeline transportation system and the nearly 1 million daily shipments of hazardous materials by land, sea, and air.\r\n",
+      id: 408,
+      logo: null,
+      name: 'Pipeline and Hazardous Materials Safety Administration',
+      parent_id: 492,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=408&order=newest',
+      short_name: 'PHMSA',
+      slug: 'pipeline-and-hazardous-materials-safety-administration',
+      url: 'https://www.federalregister.gov/agencies/pipeline-and-hazardous-materials-safety-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/408',
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Pipeline and Hazardous Materials Safety Administration',
+      budgetBureauTitleId: 'pipeline-and-hazardous-materials-safety-administration',
       exact: true
+    },
+    {
+      agency_url: 'http://www.msha.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Mine Safety and Health Administration (MSHA) is responsible for safety and health in the Nation's mines. MSHA develops and promulgates mandatory safety and health standards, ensures compliance with such standards, assesses civil penalties for violations, and investigates accidents. It cooperates with and provides assistance to the States in the development of effective State mine safety and health programs; improves and expands training programs in cooperation with the States and the mining industry; and contributes to the improvement and expansion of mine safety and health research and development. All of these activities are aimed at preventing and reducing mine accidents and occupational diseases in the mining industry.",
+      id: 288,
+      logo: null,
+      name: 'Mine Safety and Health Administration',
+      parent_id: 271,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=288&order=newest',
+      short_name: 'MSHA',
+      slug: 'mine-safety-and-health-administration',
+      url: 'https://www.federalregister.gov/agencies/mine-safety-and-health-administration',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/288',
+      budgetAgencyTitle: 'Department of Veterans Affairs',
+      budgetAgencyTitleId: 'department-of-veterans-affairs',
+      budgetBureauTitle: 'Veterans Health Administration',
+      budgetBureauTitleId: 'veterans-health-administration',
+      matchLevel: 1,
+      matches: [
+        {
+          id: 288,
+          name: 'Mine Safety and Health Administration',
+          comparing: 'Veterans Health Administration',
+          rank: 1,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Veterans Affairs'
+        },
+        {
+          id: 386,
+          name: 'Occupational Safety and Health Administration',
+          comparing: 'Veterans Health Administration',
+          rank: 1,
+          parent: 'Labor Department',
+          comparingParent: 'Department of Veterans Affairs'
+        }
+      ]
     },
     {
       agency_url: 'http://www.eac.gov/',
@@ -4287,50 +6760,6 @@ export default {
       budgetAgencyTitleId: 'election-assistance-commission',
       budgetBureauTitle: 'Election Assistance Commission',
       budgetBureauTitleId: 'election-assistance-commission',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.dol.gov/ebsa/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Employee Benefits Security Administration (EBSA) promotes and protects the pension, health, and other benefits of the over 150 million participants and beneficiaries in over 6 million private sector employee benefit plans. In administering its responsibilities, EBSA assists workers in understanding their rights and protecting their benefits; facilitates compliance by plan sponsors, plan officials, service providers, and other members of the regulated community; encourages the growth of employment-based benefits; and deters and corrects violations of the relevant statutes. The Employee Retirement Income Security Act (ERISA) is enforced through 15 EBSA field offices nationwide and the national office in Washington, DC.',
-      id: 131,
-      logo: null,
-      name: 'Employee Benefits Security Administration',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=131&order=newest',
-      short_name: 'EBSA',
-      slug: 'employee-benefits-security-administration',
-      url: 'https://www.federalregister.gov/agencies/employee-benefits-security-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/131',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Employee Benefits Security Administration',
-      budgetBureauTitleId: 'employee-benefits-security-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.doleta.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Employment and Training Administration (ETA) was originally established as the Manpower Administration, a subagency of the Department of Labor by General Order No. 63 on August 25, 1954. Renamed Employment and Training Administration  by Secretarial Order 14-75 of November12, 1975\r\n\r\nETA fulfills responsibilities assigned to the Secretary of Labor that relate to employment services, job training, and unemployment insurance. Component offices and services administer a Federal/State employment security system; fund and oversee programs to provide work experience and training for groups having difficulty entering or returning to the work force; formulate and promote apprenticeship standards and programs; and conduct continuing programs of research development, and evaluation.\r\n',
-      id: 133,
-      logo: null,
-      name: 'Employment and Training Administration',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=133&order=newest',
-      short_name: 'ETA',
-      slug: 'employment-and-training-administration',
-      url: 'https://www.federalregister.gov/agencies/employment-and-training-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/133',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Employment and Training Administration',
-      budgetBureauTitleId: 'employment-and-training-administration',
       exact: true
     },
     {
@@ -4386,6 +6815,73 @@ export default {
       exact: true
     },
     {
+      agency_url: '',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The National Economic Council was established as a Presidential advisory council under the Executive Office of the President by Executive Order 12835 of January 25, 1993.\r\n\r\nThe National Economic Council (NEC) was established in 1993 to advise the President on U.S. and global economic policy. It resides within the Office of Policy Development and is part of the Executive Office of the President. By Executive Order, the NEC has four principal functions: to coordinate policy-making for domestic and international economic issues, to coordinate economic policy advice for the President, to ensure that policy decisions and programs are consistent with the President's economic goals, and to monitor implementation of the President's economic policy agenda.\r\n\r\nThe NEC is comprised of numerous department and agency heads within the administration, whose policy jurisdictions impact the nation's economy. The NEC Director works in conjunction with these officials to coordinate and implement the President's economic policy objectives. The Director is supported by a staff of policy specialists in various fields including: agriculture, commerce, energy, financial markets, fiscal policy, healthcare, labor, and Social Security.\r\n\r\nSource: http://www.whitehouse.gov/administration/eop/nec/\r\n",
+      id: 340,
+      logo: null,
+      name: 'National Economic Council',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=340&order=newest',
+      short_name: 'NEC',
+      slug: 'national-economic-council',
+      url: 'https://www.federalregister.gov/agencies/national-economic-council',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/340',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Council of Economic Advisers',
+      budgetBureauTitleId: 'council-of-economic-advisers',
+      matchLevel: 2,
+      matches: [
+        {
+          id: 340,
+          name: 'National Economic Council',
+          comparing: 'Council of Economic Advisers',
+          rank: 2,
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov/ceq/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Council on Environmental Quality (CEQ) was established within the Executive Office of the President by the National Environmental Policy Act of 1969 (NEPA) (42 U.S.C. 4321 et seq.). The Environmental Quality Improvement Act of 1970 (42 U.S.C. 4371 et seq.) established the Office of Environmental Quality (OEQ) to provide professional and administrative support for the Council. The Council and OEQ are collectively referred to as the Council on Environmental Quality, and the CEQ Chair, who is appointed by the President, serves as the Director of OEQ.\r\n\r\nThe Council develops policies which bring into productive harmony the Nation's social, economic, and environmental priorities, with the goal of improving the quality of Federal decisionmaking. As required by NEPA, CEQ evaluates, coordinates, and mediates Federal activities; advises and assists the President on both national and international environmental policy matters; and prepares the President's annual environmental quality report to Congress. In addition, it oversees Federal agency and department implementation of NEPA.",
+      id: 92,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/92/thumb.jpg?1651504823',
+        small_url: 'https://agency-logos.federalregister.gov/92/small.jpg?1651504823',
+        medium_url: 'https://agency-logos.federalregister.gov/92/medium.jpg?1651504823'
+      },
+      name: 'Council on Environmental Quality',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=92&order=newest',
+      short_name: 'CEQ',
+      slug: 'council-on-environmental-quality',
+      url: 'https://www.federalregister.gov/agencies/council-on-environmental-quality',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/92',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Council on Environmental Quality and Office of Environmental Qua',
+      budgetBureauTitleId: 'council-on-environmental-quality-and-office-of-environmental-qua',
+      matchLevel: 14,
+      matches: [
+        {
+          id: 92,
+          name: 'Council on Environmental Quality',
+          comparing: 'Council on Environmental Quality and Office of Environmental Qua',
+          rank: 14,
+          parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
       agency_url: 'https://www.whitehouse.gov',
       child_ids: [317],
       child_slugs: ['national-commission-on-fiscal-responsibility-and-reform'],
@@ -4417,6 +6913,384 @@ export default {
           comparing: 'Executive Residence at the White House',
           rank: 3,
           parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Space Council (NSpC) is the White House policy council responsible for ensuring the United States capitalizes on the rich opportunities presented by our nation’s space activities.\r\n\r\nThe NSpC was established by law as part of the National Aeronautics and Space Administration Authorization Act of 1989 (Pub. L. 100-685). The Council was not operational from 1993-2017. The NSpC is aided by a staff from the Executive Office of the President, led by a civilian Executive Secretary. It is also supported by the Users Advisory Group, a Federal Advisory Committee consisting of outside experts from industry, academia, and other non-Federal organizations.\r\n',
+      id: 612,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/612/thumb.jpg?1665779521',
+        small_url: 'https://agency-logos.federalregister.gov/612/small.jpg?1665779521',
+        medium_url: 'https://agency-logos.federalregister.gov/612/medium.jpg?1665779521'
+      },
+      name: 'National Space Council',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=612&order=newest',
+      short_name: null,
+      slug: 'national-space-council',
+      url: 'https://www.federalregister.gov/agencies/national-space-council',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/612',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'National Security Council and Homeland Security Council',
+      budgetBureauTitleId: 'national-security-council-and-homeland-security-council',
+      matchLevel: 8,
+      matches: [
+        {
+          id: 612,
+          name: 'National Space Council',
+          comparing: 'National Security Council and Homeland Security Council',
+          rank: 8,
+          parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 368,
+          name: 'National Security Council',
+          comparing: 'National Security Council and Homeland Security Council',
+          rank: 7,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 92,
+          name: 'Council on Environmental Quality',
+          comparing: 'National Security Council and Homeland Security Council',
+          rank: 4,
+          parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 227,
+          name: 'Homeland Security Department',
+          comparing: 'National Security Council and Homeland Security Council',
+          rank: 1,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 331,
+          name: 'National Council on Disability',
+          comparing: 'National Security Council and Homeland Security Council',
+          rank: 1,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 340,
+          name: 'National Economic Council',
+          comparing: 'National Security Council and Homeland Security Council',
+          rank: 1,
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The National Space Council (NSpC) is the White House policy council responsible for ensuring the United States capitalizes on the rich opportunities presented by our nation’s space activities.\r\n\r\nThe NSpC was established by law as part of the National Aeronautics and Space Administration Authorization Act of 1989 (Pub. L. 100-685). The Council was not operational from 1993-2017. The NSpC is aided by a staff from the Executive Office of the President, led by a civilian Executive Secretary. It is also supported by the Users Advisory Group, a Federal Advisory Committee consisting of outside experts from industry, academia, and other non-Federal organizations.\r\n',
+      id: 612,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/612/thumb.jpg?1665779521',
+        small_url: 'https://agency-logos.federalregister.gov/612/small.jpg?1665779521',
+        medium_url: 'https://agency-logos.federalregister.gov/612/medium.jpg?1665779521'
+      },
+      name: 'National Space Council',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=612&order=newest',
+      short_name: null,
+      slug: 'national-space-council',
+      url: 'https://www.federalregister.gov/agencies/national-space-council',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/612',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'National Space Council',
+      budgetBureauTitleId: 'national-space-council',
+      exact: true
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov',
+      child_ids: [317],
+      child_slugs: ['national-commission-on-fiscal-responsibility-and-reform'],
+      description:
+        "The Office of Administration (OA) was created by Reorganization Plan No. 1 of 1977 and Executive Order 12028. As a component of the Executive Office of the President, the Office's primary function is to provide common administrative and support services for the various agencies and offices of the EOP.\r\n\r\n",
+      id: 2,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/2/thumb.png?1279162074',
+        small_url: 'https://agency-logos.federalregister.gov/2/small.png?1279162074',
+        medium_url: 'https://agency-logos.federalregister.gov/2/medium.png?1279162074'
+      },
+      name: 'Administration Office, Executive Office of the President',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=2&order=newest',
+      short_name: 'OA',
+      slug: 'administration-office-executive-office-of-the-president',
+      url: 'https://www.federalregister.gov/agencies/administration-office-executive-office-of-the-president',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/2',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of Administration',
+      budgetBureauTitleId: 'office-of-administration',
+      matchLevel: 8,
+      matches: [
+        {
+          id: 2,
+          name: 'Administration Office, Executive Office of the President',
+          comparing: 'Office of Administration',
+          rank: 8,
+          parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.whitehouse.gov/omb/',
+      child_ids: [184],
+      child_slugs: ['federal-procurement-policy-office'],
+      description:
+        'The Office of Management and Budget (OMB), formerly the Bureau of the Budget, was established in the Executive Office of the President pursuant to Reorganization Plan No. 1 of 1939 (5 U.S.C. app.).\r\n\r\nThe Office of Management and Budget evaluates, formulates, and coordinates management procedures and program objectives within and among Federal departments and agencies. It also controls the administration of the Federal budget, while routinely providing the President with recommendations regarding budget proposals and relevant legislative enactments.\r\n\r\n',
+      id: 280,
+      logo: null,
+      name: 'Management and Budget Office',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=280&order=newest',
+      short_name: 'OMB',
+      slug: 'management-and-budget-office',
+      url: 'https://www.federalregister.gov/agencies/management-and-budget-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/280',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of Management and Budget',
+      budgetBureauTitleId: 'office-of-management-and-budget',
+      matchLevel: 6,
+      matches: [
+        {
+          id: 280,
+          name: 'Management and Budget Office',
+          comparing: 'Office of Management and Budget',
+          rank: 6,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 81,
+          name: 'Congressional Budget Office',
+          comparing: 'Office of Management and Budget',
+          rank: 2,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 406,
+          name: 'Personnel Management Office',
+          comparing: 'Office of Management and Budget',
+          rank: 2,
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov/ondcp/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The White House Office of National Drug Control Policy (ONDCP), a component of the Executive Office of the President, was established by the Anti-Drug Abuse Act of 1988.\r\nThe principal purpose of ONDCP is to establish policies, priorities, and objectives for the Nation's drug control program. The goals of the program are to reduce illicit drug use, manufacturing, and trafficking, drug-related crime and violence, and drug-related health consequences. To achieve these goals, the Director of ONDCP is charged with producing the National Drug Control Strategy. The Strategy directs the Nation's anti-drug efforts and establishes a program, a budget, and guidelines for cooperation among Federal, State, and local entities.\r\n\r\nBy law, the Director of ONDCP also evaluates, coordinates, and oversees both the international and domestic anti-drug efforts of executive branch agencies and ensures that such efforts sustain and complement State and local anti-drug activities. The Director advises the President regarding changes in the organization, management, budgeting, and personnel of Federal Agencies that could affect the Nation's anti-drug efforts; and regarding Federal agency compliance with their obligations under the Strategy. \r\n\r\nSource: http://www.whitehousedrugpolicy.gov/about/index.html\r\n",
+      id: 390,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/390/thumb.jpg?1754426038',
+        small_url: 'https://agency-logos.federalregister.gov/390/small.jpg?1754426038',
+        medium_url: 'https://agency-logos.federalregister.gov/390/medium.jpg?1754426038'
+      },
+      name: 'Office of National Drug Control Policy',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=390&order=newest',
+      short_name: 'ONDCP',
+      slug: 'office-of-national-drug-control-policy',
+      url: 'https://www.federalregister.gov/agencies/office-of-national-drug-control-policy',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/390',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of National Drug Control Policy',
+      budgetBureauTitleId: 'office-of-national-drug-control-policy',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'Congress established the Office of Science and Technology Policy in 1976 with a broad mandate to advise the President and others within the Executive Office of the President on the effects of science and technology on domestic and international affairs. The 1976 Act also authorizes OSTP to lead interagency efforts to develop and implement sound science and technology policies and budgets, and to work with the private sector, state and local governments, the science and higher education communities, and other nations toward this end.\r\rThe mission of the Office of Science and Technology Policy is threefold; first, to provide the President and his senior staff with accurate, relevant, and timely scientific and technical advice on all matters of consequence; second, to ensure that the policies of the Executive Branch are informed by sound science; and third, to ensure that the scientific and technical work of the Executive Branch is properly coordinated so as to provide the greatest benefit to society.',
+      id: 464,
+      logo: null,
+      name: 'Science and Technology Policy Office',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=464&order=newest',
+      short_name: 'OSTP',
+      slug: 'science-and-technology-policy-office',
+      url: 'https://www.federalregister.gov/agencies/science-and-technology-policy-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/464',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of Science and Technology Policy',
+      budgetBureauTitleId: 'office-of-science-and-technology-policy',
+      matchLevel: 8,
+      matches: [
+        {
+          id: 464,
+          name: 'Science and Technology Policy Office',
+          comparing: 'Office of Science and Technology Policy',
+          rank: 8,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 390,
+          name: 'Office of National Drug Control Policy',
+          comparing: 'Office of Science and Technology Policy',
+          rank: 6,
+          parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 391,
+          name: 'Office of Policy Development',
+          comparing: 'Office of Science and Technology Policy',
+          rank: 1,
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov/oncd/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Office of the National Cyber Director (ONCD) advises the President of the United States on cybersecurity policy and strategy. Established by Congress in 2021, ONCD is a component of the Executive Office of the President at the White House.\r\nONCD’s mission is to advance national security, economic prosperity, and technological innovation through cybersecurity policy leadership. In carrying out its directive, ONCD works closely with White House and interagency partners, as well as with all levels of government, America’s international allies and partners, non-profits, academia, and the private sector, to shape and coordinate federal cybersecurity policy.',
+      id: 613,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/613/thumb.jpg?1684781012',
+        small_url: 'https://agency-logos.federalregister.gov/613/small.jpg?1684781012',
+        medium_url: 'https://agency-logos.federalregister.gov/613/medium.jpg?1684781012'
+      },
+      name: 'Office of the National Cyber Director',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=613&order=newest',
+      short_name: 'ONCD',
+      slug: 'office-of-the-national-cyber-director',
+      url: 'https://www.federalregister.gov/agencies/office-of-the-national-cyber-director',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/613',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of the National Cyber Director',
+      budgetBureauTitleId: 'office-of-the-national-cyber-director',
+      exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Office of the United States Trade Representative was created as the Office of the Special Representative for Trade Negotiations by Executive Order 11075 of January 15, 1963. The Trade Act of 1974 (19 U.S.C. 2171) established the Office as an agency of the Executive Office of the President charged with administering the trade agreements program.\r\rThe Office of the United States Trade Representative is responsible for setting and administering overall trade policy. The Office is headed by the United States Trade Representative, a Cabinet-level official with the rank of Ambassador, who is directly responsible to the President. There are three Deputy United States Trade Representatives, who also hold the rank of Ambassador--two located in Washington and one in Geneva. The Chief Agricultural Negotiator also holds the rank of Ambassador.\r\rThe United States Trade Representative serves as an ex officio member of the Boards of Directors of the Export-Import Bank and the Overseas Private Investment Corporation, and serves on the National Advisory Council for International Monetary and Financial Policy.',
+      id: 491,
+      logo: null,
+      name: 'Trade Representative, Office of United States',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=491&order=newest',
+      short_name: 'USTR',
+      slug: 'trade-representative-office-of-united-states',
+      url: 'https://www.federalregister.gov/agencies/trade-representative-office-of-united-states',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/491',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of the United States Trade Representative',
+      budgetBureauTitleId: 'office-of-the-united-states-trade-representative',
+      matchLevel: 8,
+      matches: [
+        {
+          id: 491,
+          name: 'Trade Representative, Office of United States',
+          comparing: 'Office of the United States Trade Representative',
+          rank: 8,
+          comparingParent: 'Executive Office of the President'
+        },
+        {
+          id: 3,
+          name: 'Administrative Office of United States Courts',
+          comparing: 'Office of the United States Trade Representative',
+          rank: 2,
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: 'https://www.whitehouse.gov',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The Office of Counsel to the President was created in 1943, and is responsible for advising on all legal aspects of policy questions, legal issues arising in connection with the President's decision to sign or veto legislation, ethical questions, financial disclosures, and conflicts of interest during employment and post employment. The Counsel's Office also helps define the line between official and political activities, oversees executive appointments and judicial selection, handles Presidential pardons, reviews legislation and Presidential statements, and handles lawsuits against the President in his role as President, as well as serving as the White House Contact for the Department of Justice.",
+      id: 93,
+      logo: null,
+      name: 'Counsel to the President',
+      parent_id: 538,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=93&order=newest',
+      short_name: null,
+      slug: 'counsel-to-the-president',
+      url: 'https://www.federalregister.gov/agencies/counsel-to-the-president',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/93',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Special Assistance to the President and the Official Residence',
+      budgetBureauTitleId: 'special-assistance-to-the-president-and-the-official-residence',
+      matchLevel: 6,
+      matches: [
+        {
+          id: 93,
+          name: 'Counsel to the President',
+          comparing: 'Special Assistance to the President and the Official Residence',
+          rank: 6,
+          parent: 'Executive Office of the President',
+          comparingParent: 'Executive Office of the President'
+        }
+      ]
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "The White House Office serves the President in the performance of the many detailed activities incident to his immediate office.\r\rThe President's staff facilitates and maintains communication with the Congress, the heads of executive agencies, the press and other information media, and the general public. \r\rThe various Assistants to the President aid the President in such matters as he may direct.",
+      id: 487,
+      logo: null,
+      name: 'The White House Office',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=487&order=newest',
+      short_name: null,
+      slug: 'the-white-house-office',
+      url: 'https://www.federalregister.gov/agencies/the-white-house-office',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/487',
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'The White House',
+      budgetBureauTitleId: 'the-white-house',
+      matchLevel: 5,
+      matches: [
+        {
+          id: 487,
+          name: 'The White House Office',
+          comparing: 'The White House',
+          rank: 5,
           comparingParent: 'Executive Office of the President'
         }
       ]
@@ -4455,116 +7329,6 @@ export default {
           comparingParent: 'Export-Import Bank of the United States'
         }
       ]
-    },
-    {
-      agency_url: 'https://www.fpacbc.usda.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The FPAC Business Center is a first-of-its-kind organization at USDA, combining the talent of employees from all three FPAC agencies into specialized teams that serve employees and customers across the Farm Service Agency (FSA), the Natural Resource Conservation Service (NRCS) and the Risk Management Agency (RMA). This new business approach helps agencies improve operations and efficiency at USDA and boosts support for America’s farmers, ranchers and foresters.',
-      id: 619,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/619/thumb.png?1730229220',
-        small_url: 'https://agency-logos.federalregister.gov/619/small.png?1730229220',
-        medium_url: 'https://agency-logos.federalregister.gov/619/medium.png?1730229220'
-      },
-      name: 'Farm Production and Conservation Business Center',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=619&order=newest',
-      short_name: 'FPACBC',
-      slug: 'farm-production-and-conservation-business-center',
-      url: 'https://www.federalregister.gov/agencies/farm-production-and-conservation-business-center',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/619',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Farm Production and Conservation',
-      budgetBureauTitleId: 'farm-production-and-conservation',
-      matchLevel: 9,
-      matches: [
-        {
-          id: 619,
-          name: 'Farm Production and Conservation Business Center',
-          comparing: 'Farm Production and Conservation',
-          rank: 9,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Agriculture'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.fsa.usda.gov/FSA/webapp?area=home&subject=landing&topic=landing',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Farm Service Agency (FSA) administers farm commodity, disaster, and conservation programs for farmers and ranchers, and makes and guarantees farm emergency, ownership, and operating loans through a network of State and county offices.\r\n',
-      id: 157,
-      logo: null,
-      name: 'Farm Service Agency',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=157&order=newest',
-      short_name: 'FSA',
-      slug: 'farm-service-agency',
-      url: 'https://www.federalregister.gov/agencies/farm-service-agency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/157',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Farm Service Agency',
-      budgetBureauTitleId: 'farm-service-agency',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.faa.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Federal Aviation Administration (FAA), formerly the Federal Aviation Agency, was established by the Federal Aviation Act of 1958 (72 Stat. 731). The agency became a component of the Department of Transportation in 1967 pursuant to the Department of Transportation Act (49 U.S.C. 106). The mission of the FAA is to regulate civil aviation and U.S. commercial space transportation, maintain and operate air traffic control and navigation systems for both civil and military aircrafts, and develop and administer programs relating to aviation safety and the National Airspace System.',
-      id: 159,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/159/thumb.png?1321993036',
-        small_url: 'https://agency-logos.federalregister.gov/159/small.png?1321993036',
-        medium_url: 'https://agency-logos.federalregister.gov/159/medium.png?1321993036'
-      },
-      name: 'Federal Aviation Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=159&order=newest',
-      short_name: 'FAA',
-      slug: 'federal-aviation-administration',
-      url: 'https://www.federalregister.gov/agencies/federal-aviation-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/159',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Federal Aviation Administration',
-      budgetBureauTitleId: 'federal-aviation-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fbi.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Federal Bureau of Investigation (FBI) is the principal investigative arm of the United States Department of Justice. It is primarily charged with gathering and reporting facts, locating witnesses, and compiling evidence in cases involving Federal jurisdiction. It also provides law enforcement leadership and assistance to State and international law enforcement agencies.\r\n\r\nThe Federal Bureau of Investigation was established in 1908 by the Attorney General, who directed that Department of Justice investigations be handled by its own staff. The Bureau is charged with investigating all violations of Federal law except those that have been assigned by legislative enactment or otherwise to another Federal agency. Its jurisdiction includes a wide range of responsibilities in the national security, criminal, and civil fields. Priority has been assigned to areas such as counterterrorism, counterintelligence, cyber-crimes, internationally and nationally organized crime/drug matters, and financial crimes.\r\n\r\nThe FBI also offers cooperative services to local, State, and international law enforcement agencies. These services include fingerprint identification, laboratory examination, police training, the Law Enforcement Online communication and information service for use by the law enforcement community, the National Crime Information Center, and the National Center for the Analysis of Violent Crime.',
-      id: 160,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/160/thumb.png?1321992917',
-        small_url: 'https://agency-logos.federalregister.gov/160/small.png?1321992917',
-        medium_url: 'https://agency-logos.federalregister.gov/160/medium.png?1321992917'
-      },
-      name: 'Federal Bureau of Investigation',
-      parent_id: 268,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=160&order=newest',
-      short_name: 'FBI',
-      slug: 'federal-bureau-of-investigation',
-      url: 'https://www.federalregister.gov/agencies/federal-bureau-of-investigation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/160',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Federal Bureau of Investigation',
-      budgetBureauTitleId: 'federal-bureau-of-investigation',
-      exact: true
     },
     {
       agency_url: 'http://www.fcc.gov/',
@@ -4619,58 +7383,6 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.fema.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Federal Emergency Management Agency coordinates the federal government's role in preparing for, preventing, mitigating the effects of, responding to, and recovering from all domestic disasters, whether natural or man-made, including acts of terror. FEMA can trace its beginnings to the Congressional Act of 1803. This act, generally considered the first piece of disaster legislation, provided assistance to a New Hampshire town following an extensive fire. In the century that followed, ad hoc legislation was passed more than 100 times in response to hurricanes, earthquakes, floods and other natural disasters.\r\nIn 2001, the terrorist attacks of Sept. 11th focused the agency on issues of national preparedness and homeland security, and tested the agency in unprecedented ways. The agency coordinated its activities with the newly formed Office of Homeland Security, and FEMA's Office of National Preparedness was given responsibility for helping to ensure that the nation's first responders were trained and equipped to deal with weapons of mass destruction.\r\nIn March 2003, FEMA joined 22 other federal agencies, programs and offices in becoming the Department of Homeland Security. The new department, headed by Secretary Tom Ridge, brought a coordinated approach to national security from emergencies and disasters - both natural and man-made.\r\nOn October 4, 2006, President George W. Bush signed into law the Post-Katrina Emergency Reform Act. The act significantly reorganized FEMA, provided it substantial new authority to remedy gaps that became apparent in the response to Hurricane Katrina in August 2005, the most devastating natural disaster in U.S. history, and included a more robust preparedness mission for FEMA. \r\n",
-      id: 166,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/166/thumb.jpg?1321991907',
-        small_url: 'https://agency-logos.federalregister.gov/166/small.jpg?1321991907',
-        medium_url: 'https://agency-logos.federalregister.gov/166/medium.jpg?1321991907'
-      },
-      name: 'Federal Emergency Management Agency',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=166&order=newest',
-      short_name: 'FEMA',
-      slug: 'federal-emergency-management-agency',
-      url: 'https://www.federalregister.gov/agencies/federal-emergency-management-agency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/166',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Federal Emergency Management Agency',
-      budgetBureauTitleId: 'federal-emergency-management-agency',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fhwa.dot.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Federal Highway Administration (FHWA) was established as an agency of the Department of Transportation by the Department of Transportation Act (49 U.S.C. 104). Title 23 of the United States Code and other supporting legislation authorize the Administration's various activities.\r\nFHWA's mission is to improve mobility on our Nation's highways through national leadership, innovation, and program delivery. The \r\nAdministration works with Federal, State, and local agencies as well as other stakeholders and partners to preserve and improve the National \r\nHighway System, which includes the Interstate System and other roads of importance for national defense and mobility. The FHWA works to improve highway safety and minimize traffic congestion on these and other key facilities. The FHWA bears the responsibility of ensuring that America's roads and highways remain safe, technologically up-to-date, and environmentally-friendly. Through surface transportation programs, innovative and traditional financing mechanisms, and new types of pavement and operational technology, FHWA increases the efficiency by which people and goods move throughout the Nation. The Administration also works to improve the efficiency of highway and road connections to other modes of transportation. The Federal-aid Highway Program's budget is primarily divided between Federal-aid funding and the Federal Lands Highway Program.",
-      id: 170,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/170/thumb.png?1321991143',
-        small_url: 'https://agency-logos.federalregister.gov/170/small.png?1321991143',
-        medium_url: 'https://agency-logos.federalregister.gov/170/medium.png?1321991143'
-      },
-      name: 'Federal Highway Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=170&order=newest',
-      short_name: 'FHWA',
-      slug: 'federal-highway-administration',
-      url: 'https://www.federalregister.gov/agencies/federal-highway-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/170',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Federal Highway Administration',
-      budgetBureauTitleId: 'federal-highway-administration',
-      exact: true
-    },
-    {
       agency_url: 'http://www.flra.gov/',
       child_ids: [190],
       child_slugs: ['federal-service-impasses-panel'],
@@ -4695,75 +7407,6 @@ export default {
       budgetBureauTitle: 'Federal Labor Relations Authority',
       budgetBureauTitleId: 'federal-labor-relations-authority',
       exact: true
-    },
-    {
-      agency_url: 'http://www.fletc.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The FLETC serves as an interagency law enforcement training organization for 88 Federal agencies. The FLETC also provides services to state, local, tribal, and international law enforcement agencies. The FLETC is headquartered at Glynco, Ga., near the port city of Brunswick, halfway between Savannah, Ga., and Jacksonville, Fla.\r\nIn addition to Glynco, the FLETC operates two other residential training sites in Artesia, N.M., and Charleston, S.C. The FLETC also operates a non-residential in-service re-qualification and advanced training facility in Cheltenham, Md., for use by agencies with large concentrations of personnel in the Washington, D.C., area.\r\nThe FLETC has oversight and program management responsibilities at the International Law Enforcement Academies (ILEA) in Gaborone, Botswana, and Bangkok, Thailand. The FLETC also supports training at other ILEAs in Hungary and El Salvador.',
-      id: 177,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/177/thumb.jpg?1324408371',
-        small_url: 'https://agency-logos.federalregister.gov/177/small.jpg?1324408371',
-        medium_url: 'https://agency-logos.federalregister.gov/177/medium.jpg?1324408371'
-      },
-      name: 'Federal Law Enforcement Training Center',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=177&order=newest',
-      short_name: 'FLETC',
-      slug: 'federal-law-enforcement-training-center',
-      url: 'https://www.federalregister.gov/agencies/federal-law-enforcement-training-center',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/177',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Federal Law Enforcement Training Center',
-      budgetBureauTitleId: 'federal-law-enforcement-training-center',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fletc.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The FLETC serves as an interagency law enforcement training organization for 88 Federal agencies. The FLETC also provides services to state, local, tribal, and international law enforcement agencies. The FLETC is headquartered at Glynco, Ga., near the port city of Brunswick, halfway between Savannah, Ga., and Jacksonville, Fla.\r\nIn addition to Glynco, the FLETC operates two other residential training sites in Artesia, N.M., and Charleston, S.C. The FLETC also operates a non-residential in-service re-qualification and advanced training facility in Cheltenham, Md., for use by agencies with large concentrations of personnel in the Washington, D.C., area.\r\nThe FLETC has oversight and program management responsibilities at the International Law Enforcement Academies (ILEA) in Gaborone, Botswana, and Bangkok, Thailand. The FLETC also supports training at other ILEAs in Hungary and El Salvador.',
-      id: 177,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/177/thumb.jpg?1324408371',
-        small_url: 'https://agency-logos.federalregister.gov/177/small.jpg?1324408371',
-        medium_url: 'https://agency-logos.federalregister.gov/177/medium.jpg?1324408371'
-      },
-      name: 'Federal Law Enforcement Training Center',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=177&order=newest',
-      short_name: 'FLETC',
-      slug: 'federal-law-enforcement-training-center',
-      url: 'https://www.federalregister.gov/agencies/federal-law-enforcement-training-center',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/177',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Federal Law Enforcement Training Centers',
-      budgetBureauTitleId: 'federal-law-enforcement-training-centers',
-      matchLevel: 15,
-      matches: [
-        {
-          id: 177,
-          name: 'Federal Law Enforcement Training Center',
-          comparing: 'Federal Law Enforcement Training Centers',
-          rank: 15,
-          parent: 'Homeland Security Department',
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 69,
-          name: 'Commission on the Advancement of Federal Law Enforcement',
-          comparing: 'Federal Law Enforcement Training Centers',
-          rank: 2,
-          comparingParent: 'Department of Homeland Security'
-        }
-      ]
     },
     {
       agency_url: 'http://www.fmc.gov/',
@@ -4844,28 +7487,6 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.fmcsa.dot.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Federal Motor Carrier Safety Administration was established within the Department of Transportation on January 1, 2000, pursuant to the Motor Carrier Safety Improvement Act of 1999 (49 U.S.C. 113).\r\nFormerly a part of the Federal Highway Administration, the Federal Motor Carrier Safety Administration's primary mission is to prevent commercial motor vehicle-related fatalities and injuries. Activities of the Administration contribute to ensuring safety in motor carrier operations through strong enforcement of safety regulations, targeting high-risk carriers and commercial motor vehicle drivers; improving safety information systems and commercial motor vehicle technologies; strengthening commercial motor vehicle equipment and operating standards; and increasing safety awareness. To accomplish these activities, the Administration works with Federal, State, and local enforcement agencies, the motor carrier industry, labor safety interest groups, and others.",
-      id: 181,
-      logo: null,
-      name: 'Federal Motor Carrier Safety Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=181&order=newest',
-      short_name: 'FMCSA',
-      slug: 'federal-motor-carrier-safety-administration',
-      url: 'https://www.federalregister.gov/agencies/federal-motor-carrier-safety-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/181',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Federal Motor Carrier Safety Administration',
-      budgetBureauTitleId: 'federal-motor-carrier-safety-administration',
-      exact: true
-    },
-    {
       agency_url: 'https://www.permits.performance.gov/',
       child_ids: [],
       child_slugs: [],
@@ -4897,78 +7518,6 @@ export default {
       ]
     },
     {
-      agency_url: 'http://www.unicor.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "Federal Prison Industries (commonly referred to as FPI, or by its trade name UNICOR), is a wholly-owned government corporation established by the Congress June 23, 1934. Its mission is to employ and provide job skills training to the greatest practicable number of inmates confined within the Federal Bureau of Prisons; contribute to the safety and security of our Nation's federal correctional facilities by keeping inmates constructively occupied; provide market-quality products and services; operate in a self-sustaining manner; and to minimize FPI's impact on private sector business and labor. [http://www.unicor.gov/about/faqs/faqsgeneral.cfm]",
-      id: 183,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/183/thumb.png?1322070530',
-        small_url: 'https://agency-logos.federalregister.gov/183/small.png?1322070530',
-        medium_url: 'https://agency-logos.federalregister.gov/183/medium.png?1322070530'
-      },
-      name: 'Federal Prison Industries',
-      parent_id: 268,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=183&order=newest',
-      short_name: 'FPI',
-      slug: 'federal-prison-industries',
-      url: 'https://www.federalregister.gov/agencies/federal-prison-industries',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/183',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Federal Prison System',
-      budgetBureauTitleId: 'federal-prison-system',
-      matchLevel: 7,
-      matches: [
-        {
-          id: 183,
-          name: 'Federal Prison Industries',
-          comparing: 'Federal Prison System',
-          rank: 7,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 188,
-          name: 'Federal Reserve System',
-          comparing: 'Federal Prison System',
-          rank: 2,
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 539,
-          name: 'Federal Acquisition Regulation System',
-          comparing: 'Federal Prison System',
-          rank: 1,
-          comparingParent: 'Department of Justice'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.fra.dot.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Federal Railroad Administration was created pursuant to section 3(e)(1) of the Department of Transportation Act of 1966 (49 U.S.C. 103). \r\nThe purpose of the Administration is to promulgate and enforce rail safety regulations, administer railroad financial assistance programs, \r\nconduct research and development in support of improved railroad safety and national rail transportation policy, provide for the rehabilitation \r\nof Northeast Corridor rail passenger service, and consolidate government support of rail transportation activities.',
-      id: 185,
-      logo: null,
-      name: 'Federal Railroad Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=185&order=newest',
-      short_name: 'FRA',
-      slug: 'federal-railroad-administration',
-      url: 'https://www.federalregister.gov/agencies/federal-railroad-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/185',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Federal Railroad Administration',
-      budgetBureauTitleId: 'federal-railroad-administration',
-      exact: true
-    },
-    {
       agency_url: 'http://ftc.gov/',
       child_ids: [],
       child_slugs: [],
@@ -4995,276 +7544,6 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.fta.dot.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Federal Transit Administration (FTA) (formerly the Urban Mass Transportation Administration) was established as an operating administration of the Department of Transportation by section 1 of Reorganization Plan No. 2 of 1968 (5 U.S.C. app. 1), effective July 1, 1968. FTA's mission is to assist in developing improved mass transportation, encourage the planning and establishment of areawide mass transportation systems, and provide financial assistance to State and local governments to finance mass transportation systems and carry \r\nout national transit goals and policy.",
-      id: 193,
-      logo: null,
-      name: 'Federal Transit Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=193&order=newest',
-      short_name: 'FTA',
-      slug: 'federal-transit-administration',
-      url: 'https://www.federalregister.gov/agencies/federal-transit-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/193',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Federal Transit Administration',
-      budgetBureauTitleId: 'federal-transit-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fincen.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The U.S. Department of the Treasury established the Financial Crimes Enforcement Network in 1990 to provide a government-wide multisource financial intelligence and analysis network. The organization's operation was broadened in 1994 to include regulatory responsibilities for administering the Bank Secrecy Act, one of the nation's most potent weapons for preventing corruption of the U.S. financial system.\r\n\r\nThe mission of the Financial Crimes Enforcement Network is to enhance U.S. national security, deter and detect criminal activity, and safeguard financial systems from abuse by promoting transparency in the U.S. and international financial systems.\r\n",
-      id: 194,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/194/thumb.png?1322076999',
-        small_url: 'https://agency-logos.federalregister.gov/194/small.png?1322076999',
-        medium_url: 'https://agency-logos.federalregister.gov/194/medium.png?1322076999'
-      },
-      name: 'Financial Crimes Enforcement Network',
-      parent_id: 497,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=194&order=newest',
-      short_name: 'TD',
-      slug: 'financial-crimes-enforcement-network',
-      url: 'https://www.federalregister.gov/agencies/financial-crimes-enforcement-network',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/194',
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Financial Crimes Enforcement Network',
-      budgetBureauTitleId: 'financial-crimes-enforcement-network',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description: '',
-      id: 585,
-      logo: null,
-      name: 'Fiscal Service',
-      parent_id: 497,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=585&order=newest',
-      short_name: 'FS',
-      slug: 'fiscal-service',
-      url: 'https://www.federalregister.gov/agencies/fiscal-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/585',
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Fiscal Service',
-      budgetBureauTitleId: 'fiscal-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Food and Drug Administration (FDA) is responsible for protecting the public health by ensuring the safety, efficacy, and security of human and veterinary drugs, biological products, medical devices, the Nation's food supply, cosmetics, and products that emit radiation. FDA is also responsible for advancing the public health by accelerating innovations to make medicines more effective and providing the public with accurate, science-based information on medicines and food to improve their health. FDA plays a significant role in addressing the Nation's counterterrorism capability and ensuring the security of the food supply.",
-      id: 199,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/199/thumb.png?1279161805',
-        small_url: 'https://agency-logos.federalregister.gov/199/small.png?1279161805',
-        medium_url: 'https://agency-logos.federalregister.gov/199/medium.png?1279161805'
-      },
-      name: 'Food and Drug Administration',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=199&order=newest',
-      short_name: 'FDA',
-      slug: 'food-and-drug-administration',
-      url: 'https://www.federalregister.gov/agencies/food-and-drug-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/199',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Food and Drug Administration',
-      budgetBureauTitleId: 'food-and-drug-administration',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Food and Nutrition Service (FNS) administers the USDA food assistance programs. These programs, which serve one in six Americans, represent our Nation's commitment to the principle that no one in this country should fear hunger or experience want. They provide a Federal safety net to people in need. The goals of the programs are to provide needy persons with access to a more nutritious diet, to improve the eating habits of the Nation's children, and to help America's farmers by providing an outlet for distributing foods purchased under farmer assistance authorities.\r\n\r\n  The Service works in partnership with the States in all its programs. State and local agencies determine most administrative details regarding distribution of food benefits and eligibility of participants, and FNS provides commodities and funding for additional food and to cover administrative costs.",
-      id: 200,
-      logo: null,
-      name: 'Food and Nutrition Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=200&order=newest',
-      short_name: 'FNS',
-      slug: 'food-and-nutrition-service',
-      url: 'https://www.federalregister.gov/agencies/food-and-nutrition-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/200',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Food and Nutrition Service',
-      budgetBureauTitleId: 'food-and-nutrition-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fsis.usda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Food Safety and Inspection Service (FSIS) was established by the Secretary of Agriculture on June 17, 1981, pursuant to authority contained in 5 U.S.C. 301 and Reorganization Plan No. 2 of 1953 (5 U.S.C. app.). FSIS is responsible for ensuring that the nation's commercial supply of meat, poultry, and egg products is safe, wholesome, and correctly labeled and packaged.\r\n\r\nMeat, Poultry, and Egg Products Inspection Federal meat and poultry inspection is mandatory for cattle, calves, swine, goats, sheep, lambs, horses (and other equines), chickens, turkeys, ducks, geese, and guineas used for human food. FSIS provides for the inspection of each animal or bird at slaughter and processed products during various stages of production.\r\n\r\nFSIS inspects all raw meat and poultry sold in interstate and foreign commerce, including imported products. It monitors meat and poultry products after they leave federally inspected plants. FSIS tests samples of egg products and meat and poultry products for microbial and chemical contaminants to monitor trends for enforcement purposes.\r\n\r\nFSIS provides inspection at Federal facilities for meat, poultry, and egg products, as well as voluntary inspection for animals not covered under mandatory inspection regulations such as buffalo, rabbit, and deer. It monitors meat and poultry products in storage, distribution, and retail channels; and takes necessary compliance actions to protect the public, including detention of products, voluntary product recalls, court-ordered seizures of products, administrative withdrawal of inspection, and referral for criminal prosecution. FSIS also monitors state inspection programs which inspect meat and poultry products sold only within the state in which they were produced.",
-      id: 201,
-      logo: null,
-      name: 'Food Safety and Inspection Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=201&order=newest',
-      short_name: 'FSIS',
-      slug: 'food-safety-and-inspection-service',
-      url: 'https://www.federalregister.gov/agencies/food-safety-and-inspection-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/201',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Food Safety and Inspection Service',
-      budgetBureauTitleId: 'food-safety-and-inspection-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.fas.usda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Foreign Agricultural Service (FAS) works to improve foreign market access for U.S. products, to build new markets, to improve the competitive position of U.S. agriculture in the global marketplace, and to provide food aid and technical assistance to foreign countries.\r\n\r\nFAS has the primary responsibility for USDA's activities in the areas of international marketing, trade agreements and negotiations, and the collection and analysis of international statistics and market information. It also administers the USDA's export credit guarantee and food aid programs. FAS helps increase income and food availability in developing nations by mobilizing expertise for agriculturally led economic growth.\r\n\r\nFAS also enhances U.S. agricultural competitiveness through a global network of agricultural economists, marketing experts, negotiators, and other specialists. FAS agricultural counselors, attaches, trade officers, and locally employed FAS staff stationed in over 90 countries support U.S. agricultural interests and cover 140 countries.\r\n\r\nIn addition to agricultural affairs offices in U.S. embassies, agricultural trade offices also have been established in a number of key foreign markets and function as service centers for U.S. exporters and foreign buyers seeking market information.\r\n\r\nReports prepared by our overseas offices cover changes in policies and other developments that could affect U.S. agricultural exports. FAS staff in U.S. embassies around the world assess U.S. export marketing opportunities and respond to the daily informational needs of those who develop, initiate, monitor, and evaluate U.S. food and agricultural policies and programs.\r\n\r\nIn addition to data collection, FAS also maintains a worldwide agricultural reporting system based on information from U.S. agricultural traders, remote sensing systems, and other sources. Analysts in Washington, DC, prepare production forecasts, assess export marketing opportunities, and track changes in policies affecting U.S. agricultural exports and imports.\r\n\r\nFAS programs help U.S. exporters develop and maintain markets for hundreds of food and agricultural products, from bulk commodities to brand name items. Formal market promotion activities are carried out chiefly in cooperation with agricultural trade associations, State-regional trade groups, small businesses, and cooperatives that plan, manage, and contribute staff resources and funds to support these efforts. FAS also provides guidance to help exporters locate buyers and provides assistance through a variety of other methods. This includes supporting U.S. participation in several major trade shows and a number of single-industry exhibitions each year.",
-      id: 202,
-      logo: null,
-      name: 'Foreign Agricultural Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=202&order=newest',
-      short_name: 'FAS',
-      slug: 'foreign-agricultural-service',
-      url: 'https://www.federalregister.gov/agencies/foreign-agricultural-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/202',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Foreign Agricultural Service',
-      budgetBureauTitleId: 'foreign-agricultural-service',
-      exact: true
-    },
-    {
-      agency_url: 'https://www.fs.usda.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The U.S.Forest Service was established in 1905 under the Transfer Act of February 1, 1905 (16 U.S.C. 472) which transferred the Federal forest reserves and the responsibility for their management from the Department of the Interior to the Department of Agriculture. The mission of the USDA Forest Service is to sustain the health, diversity, and productivity of the Nation’s forests and grasslands to meet the needs of present and future generations.\r\n',
-      id: 209,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/209/thumb.tif?1322497125',
-        small_url: 'https://agency-logos.federalregister.gov/209/small.tif?1322497125',
-        medium_url: 'https://agency-logos.federalregister.gov/209/medium.tif?1322497125'
-      },
-      name: 'Forest Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=209&order=newest',
-      short_name: 'FS',
-      slug: 'forest-service',
-      url: 'https://www.federalregister.gov/agencies/forest-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/209',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Forest Service',
-      budgetBureauTitleId: 'forest-service',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.gsa.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The General Services Administration (GSA) was established by section 101 of the Federal Property and Administrative Services Act of 1949 (40 U.S.C. 751).\r\n\r\nThe General Services Administration establishes policy for and provides economical and efficient management of Government property and records, including construction and operation of buildings; procurement and distribution of supplies; utilization and disposal of real and personal property; transportation, travel, fleet, and communications management; and management of the governmentwide automatic data processing resources program.\r\n \r\n',
-      id: 210,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/210/thumb.jpeg?1322497553',
-        small_url: 'https://agency-logos.federalregister.gov/210/small.jpeg?1322497553',
-        medium_url: 'https://agency-logos.federalregister.gov/210/medium.jpeg?1322497553'
-      },
-      name: 'General Services Administration',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=210&order=newest',
-      short_name: 'GSA',
-      slug: 'general-services-administration',
-      url: 'https://www.federalregister.gov/agencies/general-services-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/210',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'General Administration',
-      budgetBureauTitleId: 'general-administration',
-      matchLevel: 3,
-      matches: [
-        {
-          id: 210,
-          name: 'General Services Administration',
-          comparing: 'General Administration',
-          rank: 3,
-          comparingParent: 'Department of Justice'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://ginniemae.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Government National Mortgage Association (GNMA) was created in 1968 under the National Housing Act of 1934 and its subsequent amendments. GNMA, also known as 'Ginnie Mae' was created as a Government-owned corporation within the Department of Housing and Urban Development. \r\n\r\nThe mission of Ginnie Mae, is to support expanded affordable housing by providing an efficient Government-guaranteed secondary market vehicle to link the capital markets with Federal housing markets. Ginnie Mae guarantees mortgage-backed securities composed of FHA-insured or VA-guaranteed mortgage loans that are issued by private lenders and guaranteed by GNMA with the full faith and credit of the United States. Through these programs, Ginnie Mae increases the overall supply of credit available for housing by providing a vehicle for channeling funds from the securities market into the mortgage market.",
-      id: 216,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/216/thumb.jpg?1322500015',
-        small_url: 'https://agency-logos.federalregister.gov/216/small.jpg?1322500015',
-        medium_url: 'https://agency-logos.federalregister.gov/216/medium.jpg?1322500015'
-      },
-      name: 'Government National Mortgage Association',
-      parent_id: 228,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=216&order=newest',
-      short_name: 'GinnieMae',
-      slug: 'government-national-mortgage-association',
-      url: 'https://www.federalregister.gov/agencies/government-national-mortgage-association',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/216',
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Government National Mortgage Association',
-      budgetBureauTitleId: 'government-national-mortgage-association',
-      exact: true
-    },
-    {
-      agency_url: 'https://www.seaway.dot.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Great Lakes St. Lawrence Seaway Development Corporation (GLS) is a wholly owned government corporation created by statute May 13, 1954, to construct, operate and maintain that part of the St. Lawrence Seaway between the Port of Montreal and Lake Erie, within the territorial limits of the United States.\r\n\r\nThe mission of the Corporation is to serve the U.S. intermodal and international transportation system by improving the operation and maintenance of a safe, reliable, efficient, and environmentally responsible deep-draft waterway, in cooperation with its Canadian counterpart. The GLS also encourages the development of trade through the Great Lakes Seaway System, which contributes to the comprehensive economic and environmental development of the entire Great Lakes region.\r\n\r\nThe Great Lakes St. Lawrence Seaway Development Corporation was formerly the St. Lawrence Seaway Development Corporation (See Pub. L. 116-260).',
-      id: 609,
-      logo: null,
-      name: 'Great Lakes St. Lawrence Seaway Development Corporation',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=609&order=newest',
-      short_name: 'SAINT',
-      slug: 'great-lakes-st-lawrence-seaway-development-corporation',
-      url: 'https://www.federalregister.gov/agencies/great-lakes-st-lawrence-seaway-development-corporation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/609',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Great Lakes St. Lawrence Seaway Development Corporation',
-      budgetBureauTitleId: 'great-lakes-st-lawrence-seaway-development-corporation',
-      exact: true
-    },
-    {
       agency_url: 'http://www.restorethegulf.gov/',
       child_ids: [],
       child_slugs: [],
@@ -5287,58 +7566,6 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.hrsa.gov/index.html',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Health Resources and Services Administration (HRSA) was created in 1982 as a subagency of the Department of the Health and Human Services. Formed from the merger of the Health Resources Administration and Health Services Administration, HRSA is the primary Federal agency for improving access to health care services for people who are uninsured, isolated or medically vulnerable. \r\n\r\nAmong its duties, HRSA provides leadership and financial support to health care providers in every State and U.S. Territory; it oversees organ, bone marrow and cord blood donation; it supports programs that prepare against bioterrorism, compensates individuals harmed by vaccination, and maintains databases that protect against health care malpractice and health care waste, fraud and abuse.\r\n',
-      id: 222,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/222/thumb.gif?1322511940',
-        small_url: 'https://agency-logos.federalregister.gov/222/small.gif?1322511940',
-        medium_url: 'https://agency-logos.federalregister.gov/222/medium.gif?1322511940'
-      },
-      name: 'Health Resources and Services Administration',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=222&order=newest',
-      short_name: 'HRSA',
-      slug: 'health-resources-and-services-administration',
-      url: 'https://www.federalregister.gov/agencies/health-resources-and-services-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/222',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Health Resources and Services Administration',
-      budgetBureauTitleId: 'health-resources-and-services-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.ihs.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Indian Health Service, as part of the Public Health Service, provides a comprehensive health services delivery system for American Indians and Alaska Natives. It assists Native American tribes in developing their health programs; facilitates and assists tribes in coordinating health planning, obtaining and utilizing health resources available through Federal, State, and local programs, operating comprehensive health programs, and evaluating health programs; and provides comprehensive health care services including hospital and ambulatory medical care, preventive and rehabilitative services, and development of community sanitation facilities.',
-      id: 237,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/237/thumb.png?1322518554',
-        small_url: 'https://agency-logos.federalregister.gov/237/small.png?1322518554',
-        medium_url: 'https://agency-logos.federalregister.gov/237/medium.png?1322518554'
-      },
-      name: 'Indian Health Service',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=237&order=newest',
-      short_name: 'IHS',
-      slug: 'indian-health-service',
-      url: 'https://www.federalregister.gov/agencies/indian-health-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/237',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Indian Health Service',
-      budgetBureauTitleId: 'indian-health-service',
-      exact: true
-    },
-    {
       agency_url: '',
       child_ids: [],
       child_slugs: [],
@@ -5357,6 +7584,67 @@ export default {
       budgetAgencyTitleId: 'institute-of-museum-and-library-services',
       budgetBureauTitle: 'Institute of Museum and Library Services',
       budgetBureauTitleId: 'institute-of-museum-and-library-services',
+      exact: true
+    },
+    {
+      agency_url: 'https://www.usadf.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The United States African Development Foundation (USADF) was established under the African Development Foundation Act of 1980 (22 U.S.C. 290h) as an Independent Federal agency created to support African-designed and African-driven solutions addressing grass-roots economic and social problems.\r\n\r\nUSADF provides grants to community groups and small enterprises that benefit under served and marginalized groups in Africa.  Marginalized groups are people that have significant needs that are not being currently addressed by existing governments programs, NGOs, or other international development efforts. USADF measures grant success in terms of jobs, increased incomes levels, and improved social conditions.\r\n\r\nThe United States African Development Foundation was formerly the African Development Foundation (See Pub. L. 113-76).\r\n\r\n',
+      id: 4,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/4/thumb.jpg?1308254131',
+        small_url: 'https://agency-logos.federalregister.gov/4/small.jpg?1308254131',
+        medium_url: 'https://agency-logos.federalregister.gov/4/medium.jpg?1308254131'
+      },
+      name: 'United States African Development Foundation',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=4&order=newest',
+      short_name: 'USADF',
+      slug: 'african-development-foundation',
+      url: 'https://www.federalregister.gov/agencies/african-development-foundation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/4',
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'African Development Foundation',
+      budgetBureauTitleId: 'african-development-foundation',
+      matchLevel: 4,
+      matches: [
+        {
+          id: 4,
+          name: 'United States African Development Foundation',
+          comparing: 'African Development Foundation',
+          rank: 4,
+          comparingParent: 'International Assistance Programs'
+        }
+      ]
+    },
+    {
+      agency_url: 'http://www.usaid.gov',
+      child_ids: [258],
+      child_slugs: ['international-development-cooperation-agency'],
+      description:
+        'The United States Agency for International Development (USAID) is an independent Federal agency established by 22 U.S.C. 6563 that receives overall foreign policy guidance from the Secretary of State. Its principal statutory authority is the Foreign Assistance Act of 1961, as amended (22 U.S.C. 2151 et seq.). \r\n\r\nUSAID serves as the focal point within the Government for economic matters affecting U.S. relations with developing countries. USAID administers international economic and humanitarian assistance programs. The Administrator is under the direct authority and foreign policy guidance of the Secretary of State.\r\n\r\nFor more information on the U.S. Agency for International Development’s organization  and activities, please visit the agency homepage at http://www.usaid.gov/.\r\n\r\n\r\n',
+      id: 6,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/6/thumb.tif?1333045732',
+        small_url: 'https://agency-logos.federalregister.gov/6/small.tif?1333045732',
+        medium_url: 'https://agency-logos.federalregister.gov/6/medium.tif?1333045732'
+      },
+      name: 'Agency for International Development',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=6&order=newest',
+      short_name: 'USAID',
+      slug: 'agency-for-international-development',
+      url: 'https://www.federalregister.gov/agencies/agency-for-international-development',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/6',
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'Agency for International Development',
+      budgetBureauTitleId: 'agency-for-international-development',
       exact: true
     },
     {
@@ -5386,56 +7674,127 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.irs.gov/',
+      agency_url: 'http://www.mcc.gov/',
       child_ids: [],
       child_slugs: [],
       description:
-        'The Office of the Commissioner of Internal Revenue was established by act of July 1, 1862 (26 U.S.C. 7802). The Internal Revenue Service (IRS) is responsible for administering and enforcing the internal revenue laws and related statutes, except those relating to alcohol, tobacco, firearms, and explosives. Its mission is to collect the proper amount of tax revenue, at the least cost to the public, by efficiently applying the tax law with integrity and fairness. ',
-      id: 254,
+        "The Millennium Challenge Corporation was created under the Millennium Challenge Act of 2003 (Public Law 108-199, Div. D, Title IV). MCC is managed by a chief executive officer, who is part of the nine-member Board of Directors. The Secretary of State, the Secretary of the Treasury, the U.S. Trade Representative, and the USAID Administrator serve on the board along with four private sector representatives.\r\n\r\nMCC forms partnerships with poor countries committed to good governance, economic freedom and investments in their citizens and provides these well-performing countries with large-scale grants to fund country-led solutions for reducing poverty through sustainable economic growth. MCC grants complement other U.S. and international development programs. \r\n\r\nThe aggressive implementation of compacts and threshold programs by the Millennium Challenge Corporation promotes growth opportunities, opens markets, raises the standard of living, and creates a more prosperous future for some of the world's poorest people. \r\n\r\n",
+      id: 287,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/254/thumb.png?1322603485',
-        small_url: 'https://agency-logos.federalregister.gov/254/small.png?1322603485',
-        medium_url: 'https://agency-logos.federalregister.gov/254/medium.png?1322603485'
+        thumb_url: 'https://agency-logos.federalregister.gov/287/thumb.png?1325185949',
+        small_url: 'https://agency-logos.federalregister.gov/287/small.png?1325185949',
+        medium_url: 'https://agency-logos.federalregister.gov/287/medium.png?1325185949'
       },
-      name: 'Internal Revenue Service',
-      parent_id: 497,
+      name: 'Millennium Challenge Corporation',
+      parent_id: null,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=254&order=newest',
-      short_name: 'IRS',
-      slug: 'internal-revenue-service',
-      url: 'https://www.federalregister.gov/agencies/internal-revenue-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/254',
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Internal Revenue Service',
-      budgetBureauTitleId: 'internal-revenue-service',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=287&order=newest',
+      short_name: 'MCC',
+      slug: 'millennium-challenge-corporation',
+      url: 'https://www.federalregister.gov/agencies/millennium-challenge-corporation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/287',
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'Millennium Challenge Corporation',
+      budgetBureauTitleId: 'millennium-challenge-corporation',
       exact: true
     },
     {
-      agency_url: 'http://trade.gov/',
+      agency_url: '',
       child_ids: [],
       child_slugs: [],
       description:
-        'The International Trade Administration (ITA) was established on January \r\n2, 1980, by the Secretary of Commerce to promote world trade and to strengthen the international trade and investment position of the United States. ITA is responsible for nonagricultural trade operations of the U.S. Government and supports the trade policy negotiation efforts of the U.S. Trade Representative.\r\n\r\nITA strengthens the competitiveness of U.S. industry, promotes trade and investment, and ensures fair trade through the rigorous enforcement of our trade laws and agreements.  ITA works to improve the global business environment and helps U.S. organizations compete at home and abroad.',
-      id: 261,
+        'The mission of the Peace Corps is to help the people of interested countries in meeting their need for trained men and women, and to help promote better mutual understanding between Americans and citizens of other countries. \rThe Peace Corps was established by the Peace Corps Act of 1961, as amended (22 U.S.C. 2501), and was made an independent agency by title VI of the International Security and Development Cooperation Act of 1981 (22 U.S.C. 2501-1).\rThe Peace Corps consists of a Washington, DC, headquarters; 9 area offices; and overseas operations in 76 countries, utilizing nearly 8,000 volunteers.',
+      id: 403,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/261/thumb.png?1323293066',
-        small_url: 'https://agency-logos.federalregister.gov/261/small.png?1323293066',
-        medium_url: 'https://agency-logos.federalregister.gov/261/medium.png?1323293066'
+        thumb_url: 'https://agency-logos.federalregister.gov/403/thumb.png?1279151291',
+        small_url: 'https://agency-logos.federalregister.gov/403/small.png?1279151291',
+        medium_url: 'https://agency-logos.federalregister.gov/403/medium.png?1279151291'
       },
-      name: 'International Trade Administration',
-      parent_id: 54,
+      name: 'Peace Corps',
+      parent_id: null,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=261&order=newest',
-      short_name: 'ITA',
-      slug: 'international-trade-administration',
-      url: 'https://www.federalregister.gov/agencies/international-trade-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/261',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'International Trade Administration',
-      budgetBureauTitleId: 'international-trade-administration',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=403&order=newest',
+      short_name: 'PC',
+      slug: 'peace-corps',
+      url: 'https://www.federalregister.gov/agencies/peace-corps',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/403',
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'Peace Corps',
+      budgetBureauTitleId: 'peace-corps',
       exact: true
+    },
+    {
+      agency_url: null,
+      child_ids: [],
+      child_slugs: [],
+      description:
+        'The Trade and Development Agency advances economic development and U.S. commercial interest in developing and middle-income countries in the following regions of the world: East Asia, Europe and Eurasia, Latin America and the Caribbean, Middle East and North Africa, South and Southeast Asia, and Sub-Saharan Africa.\r \rThe Trade and Development Program was established on July 1, 1980, as a component organization of the International Development Cooperation Agency. Section 2204 of the Omnibus Trade and Competitiveness Act of 1988 (22 U.S.C. 2421) made it a separate component agency. The organization was renamed the Trade and Development Agency (USTDA) and made an independent agency within the executive branch of the Federal Government on October 28, 1992, by the Jobs Through Exports Act of 1992 (22 U.S.C. 2421).',
+      id: 490,
+      logo: null,
+      name: 'Trade and Development Agency',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=490&order=newest',
+      short_name: 'USTDA',
+      slug: 'trade-and-development-agency',
+      url: 'https://www.federalregister.gov/agencies/trade-and-development-agency',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/490',
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'Trade and Development Agency',
+      budgetBureauTitleId: 'trade-and-development-agency',
+      exact: true
+    },
+    {
+      agency_url: 'https://www.dfc.gov/',
+      child_ids: [],
+      child_slugs: [],
+      description:
+        "On October 5, 2018, President Trump signed the Better Utilization of Investments Leading to Development (BUILD) Act into law--landmark legislation that reformed and strengthened U.S. development finance capabilities into a new federal agency to help address development challenges and foreign policy priorities of the United States.\r\n\r\nU.S. International Development Finance Corporation (DFC) is a modern, consolidated agency that brings together the capabilities of OPIC and USAID’s Development Credit Authority, while introducing new and innovative financial products to better bring private capital to the developing world. The U.S. will have more flexibility to support investments in developing countries to drive economic growth, create stability, and improve livelihoods.\r\n\r\nDFC makes America a stronger and more competitive leader on the global development stage with greater ability to partner with allies on transformative projects. Further, DFC provides the developing world with financially sound alternatives to unsustainable and irresponsible state-directed initiatives. DFC invests across sectors including energy, healthcare, critical infrastructure, and technology. DFC also provides financing for small businesses and women entrepreneurs in order to create jobs in emerging markets. DFC investments adhere to high standards and respect the environment, human rights, and worker rights.\r\n\r\nDFC's work takes a Triple Aim approach as our investments focus on impactful global development, advancing U.S. foreign policy, and generating returns for American taxpayers.",
+      id: 606,
+      logo: {
+        thumb_url: 'https://agency-logos.federalregister.gov/606/thumb.png?1709657977',
+        small_url: 'https://agency-logos.federalregister.gov/606/small.png?1709657977',
+        medium_url: 'https://agency-logos.federalregister.gov/606/medium.png?1709657977'
+      },
+      name: 'U.S. International Development Finance Corporation',
+      parent_id: null,
+      recent_articles_url:
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=606&order=newest',
+      short_name: 'DFC',
+      slug: 'u-s-international-development-finance-corporation',
+      url: 'https://www.federalregister.gov/agencies/u-s-international-development-finance-corporation',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/606',
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'United States International Development Finance Corporation',
+      budgetBureauTitleId: 'united-states-international-development-finance-corporation',
+      matchLevel: 5,
+      matches: [
+        {
+          id: 606,
+          name: 'U.S. International Development Finance Corporation',
+          comparing: 'United States International Development Finance Corporation',
+          rank: 5,
+          comparingParent: 'International Assistance Programs'
+        },
+        {
+          id: 509,
+          name: 'United States Enrichment Corporation',
+          comparing: 'United States International Development Finance Corporation',
+          rank: 2,
+          comparingParent: 'International Assistance Programs'
+        },
+        {
+          id: 4,
+          name: 'United States African Development Foundation',
+          comparing: 'United States International Development Finance Corporation',
+          rank: 1,
+          comparingParent: 'International Assistance Programs'
+        }
+      ]
     },
     {
       agency_url: 'http://www.jamesmadison.com/',
@@ -5534,32 +7893,6 @@ export default {
       exact: true
     },
     {
-      agency_url: 'http://www.marad.dot.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Maritime Administration was established by Reorganization Plan No. 21 of 1950 (5 U.S.C. app.). The Maritime Act of 1981 (46 U.S.C. 1601) transferred the Maritime Administration to the Department of Transportation. \r\n\r\nPrograms of the Maritime Administration promote the development and maintenance of an adequate, well-balanced United States merchant marine, sufficient to carry the Nation's domestic waterborne commerce and a substantial portion of its waterborne foreign commerce, and capable of service as a naval and military auxiliary in time of war or national emergency. The Maritime Administration also seeks to ensure that the United States maintains adequate shipbuilding and repair services, efficient ports, effective inter-modal water and land transportation systems, and reserve shipping capacity for use in time of national emergency.",
-      id: 282,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/282/thumb.png?1279150830',
-        small_url: 'https://agency-logos.federalregister.gov/282/small.png?1279150830',
-        medium_url: 'https://agency-logos.federalregister.gov/282/medium.png?1279150830'
-      },
-      name: 'Maritime Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=282&order=newest',
-      short_name: 'MARAD',
-      slug: 'maritime-administration',
-      url: 'https://www.federalregister.gov/agencies/maritime-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/282',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Maritime Administration',
-      budgetBureauTitleId: 'maritime-administration',
-      exact: true
-    },
-    {
       agency_url: 'http://www.mspb.gov/',
       child_ids: [],
       child_slugs: [],
@@ -5583,80 +7916,6 @@ export default {
       budgetAgencyTitleId: 'merit-systems-protection-board',
       budgetBureauTitle: 'Merit Systems Protection Board',
       budgetBureauTitleId: 'merit-systems-protection-board',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.mcc.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Millennium Challenge Corporation was created under the Millennium Challenge Act of 2003 (Public Law 108-199, Div. D, Title IV). MCC is managed by a chief executive officer, who is part of the nine-member Board of Directors. The Secretary of State, the Secretary of the Treasury, the U.S. Trade Representative, and the USAID Administrator serve on the board along with four private sector representatives.\r\n\r\nMCC forms partnerships with poor countries committed to good governance, economic freedom and investments in their citizens and provides these well-performing countries with large-scale grants to fund country-led solutions for reducing poverty through sustainable economic growth. MCC grants complement other U.S. and international development programs. \r\n\r\nThe aggressive implementation of compacts and threshold programs by the Millennium Challenge Corporation promotes growth opportunities, opens markets, raises the standard of living, and creates a more prosperous future for some of the world's poorest people. \r\n\r\n",
-      id: 287,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/287/thumb.png?1325185949',
-        small_url: 'https://agency-logos.federalregister.gov/287/small.png?1325185949',
-        medium_url: 'https://agency-logos.federalregister.gov/287/medium.png?1325185949'
-      },
-      name: 'Millennium Challenge Corporation',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=287&order=newest',
-      short_name: 'MCC',
-      slug: 'millennium-challenge-corporation',
-      url: 'https://www.federalregister.gov/agencies/millennium-challenge-corporation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/287',
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'Millennium Challenge Corporation',
-      budgetBureauTitleId: 'millennium-challenge-corporation',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.msha.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Mine Safety and Health Administration (MSHA) is responsible for safety and health in the Nation's mines. MSHA develops and promulgates mandatory safety and health standards, ensures compliance with such standards, assesses civil penalties for violations, and investigates accidents. It cooperates with and provides assistance to the States in the development of effective State mine safety and health programs; improves and expands training programs in cooperation with the States and the mining industry; and contributes to the improvement and expansion of mine safety and health research and development. All of these activities are aimed at preventing and reducing mine accidents and occupational diseases in the mining industry.",
-      id: 288,
-      logo: null,
-      name: 'Mine Safety and Health Administration',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=288&order=newest',
-      short_name: 'MSHA',
-      slug: 'mine-safety-and-health-administration',
-      url: 'https://www.federalregister.gov/agencies/mine-safety-and-health-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/288',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Mine Safety and Health Administration',
-      budgetBureauTitleId: 'mine-safety-and-health-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.mbda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Minority Business Development Agency was established by Executive order in 1969. The Agency develops and coordinates a national program for minority business enterprise.\r\n\r\nThe Agency was created to assist minority businesses in achieving effective and equitable participation in the American free enterprise system and in overcoming social and economic disadvantages that have limited their participation in the past. The Agency provides national policies and leadership in forming and strengthening a partnership of business, industry, and government with the Nation's minority businesses.\r\n\r\nBusiness development services are provided to the minority business community through three vehicles: the minority business opportunity committees which disseminate information on business opportunities; the minority business development centers that provide management and technical assistance and other business development services; and electronic commerce which includes a Web page on the Internet that will show how to start a business and use the service to electronically match business with contract opportunities.\r\n\r\nThe Agency promotes and coordinates the efforts of other Federal agencies in assisting or providing market opportunities for minority business. It coordinates opportunities for minority firms in the private sector. Through such public and private cooperative activities, the Agency promotes the participation of Federal, State, and local governments, and business and industry in directing resources for the development of strong minority businesses.",
-      id: 291,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/291/thumb.png?1279150884',
-        small_url: 'https://agency-logos.federalregister.gov/291/small.png?1279150884',
-        medium_url: 'https://agency-logos.federalregister.gov/291/medium.png?1279150884'
-      },
-      name: 'Minority Business Development Agency',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=291&order=newest',
-      short_name: 'MBDA',
-      slug: 'minority-business-development-agency',
-      url: 'https://www.federalregister.gov/agencies/minority-business-development-agency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/291',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'Minority Business Development Agency',
-      budgetBureauTitleId: 'minority-business-development-agency',
       exact: true
     },
     {
@@ -5705,28 +7964,6 @@ export default {
       budgetAgencyTitleId: 'national-aeronautics-and-space-administration',
       budgetBureauTitle: 'National Aeronautics and Space Administration',
       budgetBureauTitleId: 'national-aeronautics-and-space-administration',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.nass.usda.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Agricultural Statistics Service (NASS) prepares estimates and reports on production, supply, price, chemical use, and other items necessary for the orderly operation of the U.S. agricultural economy.\r\n\r\nThe reports include statistics on field crops, fruits and vegetables, dairy, cattle, hogs, sheep, poultry, aquaculture, and related commodities or processed products. Other estimates concern farm numbers, farm production expenditures, agricultural chemical use, prices received by farmers for products sold, prices paid for commodities and services, indexes of prices received and paid, parity prices, farm employment, and farm wage rates.\r\n\r\nThe Service prepares these estimates through a complex system of sample surveys of producers, processors, buyers, and others associated with agriculture. Information is gathered by mail, telephone, personal interviews, and field visits.\r\n\r\nNASS is responsible for conducting the Census of Agriculture. The Census of Agriculture is taken every 5 years and provides comprehensive data on the agricultural economy down to the county level. Periodic reports are also issued on aquacultures, irrigation, and horticultural specialties.\r\n\r\nThe Service performs reimbursable survey work and statistical consulting services for other Federal and State agencies and provides technical assistance for developing agricultural data systems in other countries.',
-      id: 303,
-      logo: null,
-      name: 'National Agricultural Statistics Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=303&order=newest',
-      short_name: 'NASS',
-      slug: 'national-agricultural-statistics-service',
-      url: 'https://www.federalregister.gov/agencies/national-agricultural-statistics-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/303',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'National Agricultural Statistics Service',
-      budgetBureauTitleId: 'national-agricultural-statistics-service',
       exact: true
     },
     {
@@ -5848,116 +8085,6 @@ export default {
       exact: true
     },
     {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The National Highway Traffic Safety Administration (NHTSA) was established by the Highway Safety Act of 1970 (23 U.S.C. 401 note) to help reduce the number of deaths, injuries, and economic losses resulting from motor vehicle crashes on the Nation's highways.\rThe Administration carries out programs relating to the safety performance of motor vehicles and related equipment; administers the State and community highway safety program with the FHWA; regulates the Corporate Average Fuel Economy program; investigates and prosecutes odometer fraud; carries out the National Driver Register Program to facilitate the exchange of State records on problem drivers; conducts studies and operates programs aimed at reducing economic losses in motor vehicle crashes and repairs; performs studies, conducts demonstration projects, and promotes programs to reduce impaired driving, increase seat belt use, and reduce risky driver behaviors; and issues theft prevention standards for passenger and nonpassenger motor vehicles.",
-      id: 345,
-      logo: null,
-      name: 'National Highway Traffic Safety Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=345&order=newest',
-      short_name: 'NHTSA',
-      slug: 'national-highway-traffic-safety-administration',
-      url: 'https://www.federalregister.gov/agencies/national-highway-traffic-safety-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/345',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'National Highway Traffic Safety Administration',
-      budgetBureauTitleId: 'national-highway-traffic-safety-administration',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'As an independent federal regulatory agency of the United States, the National Indian Gaming Commission (Commission) was established pursuant to the Indian Gaming Regulatory Act of 1988 (Act). The Commission comprises a Chairman and two Commissioners, each of whom serves on a full-time basis for a three-year term. The Chairman is appointed by the President and must be confirmed by the Senate. The Secretary of the Interior appoints the other two Commissioners. Under the Act, at least two of the three Commissioners must be enrolled members of a federally recognized Indian tribe, and no more than two members may be of the same political party. [http://www.nigc.gov/About_Us.aspx]',
-      id: 347,
-      logo: null,
-      name: 'National Indian Gaming Commission',
-      parent_id: 253,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=347&order=newest',
-      short_name: 'NIGC',
-      slug: 'national-indian-gaming-commission',
-      url: 'https://www.federalregister.gov/agencies/national-indian-gaming-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/347',
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'National Indian Gaming Commission',
-      budgetBureauTitleId: 'national-indian-gaming-commission',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Institute of Food and Agriculture (NIFA) is an agency within the U.S. Department of Agriculture (USDA), part of the executive branch of the Federal Government. Congress created NIFA through the Food, Conservation, and Energy Act of 2008. NIFA replaced the former Cooperative State Research, Education, and Extension Service (CSREES), which had been in existence since 1994.',
-      id: 350,
-      logo: null,
-      name: 'National Institute of Food and Agriculture',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=350&order=newest',
-      short_name: 'NIFA',
-      slug: 'national-institute-of-food-and-agriculture',
-      url: 'https://www.federalregister.gov/agencies/national-institute-of-food-and-agriculture',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/350',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'National Institute of Food and Agriculture',
-      budgetBureauTitleId: 'national-institute-of-food-and-agriculture',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Institute of Standards and Technology (NIST) operates under the authority of the National Institute of Standards and Technology Act (15 U.S.C. 271), which amends the Organic Act of March 3, 1901 (ch. 872), that created the National Bureau of Standards (NBS) in 1901. In 1988, Congress renamed NBS as NIST and expanded its activities and responsibilities.\r\rNIST is a nonregulatory Federal agency within the Commerce Department. Its mission is to promote measurement science, standards, and technology to enhance productivity, facilitate trade, and improve the quality of life. NIST carries out its mission through the NIST laboratories, which conduct research to advance the U.S. technological infrastructure; the Baldrige National Quality Program, which helps U.S. businesses and other organizations improve the performance and quality of their operations; the Hollings Manufacturing Extension Partnership, which helps smaller firms adopt new manufacturing and management technologies; and the Technology Innovative Program, which provides cost-shared awards to industry and other institutions for high-risk, high-reward research in areas of critical national need.',
-      id: 352,
-      logo: null,
-      name: 'National Institute of Standards and Technology',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=352&order=newest',
-      short_name: 'NIST',
-      slug: 'national-institute-of-standards-and-technology',
-      url: 'https://www.federalregister.gov/agencies/national-institute-of-standards-and-technology',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/352',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'National Institute of Standards and Technology',
-      budgetBureauTitleId: 'national-institute-of-standards-and-technology',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Institutes of Health (NIH) supports biomedical and behavioral research domestically and abroad, conducts research in its own laboratories and clinics, trains research scientists, and develops and disseminates credible, science-based health information to the public.',
-      id: 353,
-      logo: null,
-      name: 'National Institutes of Health',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=353&order=newest',
-      short_name: 'NIH',
-      slug: 'national-institutes-of-health',
-      url: 'https://www.federalregister.gov/agencies/national-institutes-of-health',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/353',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'National Institutes of Health',
-      budgetBureauTitleId: 'national-institutes-of-health',
-      exact: true
-    },
-    {
       agency_url: null,
       child_ids: [],
       child_slugs: [],
@@ -5999,80 +8126,6 @@ export default {
       budgetAgencyTitleId: 'national-mediation-board',
       budgetBureauTitle: 'National Mediation Board',
       budgetBureauTitleId: 'national-mediation-board',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The National Nuclear Security Administration (NNSA) was created by Congress through the National Defense Authorization Act for Fiscal Year 2000 (113 Stat. 512) to bring focus to the management of the Nation's defense nuclear security programs. Three existing organizations within the Department of Energy--Defense Programs, Defense Nuclear Nonproliferation, and Naval Reactors--were combined into a new, separately organized and managed agency within DOE, headed by an Administrator who reports to the Secretary. NNSA is responsible for strengthening United States security through military application of nuclear energy and by reducing the global threat from terrorism and weapons of mass destruction.\r\rNNSA's service center and eight site offices provide operations oversight and contract administration for NNSA site activities, acting as the agency's risk acceptance for the site. The site offices are responsible for the following functions: the safe and secure operation of facilities under the purview of NNSA; supporting NNSA programs to ensure their success in accordance with their expectations; and ensuring the long-term viability of the site to support NNSA programs and projects.",
-      id: 359,
-      logo: null,
-      name: 'National Nuclear Security Administration',
-      parent_id: 136,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=359&order=newest',
-      short_name: 'NNSA',
-      slug: 'national-nuclear-security-administration',
-      url: 'https://www.federalregister.gov/agencies/national-nuclear-security-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/359',
-      budgetAgencyTitle: 'Department of Energy',
-      budgetAgencyTitleId: 'department-of-energy',
-      budgetBureauTitle: 'National Nuclear Security Administration',
-      budgetBureauTitleId: 'national-nuclear-security-administration',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The National Oceanic and Atmospheric Administration (NOAA) was formed on October 3, 1970, by Reorganization Plan No. 4 of 1970 (5 U.S.C. app.).\r\n\r\nNOAA's mission entails environmental assessment, prediction, and stewardship. It is dedicated to monitoring and assessing the state of the environment in order to make accurate and timely forecasts to protect life, property, and natural resources, as well as to promote the economic well-being of the United States and to enhance its environmental security. NOAA is committed to protecting America's ocean, coastal, and living marine resources while promoting sustainable economic development.",
-      id: 361,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/361/thumb.png?1306288142',
-        small_url: 'https://agency-logos.federalregister.gov/361/small.png?1306288142',
-        medium_url: 'https://agency-logos.federalregister.gov/361/medium.png?1306288142'
-      },
-      name: 'National Oceanic and Atmospheric Administration',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=361&order=newest',
-      short_name: 'NOAA',
-      slug: 'national-oceanic-and-atmospheric-administration',
-      url: 'https://www.federalregister.gov/agencies/national-oceanic-and-atmospheric-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/361',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'National Oceanic and Atmospheric Administration',
-      budgetBureauTitleId: 'national-oceanic-and-atmospheric-administration',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Park Service was established in the Department of the Interior on August 25, 1916 (16 U.S.C. 1).\r\n\r\nThere are close to 400 units in the National Park System, including national parks, monuments and memorials, scenic parkways, preserves, reserves, trails, riverways, wild and scenic rivers, seashores, lakeshores, recreation areas, battlefields and battlefield parks and sites, national military parks, international historic sites, and historic sites associated with important movements, events, and personalities of the American past.\r\n\r\nThe National Park Service is dedicated to conserving unimpaired the Natural and cultural resources and values of the National Park System for the enjoyment, education, and inspiration of this and future generations. ',
-      id: 362,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/362/thumb.png?1279162047',
-        small_url: 'https://agency-logos.federalregister.gov/362/small.png?1279162047',
-        medium_url: 'https://agency-logos.federalregister.gov/362/medium.png?1279162047'
-      },
-      name: 'National Park Service',
-      parent_id: 253,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=362&order=newest',
-      short_name: 'NPS',
-      slug: 'national-park-service',
-      url: 'https://www.federalregister.gov/agencies/national-park-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/362',
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'National Park Service',
-      budgetBureauTitleId: 'national-park-service',
       exact: true
     },
     {
@@ -6129,199 +8182,6 @@ export default {
       exact: true
     },
     {
-      agency_url: 'https://www.whitehouse.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Space Council (NSpC) is the White House policy council responsible for ensuring the United States capitalizes on the rich opportunities presented by our nation’s space activities.\r\n\r\nThe NSpC was established by law as part of the National Aeronautics and Space Administration Authorization Act of 1989 (Pub. L. 100-685). The Council was not operational from 1993-2017. The NSpC is aided by a staff from the Executive Office of the President, led by a civilian Executive Secretary. It is also supported by the Users Advisory Group, a Federal Advisory Committee consisting of outside experts from industry, academia, and other non-Federal organizations.\r\n',
-      id: 612,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/612/thumb.jpg?1665779521',
-        small_url: 'https://agency-logos.federalregister.gov/612/small.jpg?1665779521',
-        medium_url: 'https://agency-logos.federalregister.gov/612/medium.jpg?1665779521'
-      },
-      name: 'National Space Council',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=612&order=newest',
-      short_name: null,
-      slug: 'national-space-council',
-      url: 'https://www.federalregister.gov/agencies/national-space-council',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/612',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'National Security Council and Homeland Security Council',
-      budgetBureauTitleId: 'national-security-council-and-homeland-security-council',
-      matchLevel: 8,
-      matches: [
-        {
-          id: 612,
-          name: 'National Space Council',
-          comparing: 'National Security Council and Homeland Security Council',
-          rank: 8,
-          parent: 'Executive Office of the President',
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 368,
-          name: 'National Security Council',
-          comparing: 'National Security Council and Homeland Security Council',
-          rank: 7,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 92,
-          name: 'Council on Environmental Quality',
-          comparing: 'National Security Council and Homeland Security Council',
-          rank: 4,
-          parent: 'Executive Office of the President',
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 227,
-          name: 'Homeland Security Department',
-          comparing: 'National Security Council and Homeland Security Council',
-          rank: 1,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 331,
-          name: 'National Council on Disability',
-          comparing: 'National Security Council and Homeland Security Council',
-          rank: 1,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 340,
-          name: 'National Economic Council',
-          comparing: 'National Security Council and Homeland Security Council',
-          rank: 1,
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.nsa.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The National Security Agency (NSA) was established in 1952, and the Central Security Service (CSS) was established in 1972. NSA/CSS is under the authority, direction, and control of the Under Secretary of Defense for Intelligence. As the Nation's cryptologic organization, NSA/CSS employs the Nation's premier codemakers and codebreakers. It ensures an informed, alert, and secure environment for U.S. warfighters and policymakers. The cryptologic resources of NSA/CSS unite to provide U.S. policymakers with intelligence information derived from America's adversaries while protecting U.S. Government signals and information systems from exploitation by those same adversaries.",
-      id: 367,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/367/thumb.bmp?1321891152',
-        small_url: 'https://agency-logos.federalregister.gov/367/small.bmp?1321891152',
-        medium_url: 'https://agency-logos.federalregister.gov/367/medium.bmp?1321891152'
-      },
-      name: 'National Security Agency/Central Security Service',
-      parent_id: 103,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=367&order=newest',
-      short_name: 'NSA/CSS',
-      slug: 'national-security-agency-central-security-service',
-      url: 'https://www.federalregister.gov/agencies/national-security-agency-central-security-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/367',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'National Security Division',
-      budgetBureauTitleId: 'national-security-division',
-      matchLevel: 3,
-      matches: [
-        {
-          id: 367,
-          name: 'National Security Agency/Central Security Service',
-          comparing: 'National Security Division',
-          rank: 3,
-          parent: 'Defense Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 359,
-          name: 'National Nuclear Security Administration',
-          comparing: 'National Security Division',
-          rank: 2,
-          parent: 'Energy Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 368,
-          name: 'National Security Council',
-          comparing: 'National Security Division',
-          rank: 2,
-          comparingParent: 'Department of Justice'
-        }
-      ]
-    },
-    {
-      agency_url: 'https://www.whitehouse.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Space Council (NSpC) is the White House policy council responsible for ensuring the United States capitalizes on the rich opportunities presented by our nation’s space activities.\r\n\r\nThe NSpC was established by law as part of the National Aeronautics and Space Administration Authorization Act of 1989 (Pub. L. 100-685). The Council was not operational from 1993-2017. The NSpC is aided by a staff from the Executive Office of the President, led by a civilian Executive Secretary. It is also supported by the Users Advisory Group, a Federal Advisory Committee consisting of outside experts from industry, academia, and other non-Federal organizations.\r\n',
-      id: 612,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/612/thumb.jpg?1665779521',
-        small_url: 'https://agency-logos.federalregister.gov/612/small.jpg?1665779521',
-        medium_url: 'https://agency-logos.federalregister.gov/612/medium.jpg?1665779521'
-      },
-      name: 'National Space Council',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=612&order=newest',
-      short_name: null,
-      slug: 'national-space-council',
-      url: 'https://www.federalregister.gov/agencies/national-space-council',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/612',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'National Space Council',
-      budgetBureauTitleId: 'national-space-council',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The National Technical Information Service (NTIS) operates a central clearinghouse of scientific and technical information that is useful to U.S. business and industry. NTIS collects scientific and technical information; catalogs, abstracts, indexes, and permanently archives the information; disseminates products in the forms and formats most useful to its customers; develops electronic and other media to disseminate information; and provides information processing services to other Federal agencies. NTIS receives no appropriations. Its revenue comes from two sources: the sale of technical reports to business and industry, schools and universities, State and local government offices, and the public at large and from services to Federal agencies that help them communicate more effectively with their employees and constituents.\r\rThe NTIS collection of approximately 2.5 million works covers a broad array of subjects and includes reports on the results of research and development and scientific studies on manufacturing processes, current events, and foreign and domestic trade; business and management studies; social, economic, and trade statistics; computer software and databases; health care reports, manuals, and data; environmental handbooks, regulations, economic studies, and applied technologies; directories to Federal laboratory and technical resources; and global competitive intelligence. The collection also includes audiovisual training materials in such areas as foreign languages, workplace safety and health, law enforcement, and fire services.\r',
-      id: 372,
-      logo: null,
-      name: 'National Technical Information Service',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=372&order=newest',
-      short_name: 'NTIS',
-      slug: 'national-technical-information-service',
-      url: 'https://www.federalregister.gov/agencies/national-technical-information-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/372',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'National Technical Information Service',
-      budgetBureauTitleId: 'national-technical-information-service',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [584],
-      child_slugs: ['first-responder-network-authority'],
-      description:
-        "The National Telecommunications and Information Administration (NTIA) was established in 1978 by Reorganization Plan No. 1 of 1977 (5 U.S.C. app.) and Executive Order 12046 of March 27, 1978 (3 CFR, 1978 Comp., p. 158), by combining the Office of Telecommunications Policy of the Executive Office of the President and the Office of Telecommunications of the Department of Commerce to form a new agency reporting to the Secretary of Commerce. NTIA operates under the authority of the National Telecommunications and Information Administration Organization Act (47 U.S.C. 901).\r\rNTIA's principal responsibilities and functions include:\r\r--serving as the principal executive branch adviser to the President on telecommunications and information policy;\r--developing and presenting U.S. plans and policies at international communications conferences and related meetings;\r--prescribing policies for and managing Federal use of the radio frequency spectrum;\r--serving as the principal Federal telecommunications research and engineering laboratory, through NTIA's Institute for Telecommunication \rSciences, headquartered in Boulder, CO;\r--administering Federal programs to assist telecommunication facilities, public safety organizations, and the general public with the transition to digital broadcasting;\r--providing grants through the Broadband Technology Opportunities \rProgram to increase broadband accessibility in underserved areas of the \rUnited States; and\r--providing grants through the Public Telecommunications Facilities \rProgram to extend delivery or public telecommunications services to U.S. citizens, to increase ownership and management by women and minorities, and to strengthen the capabilities of existing public broadcasting stations to provide telecommunications services.",
-      id: 373,
-      logo: null,
-      name: 'National Telecommunications and Information Administration',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=373&order=newest',
-      short_name: 'NTIA',
-      slug: 'national-telecommunications-and-information-administration',
-      url: 'https://www.federalregister.gov/agencies/national-telecommunications-and-information-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/373',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'National Telecommunications and Information Administration',
-      budgetBureauTitleId: 'national-telecommunications-and-information-administration',
-      exact: true
-    },
-    {
       agency_url: null,
       child_ids: [],
       child_slugs: [],
@@ -6341,28 +8201,6 @@ export default {
       budgetAgencyTitleId: 'national-transportation-safety-board',
       budgetBureauTitle: 'National Transportation Safety Board',
       budgetBureauTitleId: 'national-transportation-safety-board',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Natural Resources Conservation Service (NCRS) was originally established by Congress in 1935 as the Soil Conservation Service (SCS), NRCS has expanded to become a conservation leader for all natural resources, ensuring private lands are conserved, restored, and more resilient to environmental challenges, like climate change.\r\rNRCS works with landowners through conservation planning and assistance designed to benefit the soil, water, air, plants, and animals that result in productive lands and healthy ecosystems. [http://www.nrcs.usda.gov/about/]',
-      id: 376,
-      logo: null,
-      name: 'Natural Resources Conservation Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=376&order=newest',
-      short_name: 'NRCS',
-      slug: 'natural-resources-conservation-service',
-      url: 'https://www.federalregister.gov/agencies/natural-resources-conservation-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/376',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Natural Resources Conservation Service',
-      budgetBureauTitleId: 'natural-resources-conservation-service',
       exact: true
     },
     {
@@ -6440,32 +8278,6 @@ export default {
       exact: true
     },
     {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Occupational Safety and Health Administration (OSHA) was created pursuant to the Occupational Safety and Health Act of 1970 (29 U.S.C. 651 et seq.). \rBy concentrating on four areas: \r(1) firm enforcement of workplace safety and health rules;\r(2) swift promulgation of strong, protective health and safety standards;\r(3) increased outreach and help for workers and their employers in their efforts to eliminate and control workplace hazards; and\r(4) partnership with the States that are running their own OSHA-approved programs.\rOSHA sets and enforces workplace safety and health standards and assists employers in complying with those standards. ',
-      id: 386,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/386/thumb.png?1279151253',
-        small_url: 'https://agency-logos.federalregister.gov/386/small.png?1279151253',
-        medium_url: 'https://agency-logos.federalregister.gov/386/medium.png?1279151253'
-      },
-      name: 'Occupational Safety and Health Administration',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=386&order=newest',
-      short_name: 'OSHA',
-      slug: 'occupational-safety-and-health-administration',
-      url: 'https://www.federalregister.gov/agencies/occupational-safety-and-health-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/386',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Occupational Safety and Health Administration',
-      budgetBureauTitleId: 'occupational-safety-and-health-administration',
-      exact: true
-    },
-    {
       agency_url: null,
       child_ids: [],
       child_slugs: [],
@@ -6486,141 +8298,6 @@ export default {
       budgetBureauTitle: 'Occupational Safety and Health Review Commission',
       budgetBureauTitleId: 'occupational-safety-and-health-review-commission',
       exact: true
-    },
-    {
-      agency_url: 'https://www.whitehouse.gov',
-      child_ids: [317],
-      child_slugs: ['national-commission-on-fiscal-responsibility-and-reform'],
-      description:
-        "The Office of Administration (OA) was created by Reorganization Plan No. 1 of 1977 and Executive Order 12028. As a component of the Executive Office of the President, the Office's primary function is to provide common administrative and support services for the various agencies and offices of the EOP.\r\n\r\n",
-      id: 2,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/2/thumb.png?1279162074',
-        small_url: 'https://agency-logos.federalregister.gov/2/small.png?1279162074',
-        medium_url: 'https://agency-logos.federalregister.gov/2/medium.png?1279162074'
-      },
-      name: 'Administration Office, Executive Office of the President',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=2&order=newest',
-      short_name: 'OA',
-      slug: 'administration-office-executive-office-of-the-president',
-      url: 'https://www.federalregister.gov/agencies/administration-office-executive-office-of-the-president',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/2',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of Administration',
-      budgetBureauTitleId: 'office-of-administration',
-      matchLevel: 8,
-      matches: [
-        {
-          id: 2,
-          name: 'Administration Office, Executive Office of the President',
-          comparing: 'Office of Administration',
-          rank: 8,
-          parent: 'Executive Office of the President',
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Disability Employment (ODEP) is a sub-cabinet level policy agency within the Department of Labor authorized by Congress in the Department of Labor's FY 2001 appropriation. \r\n\r\nODEP provides national leadership on disability employment policy by developing and influencing the use of evidence-based disability employment policies and practices, building collaborative partnerships, and delivering authoritative and credible data on employment of people with disabilities.\r\n\r\nWith the ultimate goal of increasing the number of people with disabilities who work, either as employees or entrepreneurs, ODEP provides policy analysis, technical assistance, development of innovative practices and strategies, and education and outreach to employers, employees, and the disability community. Related to these efforts, ODEP also conducts a variety of employment-related programs and initiatives. \r\n",
-      id: 115,
-      logo: null,
-      name: 'Disability Employment Policy Office',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=115&order=newest',
-      short_name: 'ODEP',
-      slug: 'disability-employment-policy-office',
-      url: 'https://www.federalregister.gov/agencies/disability-employment-policy-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/115',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Office of Disability Employment Policy',
-      budgetBureauTitleId: 'office-of-disability-employment-policy',
-      matchLevel: 13,
-      matches: [
-        {
-          id: 115,
-          name: 'Disability Employment Policy Office',
-          comparing: 'Office of Disability Employment Policy',
-          rank: 13,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 620,
-          name: 'Energy and Environmental Policy Office',
-          comparing: 'Office of Disability Employment Policy',
-          rank: 1,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 391,
-          name: 'Office of Policy Development',
-          comparing: 'Office of Disability Employment Policy',
-          rank: 1,
-          comparingParent: 'Department of Labor'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.dol.gov/ofccp/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Federal Contract Compliance Programs (OFCCP) administers and enforces three equal opportunity mandates: Executive Order 11246, as amended; section 503 of the Rehabilitation Act of 1973, as amended; and the Vietnam Era Veterans' Readjustment Assistance Act of 1974, as amended, 38 U.S.C. 4212. These mandates prohibit Federal contractors and subcontractors from discriminating on the basis of race, color, religion, sex, national origin, disability, or veteran status. They also require Federal contractors and subcontractors to take affirmative steps to ensure equal opportunity in their employment processes. OFCCP also shares responsibility with the U.S. Equal Opportunity Employment Commission in enforcing Title I of the Americans with Disabilities Act.",
-      id: 162,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/162/thumb.jpg?1321992489',
-        small_url: 'https://agency-logos.federalregister.gov/162/small.jpg?1321992489',
-        medium_url: 'https://agency-logos.federalregister.gov/162/medium.jpg?1321992489'
-      },
-      name: 'Federal Contract Compliance Programs Office',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=162&order=newest',
-      short_name: 'OFCCP',
-      slug: 'federal-contract-compliance-programs-office',
-      url: 'https://www.federalregister.gov/agencies/federal-contract-compliance-programs-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/162',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Office of Federal Contract Compliance Programs',
-      budgetBureauTitleId: 'office-of-federal-contract-compliance-programs',
-      matchLevel: 15,
-      matches: [
-        {
-          id: 162,
-          name: 'Federal Contract Compliance Programs Office',
-          comparing: 'Office of Federal Contract Compliance Programs',
-          rank: 15,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 530,
-          name: "Workers' Compensation Programs Office",
-          comparing: 'Office of Federal Contract Compliance Programs',
-          rank: 4,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 269,
-          name: 'Justice Programs Office',
-          comparing: 'Office of Federal Contract Compliance Programs',
-          rank: 1,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Labor'
-        }
-      ]
     },
     {
       agency_url: 'http://www.oge.gov/',
@@ -6670,339 +8347,6 @@ export default {
           comparingParent: 'Office of Government Ethics'
         }
       ]
-    },
-    {
-      agency_url: 'http://www.usda.gov/oig/index.htm',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
-      id: 244,
-      logo: null,
-      name: 'Inspector General Office, Agriculture Department',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
-      short_name: 'OIG USDA',
-      slug: 'inspector-general-office-agriculture-department',
-      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Office of Inspector General',
-      budgetBureauTitleId: 'office-of-inspector-general',
-      matchLevel: 7,
-      matches: [
-        {
-          id: 244,
-          name: 'Inspector General Office, Agriculture Department',
-          comparing: 'Office of Inspector General',
-          rank: 7,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Agriculture'
-        },
-        {
-          id: 622,
-          name: 'Inspector General Office, Treasury Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Agriculture'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.usda.gov/oig/index.htm',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
-      id: 244,
-      logo: null,
-      name: 'Inspector General Office, Agriculture Department',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
-      short_name: 'OIG USDA',
-      slug: 'inspector-general-office-agriculture-department',
-      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Office of Inspector General',
-      budgetBureauTitleId: 'office-of-inspector-general',
-      matchLevel: 3,
-      matches: [
-        {
-          id: 244,
-          name: 'Inspector General Office, Agriculture Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 622,
-          name: 'Inspector General Office, Treasury Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Labor'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.usda.gov/oig/index.htm',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
-      id: 244,
-      logo: null,
-      name: 'Inspector General Office, Agriculture Department',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
-      short_name: 'OIG USDA',
-      slug: 'inspector-general-office-agriculture-department',
-      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Office of Inspector General',
-      budgetBureauTitleId: 'office-of-inspector-general',
-      matchLevel: 3,
-      matches: [
-        {
-          id: 244,
-          name: 'Inspector General Office, Agriculture Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of the Interior'
-        },
-        {
-          id: 622,
-          name: 'Inspector General Office, Treasury Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of the Interior'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.usda.gov/oig/index.htm',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
-      id: 244,
-      logo: null,
-      name: 'Inspector General Office, Agriculture Department',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
-      short_name: 'OIG USDA',
-      slug: 'inspector-general-office-agriculture-department',
-      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Office of Inspector General',
-      budgetBureauTitleId: 'office-of-inspector-general',
-      matchLevel: 3,
-      matches: [
-        {
-          id: 244,
-          name: 'Inspector General Office, Agriculture Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Transportation'
-        },
-        {
-          id: 622,
-          name: 'Inspector General Office, Treasury Department',
-          comparing: 'Office of Inspector General',
-          rank: 3,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Transportation'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.ojp.usdoj.gov/',
-      child_ids: [523],
-      child_slugs: ['victims-of-crime-office'],
-      description:
-        'The Office of Justice Programs (OJP) provides innovative leadership to federal, state, local, and tribal justice systems, by disseminating state-of-the art knowledge and practices across America, and providing grants for the implementation of these crime fighting strategies. Because most of the responsibility for crime control and prevention falls to law enforcement officers in states, cities, and neighborhoods, the federal government can be effective in these areas only to the extent that it can enter into partnerships with these officers. Therefore, OJP does not directly carry out law enforcement and justice activities. Instead, OJP works in partnership with the justice community to identify the most pressing crime-related challenges confronting the justice system and to provide information, training, coordination, and innovative strategies and approaches for addressing these challenges.',
-      id: 269,
-      logo: null,
-      name: 'Justice Programs Office',
-      parent_id: 268,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=269&order=newest',
-      short_name: 'OJP',
-      slug: 'justice-programs-office',
-      url: 'https://www.federalregister.gov/agencies/justice-programs-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/269',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Office of Justice Programs',
-      budgetBureauTitleId: 'office-of-justice-programs',
-      matchLevel: 11,
-      matches: [
-        {
-          id: 269,
-          name: 'Justice Programs Office',
-          comparing: 'Office of Justice Programs',
-          rank: 11,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 270,
-          name: 'Juvenile Justice and Delinquency Prevention Office',
-          comparing: 'Office of Justice Programs',
-          rank: 5,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 530,
-          name: "Workers' Compensation Programs Office",
-          comparing: 'Office of Justice Programs',
-          rank: 2,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 162,
-          name: 'Federal Contract Compliance Programs Office',
-          comparing: 'Office of Justice Programs',
-          rank: 1,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Justice'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.dol.gov/olms/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Labor-Management Standards (OLMS) can trace its origin back to the passage of the Labor-Management Reporting and Disclosure Act of 1959, as amended (LMRDA) on September 14, 1959. LMRDA was enacted by Congress to ensure certain basic standards of democracy and fiscal responsibility in labor organizations representing employees in private industry. The organization's original name was the Bureau of Labor-Management Reports (BLMR). It was re-named the Labor-Management Services Administration (LMSA) in 1963.\r\n\r\nAt one time or another LMSA had responsibilities which included pension and welfare plans, Federal labor relations, veterans reemployment rights, and an anti-racketeering/organized crime strike force. Through reorganizations and the creation of new agencies through legislation, these functions were subsequently transferred to other Federal agencies.\r\n\r\nWith the passage of the Civil Service Reform Act (CSRA) in 1978, the federal labor relations program was transferred to the newly created Federal Labor Relations Authority. However, the Standard of Conduct provisions of the CSRA which regulate internal affairs of federal-sector unions remained in LMSA. In 1980, the Foreign Service Act (FSA) was passed and unions representing employees of the Department of State and U.S. Information Agency (USIA) became subject to Standards of Conduct requirements.\r\n\r\nThe agency became known as OLMS in 1984. In 1992, OLMS became part of the Employment Standards Administration (ESA). In 1993, OLMS was transferred to the newly created Office of the American Workplace (OAW). In 1996, OAW ceased to exist and OLMS was transferred back to ESA. In 2009, ESA was eliminated and OLMS became an independent agency reporting directly to the Secretary of Labor.\r\n",
-      id: 274,
-      logo: null,
-      name: 'Labor-Management Standards Office',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=274&order=newest',
-      short_name: 'LMSO',
-      slug: 'labor-management-standards-office',
-      url: 'https://www.federalregister.gov/agencies/labor-management-standards-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/274',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Office of Labor Management Standards',
-      budgetBureauTitleId: 'office-of-labor-management-standards',
-      matchLevel: 10,
-      matches: [
-        {
-          id: 274,
-          name: 'Labor-Management Standards Office',
-          comparing: 'Office of Labor Management Standards',
-          rank: 10,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 280,
-          name: 'Management and Budget Office',
-          comparing: 'Office of Labor Management Standards',
-          rank: 1,
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 406,
-          name: 'Personnel Management Office',
-          comparing: 'Office of Labor Management Standards',
-          rank: 1,
-          comparingParent: 'Department of Labor'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.whitehouse.gov/omb/',
-      child_ids: [184],
-      child_slugs: ['federal-procurement-policy-office'],
-      description:
-        'The Office of Management and Budget (OMB), formerly the Bureau of the Budget, was established in the Executive Office of the President pursuant to Reorganization Plan No. 1 of 1939 (5 U.S.C. app.).\r\n\r\nThe Office of Management and Budget evaluates, formulates, and coordinates management procedures and program objectives within and among Federal departments and agencies. It also controls the administration of the Federal budget, while routinely providing the President with recommendations regarding budget proposals and relevant legislative enactments.\r\n\r\n',
-      id: 280,
-      logo: null,
-      name: 'Management and Budget Office',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=280&order=newest',
-      short_name: 'OMB',
-      slug: 'management-and-budget-office',
-      url: 'https://www.federalregister.gov/agencies/management-and-budget-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/280',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of Management and Budget',
-      budgetBureauTitleId: 'office-of-management-and-budget',
-      matchLevel: 6,
-      matches: [
-        {
-          id: 280,
-          name: 'Management and Budget Office',
-          comparing: 'Office of Management and Budget',
-          rank: 6,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 81,
-          name: 'Congressional Budget Office',
-          comparing: 'Office of Management and Budget',
-          rank: 2,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 406,
-          name: 'Personnel Management Office',
-          comparing: 'Office of Management and Budget',
-          rank: 2,
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: 'https://www.whitehouse.gov/ondcp/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The White House Office of National Drug Control Policy (ONDCP), a component of the Executive Office of the President, was established by the Anti-Drug Abuse Act of 1988.\r\nThe principal purpose of ONDCP is to establish policies, priorities, and objectives for the Nation's drug control program. The goals of the program are to reduce illicit drug use, manufacturing, and trafficking, drug-related crime and violence, and drug-related health consequences. To achieve these goals, the Director of ONDCP is charged with producing the National Drug Control Strategy. The Strategy directs the Nation's anti-drug efforts and establishes a program, a budget, and guidelines for cooperation among Federal, State, and local entities.\r\n\r\nBy law, the Director of ONDCP also evaluates, coordinates, and oversees both the international and domestic anti-drug efforts of executive branch agencies and ensures that such efforts sustain and complement State and local anti-drug activities. The Director advises the President regarding changes in the organization, management, budgeting, and personnel of Federal Agencies that could affect the Nation's anti-drug efforts; and regarding Federal agency compliance with their obligations under the Strategy. \r\n\r\nSource: http://www.whitehousedrugpolicy.gov/about/index.html\r\n",
-      id: 390,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/390/thumb.jpg?1754426038',
-        small_url: 'https://agency-logos.federalregister.gov/390/small.jpg?1754426038',
-        medium_url: 'https://agency-logos.federalregister.gov/390/medium.jpg?1754426038'
-      },
-      name: 'Office of National Drug Control Policy',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=390&order=newest',
-      short_name: 'ONDCP',
-      slug: 'office-of-national-drug-control-policy',
-      url: 'https://www.federalregister.gov/agencies/office-of-national-drug-control-policy',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/390',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of National Drug Control Policy',
-      budgetBureauTitleId: 'office-of-national-drug-control-policy',
-      exact: true
     },
     {
       agency_url: 'https://www.onhir.gov/',
@@ -7078,52 +8422,6 @@ export default {
       ]
     },
     {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'Congress established the Office of Science and Technology Policy in 1976 with a broad mandate to advise the President and others within the Executive Office of the President on the effects of science and technology on domestic and international affairs. The 1976 Act also authorizes OSTP to lead interagency efforts to develop and implement sound science and technology policies and budgets, and to work with the private sector, state and local governments, the science and higher education communities, and other nations toward this end.\r\rThe mission of the Office of Science and Technology Policy is threefold; first, to provide the President and his senior staff with accurate, relevant, and timely scientific and technical advice on all matters of consequence; second, to ensure that the policies of the Executive Branch are informed by sound science; and third, to ensure that the scientific and technical work of the Executive Branch is properly coordinated so as to provide the greatest benefit to society.',
-      id: 464,
-      logo: null,
-      name: 'Science and Technology Policy Office',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=464&order=newest',
-      short_name: 'OSTP',
-      slug: 'science-and-technology-policy-office',
-      url: 'https://www.federalregister.gov/agencies/science-and-technology-policy-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/464',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of Science and Technology Policy',
-      budgetBureauTitleId: 'office-of-science-and-technology-policy',
-      matchLevel: 8,
-      matches: [
-        {
-          id: 464,
-          name: 'Science and Technology Policy Office',
-          comparing: 'Office of Science and Technology Policy',
-          rank: 8,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 390,
-          name: 'Office of National Drug Control Policy',
-          comparing: 'Office of Science and Technology Policy',
-          rank: 6,
-          parent: 'Executive Office of the President',
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 391,
-          name: 'Office of Policy Development',
-          comparing: 'Office of Science and Technology Policy',
-          rank: 1,
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
       agency_url: 'http://www.osc.gov/Intro.htm',
       child_ids: [],
       child_slugs: [],
@@ -7155,466 +8453,78 @@ export default {
       ]
     },
     {
-      agency_url: null,
+      agency_url: 'http://www.abmc.gov',
       child_ids: [],
       child_slugs: [],
       description:
-        "The Office of Surface Mining Reclamation and Enforcement (OSM) was established in the Department of the Interior by the Surface Mining Control and Reclamation Act of 1977 (30 U.S.C. 1211).\r\rThe Office's primary goal is to assist States in operating a nationwide program that protects society and the environment from the adverse effects of coal mining, while ensuring that surface coal mining can be done without permanent damage to land and water resources. With most coal mining States responsible for regulating coal mining and reclamation activities within their borders, OSM's main objectives are to oversee State mining regulatory and abandoned-mine reclamation programs, assist States in meeting the objectives of the surface mining law, and regulate mining and reclamation activities on Federal and Indian lands, and in those States choosing not to assume primary responsibility.",
-      id: 480,
-      logo: null,
-      name: 'Surface Mining Reclamation and Enforcement Office',
-      parent_id: 253,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=480&order=newest',
-      short_name: 'OSM',
-      slug: 'surface-mining-reclamation-and-enforcement-office',
-      url: 'https://www.federalregister.gov/agencies/surface-mining-reclamation-and-enforcement-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/480',
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Office of Surface Mining Reclamation and Enforcement',
-      budgetBureauTitleId: 'office-of-surface-mining-reclamation-and-enforcement',
-      matchLevel: 15,
-      matches: [
-        {
-          id: 480,
-          name: 'Surface Mining Reclamation and Enforcement Office',
-          comparing: 'Office of Surface Mining Reclamation and Enforcement',
-          rank: 15,
-          parent: 'Interior Department',
-          comparingParent: 'Department of the Interior'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://oig.hhs.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The mission of the Office of Inspector General (OIG), as mandated by Public Law 95-452 (as amended), is to protect the integrity of Department of Health and Human Services (HHS) programs, as well as the health and welfare of the beneficiaries of those programs.\r\nOIG has a responsibility to report both to the Secretary and to the Congress program and management problems and recommendations to correct them. OIG's duties are carried out through a nationwide network of audits, investigations, evaluations and other mission related functions performed by OIG components.",
-      id: 245,
+        'The American Battle Monuments Commission (ABMC) was established by Congress in 1923 to commemorate the service, achievements, and sacrifice of U.S. armed forces where they have served overseas since 1917, and within the U.S. when directed by public law.\r\n\r\nThe ABMC commemorative mission is reflected in 24 overseas military cemeteries that serve as resting places for almost 125,000 American war dead; on Tablets of the Missing that memorialize more than 94,000 U.S. servicemen and women; and through 25 memorials, monuments and markers.',
+      id: 20,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/245/thumb.png?1763761941',
-        small_url: 'https://agency-logos.federalregister.gov/245/small.png?1763761941',
-        medium_url: 'https://agency-logos.federalregister.gov/245/medium.png?1763761941'
+        thumb_url: 'https://agency-logos.federalregister.gov/20/thumb.png?1306287839',
+        small_url: 'https://agency-logos.federalregister.gov/20/small.png?1306287839',
+        medium_url: 'https://agency-logos.federalregister.gov/20/medium.png?1306287839'
       },
-      name: 'Inspector General Office, Health and Human Services Department',
-      parent_id: 221,
+      name: 'American Battle Monuments Commission',
+      parent_id: null,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=245&order=newest',
-      short_name: 'OIG HHS',
-      slug: 'inspector-general-office-health-and-human-services-department',
-      url: 'https://www.federalregister.gov/agencies/inspector-general-office-health-and-human-services-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/245',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Office of the Inspector General',
-      budgetBureauTitleId: 'office-of-the-inspector-general',
-      matchLevel: 9,
-      matches: [
-        {
-          id: 245,
-          name: 'Inspector General Office, Health and Human Services Department',
-          comparing: 'Office of the Inspector General',
-          rank: 9,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 244,
-          name: 'Inspector General Office, Agriculture Department',
-          comparing: 'Office of the Inspector General',
-          rank: 1,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 622,
-          name: 'Inspector General Office, Treasury Department',
-          comparing: 'Office of the Inspector General',
-          rank: 1,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Health and Human Services'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.usda.gov/oig/index.htm',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Inspector General was legislatively established in 1978 with the enactment of the Inspector General Act (Public Law 95-452). The act requires the Inspector General to independently and objectively perform audits and investigations of the Department's programs and operations; work with the Department's management team in activities that promote economy, efficiency, and effectiveness or that prevent and detect fraud and abuse in programs and operations, both within USDA and in non-Federal entities that receive USDA assistance. The Office also reports OIG activities to the Secretary and the U.S. Congress semiannually as of march 31 and September 30 each year. ",
-      id: 244,
-      logo: null,
-      name: 'Inspector General Office, Agriculture Department',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=244&order=newest',
-      short_name: 'OIG USDA',
-      slug: 'inspector-general-office-agriculture-department',
-      url: 'https://www.federalregister.gov/agencies/inspector-general-office-agriculture-department',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/244',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Office of the Inspector General',
-      budgetBureauTitleId: 'office-of-the-inspector-general',
-      matchLevel: 2,
-      matches: [
-        {
-          id: 244,
-          name: 'Inspector General Office, Agriculture Department',
-          comparing: 'Office of the Inspector General',
-          rank: 2,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 622,
-          name: 'Inspector General Office, Treasury Department',
-          comparing: 'Office of the Inspector General',
-          rank: 2,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Homeland Security'
-        }
-      ]
-    },
-    {
-      agency_url: 'https://www.whitehouse.gov/oncd/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Office of the National Cyber Director (ONCD) advises the President of the United States on cybersecurity policy and strategy. Established by Congress in 2021, ONCD is a component of the Executive Office of the President at the White House.\r\nONCD’s mission is to advance national security, economic prosperity, and technological innovation through cybersecurity policy leadership. In carrying out its directive, ONCD works closely with White House and interagency partners, as well as with all levels of government, America’s international allies and partners, non-profits, academia, and the private sector, to shape and coordinate federal cybersecurity policy.',
-      id: 613,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/613/thumb.jpg?1684781012',
-        small_url: 'https://agency-logos.federalregister.gov/613/small.jpg?1684781012',
-        medium_url: 'https://agency-logos.federalregister.gov/613/medium.jpg?1684781012'
-      },
-      name: 'Office of the National Cyber Director',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=613&order=newest',
-      short_name: 'ONCD',
-      slug: 'office-of-the-national-cyber-director',
-      url: 'https://www.federalregister.gov/agencies/office-of-the-national-cyber-director',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/613',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of the National Cyber Director',
-      budgetBureauTitleId: 'office-of-the-national-cyber-director',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=20&order=newest',
+      short_name: 'ABMC',
+      slug: 'american-battle-monuments-commission',
+      url: 'https://www.federalregister.gov/agencies/american-battle-monuments-commission',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/20',
+      budgetAgencyTitle: 'Other Defense (Civil Programs)',
+      budgetAgencyTitleId: 'other-defense-civil-programs',
+      budgetBureauTitle: 'American Battle Monuments Commission',
+      budgetBureauTitleId: 'american-battle-monuments-commission',
       exact: true
     },
     {
-      agency_url: 'https://www.whitehouse.gov/eop/',
-      child_ids: [2, 92, 93, 390, 611, 612, 613],
-      child_slugs: [
-        'administration-office-executive-office-of-the-president',
-        'council-on-environmental-quality',
-        'counsel-to-the-president',
-        'office-of-national-drug-control-policy',
-        'intellectual-property-enforcement-coordinator-office',
-        'national-space-council',
-        'office-of-the-national-cyber-director'
-      ],
+      agency_url: 'https://www.afrh.gov/afrh/',
+      child_ids: [],
+      child_slugs: [],
       description:
-        "Under authority of the Reorganization Act of 1939 (5 U.S.C. 133-133r, 133t note), various agencies were transferred to the Executive Office of the President by the President's Reorganization Plans I and II of 1939 (5 U.S.C. app.), effective July 1, 1939. Executive Order 8248 of September 8, 1939, established the divisions of the Executive Office and defined their functions. Subsequently, Presidents have used Executive orders, reorganization plans, and legislative initiatives to reorganize the Executive Office to make its composition compatible with the goals of their administrations.",
-      id: 538,
+        "The Armed Forces Retirement Home is the nation's oldest retirement community for enlisted military veterans. Established by Congress in 1851, a permanent trust fund was established and was fed by monthly, by active duty payroll deductions of 25 cents, when the average pay of a soldier was $7 a month. Fines and forfeitures from the armed forces and the monthly withholding have provided the principal support for the Home throughout its history. \r\n\r\nIn 1991, Congress incorporated the U.S. Naval Home in Gulfport, MS, and U.S. Soldiers' and Airmen's Home into an independent establishment in the Executive Branch of the Federal government known as the Armed Forces Retirement Home (AFRH). Each facility was maintained as a separate entity of the Retirement Home for administrative purposes. \r\n\r\nIn 2001, Congress renamed the U.S. Naval Home and the U.S. Soldiers' and Airmen's Home the Armed Forces Retirement Home - Gulfport and the Armed Forces Retirement Home - Washington, respectively. ",
+      id: 30,
       logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/538/thumb.jpg?1321893883',
-        small_url: 'https://agency-logos.federalregister.gov/538/small.jpg?1321893883',
-        medium_url: 'https://agency-logos.federalregister.gov/538/medium.jpg?1321893883'
+        thumb_url: 'https://agency-logos.federalregister.gov/30/thumb.png?1321309497',
+        small_url: 'https://agency-logos.federalregister.gov/30/small.png?1321309497',
+        medium_url: 'https://agency-logos.federalregister.gov/30/medium.png?1321309497'
       },
-      name: 'Executive Office of the President',
+      name: 'Armed Forces Retirement Home',
       parent_id: null,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=538&order=newest',
-      short_name: 'EOP',
-      slug: 'executive-office-of-the-president',
-      url: 'https://www.federalregister.gov/agencies/executive-office-of-the-president',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/538',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Office of the Secretary and Executive Management',
-      budgetBureauTitleId: 'office-of-the-secretary-and-executive-management',
-      matchLevel: 1,
-      matches: [
-        {
-          id: 538,
-          name: 'Executive Office of the President',
-          comparing: 'Office of the Secretary and Executive Management',
-          rank: 1,
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 280,
-          name: 'Management and Budget Office',
-          comparing: 'Office of the Secretary and Executive Management',
-          rank: 1,
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 406,
-          name: 'Personnel Management Office',
-          comparing: 'Office of the Secretary and Executive Management',
-          rank: 1,
-          comparingParent: 'Department of Homeland Security'
-        }
-      ]
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=30&order=newest',
+      short_name: 'AFRH',
+      slug: 'armed-forces-retirement-home',
+      url: 'https://www.federalregister.gov/agencies/armed-forces-retirement-home',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/30',
+      budgetAgencyTitle: 'Other Defense (Civil Programs)',
+      budgetAgencyTitleId: 'other-defense-civil-programs',
+      budgetBureauTitle: 'Armed Forces Retirement Home',
+      budgetBureauTitleId: 'armed-forces-retirement-home',
+      exact: true
     },
     {
       agency_url: null,
       child_ids: [],
       child_slugs: [],
       description:
-        'The Office of the United States Trade Representative was created as the Office of the Special Representative for Trade Negotiations by Executive Order 11075 of January 15, 1963. The Trade Act of 1974 (19 U.S.C. 2171) established the Office as an agency of the Executive Office of the President charged with administering the trade agreements program.\r\rThe Office of the United States Trade Representative is responsible for setting and administering overall trade policy. The Office is headed by the United States Trade Representative, a Cabinet-level official with the rank of Ambassador, who is directly responsible to the President. There are three Deputy United States Trade Representatives, who also hold the rank of Ambassador--two located in Washington and one in Geneva. The Chief Agricultural Negotiator also holds the rank of Ambassador.\r\rThe United States Trade Representative serves as an ex officio member of the Boards of Directors of the Export-Import Bank and the Overseas Private Investment Corporation, and serves on the National Advisory Council for International Monetary and Financial Policy.',
-      id: 491,
+        'The Selective Service System provides manpower to the Armed Forces in an emergency and operates an Alternative Service Program during a draft for men classified as conscientious objectors.\r \rThe Selective Service System was established by the Military Selective Service Act (50 U.S.C. app. 451-471a). The act requires the registration of male citizens of the United States and all other male persons who are in the United States and who are ages 18 to 25. The act exempts members of the active Armed Forces and nonimmigrant aliens. Proclamation 4771 of July 20, 1980, requires male persons born on or after January 1, 1960, and who have attained age 18 but have not attained age 26 to register. \r\rThe act imposes liability for training and service in the Armed \rForces upon registrants who are ages 18 to 26, except those who are exempt or deferred. Persons who have been deferred remain liable for training and service until age 35. Aliens are not liable for training and service until they have remained in the United States for more than \r1 year. Conscientious objectors who are found to be opposed to all service in the Armed Forces are required to perform civilian work in lieu of induction into the Armed Forces.\r\rThe authority to induct registrants, including doctors and allied medical specialists, expired July 1, 1973.',
+      id: 467,
       logo: null,
-      name: 'Trade Representative, Office of United States',
+      name: 'Selective Service System',
       parent_id: null,
       recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=491&order=newest',
-      short_name: 'USTR',
-      slug: 'trade-representative-office-of-united-states',
-      url: 'https://www.federalregister.gov/agencies/trade-representative-office-of-united-states',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/491',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of the United States Trade Representative',
-      budgetBureauTitleId: 'office-of-the-united-states-trade-representative',
-      matchLevel: 8,
-      matches: [
-        {
-          id: 491,
-          name: 'Trade Representative, Office of United States',
-          comparing: 'Office of the United States Trade Representative',
-          rank: 8,
-          comparingParent: 'Executive Office of the President'
-        },
-        {
-          id: 3,
-          name: 'Administrative Office of United States Courts',
-          comparing: 'Office of the United States Trade Representative',
-          rank: 2,
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: 'https://www.dol.gov/agencies/owcp',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Workers' Compensation Programs administers four major disability compensation programs which provide wage replacement benefits, medical treatment, vocational rehabilitation and other benefits to certain workers or their dependents who experience work-related injury or occupational disease. The program areas are:\r\n\r\nDivision of Federal Employees' Compensation. The Federal Employees' Compensation Act provides workers' compensation coverage to federal and postal workers around the world for employment-related injuries and occupational diseases. \r\nDivision of Energy Employees Occupational Illness Compensation. The Energy Employees Occupational Illness Compensation Program Act (EEOICPA) provides compensation and medical benefits to employees of the Department of Energy (DOE), its predecessor agencies, and its contractors and subcontractors, and employees of DOE designated Atomic Weapons Employers (AWE) and Beryllium Vendors who became ill as a result of work performed in the production and testing of nuclear weapons. Uranium miners, millers and ore transporters (or their eligible survivors) under Section 5 of the Radiation Exposure Compensation Act (RECA) administered by the Department of Justice may also be eligible for benefits under the EEOICPA under both Part B and Part E.\r\nDivision of Longshore and Harbor Workers' Compensation. Under the provisions of the Longshore and Harbor Workers' Compensation Act and its extensions (including the Defense Base Act) the Office provide information, technical and compliance assistance, support, and informal dispute resolution services to workers, employers, and insurers, and ensures that benefits are promptly and properly paid to minimize the impact of employment injuries and deaths on employees and their families.\r\nDivision of Coal Mine Workers' Compensation. The Black Lung Benefits Act provides benefits to coal miners who are totally disabled by black lung disease, and to their eligible survivors. Benefits include monthly compensation for disabled miners and survivors of miners whose deaths are attributable to black lung, and medical coverage for disabled miners' lung disease.",
-      id: 530,
-      logo: null,
-      name: "Workers' Compensation Programs Office",
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=530&order=newest',
-      short_name: 'OWCP',
-      slug: 'workers-compensation-programs-office',
-      url: 'https://www.federalregister.gov/agencies/workers-compensation-programs-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/530',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: "Office of Workers' Compensation Programs",
-      budgetBureauTitleId: 'office-of-workers-compensation-programs',
-      matchLevel: 13,
-      matches: [
-        {
-          id: 530,
-          name: "Workers' Compensation Programs Office",
-          comparing: "Office of Workers' Compensation Programs",
-          rank: 13,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 162,
-          name: 'Federal Contract Compliance Programs Office',
-          comparing: "Office of Workers' Compensation Programs",
-          rank: 4,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Labor'
-        },
-        {
-          id: 269,
-          name: 'Justice Programs Office',
-          comparing: "Office of Workers' Compensation Programs",
-          rank: 2,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Labor'
-        }
-      ]
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The mission of the Peace Corps is to help the people of interested countries in meeting their need for trained men and women, and to help promote better mutual understanding between Americans and citizens of other countries. \rThe Peace Corps was established by the Peace Corps Act of 1961, as amended (22 U.S.C. 2501), and was made an independent agency by title VI of the International Security and Development Cooperation Act of 1981 (22 U.S.C. 2501-1).\rThe Peace Corps consists of a Washington, DC, headquarters; 9 area offices; and overseas operations in 76 countries, utilizing nearly 8,000 volunteers.',
-      id: 403,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/403/thumb.png?1279151291',
-        small_url: 'https://agency-logos.federalregister.gov/403/small.png?1279151291',
-        medium_url: 'https://agency-logos.federalregister.gov/403/medium.png?1279151291'
-      },
-      name: 'Peace Corps',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=403&order=newest',
-      short_name: 'PC',
-      slug: 'peace-corps',
-      url: 'https://www.federalregister.gov/agencies/peace-corps',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/403',
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'Peace Corps',
-      budgetBureauTitleId: 'peace-corps',
+        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=467&order=newest',
+      short_name: 'SSS',
+      slug: 'selective-service-system',
+      url: 'https://www.federalregister.gov/agencies/selective-service-system',
+      json_url: 'https://www.federalregister.gov/api/v1/agencies/467',
+      budgetAgencyTitle: 'Other Defense (Civil Programs)',
+      budgetAgencyTitleId: 'other-defense-civil-programs',
+      budgetBureauTitle: 'Selective Service System',
+      budgetBureauTitleId: 'selective-service-system',
       exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Pension Benefit Guaranty Corporation protects the pension benefits of nearly 44 million Americans who participate in defined-benefit \rpension plans sponsored by private-sector employees.\r\rThe Pension Benefit Guaranty Corporation (PBGC) is a self-financing, wholly owned Government corporation subject to the Government \rCorporation Control Act (31 U.S.C. 9101-9109). The Corporation, established by title IV of the Employee Retirement Income Security Act \rof 1974 (29 U.S.C. 1301-1461), operates in accordance with policies established by its Board of Directors, which consists of the Secretaries \rof Labor, Commerce, and the Treasury. The Secretary of Labor is Chairman of the Board. A seven-member Advisory Committee, composed of two labor, two business, and three public members appointed by the President, advises the agency on investment issues.',
-      id: 405,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/405/thumb.png?1279162140',
-        small_url: 'https://agency-logos.federalregister.gov/405/small.png?1279162140',
-        medium_url: 'https://agency-logos.federalregister.gov/405/medium.png?1279162140'
-      },
-      name: 'Pension Benefit Guaranty Corporation',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=405&order=newest',
-      short_name: 'PBGC',
-      slug: 'pension-benefit-guaranty-corporation',
-      url: 'https://www.federalregister.gov/agencies/pension-benefit-guaranty-corporation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/405',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Pension Benefit Guaranty Corporation',
-      budgetBureauTitleId: 'pension-benefit-guaranty-corporation',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Pipeline and Hazardous Materials Safety Administration (PHMSA) was established on November 20, 2004 under the Norman Y. Mineta Research and Special Programs Improvement Act of 2004 (Pub. L. 108-426).\r\n\r\n PHMSA was created to protect the American public and the environment by ensuring the safe and secure movement of hazardous materials to industry and consumers by all transportation modes, including the nation's pipelines. Through PHMSA, the Department develops and enforces regulations for the safe, reliable, and environmentally sound operation of the nation's 2.3 million mile pipeline transportation system and the nearly 1 million daily shipments of hazardous materials by land, sea, and air.\r\n",
-      id: 408,
-      logo: null,
-      name: 'Pipeline and Hazardous Materials Safety Administration',
-      parent_id: 492,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=408&order=newest',
-      short_name: 'PHMSA',
-      slug: 'pipeline-and-hazardous-materials-safety-administration',
-      url: 'https://www.federalregister.gov/agencies/pipeline-and-hazardous-materials-safety-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/408',
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Pipeline and Hazardous Materials Safety Administration',
-      budgetBureauTitleId: 'pipeline-and-hazardous-materials-safety-administration',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'In 1970, President Richard M. Nixon issued an executive order that created the Office of Policy Development, with jurisdiction over economic and domestic policy. \r\n \r\nThe Office of Policy Development is comprised of the Domestic Policy Council and the National Economic Council, which are responsible for advising and assisting the President in the formulation, coordination, and implementation of domestic and economic policy. The Office of Policy Development also provides support for other policy development and implementation activities as directed by the President.\r\nIn 1993, President William J. Clinton split the Office of Policy Development, forming the present Domestic Policy Council and the National Economic Council.\r\n\r\nSource: http://system.uslegal.com/executive-branch/office-of-policy-development\r\n',
-      id: 391,
-      logo: null,
-      name: 'Office of Policy Development',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=391&order=newest',
-      short_name: null,
-      slug: 'office-of-policy-development',
-      url: 'https://www.federalregister.gov/agencies/office-of-policy-development',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/391',
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Policy Development and Research',
-      budgetBureauTitleId: 'policy-development-and-research',
-      matchLevel: 2,
-      matches: [
-        {
-          id: 391,
-          name: 'Office of Policy Development',
-          comparing: 'Policy Development and Research',
-          rank: 2,
-          comparingParent: 'Department of Housing and Urban Development'
-        }
-      ]
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Alaska Power Administration was established by the Secretary of the Interior in 1967. The Administration was abolished and its responsibilities transferred to the Department of Energy by act of August 4, 1977 (91 Stat. 578).',
-      id: 17,
-      logo: null,
-      name: 'Alaska Power Administration',
-      parent_id: 136,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=17&order=newest',
-      short_name: 'APA',
-      slug: 'alaska-power-administration',
-      url: 'https://www.federalregister.gov/agencies/alaska-power-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/17',
-      budgetAgencyTitle: 'Department of Energy',
-      budgetAgencyTitleId: 'department-of-energy',
-      budgetBureauTitle: 'Power Marketing Administration',
-      budgetBureauTitleId: 'power-marketing-administration',
-      matchLevel: 7,
-      matches: [
-        {
-          id: 17,
-          name: 'Alaska Power Administration',
-          comparing: 'Power Marketing Administration',
-          rank: 7,
-          parent: 'Energy Department',
-          comparingParent: 'Department of Energy'
-        },
-        {
-          id: 40,
-          name: 'Bonneville Power Administration',
-          comparing: 'Power Marketing Administration',
-          rank: 7,
-          parent: 'Energy Department',
-          comparingParent: 'Department of Energy'
-        },
-        {
-          id: 471,
-          name: 'Southeastern Power Administration',
-          comparing: 'Power Marketing Administration',
-          rank: 7,
-          parent: 'Energy Department',
-          comparingParent: 'Department of Energy'
-        },
-        {
-          id: 472,
-          name: 'Southwestern Power Administration',
-          comparing: 'Power Marketing Administration',
-          rank: 7,
-          parent: 'Energy Department',
-          comparingParent: 'Department of Energy'
-        },
-        {
-          id: 525,
-          name: 'Western Area Power Administration',
-          comparing: 'Power Marketing Administration',
-          rank: 6,
-          parent: 'Energy Department',
-          comparingParent: 'Department of Energy'
-        }
-      ]
     },
     {
       agency_url: '',
@@ -7662,28 +8572,6 @@ export default {
       budgetAgencyTitleId: 'privacy-and-civil-liberties-oversight-board',
       budgetBureauTitle: 'Privacy and Civil Liberties Oversight Board',
       budgetBureauTitleId: 'privacy-and-civil-liberties-oversight-board',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Program Support Center provides information concerning fee-for-service activities in the areas of acquisitions, occupational health, information technology support, human resources, financial management, and administrative operations.',
-      id: 439,
-      logo: null,
-      name: 'Program Support Center',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=439&order=newest',
-      short_name: 'PSC',
-      slug: 'program-support-center',
-      url: 'https://www.federalregister.gov/agencies/program-support-center',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/439',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Program Support Center',
-      budgetBureauTitleId: 'program-support-center',
       exact: true
     },
     {
@@ -7735,161 +8623,6 @@ export default {
       child_ids: [],
       child_slugs: [],
       description:
-        "The role of USDA's Risk Management Agency (RMA) is to help producers manage their business risks through effective, market-based risk management solutions. RMA's mission is to promote, support, and regulate sound risk management solutions to preserve and strengthen the economic stability of America's agricultural producers. As part of this mission, RMA operates and manages the Federal Crop Insurance Corporation (FCIC). RMA was created in 1996; the FCIC was founded in 1938. ",
-      id: 454,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/454/thumb.png?1279151351',
-        small_url: 'https://agency-logos.federalregister.gov/454/small.png?1279151351',
-        medium_url: 'https://agency-logos.federalregister.gov/454/medium.png?1279151351'
-      },
-      name: 'Risk Management Agency',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=454&order=newest',
-      short_name: 'RMA',
-      slug: 'risk-management-agency',
-      url: 'https://www.federalregister.gov/agencies/risk-management-agency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/454',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Risk Management Agency',
-      budgetBureauTitleId: 'risk-management-agency',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The mission of the Rural Business-Cooperative Service (RBS) is to enhance the quality of life for all rural Americans by providing leadership in building competitive businesses and sustainable cooperatives that can prosper in the global marketplace. To meet business credit needs in under-served areas, RBS business programs are usually leveraged with commercial, cooperative, or other private sector lenders.',
-      id: 456,
-      logo: null,
-      name: 'Rural Business-Cooperative Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=456&order=newest',
-      short_name: 'RBS',
-      slug: 'rural-business-cooperative-service',
-      url: 'https://www.federalregister.gov/agencies/rural-business-cooperative-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/456',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Rural Business-Cooperative Service',
-      budgetBureauTitleId: 'rural-business-cooperative-service',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Rural Housing and Community Development Service (RHCDS) was established by an act of October 13, 1994 (108 Stat. 3219). The Service operated under the Consolidated Farm and Rural Development Act (7 U.S.C. 1921) and title V of the Housing Act of 1949 (42 U.S.C. 1471).\r\n\r\nRHCDS provided loans to rural residents who were unable to get credit \r\nfrom commercial sources at reasonable rates and terms and who had a \r\nreasonable chance for success. In addition, The Service guaranteed loans made by commercial lenders for modest rural housing. RHCDS also made direct loans to low-income rural residents.\r\n\r\nRHCDS was renamed Rural Housing Service as of January 30, 1996.\r\n',
-      id: 457,
-      logo: null,
-      name: 'Rural Housing and Community Development Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=457&order=newest',
-      short_name: 'RHCDS',
-      slug: 'rural-housing-and-community-development-service',
-      url: 'https://www.federalregister.gov/agencies/rural-housing-and-community-development-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/457',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Rural Development',
-      budgetBureauTitleId: 'rural-development',
-      matchLevel: 6,
-      matches: [
-        {
-          id: 457,
-          name: 'Rural Housing and Community Development Service',
-          comparing: 'Rural Development',
-          rank: 6,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Agriculture'
-        }
-      ]
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Rural Housing Service (RHS) provides affordable rental housing, homeownership opportunities, and essential community facilities to rural Americans through a broad array of direct loan, guarantee, and grant programs. Rural residents and communities may inquire about any of these programs through local and State rural development offices.',
-      id: 458,
-      logo: null,
-      name: 'Rural Housing Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=458&order=newest',
-      short_name: 'RHS',
-      slug: 'rural-housing-service',
-      url: 'https://www.federalregister.gov/agencies/rural-housing-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/458',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Rural Housing Service',
-      budgetBureauTitleId: 'rural-housing-service',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Rural Utilities Service (RUS) is a credit agency that assists rural electric and telecommunications utilities in obtaining financing and administers a nationwide water and waste loan and grant program to improve the quality of life and promote economic development in rural America. A total of 890 rural electric and 800 rural telecommunications utilities in 47 States, Puerto Rico, the Virgin Islands, Guam, the Republic of the Marshall Islands, the Northern Mariana Islands, and the Federated States of Micronesia have received financial assistance. Approximately 7,200 rural communities are currently served through financial assistance received from water and waste loans and grants.',
-      id: 460,
-      logo: null,
-      name: 'Rural Utilities Service',
-      parent_id: 12,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=460&order=newest',
-      short_name: 'RUS',
-      slug: 'rural-utilities-service',
-      url: 'https://www.federalregister.gov/agencies/rural-utilities-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/460',
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Rural Utilities Service',
-      budgetBureauTitleId: 'rural-utilities-service',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'Congress established the Office of Science and Technology Policy in 1976 with a broad mandate to advise the President and others within the Executive Office of the President on the effects of science and technology on domestic and international affairs. The 1976 Act also authorizes OSTP to lead interagency efforts to develop and implement sound science and technology policies and budgets, and to work with the private sector, state and local governments, the science and higher education communities, and other nations toward this end.\r\rThe mission of the Office of Science and Technology Policy is threefold; first, to provide the President and his senior staff with accurate, relevant, and timely scientific and technical advice on all matters of consequence; second, to ensure that the policies of the Executive Branch are informed by sound science; and third, to ensure that the scientific and technical work of the Executive Branch is properly coordinated so as to provide the greatest benefit to society.',
-      id: 464,
-      logo: null,
-      name: 'Science and Technology Policy Office',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=464&order=newest',
-      short_name: 'OSTP',
-      slug: 'science-and-technology-policy-office',
-      url: 'https://www.federalregister.gov/agencies/science-and-technology-policy-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/464',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Science and Technology',
-      budgetBureauTitleId: 'science-and-technology',
-      matchLevel: 2,
-      matches: [
-        {
-          id: 464,
-          name: 'Science and Technology Policy Office',
-          comparing: 'Science and Technology',
-          rank: 2,
-          comparingParent: 'Department of Homeland Security'
-        }
-      ]
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
         'The Securities and Exchange Commission administers Federal securities laws that seek to provide protection for investors; to ensure that securities markets are fair and honest; and, when necessary, to provide the means to enforce securities laws through sanctions.\r\rThe Securities and Exchange Commission (SEC) was created under authority of the Securities Exchange Act of 1934 (15 U.S.C. 78a-78jj) and was organized on July 2, 1934. The Commission serves as adviser to United States district courts in connection with reorganization proceedings for debtor corporations in which there is a substantial public interest. The Commission also has certain responsibilities under section 15 of the Bretton Woods Agreements Act of 1945 (22 U.S.C. 286k-1) and section 851(e) of the Internal Revenue Code of 1954 (26 U.S.C. 851(e)).\r\rThe Commission is vested with quasi-judicial functions. Persons aggrieved by its decisions in the exercise of those functions have a right of review by the United States courts of appeals.',
       id: 466,
       logo: {
@@ -7909,28 +8642,6 @@ export default {
       budgetAgencyTitleId: 'securities-and-exchange-commission',
       budgetBureauTitle: 'Securities and Exchange Commission',
       budgetBureauTitleId: 'securities-and-exchange-commission',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Selective Service System provides manpower to the Armed Forces in an emergency and operates an Alternative Service Program during a draft for men classified as conscientious objectors.\r \rThe Selective Service System was established by the Military Selective Service Act (50 U.S.C. app. 451-471a). The act requires the registration of male citizens of the United States and all other male persons who are in the United States and who are ages 18 to 25. The act exempts members of the active Armed Forces and nonimmigrant aliens. Proclamation 4771 of July 20, 1980, requires male persons born on or after January 1, 1960, and who have attained age 18 but have not attained age 26 to register. \r\rThe act imposes liability for training and service in the Armed \rForces upon registrants who are ages 18 to 26, except those who are exempt or deferred. Persons who have been deferred remain liable for training and service until age 35. Aliens are not liable for training and service until they have remained in the United States for more than \r1 year. Conscientious objectors who are found to be opposed to all service in the Armed Forces are required to perform civilian work in lieu of induction into the Armed Forces.\r\rThe authority to induct registrants, including doctors and allied medical specialists, expired July 1, 1973.',
-      id: 467,
-      logo: null,
-      name: 'Selective Service System',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=467&order=newest',
-      short_name: 'SSS',
-      slug: 'selective-service-system',
-      url: 'https://www.federalregister.gov/agencies/selective-service-system',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/467',
-      budgetAgencyTitle: 'Other Defense (Civil Programs)',
-      budgetAgencyTitleId: 'other-defense-civil-programs',
-      budgetBureauTitle: 'Selective Service System',
-      budgetBureauTitleId: 'selective-service-system',
       exact: true
     },
     {
@@ -8089,226 +8800,6 @@ export default {
       ]
     },
     {
-      agency_url: 'https://www.whitehouse.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Office of Counsel to the President was created in 1943, and is responsible for advising on all legal aspects of policy questions, legal issues arising in connection with the President's decision to sign or veto legislation, ethical questions, financial disclosures, and conflicts of interest during employment and post employment. The Counsel's Office also helps define the line between official and political activities, oversees executive appointments and judicial selection, handles Presidential pardons, reviews legislation and Presidential statements, and handles lawsuits against the President in his role as President, as well as serving as the White House Contact for the Department of Justice.",
-      id: 93,
-      logo: null,
-      name: 'Counsel to the President',
-      parent_id: 538,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=93&order=newest',
-      short_name: null,
-      slug: 'counsel-to-the-president',
-      url: 'https://www.federalregister.gov/agencies/counsel-to-the-president',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/93',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Special Assistance to the President and the Official Residence',
-      budgetBureauTitleId: 'special-assistance-to-the-president-and-the-official-residence',
-      matchLevel: 6,
-      matches: [
-        {
-          id: 93,
-          name: 'Counsel to the President',
-          comparing: 'Special Assistance to the President and the Official Residence',
-          rank: 6,
-          parent: 'Executive Office of the President',
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.ojp.usdoj.gov/',
-      child_ids: [523],
-      child_slugs: ['victims-of-crime-office'],
-      description:
-        'The Office of Justice Programs (OJP) provides innovative leadership to federal, state, local, and tribal justice systems, by disseminating state-of-the art knowledge and practices across America, and providing grants for the implementation of these crime fighting strategies. Because most of the responsibility for crime control and prevention falls to law enforcement officers in states, cities, and neighborhoods, the federal government can be effective in these areas only to the extent that it can enter into partnerships with these officers. Therefore, OJP does not directly carry out law enforcement and justice activities. Instead, OJP works in partnership with the justice community to identify the most pressing crime-related challenges confronting the justice system and to provide information, training, coordination, and innovative strategies and approaches for addressing these challenges.',
-      id: 269,
-      logo: null,
-      name: 'Justice Programs Office',
-      parent_id: 268,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=269&order=newest',
-      short_name: 'OJP',
-      slug: 'justice-programs-office',
-      url: 'https://www.federalregister.gov/agencies/justice-programs-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/269',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'State, Local, and Tribal Justice Assistance Programs',
-      budgetBureauTitleId: 'state-local-and-tribal-justice-assistance-programs',
-      matchLevel: 4,
-      matches: [
-        {
-          id: 269,
-          name: 'Justice Programs Office',
-          comparing: 'State, Local, and Tribal Justice Assistance Programs',
-          rank: 4,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Justice'
-        }
-      ]
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Substance Abuse and Mental Health Services Administration (SAMHSA) funds and administers grant programs and contracts that support, expand, enhance, and improve the quality, availability, and range of substance abuse treatment and mental health services. SAMHSA has a matrix management system that outlines and guides its activities to improve the accountability, capacity, and effectiveness of the Nation's substance abuse prevention, addictions treatment, and mental health service delivery systems. The system includes 11 program priority areas: co-occurring disorders, substance abuse treatment capacity, seclusion and restraint, children and families, mental health system transformation, suicide prevention, homelessness, older adults, HIV/AIDS and Hepatitis, criminal and juvenile, and workforce development.",
-      id: 479,
-      logo: null,
-      name: 'Substance Abuse and Mental Health Services Administration',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=479&order=newest',
-      short_name: 'SAMHSA',
-      slug: 'substance-abuse-and-mental-health-services-administration',
-      url: 'https://www.federalregister.gov/agencies/substance-abuse-and-mental-health-services-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/479',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Substance Abuse and Mental Health Services Administration',
-      budgetBureauTitleId: 'substance-abuse-and-mental-health-services-administration',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Substance Abuse and Mental Health Services Administration (SAMHSA) funds and administers grant programs and contracts that support, expand, enhance, and improve the quality, availability, and range of substance abuse treatment and mental health services. SAMHSA has a matrix management system that outlines and guides its activities to improve the accountability, capacity, and effectiveness of the Nation's substance abuse prevention, addictions treatment, and mental health service delivery systems. The system includes 11 program priority areas: co-occurring disorders, substance abuse treatment capacity, seclusion and restraint, children and families, mental health system transformation, suicide prevention, homelessness, older adults, HIV/AIDS and Hepatitis, criminal and juvenile, and workforce development.",
-      id: 479,
-      logo: null,
-      name: 'Substance Abuse and Mental Health Services Administration',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=479&order=newest',
-      short_name: 'SAMHSA',
-      slug: 'substance-abuse-and-mental-health-services-administration',
-      url: 'https://www.federalregister.gov/agencies/substance-abuse-and-mental-health-services-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/479',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Substance Abuse And Mental Health Services Administration',
-      budgetBureauTitleId: 'substance-abuse-and-mental-health-services-administration',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Substance Abuse and Mental Health Services Administration (SAMHSA) funds and administers grant programs and contracts that support, expand, enhance, and improve the quality, availability, and range of substance abuse treatment and mental health services. SAMHSA has a matrix management system that outlines and guides its activities to improve the accountability, capacity, and effectiveness of the Nation's substance abuse prevention, addictions treatment, and mental health service delivery systems. The system includes 11 program priority areas: co-occurring disorders, substance abuse treatment capacity, seclusion and restraint, children and families, mental health system transformation, suicide prevention, homelessness, older adults, HIV/AIDS and Hepatitis, criminal and juvenile, and workforce development.",
-      id: 479,
-      logo: null,
-      name: 'Substance Abuse and Mental Health Services Administration',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=479&order=newest',
-      short_name: 'SAMHSA',
-      slug: 'substance-abuse-and-mental-health-services-administration',
-      url: 'https://www.federalregister.gov/agencies/substance-abuse-and-mental-health-services-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/479',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Substance use And Mental Health Services Administration',
-      budgetBureauTitleId: 'substance-use-and-mental-health-services-administration',
-      matchLevel: 18,
-      matches: [
-        {
-          id: 479,
-          name: 'Substance Abuse and Mental Health Services Administration',
-          comparing: 'Substance use And Mental Health Services Administration',
-          rank: 18,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 222,
-          name: 'Health Resources and Services Administration',
-          comparing: 'Substance use And Mental Health Services Administration',
-          rank: 10,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 559,
-          name: 'Health Care Finance Administration',
-          comparing: 'Substance use And Mental Health Services Administration',
-          rank: 6,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 245,
-          name: 'Inspector General Office, Health and Human Services Department',
-          comparing: 'Substance use And Mental Health Services Administration',
-          rank: 3,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        }
-      ]
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Substance Abuse and Mental Health Services Administration (SAMHSA) funds and administers grant programs and contracts that support, expand, enhance, and improve the quality, availability, and range of substance abuse treatment and mental health services. SAMHSA has a matrix management system that outlines and guides its activities to improve the accountability, capacity, and effectiveness of the Nation's substance abuse prevention, addictions treatment, and mental health service delivery systems. The system includes 11 program priority areas: co-occurring disorders, substance abuse treatment capacity, seclusion and restraint, children and families, mental health system transformation, suicide prevention, homelessness, older adults, HIV/AIDS and Hepatitis, criminal and juvenile, and workforce development.",
-      id: 479,
-      logo: null,
-      name: 'Substance Abuse and Mental Health Services Administration',
-      parent_id: 221,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=479&order=newest',
-      short_name: 'SAMHSA',
-      slug: 'substance-abuse-and-mental-health-services-administration',
-      url: 'https://www.federalregister.gov/agencies/substance-abuse-and-mental-health-services-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/479',
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Substance Use And Mental Health Services Administration',
-      budgetBureauTitleId: 'substance-use-and-mental-health-services-administration',
-      matchLevel: 16,
-      matches: [
-        {
-          id: 479,
-          name: 'Substance Abuse and Mental Health Services Administration',
-          comparing: 'Substance Use And Mental Health Services Administration',
-          rank: 16,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 222,
-          name: 'Health Resources and Services Administration',
-          comparing: 'Substance Use And Mental Health Services Administration',
-          rank: 10,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 559,
-          name: 'Health Care Finance Administration',
-          comparing: 'Substance Use And Mental Health Services Administration',
-          rank: 6,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        },
-        {
-          id: 245,
-          name: 'Inspector General Office, Health and Human Services Department',
-          comparing: 'Substance Use And Mental Health Services Administration',
-          rank: 3,
-          parent: 'Health and Human Services Department',
-          comparingParent: 'Department of Health and Human Services'
-        }
-      ]
-    },
-    {
       agency_url: 'https://www.stb.gov',
       child_ids: [],
       child_slugs: [],
@@ -8332,85 +8823,6 @@ export default {
       budgetAgencyTitleId: 'surface-transportation-board',
       budgetBureauTitle: 'Surface Transportation Board',
       budgetBureauTitleId: 'surface-transportation-board',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The White House Office serves the President in the performance of the many detailed activities incident to his immediate office.\r\rThe President's staff facilitates and maintains communication with the Congress, the heads of executive agencies, the press and other information media, and the general public. \r\rThe various Assistants to the President aid the President in such matters as he may direct.",
-      id: 487,
-      logo: null,
-      name: 'The White House Office',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=487&order=newest',
-      short_name: null,
-      slug: 'the-white-house-office',
-      url: 'https://www.federalregister.gov/agencies/the-white-house-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/487',
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'The White House',
-      budgetBureauTitleId: 'the-white-house',
-      matchLevel: 5,
-      matches: [
-        {
-          id: 487,
-          name: 'The White House Office',
-          comparing: 'The White House',
-          rank: 5,
-          comparingParent: 'Executive Office of the President'
-        }
-      ]
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Trade and Development Agency advances economic development and U.S. commercial interest in developing and middle-income countries in the following regions of the world: East Asia, Europe and Eurasia, Latin America and the Caribbean, Middle East and North Africa, South and Southeast Asia, and Sub-Saharan Africa.\r \rThe Trade and Development Program was established on July 1, 1980, as a component organization of the International Development Cooperation Agency. Section 2204 of the Omnibus Trade and Competitiveness Act of 1988 (22 U.S.C. 2421) made it a separate component agency. The organization was renamed the Trade and Development Agency (USTDA) and made an independent agency within the executive branch of the Federal Government on October 28, 1992, by the Jobs Through Exports Act of 1992 (22 U.S.C. 2421).',
-      id: 490,
-      logo: null,
-      name: 'Trade and Development Agency',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=490&order=newest',
-      short_name: 'USTDA',
-      slug: 'trade-and-development-agency',
-      url: 'https://www.federalregister.gov/agencies/trade-and-development-agency',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/490',
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'Trade and Development Agency',
-      budgetBureauTitleId: 'trade-and-development-agency',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.tsa.gov',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Transportation Security Administration (TSA) was created in the wake of 9/11 to strengthen the security of the nation’s transportation systems while ensuring the freedom of movement for people and commerce. Originally established as a subagency of  the Department of Transportation, TSA was transferred to the Department of Homeland Security in March of 2003.\r\n\r\nIn March 2003, TSA transferred from the Department of Transportation to the Department of Homeland Security.\r\n\r\nTSA employs a risk-based strategy to secure U.S. transportation systems, working closely with stakeholders in aviation, rail, transit, highway, and pipeline sectors, as well as the partners in the law enforcement and intelligence community. The agency will continuously set the standard for excellence in transportation security through its people, processes, technologies and use of intelligence to drive operations.\r\n\r\n \r\n',
-      id: 494,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/494/thumb.png?1324408023',
-        small_url: 'https://agency-logos.federalregister.gov/494/small.png?1324408023',
-        medium_url: 'https://agency-logos.federalregister.gov/494/medium.png?1324408023'
-      },
-      name: 'Transportation Security Administration',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=494&order=newest',
-      short_name: 'TSA',
-      slug: 'transportation-security-administration',
-      url: 'https://www.federalregister.gov/agencies/transportation-security-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/494',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Transportation Security Administration',
-      budgetBureauTitleId: 'transportation-security-administration',
       exact: true
     },
     {
@@ -8449,242 +8861,6 @@ export default {
       ]
     },
     {
-      agency_url: 'http://www.cbp.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The U.S. Customs and Border Protection was established on March 1, 2003 in the Directorate for Border and Transportation Security, Department of Homeland Security.\r\n\r\nU.S. Customs and Border Protection is responsible for guarding nearly 7,000 miles of land border the United States shares with Canada and Mexico and 2,000 miles of coastal waters surrounding the Florida peninsula and off the coast of Southern California. The agency also protects 95,000 miles of maritime border in partnership with the United States Coast Guard.\r\n \r\nCBP’s priority mission is to prevent terrorists and terrorist weapons from entering the United States and ensuring the security of our nation at America's borders and ports of entry. We must maintain this line of defense while allowing legitimate travel and trade that is vital to our economy and way of life. \r\nCBP is responsible for apprehending individuals attempting to enter the United States illegally; stemming the flow of illegal drugs and other contraband; protecting our agricultural and economic interests from harmful pests and diseases; protecting American businesses from theft of their intellectual property; and regulating and facilitating international trade, collecting import duties, and enforcing U.S. trade laws.\r\n__________\r\n\r\nSource:  https://www.cbp.gov/about.\r\n",
-      id: 501,
-      logo: null,
-      name: 'U.S. Customs and Border Protection',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=501&order=newest',
-      short_name: 'USCBP',
-      slug: 'u-s-customs-and-border-protection',
-      url: 'https://www.federalregister.gov/agencies/u-s-customs-and-border-protection',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/501',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'U.S. Customs and Border Protection',
-      budgetBureauTitleId: 'us-customs-and-border-protection',
-      exact: true
-    },
-    {
-      agency_url: 'http://www.ice.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'Immigration and Customs Enforcement (ICE) was created in 2003 pursuant to the Homeland Security Act of 2002. \r\n\r\nFormed by the merger of the U.S. Customs Service and the Immigration and Naturalization Service, ICE is the principal investigative arm of the U.S. Department of Homeland Security (DHS) and the second largest investigative agency in the federal government. Its primary responsibility is the identification and elimination of border, economic, transportation, and infrastructure security vulnerabilities.\r\n',
-      id: 503,
-      logo: null,
-      name: 'U.S. Immigration and Customs Enforcement',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=503&order=newest',
-      short_name: 'ICE',
-      slug: 'u-s-immigration-and-customs-enforcement',
-      url: 'https://www.federalregister.gov/agencies/u-s-immigration-and-customs-enforcement',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/503',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'U.S. Immigration and Customs Enforcement',
-      budgetBureauTitleId: 'us-immigration-and-customs-enforcement',
-      exact: true
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The United States Patent and Trademark Office (USPTO) was established by the act of July 19, 1952 (35 U.S.C. 1) \"to promote the progress of science and the useful arts by securing for limited times to inventors the exclusive right to their respective discoveries for a certain period of time'' (Article I, Section 8 of the United States Constitution). The registration of trademarks is based on the commerce clause of the U.S. Constitution.\r\rUSPTO examines and issues patents. There are three major patent categories: utility patents, design patents, and plant patents. USPTO also issues statutory invention registrations and processes international patent applications.\r\rThrough the registration of trademarks, USPTO assists businesses in protecting their investments, promoting goods and services, and safeguarding consumers against confusion and deception in the marketplace. A trademark includes any distinctive word, name, symbol, device, or any combination thereof adopted and used or intended to be used by a manufacturer or merchant to identify his goods or services and distinguish them from those manufactured or sold by others. Trademarks are examined by the Office for compliance with various statutory requirements to prevent unfair competition and consumer deception.\r\rIn addition to the examination of patent and trademark applications, issuance of patents, and registration of trademarks, USPTO advises and assists government agencies and officials in matters involving all domestic and global aspects of intellectual property. USPTO also promotes an understanding of intellectual property protection.",
-      id: 402,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/402/thumb.png?1279151273',
-        small_url: 'https://agency-logos.federalregister.gov/402/small.png?1279151273',
-        medium_url: 'https://agency-logos.federalregister.gov/402/medium.png?1279151273'
-      },
-      name: 'Patent and Trademark Office',
-      parent_id: 54,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=402&order=newest',
-      short_name: 'PTO',
-      slug: 'patent-and-trademark-office',
-      url: 'https://www.federalregister.gov/agencies/patent-and-trademark-office',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/402',
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'U.S. Patent and Trademark Office',
-      budgetBureauTitleId: 'us-patent-and-trademark-office',
-      matchLevel: 10,
-      matches: [
-        {
-          id: 402,
-          name: 'Patent and Trademark Office',
-          comparing: 'U.S. Patent and Trademark Office',
-          rank: 10,
-          parent: 'Commerce Department',
-          comparingParent: 'Department of Commerce'
-        },
-        {
-          id: 597,
-          name: 'U.S. Codex Office',
-          comparing: 'U.S. Patent and Trademark Office',
-          rank: 2,
-          parent: 'Agriculture Department',
-          comparingParent: 'Department of Commerce'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.uscg.mil/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The United States Coast Guard was established by act of January 28, 1915 (14 U.S.C. 1) and became a component of the Department of Transportation on April 1, 1967, pursuant to the Department of Transportation Act of October 15, 1966. Following the enactment of the Homeland Security Act of 2002, The Coast Guard was transferred from Department of Transportation to the Department of Homeland Security on March 1, 2003 (116 Stat. 2135).\r\n\r\nThe Coast Guard protects the public, the environment, and U.S. economic interests in the Nation's ports and waterways, along the coast, on international waters, or in any maritime region, as required, to support national security. Among its duties are: search and rescue operations in and over the high seas and navigable waters, maritime law enforcement, marine inspection and licensing, pilotage of the Great Lakes, protection of the marine environment by enforcing the Federal Water Pollution Control Act, ensuring the safety and security of ports and anchorages, maintaining the management of waterways, providing navigational aids, and regulating the construction, maintenance and operation of bridges and causeways across navigable waters.",
-      id: 53,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/53/thumb.jpg?1321388388',
-        small_url: 'https://agency-logos.federalregister.gov/53/small.jpg?1321388388',
-        medium_url: 'https://agency-logos.federalregister.gov/53/medium.jpg?1321388388'
-      },
-      name: 'Coast Guard',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=53&order=newest',
-      short_name: 'USCG',
-      slug: 'coast-guard',
-      url: 'https://www.federalregister.gov/agencies/coast-guard',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/53',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'United States Coast Guard',
-      budgetBureauTitleId: 'united-states-coast-guard',
-      matchLevel: 9,
-      matches: [
-        {
-          id: 53,
-          name: 'Coast Guard',
-          comparing: 'United States Coast Guard',
-          rank: 9,
-          parent: 'Homeland Security Department',
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 513,
-          name: 'United States Mint',
-          comparing: 'United States Coast Guard',
-          rank: 1,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Homeland Security'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.fws.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The U.S. Fish and Wildlife Service is the only agency in the Federal government whose primary responsibility is the conservation and management of fish, wildlife, plants and their habitats for the American people. Its origins date back to 1871 when Congress established the U.S. Commission of Fish and Fisheries to study why the nation’s food fishes were decreasing and recommend ways to reverse that decline. A second predecessor agency, the Bureau of Biological Survey, was established in 1885. In 1939, Fisheries and Biological Survey were moved to the Department of the Interior, and on June 30, 1940, they were combined to create the U.S. Fish and Wildlife Service.',
-      id: 197,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/197/thumb.png?1322081285',
-        small_url: 'https://agency-logos.federalregister.gov/197/small.png?1322081285',
-        medium_url: 'https://agency-logos.federalregister.gov/197/medium.png?1322081285'
-      },
-      name: 'Fish and Wildlife Service',
-      parent_id: 253,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=197&order=newest',
-      short_name: 'FWS',
-      slug: 'fish-and-wildlife-service',
-      url: 'https://www.federalregister.gov/agencies/fish-and-wildlife-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/197',
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'United States Fish and Wildlife Service',
-      budgetBureauTitleId: 'united-states-fish-and-wildlife-service',
-      matchLevel: 9,
-      matches: [
-        {
-          id: 197,
-          name: 'Fish and Wildlife Service',
-          comparing: 'United States Fish and Wildlife Service',
-          rank: 9,
-          parent: 'Interior Department',
-          comparingParent: 'Department of the Interior'
-        },
-        {
-          id: 512,
-          name: 'United States Marshals Service',
-          comparing: 'United States Fish and Wildlife Service',
-          rank: 4,
-          parent: 'Justice Department',
-          comparingParent: 'Department of the Interior'
-        },
-        {
-          id: 513,
-          name: 'United States Mint',
-          comparing: 'United States Fish and Wildlife Service',
-          rank: 1,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of the Interior'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.usgs.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The U.S. Geological Survey (USGS) was established by the Organic Act of March 3, 1879 (43 U.S.C. 31). USGS classifies public lands, examines the geological structure, and assesses the energy, mineral, water, and biology resources and products within and outside the national domain.\r\n\r\nUSGS provides relevant, objective scientific studies and information used to help address issues and solve problems dealing with natural resources, natural hazards, and the environmental effects on human and wildlife health. ',
-      id: 212,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/212/thumb.png?1279150544',
-        small_url: 'https://agency-logos.federalregister.gov/212/small.png?1279150544',
-        medium_url: 'https://agency-logos.federalregister.gov/212/medium.png?1279150544'
-      },
-      name: 'Geological Survey',
-      parent_id: 253,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=212&order=newest',
-      short_name: 'USGS',
-      slug: 'geological-survey',
-      url: 'https://www.federalregister.gov/agencies/geological-survey',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/212',
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'United States Geological Survey',
-      budgetBureauTitleId: 'united-states-geological-survey',
-      matchLevel: 7,
-      matches: [
-        {
-          id: 212,
-          name: 'Geological Survey',
-          comparing: 'United States Geological Survey',
-          rank: 7,
-          parent: 'Interior Department',
-          comparingParent: 'Department of the Interior'
-        },
-        {
-          id: 513,
-          name: 'United States Mint',
-          comparing: 'United States Geological Survey',
-          rank: 2,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of the Interior'
-        },
-        {
-          id: 512,
-          name: 'United States Marshals Service',
-          comparing: 'United States Geological Survey',
-          rank: 1,
-          parent: 'Justice Department',
-          comparingParent: 'Department of the Interior'
-        }
-      ]
-    },
-    {
       agency_url: '',
       child_ids: [],
       child_slugs: [],
@@ -8705,425 +8881,151 @@ export default {
       budgetBureauTitle: 'United States Institute of Peace',
       budgetBureauTitleId: 'united-states-institute-of-peace',
       exact: true
-    },
-    {
-      agency_url: 'https://www.dfc.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "On October 5, 2018, President Trump signed the Better Utilization of Investments Leading to Development (BUILD) Act into law--landmark legislation that reformed and strengthened U.S. development finance capabilities into a new federal agency to help address development challenges and foreign policy priorities of the United States.\r\n\r\nU.S. International Development Finance Corporation (DFC) is a modern, consolidated agency that brings together the capabilities of OPIC and USAID’s Development Credit Authority, while introducing new and innovative financial products to better bring private capital to the developing world. The U.S. will have more flexibility to support investments in developing countries to drive economic growth, create stability, and improve livelihoods.\r\n\r\nDFC makes America a stronger and more competitive leader on the global development stage with greater ability to partner with allies on transformative projects. Further, DFC provides the developing world with financially sound alternatives to unsustainable and irresponsible state-directed initiatives. DFC invests across sectors including energy, healthcare, critical infrastructure, and technology. DFC also provides financing for small businesses and women entrepreneurs in order to create jobs in emerging markets. DFC investments adhere to high standards and respect the environment, human rights, and worker rights.\r\n\r\nDFC's work takes a Triple Aim approach as our investments focus on impactful global development, advancing U.S. foreign policy, and generating returns for American taxpayers.",
-      id: 606,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/606/thumb.png?1709657977',
-        small_url: 'https://agency-logos.federalregister.gov/606/small.png?1709657977',
-        medium_url: 'https://agency-logos.federalregister.gov/606/medium.png?1709657977'
-      },
-      name: 'U.S. International Development Finance Corporation',
-      parent_id: null,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=606&order=newest',
-      short_name: 'DFC',
-      slug: 'u-s-international-development-finance-corporation',
-      url: 'https://www.federalregister.gov/agencies/u-s-international-development-finance-corporation',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/606',
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'United States International Development Finance Corporation',
-      budgetBureauTitleId: 'united-states-international-development-finance-corporation',
-      matchLevel: 5,
-      matches: [
-        {
-          id: 606,
-          name: 'U.S. International Development Finance Corporation',
-          comparing: 'United States International Development Finance Corporation',
-          rank: 5,
-          comparingParent: 'International Assistance Programs'
-        },
-        {
-          id: 509,
-          name: 'United States Enrichment Corporation',
-          comparing: 'United States International Development Finance Corporation',
-          rank: 2,
-          comparingParent: 'International Assistance Programs'
-        },
-        {
-          id: 4,
-          name: 'United States African Development Foundation',
-          comparing: 'United States International Development Finance Corporation',
-          rank: 1,
-          comparingParent: 'International Assistance Programs'
-        }
-      ]
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The establishment of a mint was authorized by act of April 2, 1792 (1 Stat. 246). The Bureau of the Mint was established by act of February 12, 1873 (17 Stat. 424), and recodified on September 13, 1982 (31 U.S.C. 304, 5131). The name was changed to United States Mint by Secretarial order dated January 9, 1984.\r\rThe primary mission of the Mint is to produce an adequate volume of circulating coinage for the Nation to conduct its trade and commerce. The Mint also produces and sells numismatic coins, American Eagle gold and silver bullion coins, and national medals. In addition, the Fort Knox Bullion Depository is the primary storage facility for the Nation's gold bullion.\r\rThe U.S. Mint maintains sales centers at the Philadelphia and Denver Mints and at Union Station in Washington, DC. Public tours are conducted, with free admission, at the Philadelphia and Denver Mints.",
-      id: 513,
-      logo: null,
-      name: 'United States Mint',
-      parent_id: 497,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=513&order=newest',
-      short_name: 'USMINT',
-      slug: 'united-states-mint',
-      url: 'https://www.federalregister.gov/agencies/united-states-mint',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/513',
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'United States Mint',
-      budgetBureauTitleId: 'united-states-mint',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The United States Parole Commission (USPC) makes parole release decisions for eligible Federal and District of Columbia prisoners; authorizes methods of release and conditions under which release occurs; prescribes, modifies, and monitors compliance with the terms and conditions governing offenders' behavior while on parole or mandatory or supervised release; issues warrants for violation of supervision; determines probable cause for the revocation process; revokes parole, mandatory, or supervised release; releases from supervision those offenders who are no longer a risk to public safety; and promulgates the rules, regulations, and guidelines for the exercise of USPC's authority and the implementation of a national parole policy.\r  \rUSPC has sole jurisdiction over the following: Federal offenders who committed offenses before November 1, 1987; D.C. Code offenders who committed offenses before August 5, 2000; D.C. Code offenders sentenced to a term of supervised release; Uniform Code of Military Justice offenders who are in Bureau of Prison's custody; transfer treaty cases; and State probationers and parolees in the Federal Witness Protection Program.",
-      id: 401,
-      logo: null,
-      name: 'Parole Commission',
-      parent_id: 268,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=401&order=newest',
-      short_name: 'USPC',
-      slug: 'parole-commission',
-      url: 'https://www.federalregister.gov/agencies/parole-commission',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/401',
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'United States Parole Commission',
-      budgetBureauTitleId: 'united-states-parole-commission',
-      matchLevel: 7,
-      matches: [
-        {
-          id: 401,
-          name: 'Parole Commission',
-          comparing: 'United States Parole Commission',
-          rank: 7,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 512,
-          name: 'United States Marshals Service',
-          comparing: 'United States Parole Commission',
-          rank: 5,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 515,
-          name: 'United States Sentencing Commission',
-          comparing: 'United States Parole Commission',
-          rank: 4,
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 70,
-          name: 'Commission on the Bicentennial of the United States Constitution',
-          comparing: 'United States Parole Commission',
-          rank: 3,
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 71,
-          name: 'Commission on the Future of the United States Aerospace Industry',
-          comparing: 'United States Parole Commission',
-          rank: 2,
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 264,
-          name: 'Japan-United States Friendship Commission',
-          comparing: 'United States Parole Commission',
-          rank: 2,
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 513,
-          name: 'United States Mint',
-          comparing: 'United States Parole Commission',
-          rank: 2,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Justice'
-        },
-        {
-          id: 325,
-          name: 'National Commission on Terrorist Attacks Upon the United States',
-          comparing: 'United States Parole Commission',
-          rank: 1,
-          comparingParent: 'Department of Justice'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.secretservice.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Secret Service protects the President and other high-level officials and investigates counterfeiting and other financial crimes, including financial institution fraud, identity theft, and computer fraud and computer-based attacks on our Nation's financial, banking, and telecommunications infrastructure.",
-      id: 465,
-      logo: {
-        thumb_url: 'https://agency-logos.federalregister.gov/465/thumb.png?1279151412',
-        small_url: 'https://agency-logos.federalregister.gov/465/small.png?1279151412',
-        medium_url: 'https://agency-logos.federalregister.gov/465/medium.png?1279151412'
-      },
-      name: 'Secret Service',
-      parent_id: 227,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=465&order=newest',
-      short_name: 'USSS',
-      slug: 'secret-service',
-      url: 'https://www.federalregister.gov/agencies/secret-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/465',
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'United States Secret Service',
-      budgetBureauTitleId: 'united-states-secret-service',
-      matchLevel: 9,
-      matches: [
-        {
-          id: 465,
-          name: 'Secret Service',
-          comparing: 'United States Secret Service',
-          rank: 9,
-          parent: 'Homeland Security Department',
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 512,
-          name: 'United States Marshals Service',
-          comparing: 'United States Secret Service',
-          rank: 4,
-          parent: 'Justice Department',
-          comparingParent: 'Department of Homeland Security'
-        },
-        {
-          id: 513,
-          name: 'United States Mint',
-          comparing: 'United States Secret Service',
-          rank: 1,
-          parent: 'Treasury Department',
-          comparingParent: 'Department of Homeland Security'
-        }
-      ]
-    },
-    {
-      agency_url: 'http://www.msha.gov/',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        "The Mine Safety and Health Administration (MSHA) is responsible for safety and health in the Nation's mines. MSHA develops and promulgates mandatory safety and health standards, ensures compliance with such standards, assesses civil penalties for violations, and investigates accidents. It cooperates with and provides assistance to the States in the development of effective State mine safety and health programs; improves and expands training programs in cooperation with the States and the mining industry; and contributes to the improvement and expansion of mine safety and health research and development. All of these activities are aimed at preventing and reducing mine accidents and occupational diseases in the mining industry.",
-      id: 288,
-      logo: null,
-      name: 'Mine Safety and Health Administration',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=288&order=newest',
-      short_name: 'MSHA',
-      slug: 'mine-safety-and-health-administration',
-      url: 'https://www.federalregister.gov/agencies/mine-safety-and-health-administration',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/288',
-      budgetAgencyTitle: 'Department of Veterans Affairs',
-      budgetAgencyTitleId: 'department-of-veterans-affairs',
-      budgetBureauTitle: 'Veterans Health Administration',
-      budgetBureauTitleId: 'veterans-health-administration',
-      matchLevel: 1,
-      matches: [
-        {
-          id: 288,
-          name: 'Mine Safety and Health Administration',
-          comparing: 'Veterans Health Administration',
-          rank: 1,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Veterans Affairs'
-        },
-        {
-          id: 386,
-          name: 'Occupational Safety and Health Administration',
-          comparing: 'Veterans Health Administration',
-          rank: 1,
-          parent: 'Labor Department',
-          comparingParent: 'Department of Veterans Affairs'
-        }
-      ]
-    },
-    {
-      agency_url: '',
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Veterans Employment and Training Service (VETS) was established in 1974 \r\nas an office under the Employment and Training Administration to focus specifically on the education and training of veterans. In 1984 VETS was reestablished as an independent agency and is one of several government units (including the Department of Veterans Affairs and the Small Business Bureau) addressing and executing improvement of employment, training and other work-force issues and scenarios for veterans. VETS works to secure the greatest number of employment opportunities possible for veterans, which it realizes through a variety of avenues and financial plans and policies, for veterans and those who hire them,\r\n',
-      id: 521,
-      logo: null,
-      name: 'Veterans Employment and Training Service',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=521&order=newest',
-      short_name: 'VETS',
-      slug: 'veterans-employment-and-training-service',
-      url: 'https://www.federalregister.gov/agencies/veterans-employment-and-training-service',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/521',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: "Veterans' Employment and Training Service",
-      budgetBureauTitleId: 'veterans-employment-and-training-service',
-      exact: true
-    },
-    {
-      agency_url: null,
-      child_ids: [],
-      child_slugs: [],
-      description:
-        'The Wage and Hour Division is responsible for planning, directing, and administering programs dealing with a variety of Federal labor legislation. These programs are designed to protect low-wage incomes; safeguard the health and welfare of workers by discouraging excessively long work hours; safeguard the health and well-being of minors; prevent curtailment of employment and earnings for students, trainees, and handicapped workers; minimize losses of income and job rights caused by indebtedness; and direct a program of farm labor contractor registration designed to protect the health, safety, and welfare of migrant and seasonal agricultural workers.',
-      id: 524,
-      logo: null,
-      name: 'Wage and Hour Division',
-      parent_id: 271,
-      recent_articles_url:
-        'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=524&order=newest',
-      short_name: 'WHD',
-      slug: 'wage-and-hour-division',
-      url: 'https://www.federalregister.gov/agencies/wage-and-hour-division',
-      json_url: 'https://www.federalregister.gov/api/v1/agencies/524',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Wage and Hour Division',
-      budgetBureauTitleId: 'wage-and-hour-division',
-      exact: true
     }
   ],
   orphanAgencies: [
     {
       budgetAgencyTitle: '400 Years of African-American History Commission',
       budgetAgencyTitleId: '400-years-of-african-american-history-commission',
-      fileCount: 4,
-      spendPlanCount: 0,
-      latestApprovalTimestamp: '2026-02-21T15:36:21.000Z',
+      fileType: 'standard',
+      fileCount: 5,
+      latestApprovalTimestamp: '2026-02-24T17:01:24.000Z',
+      standard: 5,
       matches: []
     },
     {
       budgetAgencyTitle: 'Access Board',
       budgetAgencyTitleId: 'access-board',
+      fileType: 'standard',
       fileCount: 4,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2025-05-13T13:19:15.000Z',
+      standard: 4,
       matches: []
     },
     {
       budgetAgencyTitle: 'Alyce Spotted Bear and Walter Soboleff Com. on Native Children',
       budgetAgencyTitleId: 'alyce-spotted-bear-and-walter-soboleff-com-on-native-children',
+      fileType: 'standard',
       fileCount: 6,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2024-04-04T14:45:27.000Z',
+      standard: 6,
       matches: []
     },
     {
       budgetAgencyTitle: 'Commission on Combating Synthetic Opioid Trafficking',
       budgetAgencyTitleId: 'commission-on-combating-synthetic-opioid-trafficking',
+      fileType: 'standard',
       fileCount: 1,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2021-09-22T13:26:11.000Z',
+      standard: 1,
       matches: []
     },
     {
       budgetAgencyTitle: 'Corporation for Public Broadcasting',
       budgetAgencyTitleId: 'corporation-for-public-broadcasting',
+      fileType: 'standard',
       fileCount: 7,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2024-09-13T17:47:21.000Z',
+      standard: 7,
       matches: []
     },
     {
       budgetAgencyTitle: 'Corporation for Travel Promotion',
       budgetAgencyTitleId: 'corporation-for-travel-promotion',
+      fileType: 'standard',
       fileCount: 7,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2025-09-24T14:41:09.000Z',
+      standard: 7,
       matches: []
     },
     {
       budgetAgencyTitle: 'District of Columbia',
       budgetAgencyTitleId: 'district-of-columbia',
-      fileCount: 51,
-      spendPlanCount: 0,
-      latestApprovalTimestamp: '2026-01-16T17:18:43.000Z',
+      fileType: 'standard',
+      fileCount: 53,
+      latestApprovalTimestamp: '2026-02-26T16:13:38.000Z',
+      standard: 53,
       matches: []
     },
     {
       budgetAgencyTitle: 'Federal Drug Control Programs',
       budgetAgencyTitleId: 'federal-drug-control-programs',
+      fileType: 'standard',
       fileCount: 42,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2025-12-23T16:10:34.000Z',
+      standard: 42,
       matches: []
     },
     {
       budgetAgencyTitle: 'Intelligence Community Management Account',
       budgetAgencyTitleId: 'intelligence-community-management-account',
+      fileType: 'standard',
       fileCount: 9,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2026-02-13T18:13:00.000Z',
+      standard: 9,
       matches: []
     },
     {
       budgetAgencyTitle: 'International Assistance Programs',
       budgetAgencyTitleId: 'international-assistance-programs',
-      fileCount: 1868,
-      spendPlanCount: 0,
-      latestApprovalTimestamp: '2026-02-20T13:42:21.000Z',
+      fileType: 'standard',
+      fileCount: 1887,
+      latestApprovalTimestamp: '2026-02-27T14:07:31.000Z',
+      standard: 1887,
       matches: []
     },
     {
       budgetAgencyTitle: 'Other Commissions and Boards',
       budgetAgencyTitleId: 'other-commissions-and-boards',
-      fileCount: 10,
-      spendPlanCount: 0,
-      latestApprovalTimestamp: '2025-09-09T09:25:39.000Z',
+      fileType: 'standard',
+      fileCount: 12,
+      latestApprovalTimestamp: '2026-02-27T14:07:31.000Z',
+      standard: 12,
       matches: []
     },
     {
       budgetAgencyTitle: 'Other Defense (Civil Programs)',
       budgetAgencyTitleId: 'other-defense-civil-programs',
-      fileCount: 205,
-      spendPlanCount: 0,
-      latestApprovalTimestamp: '2026-02-06T10:39:36.000Z',
+      fileType: 'standard',
+      fileCount: 207,
+      latestApprovalTimestamp: '2026-02-23T16:22:54.000Z',
+      standard: 207,
       matches: []
     },
     {
       budgetAgencyTitle: 'Patient-Centered Outcomes Research Trust Fund',
       budgetAgencyTitleId: 'patient-centered-outcomes-research-trust-fund',
+      fileType: 'standard',
       fileCount: 6,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2025-09-04T14:35:15.000Z',
+      standard: 6,
       matches: []
     },
     {
       budgetAgencyTitle: 'Public Defender Service for the District of Columbia',
       budgetAgencyTitleId: 'public-defender-service-for-the-district-of-columbia',
+      fileType: 'standard',
       fileCount: 19,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2025-10-16T14:10:41.000Z',
+      standard: 19,
       matches: []
     },
     {
       budgetAgencyTitle: 'United States Holocaust Memorial Museum',
       budgetAgencyTitleId: 'united-states-holocaust-memorial-museum',
+      fileType: 'standard',
       fileCount: 35,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2026-02-21T08:32:54.000Z',
+      standard: 35,
       matches: []
     },
     {
       budgetAgencyTitle: 'United States Interagency Council on Homelessness',
       budgetAgencyTitleId: 'united-states-interagency-council-on-homelessness',
+      fileType: 'standard',
       fileCount: 6,
-      spendPlanCount: 0,
       latestApprovalTimestamp: '2025-11-13T16:36:56.000Z',
+      standard: 6,
       matches: []
     }
   ],
@@ -9133,8 +9035,10 @@ export default {
       budgetAgencyTitleId: '400-years-of-african-american-history-commission',
       budgetBureauTitle: '400 Years of African-American History Commission',
       budgetBureauTitleId: '400-years-of-african-american-history-commission',
-      fileCount: 4,
-      spendPlanCount: 0,
+      fileType: 'standard',
+      fileCount: 5,
+      latestApprovalTimestamp: '2026-02-24T17:01:24.000Z',
+      standard: 5,
       matches: []
     },
     {
@@ -9142,17 +9046,10 @@ export default {
       budgetAgencyTitleId: 'access-board',
       budgetBureauTitle: 'Access Board',
       budgetBureauTitleId: 'access-board',
+      fileType: 'standard',
       fileCount: 4,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of State',
-      budgetAgencyTitleId: 'department-of-state',
-      budgetBureauTitle: 'Administration of Foreign Affairs',
-      budgetBureauTitleId: 'administration-of-foreign-affairs',
-      fileCount: 554,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2025-05-13T13:19:15.000Z',
+      standard: 4,
       matches: []
     },
     {
@@ -9160,53 +9057,10 @@ export default {
       budgetAgencyTitleId: 'alyce-spotted-bear-and-walter-soboleff-com-on-native-children',
       budgetBureauTitle: 'Alyce Spotted Bear and Walter Soboleff Com. on Native Children',
       budgetBureauTitleId: 'alyce-spotted-bear-and-walter-soboleff-com-on-native-children',
+      fileType: 'standard',
       fileCount: 6,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Analysis and Operations',
-      budgetBureauTitleId: 'analysis-and-operations',
-      fileCount: 38,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Veterans Affairs',
-      budgetAgencyTitleId: 'department-of-veterans-affairs',
-      budgetBureauTitle: 'Benefits Programs',
-      budgetBureauTitleId: 'benefits-programs',
-      fileCount: 339,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Agriculture',
-      budgetAgencyTitleId: 'department-of-agriculture',
-      budgetBureauTitle: 'Buildings and Facilities',
-      budgetBureauTitleId: 'buildings-and-facilities',
-      fileCount: 14,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Other Defense (Civil Programs)',
-      budgetAgencyTitleId: 'other-defense-civil-programs',
-      budgetBureauTitle: 'Cemeterial Expenses',
-      budgetBureauTitleId: 'cemeterial-expenses',
-      fileCount: 76,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Central Utah Project',
-      budgetBureauTitleId: 'central-utah-project',
-      fileCount: 14,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2024-04-04T14:45:27.000Z',
+      standard: 6,
       matches: []
     },
     {
@@ -9214,17 +9068,10 @@ export default {
       budgetAgencyTitleId: 'commission-on-combating-synthetic-opioid-trafficking',
       budgetBureauTitle: 'Commission on Combating Synthetic Opioid Trafficking',
       budgetBureauTitleId: 'commission-on-combating-synthetic-opioid-trafficking',
+      fileType: 'standard',
       fileCount: 1,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Community Planning and Development',
-      budgetBureauTitleId: 'community-planning-and-development',
-      fileCount: 112,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2021-09-22T13:26:11.000Z',
+      standard: 1,
       matches: []
     },
     {
@@ -9232,8 +9079,10 @@ export default {
       budgetAgencyTitleId: 'corporation-for-public-broadcasting',
       budgetBureauTitle: 'Corporation for Public Broadcasting',
       budgetBureauTitleId: 'corporation-for-public-broadcasting',
+      fileType: 'standard',
       fileCount: 7,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2024-09-13T17:47:21.000Z',
+      standard: 7,
       matches: []
     },
     {
@@ -9241,8 +9090,10 @@ export default {
       budgetAgencyTitleId: 'corporation-for-travel-promotion',
       budgetBureauTitle: 'Corporation for Travel Promotion',
       budgetBureauTitleId: 'corporation-for-travel-promotion',
+      fileType: 'standard',
       fileCount: 7,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2025-09-24T14:41:09.000Z',
+      standard: 7,
       matches: []
     },
     {
@@ -9250,152 +9101,21 @@ export default {
       budgetAgencyTitleId: 'corps-of-engineers-civil-works',
       budgetBureauTitle: 'Corps of Engineers (Civil Works)',
       budgetBureauTitleId: 'corps-of-engineers-civil-works',
+      fileType: 'standard',
       fileCount: 366,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2026-02-21T18:27:19.000Z',
+      standard: 366,
       matches: []
     },
     {
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Countering Weapons of Mass Destruction Office',
-      budgetBureauTitleId: 'countering-weapons-of-mass-destruction-office',
-      fileCount: 153,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Cybersecurity and Infrastructure Security Agency',
-      budgetBureauTitleId: 'cybersecurity-and-infrastructure-security-agency',
-      fileCount: 135,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Department-Wide Programs',
-      budgetBureauTitleId: 'department-wide-programs',
-      fileCount: 69,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Energy',
-      budgetAgencyTitleId: 'department-of-energy',
-      budgetBureauTitle: 'Departmental Administration',
-      budgetBureauTitleId: 'departmental-administration',
-      fileCount: 169,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Veterans Affairs',
-      budgetAgencyTitleId: 'department-of-veterans-affairs',
-      budgetBureauTitle: 'Departmental Administration',
-      budgetBureauTitleId: 'departmental-administration',
-      fileCount: 589,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Commerce',
-      budgetAgencyTitleId: 'department-of-commerce',
-      budgetBureauTitle: 'Departmental Management',
-      budgetBureauTitleId: 'departmental-management',
-      fileCount: 136,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Departmental Management',
-      budgetBureauTitleId: 'departmental-management',
-      fileCount: 73,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Health and Human Services',
-      budgetAgencyTitleId: 'department-of-health-and-human-services',
-      budgetBureauTitle: 'Departmental Management',
-      budgetBureauTitleId: 'departmental-management',
-      fileCount: 180,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
-      budgetBureauTitle: 'Departmental Management',
-      budgetBureauTitleId: 'departmental-management',
-      fileCount: 133,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Departmental Offices',
-      budgetBureauTitleId: 'departmental-offices',
-      fileCount: 20,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Departmental Offices',
-      budgetBureauTitleId: 'departmental-offices',
-      fileCount: 310,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Disaster Education Recovery',
-      budgetBureauTitleId: 'disaster-education-recovery',
-      fileCount: 1,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'District of Columbia',
-      budgetAgencyTitleId: 'district-of-columbia',
-      budgetBureauTitle: 'District of Columbia Courts',
-      budgetBureauTitleId: 'district-of-columbia-courts',
-      fileCount: 47,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'District of Columbia',
-      budgetAgencyTitleId: 'district-of-columbia',
-      budgetBureauTitle: 'District of Columbia General and Special Payments',
-      budgetBureauTitleId: 'district-of-columbia-general-and-special-payments',
-      fileCount: 4,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Energy',
-      budgetAgencyTitleId: 'department-of-energy',
-      budgetBureauTitle: 'Energy Programs',
-      budgetBureauTitleId: 'energy-programs',
-      fileCount: 897,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Energy',
-      budgetAgencyTitleId: 'department-of-energy',
-      budgetBureauTitle: 'Environmental and Other Defense Activities',
-      budgetBureauTitleId: 'environmental-and-other-defense-activities',
-      fileCount: 105,
-      spendPlanCount: 0,
+      budgetAgencyTitle: 'Department of Agriculture',
+      budgetAgencyTitleId: 'department-of-agriculture',
+      budgetBureauTitle: 'Buildings and Facilities',
+      budgetBureauTitleId: 'buildings-and-facilities',
+      fileType: 'standard',
+      fileCount: 14,
+      latestApprovalTimestamp: '2025-12-07T14:16:00.000Z',
+      standard: 14,
       matches: []
     },
     {
@@ -9403,305 +9123,10 @@ export default {
       budgetAgencyTitleId: 'department-of-agriculture',
       budgetBureauTitle: 'Executive Operations',
       budgetBureauTitleId: 'executive-operations',
+      fileType: 'standard',
       fileCount: 30,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Fair Housing and Equal Opportunity',
-      budgetBureauTitleId: 'fair-housing-and-equal-opportunity',
-      fileCount: 14,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Defense (Military Programs)',
-      budgetAgencyTitleId: 'department-of-defense-military-programs',
-      budgetBureauTitle: 'Family Housing',
-      budgetBureauTitleId: 'family-housing',
-      fileCount: 279,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Federal Drug Control Programs',
-      budgetAgencyTitleId: 'federal-drug-control-programs',
-      budgetBureauTitle: 'Federal Drug Control Programs',
-      budgetBureauTitleId: 'federal-drug-control-programs',
-      fileCount: 42,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of the Treasury',
-      budgetAgencyTitleId: 'department-of-the-treasury',
-      budgetBureauTitle: 'Federal Financing Bank',
-      budgetBureauTitleId: 'federal-financing-bank',
-      fileCount: 5,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Other Defense (Civil Programs)',
-      budgetAgencyTitleId: 'other-defense-civil-programs',
-      budgetBureauTitle: 'Forest and Wildlife Conservation, Military Reservations',
-      budgetBureauTitleId: 'forest-and-wildlife-conservation-military-reservations',
-      fileCount: 52,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'General Services Administration',
-      budgetAgencyTitleId: 'general-services-administration',
-      budgetBureauTitle: 'General Activities',
-      budgetBureauTitleId: 'general-activities',
-      fileCount: 178,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Housing Programs',
-      budgetBureauTitleId: 'housing-programs',
-      fileCount: 289,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Institute of Education Sciences',
-      budgetBureauTitleId: 'institute-of-education-sciences',
-      fileCount: 27,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Insular Affairs',
-      budgetBureauTitleId: 'insular-affairs',
-      fileCount: 18,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Intelligence Community Management Account',
-      budgetAgencyTitleId: 'intelligence-community-management-account',
-      budgetBureauTitle: 'Intelligence Community Management Account',
-      budgetBureauTitleId: 'intelligence-community-management-account',
-      fileCount: 9,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Interagency Law Enforcement',
-      budgetBureauTitleId: 'interagency-law-enforcement',
-      fileCount: 19,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of State',
-      budgetAgencyTitleId: 'department-of-state',
-      budgetBureauTitle: 'International Commissions',
-      budgetBureauTitleId: 'international-commissions',
-      fileCount: 66,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'International Monetary Programs',
-      budgetBureauTitleId: 'international-monetary-programs',
-      fileCount: 9,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of State',
-      budgetAgencyTitleId: 'department-of-state',
-      budgetBureauTitle: 'International Organizations and Conferences',
-      budgetBureauTitleId: 'international-organizations-and-conferences',
-      fileCount: 49,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Defense (Military Programs)',
-      budgetAgencyTitleId: 'department-of-defense-military-programs',
-      budgetBureauTitle: 'International Reconstruction and Other Assistance',
-      budgetBureauTitleId: 'international-reconstruction-and-other-assistance',
-      fileCount: 6,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'International Security Assistance',
-      budgetBureauTitleId: 'international-security-assistance',
-      fileCount: 792,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Justice Operations, Management, and Accountability',
-      budgetBureauTitleId: 'justice-operations-management-and-accountability',
-      fileCount: 117,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Legal Activities and U.S. Marshals',
-      budgetBureauTitleId: 'legal-activities-and-us-marshals',
-      fileCount: 335,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Management and Administration',
-      budgetBureauTitleId: 'management-and-administration',
-      fileCount: 149,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Homeland Security',
-      budgetAgencyTitleId: 'department-of-homeland-security',
-      budgetBureauTitle: 'Management Directorate',
-      budgetBureauTitleId: 'management-directorate',
-      fileCount: 186,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Defense (Military Programs)',
-      budgetAgencyTitleId: 'department-of-defense-military-programs',
-      budgetBureauTitle: 'Military Construction',
-      budgetBureauTitleId: 'military-construction',
-      fileCount: 644,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Defense (Military Programs)',
-      budgetAgencyTitleId: 'department-of-defense-military-programs',
-      budgetBureauTitle: 'Military Personnel',
-      budgetBureauTitleId: 'military-personnel',
-      fileCount: 522,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'Military Sales Program',
-      budgetBureauTitleId: 'military-sales-program',
-      fileCount: 23,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'International Assistance Programs',
-      budgetAgencyTitleId: 'international-assistance-programs',
-      budgetBureauTitle: 'Multilateral Assistance',
-      budgetBureauTitleId: 'multilateral-assistance',
-      fileCount: 142,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of Career, Technical, and Adult Education',
-      budgetBureauTitleId: 'office-of-career-technical-and-adult-education',
-      fileCount: 30,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of Elementary and Secondary Education',
-      budgetBureauTitleId: 'office-of-elementary-and-secondary-education',
-      fileCount: 120,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of English Language Acquisition',
-      budgetBureauTitleId: 'office-of-english-language-acquisition',
-      fileCount: 11,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of Federal Student Aid',
-      budgetBureauTitleId: 'office-of-federal-student-aid',
-      fileCount: 293,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of Innovation and Improvement',
-      budgetBureauTitleId: 'office-of-innovation-and-improvement',
-      fileCount: 23,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Office of Lead Hazard Control and Healthy Homes',
-      budgetBureauTitleId: 'office-of-lead-hazard-control-and-healthy-homes',
-      fileCount: 16,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Executive Office of the President',
-      budgetAgencyTitleId: 'executive-office-of-the-president',
-      budgetBureauTitle: 'Office of Pandemic Preparedness and Response',
-      budgetBureauTitleId: 'office-of-pandemic-preparedness-and-response',
-      fileCount: 3,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of Postsecondary Education',
-      budgetBureauTitleId: 'office-of-postsecondary-education',
-      fileCount: 121,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Education',
-      budgetAgencyTitleId: 'department-of-education',
-      budgetBureauTitle: 'Office of Special Education and Rehabilitative Services',
-      budgetBureauTitleId: 'office-of-special-education-and-rehabilitative-services',
-      fileCount: 58,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2025-12-07T14:16:00.000Z',
+      standard: 30,
       matches: []
     },
     {
@@ -9709,26 +9134,65 @@ export default {
       budgetAgencyTitleId: 'department-of-agriculture',
       budgetBureauTitle: 'Office of the Secretary',
       budgetBureauTitleId: 'office-of-the-secretary',
+      fileType: 'standard',
       fileCount: 134,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2026-02-21T18:25:13.000Z',
+      standard: 134,
       matches: []
     },
     {
-      budgetAgencyTitle: 'Department of Transportation',
-      budgetAgencyTitleId: 'department-of-transportation',
-      budgetBureauTitle: 'Office of the Secretary',
-      budgetBureauTitleId: 'office-of-the-secretary',
-      fileCount: 307,
-      spendPlanCount: 0,
+      budgetAgencyTitle: 'Department of Commerce',
+      budgetAgencyTitleId: 'department-of-commerce',
+      budgetBureauTitle: 'Departmental Management',
+      budgetBureauTitleId: 'departmental-management',
+      fileType: 'standard',
+      fileCount: 136,
+      latestApprovalTimestamp: '2026-02-21T15:46:17.000Z',
+      standard: 136,
       matches: []
     },
     {
-      budgetAgencyTitle: 'Department of the Interior',
-      budgetAgencyTitleId: 'department-of-the-interior',
-      budgetBureauTitle: 'Office of the Solicitor',
-      budgetBureauTitleId: 'office-of-the-solicitor',
-      fileCount: 12,
-      spendPlanCount: 0,
+      budgetAgencyTitle: 'Department of Defense (Military Programs)',
+      budgetAgencyTitleId: 'department-of-defense-military-programs',
+      budgetBureauTitle: 'Family Housing',
+      budgetBureauTitleId: 'family-housing',
+      fileType: 'standard',
+      fileCount: 279,
+      latestApprovalTimestamp: '2026-02-06T10:39:36.000Z',
+      standard: 279,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Defense (Military Programs)',
+      budgetAgencyTitleId: 'department-of-defense-military-programs',
+      budgetBureauTitle: 'International Reconstruction and Other Assistance',
+      budgetBureauTitleId: 'international-reconstruction-and-other-assistance',
+      fileType: 'standard',
+      fileCount: 6,
+      latestApprovalTimestamp: '2025-09-22T10:22:12.000Z',
+      standard: 6,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Defense (Military Programs)',
+      budgetAgencyTitleId: 'department-of-defense-military-programs',
+      budgetBureauTitle: 'Military Construction',
+      budgetBureauTitleId: 'military-construction',
+      fileType: 'standard',
+      fileCount: 644,
+      latestApprovalTimestamp: '2026-02-18T12:35:24.000Z',
+      standard: 644,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Defense (Military Programs)',
+      budgetAgencyTitleId: 'department-of-defense-military-programs',
+      budgetBureauTitle: 'Military Personnel',
+      budgetBureauTitleId: 'military-personnel',
+      fileType: 'standard',
+      fileCount: 527,
+      latestApprovalTimestamp: '2026-02-23T16:22:34.000Z',
+      standard: 527,
       matches: []
     },
     {
@@ -9736,35 +9200,10 @@ export default {
       budgetAgencyTitleId: 'department-of-defense-military-programs',
       budgetBureauTitle: 'Operation and Maintenance',
       budgetBureauTitleId: 'operation-and-maintenance',
-      fileCount: 1486,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of State',
-      budgetAgencyTitleId: 'department-of-state',
-      budgetBureauTitle: 'Other',
-      budgetBureauTitleId: 'other',
-      fileCount: 525,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Other Commissions and Boards',
-      budgetAgencyTitleId: 'other-commissions-and-boards',
-      budgetBureauTitle: 'Other Commissions and Boards',
-      budgetBureauTitleId: 'other-commissions-and-boards',
-      fileCount: 10,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Patient-Centered Outcomes Research Trust Fund',
-      budgetAgencyTitleId: 'patient-centered-outcomes-research-trust-fund',
-      budgetBureauTitle: 'Patient-Centered Outcomes Research Trust Fund',
-      budgetBureauTitleId: 'patient-centered-outcomes-research-trust-fund',
-      fileCount: 6,
-      spendPlanCount: 0,
+      fileType: 'standard',
+      fileCount: 1501,
+      latestApprovalTimestamp: '2026-02-26T13:38:52.000Z',
+      standard: 1501,
       matches: []
     },
     {
@@ -9772,44 +9211,10 @@ export default {
       budgetAgencyTitleId: 'department-of-defense-military-programs',
       budgetBureauTitle: 'Procurement',
       budgetBureauTitleId: 'procurement',
-      fileCount: 1666,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Housing and Urban Development',
-      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
-      budgetBureauTitle: 'Public and Indian Housing Programs',
-      budgetBureauTitleId: 'public-and-indian-housing-programs',
-      fileCount: 225,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Public Defender Service for the District of Columbia',
-      budgetAgencyTitleId: 'public-defender-service-for-the-district-of-columbia',
-      budgetBureauTitle: 'Public Defender Service for the District of Columbia',
-      budgetBureauTitleId: 'public-defender-service-for-the-district-of-columbia',
-      fileCount: 19,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'Radiation Exposure Compensation',
-      budgetBureauTitleId: 'radiation-exposure-compensation',
-      fileCount: 16,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'General Services Administration',
-      budgetAgencyTitleId: 'general-services-administration',
-      budgetBureauTitle: 'Real Property Activities',
-      budgetBureauTitleId: 'real-property-activities',
-      fileCount: 51,
-      spendPlanCount: 0,
+      fileType: 'standard',
+      fileCount: 1706,
+      latestApprovalTimestamp: '2026-02-26T16:30:01.000Z',
+      standard: 1706,
       matches: []
     },
     {
@@ -9817,17 +9222,10 @@ export default {
       budgetAgencyTitleId: 'department-of-defense-military-programs',
       budgetBureauTitle: 'Research, Development, Test, and Evaluation',
       budgetBureauTitleId: 'research-development-test-and-evaluation',
-      fileCount: 627,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Other Defense (Civil Programs)',
-      budgetAgencyTitleId: 'other-defense-civil-programs',
-      budgetBureauTitle: 'Retiree Health Care',
-      budgetBureauTitleId: 'retiree-health-care',
-      fileCount: 9,
-      spendPlanCount: 0,
+      fileType: 'standard',
+      fileCount: 643,
+      latestApprovalTimestamp: '2026-02-27T17:09:21.000Z',
+      standard: 643,
       matches: []
     },
     {
@@ -9835,26 +9233,10 @@ export default {
       budgetAgencyTitleId: 'department-of-defense-military-programs',
       budgetBureauTitle: 'Revolving and Management Funds',
       budgetBureauTitleId: 'revolving-and-management-funds',
+      fileType: 'standard',
       fileCount: 161,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'Department of Justice',
-      budgetAgencyTitleId: 'department-of-justice',
-      budgetBureauTitle: 'State, Local, and Tribal Justice Assistance',
-      budgetBureauTitleId: 'state-local-and-tribal-justice-assistance',
-      fileCount: 108,
-      spendPlanCount: 0,
-      matches: []
-    },
-    {
-      budgetAgencyTitle: 'General Services Administration',
-      budgetAgencyTitleId: 'general-services-administration',
-      budgetBureauTitle: 'Supply and Technology Activities',
-      budgetBureauTitleId: 'supply-and-technology-activities',
-      fileCount: 87,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2026-02-13T17:52:00.000Z',
+      standard: 161,
       matches: []
     },
     {
@@ -9862,8 +9244,527 @@ export default {
       budgetAgencyTitleId: 'department-of-defense-military-programs',
       budgetBureauTitle: 'Trust Funds',
       budgetBureauTitleId: 'trust-funds',
+      fileType: 'standard',
       fileCount: 21,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2026-02-06T10:39:36.000Z',
+      standard: 21,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Departmental Management',
+      budgetBureauTitleId: 'departmental-management',
+      fileType: 'standard',
+      fileCount: 74,
+      latestApprovalTimestamp: '2026-02-27T16:56:52.000Z',
+      standard: 74,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Disaster Education Recovery',
+      budgetBureauTitleId: 'disaster-education-recovery',
+      fileType: 'standard',
+      fileCount: 1,
+      latestApprovalTimestamp: '2021-08-26T14:34:43.000Z',
+      standard: 1,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Institute of Education Sciences',
+      budgetBureauTitleId: 'institute-of-education-sciences',
+      fileType: 'standard',
+      fileCount: 28,
+      latestApprovalTimestamp: '2026-02-27T16:55:48.000Z',
+      standard: 28,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of Career, Technical, and Adult Education',
+      budgetBureauTitleId: 'office-of-career-technical-and-adult-education',
+      fileType: 'standard',
+      fileCount: 30,
+      latestApprovalTimestamp: '2025-09-25T18:25:46.000Z',
+      standard: 30,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of Elementary and Secondary Education',
+      budgetBureauTitleId: 'office-of-elementary-and-secondary-education',
+      fileType: 'standard',
+      fileCount: 120,
+      latestApprovalTimestamp: '2026-02-13T11:29:15.000Z',
+      standard: 120,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of English Language Acquisition',
+      budgetBureauTitleId: 'office-of-english-language-acquisition',
+      fileType: 'standard',
+      fileCount: 11,
+      latestApprovalTimestamp: '2025-09-28T12:20:03.000Z',
+      standard: 11,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of Federal Student Aid',
+      budgetBureauTitleId: 'office-of-federal-student-aid',
+      fileType: 'standard',
+      fileCount: 295,
+      latestApprovalTimestamp: '2026-02-27T17:28:52.000Z',
+      standard: 295,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of Innovation and Improvement',
+      budgetBureauTitleId: 'office-of-innovation-and-improvement',
+      fileType: 'standard',
+      fileCount: 23,
+      latestApprovalTimestamp: '2025-09-30T18:20:31.000Z',
+      standard: 23,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of Postsecondary Education',
+      budgetBureauTitleId: 'office-of-postsecondary-education',
+      fileType: 'standard',
+      fileCount: 121,
+      latestApprovalTimestamp: '2026-02-13T11:27:43.000Z',
+      standard: 121,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Education',
+      budgetAgencyTitleId: 'department-of-education',
+      budgetBureauTitle: 'Office of Special Education and Rehabilitative Services',
+      budgetBureauTitleId: 'office-of-special-education-and-rehabilitative-services',
+      fileType: 'standard',
+      fileCount: 62,
+      latestApprovalTimestamp: '2026-02-26T14:10:34.000Z',
+      standard: 62,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Energy',
+      budgetAgencyTitleId: 'department-of-energy',
+      budgetBureauTitle: 'Departmental Administration',
+      budgetBureauTitleId: 'departmental-administration',
+      fileType: 'standard',
+      fileCount: 169,
+      latestApprovalTimestamp: '2026-02-21T15:43:16.000Z',
+      standard: 169,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Energy',
+      budgetAgencyTitleId: 'department-of-energy',
+      budgetBureauTitle: 'Energy Programs',
+      budgetBureauTitleId: 'energy-programs',
+      fileType: 'standard',
+      fileCount: 897,
+      latestApprovalTimestamp: '2026-02-21T15:43:16.000Z',
+      standard: 897,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Energy',
+      budgetAgencyTitleId: 'department-of-energy',
+      budgetBureauTitle: 'Environmental and Other Defense Activities',
+      budgetBureauTitleId: 'environmental-and-other-defense-activities',
+      fileType: 'standard',
+      fileCount: 105,
+      latestApprovalTimestamp: '2026-02-21T18:33:35.000Z',
+      standard: 105,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Health and Human Services',
+      budgetAgencyTitleId: 'department-of-health-and-human-services',
+      budgetBureauTitle: 'Departmental Management',
+      budgetBureauTitleId: 'departmental-management',
+      fileType: 'standard',
+      fileCount: 181,
+      latestApprovalTimestamp: '2026-02-24T13:25:14.000Z',
+      standard: 181,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Analysis and Operations',
+      budgetBureauTitleId: 'analysis-and-operations',
+      fileType: 'standard',
+      fileCount: 38,
+      latestApprovalTimestamp: '2025-12-16T09:30:47.000Z',
+      standard: 38,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Countering Weapons of Mass Destruction Office',
+      budgetBureauTitleId: 'countering-weapons-of-mass-destruction-office',
+      fileType: 'standard',
+      fileCount: 153,
+      latestApprovalTimestamp: '2026-02-13T17:06:28.000Z',
+      standard: 153,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Cybersecurity and Infrastructure Security Agency',
+      budgetBureauTitleId: 'cybersecurity-and-infrastructure-security-agency',
+      fileType: 'standard',
+      fileCount: 135,
+      latestApprovalTimestamp: '2026-02-06T14:33:48.000Z',
+      standard: 135,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Homeland Security',
+      budgetAgencyTitleId: 'department-of-homeland-security',
+      budgetBureauTitle: 'Management Directorate',
+      budgetBureauTitleId: 'management-directorate',
+      fileType: 'standard',
+      fileCount: 186,
+      latestApprovalTimestamp: '2026-02-13T17:07:44.000Z',
+      standard: 186,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Community Planning and Development',
+      budgetBureauTitleId: 'community-planning-and-development',
+      fileType: 'standard',
+      fileCount: 112,
+      latestApprovalTimestamp: '2025-10-01T11:45:01.000Z',
+      standard: 112,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Fair Housing and Equal Opportunity',
+      budgetBureauTitleId: 'fair-housing-and-equal-opportunity',
+      fileType: 'standard',
+      fileCount: 14,
+      latestApprovalTimestamp: '2025-11-20T10:50:20.000Z',
+      standard: 14,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Housing Programs',
+      budgetBureauTitleId: 'housing-programs',
+      fileType: 'standard',
+      fileCount: 289,
+      latestApprovalTimestamp: '2026-02-13T15:43:19.000Z',
+      standard: 289,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Management and Administration',
+      budgetBureauTitleId: 'management-and-administration',
+      fileType: 'standard',
+      fileCount: 149,
+      latestApprovalTimestamp: '2026-02-20T18:55:37.000Z',
+      standard: 149,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Office of Lead Hazard Control and Healthy Homes',
+      budgetBureauTitleId: 'office-of-lead-hazard-control-and-healthy-homes',
+      fileType: 'standard',
+      fileCount: 16,
+      latestApprovalTimestamp: '2025-09-24T14:40:40.000Z',
+      standard: 16,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Housing and Urban Development',
+      budgetAgencyTitleId: 'department-of-housing-and-urban-development',
+      budgetBureauTitle: 'Public and Indian Housing Programs',
+      budgetBureauTitleId: 'public-and-indian-housing-programs',
+      fileType: 'standard',
+      fileCount: 225,
+      latestApprovalTimestamp: '2026-01-21T18:21:50.000Z',
+      standard: 225,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Interagency Law Enforcement',
+      budgetBureauTitleId: 'interagency-law-enforcement',
+      fileType: 'standard',
+      fileCount: 19,
+      latestApprovalTimestamp: '2026-02-20T18:48:54.000Z',
+      standard: 19,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Justice Operations, Management, and Accountability',
+      budgetBureauTitleId: 'justice-operations-management-and-accountability',
+      fileType: 'standard',
+      fileCount: 120,
+      latestApprovalTimestamp: '2026-02-25T10:11:10.000Z',
+      standard: 120,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Legal Activities and U.S. Marshals',
+      budgetBureauTitleId: 'legal-activities-and-us-marshals',
+      fileType: 'standard',
+      fileCount: 337,
+      latestApprovalTimestamp: '2026-02-26T16:13:38.000Z',
+      standard: 337,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'Radiation Exposure Compensation',
+      budgetBureauTitleId: 'radiation-exposure-compensation',
+      fileType: 'standard',
+      fileCount: 16,
+      latestApprovalTimestamp: '2026-01-14T15:07:48.000Z',
+      standard: 16,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Justice',
+      budgetAgencyTitleId: 'department-of-justice',
+      budgetBureauTitle: 'State, Local, and Tribal Justice Assistance',
+      budgetBureauTitleId: 'state-local-and-tribal-justice-assistance',
+      fileType: 'standard',
+      fileCount: 110,
+      latestApprovalTimestamp: '2026-02-26T16:13:38.000Z',
+      standard: 110,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Labor',
+      budgetAgencyTitleId: 'department-of-labor',
+      budgetBureauTitle: 'Departmental Management',
+      budgetBureauTitleId: 'departmental-management',
+      fileType: 'standard',
+      fileCount: 134,
+      latestApprovalTimestamp: '2026-02-23T10:38:07.000Z',
+      standard: 134,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of State',
+      budgetAgencyTitleId: 'department-of-state',
+      budgetBureauTitle: 'Administration of Foreign Affairs',
+      budgetBureauTitleId: 'administration-of-foreign-affairs',
+      fileType: 'standard',
+      fileCount: 555,
+      latestApprovalTimestamp: '2026-02-24T13:59:17.000Z',
+      standard: 555,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of State',
+      budgetAgencyTitleId: 'department-of-state',
+      budgetBureauTitle: 'International Commissions',
+      budgetBureauTitleId: 'international-commissions',
+      fileType: 'standard',
+      fileCount: 67,
+      latestApprovalTimestamp: '2026-02-27T14:07:31.000Z',
+      standard: 67,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of State',
+      budgetAgencyTitleId: 'department-of-state',
+      budgetBureauTitle: 'International Organizations and Conferences',
+      budgetBureauTitleId: 'international-organizations-and-conferences',
+      fileType: 'standard',
+      fileCount: 49,
+      latestApprovalTimestamp: '2025-11-26T09:12:00.000Z',
+      standard: 49,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of State',
+      budgetAgencyTitleId: 'department-of-state',
+      budgetBureauTitle: 'Other',
+      budgetBureauTitleId: 'other',
+      fileType: 'standard',
+      fileCount: 525,
+      latestApprovalTimestamp: '2026-02-19T13:07:56.000Z',
+      standard: 525,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Central Utah Project',
+      budgetBureauTitleId: 'central-utah-project',
+      fileType: 'standard',
+      fileCount: 14,
+      latestApprovalTimestamp: '2026-02-21T18:29:13.000Z',
+      standard: 14,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Department-Wide Programs',
+      budgetBureauTitleId: 'department-wide-programs',
+      fileType: 'standard',
+      fileCount: 69,
+      latestApprovalTimestamp: '2026-02-21T18:20:42.000Z',
+      standard: 69,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Departmental Offices',
+      budgetBureauTitleId: 'departmental-offices',
+      fileType: 'standard',
+      fileCount: 20,
+      latestApprovalTimestamp: '2026-02-21T14:27:50.000Z',
+      standard: 20,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Insular Affairs',
+      budgetBureauTitleId: 'insular-affairs',
+      fileType: 'standard',
+      fileCount: 18,
+      latestApprovalTimestamp: '2026-02-15T20:33:20.000Z',
+      standard: 18,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Interior',
+      budgetAgencyTitleId: 'department-of-the-interior',
+      budgetBureauTitle: 'Office of the Solicitor',
+      budgetBureauTitleId: 'office-of-the-solicitor',
+      fileType: 'standard',
+      fileCount: 12,
+      latestApprovalTimestamp: '2026-02-21T18:20:42.000Z',
+      standard: 12,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Departmental Offices',
+      budgetBureauTitleId: 'departmental-offices',
+      fileType: 'standard',
+      fileCount: 311,
+      latestApprovalTimestamp: '2026-02-26T17:38:47.000Z',
+      standard: 311,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of the Treasury',
+      budgetAgencyTitleId: 'department-of-the-treasury',
+      budgetBureauTitle: 'Federal Financing Bank',
+      budgetBureauTitleId: 'federal-financing-bank',
+      fileType: 'standard',
+      fileCount: 5,
+      latestApprovalTimestamp: '2025-10-01T11:03:39.000Z',
+      standard: 5,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Transportation',
+      budgetAgencyTitleId: 'department-of-transportation',
+      budgetBureauTitle: 'Office of the Secretary',
+      budgetBureauTitleId: 'office-of-the-secretary',
+      fileType: 'standard',
+      fileCount: 311,
+      latestApprovalTimestamp: '2026-02-26T17:38:47.000Z',
+      standard: 311,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Veterans Affairs',
+      budgetAgencyTitleId: 'department-of-veterans-affairs',
+      budgetBureauTitle: 'Benefits Programs',
+      budgetBureauTitleId: 'benefits-programs',
+      fileType: 'standard',
+      fileCount: 340,
+      latestApprovalTimestamp: '2026-02-27T17:06:46.000Z',
+      standard: 340,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Department of Veterans Affairs',
+      budgetAgencyTitleId: 'department-of-veterans-affairs',
+      budgetBureauTitle: 'Departmental Administration',
+      budgetBureauTitleId: 'departmental-administration',
+      fileType: 'standard',
+      fileCount: 590,
+      latestApprovalTimestamp: '2026-02-23T11:42:37.000Z',
+      standard: 590,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'District of Columbia',
+      budgetAgencyTitleId: 'district-of-columbia',
+      budgetBureauTitle: 'District of Columbia Courts',
+      budgetBureauTitleId: 'district-of-columbia-courts',
+      fileType: 'standard',
+      fileCount: 49,
+      latestApprovalTimestamp: '2026-02-26T16:13:38.000Z',
+      standard: 49,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'District of Columbia',
+      budgetAgencyTitleId: 'district-of-columbia',
+      budgetBureauTitle: 'District of Columbia General and Special Payments',
+      budgetBureauTitleId: 'district-of-columbia-general-and-special-payments',
+      fileType: 'standard',
+      fileCount: 4,
+      latestApprovalTimestamp: '2025-05-05T12:34:13.000Z',
+      standard: 4,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Executive Office of the President',
+      budgetAgencyTitleId: 'executive-office-of-the-president',
+      budgetBureauTitle: 'Office of Pandemic Preparedness and Response',
+      budgetBureauTitleId: 'office-of-pandemic-preparedness-and-response',
+      fileType: 'standard',
+      fileCount: 3,
+      latestApprovalTimestamp: '2024-03-12T18:04:30.000Z',
+      standard: 3,
       matches: []
     },
     {
@@ -9871,8 +9772,175 @@ export default {
       budgetAgencyTitleId: 'executive-office-of-the-president',
       budgetBureauTitle: 'Unanticipated Needs',
       budgetBureauTitleId: 'unanticipated-needs',
-      fileCount: 111,
-      spendPlanCount: 0,
+      fileType: 'standard',
+      fileCount: 112,
+      latestApprovalTimestamp: '2026-02-25T10:11:10.000Z',
+      standard: 112,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Federal Drug Control Programs',
+      budgetAgencyTitleId: 'federal-drug-control-programs',
+      budgetBureauTitle: 'Federal Drug Control Programs',
+      budgetBureauTitleId: 'federal-drug-control-programs',
+      fileType: 'standard',
+      fileCount: 42,
+      latestApprovalTimestamp: '2025-12-23T16:10:34.000Z',
+      standard: 42,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'General Services Administration',
+      budgetAgencyTitleId: 'general-services-administration',
+      budgetBureauTitle: 'General Activities',
+      budgetBureauTitleId: 'general-activities',
+      fileType: 'standard',
+      fileCount: 179,
+      latestApprovalTimestamp: '2026-02-25T10:11:10.000Z',
+      standard: 179,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'General Services Administration',
+      budgetAgencyTitleId: 'general-services-administration',
+      budgetBureauTitle: 'Real Property Activities',
+      budgetBureauTitleId: 'real-property-activities',
+      fileType: 'standard',
+      fileCount: 51,
+      latestApprovalTimestamp: '2026-02-13T15:46:11.000Z',
+      standard: 51,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'General Services Administration',
+      budgetAgencyTitleId: 'general-services-administration',
+      budgetBureauTitle: 'Supply and Technology Activities',
+      budgetBureauTitleId: 'supply-and-technology-activities',
+      fileType: 'standard',
+      fileCount: 87,
+      latestApprovalTimestamp: '2025-12-03T17:35:07.000Z',
+      standard: 87,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Intelligence Community Management Account',
+      budgetAgencyTitleId: 'intelligence-community-management-account',
+      budgetBureauTitle: 'Intelligence Community Management Account',
+      budgetBureauTitleId: 'intelligence-community-management-account',
+      fileType: 'standard',
+      fileCount: 9,
+      latestApprovalTimestamp: '2026-02-13T18:13:00.000Z',
+      standard: 9,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'International Monetary Programs',
+      budgetBureauTitleId: 'international-monetary-programs',
+      fileType: 'standard',
+      fileCount: 9,
+      latestApprovalTimestamp: '2025-09-23T18:32:27.000Z',
+      standard: 9,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'International Security Assistance',
+      budgetBureauTitleId: 'international-security-assistance',
+      fileType: 'standard',
+      fileCount: 792,
+      latestApprovalTimestamp: '2026-02-18T09:47:05.000Z',
+      standard: 792,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'Military Sales Program',
+      budgetBureauTitleId: 'military-sales-program',
+      fileType: 'standard',
+      fileCount: 23,
+      latestApprovalTimestamp: '2026-02-20T13:42:21.000Z',
+      standard: 23,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'International Assistance Programs',
+      budgetAgencyTitleId: 'international-assistance-programs',
+      budgetBureauTitle: 'Multilateral Assistance',
+      budgetBureauTitleId: 'multilateral-assistance',
+      fileType: 'standard',
+      fileCount: 144,
+      latestApprovalTimestamp: '2026-02-27T14:07:31.000Z',
+      standard: 144,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Other Commissions and Boards',
+      budgetAgencyTitleId: 'other-commissions-and-boards',
+      budgetBureauTitle: 'Other Commissions and Boards',
+      budgetBureauTitleId: 'other-commissions-and-boards',
+      fileType: 'standard',
+      fileCount: 12,
+      latestApprovalTimestamp: '2026-02-27T14:07:31.000Z',
+      standard: 12,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Other Defense (Civil Programs)',
+      budgetAgencyTitleId: 'other-defense-civil-programs',
+      budgetBureauTitle: 'Cemeterial Expenses',
+      budgetBureauTitleId: 'cemeterial-expenses',
+      fileType: 'standard',
+      fileCount: 76,
+      latestApprovalTimestamp: '2026-01-14T09:08:33.000Z',
+      standard: 76,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Other Defense (Civil Programs)',
+      budgetAgencyTitleId: 'other-defense-civil-programs',
+      budgetBureauTitle: 'Forest and Wildlife Conservation, Military Reservations',
+      budgetBureauTitleId: 'forest-and-wildlife-conservation-military-reservations',
+      fileType: 'standard',
+      fileCount: 52,
+      latestApprovalTimestamp: '2026-02-06T10:39:36.000Z',
+      standard: 52,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Other Defense (Civil Programs)',
+      budgetAgencyTitleId: 'other-defense-civil-programs',
+      budgetBureauTitle: 'Retiree Health Care',
+      budgetBureauTitleId: 'retiree-health-care',
+      fileType: 'standard',
+      fileCount: 9,
+      latestApprovalTimestamp: '2025-09-26T16:29:33.000Z',
+      standard: 9,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Patient-Centered Outcomes Research Trust Fund',
+      budgetAgencyTitleId: 'patient-centered-outcomes-research-trust-fund',
+      budgetBureauTitle: 'Patient-Centered Outcomes Research Trust Fund',
+      budgetBureauTitleId: 'patient-centered-outcomes-research-trust-fund',
+      fileType: 'standard',
+      fileCount: 6,
+      latestApprovalTimestamp: '2025-09-04T14:35:15.000Z',
+      standard: 6,
+      matches: []
+    },
+    {
+      budgetAgencyTitle: 'Public Defender Service for the District of Columbia',
+      budgetAgencyTitleId: 'public-defender-service-for-the-district-of-columbia',
+      budgetBureauTitle: 'Public Defender Service for the District of Columbia',
+      budgetBureauTitleId: 'public-defender-service-for-the-district-of-columbia',
+      fileType: 'standard',
+      fileCount: 19,
+      latestApprovalTimestamp: '2025-10-16T14:10:41.000Z',
+      standard: 19,
       matches: []
     },
     {
@@ -9880,8 +9948,10 @@ export default {
       budgetAgencyTitleId: 'united-states-holocaust-memorial-museum',
       budgetBureauTitle: 'United States Holocaust Memorial Museum',
       budgetBureauTitleId: 'united-states-holocaust-memorial-museum',
+      fileType: 'standard',
       fileCount: 35,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2026-02-21T08:32:54.000Z',
+      standard: 35,
       matches: []
     },
     {
@@ -9889,8 +9959,10 @@ export default {
       budgetAgencyTitleId: 'united-states-interagency-council-on-homelessness',
       budgetBureauTitle: 'United States Interagency Council on Homelessness',
       budgetBureauTitleId: 'united-states-interagency-council-on-homelessness',
+      fileType: 'standard',
       fileCount: 6,
-      spendPlanCount: 0,
+      latestApprovalTimestamp: '2025-11-13T16:36:56.000Z',
+      standard: 6,
       matches: []
     }
   ],

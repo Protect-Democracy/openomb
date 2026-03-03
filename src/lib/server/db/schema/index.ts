@@ -10,7 +10,6 @@ import { lineDescriptions } from './line-descriptions';
 import { lineTypes } from './line-types';
 import { searches } from './searches';
 import { subscriptions } from './subscriptions';
-import { spendPlans } from './spend-plans';
 import { tafs } from './tafs';
 import { users, accounts, sessions, verificationTokens, authenticators } from './users';
 
@@ -23,7 +22,6 @@ const allSchemas = {
   lineTypes,
   searches,
   subscriptions,
-  spendPlans,
   tafs,
   users,
   accounts,
@@ -41,7 +39,6 @@ export {
   lineTypes,
   searches,
   subscriptions,
-  spendPlans,
   tafs,
   users,
   accounts,

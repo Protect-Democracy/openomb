@@ -11,7 +11,6 @@ import chalk from 'chalk';
 import { db } from '$db/connection';
 import { collections } from '$schema/collections';
 import { files } from '$schema/files';
-import { spendPlans, type spendPlansSelect } from '$schema/spend-plans';
 import type { filesSelect } from '$schema/files';
 import {
   apportionmentListFromHomepage,
@@ -155,7 +154,6 @@ async function cli(): Promise<void> {
 
     // Keep track of file ids to mark any as removed
     const fileIds: string[] = [];
-    const spendPlanIds: string[] = [];
 
     // Get list of apportionment URLs
     let apportionmentUrls;
@@ -226,9 +224,9 @@ async function cli(): Promise<void> {
         // If new records only, check if file exists
         let existingRecord;
         if (options.newRecordsOnly) {
-          existingRecord = await findSpendPlanBySourceUrl(jsonSpendPlanUrls[urlIndex]);
+          existingRecord = await findFileBySourceUrl(jsonSpendPlanUrls[urlIndex]);
           if (existingRecord) {
-            spendPlanIds.push(existingRecord.fileId);
+            fileIds.push(existingRecord.fileId);
           }
         }
 
@@ -237,7 +235,7 @@ async function cli(): Promise<void> {
           try {
             const spendPlanRecord = await loadJsonSpendPlan(jsonSpendPlanUrls[urlIndex]);
             if (spendPlanRecord) {
-              spendPlanIds.push(spendPlanRecord.fileId);
+              fileIds.push(spendPlanRecord.fileId);
             }
           }
           catch (error) {
@@ -313,9 +311,9 @@ async function cli(): Promise<void> {
         // If new records only, check if file exists
         let existingRecord;
         if (options.newRecordsOnly) {
-          existingRecord = await findSpendPlanBySourceUrl(pdfSpendPlanUrls[urlIndex]);
+          existingRecord = await findFileBySourceUrl(pdfSpendPlanUrls[urlIndex]);
           if (existingRecord) {
-            spendPlanIds.push(existingRecord.fileId);
+            fileIds.push(existingRecord.fileId);
           }
         }
 
@@ -324,7 +322,7 @@ async function cli(): Promise<void> {
           try {
             const spendPlanRecord = await loadPdfSpendPlan(pdfSpendPlanUrls[urlIndex]);
             if (spendPlanRecord) {
-              spendPlanIds.push(spendPlanRecord.fileId);
+              fileIds.push(spendPlanRecord.fileId);
             }
           }
           catch (error) {
@@ -353,10 +351,6 @@ async function cli(): Promise<void> {
       .update(files)
       .set({ removed: true, modifiedAt: new Date() })
       .where(notInArray(files.fileId, fileIds));
-    await db
-      .update(spendPlans)
-      .set({ removed: true, modifiedAt: new Date() })
-      .where(notInArray(spendPlans.fileId, spendPlanIds));
 
     // Save end of collection
     const complete = new Date();
@@ -417,19 +411,6 @@ async function cli(): Promise<void> {
 async function findFileBySourceUrl(sourceUrl: string): Promise<filesSelect | null> {
   const existingRecords = await db.query.files.findFirst({
     where: eq(files.sourceUrl, sourceUrl)
-  });
-  return existingRecords ? existingRecords : null;
-}
-
-/**
- * Check database for existing record by source URL.
- *
- * @param sourceUrl Source URL to check for
- * @returns Existing record or null
- */
-async function findSpendPlanBySourceUrl(sourceUrl: string): Promise<spendPlansSelect | null> {
-  const existingRecords = await db.query.spendPlans.findFirst({
-    where: eq(spendPlans.sourceUrl, sourceUrl)
   });
   return existingRecords ? existingRecords : null;
 }
