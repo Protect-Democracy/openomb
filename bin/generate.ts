@@ -15,6 +15,17 @@ import { schemas } from '$db/connection';
 import packageJson from '../package.json' with { type: 'json' };
 import journal from '$db/migrations/meta/_journal.json';
 
+const queryReplacements = [
+  {
+    pattern: /CREATE TABLE "/,
+    alternative: 'CREATE TABLE IF NOT EXISTS "'
+  },
+  {
+    pattern: /CREATE INDEX "/,
+    alternative: 'CREATE INDEX IF NOT EXISTS "'
+  }
+];
+
 /**
  * Main CLI handler.
  */
@@ -57,15 +68,22 @@ async function cli(): Promise<void> {
         version: `${curr.version}`,
         when: Date.now(),
         tag: nextTag,
-        breakpoints: true
+        breakpoints: false // The generated sql doesn't contain breakpoints
       }
     ]
   };
 
+  const saferSqlStatements = migrationStatements.map((statement) => {
+    queryReplacements.forEach((r) => {
+      statement = statement.replace(r.pattern, r.alternative);
+    });
+    return statement;
+  });
+
   await Promise.all([
     fs.writeFile(`${migrationsDir}/meta/${nextIndex}_snapshot.json`, JSON.stringify(curr, null, 2)),
     fs.writeFile(`${migrationsDir}/meta/_journal.json`, JSON.stringify(newJournal, null, 2)),
-    fs.writeFile(`${migrationsDir}/${nextTag}.sql`, migrationStatements.join('\n'))
+    fs.writeFile(`${migrationsDir}/${nextTag}.sql`, saferSqlStatements.join('\n'))
   ]);
 
   console.info(`Migration files written for ${nextTag}`);
