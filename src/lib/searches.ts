@@ -50,8 +50,7 @@ export function parseCriterion(
   const emptyArrayAsUndefined = <T>(value: T[] | undefined): T[] | undefined => {
     if (value && Array.isArray(value) && value.length === 0) {
       return undefined;
-    }
-    else {
+    } else {
       return value;
     }
   };
@@ -59,16 +58,14 @@ export function parseCriterion(
   const parseStringArray = (value: string | string[] | undefined): string[] | undefined => {
     if (Array.isArray(value)) {
       return emptyArrayAsUndefined(value.filter(Boolean));
-    }
-    else if (typeof value === 'string') {
+    } else if (typeof value === 'string') {
       return emptyArrayAsUndefined(
         value
           .split(',')
           .map((s) => s.trim())
           .filter(Boolean)
       );
-    }
-    else {
+    } else {
       return undefined;
     }
   };
@@ -83,19 +80,16 @@ export function parseCriterion(
           .map((v) => {
             if (typeof v === 'number') {
               return v;
-            }
-            else if (typeof v === 'string') {
+            } else if (typeof v === 'string') {
               const parsed = parseInt(v);
               return isNaN(parsed) ? undefined : parsed;
-            }
-            else {
+            } else {
               return undefined;
             }
           })
           .filter((n) => n !== undefined) as number[]
       );
-    }
-    else if (typeof value === 'string') {
+    } else if (typeof value === 'string') {
       return emptyArrayAsUndefined(
         value
           .split(',')
@@ -103,8 +97,7 @@ export function parseCriterion(
           .map((s) => parseInt(s))
           .filter((n) => !isNaN(n))
       );
-    }
-    else {
+    } else {
       return undefined;
     }
   };
@@ -113,13 +106,11 @@ export function parseCriterion(
     if (isDate(value)) {
       // Cutout the date portion as ISO
       return value.toISOString().split('T')[0];
-    }
-    else if (typeof value === 'string') {
+    } else if (typeof value === 'string') {
       // Try parsing as ISO date string, and if it's valid, return the date portion as ISO
       const parsed = DateTime.fromISO(value);
       return parsed.isValid ? parsed.toFormat('yyyy-MM-dd') : undefined;
-    }
-    else {
+    } else {
       return undefined;
     }
   };
@@ -190,8 +181,7 @@ export function criterionToUrlSearchParams(criterion: SavedSearchCriterion): URL
     if (value !== undefined) {
       if (Array.isArray(value)) {
         value.forEach((v) => searchParams.append(key, v.toString()));
-      }
-      else {
+      } else {
         searchParams.append(key, value.toString());
       }
     }
@@ -275,8 +265,7 @@ export function searchCriterionDescriptions(
         })
         .filter(Boolean);
       criterionArray.push(`${plural('Approver', approverTitles)}: ${approverTitles.join(', ')}`);
-    }
-    else {
+    } else {
       criterionArray.push(
         `${plural('Approver', criterion.approver)}: ${criterion.approver.join(', ')}`
       );

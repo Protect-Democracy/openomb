@@ -1,10 +1,10 @@
 <script lang="ts">
   import Spinner from '$components/icons/Spinner.svelte';
-  import SearchIcon from '$components/icons/Search.svelte';
-  import TopRightArrowIcon from '$components/icons/TopRightArrow.svelte';
+import SearchIcon from '$components/icons/Search.svelte';
+import TopRightArrowIcon from '$components/icons/TopRightArrow.svelte';
 
-  // State
-  let submitting = false;
+// State
+let submitting = false;
 </script>
 
 <form method="GET" action="/search" on:submit={() => (submitting = true)}>

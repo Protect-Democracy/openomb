@@ -2,7 +2,7 @@ import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import js from '@eslint/js';
 import svelte from 'eslint-plugin-svelte';
-import eslintConfigPrettier from 'eslint-config-prettier/flat';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import typescriptParser from '@typescript-eslint/parser';
 import svelteParser from 'svelte-eslint-parser';
@@ -10,9 +10,10 @@ import svelteParser from 'svelte-eslint-parser';
 /** @type { import("eslint").Linter.Config } */
 export default defineConfig([
   js.configs.recommended,
-  tseslint.configs.recommended,
+  ...tseslint.configs.recommended,
   ...svelte.configs.recommended,
   eslintConfigPrettier,
+  ...svelte.configs.prettier,
   {
     languageOptions: {
       ecmaVersion: 2022,

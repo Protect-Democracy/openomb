@@ -10,32 +10,32 @@
 
 <script lang="ts">
   import { createTabs } from '@melt-ui/svelte';
-  import { writable } from 'svelte/store';
-  import { setContext } from 'svelte';
+import { writable } from 'svelte/store';
+import { setContext } from 'svelte';
 
-  // TODO: Ideally we could keep the default tab in the URL,
-  // but there are two issues to figure out:
-  // 1) If the hash is the same as something else, it will scroll
-  //    to that place, which is a bit unexpected when changing tabs
-  // 2) For some reason the non default content doesn't show up
-  //    if there is a hash set on the page load.  For instance,
-  //    setting to #account-results on the search page, the results
-  //    don't show up initially but will after clicking other tab
+// TODO: Ideally we could keep the default tab in the URL,
+// but there are two issues to figure out:
+// 1) If the hash is the same as something else, it will scroll
+//    to that place, which is a bit unexpected when changing tabs
+// 2) For some reason the non default content doesn't show up
+//    if there is a hash set on the page load.  For instance,
+//    setting to #account-results on the search page, the results
+//    don't show up initially but will after clicking other tab
 
-  // Props
-  export let defaultTabId: string;
+// Props
+export let defaultTabId: string;
 
-  // Setup tabs parts from MeltUI
-  const {
-    elements: { root, list, content, trigger }
-  } = createTabs({
-    defaultValue: `tab-${defaultTabId}`
-  });
+// Setup tabs parts from MeltUI
+const {
+  elements: { root, list, content, trigger }
+} = createTabs({
+  defaultValue: `tab-${defaultTabId}`
+});
 
-  // Setup tab context to keep track of tabs and content
-  let tabs = writable([]);
-  let tabContext = { tabs, content };
-  setContext('tabs', tabContext);
+// Setup tab context to keep track of tabs and content
+let tabs = writable([]);
+let tabContext = { tabs, content };
+setContext('tabs', tabContext);
 </script>
 
 <div

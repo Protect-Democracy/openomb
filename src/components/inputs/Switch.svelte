@@ -1,23 +1,23 @@
 <script lang="ts">
   import { createSwitch } from '@melt-ui/svelte';
-  import type { Writable } from 'svelte/store';
+import type { Writable } from 'svelte/store';
 
-  // Props
-  export let id: string;
-  export let label: string;
-  export let checked: Writable<boolean>;
-  export let variant: string = '';
+// Props
+export let id: string;
+export let label: string;
+export let checked: Writable<boolean>;
+export let variant: string = '';
 
-  // Make switch parts
-  const {
-    elements: { root, input }
-  } = createSwitch({
-    checked,
-    onCheckedChange: ({ next }) => {
-      checked.set(next);
-      return next;
-    }
-  });
+// Make switch parts
+const {
+  elements: { root, input }
+} = createSwitch({
+  checked,
+  onCheckedChange: ({ next }) => {
+    checked.set(next);
+    return next;
+  }
+});
 </script>
 
 <form>

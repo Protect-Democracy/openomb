@@ -7,15 +7,15 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "tofu/**"
-      - "docs/**"
-      - "**/*.md"
+      - 'tofu/**'
+      - 'docs/**'
+      - '**/*.md'
 
   pull_request:
     paths-ignore:
-      - "tofu/**"
-      - "docs/**"
-      - "**/*.md"
+      - 'tofu/**'
+      - 'docs/**'
+      - '**/*.md'
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install

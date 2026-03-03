@@ -1,13 +1,13 @@
 <script lang="ts">
   // Helpful display that appears when no results are found
 
-  // Props
-  export let resultType: 'file' | 'account';
+// Props
+export let resultType: 'file' | 'account';
 </script>
 
 <p>
-  <strong>No {resultType}s were found</strong> from your criteria. Please refine your search and try
-  again. Need some tips?
+  <strong>No {resultType}s were found</strong> from your criteria. Please refine your search and try again.
+  Need some tips?
 </p>
 
 <ul>

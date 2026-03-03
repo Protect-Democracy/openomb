@@ -17,141 +17,144 @@
 
 <script lang="ts">
   import { createCombobox } from '@melt-ui/svelte';
-import { fly } from 'svelte/transition';
-import { createEventDispatcher } from 'svelte';
-import { groupBy, uniqBy } from 'lodash-es';
-import ChevronDown from '$components/icons/ChevronDown.svelte';
+  import { fly } from 'svelte/transition';
+  import { createEventDispatcher } from 'svelte';
+  import { groupBy, uniqBy } from 'lodash-es';
+  import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-export let options: string[] | Record<string, unknown>[];
-export let multi = false;
-export let id: string;
-export let name: string;
-export let value: string | string[];
+  export let options: string[] | Record<string, unknown>[];
+  export let multi = false;
+  export let id: string;
+  export let name: string;
+  export let value: string | string[];
 
-export let formatOptionLabel: (option: any) => string = (o) => o;
-export let formatOptionValue: (option: any) => string = (o) => o;
-export let formatGroupLabel: ((option: any) => string) | undefined = undefined;
-export let formatGroupValue: ((option: any) => string) | undefined = undefined;
-// Used to combine the group and option value together separated by comma.  This
-// has been the default, so default to true.  If false, then just the
-// formatOptionValue will determine the value regardless if a formatGroupValue
-// is set.
-export let combineGroupValue = true;
+  export let formatOptionLabel: (option: any) => string = (o) => o;
+  export let formatOptionValue: (option: any) => string = (o) => o;
+  export let formatGroupLabel: ((option: any) => string) | undefined = undefined;
+  export let formatGroupValue: ((option: any) => string) | undefined = undefined;
+  // Used to combine the group and option value together separated by comma.  This
+  // has been the default, so default to true.  If false, then just the
+  // formatOptionValue will determine the value regardless if a formatGroupValue
+  // is set.
+  export let combineGroupValue = true;
 
-// Constants
-const emptyOption = { value: '', label: 'None' };
+  // Constants
+  const emptyOption = { value: '', label: 'None' };
 
-// Get our option(s) that correspond to the provided value
-function getDefaultSelection() {
-  if (!multi && !value) {
-    return emptyOption;
-  }
-
-  const defaultSelected = options
-    .filter((o) =>
-      Array.isArray(value)
-        ? value.includes(formatGroupOptionValue(o))
-        : formatGroupOptionValue(o) === value
-    )
-    .map((o) => ({
-      value: formatGroupOptionValue(o),
-      label: formatOptionLabel(o)
-    }));
-  return multi ? defaultSelected : defaultSelected?.[0];
-}
-
-// Melt combobox
-const dispatch = createEventDispatcher();
-const {
-  elements: { menu, input, option, group, groupLabel },
-  states: { open, inputValue, touchedInput, selected },
-  helpers: { isSelected, isHighlighted }
-} = createCombobox({
-  forceVisible: true,
-  multiple: multi,
-  defaultSelected: getDefaultSelection(),
-  ids: { label: id },
-  onSelectedChange: ({ next }) => {
-    dispatch('change', next);
-    return next;
-  },
-  onOpenChange: ({ next }) => {
-    if (!next) {
-      inputValue.set(''); //Clear input when options are chosen & dialog is closed
+  // Get our option(s) that correspond to the provided value
+  function getDefaultSelection() {
+    if (!multi && !value) {
+      return emptyOption;
     }
-    return next;
+
+    const defaultSelected = options
+      .filter((o) =>
+        Array.isArray(value)
+          ? value.includes(formatGroupOptionValue(o))
+          : formatGroupOptionValue(o) === value
+      )
+      .map((o) => ({
+        value: formatGroupOptionValue(o),
+        label: formatOptionLabel(o)
+      }));
+    return multi ? defaultSelected : defaultSelected?.[0];
   }
-});
 
-// Derived
-// For some reason the store, $open, causes issues with sveltekit rendering,
-// specifically it claims the $open store is undefined.
-$: openProxy = typeof $open !== 'undefined' ? $open : false;
-$: groupedOptions = formatGroupLabel
-  ? groupBy(uniqBy(options, formatGroupOptionValue), formatGroupLabel)
-  : {
-      Options: options
-    };
-
-$: filteredGroupOptions = $touchedInput
-  ? Object.keys(groupedOptions).reduce((filteredGroupObject, groupName) => {
-      const normalizedInput = $inputValue.toLowerCase();
-      const filteredOptions = groupName.toLowerCase().includes(normalizedInput)
-        ? groupedOptions[groupName]
-        : groupedOptions[groupName].filter((o) =>
-            formatOptionLabel(o).toLowerCase().includes(normalizedInput)
-          );
-      if (filteredOptions.length) {
-        filteredGroupObject[groupName] = filteredOptions;
+  // Melt combobox
+  const dispatch = createEventDispatcher();
+  const {
+    elements: { menu, input, option, group, groupLabel },
+    states: { open, inputValue, touchedInput, selected },
+    helpers: { isSelected, isHighlighted }
+  } = createCombobox({
+    forceVisible: true,
+    multiple: multi,
+    defaultSelected: getDefaultSelection(),
+    ids: { label: id },
+    onSelectedChange: ({ next }) => {
+      dispatch('change', next);
+      return next;
+    },
+    onOpenChange: ({ next }) => {
+      if (!next) {
+        inputValue.set(''); //Clear input when options are chosen & dialog is closed
       }
-      return filteredGroupObject;
-    }, {})
-  : groupedOptions;
-
-function placeholderText(selectedOptions) {
-  // Option is empty (undefined or empty array)
-  if (
-    !selectedOptions ||
-    (!Array.isArray(selectedOptions) && !selectedOptions.value) ||
-    (Array.isArray(selectedOptions) && !selectedOptions.length)
-  ) {
-    return 'Type here to filter options';
-  }
-  // Single option is selected
-  if (!Array.isArray(selectedOptions)) {
-    return selectedOptions.label;
-  }
-  // Array of options is selected
-  return `${selectedOptions.length} value(s) selected`;
-}
-
-function formatGroupOptionValue(option) {
-  // If we want our group value returned as well, return both
-  if (formatGroupValue && combineGroupValue) {
-    return `${formatGroupValue(option)},${formatOptionValue(option)}`;
-  }
-
-  // Otherwise just return the option value
-  return formatOptionValue(option);
-}
-
-// Our selected values do not properly clear on reset, so we need to
-//  add an event to our form input(s)
-//  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
-function fixFormReset(el) {
-  const form = el.form;
-  if (!form) return;
-  const handleReset = () => {
-    // Set timeout is needed since `el.value` is only updated on the next frame
-    setTimeout(() => selected.set(multi ? [] : emptyOption));
-  };
-  form.addEventListener('reset', handleReset);
-  return {
-    destroy() {
-      form.removeEventListener('reset', handleReset);
+      return next;
     }
-  };
-}
+  });
+
+  // Derived
+  // For some reason the store, $open, causes issues with sveltekit rendering,
+  // specifically it claims the $open store is undefined.
+  $: openProxy = typeof $open !== 'undefined' ? $open : false;
+  $: groupedOptions = formatGroupLabel
+    ? groupBy(uniqBy(options, formatGroupOptionValue), formatGroupLabel)
+    : {
+        Options: options
+      };
+
+  $: filteredGroupOptions = $touchedInput
+    ? Object.keys(groupedOptions).reduce(
+        (filteredGroupObject: Record<string, (typeof groupedOptions)[string]>, groupName) => {
+          const normalizedInput = $inputValue.toLowerCase();
+          const filteredOptions = groupName.toLowerCase().includes(normalizedInput)
+            ? groupedOptions[groupName]
+            : groupedOptions[groupName].filter((o) =>
+                formatOptionLabel(o).toLowerCase().includes(normalizedInput)
+              );
+          if (filteredOptions.length) {
+            filteredGroupObject[groupName] = filteredOptions;
+          }
+          return filteredGroupObject;
+        },
+        {}
+      )
+    : groupedOptions;
+
+  function placeholderText(selectedOptions: typeof $selected) {
+    // Option is empty (undefined or empty array)
+    if (
+      !selectedOptions ||
+      (!Array.isArray(selectedOptions) && !selectedOptions.value) ||
+      (Array.isArray(selectedOptions) && !selectedOptions.length)
+    ) {
+      return 'Type here to filter options';
+    }
+    // Single option is selected
+    if (!Array.isArray(selectedOptions)) {
+      return selectedOptions.label;
+    }
+    // Array of options is selected
+    return `${selectedOptions.length} value(s) selected`;
+  }
+
+  function formatGroupOptionValue(option: string | Record<string, unknown>) {
+    // If we want our group value returned as well, return both
+    if (formatGroupValue && combineGroupValue) {
+      return `${formatGroupValue(option)},${formatOptionValue(option)}`;
+    }
+
+    // Otherwise just return the option value
+    return formatOptionValue(option);
+  }
+
+  // Our selected values do not properly clear on reset, so we need to
+  //  add an event to our form input(s)
+  //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
+  function fixFormReset(el: HTMLInputElement) {
+    const form = el.form;
+    if (!form) return;
+    const handleReset = () => {
+      // Set timeout is needed since `el.value` is only updated on the next frame
+      setTimeout(() => selected.set(multi ? [] : emptyOption));
+    };
+    form.addEventListener('reset', handleReset);
+    return {
+      destroy() {
+        form.removeEventListener('reset', handleReset);
+      }
+    };
+  }
 </script>
 
 <div class="has-js-only-block">

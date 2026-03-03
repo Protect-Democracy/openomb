@@ -1,20 +1,20 @@
 <script lang="ts">
   import { formatNumber } from '$lib/formatters';
-  import Spinner from '$components/icons/Spinner.svelte';
+import Spinner from '$components/icons/Spinner.svelte';
 
-  // Props
-  export let countLabel = 'accounts';
-  export let count: number | Promise<number>;
-  export let currentPage: number;
-  export let pageSize: number;
+// Props
+export let countLabel = 'accounts';
+export let count: number | Promise<number>;
+export let currentPage: number;
+export let pageSize: number;
 
-  // Methods
-  function resultsStart() {
-    return currentPage * pageSize - pageSize + 1;
-  }
-  function resultsEnd(count: number) {
-    return Math.min(count || 0, currentPage * pageSize);
-  }
+// Methods
+function resultsStart() {
+  return currentPage * pageSize - pageSize + 1;
+}
+function resultsEnd(count: number) {
+  return Math.min(count || 0, currentPage * pageSize);
+}
 </script>
 
 <div class="result-count">

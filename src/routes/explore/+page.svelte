@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import AgencyExplorer from '$components/agencies/AgencyExplorer.svelte';
-  import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
+import AgencyExplorer from '$components/agencies/AgencyExplorer.svelte';
+import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
 
-  export let data: PageData;
+export let data: PageData;
 </script>
 
 <section class="page-container content-container">

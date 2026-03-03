@@ -15,55 +15,55 @@
 
 <script lang="ts">
   import { createToggleGroup } from '@melt-ui/svelte';
-import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
 
-export let options: string[] | Record<string, unknown>[];
-export let multi = false;
-export let id;
-export let name;
+  export let options: string[];
+  export let multi = false;
+  export let id;
+  export let name;
 
-let defaultValue;
-export { defaultValue as value };
+  let defaultValue;
+  export { defaultValue as value };
 
-export let buttonClass = '';
-export let formatOptionLabel = (o: string) => o;
-export let formatOptionValue = (o: string) => o;
+  export let buttonClass = '';
+  export let formatOptionLabel = (o: string) => o;
+  export let formatOptionValue = (o: string) => o;
 
-const dispatch = createEventDispatcher();
-const {
-  elements: { root, item },
-  states: { value },
-  helpers: { isPressed }
-} = createToggleGroup({
-  type: multi ? 'multiple' : 'single',
-  defaultValue,
-  onValueChange: ({ next }) => {
-    dispatch('change', next);
-    return next;
-  }
-});
-
-// Our selected values do not properly clear on reset, so we need to
-//  add an event to our form input(s)
-//  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
-function fixFormReset(el) {
-  const form = el.form;
-  if (!form) {
-    return;
-  }
-
-  const handleReset = () => {
-    // Set timeout is needed since `el.value` is only updated on the next frame
-    setTimeout(() => value.set(multi ? [] : ''));
-  };
-  form.addEventListener('reset', handleReset);
-
-  return {
-    destroy() {
-      form.removeEventListener('reset', handleReset);
+  const dispatch = createEventDispatcher();
+  const {
+    elements: { root, item },
+    states: { value },
+    helpers: { isPressed }
+  } = createToggleGroup({
+    type: multi ? 'multiple' : 'single',
+    defaultValue,
+    onValueChange: ({ next }) => {
+      dispatch('change', next);
+      return next;
     }
-  };
-}
+  });
+
+  // Our selected values do not properly clear on reset, so we need to
+  //  add an event to our form input(s)
+  //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
+  function fixFormReset(el: HTMLInputElement) {
+    const form = el.form;
+    if (!form) {
+      return;
+    }
+
+    const handleReset = () => {
+      // Set timeout is needed since `el.value` is only updated on the next frame
+      setTimeout(() => value.set(multi ? [] : ''));
+    };
+    form.addEventListener('reset', handleReset);
+
+    return {
+      destroy() {
+        form.removeEventListener('reset', handleReset);
+      }
+    };
+  }
 </script>
 
 <div class="has-js-only-block">
@@ -91,7 +91,7 @@ function fixFormReset(el) {
         {name}
         id={id || name}
         value={formatOptionValue(option)}
-        checked={$value.includes(`${formatOptionValue(option)}`)}
+        checked={$value?.includes(`${formatOptionValue(option)}`)}
         use:fixFormReset
       />
       <label for={formatOptionValue(option)}>

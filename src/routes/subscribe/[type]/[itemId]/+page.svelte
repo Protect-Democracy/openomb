@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
-  export let data: PageData;
-  $: ({ type, itemId, subscription, user } = data);
+export let data: PageData;
+$: ({ type, itemId, subscription, user } = data);
 </script>
 
 <div class="page-container content-container">

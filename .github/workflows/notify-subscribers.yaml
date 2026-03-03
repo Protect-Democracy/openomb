@@ -7,17 +7,17 @@ name: Notify subscribers
 on:
   # We want this to run whenever our collection tasks run successfully
   workflow_run:
-    workflows: ["Collect data (Full)", "Collect data (New)"]
+    workflows: ['Collect data (Full)', 'Collect data (New)']
     types:
       - completed
   workflow_dispatch:
 
 env:
-  AWS_REGION: "us-west-2"
+  AWS_REGION: 'us-west-2'
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_ROLE_TO_ASSUME: "notify"
-  TOFU_TASK_DEFINITION_OUTPUT: "notify_task_definition_arn"
-  tf_actions_working_dir: "tofu"
+  AWS_ROLE_TO_ASSUME: 'notify'
+  TOFU_TASK_DEFINITION_OUTPUT: 'notify_task_definition_arn'
+  tf_actions_working_dir: 'tofu'
 
 jobs:
   notify:

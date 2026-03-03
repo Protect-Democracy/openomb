@@ -1,13 +1,13 @@
 <script lang="ts">
   import { formatDate } from '$lib/formatters';
-  import type { PageData } from './$types';
-  import { siteName, supportEmail, sourceDataUrl } from '$config';
+import type { PageData } from './$types';
+import { siteName, supportEmail, sourceDataUrl } from '$config';
 
-  // Props
-  export let data: PageData;
+// Props
+export let data: PageData;
 
-  // Derived
-  $: ({ lastUpdated } = data);
+// Derived
+$: ({ lastUpdated } = data);
 </script>
 
 <div class="page-container content-container">
@@ -146,8 +146,8 @@
               lines, and footnotes.
             </li>
             <li>
-              <code class="code-alt">agencyBureau</code> - Search in a specific agency or bureau, in
-              format ACCOUNT_ID or ACCOUNT_ID,BUREAU_ID.
+              <code class="code-alt">agencyBureau</code> - Search in a specific agency or bureau, in format
+              ACCOUNT_ID or ACCOUNT_ID,BUREAU_ID.
             </li>
             <li><code class="code-alt">tafs</code> - Keyword search specifically for TAFS.</li>
             <li>
@@ -158,8 +158,8 @@
               for multiple values.
             </li>
             <li>
-              <code class="code-alt">year</code> - Approval year; utilize multiple year query params
-              for multiple values.
+              <code class="code-alt">year</code> - Approval year; utilize multiple year query params for
+              multiple values.
             </li>
             <li>
               <code class="code-alt">approvedStart</code> - Date in ISO YYYY-MM-DD format to limit approvals
@@ -178,8 +178,8 @@
               for multiple values.
             </li>
             <li>
-              <code class="code-alt">footnoteNum</code> - Contains a certain footnote type, either A
-              or B.
+              <code class="code-alt">footnoteNum</code> - Contains a certain footnote type, either A or
+              B.
             </li>
             <li>
               <code class="code-alt">sort</code> - Should be approved_desc, approved_asc, agency_asc,

@@ -144,7 +144,7 @@
       headers: {
         'x-sveltekit-action': 'true'
       },
-      body: JSON.stringify({ type: subType, itemId: subItemId })
+      body: JSON.stringify({ subId: addedSubscription.id })
     });
 
     // @ts-expect-error Unsure how to type the deserialize output.

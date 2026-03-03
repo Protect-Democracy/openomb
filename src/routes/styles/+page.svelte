@@ -1,70 +1,70 @@
 <script lang="ts">
   import Spinner from '$components/icons/Spinner.svelte';
-  import placeholderImage from '$assets/other/placeholder-600.png';
+import placeholderImage from '$assets/other/placeholder-600.png';
 
-  const paletteColors = [
-    'color-white',
-    'color-gray-lighter',
-    'color-gray-light',
-    'color-gray-medium',
-    'color-gray-dark',
-    'color-gray-darker',
-    'color-green',
-    'color-green-light',
-    'color-green-dark',
-    'color-green-darker',
-    'color-blue-lighter',
-    'color-blue-lightest'
-  ];
+const paletteColors = [
+  'color-white',
+  'color-gray-lighter',
+  'color-gray-light',
+  'color-gray-medium',
+  'color-gray-dark',
+  'color-gray-darker',
+  'color-green',
+  'color-green-light',
+  'color-green-dark',
+  'color-green-darker',
+  'color-blue-lighter',
+  'color-blue-lightest'
+];
 
-  const potentialColors = [
-    'color-yellow',
-    'color-yellow-light',
-    'color-yellow-dark',
-    'color-yellow-darker',
-    'color-orange',
-    'color-orange-light',
-    'color-orange-dark',
-    'color-orange-darker',
-    'color-blue',
-    'color-blue-light',
-    'color-blue-dark',
-    'color-blue-darker'
-  ];
+const potentialColors = [
+  'color-yellow',
+  'color-yellow-light',
+  'color-yellow-dark',
+  'color-yellow-darker',
+  'color-orange',
+  'color-orange-light',
+  'color-orange-dark',
+  'color-orange-darker',
+  'color-blue',
+  'color-blue-light',
+  'color-blue-dark',
+  'color-blue-darker'
+];
 
-  const semanticColors = [
-    'color-background',
-    'color-text',
-    'color-text-muted',
-    'color-background-inverse',
-    'color-text-inverse',
-    'color-background-alt',
-    'color-text-alt',
-    'color-primary',
-    'color-primary-text',
-    'color-primary-hover',
-    'color-primary-hover-text',
-    'color-secondary',
-    'color-secondary-text',
-    'color-secondary-border',
-    'color-secondary-hover',
-    'color-secondary-hover-text',
-    'color-secondary-hover-border',
-    'color-alt',
-    'color-alt-text',
-    'color-alt-hover',
-    'color-alt-hover-text',
-    'color-toggle-on',
-    'color-toggle-on-text',
-    'color-toggle-off',
-    'color-toggle-off-text',
-    'color-toggle-hover',
-    'color-toggle-hover-text',
-    'color-highlight',
-    'color-error',
-    'color-disabled',
-    'color-link'
-  ];
+const semanticColors = [
+  'color-background',
+  'color-text',
+  'color-text-muted',
+  'color-background-inverse',
+  'color-text-inverse',
+  'color-background-alt',
+  'color-text-alt',
+  'color-primary',
+  'color-primary-text',
+  'color-primary-hover',
+  'color-primary-hover-text',
+  'color-secondary',
+  'color-secondary-text',
+  'color-secondary-border',
+  'color-secondary-hover',
+  'color-secondary-hover-text',
+  'color-secondary-hover-border',
+  'color-alt',
+  'color-alt-text',
+  'color-alt-hover',
+  'color-alt-hover-text',
+  'color-toggle-on',
+  'color-toggle-on-text',
+  'color-toggle-off',
+  'color-toggle-off-text',
+  'color-toggle-hover',
+  'color-toggle-hover-text',
+  'color-highlight',
+  'color-error',
+  'color-disabled',
+  'color-link'
+];
 </script>
 
 <svelte:head>
