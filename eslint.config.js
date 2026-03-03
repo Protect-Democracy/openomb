@@ -10,9 +10,10 @@ import svelteParser from 'svelte-eslint-parser';
 /** @type { import("eslint").Linter.Config } */
 export default defineConfig([
   js.configs.recommended,
-  tseslint.configs.recommended,
+  ...tseslint.configs.recommended,
   ...svelte.configs.recommended,
   eslintConfigPrettier,
+  ...svelte.configs.prettier,
   {
     languageOptions: {
       ecmaVersion: 2022,
@@ -44,6 +45,8 @@ export default defineConfig([
       }
     },
     rules: {
+      // These seem to be overly noisy
+      'svelte/no-navigation-without-resolve': 'warn',
       'svelte/valid-compile': 'warn'
     }
   },

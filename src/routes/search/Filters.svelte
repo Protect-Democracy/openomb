@@ -24,7 +24,6 @@ export let lineOptions: LineNumberOptionsResult = [];
 export let approverTitleOptions: ApproverTitleOptionsResult = [];
 
 // Derived
-
 $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 $: parsedSearchParams = parseUrlSearchParams(url.searchParams);
 

@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { map } from 'lodash-es';
+import { map, transform } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
@@ -68,8 +68,7 @@ async function getSubscriptionDetails(
       description: item?.folder || '',
       itemLink: `/folder/${itemId}`
     };
-  }
-  else if (type === 'tafs') {
+  } else if (type === 'tafs') {
     // TAFS subscriptions are for a specific TAFS and Fiscal Year
     // which is what we track as far as "iteractions" go.
     const item = await db.query.tafs.findFirst({
@@ -80,8 +79,7 @@ async function getSubscriptionDetails(
       description: `TAFS: ${item && formatTafsFormattedId(item)} - ${item?.accountTitle} (FY ${item?.fiscalYear})`,
       itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
-  }
-  else if (type === 'agency') {
+  } else if (type === 'agency') {
     const item = await db.query.tafs.findFirst({
       where: eq(tafs.budgetAgencyTitleId, itemId)
     });
@@ -93,8 +91,7 @@ async function getSubscriptionDetails(
       description: item?.budgetAgencyTitle || '',
       itemLink: `/agency/${itemId}`
     };
-  }
-  else if (type === 'bureau') {
+  } else if (type === 'bureau') {
     const [agency, bureau] = itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(eq(tafs.budgetAgencyTitleId, agency), eq(tafs.budgetBureauTitleId, bureau))
@@ -109,8 +106,7 @@ async function getSubscriptionDetails(
       description: item?.budgetBureauTitle || '',
       itemLink: `/agency/${agency}/bureau/${bureau}`
     };
-  }
-  else if (type === 'account') {
+  } else if (type === 'account') {
     const [agency, bureau, account] = itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(
@@ -131,8 +127,7 @@ async function getSubscriptionDetails(
       description: item?.accountTitle || '',
       itemLink: `/agency/${agency}/bureau/${bureau}/account/${account}`
     };
-  }
-  else if (type === 'search') {
+  } else if (type === 'search') {
     const item = await db.query.searches.findFirst({
       where: eq(searches.id, itemId)
     });

@@ -6,6 +6,7 @@
 import { isDate } from 'lodash-es';
 import { timestamp, pgTable, text, json, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+import { searchCriterionDescriptions, parseCriterion } from '$lib/searches';
 import { users } from './users';
 
 // This should be the source of truth for search fields.

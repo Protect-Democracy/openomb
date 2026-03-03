@@ -99,23 +99,23 @@ export async function getSubscriptionWithFiles(
 
   if (sub.type === 'search' && 'criterion' in sub.itemDetails) {
     criterion = sub.itemDetails.criterion;
-  }
-  else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
+  } else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
     criterion = {
       agency: sub.itemDetails.agencyId || '',
       bureau: sub.itemDetails.bureauId || '',
       account: sub.itemDetails.account || ''
     };
-  }
-  else if (sub.type === 'folder') {
+  } else if (sub.type === 'folder') {
     criterion = { folder: sub.itemId };
-  }
-  else if (sub.type === 'tafs') {
+  } else if (sub.type === 'tafs') {
     const detailRecord = await userSubscriptionDetails(email, sub.type, sub.itemId);
     criterion = {
       tafs: detailRecord?.itemDetails.tafsId,
       year: `${detailRecord?.itemDetails.fiscalYear}`
     };
+  } else {
+    // Unrecognized subscription type, throw error
+    throw new Error(`Unrecognized subscription type ${sub.type}`);
   }
   else {
     // Unrecognized subscription type, throw error

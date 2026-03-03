@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { derived } from 'svelte/store';
-import { page } from '$app/stores';
-import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+  import { derived } from 'svelte/store';
+  import { page } from '$app/stores';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
 
-import type { User } from '$lib/users';
+  import type { User } from '$lib/users';
 
 export let data: PageData;
 $: ({ type, user } = data);
