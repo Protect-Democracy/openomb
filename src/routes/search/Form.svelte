@@ -1,53 +1,53 @@
 <script lang="ts">
   import { submitting } from './form-store';
-import { getContext } from 'svelte';
-import { parseUrlSearchParams } from '$lib/searches';
-import { formatDate } from '$lib/formatters';
+  import { getContext } from 'svelte';
+  import { parseUrlSearchParams } from '$lib/searches';
+  import { formatDate } from '$lib/formatters';
 
-import Spinner from '$components/icons/Spinner.svelte';
-import SearchSelect from '$components/inputs/SearchSelect.svelte';
-import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
-import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
+  import Spinner from '$components/icons/Spinner.svelte';
+  import SearchSelect from '$components/inputs/SearchSelect.svelte';
+  import AgencyBureauSearchSelect from '$components/inputs/AgencyBureauSearchSelect.svelte';
+  import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
 
-// Types
-import type { BureausResult } from '$queries/tafs';
-import type {
-  YearOptionsResult,
-  ApproverTitleOptionsResult,
-  LineNumberOptionsResult
-} from '$queries/search';
+  // Types
+  import type { BureausResult } from '$queries/tafs';
+  import type {
+    YearOptionsResult,
+    ApproverTitleOptionsResult,
+    LineNumberOptionsResult
+  } from '$queries/search';
 
-// Props
-export let url: URL;
-export let agencyBureauOptions: BureausResult = [];
-export let yearOptions: YearOptionsResult = [];
-export let lineOptions: LineNumberOptionsResult = [];
-export let approverTitleOptions: ApproverTitleOptionsResult = [];
+  // Props
+  export let url: URL;
+  export let agencyBureauOptions: BureausResult = [];
+  export let yearOptions: YearOptionsResult = [];
+  export let lineOptions: LineNumberOptionsResult = [];
+  export let approverTitleOptions: ApproverTitleOptionsResult = [];
 
-// Context
-// TODO: Type this
-const drawerContext = getContext('drawer');
+  // Context
+  // TODO: Type this
+  const drawerContext = getContext('drawer');
 
-// Derived
-$: parsedSearchParams = parseUrlSearchParams(url.searchParams);
+  // Derived
+  $: parsedSearchParams = parseUrlSearchParams(url.searchParams);
 
-// Submit handler
-function submitHandler() {
-  submitting.set(true);
+  // Submit handler
+  function submitHandler() {
+    submitting.set(true);
 
-  if (drawerContext) {
-    // TODO: Need to type the drawer context
-    // @ts-expect-error
-    drawerContext.close();
+    if (drawerContext) {
+      // TODO: Need to type the drawer context
+      // @ts-expect-error
+      drawerContext.close();
+    }
   }
-}
 
-// Derived
-$: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
+  // Derived
+  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
 
-// TODO: It would be good to align this markup with the global styles,
-// specifically the use of .form-item.  The global styles could be
-// updated to reflect this, as they are not agreed upon yet.
+  // TODO: It would be good to align this markup with the global styles,
+  // specifically the use of .form-item.  The global styles could be
+  // updated to reflect this, as they are not agreed upon yet.
 </script>
 
 <form method="get" on:submit={submitHandler}>
@@ -158,6 +158,7 @@ $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
           return lineOptions.find((o) => o.value === v)?.groupLabel || '(unknown)';
         }}
         value={parsedSearchParams.lineNum || ''}
+        combineGroupValue={false}
         multi
       />
     </div>

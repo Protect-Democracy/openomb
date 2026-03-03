@@ -36,6 +36,7 @@ export type SubscriptionWithFiles = subscriptionSelect & {
  */
 export async function sendNotifications() {
   const userSubscriptions = await subscriptionsByUser();
+  const notificationsSent = [];
 
   for (const email of Object.keys(userSubscriptions)) {
     // For a user, find any relevant new files, then send the notification
@@ -54,8 +55,16 @@ export async function sendNotifications() {
       await sendNotificationEmail(email, notifySubs);
       // Update our subscriptions to indicate notifications were sent
       await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
+
+      notificationsSent.push({
+        email,
+        notifySubs,
+        subscriptionsNotified: notifySubs.length
+      });
     }
   }
+
+  return notificationsSent;
 }
 
 /**
@@ -90,25 +99,21 @@ export async function getSubscriptionWithFiles(
 
   if (sub.type === 'search' && 'criterion' in sub.itemDetails) {
     criterion = sub.itemDetails.criterion;
-  }
-  else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
+  } else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
     criterion = {
       agency: sub.itemDetails.agencyId || '',
       bureau: sub.itemDetails.bureauId || '',
       account: sub.itemDetails.account || ''
     };
-  }
-  else if (sub.type === 'folder') {
+  } else if (sub.type === 'folder') {
     criterion = { folder: sub.itemId };
-  }
-  else if (sub.type === 'tafs') {
+  } else if (sub.type === 'tafs') {
     const detailRecord = await userSubscriptionDetails(email, sub.type, sub.itemId);
     criterion = {
       tafs: detailRecord?.itemDetails.tafsId,
       year: `${detailRecord?.itemDetails.fiscalYear}`
     };
-  }
-  else {
+  } else {
     // Unrecognized subscription type, throw error
     throw new Error(`Unrecognized subscription type ${sub.type}`);
   }

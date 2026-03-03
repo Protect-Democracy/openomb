@@ -8,11 +8,17 @@ import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
-import { searches, searchCriterionDescription, type searchesSelect } from '$schema/searches';
+import { searches, type searchesSelect } from '$schema/searches';
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
-import { criterionToUrlSearchParams, parseCriterion } from '$lib/searches';
+import {
+  criterionToUrlSearchParams,
+  parseCriterion,
+  searchCriterionDescriptions
+} from '$lib/searches';
+import { mApproverTitleOptions, type ApproverTitleOptionsResult } from '$queries/search';
+import { mBureaus, type BureausResult } from '$queries/tafs';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
@@ -62,8 +68,7 @@ async function getSubscriptionDetails(
       description: item?.folder || '',
       itemLink: `/folder/${itemId}`
     };
-  }
-  else if (type === 'tafs') {
+  } else if (type === 'tafs') {
     // TAFS subscriptions are for a specific TAFS and Fiscal Year
     // which is what we track as far as "iteractions" go.
     const item = await db.query.tafs.findFirst({
@@ -74,8 +79,7 @@ async function getSubscriptionDetails(
       description: `TAFS: ${item && formatTafsFormattedId(item)} - ${item?.accountTitle} (FY ${item?.fiscalYear})`,
       itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
-  }
-  else if (type === 'agency') {
+  } else if (type === 'agency') {
     const item = await db.query.tafs.findFirst({
       where: eq(tafs.budgetAgencyTitleId, itemId)
     });
@@ -87,8 +91,7 @@ async function getSubscriptionDetails(
       description: item?.budgetAgencyTitle || '',
       itemLink: `/agency/${itemId}`
     };
-  }
-  else if (type === 'bureau') {
+  } else if (type === 'bureau') {
     const [agency, bureau] = itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(eq(tafs.budgetAgencyTitleId, agency), eq(tafs.budgetBureauTitleId, bureau))
@@ -103,8 +106,7 @@ async function getSubscriptionDetails(
       description: item?.budgetBureauTitle || '',
       itemLink: `/agency/${agency}/bureau/${bureau}`
     };
-  }
-  else if (type === 'account') {
+  } else if (type === 'account') {
     const [agency, bureau, account] = itemId.split(',');
     const item = await db.query.tafs.findFirst({
       where: and(
@@ -125,8 +127,7 @@ async function getSubscriptionDetails(
       description: item?.accountTitle || '',
       itemLink: `/agency/${agency}/bureau/${bureau}/account/${account}`
     };
-  }
-  else if (type === 'search') {
+  } else if (type === 'search') {
     const item = await db.query.searches.findFirst({
       where: eq(searches.id, itemId)
     });
@@ -136,7 +137,10 @@ async function getSubscriptionDetails(
 
     return {
       itemDetails: item || {},
-      description: `Saved Search: ${searchCriterionDescription(item)}`,
+      description: `Saved Search: ${searchCriterionDescription(item, {
+        agencyBureauOptions: await mBureaus(),
+        approverTitleOptions: await mApproverTitleOptions()
+      })}`,
       itemLink: `/search?${searchParams.toString()}`
     };
   }
@@ -162,7 +166,7 @@ export const subscriptionsByUser = async function (): Promise<SubscriptionByUser
       if (!userSubs[result.users.email]) {
         userSubs[result.users.email] = [];
       }
-      const subDetails = await mGetSubscriptionDetails(
+      const subDetails = await getSubscriptionDetails(
         result.subscriptions.type,
         result.subscriptions.itemId
       );
@@ -213,7 +217,7 @@ export const userSubscriptionDetails = async function (
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
-    const subscriptionDetails = await mGetSubscriptionDetails(
+    const subscriptionDetails = await getSubscriptionDetails(
       subscriptionResults.type,
       subscriptionResults.itemId
     );
@@ -247,7 +251,7 @@ export const userSubscriptionListDetails = async function (
   const subscriptionResults = await userSubscriptionList(email);
   return await Promise.all(
     map(subscriptionResults, async (result) => {
-      const details = await mGetSubscriptionDetails(result.type, result.itemId);
+      const details = await getSubscriptionDetails(result.type, result.itemId);
       return { ...result, ...details };
     })
   );
@@ -348,3 +352,29 @@ export const removeUser = async function (email: string) {
   // Deletion cascades, so when user is removed, all entries that reference user id will be removed
   await db.delete(users).where(eq(users.email, email));
 };
+
+/**
+ * Compute parsed description value.
+ *
+ * Describes the criterion in text
+ *
+ */
+export function searchCriterionDescription(
+  searchesRecord: searchesSelect | undefined,
+  options?: {
+    agencyBureauOptions?: BureausResult;
+    approverTitleOptions?: ApproverTitleOptionsResult;
+  }
+): string {
+  const noFiltersDescription = '(no filters)';
+
+  if (!searchesRecord?.criterion) {
+    return noFiltersDescription;
+  }
+
+  const descriptions = searchCriterionDescriptions(
+    parseCriterion(searchesRecord.criterion),
+    options
+  );
+  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
+}

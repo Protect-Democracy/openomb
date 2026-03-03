@@ -95,25 +95,6 @@ export const searchesRelations = relations(searches, ({ one }) => ({
 }));
 
 /**
- * Compute parsed description value.
- *
- * Describes the criterion in text
- *
- */
-export function searchCriterionDescription(
-  searchesRecord: typeof searches.$inferSelect | undefined
-): string {
-  const noFiltersDescription = '(no filters)';
-
-  if (!searchesRecord?.criterion) {
-    return noFiltersDescription;
-  }
-
-  const descriptions = searchCriterionDescriptions(parseCriterion(searchesRecord.criterion));
-  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
-}
-
-/**
  * Export some types
  */
 export type searchesSelect = typeof searches.$inferSelect;
