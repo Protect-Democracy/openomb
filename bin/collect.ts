@@ -38,6 +38,33 @@ const env = environmentVariables();
 // Set up readable stream for testing S3 write access
 const testFileStream = Buffer.from('TEST DATA');
 
+// Apportionment types
+const apportionmentTypes = ['spreadsheet', 'letter', 'spend-plan', 'spend-plan-json'] as const;
+
+// Runs
+const collectionTypes = {
+  spreadsheet: {
+    collect: undefined as boolean | undefined,
+    progressMessage: 'Loading JSON Spreadsheet files',
+    color: 'cyan' as 'yellow' | 'cyan' | 'magenta' | 'green'
+  },
+  letter: {
+    collect: undefined as boolean | undefined,
+    progressMessage: 'Loading PDF Letter files',
+    color: 'magenta' as 'yellow' | 'cyan' | 'magenta' | 'green'
+  },
+  'spend-plan-json': {
+    collect: undefined as boolean | undefined,
+    progressMessage: 'Loading JSON Spend Plan files',
+    color: 'yellow' as 'yellow' | 'cyan' | 'magenta' | 'green'
+  },
+  'spend-plan': {
+    collect: undefined as boolean | undefined,
+    progressMessage: 'Loading PDF Spend Plan files',
+    color: 'green' as 'yellow' | 'cyan' | 'magenta' | 'green'
+  }
+};
+
 // Main
 createTransaction('apportionment-collect', cli);
 
@@ -58,6 +85,10 @@ async function cli(): Promise<void> {
     .option('--no-collection', 'Do not do collection/scraping of data.')
     .option('--no-archive', 'Do not zip and archive to S3.')
     .option('--no-meta', 'Do not load metadata such as line types and descriptions.')
+    .option(
+      '--apportionment-type <type>',
+      `Only collect specific apportionment type(s).  Can be: ${apportionmentTypes.join(', ')}.`
+    )
     .option('--show-progress', 'Show progress of collection.')
     .parse(process.argv);
   const options = program.opts();
@@ -93,12 +124,18 @@ async function cli(): Promise<void> {
     }
   }
 
+  // Mark things for collection
+  apportionmentTypes.forEach((type) => {
+    collectionTypes[type].collect =
+      !options.apportionmentType || options.apportionmentType === type;
+  });
+
   // Create timestamp and id for this run
   const start = new Date();
   const collectionId = `omb-${options.newRecordsOnly ? 'new-records-only' : 'full'}-${start.toISOString()}`;
 
   // Setup progress bars
-  let progress: MultiProgressBars;
+  let progress: MultiProgressBars | undefined = undefined;
   if (options.showProgress) {
     // TODO: Move away from MultiProgressBars. It takes over the console object and
     // doesn't give it back until progress.close() is called.  This is bad in general,
@@ -113,22 +150,13 @@ async function cli(): Promise<void> {
 
   // Collection
   if (options.collection) {
-    const jsonProgressMessage = 'Loading JSON files';
-    const jsonSpendPlanProgressMessage = 'Loading JSON spend plans';
-    const pdfProgressMessage = 'Loading PDF files';
-    const pdfSpendPlanProgressMessage = 'Loading PDF spend plans';
-
     // Progress for collection parts
-    if (options.showProgress) {
-      progress.addTask(jsonProgressMessage, { type: 'percentage', barTransformFn: chalk.cyan });
-      progress.addTask(jsonSpendPlanProgressMessage, {
-        type: 'percentage',
-        barTransformFn: chalk.cyan
-      });
-      progress.addTask(pdfProgressMessage, { type: 'percentage', barTransformFn: chalk.yellow });
-      progress.addTask(pdfSpendPlanProgressMessage, {
-        type: 'percentage',
-        barTransformFn: chalk.yellow
+    if (options.showProgress && !!progress) {
+      apportionmentTypes.forEach((type) => {
+        progress.addTask(collectionTypes[type].progressMessage, {
+          type: 'percentage',
+          barTransformFn: chalk[collectionTypes[type].color]
+        });
       });
     }
 
@@ -168,174 +196,198 @@ async function cli(): Promise<void> {
     }
 
     // Load JSON files
-    const jsonUrls = apportionmentUrls.filter((url) => isApportionmentJsonUrl(url));
+    const jsonUrls = apportionmentUrls.filter((url: string) => isApportionmentJsonUrl(url));
 
     // Go through each JSON URL and collect data
-    await createSpan('loadJsonFile[]', async () => {
-      for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
-        // If new records only, check if file exists
-        let existingRecord;
-        if (options.newRecordsOnly) {
-          existingRecord = await findFileBySourceUrl(jsonUrls[urlIndex]);
-          if (existingRecord) {
-            fileIds.push(existingRecord.fileId);
-          }
-        }
-
-        // Add new record
-        if (!existingRecord) {
-          try {
-            const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
-            if (fileRecord) {
-              fileIds.push(fileRecord.fileId);
+    if (collectionTypes.spreadsheet.collect) {
+      await createSpan('loadJsonFile[]', async () => {
+        for (let urlIndex = 0; urlIndex < jsonUrls.length; urlIndex++) {
+          // If new records only, check if file exists
+          let existingRecord;
+          if (options.newRecordsOnly) {
+            existingRecord = await findFileBySourceUrl(jsonUrls[urlIndex]);
+            if (existingRecord) {
+              fileIds.push(existingRecord.fileId);
             }
-          } catch (error) {
-            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
-            // but everything else will.
-            throw new Error(
-              `IMPORTANT: Failed loading JSON file from URL "${jsonUrls[urlIndex]}": ${error?.message || error}`
-            );
+          }
+
+          // Add new record
+          if (!existingRecord) {
+            try {
+              const fileRecord = await loadJsonFile(jsonUrls[urlIndex]);
+              if (fileRecord) {
+                fileIds.push(fileRecord.fileId);
+              }
+            } catch (error) {
+              // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+              // but everything else will.
+              throw new Error(
+                `IMPORTANT: Failed loading JSON file from URL "${jsonUrls[urlIndex]}": ${error?.message || error}`
+              );
+            }
+          }
+
+          if (options.showProgress && !!progress) {
+            progress.updateTask(collectionTypes.spreadsheet.progressMessage, {
+              percentage: (urlIndex + 1) / jsonUrls.length
+            });
           }
         }
+      });
+    }
 
-        if (options.showProgress) {
-          progress.updateTask(jsonProgressMessage, {
-            percentage: (urlIndex + 1) / jsonUrls.length
-          });
-        }
-      }
-    });
-
-    if (options.showProgress) {
-      progress.done(jsonProgressMessage, { message: chalk.green('Loaded') });
+    if (options.showProgress && !!progress) {
+      progress.done(collectionTypes.spreadsheet.progressMessage, {
+        message: collectionTypes.spreadsheet.collect
+          ? chalk.green('Loaded')
+          : chalk.yellow('Skipped')
+      });
     }
 
     // Load JSON spend plans
-    const jsonSpendPlanUrls = apportionmentUrls.filter((url) => isSpendPlanJsonUrl(url));
+    const jsonSpendPlanUrls = apportionmentUrls.filter((url: string) => isSpendPlanJsonUrl(url));
 
     // Go through each JSON URL and collect data
-    await createSpan('loadJsonSpendPlan[]', async () => {
-      for (let urlIndex = 0; urlIndex < jsonSpendPlanUrls.length; urlIndex++) {
-        // If new records only, check if file exists
-        let existingRecord;
-        if (options.newRecordsOnly) {
-          existingRecord = await findFileBySourceUrl(jsonSpendPlanUrls[urlIndex]);
-          if (existingRecord) {
-            fileIds.push(existingRecord.fileId);
-          }
-        }
-
-        // Add new record
-        if (!existingRecord) {
-          try {
-            const spendPlanRecord = await loadJsonSpendPlan(jsonSpendPlanUrls[urlIndex]);
-            if (spendPlanRecord) {
-              fileIds.push(spendPlanRecord.fileId);
+    if (collectionTypes['spend-plan-json'].collect) {
+      await createSpan('loadJsonSpendPlan[]', async () => {
+        for (let urlIndex = 0; urlIndex < jsonSpendPlanUrls.length; urlIndex++) {
+          // If new records only, check if file exists
+          let existingRecord;
+          if (options.newRecordsOnly) {
+            existingRecord = await findFileBySourceUrl(jsonSpendPlanUrls[urlIndex]);
+            if (existingRecord) {
+              fileIds.push(existingRecord.fileId);
             }
-          } catch (error) {
-            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
-            // but everything else will.
-            throw new Error(
-              `IMPORTANT: Failed loading JSON spend plan from URL "${jsonSpendPlanUrls[urlIndex]}": ${error?.message || error}`
-            );
+          }
+
+          // Add new record
+          if (!existingRecord) {
+            try {
+              const spendPlanRecord = await loadJsonSpendPlan(jsonSpendPlanUrls[urlIndex]);
+              if (spendPlanRecord) {
+                fileIds.push(spendPlanRecord.fileId);
+              }
+            } catch (error) {
+              // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+              // but everything else will.
+              throw new Error(
+                `IMPORTANT: Failed loading JSON spend plan from URL "${jsonSpendPlanUrls[urlIndex]}": ${error?.message || error}`
+              );
+            }
+          }
+
+          if (options.showProgress && !!progress) {
+            progress.updateTask(collectionTypes['spend-plan-json'].progressMessage, {
+              percentage: (urlIndex + 1) / jsonSpendPlanUrls.length
+            });
           }
         }
+      });
+    }
 
-        if (options.showProgress) {
-          progress.updateTask(jsonSpendPlanProgressMessage, {
-            percentage: (urlIndex + 1) / jsonSpendPlanUrls.length
-          });
-        }
-      }
-    });
-
-    if (options.showProgress) {
-      progress.done(jsonSpendPlanProgressMessage, { message: chalk.green('Loaded') });
+    if (options.showProgress && !!progress) {
+      progress.done(collectionTypes['spend-plan-json'].progressMessage, {
+        message: collectionTypes['spend-plan-json'].collect
+          ? chalk.green('Loaded')
+          : chalk.yellow('Skipped')
+      });
     }
 
     // Load PDF Apportionment files.  Doesn't have "spend plan" in  the name
-    const pdfApportionmentUrls = apportionmentUrls.filter((url) => isApportionmentPdfUrl(url));
+    const pdfApportionmentUrls = apportionmentUrls.filter((url: string) =>
+      isApportionmentPdfUrl(url)
+    );
 
     // Go through each URL and collect data
-    await createSpan('loadPdfFile[]', async () => {
-      for (let urlIndex = 0; urlIndex < pdfApportionmentUrls.length; urlIndex++) {
-        // If new records only, check if file exists
-        let existingRecord;
-        if (options.newRecordsOnly) {
-          existingRecord = await findFileBySourceUrl(pdfApportionmentUrls[urlIndex]);
-          if (existingRecord) {
-            fileIds.push(existingRecord.fileId);
-          }
-        }
-
-        // Add new record
-        if (!existingRecord) {
-          try {
-            const fileRecord = await loadPdfFile(pdfApportionmentUrls[urlIndex]);
-            if (fileRecord) {
-              fileIds.push(fileRecord.fileId);
+    if (collectionTypes.letter.collect) {
+      await createSpan('loadPdfFile[]', async () => {
+        for (let urlIndex = 0; urlIndex < pdfApportionmentUrls.length; urlIndex++) {
+          // If new records only, check if file exists
+          let existingRecord;
+          if (options.newRecordsOnly) {
+            existingRecord = await findFileBySourceUrl(pdfApportionmentUrls[urlIndex]);
+            if (existingRecord) {
+              fileIds.push(existingRecord.fileId);
             }
-          } catch (error) {
-            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
-            // but everything else will.
-            throw new Error(
-              `IMPORTANT: Failed loading PDF file from URL "${pdfApportionmentUrls[urlIndex]}": ${error?.message || error}`
-            );
+          }
+
+          // Add new record
+          if (!existingRecord) {
+            try {
+              const fileRecord = await loadPdfFile(pdfApportionmentUrls[urlIndex]);
+              if (fileRecord) {
+                fileIds.push(fileRecord.fileId);
+              }
+            } catch (error) {
+              // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+              // but everything else will.
+              throw new Error(
+                `IMPORTANT: Failed loading PDF file from URL "${pdfApportionmentUrls[urlIndex]}": ${error?.message || error}`
+              );
+            }
+          }
+
+          if (options.showProgress && !!progress) {
+            progress.updateTask(collectionTypes.letter.progressMessage, {
+              percentage: (urlIndex + 1) / pdfApportionmentUrls.length
+            });
           }
         }
+      });
+    }
 
-        if (options.showProgress) {
-          progress.updateTask(pdfProgressMessage, {
-            percentage: (urlIndex + 1) / pdfApportionmentUrls.length
-          });
-        }
-      }
-    });
-
-    if (options.showProgress) {
-      progress.done(pdfProgressMessage, { message: chalk.green('Loaded') });
+    if (options.showProgress && !!progress) {
+      progress.done(collectionTypes.letter.progressMessage, {
+        message: collectionTypes.letter.collect ? chalk.green('Loaded') : chalk.yellow('Skipped')
+      });
     }
 
     // Load PDF Spend Plan files.  Has "spend plan" in the name
     const pdfSpendPlanUrls = apportionmentUrls.filter((url) => isSpendPlanPdfUrl(url));
 
-    await createSpan('loadPdfSpendPlan[]', async () => {
-      for (let urlIndex = 0; urlIndex < pdfSpendPlanUrls.length; urlIndex++) {
-        // If new records only, check if file exists
-        let existingRecord;
-        if (options.newRecordsOnly) {
-          existingRecord = await findFileBySourceUrl(pdfSpendPlanUrls[urlIndex]);
-          if (existingRecord) {
-            fileIds.push(existingRecord.fileId);
-          }
-        }
-
-        // Add new record
-        if (!existingRecord) {
-          try {
-            const spendPlanRecord = await loadPdfSpendPlan(pdfSpendPlanUrls[urlIndex]);
-            if (spendPlanRecord) {
-              fileIds.push(spendPlanRecord.fileId);
+    if (collectionTypes['spend-plan'].collect) {
+      await createSpan('loadPdfSpendPlan[]', async () => {
+        for (let urlIndex = 0; urlIndex < pdfSpendPlanUrls.length; urlIndex++) {
+          // If new records only, check if file exists
+          let existingRecord;
+          if (options.newRecordsOnly) {
+            existingRecord = await findFileBySourceUrl(pdfSpendPlanUrls[urlIndex]);
+            if (existingRecord) {
+              fileIds.push(existingRecord.fileId);
             }
-          } catch (error) {
-            // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
-            // but everything else will.
-            throw new Error(
-              `IMPORTANT: Failed loading PDF spend plan from URL "${pdfSpendPlanUrls[urlIndex]}": ${error?.message || error}`
-            );
+          }
+
+          // Add new record
+          if (!existingRecord) {
+            try {
+              const spendPlanRecord = await loadPdfSpendPlan(pdfSpendPlanUrls[urlIndex]);
+              if (spendPlanRecord) {
+                fileIds.push(spendPlanRecord.fileId);
+              }
+            } catch (error) {
+              // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
+              // but everything else will.
+              throw new Error(
+                `IMPORTANT: Failed loading PDF spend plan from URL "${pdfSpendPlanUrls[urlIndex]}": ${error?.message || error}`
+              );
+            }
+          }
+
+          if (options.showProgress && !!progress) {
+            progress.updateTask(collectionTypes['spend-plan'].progressMessage, {
+              percentage: (urlIndex + 1) / pdfSpendPlanUrls.length
+            });
           }
         }
+      });
+    }
 
-        if (options.showProgress) {
-          progress.updateTask(pdfSpendPlanProgressMessage, {
-            percentage: (urlIndex + 1) / pdfSpendPlanUrls.length
-          });
-        }
-      }
-    });
-
-    if (options.showProgress) {
-      progress.done(pdfSpendPlanProgressMessage, { message: chalk.green('Loaded') });
+    if (options.showProgress && !!progress) {
+      progress.done(collectionTypes['spend-plan'].progressMessage, {
+        message: collectionTypes['spend-plan'].collect
+          ? chalk.green('Loaded')
+          : chalk.yellow('Skipped')
+      });
     }
 
     // Mark any files not in the list as removed
@@ -365,7 +417,7 @@ async function cli(): Promise<void> {
   if (options.archive) {
     // Archive progress
     const archiveProgressMessage = 'Archiving data';
-    if (options.showProgress) {
+    if (options.showProgress && !!progress) {
       progress.addTask(archiveProgressMessage, {
         type: 'indefinite',
         barTransformFn: chalk.magenta
@@ -381,7 +433,7 @@ async function cli(): Promise<void> {
     const s3Path = `collections/${archiveFileName}`;
     await putS3File(archiveFilePath, s3Path);
 
-    if (options.showProgress) {
+    if (options.showProgress && !!progress) {
       progress.done(archiveProgressMessage, {
         message: chalk.green(`Archived to s3://${env.archiveS3Bucket}/${s3Path}`)
       });
