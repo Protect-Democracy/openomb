@@ -19,7 +19,7 @@ import type { PutObjectRequest, ListObjectsRequest } from '@aws-sdk/client-s3';
 
 // Directories (note that __dirname might actually be available globally)
 const _dirname = dirname(fileURLToPath(import.meta.url));
-const defaultCacheDir = joinPath(_dirname, '..', '.cache');
+const defaultCacheDir = joinPath(_dirname, '..', '..', '..', '.cache');
 const defaultCollectionCacheDir = joinPath(defaultCacheDir, 'collection');
 const s3AclOptions = [
   'private',
@@ -390,8 +390,7 @@ async function putS3File(
     const params: PutObjectRequest = {
       Bucket: s3Bucket || env.archiveS3Bucket,
       Key: s3Path,
-      // TODO: Still unsure how to get file typed correct.
-      // @ts-expect-error
+      // @ts-expect-error Still unsure how to get file typed correct.
       Body: typeof file === 'string' ? createReadStream(file) : file,
       ACL: env.archiveS3Acl
     };
