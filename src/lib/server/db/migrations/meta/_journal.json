@@ -64,6 +64,13 @@
       "when": 1772573098987,
       "tag": "0008_migration_statements",
       "breakpoints": false
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1772851205516,
+      "tag": "0009_migration_statements",
+      "breakpoints": false
     }
   ]
 }

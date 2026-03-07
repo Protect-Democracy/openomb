@@ -3,12 +3,26 @@
  */
 
 // Dependencies
-import { integer, pgTable, index, varchar, timestamp, boolean, text } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  pgTable,
+  index,
+  varchar,
+  timestamp,
+  boolean,
+  text,
+  pgEnum
+} from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { tafs } from './tafs';
 import { lines } from './lines';
 import { footnotes } from './footnotes';
-import { apportionmentTypeStandard } from '$config/files';
+import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
+
+export const fileTypeEnum = pgEnum('file_type_enum', [
+  apportionmentTypeStandard,
+  apportionmentTypeSpendPlan
+]);
 
 // Table
 // {
@@ -27,7 +41,7 @@ export const files = pgTable(
     // Fields from data
     fileId: varchar('file_id').primaryKey(),
     fileName: varchar('file_name'),
-    fileType: varchar('file_type').default(apportionmentTypeStandard),
+    fileType: fileTypeEnum('file_type').notNull().default(apportionmentTypeStandard),
     fiscalYear: integer('fiscal_year'),
     approvalTimestamp: timestamp('approval_timestamp'),
     folder: varchar('folder'),
