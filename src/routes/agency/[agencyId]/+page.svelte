@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
-  import { apportionmentTypeSpendPlan } from '$config/files';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import TabbedFileListing from '$components/files/TabbedFileListing.svelte';
@@ -10,6 +9,9 @@
 
   export let data: PageData;
   $: ({ agency, bureausByAgency, recentApportionments, user, existingSubscription } = data);
+  $: console.log({
+    bureausByAgency
+  });
 </script>
 
 <div class="page-container">
@@ -51,9 +53,6 @@
             >{bureau.budgetBureauTitle}</a
           >
           ({formatNumber(bureau.fileCount)}{bIndex === 0 ? ' files' : ''})
-          {#if bureau[apportionmentTypeSpendPlan] > 0}({formatNumber(
-              bureau[apportionmentTypeSpendPlan]
-            )} spend plans){/if}
         </li>
       {/each}
     </ul>

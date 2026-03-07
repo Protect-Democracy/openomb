@@ -21,6 +21,7 @@
 
   // Derived
   $: letterApportionment = !!file.pdfUrl;
+  $: noApprovalTimestamp = !file.approvalTimestamp && !!file.createdAt;
   $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = uniqBy(
@@ -66,7 +67,7 @@
     {#if tafs?.length}
       <h2 class="sr-only">Schedules</h2>
 
-      {#each tafs as tafsGroup (tafs.tafsTableId)}
+      {#each tafs as tafsGroup (tafsGroup.tafsTableId)}
         {@const prevIterationTafs = prevIterationFiles[tafsGroup.tafsTableId]?.tafs?.find(
           (taf) => taf.tafsId === tafsGroup.tafsId
         )}
@@ -149,6 +150,14 @@
         <li id="page-footnote-file-id">
           &Dagger; For letter apportionments, the file identifier is an internally assigned
           identifier and not assigned by the Office of Management and Budget.
+        </li>
+      {/if}
+
+      {#if noApprovalTimestamp}
+        <li id="page-footnote-first-seen">
+          &sect; This file does not have an approval date, so the "First seen" date is shown
+          instead. This is the date that OpenOMB first observed this file, which may be different
+          from the date that the file was created or published.
         </li>
       {/if}
     </ul>

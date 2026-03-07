@@ -10,6 +10,7 @@
   // Derived
   $: ({ tafs } = file);
   $: letterApportionment = !!file.pdfUrl;
+  $: noApprovalTimestamp = !file.approvalTimestamp && !!file.createdAt;
   $: uniqueAgencies = tafs
     ? uniqBy(
         tafs.map((tafsGroup) => ({
@@ -25,17 +26,27 @@
 <div class="file-metadata">
   <ul class="grid-values">
     <li class="grid-value">
-      <strong>File ID<span class="sr-only">:</span></strong>
-      <span class="file-id-value"
-        >{file.fileId}{#if letterApportionment}<a href="#page-footnote-file-id">&Dagger;</a
-          >{/if}</span
+      <strong
+        >File ID {#if letterApportionment}<a href="#page-footnote-file-id">&Dagger;</a>{/if}<span
+          class="sr-only">:</span
+        ></strong
       >
+      <span class="file-id-value">{file.fileId}</span>
     </li>
 
     <li class="grid-value">
-      <strong>File approved<span class="sr-only">:</span></strong>
       {#if file.approvalTimestamp}
+        <strong>File approved<span class="sr-only">:</span></strong>
+
         <span>{formatDate(file.approvalTimestamp, 'medium')}</span>
+      {:else if noApprovalTimestamp}
+        <strong
+          >First seen <a href="#page-footnote-first-seen">&sect;</a><span class="sr-only">:</span
+          ></strong
+        >
+        <span>{formatDate(file.createdAt, 'medium')}</span>
+      {:else}
+        <strong>File approved<span class="sr-only">:</span></strong>
       {/if}
     </li>
 
@@ -88,10 +99,9 @@
       <span>
         {#each fundsParts as part, partIndex (`law-${partIndex}`)}
           {#if isString(part)}
-            {part}{' '}
+            {part}
           {:else}
-            {part.pre || ''}<ExternalLink url={part.url}>{part.text}</ExternalLink>{part.post ||
-              ''}{' '}
+            {part.pre || ''}<ExternalLink url={part.url}>{part.text}</ExternalLink>{part.post || ''}
           {/if}
         {/each}
       </span>

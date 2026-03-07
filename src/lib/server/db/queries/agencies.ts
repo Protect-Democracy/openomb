@@ -420,3 +420,4 @@ export const mBureaus = memoizeDataAsync(bureaus);
 export const mAgencyDetails = memoizeDataAsync(agencyDetails);
 export const mBureauDetails = memoizeDataAsync(bureauDetails);
 export const mAgenciesByFolder = memoizeDataAsync(agenciesByFolder);
+export const mBureausByAgency = memoizeDataAsync(bureausByAgency);
