@@ -23,7 +23,7 @@ import { tafs } from '$schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
 import { DateTime } from 'luxon';
 import { memoizeDataAsync } from '$server/cache';
-import { DEFAULT_TYPE } from '$config/files';
+import { apportionmentTypeStandard } from '$config/files';
 
 /**
  * Get simple file record given file id
@@ -355,8 +355,12 @@ export type ApproverDetailsResult = Awaited<ReturnType<typeof approverDetails>>;
  */
 export const filesWithoutTafs = async function (folderId: string | undefined = undefined) {
   const where = folderId
-    ? and(eq(files.folderId, folderId), isNull(tafs.fileId), eq(files.fileType, DEFAULT_TYPE))
-    : and(isNull(tafs.fileId), eq(files.fileType, DEFAULT_TYPE));
+    ? and(
+        eq(files.folderId, folderId),
+        isNull(tafs.fileId),
+        eq(files.fileType, apportionmentTypeStandard)
+      )
+    : and(isNull(tafs.fileId), eq(files.fileType, apportionmentTypeStandard));
 
   const foundFiles = await db
     .select()

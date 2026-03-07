@@ -28,7 +28,7 @@ import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
-import { apportionmentTypeSpendPlan } from '$config/files';
+import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/files';
 
 // Types
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
@@ -314,19 +314,23 @@ function generalSearchFilters(
   );
   where.push(searchParams.createdEnd ? lte(files.createdAt, searchParams.createdEnd) : undefined);
 
-  // Apportionemnt type.
-  // Prioritizes PDF specification (we don't need or want to apply both)
-  if (searchParams.apportionmentType?.length && searchParams.apportionmentType.includes('letter')) {
-    where.push(isNotNull(files.pdfUrl));
-  } else if (
-    searchParams.apportionmentType?.length &&
-    searchParams.apportionmentType.includes('spreadsheet')
-  ) {
-    where.push(isNull(files.pdfUrl));
-  }
-  // There could be excel/json spend plans in the future
-  if (searchParams.apportionmentType?.length && searchParams.apportionmentType.includes('spend')) {
-    where.push(eq(files.fileType, apportionmentTypeSpendPlan));
+  // Apportionment type.
+  if (searchParams.apportionmentType && searchParams.apportionmentType.length > 0) {
+    const apportionmentTypeFilters = [];
+    if (searchParams.apportionmentType.includes('spreadsheet')) {
+      apportionmentTypeFilters.push(
+        and(isNull(files.pdfUrl), eq(files.fileType, apportionmentTypeStandard))
+      );
+    }
+    if (searchParams.apportionmentType.includes('letter')) {
+      apportionmentTypeFilters.push(
+        and(isNotNull(files.pdfUrl), eq(files.fileType, apportionmentTypeStandard))
+      );
+    }
+    if (searchParams.apportionmentType.includes('spend')) {
+      apportionmentTypeFilters.push(eq(files.fileType, apportionmentTypeSpendPlan));
+    }
+    where.push(or(...apportionmentTypeFilters));
   }
 
   // Complete AND wheres
