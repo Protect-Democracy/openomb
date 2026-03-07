@@ -9,9 +9,6 @@
 
   export let data: PageData;
   $: ({ agency, bureausByAgency, recentApportionments, user, existingSubscription } = data);
-  $: console.log({
-    bureausByAgency
-  });
 </script>
 
 <div class="page-container">
