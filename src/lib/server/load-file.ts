@@ -14,7 +14,8 @@ import { files, computeFundsProvidedByParsed } from './db/schema/files';
 import { lines } from './db/schema/lines';
 import { mLineTypeFromLineNumber } from './db/queries/line-types';
 import { footnotes } from './db/schema/footnotes';
-import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from './db/schema/tafs';
+import { mAgencyDetails } from '$queries/agencies';
+import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '$schema/tafs';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -25,17 +26,17 @@ import {
   dbId,
   unique
 } from './utilities';
-import { db } from './db/connection';
+import { db } from '$db/connection';
 import pdfFixes from '$data/fixes/pdf-files';
 import spendPlanAgencyMatchFixes from '$data/fixes/spend-plan-agency-match';
 import agencyMatches from '$data/agency-reference';
 import { createSpan } from './sentry-custom';
-import { SPEND_PLAN_TYPE } from '$config/files';
+import { SPEND_PLAN_TYPE, UNKNOWN_FOLDER } from '$config/files';
 
 // Types
 import type { filesSelect, filesInsert } from '$schema/files';
 import type { linesInsert } from '$schema/lines';
-import type { tafsInsert, tafsSelect } from '$schema/tafs';
+import type { tafsInsert } from '$schema/tafs';
 import type { RequestOptions } from './request';
 
 // Apportionment schedule data from API
@@ -489,10 +490,12 @@ async function loadJsonSpendPlan(
     throw new Error(`FileId is missing | URL: ${jsonUrl}`);
   }
 
-  const folder = 'Spend Plans'; // Put all spend plans in one folder
+  const folder = UNKNOWN_FOLDER;
 
   // Parse out the file name
   const { fiscalYear, agency, bureau } = parseSpendPlanFilename(sourceData.FileName);
+
+  // TODO: Get folder from parsed agency.
 
   // Create file record
   // TODO: I think
@@ -586,19 +589,38 @@ async function loadPdfSpendPlan(
     .replace(env.baseUrl, '')
     .replace(/(\.pdf)+$/, '');
   const parts = urlPath.split('/');
-  const folder = 'Spend Plans'; // Put all spend plans in one folder
   const fileName = parts[parts.length - 1];
 
   // Parse out the file name
   const { fiscalYear, agency, bureau } = parseSpendPlanFilename(fileName);
 
   // Throw error if we do not have an approval date in the title or fixes
+  const budgetAgencyTitleId = dbId(formatBudgetAgency(agency || ''));
   if (
-    !agency &&
+    (!agency || !budgetAgencyTitleId) &&
     (!(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
       !(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
   ) {
     throw new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
+  }
+
+  // Determine Folder from agency
+  // IMPORTANT: This depends on data being in the system to query for folder.  So, it is important
+  // that regular/spreadsheet apportionments get loaded into the database before spend plans.
+  const agencyDetails = await mAgencyDetails(budgetAgencyTitleId || '');
+  let folder = agencyDetails?.folder?.folder;
+  let folderId = agencyDetails?.folder?.folderId;
+  if (!agencyDetails || !agencyDetails.folder.folderId) {
+    // Question: Do we want to throw an error if we can't determine the folder?  Or just put in unknown?
+    const e = new Error(
+      `Folder could not be determined from agency for spend plan | URL: ${pdfUrl} | Agency: ${agency} | Budget Agency Title ID: ${budgetAgencyTitleId}`
+    );
+    e.name = 'ParseSpendPlanFolderError';
+    console.error(e);
+    captureException(e);
+
+    folder = UNKNOWN_FOLDER;
+    folderId = dbId(folder);
   }
 
   // Create spend plan record
@@ -607,8 +629,8 @@ async function loadPdfSpendPlan(
     fileName: cleanString(fileName),
     fileType: SPEND_PLAN_TYPE,
     fiscalYear: parseIntegerFromString(fiscalYear),
-    folder: formatFolder(folder),
-    folderId: dbId(formatFolder(folder)),
+    folder: folder,
+    folderId: folderId,
     budgetAgencyTitle: agency ? formatBudgetAgency(agency) : undefined,
     budgetAgencyTitleId: agency ? dbId(formatBudgetAgency(agency)) : undefined,
     budgetBureauTitle: bureau ? formatBudgetBureau(bureau) : undefined,
@@ -886,8 +908,7 @@ async function readPdfText(url: string): Promise<string> {
   const pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
     return (
       (await (await doc.getPage(i + 1)).getTextContent()).items
-        // TODO: Unsure about this typing issue
-        // @ts-expect-error
+        // @ts-expect-error Unsure about this typing issue
         .map((token) => token.str)
         .join(' ')
     );

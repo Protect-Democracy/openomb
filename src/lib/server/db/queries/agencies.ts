@@ -417,3 +417,6 @@ export type BureauDetailsResult = Awaited<ReturnType<typeof bureauDetails>>;
 export const mAgenciesWithChildren = memoizeDataAsync(agenciesWithChildren);
 export const mAgencies = memoizeDataAsync(agencies);
 export const mBureaus = memoizeDataAsync(bureaus);
+export const mAgencyDetails = memoizeDataAsync(agencyDetails);
+export const mBureauDetails = memoizeDataAsync(bureauDetails);
+export const mAgenciesByFolder = memoizeDataAsync(agenciesByFolder);
