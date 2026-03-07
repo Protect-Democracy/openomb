@@ -12,6 +12,7 @@
   import type { filesSelect } from '$schema/files';
   import type { tafsSelect } from '$schema/tafs';
   import type { SearchPaginationParams } from '$db/queries/search';
+  import type { RecentlyAddedOrApprovedWithTafsResult } from '$queries/files';
 
   // Types
   interface File extends filesSelect {
@@ -21,8 +22,8 @@
   // Props
   export let headerElement = 'h3';
   export let headerClasses = '';
-  export let file: File;
-  export let highlightParams: SearchPaginationParams;
+  export let file: File | filesSelect | RecentlyAddedOrApprovedWithTafsResult[number];
+  export let highlightParams: SearchPaginationParams | undefined = undefined;
 
   // Constants
   const tafsLimit = 1;
@@ -153,6 +154,14 @@
             <span class="tag">
               Approved <time datetime={formatDateISO(file.approvalTimestamp)}
                 >{formatDate(file.approvalTimestamp, 'medium')}</time
+              >
+            </span>
+          </li>
+        {:else if file.createdAt}
+          <li>
+            <span class="tag">
+              First seen <time datetime={formatDateISO(file.createdAt)}
+                >{formatDate(file.createdAt, 'medium')}</time
               >
             </span>
           </li>

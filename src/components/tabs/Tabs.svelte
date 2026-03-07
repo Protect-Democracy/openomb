@@ -41,11 +41,11 @@
 <div
   {...$root}
   use:root
-  class="page-container tab-menu"
+  class="tab-menu"
   class:has-tabs={typeof $tabs !== 'undefined' && $tabs.length}
 >
   <div {...$list} use:list class="tab-list">
-    {#each $tabs as tab}
+    {#each $tabs as tab, ti (ti)}
       <button {...$trigger(`tab-${tab.id}`)} use:trigger class="trigger relative">
         {tab.label}
       </button>

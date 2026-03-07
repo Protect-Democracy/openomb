@@ -43,7 +43,7 @@
     {user}
     subType="account"
     subItemId={`${account.bureau.agency.budgetAgencyTitleId},${account.bureau.budgetBureauTitleId},${account.accountTitleId}`}
-    subItemFormatted={account.accountTitle}
+    subItemFormatted={account.accountTitle || undefined}
     {existingSubscription}
   />
 

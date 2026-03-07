@@ -4,7 +4,7 @@
   import { apportionmentTypeSpendPlan } from '$config/files';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import TabbedFileListing from '$components/files/TabbedFileListing.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
   import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
@@ -37,7 +37,7 @@
     {user}
     subType="agency"
     subItemId={agency.budgetAgencyTitleId}
-    subItemFormatted={agency.budgetAgencyTitle}
+    subItemFormatted={agency.budgetAgencyTitle || undefined}
     {existingSubscription}
   />
 
@@ -73,11 +73,8 @@
 
   <section class="page-section">
     <h2>Recent Apportionments</h2>
-    <div class="recently-approved-files">
-      {#each recentApportionments as file (file.fileId)}
-        <FileListingHighlightable {file} />
-      {/each}
-    </div>
+
+    <TabbedFileListing files={recentApportionments} />
   </section>
 </div>
 

@@ -116,128 +116,130 @@
       <div id="file-results"></div>
       <div id="account-results"></div>
 
-      <Tabs defaultTabId="file-results">
-        <Tab label="File Results" id="file-results">
-          {#if hasFileResults}
-            <div class="page-container">
-              <div class="heading-links">
-                <h2>Files</h2>
+      <div class="page-container">
+        <Tabs defaultTabId="file-results">
+          <Tab label="File Results" id="file-results">
+            {#if hasFileResults}
+              <div class="page-container">
+                <div class="heading-links">
+                  <h2>Files</h2>
+                </div>
               </div>
-            </div>
 
-            <aside class="result-actions-wrapper">
-              <div class="result-actions page-container">
-                <ResultCount
-                  countLabel="files"
+              <aside class="result-actions-wrapper">
+                <div class="result-actions page-container">
+                  <ResultCount
+                    countLabel="files"
+                    count={fileCount}
+                    currentPage={currentFilesPage}
+                    pageSize={filePageSize}
+                  />
+
+                  <div class="sort-action">
+                    <ResultSort
+                      id="sort"
+                      anchor="file-results"
+                      url={$url}
+                      sortOptions={fileSortOptions}
+                      defaultValue="approved_desc"
+                    />
+                  </div>
+                </div>
+              </aside>
+
+              <div class="subscription-action">
+                <SubscribeLink
+                  subscriptionType="search"
+                  {user}
+                  url={$url}
+                  {existingSubscription}
+                  variant="small"
+                />
+              </div>
+
+              <div class="file-list page-container">
+                {#each files as file, fi (fi)}
+                  <FileListingHighlightable {file} highlightParams={searchParams} />
+                {/each}
+              </div>
+
+              <div class="page-container">
+                <ResultPaging
                   count={fileCount}
-                  currentPage={currentFilesPage}
                   pageSize={filePageSize}
+                  id="page"
+                  anchor="file-results"
                 />
+              </div>
+            {:else}
+              <div class="page-container">
+                <h2>Files</h2>
 
-                <div class="sort-action">
-                  <ResultSort
-                    id="sort"
-                    anchor="file-results"
-                    url={$url}
-                    sortOptions={fileSortOptions}
-                    defaultValue="approved_desc"
-                  />
+                <div class="text-container no-results">
+                  <NoResults resultType="file" />
                 </div>
               </div>
-            </aside>
+            {/if}
+          </Tab>
 
-            <div class="subscription-action">
-              <SubscribeLink
-                subscriptionType="search"
-                {user}
-                url={$url}
-                {existingSubscription}
-                variant="small"
-              />
-            </div>
-
-            <div class="file-list page-container">
-              {#each files as file}
-                <FileListingHighlightable {file} highlightParams={searchParams} />
-              {/each}
-            </div>
-
-            <div class="page-container">
-              <ResultPaging
-                count={fileCount}
-                pageSize={filePageSize}
-                id="page"
-                anchor="file-results"
-              />
-            </div>
-          {:else}
-            <div class="page-container">
-              <h2>Files</h2>
-
-              <div class="text-container no-results">
-                <NoResults resultType="file" />
-              </div>
-            </div>
-          {/if}
-        </Tab>
-
-        <Tab label="Account Results" id="account-results">
-          {#if hasAccountResults}
-            <div class="page-container">
-              <div class="heading-links">
-                <h2>Accounts</h2>
-              </div>
-            </div>
-
-            <aside class="result-actions-wrapper">
-              <div class="result-actions page-container">
-                <ResultCount
-                  countLabel="accounts"
-                  count={accountCount}
-                  currentPage={currentAccountsPage}
-                  pageSize={accountPageSize}
-                />
-
-                <div class="sort-action">
-                  <ResultSort
-                    id="accountSort"
-                    anchor="account-results"
-                    url={$url}
-                    sortOptions={accountSortOptions}
-                    defaultValue="account_asc"
-                  />
+          <Tab label="Account Results" id="account-results">
+            {#if hasAccountResults}
+              <div class="page-container">
+                <div class="heading-links">
+                  <h2>Accounts</h2>
                 </div>
               </div>
-            </aside>
 
-            <div class="account-list page-container">
-              <!-- There are technically accounts that have the same name with different casing,
+              <aside class="result-actions-wrapper">
+                <div class="result-actions page-container">
+                  <ResultCount
+                    countLabel="accounts"
+                    count={accountCount}
+                    currentPage={currentAccountsPage}
+                    pageSize={accountPageSize}
+                  />
+
+                  <div class="sort-action">
+                    <ResultSort
+                      id="accountSort"
+                      anchor="account-results"
+                      url={$url}
+                      sortOptions={accountSortOptions}
+                      defaultValue="account_asc"
+                    />
+                  </div>
+                </div>
+              </aside>
+
+              <div class="account-list page-container">
+                <!-- There are technically accounts that have the same name with different casing,
               so the id's are the same, but the name is different.  Ideally this is fixed in
               data and/or the query, but for now we'll just use the index as well. -->
-              {#each accounts as account, ai (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}-${ai}`)}
-                <AccountListingHiglightable {account} highlightParams={searchParams} />
-              {/each}
-            </div>
-
-            <div class="page-container">
-              <ResultPaging
-                count={accountCount}
-                pageSize={accountPageSize}
-                id="accountPage"
-                anchor="account-results"
-              />
-            </div>
-          {:else}
-            <div class="page-container">
-              <h2>Accounts</h2>
-
-              <div class="text-container no-results">
-                <NoResults resultType="account" />
+                {#each accounts as account, ai (`${account.accountTitleId}-${account.budgetAgencyTitleId}-${account.budgetBureauTitleId}-${ai}`)}
+                  <AccountListingHiglightable {account} highlightParams={searchParams} />
+                {/each}
               </div>
-            </div>
-          {/if}
-        </Tab>
-      </Tabs>
+
+              <div class="page-container">
+                <ResultPaging
+                  count={accountCount}
+                  pageSize={accountPageSize}
+                  id="accountPage"
+                  anchor="account-results"
+                />
+              </div>
+            {:else}
+              <div class="page-container">
+                <h2>Accounts</h2>
+
+                <div class="text-container no-results">
+                  <NoResults resultType="account" />
+                </div>
+              </div>
+            {/if}
+          </Tab>
+        </Tabs>
+      </div>
     </div>
   {/if}
 

@@ -23,7 +23,7 @@ import { tafs } from '$schema/tafs';
 import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
 import { DateTime } from 'luxon';
 import { memoizeDataAsync } from '$server/cache';
-import { apportionmentTypeStandard } from '$config/files';
+import { DEFAULT_TYPE } from '$config/files';
 
 /**
  * Get simple file record given file id
@@ -254,6 +254,10 @@ export const recentlyAddedOrApprovedWithTafs = async function (
   return recentFiles || [];
 };
 
+export type RecentlyAddedOrApprovedWithTafsResult = Awaited<
+  ReturnType<typeof recentlyAddedOrApprovedWithTafs>
+>;
+
 /**
  * Recently removed.
  */
@@ -351,12 +355,8 @@ export type ApproverDetailsResult = Awaited<ReturnType<typeof approverDetails>>;
  */
 export const filesWithoutTafs = async function (folderId: string | undefined = undefined) {
   const where = folderId
-    ? and(
-        eq(files.folderId, folderId),
-        isNull(tafs.fileId),
-        eq(files.fileType, apportionmentTypeStandard)
-      )
-    : and(isNull(tafs.fileId), eq(files.fileType, apportionmentTypeStandard));
+    ? and(eq(files.folderId, folderId), isNull(tafs.fileId), eq(files.fileType, DEFAULT_TYPE))
+    : and(isNull(tafs.fileId), eq(files.fileType, DEFAULT_TYPE));
 
   const foundFiles = await db
     .select()

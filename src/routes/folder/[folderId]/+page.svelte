@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
-  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import TabbedFileListing from '$components/files/TabbedFileListing.svelte';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
@@ -10,15 +10,7 @@
   export let data: PageData;
 
   // Derived
-  $: ({
-    folder,
-    agenciesByFolder,
-    filesWithoutTafs,
-    recentApportionments,
-    user,
-    existingSubscription
-  } = data);
-  // Break up files into types
+  $: ({ folder, agenciesByFolder, recentApportionments, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -76,28 +68,10 @@
     {/if}
   {/await}
 
-  {#if filesWithoutTafs && filesWithoutTafs.length}
-    <section class="page-section">
-      <h2>Letter apportionments</h2>
-
-      <p>
-        The following are Letter Apportionments and do not have agency and schedule data attached to
-        them as their source is a PDF and not structured data from a spreadsheet.
-      </p>
-
-      {#each filesWithoutTafs as file (`letter-${file.fileId}`)}
-        <FileListingHighlightable {file} />
-      {/each}
-    </section>
-  {/if}
-
   <section class="page-section">
     <h2>Recent Apportionments</h2>
-    <div class="recently-approved-files">
-      {#each recentApportionments as file (file.fileId)}
-        <FileListingHighlightable {file} />
-      {/each}
-    </div>
+
+    <TabbedFileListing files={recentApportionments} />
   </section>
 </div>
 
