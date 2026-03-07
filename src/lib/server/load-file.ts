@@ -31,7 +31,7 @@ import pdfFixes from '$data/fixes/pdf-files';
 import spendPlanAgencyMatchFixes from '$data/fixes/spend-plan-agency-match';
 import agencyMatches from '$data/agency-reference';
 import { createSpan } from './sentry-custom';
-import { SPEND_PLAN_TYPE, UNKNOWN_FOLDER } from '$config/files';
+import { apportionmentTypeSpendPlan, unknownFolderName } from '$config/files';
 
 // Types
 import type { filesSelect, filesInsert } from '$schema/files';
@@ -490,7 +490,7 @@ async function loadJsonSpendPlan(
     throw new Error(`FileId is missing | URL: ${jsonUrl}`);
   }
 
-  const folder = UNKNOWN_FOLDER;
+  const folder = unknownFolderName;
 
   // Parse out the file name
   const { fiscalYear, agency, bureau } = parseSpendPlanFilename(sourceData.FileName);
@@ -502,7 +502,7 @@ async function loadJsonSpendPlan(
   const spendPlanRecord: filesInsert = {
     fileId: cleanString(sourceData.FileId.toString()) || `json-${md5hash(jsonUrl)}`,
     fileName: cleanString(sourceData.FileName),
-    fileType: SPEND_PLAN_TYPE,
+    fileType: apportionmentTypeSpendPlan,
     fiscalYear: sourceData.FiscalYear
       ? parseIntegerFromString(sourceData.FiscalYear)
       : parseIntegerFromString(fiscalYear),
@@ -619,7 +619,7 @@ async function loadPdfSpendPlan(
     console.error(e);
     captureException(e);
 
-    folder = UNKNOWN_FOLDER;
+    folder = unknownFolderName;
     folderId = dbId(folder);
   }
 
@@ -627,7 +627,7 @@ async function loadPdfSpendPlan(
   const spendPlanRecord: filesInsert = {
     fileId: `pdf-${md5hash(pdfUrl)}`,
     fileName: cleanString(fileName),
-    fileType: SPEND_PLAN_TYPE,
+    fileType: apportionmentTypeSpendPlan,
     fiscalYear: parseIntegerFromString(fiscalYear),
     folder: folder,
     folderId: folderId,

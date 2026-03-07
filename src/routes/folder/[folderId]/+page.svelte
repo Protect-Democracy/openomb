@@ -8,6 +8,8 @@
   import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
   export let data: PageData;
+
+  // Derived
   $: ({
     folder,
     agenciesByFolder,
@@ -16,6 +18,7 @@
     user,
     existingSubscription
   } = data);
+  // Break up files into types
 </script>
 
 <div class="page-container">
@@ -40,7 +43,7 @@
     {user}
     subType="folder"
     subItemId={folder.folderId}
-    subItemFormatted={folder.folder}
+    subItemFormatted={folder.folder || ''}
     {existingSubscription}
   />
 

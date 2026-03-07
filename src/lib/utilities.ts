@@ -4,7 +4,7 @@
 
 import { DateTime } from 'luxon';
 import { collectionHour, collectionMinute, collectionTimezone } from '$config';
-import { SPEND_PLAN_TYPE } from '$config/files';
+import { apportionmentTypeSpendPlan } from '$config/files';
 import type { filesSelect } from '$schema/files';
 
 /**
@@ -144,5 +144,5 @@ export function dateForCacheInvalidation() {
  * Determine if file is spend plan
  */
 export function isSpendPlanFile(file: filesSelect): boolean {
-  return file.fileType === SPEND_PLAN_TYPE;
+  return file.fileType === apportionmentTypeSpendPlan;
 }

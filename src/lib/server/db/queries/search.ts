@@ -28,7 +28,7 @@ import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
-import { SPEND_PLAN_TYPE } from '$config/files';
+import { apportionmentTypeSpendPlan } from '$config/files';
 
 // Types
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
@@ -326,7 +326,7 @@ function generalSearchFilters(
   }
   // There could be excel/json spend plans in the future
   if (searchParams.apportionmentType?.length && searchParams.apportionmentType.includes('spend')) {
-    where.push(eq(files.fileType, SPEND_PLAN_TYPE));
+    where.push(eq(files.fileType, apportionmentTypeSpendPlan));
   }
 
   // Complete AND wheres
@@ -772,7 +772,7 @@ export async function saveUserSearch(
 
   const newSearch = {
     userId: userResults[0].id,
-    criterion
+    criterion: criterionToSave
   };
   const newRecords = await db.insert(searches).values(newSearch).returning({ id: searches.id });
   return newRecords[0];

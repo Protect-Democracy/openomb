@@ -11,7 +11,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 import { fileDetails } from '$db/queries/files';
-import { DEFAULT_TYPE, SPEND_PLAN_TYPE } from '$config/files';
+import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
 
 import {
   approvalDateFromPdfFileName,
@@ -313,7 +313,7 @@ describe('loadJsonFile()', async () => {
     expect(result).toMatchObject({
       fileId: '11496188',
       fileName: 'FY2026_Agency=DOD_Bureau=O&M_TAFS=097-2025-2029-0100_Iteration=4_2026-01-28-15.14',
-      fileType: DEFAULT_TYPE,
+      fileType: apportionmentTypeStandard,
       fiscalYear: 2026,
       approvalTimestamp: new Date('2026-01-28T15:14:31.000Z'),
       folder: 'Department of Defense (Military Programs)',
@@ -365,7 +365,7 @@ describe('loadJsonFile()', async () => {
 
     // Lines
     expect(file.tafs[0].lines.length).toBe(9);
-    // @ts-ignore
+    // @ts-expect-error TODO: fix typing
     const lineSorter = (a, b) => a.lineIndex - b.lineIndex;
     const expectedLines = [
       {
@@ -530,10 +530,10 @@ describe('loadJsonSpendPlan()', async () => {
     expect(result).toMatchObject({
       fileId: '10000001',
       fileName: 'FY 2026 DHS FLETC PCI Spend Plan',
-      fileType: SPEND_PLAN_TYPE,
+      fileType: apportionmentTypeSpendPlan,
       fiscalYear: 2026,
-      folder: 'Spend Plans',
-      folderId: 'spend-plans',
+      folder: 'Unknown Folder',
+      folderId: 'unknown-folder',
       budgetAgencyTitle: 'Department of Homeland Security',
       budgetAgencyTitleId: 'department-of-homeland-security',
       budgetBureauTitle: 'Federal Law Enforcement Training Center',
@@ -613,10 +613,10 @@ describe('loadPdfSpendPlan()', async () => {
     expect(result).toMatchObject({
       fileId: expect.stringMatching(/^pdf-.*/),
       fileName: 'PY 2024 DOL OJC CRA Spend Plan',
-      fileType: SPEND_PLAN_TYPE,
+      fileType: apportionmentTypeSpendPlan,
       fiscalYear: 2024,
-      folder: 'Spend Plans',
-      folderId: 'spend-plans',
+      folder: 'Unknown Folder',
+      folderId: 'unknown-folder',
       budgetAgencyTitle: 'Department of Labor',
       budgetAgencyTitleId: 'department-of-labor',
       budgetBureauTitle: null,

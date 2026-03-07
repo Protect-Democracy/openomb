@@ -8,7 +8,7 @@ import { relations, sql } from 'drizzle-orm';
 import { tafs } from './tafs';
 import { lines } from './lines';
 import { footnotes } from './footnotes';
-import { DEFAULT_TYPE } from '$config/files';
+import { apportionmentTypeStandard } from '$config/files';
 
 // Table
 // {
@@ -27,7 +27,7 @@ export const files = pgTable(
     // Fields from data
     fileId: varchar('file_id').primaryKey(),
     fileName: varchar('file_name'),
-    fileType: varchar('file_type').default(DEFAULT_TYPE),
+    fileType: varchar('file_type').default(apportionmentTypeStandard),
     fiscalYear: integer('fiscal_year'),
     approvalTimestamp: timestamp('approval_timestamp'),
     folder: varchar('folder'),

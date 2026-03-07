@@ -4,7 +4,7 @@
 
 // Dependencies
 import { expect, test, describe } from 'vitest';
-import { DEFAULT_TYPE, SPEND_PLAN_TYPE } from '$config/files';
+import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
 import { reduceByFileType } from './query-utilities';
 
 describe('reduceByFileType()', () => {
@@ -13,38 +13,38 @@ describe('reduceByFileType()', () => {
       {
         folderId: 'corps-of-engineers-civil-works',
         folder: 'Corps of Engineers (Civil Works)',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 12
       },
       {
         folderId: 'department-of-agriculture',
         folder: 'Department of Agriculture',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 10
       },
       {
         folderId: 'department-of-defense-military-programs',
         folder: 'Department of Defense (Military Programs)',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 10,
         otherField: 'test'
       },
       {
         folderId: 'department-of-defense-military-programs',
         folder: 'Department of Defense (Military Programs)',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 11
       },
       {
         folderId: 'department-of-agriculture',
         folder: 'Department of Agriculture',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 1
       },
       {
         folderId: 'spend-plans',
         folder: 'Spend Plans',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 29
       }
     ];
@@ -53,28 +53,28 @@ describe('reduceByFileType()', () => {
       {
         folderId: 'corps-of-engineers-civil-works',
         folder: 'Corps of Engineers (Civil Works)',
-        [DEFAULT_TYPE]: 12,
+        [apportionmentTypeStandard]: 12,
         fileCount: 12
       },
       {
         folderId: 'department-of-agriculture',
         folder: 'Department of Agriculture',
-        [DEFAULT_TYPE]: 10,
-        [SPEND_PLAN_TYPE]: 1,
+        [apportionmentTypeStandard]: 10,
+        [apportionmentTypeSpendPlan]: 1,
         fileCount: 11
       },
       {
         folderId: 'department-of-defense-military-programs',
         folder: 'Department of Defense (Military Programs)',
-        [DEFAULT_TYPE]: 10,
-        [SPEND_PLAN_TYPE]: 11,
+        [apportionmentTypeStandard]: 10,
+        [apportionmentTypeSpendPlan]: 11,
         fileCount: 21,
         otherField: 'test'
       },
       {
         folderId: 'spend-plans',
         folder: 'Spend Plans',
-        [SPEND_PLAN_TYPE]: 29,
+        [apportionmentTypeSpendPlan]: 29,
         fileCount: 29
       }
     ]);
@@ -85,37 +85,37 @@ describe('reduceByFileType()', () => {
       {
         budgetAgencyTitleId: 'corps-of-engineers-civil-works',
         budgetAgencyTitle: 'Corps of Engineers (Civil Works)',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 1452
       },
       {
         budgetAgencyTitleId: 'national-labor-relations-board',
         budgetAgencyTitle: 'National Labor Relations Board',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 2
       },
       {
         budgetAgencyTitleId: 'national-labor-relations-board',
         budgetAgencyTitle: 'National Labor Relations Board',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 5
       },
       {
         budgetAgencyTitleId: 'office-of-personnel-management',
         budgetAgencyTitle: 'Office of Personnel Management',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 90
       },
       {
         budgetAgencyTitleId: 'office-of-personnel-management',
         budgetAgencyTitle: 'Office of Personnel Management',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 132
       },
       {
         budgetAgencyTitleId: 'international-assistance-programs',
         budgetAgencyTitle: 'International Assistance Programs',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 12
       }
     ];
@@ -124,27 +124,27 @@ describe('reduceByFileType()', () => {
       {
         budgetAgencyTitleId: 'corps-of-engineers-civil-works',
         budgetAgencyTitle: 'Corps of Engineers (Civil Works)',
-        [DEFAULT_TYPE]: 1452,
+        [apportionmentTypeStandard]: 1452,
         fileCount: 1452
       },
       {
         budgetAgencyTitleId: 'national-labor-relations-board',
         budgetAgencyTitle: 'National Labor Relations Board',
-        [DEFAULT_TYPE]: 2,
-        [SPEND_PLAN_TYPE]: 5,
+        [apportionmentTypeStandard]: 2,
+        [apportionmentTypeSpendPlan]: 5,
         fileCount: 7
       },
       {
         budgetAgencyTitleId: 'office-of-personnel-management',
         budgetAgencyTitle: 'Office of Personnel Management',
-        [DEFAULT_TYPE]: 90,
-        [SPEND_PLAN_TYPE]: 132,
+        [apportionmentTypeStandard]: 90,
+        [apportionmentTypeSpendPlan]: 132,
         fileCount: 222
       },
       {
         budgetAgencyTitleId: 'international-assistance-programs',
         budgetAgencyTitle: 'International Assistance Programs',
-        [SPEND_PLAN_TYPE]: 12,
+        [apportionmentTypeSpendPlan]: 12,
         fileCount: 12
       }
     ]);
@@ -157,7 +157,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'International Assistance Programs',
         budgetBureauTitleId: 'african-development-foundation',
         budgetBureauTitle: 'African Development Foundation',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 20
       },
       {
@@ -165,7 +165,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'Department of Education',
         budgetBureauTitleId: 'departmental-management',
         budgetBureauTitle: 'Departmental Management',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 173
       },
       {
@@ -173,7 +173,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'International Assistance Programs',
         budgetBureauTitleId: 'african-development-foundation',
         budgetBureauTitle: 'African Development Foundation',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 304
       },
       {
@@ -181,7 +181,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'International Assistance Programs',
         budgetBureauTitleId: 'millennium-challenge-corporation',
         budgetBureauTitle: 'Millennium Challenge Corporation',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 276
       },
       {
@@ -189,7 +189,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'Department of Health and Human Services',
         budgetBureauTitleId: 'departmental-management',
         budgetBureauTitle: 'Departmental Management',
-        fileType: DEFAULT_TYPE,
+        fileType: apportionmentTypeStandard,
         fileCount: 192
       },
       {
@@ -197,7 +197,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'Department of Health and Human Services',
         budgetBureauTitleId: 'departmental-management',
         budgetBureauTitle: 'Departmental Management',
-        fileType: SPEND_PLAN_TYPE,
+        fileType: apportionmentTypeSpendPlan,
         fileCount: 90
       }
     ];
@@ -208,8 +208,8 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'International Assistance Programs',
         budgetBureauTitleId: 'african-development-foundation',
         budgetBureauTitle: 'African Development Foundation',
-        [SPEND_PLAN_TYPE]: 20,
-        [DEFAULT_TYPE]: 304,
+        [apportionmentTypeSpendPlan]: 20,
+        [apportionmentTypeStandard]: 304,
         fileCount: 324
       },
       {
@@ -217,7 +217,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'Department of Education',
         budgetBureauTitleId: 'departmental-management',
         budgetBureauTitle: 'Departmental Management',
-        [SPEND_PLAN_TYPE]: 173,
+        [apportionmentTypeSpendPlan]: 173,
         fileCount: 173
       },
       {
@@ -225,7 +225,7 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'International Assistance Programs',
         budgetBureauTitleId: 'millennium-challenge-corporation',
         budgetBureauTitle: 'Millennium Challenge Corporation',
-        [DEFAULT_TYPE]: 276,
+        [apportionmentTypeStandard]: 276,
         fileCount: 276
       },
       {
@@ -233,8 +233,8 @@ describe('reduceByFileType()', () => {
         budgetAgencyTitle: 'Department of Health and Human Services',
         budgetBureauTitleId: 'departmental-management',
         budgetBureauTitle: 'Departmental Management',
-        [DEFAULT_TYPE]: 192,
-        [SPEND_PLAN_TYPE]: 90,
+        [apportionmentTypeStandard]: 192,
+        [apportionmentTypeSpendPlan]: 90,
         fileCount: 282
       }
     ]);

@@ -18,7 +18,7 @@ export async function load({ params, locals }) {
 
   const user = (await locals.auth())?.user;
   const existingSubscription = user
-    ? await userSubscription(user.email, 'folder', params.folderId)
+    ? await userSubscription(user.email || '', 'folder', params.folderId)
     : null;
 
   return {
