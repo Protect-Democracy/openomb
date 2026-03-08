@@ -17,7 +17,11 @@ export async function GET({ url }) {
 
   // Make sure we have a URL
   if (urlToCheck) {
-    reachable = await mUrlIsReachable(urlToCheck);
+    try {
+      reachable = await mUrlIsReachable(urlToCheck);
+    } catch {
+      reachable = false;
+    }
   }
 
   return json({

@@ -14,7 +14,8 @@ import { files, computeFundsProvidedByParsed } from './db/schema/files';
 import { lines } from './db/schema/lines';
 import { mLineTypeFromLineNumber } from './db/queries/line-types';
 import { footnotes } from './db/schema/footnotes';
-import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from './db/schema/tafs';
+import { mAgencyDetails } from '$queries/agencies';
+import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '$schema/tafs';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -25,15 +26,17 @@ import {
   dbId,
   unique
 } from './utilities';
-import { db } from './db/connection';
+import { db } from '$db/connection';
 import pdfFixes from '$data/fixes/pdf-files';
+import spendPlanAgencyMatchFixes from '$data/fixes/spend-plan-agency-match';
+import agencyMatches from '$data/agency-reference';
 import { createSpan } from './sentry-custom';
+import { apportionmentTypeSpendPlan, unknownFolderName } from '$config/files';
 
 // Types
 import type { filesSelect, filesInsert } from '$schema/files';
-import type { linesSelect, linesInsert } from '$schema/lines';
-import type { tafsSelect, tafsInsert } from '$schema/tafs';
-import type { footnotesSelect, footnotesInsert } from '$schema/footnotes';
+import type { linesInsert } from '$schema/lines';
+import type { tafsInsert } from '$schema/tafs';
 import type { RequestOptions } from './request';
 
 // Apportionment schedule data from API
@@ -76,6 +79,13 @@ export type ApportionmentFileJson = {
   FootnoteData: Array<ApportionmentFootnoteApi>;
 };
 
+// Apportionment file type
+export type SpendPlanJson = {
+  FileId: number;
+  FileName: string;
+  FiscalYear: string;
+};
+
 // Intermediate schedule record type used for processing data before inserting into DB
 type ScheduleRecord = linesInsert | tafsInsert;
 
@@ -98,8 +108,7 @@ async function loadJsonFile(
   try {
     fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries });
     sourceData = (fileResponse.data || {}) as ApportionmentFileJson;
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error instanceof Error ? error.message : error}`
     );
@@ -341,8 +350,7 @@ async function loadPdfFile(
   let fileResponse;
   try {
     fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
       `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
     );
@@ -379,7 +387,7 @@ async function loadPdfFile(
     .replace(/(\.pdf)+$/, '');
   const parts = urlPath.split('/');
   const fiscalYear = parts[0].replace('Fiscal Year ', '');
-  const fileName = parts[parts.length - 1].replace(/\s+/g, '_').trim();
+  const fileName = parts[parts.length - 1];
   const approvalDate = approvalDateFromPdfFileName(fileName);
 
   // Throw error if we do not have an approval date in the title or fixes
@@ -390,7 +398,7 @@ async function loadPdfFile(
   const folder = parts[1].replace(/_/g, ' ').trim();
 
   // Create file record
-  const fileRecord = {
+  const fileRecord: filesInsert = {
     fileId: `pdf-${md5hash(pdfUrl)}`,
     fileName: cleanString(fileName),
     fiscalYear: parseIntegerFromString(fiscalYear),
@@ -407,10 +415,9 @@ async function loadPdfFile(
   // Read text from PDF
   try {
     fileRecord.sourceText = await readPdfText(pdfUrl);
-  }
-  catch (error) {
+  } catch (error) {
     const e = new Error(
-      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${error?.message || error}`
+      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
     );
     e.name = 'ParsePdfFileError';
     console.error(e);
@@ -432,6 +439,236 @@ async function loadPdfFile(
       target: files.fileId,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       set: (({ createdAt, ...o }) => o)(fileRecord)
+    })
+    .returning();
+  return records[0];
+}
+
+/**
+ * Load a spend plan into the database.
+ */
+// @todo - we do not have any of these yet to test with! but just in case
+async function loadJsonSpendPlan(
+  jsonUrl: string,
+  retries: number = 5
+): Promise<filesInsert | undefined> {
+  // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
+  // completely stop the process.
+  let fileResponse;
+  let sourceData;
+  try {
+    fileResponse = await request(jsonUrl, {}, { expectedType: 'json', retries });
+    sourceData = (fileResponse.data || {}) as SpendPlanJson;
+  } catch (error) {
+    const e = new Error(
+      `JSON File could not be loaded from URL "${jsonUrl}" with error: ${error instanceof Error ? error.message : error}`
+    );
+    e.name = 'LoadJsonFileError';
+    console.error(e);
+    captureException(e);
+    return;
+  }
+
+  // Check response
+  if (
+    !fileResponse.meta.response.ok ||
+    !fileResponse.data ||
+    typeof fileResponse !== 'object' ||
+    fileResponse.meta.response.status >= 300
+  ) {
+    throw new Error(
+      `File response was not valid | OK: ${fileResponse.meta.response.ok} | Status: ${fileResponse.meta.response.status} | URL: ${jsonUrl}`
+    );
+  }
+
+  // Check Excel file
+  const expectedExcelUrl = excelUrl(jsonUrl);
+  const hasExcelUrl = await urlExists(expectedExcelUrl, { expectedType: 'blob' });
+
+  // Check file data
+  if (!sourceData.FileId) {
+    throw new Error(`FileId is missing | URL: ${jsonUrl}`);
+  }
+
+  const folder = unknownFolderName;
+
+  // Parse out the file name
+  const { fiscalYear, agency, bureau } = parseSpendPlanFilename(sourceData.FileName);
+
+  // TODO: Get folder from parsed agency.
+
+  // Create file record
+  // TODO: I think
+  const spendPlanRecord: filesInsert = {
+    fileId: cleanString(sourceData.FileId.toString()) || `json-${md5hash(jsonUrl)}`,
+    fileName: cleanString(sourceData.FileName),
+    fileType: apportionmentTypeSpendPlan,
+    fiscalYear: sourceData.FiscalYear
+      ? parseIntegerFromString(sourceData.FiscalYear)
+      : parseIntegerFromString(fiscalYear),
+    folder: formatFolder(folder),
+    folderId: dbId(formatFolder(folder)),
+    budgetAgencyTitle: agency ? formatBudgetAgency(agency) : undefined,
+    budgetAgencyTitleId: agency ? dbId(formatBudgetAgency(agency)) : undefined,
+    budgetBureauTitle: bureau ? formatBudgetBureau(bureau) : undefined,
+    budgetBureauTitleId: bureau ? dbId(formatBudgetBureau(bureau)) : undefined,
+    excelUrl: hasExcelUrl ? expectedExcelUrl : null,
+    sourceUrl: jsonUrl,
+    pdfUrl: null,
+    sourceText: null,
+    sourceData: JSON.stringify(sourceData),
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+    removed: false
+  };
+
+  // Upsert file
+  const savedSpendPlanRecords = await db
+    .insert(files)
+    .values(spendPlanRecord)
+    .onConflictDoUpdate({
+      target: files.fileId,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      set: (({ createdAt, ...o }) => o)(spendPlanRecord)
+    })
+    .returning();
+
+  // Return file record
+  return savedSpendPlanRecords[0];
+}
+
+/**
+ * Load a PDF spend plan into the database.
+ *
+ * Note that we don't try to parse the PDF file directly,
+ * we simply make a basic entry in the DB using data from
+ * the URL.
+ */
+async function loadPdfSpendPlan(
+  pdfUrl: string,
+  retries: number = 5
+): Promise<filesInsert | undefined> {
+  // Get the file.  An occasional error is ok, but we want to make sure it is seen, but doesn't
+  // completely stop the process.
+  let fileResponse;
+  try {
+    fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
+  } catch (error) {
+    const e = new Error(
+      `PDF File could not be loaded from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
+    );
+    e.name = 'LoadPdfFileError';
+    console.error(e);
+    captureException(e);
+    return;
+  }
+
+  // Check response
+  if (
+    !fileResponse.meta.response.ok ||
+    !fileResponse.data ||
+    typeof fileResponse !== 'object' ||
+    fileResponse.meta.response.status >= 300
+  ) {
+    throw new Error(
+      `File response was not valid | OK: ${fileResponse.meta.response.ok} | Status: ${fileResponse.meta.response.status} | URL: ${pdfUrl}`
+    );
+  }
+
+  // Parse parts from URL
+  //
+  // Examples:
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Chronic%20Diseases%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20PHPR%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20SAMHSA%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20HRSA%20Operating%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.pdf
+  const urlPath = decodeURIComponent(pdfUrl)
+    .replace(env.baseUrl, '')
+    .replace(/(\.pdf)+$/, '');
+  const parts = urlPath.split('/');
+  const fileName = parts[parts.length - 1];
+
+  // Parse out the file name
+  const { fiscalYear, agency, bureau } = parseSpendPlanFilename(fileName);
+
+  // Throw error if we do not have an approval date in the title or fixes
+  const budgetAgencyTitleId = dbId(formatBudgetAgency(agency || ''));
+  if (
+    (!agency || !budgetAgencyTitleId) &&
+    (!(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
+      !(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
+  ) {
+    throw new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
+  }
+
+  // Determine Folder from agency
+  // IMPORTANT: This depends on data being in the system to query for folder.  So, it is important
+  // that regular/spreadsheet apportionments get loaded into the database before spend plans.
+  const agencyDetails = await mAgencyDetails(budgetAgencyTitleId || '');
+  let folder = agencyDetails?.folder?.folder;
+  let folderId = agencyDetails?.folder?.folderId;
+  if (!agencyDetails || !agencyDetails.folder.folderId) {
+    // Question: Do we want to throw an error if we can't determine the folder?  Or just put in unknown?
+    const e = new Error(
+      `Folder could not be determined from agency for spend plan | URL: ${pdfUrl} | Agency: ${agency} | Budget Agency Title ID: ${budgetAgencyTitleId}`
+    );
+    e.name = 'ParseSpendPlanFolderError';
+    console.error(e);
+    captureException(e);
+
+    folder = unknownFolderName;
+    folderId = dbId(folder);
+  }
+
+  // Create spend plan record
+  const spendPlanRecord: filesInsert = {
+    fileId: `pdf-${md5hash(pdfUrl)}`,
+    fileName: cleanString(fileName),
+    fileType: apportionmentTypeSpendPlan,
+    fiscalYear: parseIntegerFromString(fiscalYear),
+    folder: folder,
+    folderId: folderId,
+    budgetAgencyTitle: agency ? formatBudgetAgency(agency) : undefined,
+    budgetAgencyTitleId: agency ? dbId(formatBudgetAgency(agency)) : undefined,
+    budgetBureauTitle: bureau ? formatBudgetBureau(bureau) : undefined,
+    budgetBureauTitleId: bureau ? dbId(formatBudgetBureau(bureau)) : undefined,
+    sourceUrl: pdfUrl,
+    pdfUrl: pdfUrl,
+    createdAt: new Date(),
+    modifiedAt: new Date(),
+    removed: false
+  };
+
+  // Read text from PDF
+  try {
+    spendPlanRecord.sourceText = await readPdfText(pdfUrl);
+  } catch (error) {
+    const e = new Error(
+      `PDF File could not be parsed from URL "${pdfUrl}" with error: ${(<Error>error)?.message || error}`
+    );
+    e.name = 'ParsePdfFileError';
+    console.error(e);
+    captureException(e);
+
+    // It's ok if we don't get the PDF text ??
+  }
+
+  // Handle any fixes
+  if (pdfFixes[pdfUrl]) {
+    Object.assign(spendPlanRecord, pdfFixes[pdfUrl]);
+  }
+
+  // Upsert file
+  const records = await db
+    .insert(files)
+    .values(spendPlanRecord)
+    .onConflictDoUpdate({
+      target: files.fileId,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      set: (({ createdAt, ...o }) => o)(spendPlanRecord)
     })
     .returning();
   return records[0];
@@ -528,6 +765,84 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
 }
 
 /**
+ * Parse information from spend plan file name
+ */
+export function parseSpendPlanFilename(fileName: string): {
+  fiscalYear: string | undefined;
+  agency: string | undefined;
+  bureau: string | undefined;
+} {
+  const yearParts = fileName.match(/^.Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
+  const results = {
+    fiscalYear: yearParts ? yearParts[1].padStart(4, '20') : undefined,
+    agency: <string | undefined>undefined,
+    bureau: <string | undefined>undefined
+  };
+  const fileNameRest = yearParts ? yearParts[2] : fileName;
+
+  // Check for acronyms
+  const acronymParts = fileNameRest.match(/[A-Z]{2,6}/g);
+  if (acronymParts) {
+    acronymParts.forEach((acronym) => {
+      if (!results['agency']) {
+        const agencyResult = agencyMatches.agencies.find((a) =>
+          a.short_name?.split('/').some((p) => p === acronym)
+        );
+        if (agencyResult) {
+          results['agency'] = agencyResult.budgetAgencyTitle;
+        }
+      } else if (!results['bureau']) {
+        const bureauResult = agencyMatches.bureaus.find((a) =>
+          a.short_name?.split('/').some((p) => p === acronym)
+        );
+        if (bureauResult && results['agency'] === bureauResult.budgetAgencyTitle) {
+          // Make sure our hierarchy aligns before we set this
+          results['bureau'] = bureauResult.budgetBureauTitle;
+        }
+      }
+    });
+
+    // If we didn't get an agency, check the orphaned ones for results
+    //  (This will add a new agency/bureau that has no apportionments
+    //    within it, only spend plans)
+    if (!results['agency']) {
+      let agencyId: number;
+      acronymParts.forEach((acronym) => {
+        if (!results['agency']) {
+          const agencyResult = agencyMatches.leftoverAgencies.find((a) =>
+            a.short_name?.split('/').some((p) => p === acronym)
+          );
+          if (agencyResult) {
+            results['agency'] = agencyResult.name;
+            agencyId = agencyResult.id;
+          }
+        } else if (!results['bureau']) {
+          const bureauResult = agencyMatches.leftoverBureaus.find((a) =>
+            a.short_name?.split('/').some((p) => p === acronym)
+          );
+          if (bureauResult && agencyId === bureauResult.parent_id) {
+            // Make sure our hierarchy aligns before we set this
+            results['bureau'] = bureauResult.name;
+          }
+        }
+      });
+    }
+  }
+
+  // If we didn't find an agency yet, check against filename patterns we know
+  if (!results['agency']) {
+    // Department of state
+    const match = spendPlanAgencyMatchFixes.find((fix) => fix.pattern.test(fileName));
+    if (match) {
+      results['agency'] = match.agency;
+      results['bureau'] = match.bureau;
+    }
+  }
+
+  return results;
+}
+
+/**
  * Determine approval date from PDF file name.
  *
  * The current assumption is that the date is at the end of the file name,
@@ -540,6 +855,7 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
  * MM.DD.YYYY
  * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf
  * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf
+ * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Health%20and%20Human%20Services/PDF/FY2026_Department_of_Health_and_Human_Services_2026-03-04_2.pdf.pdf
  *
  * Approvals actually come in at specific times, so we default to noon.
  *
@@ -555,7 +871,7 @@ function approvalDateFromPdfFileName(fileName: string): Date | null {
   fileName = fileName.replace(/(\.pdf)+$/, '');
 
   // Get date part
-  const datePart = fileName.match(/.*_(\d{2,4}[-_.]\d{1,4}[-_.]\d{1,4})$/);
+  const datePart = fileName.match(/.*[_| ](\d{2,4}[-_.]\d{1,4}[-_.]\d{1,4})(_[0-9]+)?$/);
   if (!datePart || !datePart[1]) {
     return null;
   }
@@ -593,8 +909,7 @@ async function readPdfText(url: string): Promise<string> {
   const pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
     return (
       (await (await doc.getPage(i + 1)).getTextContent()).items
-        // TODO: Unsure about this typing issue
-        // @ts-expect-error
+        // @ts-expect-error Unsure about this typing issue
         .map((token) => token.str)
         .join(' ')
     );
@@ -645,26 +960,45 @@ async function apportionmentListFromHomepage(
   });
 }
 
-// Is an apportionment PDF url.  All pdf files that don't have "spend plan"
-// in the name seem to be apportionment files
-function isApportionmentPdfUrl(url: string): boolean {
+// Is an apportionment json url.
+// (Not from the /spend plans folder and no spend plan in the name)
+function isApportionmentJsonUrl(url: string): boolean {
   url = decodeURI(url);
-  return !!url.match(/\.pdf$/i) && !url.match(/spend\s+plan/i);
+  return !!url.match(/\.json$/i) && !url.match(/spend\s+plan(s)?/i);
 }
 
-// Is a spend plan url.  These are PDFs that have "spend plan" in the name
+// Is an apportionment PDF url.
+// (Not from the /spend plans folder and no spend plan in the name)
+function isApportionmentPdfUrl(url: string): boolean {
+  url = decodeURI(url);
+  return !!url.match(/\.pdf$/i) && !url.match(/spend\s+plan(s)?/i);
+}
+
+// Is a spend plan json url.
+// (From the /spend plans folder or with spend plan in the name)
+function isSpendPlanJsonUrl(url: string): boolean {
+  url = decodeURI(url);
+  return !!url.match(/\.json/i) && !!url.match(/spend\s+plan(s)?/i);
+}
+
+// Is a spend plan PDF url.
+// (From the /spend plans folder or with spend plan in the name)
 function isSpendPlanPdfUrl(url: string): boolean {
   url = decodeURI(url);
-  return !!url.match(/spend\s+plan.*\.pdf$/i);
+  return !!url.match(/\.pdf$/i) && !!url.match(/spend\s+plan(s)?/i);
 }
 
 // Extra exports for testing
 export {
   loadJsonFile,
   loadPdfFile,
+  loadJsonSpendPlan,
+  loadPdfSpendPlan,
   approvalDateFromPdfFileName,
   readPdfText,
   apportionmentListFromHomepage,
+  isApportionmentJsonUrl,
   isApportionmentPdfUrl,
+  isSpendPlanJsonUrl,
   isSpendPlanPdfUrl
 };

@@ -11,8 +11,7 @@
 import { dirname, join as joinPath } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { drizzle } from 'drizzle-orm/node-postgres';
-// For some reason Drizzle doesn't provide types for this
-// @ts-ignore
+// @ts-expect-error: For some reason Drizzle doesn't provide types for this
 import { tracer } from 'drizzle-orm/tracing';
 import { startSpan, captureException } from '@sentry/node';
 import pg from 'pg';
@@ -42,7 +41,8 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 export const migrationsDir = joinPath(_dirname, 'migrations');
 
 // The combined schema at the module level
-const schemas = {
+// This captures relations as well
+export const schemas = {
   ...files,
   ...footnotes,
   ...lines,
@@ -93,7 +93,7 @@ export function dbConnection() {
       //
       // TODO: This seems hacky, but also tried many ways to handle this with
       // testing and wasn't able to find a better way.
-      if (process.env.NODE_ENV === 'test' && (err as any).code === '57P01') {
+      if (process.env.NODE_ENV === 'test' && (err as pg.DatabaseError).code === '57P01') {
         return;
       }
 
@@ -144,8 +144,7 @@ export function dbConnectionString() {
   let possibleDbAuth = '';
   if (env.dbAuth && env.dbAuth.username) {
     possibleDbAuth = `${env.dbAuth.username}:${env.dbAuth.password}@`;
-  }
-  else if (env.dbUser) {
+  } else if (env.dbUser) {
     possibleDbAuth = `${env.dbUser}:${env.dbPassword}@`;
   }
 
@@ -170,9 +169,9 @@ export function dbConnectionString() {
 export function overrideDrizzleTracer() {
   const env = environmentVariables();
 
-  // @ts-ignore
+  // @ts-expect-error: TODO
   let query;
-  // @ts-ignore
+  // @ts-expect-error: TODO
   tracer.startActiveSpan = (name, fn) => {
     // Drizzle prepares queries, then executes them.
     //    We need to get the SQL from the prepared query
@@ -187,7 +186,7 @@ export function overrideDrizzleTracer() {
     if (name == 'drizzle.execute') {
       return startSpan(
         {
-          // @ts-ignore
+          // @ts-expect-error: TODO
           name: query || name,
           op: 'db.sql.execute',
           attributes: {

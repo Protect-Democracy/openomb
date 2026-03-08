@@ -1,13 +1,13 @@
 <script lang="ts">
   import { siteName, deployedBaseUrl } from '$config/index';
 
-// TODO: How to handle images in email templates?
+  // TODO: How to handle images in email templates?
 
-export let title: string;
-export let subscriptionsUrl: string = `${deployedBaseUrl}/subscribe`;
-export let unsubscribable: boolean = true;
+  export let title: string;
+  export let subscriptionsUrl: string = `${deployedBaseUrl}/subscribe`;
+  export let unsubscribable: boolean = true;
 
-const privacyPolicyUrl: string = `${deployedBaseUrl}/privacy-policy`;
+  const privacyPolicyUrl: string = `${deployedBaseUrl}/privacy-policy`;
 </script>
 
 <div

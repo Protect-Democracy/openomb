@@ -1,6 +1,7 @@
 <script lang="ts">
   import { uniqBy, isString } from 'lodash-es';
   import { formatDate, deconstructLaws } from '$lib/formatters';
+  import { isSpendPlanFile } from '$lib/utilities';
   import ExternalLink from '$components/links/ExternalLink.svelte';
 
   // Props
@@ -9,29 +10,44 @@
   // Derived
   $: ({ tafs } = file);
   $: letterApportionment = !!file.pdfUrl;
-  $: uniqueAgencies = uniqBy(
-    tafs.map((tafsGroup) => ({
-      id: tafsGroup.budgetAgencyTitleId,
-      title: tafsGroup.budgetAgencyTitle
-    })),
-    'id'
-  );
+  $: noApprovalTimestamp = !file.approvalTimestamp && !!file.createdAt;
+  $: uniqueAgencies = tafs
+    ? uniqBy(
+        tafs.map((tafsGroup) => ({
+          id: tafsGroup.budgetAgencyTitleId,
+          title: tafsGroup.budgetAgencyTitle
+        })),
+        'id'
+      )
+    : [];
   $: fundsParts = deconstructLaws(file.fundsProvidedByParsed);
 </script>
 
 <div class="file-metadata">
   <ul class="grid-values">
     <li class="grid-value">
-      <strong>File ID<span class="sr-only">:</span></strong>
-      <span class="file-id-value"
-        >{file.fileId}{#if letterApportionment}<a href="#page-footnote-file-id">&Dagger;</a
-          >{/if}</span
+      <strong
+        >File ID {#if letterApportionment}<a href="#page-footnote-file-id">&Dagger;</a>{/if}<span
+          class="sr-only">:</span
+        ></strong
       >
+      <span class="file-id-value">{file.fileId}</span>
     </li>
 
     <li class="grid-value">
-      <strong>File approved<span class="sr-only">:</span></strong>
-      <span>{formatDate(file.approvalTimestamp, 'medium')}</span>
+      {#if file.approvalTimestamp}
+        <strong>File approved<span class="sr-only">:</span></strong>
+
+        <span>{formatDate(file.approvalTimestamp, 'medium')}</span>
+      {:else if noApprovalTimestamp}
+        <strong
+          >First seen <a href="#page-footnote-first-seen">&sect;</a><span class="sr-only">:</span
+          ></strong
+        >
+        <span>{formatDate(file.createdAt, 'medium')}</span>
+      {:else}
+        <strong>File approved<span class="sr-only">:</span></strong>
+      {/if}
     </li>
 
     <li class="grid-value">
@@ -53,18 +69,27 @@
       </span>
     </li>
 
-    <li class="grid-value">
-      <strong
-        >{uniqueAgencies.length > 1 ? 'Agencies' : 'Agency'}<span class="sr-only">:</span></strong
-      >
-      <span>
-        {#each uniqueAgencies as agency, li (agency.id)}
-          <a href="/agency/{agency.id}">{agency.title}</a>{li > 0 && li < uniqueAgencies.length
-            ? ', '
-            : ''}
-        {/each}
-      </span>
-    </li>
+    {#if isSpendPlanFile(file)}
+      <li class="grid-value">
+        <strong>Agency<span class="sr-only">:</span></strong>
+        <span>
+          <a href="/agency/{file.budgetAgencyTitleId}">{file.budgetAgencyTitle}</a>
+        </span>
+      </li>
+    {:else}
+      <li class="grid-value">
+        <strong
+          >{uniqueAgencies.length > 1 ? 'Agencies' : 'Agency'}<span class="sr-only">:</span></strong
+        >
+        <span>
+          {#each uniqueAgencies as agency, li (agency.id)}
+            <a href="/agency/{agency.id}">{agency.title}</a>{li > 0 && li < uniqueAgencies.length
+              ? ', '
+              : ''}
+          {/each}
+        </span>
+      </li>
+    {/if}
 
     <li class="grid-value grid-span-2">
       <strong
@@ -72,12 +97,11 @@
         ></strong
       >
       <span>
-        {#each fundsParts as part}
+        {#each fundsParts as part, partIndex (`law-${partIndex}`)}
           {#if isString(part)}
-            {part}{' '}
+            {part}
           {:else}
-            {part.pre || ''}<ExternalLink url={part.url}>{part.text}</ExternalLink>{part.post ||
-              ''}{' '}
+            {part.pre || ''}<ExternalLink url={part.url}>{part.text}</ExternalLink>{part.post || ''}
           {/if}
         {/each}
       </span>

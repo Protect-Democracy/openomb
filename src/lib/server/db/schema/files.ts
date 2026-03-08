@@ -3,11 +3,26 @@
  */
 
 // Dependencies
-import { integer, pgTable, index, varchar, timestamp, boolean, text } from 'drizzle-orm/pg-core';
+import {
+  integer,
+  pgTable,
+  index,
+  varchar,
+  timestamp,
+  boolean,
+  text,
+  pgEnum
+} from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { tafs } from './tafs';
 import { lines } from './lines';
 import { footnotes } from './footnotes';
+import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
+
+export const fileTypeEnum = pgEnum('file_type_enum', [
+  apportionmentTypeStandard,
+  apportionmentTypeSpendPlan
+]);
 
 // Table
 // {
@@ -26,6 +41,7 @@ export const files = pgTable(
     // Fields from data
     fileId: varchar('file_id').primaryKey(),
     fileName: varchar('file_name'),
+    fileType: fileTypeEnum('file_type').notNull().default(apportionmentTypeStandard),
     fiscalYear: integer('fiscal_year'),
     approvalTimestamp: timestamp('approval_timestamp'),
     folder: varchar('folder'),
@@ -38,6 +54,12 @@ export const files = pgTable(
 
     // Parsed value
     fundsProvidedByParsed: varchar('funds_provided_by_parsed'),
+
+    // Spend plan (no tafs) agency info
+    budgetAgencyTitle: varchar('budget_agency_title'),
+    budgetBureauTitle: varchar('budget_bureau_title'),
+    budgetAgencyTitleId: varchar('budget_agency_title_id'),
+    budgetBureauTitleId: varchar('budget_bureau_title_id'),
 
     // Meta data
     excelUrl: varchar('excel_url'),
@@ -53,6 +75,7 @@ export const files = pgTable(
     // Indexes.  We will likely need to search or group on all of these fields
     return {
       fileNameIndex: index('file_file_name_index').on(files.fileName),
+      fileTypeIndex: index('file_file_type_index').on(files.fileType),
       fiscalYearIndex: index('file_fiscal_year_index').on(files.fiscalYear),
       approvalTimestampIndex: index('file_approval_timestamp_index').on(files.approvalTimestamp),
       folderIndex: index('file_folder_index').on(files.folder),
@@ -62,6 +85,14 @@ export const files = pgTable(
       fundsProvidedByIndex: index('file_funds_provided_by_index').on(files.fundsProvidedBy),
       fundsProvidedByParsedIndex: index('file_funds_provided_by_parsed_index').on(
         files.fundsProvidedByParsed
+      ),
+      budgetAgencyTitleIndex: index('file_budget_agency_title_index').on(files.budgetAgencyTitle),
+      budgetBureauTitleIndex: index('file_budget_bureau_title_index').on(files.budgetBureauTitle),
+      budgetAgencyTitleIdIndex: index('file_budget_agency_title_id_index').on(
+        files.budgetAgencyTitleId
+      ),
+      budgetBureauTitleIdIndex: index('file_budget_bureau_title_id_index').on(
+        files.budgetBureauTitleId
       ),
       excelUrlIndex: index('file_excel_url_index').on(files.excelUrl),
       pdfUrlIndex: index('file_pdf_url_index').on(files.pdfUrl),

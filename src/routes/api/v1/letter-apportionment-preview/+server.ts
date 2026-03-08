@@ -25,13 +25,15 @@ export async function GET({ url }) {
   let urlObj;
   try {
     urlObj = new URL(urlToProxy);
-  }
-  catch (error) {
-    return json({ error: true, status: 400, message: error.toString() }, { status: 400 });
+  } catch {
+    return json(
+      { error: true, status: 400, message: 'Unable to parse URL provided' },
+      { status: 400 }
+    );
   }
 
   if (urlObj.hostname !== new URL(sourceDataUrl).hostname) {
-    return json({ error: true, status: 400, message: `Invalid URL` }, { status: 400 });
+    return json({ error: true, status: 400, message: `Invalid URL.` }, { status: 400 });
   }
 
   // Get file name from URL
@@ -39,8 +41,17 @@ export async function GET({ url }) {
   const fileName = pathParts[pathParts.length - 1];
 
   // Fetch the file
-  const response = await fetch(urlToProxy);
-  const blob = await response.blob();
+  let blob;
+  try {
+    const response = await fetch(urlToProxy);
+    blob = await response.blob();
+  } catch (error) {
+    console.error(`Error fetching apportionment preview file, ${urlObj}, from source: ${error}`);
+    return json(
+      { error: true, status: 500, message: 'Unable to get preview file from source.' },
+      { status: 500 }
+    );
+  }
 
   // TODO: Handle different file types, such as Excel
   return new Response(blob, {

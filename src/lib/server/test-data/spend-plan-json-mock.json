@@ -1,0 +1,30 @@
+{
+  "FileId": 10000001,
+  "FileName": "FY 2026 DHS FLETC PCI Spend Plan",
+  "FiscalYear": "2026",
+  "Folder": "Spend Plans",
+  "EstimatedObligations": [
+    {
+      "Component": "FLETC",
+      "Name": "Procurement, construction, improvements, and related expenses to facilities.",
+      "Appropriation": "Procurement, Construction, and Improvements",
+      "Programs, Projects or Activities": "Construction and Facility Improvements",
+      "FY2025": 98800,
+      "FY2026": 366200,
+      "FY2027": 0,
+      "FY2028": 0,
+      "FY2029": 0,
+      "Total": 465000,
+      "Comments": "Not more than $465,000,000 of the amounts available under subsection (a) shall be for procurement, construction and maintenance of, improvements to, training equipment for, and related expenses, of facilities of the Federal Law Enforcement Training Centers."
+    }
+  ],
+  "FacilityProjects": {
+    "FY2025": 82757,
+    "FY2026": 296582
+  },
+  "DeferredMaintenance": {
+    "FY2025": 16043,
+    "FY2026": 69618
+  },
+  "Note": "Lines and descriptions as listed within this spend plan are not used to apportion funds, and are not subject to"
+}

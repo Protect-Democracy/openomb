@@ -1,8 +1,8 @@
-import { agenciesWithChildren } from '$queries/tafs';
+import { mAgenciesWithChildren } from '$queries/agencies';
 
 /** @type {import('./$types').PageLoad} */
 export async function load() {
-  const agencyList = await agenciesWithChildren();
+  const agencyList = await mAgenciesWithChildren();
 
   return {
     agencies: agencyList,

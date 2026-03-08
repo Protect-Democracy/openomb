@@ -27,7 +27,7 @@ export type SavedSearchCriterion = {
   year?: number[];
   lineNum?: string[];
   footnoteNum?: string[];
-  apportionmentType?: ('letter' | 'spreadsheet')[];
+  apportionmentType?: ('letter' | 'spreadsheet' | 'spend')[];
   // Dates don't exist in JS, and JS's datetime can be very difficult to deal with given that
   // it the timezone is dependent on the users browser, so getting the correct date can be tricky,
   // let's just use ISO date strings

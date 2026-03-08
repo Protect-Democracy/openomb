@@ -3,6 +3,7 @@
   import { getContext } from 'svelte';
   import { parseUrlSearchParams } from '$lib/searches';
   import { formatDate } from '$lib/formatters';
+  import { apportionmentTypeDescriptions, footnoteNumberOptions } from '$config/search';
 
   import Spinner from '$components/icons/Spinner.svelte';
   import SearchSelect from '$components/inputs/SearchSelect.svelte';
@@ -169,7 +170,7 @@
       <CheckboxButtons
         id="footnoteNum"
         name="footnoteNum"
-        options={['A', 'B']}
+        options={footnoteNumberOptions}
         value={parsedSearchParams.footnoteNum}
         multi
       />
@@ -181,9 +182,9 @@
       <CheckboxButtons
         id="apportionmentType"
         name="apportionmentType"
-        options={['spreadsheet', 'letter']}
+        options={Object.keys(apportionmentTypeDescriptions)}
         formatOptionLabel={(v) => {
-          const formatted = { spreadsheet: 'Standard (Excel)', letter: 'Letter (PDF)' }[v];
+          const formatted = apportionmentTypeDescriptions[v];
           return formatted || '(unknown)';
         }}
         value={parsedSearchParams.apportionmentType}

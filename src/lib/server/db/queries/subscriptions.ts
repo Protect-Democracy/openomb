@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { map, transform } from 'lodash-es';
+import { map } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
@@ -17,8 +17,9 @@ import {
   parseCriterion,
   searchCriterionDescriptions
 } from '$lib/searches';
+import { agency as agencyLookup } from '$queries/agencies';
 import { mApproverTitleOptions, type ApproverTitleOptionsResult } from '$queries/search';
-import { mBureaus, type BureausResult } from '$queries/tafs';
+import { mBureaus, type BureausResult } from '$queries/agencies';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
@@ -80,15 +81,13 @@ async function getSubscriptionDetails(
       itemLink: `/file/${item?.fileId}#tafs_${item?.tafsTableId}`
     };
   } else if (type === 'agency') {
-    const item = await db.query.tafs.findFirst({
-      where: eq(tafs.budgetAgencyTitleId, itemId)
-    });
+    const item = await agencyLookup(itemId);
     return {
       itemDetails: {
         agency: item?.budgetAgencyTitle || '',
         agencyId: item?.budgetAgencyTitleId || ''
       },
-      description: item?.budgetAgencyTitle || '',
+      description: item?.budgetAgencyTitle || itemId,
       itemLink: `/agency/${itemId}`
     };
   } else if (type === 'bureau') {
@@ -149,7 +148,7 @@ async function getSubscriptionDetails(
 /**
  * Memoize detail select for caching
  */
-const mGetSubscriptionDetails = memoizeDataAsync(getSubscriptionDetails);
+export const mGetSubscriptionDetails = memoizeDataAsync(getSubscriptionDetails);
 
 /**
  * Gets all subscriptions, with details, grouped by user

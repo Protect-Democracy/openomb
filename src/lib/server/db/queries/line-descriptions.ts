@@ -47,8 +47,7 @@ export const loadDefaultLineDescriptions = async (): Promise<void> => {
             updatedAt: new Date()
           });
         }
-      }
-      else if (isSingle) {
+      } else if (isSingle) {
         parsedRecords.push({
           lineNumber: record.Lines,
           description: record.Description,
@@ -56,8 +55,7 @@ export const loadDefaultLineDescriptions = async (): Promise<void> => {
           createdAt: new Date(),
           updatedAt: new Date()
         });
-      }
-      else {
+      } else {
         throw new Error(`Invalid line number: ${record.Lines}`);
       }
     }

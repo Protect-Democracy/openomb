@@ -11,25 +11,25 @@
 
 <script lang="ts">
   import { type TreeView } from '@melt-ui/svelte';
-import { getContext } from 'svelte';
-import PlusSquare from '$components/icons/PlusSquare.svelte';
-import MinusSquare from '$components/icons/MinusSquare.svelte';
-import ArrowDownRight from '$components/icons/ArrowDownRight.svelte';
+  import { getContext } from 'svelte';
+  import PlusSquare from '$components/icons/PlusSquare.svelte';
+  import MinusSquare from '$components/icons/MinusSquare.svelte';
+  import ArrowDownRight from '$components/icons/ArrowDownRight.svelte';
 
-const {
-  elements: { item, group },
-  helpers: { isExpanded, isSelected }
-} = getContext<TreeView>('tree');
+  const {
+    elements: { item, group },
+    helpers: { isExpanded, isSelected }
+  } = getContext<TreeView>('tree');
 
-const itemId = (Math.random() + 1).toString(36).substring(7);
-const hasChildren = !!$$slots.children;
+  const itemId = (Math.random() + 1).toString(36).substring(7);
+  const hasChildren = !!$$slots.children;
 
-let iconDisplayProps = {};
-$: iconDisplayProps = $isSelected(itemId)
-  ? {
-      ['stroke-width']: 3
-    }
-  : {};
+  let iconDisplayProps = {};
+  $: iconDisplayProps = $isSelected(itemId)
+    ? {
+        ['stroke-width']: 3
+      }
+    : {};
 </script>
 
 <li>

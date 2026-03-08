@@ -1,90 +1,86 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-import { formatDate } from '$lib/formatters';
-import { parseUrlSearchParams, searchCriterionDescriptions } from '$lib/searches';
-import { submitting } from './form-store';
-import Drawer from '$components/drawer/Drawer.svelte';
-import XSymbol from '$components/icons/XSymbol.svelte';
-import Spinner from '$components/icons/Spinner.svelte';
-import Form from './Form.svelte';
+  import { formatDate } from '$lib/formatters';
+  import { parseUrlSearchParams, searchCriterionDescriptions } from '$lib/searches';
+  import { submitting } from './form-store';
+  import Drawer from '$components/drawer/Drawer.svelte';
+  import XSymbol from '$components/icons/XSymbol.svelte';
+  import Spinner from '$components/icons/Spinner.svelte';
+  import Form from './Form.svelte';
 
-// Types
-import type { BureausResult } from '$queries/tafs';
-import type {
-  YearOptionsResult,
-  ApproverTitleOptionsResult,
-  LineNumberOptionsResult
-} from '$queries/search';
+  // Types
+  import type { BureausResult } from '$queries/agencies';
+  import type {
+    YearOptionsResult,
+    ApproverTitleOptionsResult,
+    LineNumberOptionsResult
+  } from '$queries/search';
 
-// Props
-export let url: URL;
-export let agencyBureauOptions: BureausResult = [];
-export let yearOptions: YearOptionsResult = [];
-export let lineOptions: LineNumberOptionsResult = [];
-export let approverTitleOptions: ApproverTitleOptionsResult = [];
+  // Props
+  export let url: URL;
+  export let agencyBureauOptions: BureausResult = [];
+  export let yearOptions: YearOptionsResult = [];
+  export let lineOptions: LineNumberOptionsResult = [];
+  export let approverTitleOptions: ApproverTitleOptionsResult = [];
 
-// Derived
-// eslint-disable-next-line svelte/valid-compile
-$: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
-$: parsedSearchParams = parseUrlSearchParams(url.searchParams);
+  // Derived
+  $: submittingProxy = typeof $submitting !== 'undefined' ? $submitting : false;
+  $: parsedSearchParams = parseUrlSearchParams(url.searchParams);
 
-// It might make sense to just use links instead of buttons, but given
-// that this filter version doesn't show up for non-js users,
-// it's not really necessary.
-function removeFilter(filterParam: string, filterValue: string | number | Date) {
-  const newParams = new URLSearchParams(url.searchParams.toString());
+  // It might make sense to just use links instead of buttons, but given
+  // that this filter version doesn't show up for non-js users,
+  // it's not really necessary.
+  function removeFilter(filterParam: string, filterValue: string | number | Date) {
+    const newParams = new URLSearchParams(url.searchParams.toString());
 
-  // Custom param handling.  Term is an input with comma separated list of values.
-  if (filterParam === 'term') {
-    const terms =
-      newParams
-        .get(filterParam)
-        ?.split(',')
-        .map((t) => t.trim()) || [];
-    const newTerms = terms.filter((t) => t !== filterValue);
-    if (newTerms.length > 0) {
-      newParams.set(filterParam, newTerms.join(', '));
+    // Custom param handling.  Term is an input with comma separated list of values.
+    if (filterParam === 'term') {
+      const terms =
+        newParams
+          .get(filterParam)
+          ?.split(',')
+          .map((t) => t.trim()) || [];
+      const newTerms = terms.filter((t) => t !== filterValue);
+      if (newTerms.length > 0) {
+        newParams.set(filterParam, newTerms.join(', '));
+      } else {
+        newParams.delete(filterParam);
+      }
+    } else {
+      newParams.delete(filterParam, filterValue.toString());
     }
-    else {
-      newParams.delete(filterParam);
+
+    goto(`${url.pathname}?${newParams.toString()}`, { noScroll: true });
+  }
+
+  // Label for our filter toggle where %s is the current filter value
+  function getFilterLabel(
+    key: string,
+    value: string | number | Date | undefined | (string | number | Date)[]
+  ) {
+    if (value === null || value === undefined) {
+      return false;
     }
-  }
-  else {
-    newParams.delete(filterParam, filterValue.toString());
-  }
 
-  goto(`${url.pathname}?${newParams.toString()}`, { noScroll: true });
-}
+    // See if the value is in the search criterion.
+    let criterion = { [key]: value };
+    const criterionDescription = searchCriterionDescriptions(criterion, {
+      agencyBureauOptions: agencyBureauOptions,
+      approverTitleOptions: approverTitleOptions
+    });
+    if (criterionDescription) {
+      return criterionDescription[0];
+    }
 
-// Label for our filter toggle where %s is the current filter value
-function getFilterLabel(
-  key: string,
-  value: string | number | Date | undefined | (string | number | Date)[]
-) {
-  if (value === null || value === undefined) {
+    // Things that may not be in the search criterion descriptions, but we still want to show a label for.
+    else if (key === 'createdStart' && (value instanceof Date || typeof value === 'string')) {
+      return `Added to OpenOMB after: ${formatDate(value)}`;
+    } else if (key === 'createdEnd' && (value instanceof Date || typeof value === 'string')) {
+      return `Added to OpenOMB before: ${formatDate(value)}`;
+    }
+
     return false;
   }
-
-  // See if the value is in the search criterion.
-  let criterion = { [key]: value };
-  const criterionDescription = searchCriterionDescriptions(criterion, {
-    agencyBureauOptions: agencyBureauOptions,
-    approverTitleOptions: approverTitleOptions
-  });
-  if (criterionDescription) {
-    return criterionDescription[0];
-  }
-
-  // Things that may not be in the search criterion descriptions, but we still want to show a label for.
-  else if (key === 'createdStart' && (value instanceof Date || typeof value === 'string')) {
-    return `Added to OpenOMB after: ${formatDate(value)}`;
-  }
-  else if (key === 'createdEnd' && (value instanceof Date || typeof value === 'string')) {
-    return `Added to OpenOMB before: ${formatDate(value)}`;
-  }
-
-  return false;
-}
 </script>
 
 <div class="bar">

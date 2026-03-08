@@ -3,6 +3,7 @@
   import { uniqBy, reduce } from 'lodash-es';
   import { writable } from 'svelte/store';
   import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
+  import { isSpendPlanFile } from '$lib/utilities';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
   import Switch from '$components/inputs/Switch.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
@@ -20,6 +21,7 @@
 
   // Derived
   $: letterApportionment = !!file.pdfUrl;
+  $: noApprovalTimestamp = !file.approvalTimestamp && !!file.createdAt;
   $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = uniqBy(
@@ -45,7 +47,7 @@
   </div>
 
   {#if letterApportionment}
-    <h2>Apportionment letter</h2>
+    <h2>Apportionment {isSpendPlanFile(file) ? 'spend plan' : 'letter'}</h2>
 
     <LetterApportionmentPreview {file} />
   {/if}
@@ -65,7 +67,7 @@
     {#if tafs?.length}
       <h2 class="sr-only">Schedules</h2>
 
-      {#each tafs as tafsGroup}
+      {#each tafs as tafsGroup (tafsGroup.tafsTableId)}
         {@const prevIterationTafs = prevIterationFiles[tafsGroup.tafsTableId]?.tafs?.find(
           (taf) => taf.tafsId === tafsGroup.tafsId
         )}
@@ -113,7 +115,7 @@
       file.
     </p>
 
-    {#if footnotes.length}
+    {#if footnotes?.length}
       <FootnoteTable {footnotes} />
     {:else}
       <p><em>No footnotes available.</em></p>
@@ -138,19 +140,29 @@
   <section class="page-footnotes">
     <h2 class="sr-only">Notes about this page</h2>
 
-    <ul>
-      <li id="page-footnote-funds">
-        &dagger; Links to public laws are automatically generated and are not guaranteed to be
-        accurate.
-      </li>
-
-      {#if letterApportionment}
-        <li id="page-footnote-file-id">
-          &Dagger; For letter apportionments, the file identifier is an internally assigned
-          identifier and not assigned by the Office of Management and Budget.
+    <div class="text-container">
+      <ul>
+        <li id="page-footnote-funds">
+          &dagger; Links to public laws are automatically generated and are not guaranteed to be
+          accurate.
         </li>
-      {/if}
-    </ul>
+
+        {#if letterApportionment}
+          <li id="page-footnote-file-id">
+            &Dagger; For certain apportionments, the file identifier is an internally assigned
+            identifier and not assigned by the Office of Management and Budget.
+          </li>
+        {/if}
+
+        {#if noApprovalTimestamp}
+          <li id="page-footnote-first-seen">
+            &sect; Some apportionments do not have an approval date, so the "First seen" date is
+            shown instead. This is the date that OpenOMB first observed this file, which may be
+            different from the date that the file was created or published.
+          </li>
+        {/if}
+      </ul>
+    </div>
   </section>
 
   <ScrollToTop />

@@ -20,8 +20,7 @@ export async function urlIsReachable(url: string, timeout: number = 4000) {
       signal: AbortSignal.timeout(timeout)
     });
     return response?.status === 200;
-  }
-  catch (error) {
+  } catch (error) {
     return false;
   }
 }

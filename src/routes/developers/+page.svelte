@@ -1,13 +1,13 @@
 <script lang="ts">
   import { formatDate } from '$lib/formatters';
-import type { PageData } from './$types';
-import { siteName, supportEmail, sourceDataUrl } from '$config';
+  import type { PageData } from './$types';
+  import { siteName, supportEmail, sourceDataUrl } from '$config';
 
-// Props
-export let data: PageData;
+  // Props
+  export let data: PageData;
 
-// Derived
-$: ({ lastUpdated } = data);
+  // Derived
+  $: ({ lastUpdated } = data);
 </script>
 
 <div class="page-container content-container">

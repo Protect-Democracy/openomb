@@ -28,6 +28,7 @@ import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
+import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/files';
 
 // Types
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
@@ -313,20 +314,23 @@ function generalSearchFilters(
   );
   where.push(searchParams.createdEnd ? lte(files.createdAt, searchParams.createdEnd) : undefined);
 
-  // Apportionemnt type.  Only need to search on a single one
-  if (
-    searchParams.apportionmentType?.length &&
-    searchParams.apportionmentType?.length === 1 &&
-    searchParams.apportionmentType[0] === 'letter'
-  ) {
-    where.push(isNotNull(files.pdfUrl));
-  }
-  if (
-    searchParams.apportionmentType?.length &&
-    searchParams.apportionmentType?.length === 1 &&
-    searchParams.apportionmentType[0] === 'spreadsheet'
-  ) {
-    where.push(isNull(files.pdfUrl));
+  // Apportionment type.
+  if (searchParams.apportionmentType && searchParams.apportionmentType.length > 0) {
+    const apportionmentTypeFilters = [];
+    if (searchParams.apportionmentType.includes('spreadsheet')) {
+      apportionmentTypeFilters.push(
+        and(isNull(files.pdfUrl), eq(files.fileType, apportionmentTypeStandard))
+      );
+    }
+    if (searchParams.apportionmentType.includes('letter')) {
+      apportionmentTypeFilters.push(
+        and(isNotNull(files.pdfUrl), eq(files.fileType, apportionmentTypeStandard))
+      );
+    }
+    if (searchParams.apportionmentType.includes('spend')) {
+      apportionmentTypeFilters.push(eq(files.fileType, apportionmentTypeSpendPlan));
+    }
+    where.push(or(...apportionmentTypeFilters));
   }
 
   // Complete AND wheres
@@ -359,36 +363,34 @@ export async function searchSetup(
 
   // File order parameters.  Since we are grouping, we need to  order
   // by aggregate values.  Default is just to order by approval.
-  let order = [desc(files.approvalTimestamp)];
-  // TODO: Unsure why this throws the type issue
+  const defaultOrder = sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`;
+  let order = [defaultOrder];
   if ('sort' in searchParams && searchParams.sort === 'approved_asc') {
-    order = [asc(files.approvalTimestamp)];
+    order = [sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) ASC NULLS LAST`];
   }
+  // TODO: The Agency and Bureau sorts below do not account for spend plans
   if ('sort' in searchParams && searchParams?.sort === 'account_asc') {
     const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
-    order = [asc(aggField), desc(files.approvalTimestamp)];
-  }
-  else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
+    order = [asc(aggField), defaultOrder];
+  } else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
-    order = [asc(aggField), desc(files.approvalTimestamp)];
-  }
-  else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
+    order = [asc(aggField), defaultOrder];
+  } else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
-    order = [asc(aggField), desc(files.approvalTimestamp)];
+    order = [asc(aggField), defaultOrder];
   }
 
   // Account ordering
   let accountOrder = [
     sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
-    sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
+    sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
   ];
   if ('accountSort' in searchParams && searchParams?.accountSort === 'account_desc') {
     accountOrder = [
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
-      sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
+      sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
     ];
-  }
-  else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
+  } else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
     accountOrder = [
       desc(countDistinct(tafs.fileId)),
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`
@@ -775,7 +777,7 @@ export async function saveUserSearch(
 
   const newSearch = {
     userId: userResults[0].id,
-    criterion
+    criterion: criterionToSave
   };
   const newRecords = await db.insert(searches).values(newSearch).returning({ id: searches.id });
   return newRecords[0];

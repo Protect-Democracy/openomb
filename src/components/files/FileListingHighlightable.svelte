@@ -1,102 +1,103 @@
 <script lang="ts">
   import {
-  formatFileTitle,
-  formatDate,
-  formatDateISO,
-  highlight,
-  formatTafsFormattedId,
-  highlightOrder,
-  hasHighlight
-} from '$lib/formatters';
-import { uniqBy, flatMap, filter } from 'lodash-es';
-import type { filesSelect } from '$schema/files';
-import type { tafsSelect } from '$schema/tafs';
-import type { SearchPaginationParams } from '$db/queries/search';
+    formatFileTitle,
+    formatDate,
+    formatDateISO,
+    highlight,
+    formatTafsFormattedId,
+    highlightOrder,
+    hasHighlight
+  } from '$lib/formatters';
+  import { uniqBy, flatMap, filter } from 'lodash-es';
+  import type { filesSelect } from '$schema/files';
+  import type { tafsSelect } from '$schema/tafs';
+  import type { SearchPaginationParams } from '$db/queries/search';
+  import type { RecentlyAddedOrApprovedWithTafsResult } from '$queries/files';
 
-// Types
-interface File extends filesSelect {
-  tafs?: tafsSelect[];
-}
+  // Types
+  interface File extends filesSelect {
+    tafs?: tafsSelect[];
+  }
 
-// Props
-export let headerElement = 'h3';
-export let headerClasses = '';
-export let file: File;
-export let highlightParams: SearchPaginationParams;
+  // Props
+  export let headerElement = 'h3';
+  export let headerClasses = '';
+  export let file: File | filesSelect | RecentlyAddedOrApprovedWithTafsResult[number];
+  export let highlightParams: SearchPaginationParams | undefined = undefined;
 
-// Constants
-const tafsLimit = 1;
-const footnotesLimit = 3;
+  // Constants
+  const tafsLimit = 1;
+  const footnotesLimit = 3;
 
-// Derived
-let hasTafs: boolean;
-$: hasTafs = file.tafs && file.tafs.length > 0 ? true : false;
-$: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
-$: highlightedApproverTitle = highlight(
-  file.approverTitle,
-  highlightParams?.approver ? highlightParams?.approver : []
-);
-$: hasHighlightedApproverTitle = hasHighlight(highlightedApproverTitle);
-$: searchTerms = highlightParams?.term;
-$: agencies = highlightOrder(
-  uniqBy(
-    file?.tafs?.map((t) => ({
-      id: t.budgetAgencyTitleId,
-      title: t.budgetAgencyTitle,
-      highlightedTitle: highlight(t.budgetAgencyTitle, searchTerms)
-    })) || [],
-    'id'
-  ),
-  'highlightedTitle'
-);
-$: bureaus = highlightOrder(
-  uniqBy(
-    file?.tafs?.map((t) => ({
-      id: t.budgetBureauTitleId,
-      title: t.budgetBureauTitle,
-      highlightedTitle: highlight(t.budgetBureauTitle, searchTerms)
-    })) || [],
-    'id'
-  ),
-  'highlightedTitle'
-);
-$: tafs = highlightOrder(
-  uniqBy(
-    file?.tafs?.map((t) => ({
-      id: t.tafsId,
-      title: formatTafsFormattedId(t),
-      highlightedTitle: highlight(
-        formatTafsFormattedId(t),
-        highlightParams?.tafs ? [highlightParams?.tafs] : []
-      )
-    })) || [],
-    'id'
-  ),
-  'highlightedTitle'
-);
-$: allLines = highlightOrder(
-  (filter(flatMap(file?.tafs, 'lines')) || []).map((l) => ({
-    ...l,
-    id: `${l.tafsTableId}-${l.lineIndex}`,
-    highlightedDescription: highlight(l.lineDescription, searchTerms),
-    hasHighlight: hasHighlight(highlight(l.lineDescription, searchTerms))
-  })),
-  'highlightedDescription'
-);
-$: hasHighlightedLines = allLines.some((l) => l.hasHighlight);
-$: footnotes = highlightOrder(
-  uniqBy(
-    file?.footnotes?.map((f) => ({
-      id: f.footnoteNumber,
-      text: f.footnoteText,
-      highlightedText: highlight(f.footnoteText, searchTerms, 100),
-      hasHighlight: hasHighlight(highlight(f.footnoteText, searchTerms, 100))
+  // Derived
+  let hasTafs: boolean;
+  $: hasTafs = file.tafs && file.tafs.length > 0 ? true : false;
+  $: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
+  $: highlightedApproverTitle = highlight(
+    file.approverTitle,
+    highlightParams?.approver ? highlightParams?.approver : []
+  );
+  $: hasHighlightedApproverTitle = hasHighlight(highlightedApproverTitle);
+  $: searchTerms = highlightParams?.term;
+  $: agencies = highlightOrder(
+    uniqBy(
+      file?.tafs?.map((t) => ({
+        id: t.budgetAgencyTitleId,
+        title: t.budgetAgencyTitle,
+        highlightedTitle: highlight(t.budgetAgencyTitle, searchTerms)
+      })) || [],
+      'id'
+    ),
+    'highlightedTitle'
+  );
+  $: bureaus = highlightOrder(
+    uniqBy(
+      file?.tafs?.map((t) => ({
+        id: t.budgetBureauTitleId,
+        title: t.budgetBureauTitle,
+        highlightedTitle: highlight(t.budgetBureauTitle, searchTerms)
+      })) || [],
+      'id'
+    ),
+    'highlightedTitle'
+  );
+  $: tafs = highlightOrder(
+    uniqBy(
+      file?.tafs?.map((t) => ({
+        id: t.tafsId,
+        title: formatTafsFormattedId(t),
+        highlightedTitle: highlight(
+          formatTafsFormattedId(t),
+          highlightParams?.tafs ? [highlightParams?.tafs] : []
+        )
+      })) || [],
+      'id'
+    ),
+    'highlightedTitle'
+  );
+  $: allLines = highlightOrder(
+    (filter(flatMap(file?.tafs, 'lines')) || []).map((l) => ({
+      ...l,
+      id: `${l.tafsTableId}-${l.lineIndex}`,
+      highlightedDescription: highlight(l.lineDescription, searchTerms),
+      hasHighlight: hasHighlight(highlight(l.lineDescription, searchTerms))
     })),
-    'id'
-  ),
-  'highlightedText'
-);
-$: hasHighlightedFootnotes = footnotes.some((f) => f.hasHighlight);
+    'highlightedDescription'
+  );
+  $: hasHighlightedLines = allLines.some((l) => l.hasHighlight);
+  $: footnotes = highlightOrder(
+    uniqBy(
+      file?.footnotes?.map((f) => ({
+        id: f.footnoteNumber,
+        text: f.footnoteText,
+        highlightedText: highlight(f.footnoteText, searchTerms, 100),
+        hasHighlight: hasHighlight(highlight(f.footnoteText, searchTerms, 100))
+      })),
+      'id'
+    ),
+    'highlightedText'
+  );
+  $: hasHighlightedFootnotes = footnotes.some((f) => f.hasHighlight);
 </script>
 
 <article class="file-listing-small">
@@ -148,13 +149,23 @@ $: hasHighlightedFootnotes = footnotes.some((f) => f.hasHighlight);
         <li>
           <span class="tag"><acronym title="Fiscal Year">FY</acronym> {file.fiscalYear}</span>
         </li>
-        <li>
-          <span class="tag">
-            Approved <time datetime={formatDateISO(file.approvalTimestamp)}
-              >{formatDate(file.approvalTimestamp, 'medium')}</time
-            >
-          </span>
-        </li>
+        {#if file.approvalTimestamp}
+          <li>
+            <span class="tag">
+              Approved <time datetime={formatDateISO(file.approvalTimestamp)}
+                >{formatDate(file.approvalTimestamp, 'medium')}</time
+              >
+            </span>
+          </li>
+        {:else if file.createdAt}
+          <li>
+            <span class="tag">
+              First seen <time datetime={formatDateISO(file.createdAt)}
+                >{formatDate(file.createdAt, 'medium')}</time
+              >
+            </span>
+          </li>
+        {/if}
       </ul>
     </div>
 

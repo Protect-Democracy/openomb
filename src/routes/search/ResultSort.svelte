@@ -1,26 +1,27 @@
 <script lang="ts">
+  import { uniq } from 'lodash-es';
   import { submitting } from './form-store';
 
-// Props
-export let url: URL;
-export let id: string;
-export let anchor: string;
-export let sortOptions: { key: string; label: string }[] = [];
-export let defaultValue: string;
+  // Props
+  export let url: URL;
+  export let id: string;
+  export let anchor: string;
+  export let sortOptions: { key: string; label: string }[] = [];
+  export let defaultValue: string;
 
-// State
-let sortFormEl: HTMLFormElement;
+  // State
+  let sortFormEl: HTMLFormElement;
 
-// It looks like using a function or expression in value causes a bug?
-// https://github.com/sveltejs/svelte/issues/15316
-$: currentValue = url.searchParams.get(id) || defaultValue;
+  // It looks like using a function or expression in value causes a bug?
+  // https://github.com/sveltejs/svelte/issues/15316
+  $: currentValue = url.searchParams.get(id) || defaultValue;
 
-// The regular form doesn't seem to change the page in a way that
-// does submitting so we have to do it manually.
-function updateSort() {
-  submitting.set(true);
-  sortFormEl.submit();
-}
+  // The regular form doesn't seem to change the page in a way that
+  // does submitting so we have to do it manually.
+  function updateSort() {
+    submitting.set(true);
+    sortFormEl.submit();
+  }
 </script>
 
 <div class="result-sort">
@@ -33,8 +34,8 @@ function updateSort() {
       {/each}
     </select>
 
-    {#each url.searchParams.keys() as param, pi (`${param}-${pi}`)}
-      {#each url.searchParams.getAll(param) as value}
+    {#each uniq(Array.from(url.searchParams.keys())) as param, pi (`${param}-${pi}`)}
+      {#each url.searchParams.getAll(param) as value, vi (`${param}-${vi}`)}
         {#if param !== 'sort'}
           <input type="hidden" name={param} {value} />
         {/if}

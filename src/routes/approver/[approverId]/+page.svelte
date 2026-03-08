@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import { formatNumber } from '$lib/formatters';
-import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import { formatNumber } from '$lib/formatters';
+  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
 
-export let data: PageData;
-$: ({ approver, recentlyApproved } = data);
+  export let data: PageData;
+  $: ({ approver, recentlyApproved } = data);
 </script>
 
 <div class="page-container content-container">

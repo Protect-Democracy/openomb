@@ -12,9 +12,9 @@
 -->
 <script lang="ts">
   // Props
-export let variant: 'small' | 'full' = 'full';
-export let callbackUrl;
-export let action = 'Send link';
+  export let variant: 'small' | 'full' = 'full';
+  export let callbackUrl;
+  export let action = 'Send link';
 </script>
 
 <form class="login-form" action="/auth/signin/http-email" method="POST">

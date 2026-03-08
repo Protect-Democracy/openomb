@@ -32,8 +32,7 @@ const cacheOptions = {
     let stringified;
     try {
       return Buffer.byteLength(JSON.stringify(value));
-    }
-    catch {
+    } catch {
       throw new Error(`Could not stringify cache value`);
     }
   },
@@ -88,8 +87,7 @@ export function cacheId(identifiers: unknown) {
 
   try {
     return JSON.stringify(identifiers);
-  }
-  catch (e: Error | unknown) {
+  } catch (e: Error | unknown) {
     throw new Error(
       `Could not stringify identifiers to make cache Id: ${e instanceof Error ? e.message : String(e)}`
     );
@@ -112,8 +110,7 @@ export function memoizeAsync<Args extends any[], Return>(
     if (cachedValue) {
       debugLogger(`Cache hit for ${id}`);
       return cachedValue;
-    }
-    else {
+    } else {
       debugLogger(`Cache miss for ${id}, options: ${JSON.stringify(options)}`);
       const result = await fn(...args);
       cacheSet(id, result, options);

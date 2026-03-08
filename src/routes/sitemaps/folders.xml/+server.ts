@@ -1,5 +1,5 @@
 import { deployedBaseUrl } from '$config';
-import { mFolders } from '$queries/files';
+import { mFolders } from '$queries/folders';
 
 export async function GET() {
   const folderRecords = (await mFolders()) || [];

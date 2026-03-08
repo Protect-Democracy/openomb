@@ -13,8 +13,7 @@ export async function GET() {
   try {
     await recentlyApproved(1);
     database = true;
-  }
-  catch {
+  } catch {
     database = false;
   }
 

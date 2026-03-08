@@ -11,29 +11,29 @@
 
 <script lang="ts">
   import { type TreeView } from '@melt-ui/svelte';
-import { getContext } from 'svelte';
-import PlusSquare from '$components/icons/PlusSquare.svelte';
-import MinusSquare from '$components/icons/MinusSquare.svelte';
-import ArrowDownRight from '$components/icons/ArrowDownRight.svelte';
+  import { getContext } from 'svelte';
+  import PlusSquare from '$components/icons/PlusSquare.svelte';
+  import MinusSquare from '$components/icons/MinusSquare.svelte';
+  import ArrowDownRight from '$components/icons/ArrowDownRight.svelte';
 
-// Props
-export let level: number;
+  // Props
+  export let level: number;
 
-// Get context from the top-level parent "tree"
-const {
-  elements: { item, group },
-  helpers: { isExpanded, isSelected }
-} = getContext<TreeView>('tree');
+  // Get context from the top-level parent "tree"
+  const {
+    elements: { item, group },
+    helpers: { isExpanded, isSelected }
+  } = getContext<TreeView>('tree');
 
-// Constants
-const itemId = (Math.random() + 1).toString(36).substring(7);
-const hasChildren = !!$$slots.default;
+  // Constants
+  const itemId = (Math.random() + 1).toString(36).substring(7);
+  const hasChildren = !!$$slots.default;
 
-// Derived
-let iconDisplayProps = {};
-$: iconDisplayProps = {
-  ['stroke-width']: $isSelected(itemId) ? 3 : 2
-};
+  // Derived
+  let iconDisplayProps = {};
+  $: iconDisplayProps = {
+    ['stroke-width']: $isSelected(itemId) ? 3 : 2
+  };
 </script>
 
 <li class={`level-${level} clearfix`}>

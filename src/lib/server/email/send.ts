@@ -106,8 +106,7 @@ async function sendEmail(to: string, subject: string, html: string, forceClientR
       html: html,
       replyTo: replyTo
     });
-  }
-  else {
+  } else {
     throw new Error('Unknown email service type in environment variables.');
   }
 }

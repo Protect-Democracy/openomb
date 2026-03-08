@@ -38,7 +38,7 @@ async function cli(): Promise<void> {
 
   // Path to migrations (needed here for how build works)
   const _dirname = dirname(fileURLToPath(import.meta.url));
-  const migrationsDir = joinPath(_dirname, '..', 'db', 'migrations');
+  const migrationsDir = joinPath(_dirname, '..', 'src', 'lib', 'server', 'db', 'migrations');
 
   // This will run migrations on the database, skipping the ones already applied
   await createSpan({ name: 'migrate', op: 'db.transaction' }, async () =>

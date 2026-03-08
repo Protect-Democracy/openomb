@@ -6,6 +6,7 @@
 import { DateTime } from 'luxon';
 import { isDate } from 'lodash-es';
 import { formatDate } from '$lib/formatters';
+import { apportionmentTypeDescriptions } from '$config/search';
 
 // Types
 import type {
@@ -13,16 +14,8 @@ import type {
   SavedSearchCriterionUrl,
   LegacySearchCriterion
 } from '$schema/searches';
-import type { BureausResult } from '$queries/tafs';
+import type { BureausResult } from '$queries/agencies';
 import type { ApproverTitleOptionsResult } from '$queries/search';
-
-/**
- * Manual descriptions for apportionment types
- */
-export const apportionmentTypeDescriptions: Record<string, string> = {
-  spreadsheet: 'Standard (Excel)',
-  letter: 'Letter (PDF)'
-};
 
 /**
  * Make sure the criterion is in the correct format for saving and comparing.
@@ -116,8 +109,8 @@ export function parseCriterion(
   };
 
   // Apportionment type has to be a specific value
-  let apportionmentTypeArray = parseStringArray(criterion?.apportionmentType);
-  let apportionmentType = (
+  const apportionmentTypeArray = parseStringArray(criterion?.apportionmentType);
+  const apportionmentType = (
     Array.isArray(apportionmentTypeArray)
       ? apportionmentTypeArray.filter((t) => Object.keys(apportionmentTypeDescriptions).includes(t))
       : undefined
@@ -227,20 +220,20 @@ export function searchCriterionDescriptions(
   }
 
   if (criterion.agencyBureau) {
-    let [agency, bureau] = criterion.agencyBureau.split(',').map((s) => s.trim());
+    const [agency, bureau] = criterion.agencyBureau.split(',').map((s) => s.trim());
 
     // Need at least agency
     if (agency) {
       // Default title is just the ID, but if we have options, we can find the title for it.
-      let agencyBureauTitles: string[] = [agency, bureau];
+      const agencyBureauTitles: string[] = [agency, bureau];
       if (options?.agencyBureauOptions) {
-        let agencyOption = options.agencyBureauOptions.find(
+        const agencyOption = options.agencyBureauOptions.find(
           (option) => option.budgetAgencyTitleId == agency
         );
         if (agencyOption) {
           agencyBureauTitles[0] = agencyOption.budgetAgencyTitle || '';
         }
-        let bureauOption = options.agencyBureauOptions.find(
+        const bureauOption = options.agencyBureauOptions.find(
           (option) => option.budgetAgencyTitleId == agency && option.budgetBureauTitleId == bureau
         );
         if (bureauOption) {

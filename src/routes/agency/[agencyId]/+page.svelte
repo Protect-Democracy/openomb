@@ -3,12 +3,12 @@
   import { formatNumber } from '$lib/formatters';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import TabbedFileListing from '$components/files/TabbedFileListing.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
   import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
   export let data: PageData;
-  $: ({ agency, bureausByAgency, recentlyApproved, user, existingSubscription } = data);
+  $: ({ agency, bureausByAgency, recentApportionments, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -36,7 +36,7 @@
     {user}
     subType="agency"
     subItemId={agency.budgetAgencyTitleId}
-    subItemFormatted={agency.budgetAgencyTitle}
+    subItemFormatted={agency.budgetAgencyTitle || undefined}
     {existingSubscription}
   />
 
@@ -44,7 +44,7 @@
     <h2>Bureaus</h2>
 
     <ul>
-      {#each bureausByAgency as bureau, bIndex}
+      {#each bureausByAgency as bureau, bIndex (bureau.budgetBureauTitleId)}
         <li>
           <a href="/agency/{agency.budgetAgencyTitleId}/bureau/{bureau.budgetBureauTitleId}"
             >{bureau.budgetBureauTitle}</a
@@ -56,23 +56,21 @@
   </section>
 
   {#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
-    <section class="page-section">
-      <h2>Files approved by month</h2>
+    {#if fileCountByMonthByYearData && fileCountByMonthByYearData.length > 0}
+      <section class="page-section">
+        <h2>Files approved by month</h2>
 
-      <div class="chart-container">
-        <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
-      </div>
-    </section>
+        <div class="chart-container">
+          <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
+        </div>
+      </section>
+    {/if}
   {/await}
 
   <section class="page-section">
-    <h2>Recently approved</h2>
+    <h2>Recent Apportionments</h2>
 
-    <div class="recently-approved-files">
-      {#each recentlyApproved as file}
-        <FileListingHighlightable {file} />
-      {/each}
-    </div>
+    <TabbedFileListing files={recentApportionments} />
   </section>
 </div>
 

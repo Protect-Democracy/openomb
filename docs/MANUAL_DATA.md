@@ -20,4 +20,15 @@ The default set of line types is maintained in `data/line-types.ts`.
 
 Occasionally the data that comes through the OMB site is obviously incorrect, and it is necessary to manually fix it. These fixes are stored in the following files:
 
-- `data/fixes/pdf-files.ts`: A JSON-ish file that contains update to PDF apportionments. Will get run when collecting data.
+- `data/fixes/pdf-files.ts`: A JSON-ish file that contains update to PDF apportionments and spend plans. Will get run when collecting data.
+
+## Spend Plan Agencies
+
+Our spend plans are not organized or named with the conventions that other apportionments use. They often use agency acronyms in order to specify which agency the spend plan applies to. In order to square this with our budget agencies as defined in our apportionment records, we need to generate a reference data set.
+
+- `data/agencyMatches.ts`
+  - File is generated with the `npm run dev:check-agencies` command (not run automatically)
+  - Pulls agencies from [The Federal Register's api endpoint](https://www.federalregister.gov/api/v1/agencies) that lists agency information
+  - The script then compares these agencies' names with our budget agencies within our tafs records. It ranks the match based on similarity across the two names, and if the match is good enough, associates the top result to our budget agency or budget bureau. (For bureau, it also compares across the parent agency to improve the ranking accuracy).
+  - This match is not always perfect, but more often than not does return the correct agency when provided.
+  - The script also keeps track of orphaned agencies/bureaus (values within our tafs that do not have matches) and leftover agencies/bureaus (values returned by the api dataset that do not have matching tafs).

@@ -9,11 +9,11 @@ import { mockFetchResponse } from '$tests/helpers/fetch';
 
 // To test
 import { request, cacheKey, fetchWithRetries } from './request';
-import type { RequestData } from './request';
 
 // Cache place; TODO, make sure this happens without requiring
 // test to pass.
 const _dirname = dirname(fileURLToPath(import.meta.url));
+// TODO: Use temp directory
 const testCacheDir = join(_dirname, '.cache-test');
 
 // Clear cache before/after each

@@ -1,0 +1,10 @@
+ALTER TABLE "files" ADD COLUMN "file_type" varchar DEFAULT 'standard';
+ALTER TABLE "files" ADD COLUMN "budget_agency_title" varchar;
+ALTER TABLE "files" ADD COLUMN "budget_bureau_title" varchar;
+ALTER TABLE "files" ADD COLUMN "budget_agency_title_id" varchar;
+ALTER TABLE "files" ADD COLUMN "budget_bureau_title_id" varchar;
+CREATE INDEX IF NOT EXISTS "file_file_type_index" ON "files" USING btree ("file_type");
+CREATE INDEX IF NOT EXISTS "file_budget_agency_title_index" ON "files" USING btree ("budget_agency_title");
+CREATE INDEX IF NOT EXISTS "file_budget_bureau_title_index" ON "files" USING btree ("budget_bureau_title");
+CREATE INDEX IF NOT EXISTS "file_budget_agency_title_id_index" ON "files" USING btree ("budget_agency_title_id");
+CREATE INDEX IF NOT EXISTS "file_budget_bureau_title_id_index" ON "files" USING btree ("budget_bureau_title_id");

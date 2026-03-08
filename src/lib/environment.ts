@@ -8,8 +8,7 @@ let publicEnv;
 if (BROWSER) {
   // If we are on the client, use our dynamic public env from svelte
   publicEnv = (await import('$env/dynamic/public')).env;
-}
-else {
+} else {
   // If we are on the server, use the process env values
   publicEnv = process.env;
 }

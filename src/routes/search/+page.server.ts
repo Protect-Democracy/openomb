@@ -12,8 +12,8 @@ import {
   userSearch
 } from '$queries/search';
 import { parseUrlSearchParams } from '$lib/searches';
-import { mBureaus } from '$queries/tafs';
-import { mFolders } from '$queries/files';
+import { mBureaus } from '$queries/agencies';
+import { mFolders } from '$queries/folders';
 import { userSubscription } from '$queries/subscriptions';
 
 // Types
@@ -69,7 +69,6 @@ export const load = async ({ url, cookies, locals }) => {
   // Only perform our search once the form is submitted.  From the landing page, an
   // empty query is in the form ?term= so we don't need to perform a search.
   const searchString = url.searchParams.toString();
-  console.log(searchString);
 
   // User & subscription values
   const user = (await locals.auth())?.user;

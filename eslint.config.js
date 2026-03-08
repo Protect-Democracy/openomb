@@ -2,7 +2,7 @@ import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import js from '@eslint/js';
 import svelte from 'eslint-plugin-svelte';
-import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import globals from 'globals';
 import typescriptParser from '@typescript-eslint/parser';
 import svelteParser from 'svelte-eslint-parser';

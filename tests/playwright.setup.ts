@@ -47,8 +47,7 @@ async function globalSetup(config: FullConfig) {
   try {
     console.log('Building Web Server...');
     execSync(buildCommand);
-  }
-  catch (e) {
+  } catch (e) {
     throw e;
   }
 
@@ -94,8 +93,7 @@ export async function forceKillPort(port: number) {
           await execAsync(`taskkill /PID ${pid} /F`);
         }
       }
-    }
-    else {
+    } else {
       // Mac/Linux: Use lsof to find PID and kill -9
       // -t returns only the PID
       // -i :port selects the port
@@ -107,8 +105,7 @@ export async function forceKillPort(port: number) {
         }
       }
     }
-  }
-  catch (e: any) {
+  } catch (e: any) {
     // Ignore errors where no process was found (exit code 1)
     if (e.code !== 1 && !e.message.includes('No such process')) {
       console.warn(`[Process Utils] Warning: Failed to kill process on port ${port}`, e.message);

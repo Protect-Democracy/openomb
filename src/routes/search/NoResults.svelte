@@ -1,8 +1,8 @@
 <script lang="ts">
   // Helpful display that appears when no results are found
 
-// Props
-export let resultType: 'file' | 'account';
+  // Props
+  export let resultType: 'file' | 'account';
 </script>
 
 <p>

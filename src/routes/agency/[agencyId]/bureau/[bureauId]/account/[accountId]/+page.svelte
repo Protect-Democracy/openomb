@@ -1,13 +1,13 @@
 <script lang="ts">
   import type { PageData } from './$types';
-import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
-import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
-import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
-import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
-import { formatNumber } from '$lib/formatters';
+  import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
+  import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
+  import TafsDisplay from '$components/tafs/TafsDisplay.svelte';
+  import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
+  import { formatNumber } from '$lib/formatters';
 
-export let data: PageData;
-$: ({ account, tafsByAccount, user, existingSubscription } = data);
+  export let data: PageData;
+  $: ({ account, tafsByAccount, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -43,7 +43,7 @@ $: ({ account, tafsByAccount, user, existingSubscription } = data);
     {user}
     subType="account"
     subItemId={`${account.bureau.agency.budgetAgencyTitleId},${account.bureau.budgetBureauTitleId},${account.accountTitleId}`}
-    subItemFormatted={account.accountTitle}
+    subItemFormatted={account.accountTitle || undefined}
     {existingSubscription}
   />
 

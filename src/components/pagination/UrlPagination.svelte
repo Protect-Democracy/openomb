@@ -14,76 +14,76 @@
 
 <script lang="ts">
   import { derived } from 'svelte/store';
-import { page } from '$app/stores';
-import { formatNumber } from '$lib/formatters';
+  import { page } from '$app/stores';
+  import { formatNumber } from '$lib/formatters';
 
-// Constants
-const itemId = (Math.random() + 1).toString(36).substring(7);
+  // Constants
+  const itemId = (Math.random() + 1).toString(36).substring(7);
 
-// Props
-export let urlPageParam = 'page';
-export let perPage = 50;
-export let total = 0;
-export let pageBuffer = 2;
-export let includeLabel = true;
-export let anchor = '';
+  // Props
+  export let urlPageParam = 'page';
+  export let perPage = 50;
+  export let total = 0;
+  export let pageBuffer = 2;
+  export let includeLabel = true;
+  export let anchor = '';
 
-// Stores
-const url = derived(page, ($page) => $page.url);
+  // Stores
+  const url = derived(page, ($page) => $page.url);
 
-// Derived
-$: currentPage = $url.searchParams.get(urlPageParam)
-  ? Number($url.searchParams.get(urlPageParam))
-  : 1;
-$: pagesLength = Math.ceil(total / perPage);
-$: pages = makePages(pagesLength, currentPage, pageBuffer);
+  // Derived
+  $: currentPage = $url.searchParams.get(urlPageParam)
+    ? Number($url.searchParams.get(urlPageParam))
+    : 1;
+  $: pagesLength = Math.ceil(total / perPage);
+  $: pages = makePages(pagesLength, currentPage, pageBuffer);
 
-// Make pages
-function makePages(
-  pagesLength: number,
-  currentPage: number,
-  pageBuffer: number
-): { value: number; type?: 'ellipsis' }[] {
-  if (pagesLength <= 1) {
-    return [{ value: 1 }];
+  // Make pages
+  function makePages(
+    pagesLength: number,
+    currentPage: number,
+    pageBuffer: number
+  ): { value: number; type?: 'ellipsis' }[] {
+    if (pagesLength <= 1) {
+      return [{ value: 1 }];
+    }
+
+    pages = [];
+    for (let i = 1; i <= pagesLength; i++) {
+      // Only do:
+      // - a certain amount around the current page,
+      // - last and first,
+      if (
+        (i >= currentPage - pageBuffer && i <= currentPage + pageBuffer) ||
+        i === 1 ||
+        i === pagesLength
+      ) {
+        pages.push({ value: i });
+      }
+      // Add later ellipses
+      else if (i === currentPage + pageBuffer + 1) {
+        pages.push({ value: i, type: 'ellipsis' });
+      }
+      // Add early ellipses
+      else if (i === currentPage - pageBuffer - 1) {
+        pages.push({ value: i, type: 'ellipsis' });
+      }
+    }
+
+    return pages;
   }
 
-  pages = [];
-  for (let i = 1; i <= pagesLength; i++) {
-    // Only do:
-    // - a certain amount around the current page,
-    // - last and first,
-    if (
-      (i >= currentPage - pageBuffer && i <= currentPage + pageBuffer) ||
-      i === 1 ||
-      i === pagesLength
-    ) {
-      pages.push({ value: i });
-    }
-    // Add later ellipses
-    else if (i === currentPage + pageBuffer + 1) {
-      pages.push({ value: i, type: 'ellipsis' });
-    }
-    // Add early ellipses
-    else if (i === currentPage - pageBuffer - 1) {
-      pages.push({ value: i, type: 'ellipsis' });
-    }
+  // Check if valid page
+  function isValidPage(pageNumber: number) {
+    return pageNumber > 0 && pageNumber <= pagesLength;
   }
 
-  return pages;
-}
-
-// Check if valid page
-function isValidPage(pageNumber: number) {
-  return pageNumber > 0 && pageNumber <= pagesLength;
-}
-
-// Make url for a specific page
-function getPageUrl(pageNumber: number) {
-  const newQuery = new URLSearchParams($url.searchParams.toString());
-  newQuery.set(urlPageParam, pageNumber.toString());
-  return `${$url.pathname}?${newQuery.toString()}${anchor ? '#' + anchor : ''}`;
-}
+  // Make url for a specific page
+  function getPageUrl(pageNumber: number) {
+    const newQuery = new URLSearchParams($url.searchParams.toString());
+    newQuery.set(urlPageParam, pageNumber.toString());
+    return `${$url.pathname}?${newQuery.toString()}${anchor ? '#' + anchor : ''}`;
+  }
 </script>
 
 {#if pages.length > 1 && total > 0}

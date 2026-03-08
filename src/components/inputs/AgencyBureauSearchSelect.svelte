@@ -17,145 +17,147 @@
 
 <script lang="ts">
   import { createCombobox } from '@melt-ui/svelte';
-import { fly } from 'svelte/transition';
-import { createEventDispatcher } from 'svelte';
-import { groupBy, uniqBy } from 'lodash-es';
-import ChevronDown from '$components/icons/ChevronDown.svelte';
+  import { fly } from 'svelte/transition';
+  import { createEventDispatcher } from 'svelte';
+  import { groupBy, uniqBy } from 'lodash-es';
+  import ChevronDown from '$components/icons/ChevronDown.svelte';
 
-// Types
-import type { BureausResult } from '$queries/tafs';
+  // Types
+  import type { BureausResult } from '$queries/tafs';
 
-export let bureaus: BureausResult;
-export let id: string;
-export let name: string;
-export let value: string;
+  export let bureaus: BureausResult;
+  export let id: string;
+  export let name: string;
+  export let value: string;
 
-// Constants
-const emptyOption = { value: '', label: 'None' };
+  // Constants
+  const emptyOption = { value: '', label: 'None' };
 
-function createOptions(bureauArray) {
-  const agencies = groupBy(bureauArray, 'budgetAgencyTitleId');
-  const options = Object.keys(agencies).reduce((opts, key) => {
-    if (agencies[key].length < 2) {
+  function createOptions(bureauArray) {
+    const agencies = groupBy(bureauArray, 'budgetAgencyTitleId');
+    const options = Object.keys(agencies).reduce((opts, key) => {
+      if (agencies[key].length < 2) {
+        return [
+          ...opts,
+          {
+            label: agencies[key][0].budgetAgencyTitle,
+            value: agencies[key][0].budgetAgencyTitleId,
+            agency: null
+          }
+        ];
+      }
+
       return [
         ...opts,
         {
           label: agencies[key][0].budgetAgencyTitle,
           value: agencies[key][0].budgetAgencyTitleId,
           agency: null
-        }
+        },
+        ...agencies[key].map((bureau) => ({
+          label: bureau.budgetBureauTitle,
+          value: bureau.budgetAgencyTitleId + ',' + bureau.budgetBureauTitleId,
+          agency: bureau.budgetAgencyTitle
+        }))
       ];
-    }
+    }, []);
 
-    return [
-      ...opts,
-      {
-        label: agencies[key][0].budgetAgencyTitle,
-        value: agencies[key][0].budgetAgencyTitleId,
-        agency: null
-      },
-      ...agencies[key].map((bureau) => ({
-        label: bureau.budgetBureauTitle,
-        value: bureau.budgetAgencyTitleId + ',' + bureau.budgetBureauTitleId,
-        agency: bureau.budgetAgencyTitle
-      }))
-    ];
-  }, []);
-
-  return uniqBy(options, 'value');
-}
-
-$: options = createOptions(bureaus);
-
-// Get our option(s) that correspond to the provided value
-function getDefaultSelection() {
-  if (!value) {
-    return emptyOption;
+    return uniqBy(options, 'value');
   }
 
-  const selectedBureau = bureaus.find(
-    (bureau) =>
-      value == bureau.budgetAgencyTitleId ||
-      value == bureau.budgetAgencyTitleId + ',' + bureau.budgetBureauTitleId
-  );
-  return selectedBureau
-    ? {
-        label:
-          value == selectedBureau.budgetAgencyTitleId
-            ? selectedBureau.budgetAgencyTitle
-            : selectedBureau.budgetBureauTitle,
-        value:
-          value == selectedBureau.budgetAgencyTitleId
-            ? selectedBureau.budgetAgencyTitleId
-            : selectedBureau.budgetAgencyTitleId + ',' + selectedBureau.budgetBureauTitleId,
-        agency:
-          value == selectedBureau.budgetAgencyTitleId ? undefined : selectedBureau.budgetAgencyTitle
+  $: options = createOptions(bureaus);
+
+  // Get our option(s) that correspond to the provided value
+  function getDefaultSelection() {
+    if (!value) {
+      return emptyOption;
+    }
+
+    const selectedBureau = bureaus.find(
+      (bureau) =>
+        value == bureau.budgetAgencyTitleId ||
+        value == bureau.budgetAgencyTitleId + ',' + bureau.budgetBureauTitleId
+    );
+    return selectedBureau
+      ? {
+          label:
+            value == selectedBureau.budgetAgencyTitleId
+              ? selectedBureau.budgetAgencyTitle
+              : selectedBureau.budgetBureauTitle,
+          value:
+            value == selectedBureau.budgetAgencyTitleId
+              ? selectedBureau.budgetAgencyTitleId
+              : selectedBureau.budgetAgencyTitleId + ',' + selectedBureau.budgetBureauTitleId,
+          agency:
+            value == selectedBureau.budgetAgencyTitleId
+              ? undefined
+              : selectedBureau.budgetAgencyTitle
+        }
+      : emptyOption;
+  }
+
+  // Melt combobox
+  const dispatch = createEventDispatcher();
+  const {
+    elements: { menu, input, option },
+    states: { open, inputValue, touchedInput, selected },
+    helpers: { isSelected, isHighlighted }
+  } = createCombobox({
+    forceVisible: true,
+    defaultSelected: getDefaultSelection(),
+    ids: { label: id },
+    onSelectedChange: ({ next }) => {
+      dispatch('change', next);
+      return next;
+    },
+    onOpenChange: ({ next }) => {
+      if (!next) {
+        inputValue.set(''); //Clear input when options are chosen & dialog is closed
       }
-    : emptyOption;
-}
-
-// Melt combobox
-const dispatch = createEventDispatcher();
-const {
-  elements: { menu, input, option },
-  states: { open, inputValue, touchedInput, selected },
-  helpers: { isSelected, isHighlighted }
-} = createCombobox({
-  forceVisible: true,
-  defaultSelected: getDefaultSelection(),
-  ids: { label: id },
-  onSelectedChange: ({ next }) => {
-    dispatch('change', next);
-    return next;
-  },
-  onOpenChange: ({ next }) => {
-    if (!next) {
-      inputValue.set(''); //Clear input when options are chosen & dialog is closed
+      return next;
     }
-    return next;
-  }
-});
+  });
 
-// Derived
-// For some reason the store, $open, causes issues with sveltekit rendering,
-// specifically it claims the $open store is undefined.
-$: openProxy = typeof $open !== 'undefined' ? $open : false;
+  // Derived
+  // For some reason the store, $open, causes issues with sveltekit rendering,
+  // specifically it claims the $open store is undefined.
+  $: openProxy = typeof $open !== 'undefined' ? $open : false;
 
-$: filteredOptions = $touchedInput
-  ? options.filter((o) => {
-      const normalizedInput = $inputValue.toLowerCase();
-      return (
-        o.label.toLowerCase().includes(normalizedInput) ||
-        o.agency?.toLowerCase().includes(normalizedInput)
-      );
-    })
-  : options;
+  $: filteredOptions = $touchedInput
+    ? options.filter((o) => {
+        const normalizedInput = $inputValue.toLowerCase();
+        return (
+          o.label.toLowerCase().includes(normalizedInput) ||
+          o.agency?.toLowerCase().includes(normalizedInput)
+        );
+      })
+    : options;
 
-function placeholderText(selectedOptions) {
-  // Option is empty
-  if (!selectedOptions || !selectedOptions.value) {
-    return 'Type here to filter options';
-  }
-  return selectedOptions.label;
-}
-
-// Our selected values do not properly clear on reset, so we need to
-//  add an event to our form input(s)
-//  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
-function fixFormReset(el) {
-  const form = el.form;
-  if (!form) return;
-  const handleReset = () => {
-    // Set timeout is needed since `el.value` is only updated on the next frame
-    setTimeout(() => selected.set(emptyOption));
-  };
-  form.addEventListener('reset', handleReset);
-  return {
-    destroy() {
-      form.removeEventListener('reset', handleReset);
+  function placeholderText(selectedOptions) {
+    // Option is empty
+    if (!selectedOptions || !selectedOptions.value) {
+      return 'Type here to filter options';
     }
-  };
-}
+    return selectedOptions.label;
+  }
+
+  // Our selected values do not properly clear on reset, so we need to
+  //  add an event to our form input(s)
+  //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
+  function fixFormReset(el) {
+    const form = el.form;
+    if (!form) return;
+    const handleReset = () => {
+      // Set timeout is needed since `el.value` is only updated on the next frame
+      setTimeout(() => selected.set(emptyOption));
+    };
+    form.addEventListener('reset', handleReset);
+    return {
+      destroy() {
+        form.removeEventListener('reset', handleReset);
+      }
+    };
+  }
 </script>
 
 <div class="has-js-only-block">

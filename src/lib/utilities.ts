@@ -4,6 +4,8 @@
 
 import { DateTime } from 'luxon';
 import { collectionHour, collectionMinute, collectionTimezone } from '$config';
+import { apportionmentTypeSpendPlan } from '$config/files';
+import type { filesSelect } from '$schema/files';
 
 /**
  * Get seconds to the next specific time in a timezone.
@@ -43,8 +45,7 @@ export const secondsToZonedTime = function (
   let diffSeconds = 0;
   if (currentSeconds > targetSeconds) {
     diffSeconds = 24 * 60 * 60 - currentSeconds + targetSeconds;
-  }
-  else {
+  } else {
     diffSeconds = targetSeconds - currentSeconds;
   }
 
@@ -137,4 +138,11 @@ export function secondsToCacheInvalidation() {
  */
 export function dateForCacheInvalidation() {
   return DateTime.now().plus({ seconds: secondsToCacheInvalidation() }).toJSDate();
+}
+
+/**
+ * Determine if file is spend plan
+ */
+export function isSpendPlanFile(file: filesSelect): boolean {
+  return file.fileType === apportionmentTypeSpendPlan;
 }

@@ -92,8 +92,7 @@ export const actions = {
     // Prevent signout redirect
     try {
       await signOut(params);
-    }
-    catch (e) {
+    } catch (e) {
       if (!isRedirect(e)) {
         // Only surface our error if it is not a redirect attempt
         throw e;

@@ -1,15 +1,16 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
-  import FileListingHighlightable from '$components/files/FileListingHighlightable.svelte';
+  import TabbedFileListing from '$components/files/TabbedFileListing.svelte';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
   import BreadcrumbItem from '$components/navigation/BreadcrumbItem.svelte';
   import SubscribeLink from '$components/subscriptions/SubscribeLink.svelte';
   import ApprovalsByYear from '$components/charts/ApprovalsByYear.svelte';
 
   export let data: PageData;
-  $: ({ folder, agenciesByFolder, filesWithoutTafs, recentlyApproved, user, existingSubscription } =
-    data);
+
+  // Derived
+  $: ({ folder, agenciesByFolder, recentApportionments, user, existingSubscription } = data);
 </script>
 
 <div class="page-container">
@@ -26,13 +27,15 @@
 <div class="page-container content-container">
   <h1>Folder: {folder.folder}</h1>
 
-  <p>There are <strong>{formatNumber(folder.fileCount)} files</strong> in this folder.</p>
+  <p>
+    There are <strong>{formatNumber(folder.fileCount)} files</strong> in this folder.
+  </p>
 
   <SubscribeLink
     {user}
     subType="folder"
     subItemId={folder.folderId}
-    subItemFormatted={folder.folder}
+    subItemFormatted={folder.folder || ''}
     {existingSubscription}
   />
 
@@ -41,7 +44,7 @@
 
     {#if agenciesByFolder && agenciesByFolder.length}
       <ul>
-        {#each agenciesByFolder as agency, aIndex}
+        {#each agenciesByFolder as agency, aIndex (agency.budgetAgencyTitleId)}
           <li>
             <a href="/agency/{agency.budgetAgencyTitleId}">{agency.budgetAgencyTitle}</a>
             ({formatNumber(agency.fileCount)}{aIndex === 0 ? ' files' : ''})
@@ -54,38 +57,21 @@
   </section>
 
   {#await data.fileCountByMonthByYear then fileCountByMonthByYearData}
-    <section class="page-section">
-      <h2>Files approved by month</h2>
+    {#if fileCountByMonthByYearData && fileCountByMonthByYearData.length > 0}
+      <section class="page-section">
+        <h2>Files approved by month</h2>
 
-      <div class="chart-container">
-        <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
-      </div>
-    </section>
+        <div class="chart-container">
+          <ApprovalsByYear data={fileCountByMonthByYearData} align="left" height="20rem" />
+        </div>
+      </section>
+    {/if}
   {/await}
 
-  {#if filesWithoutTafs && filesWithoutTafs.length}
-    <section class="page-section">
-      <h2>Letter apportionments</h2>
-
-      <p>
-        The following are Letter Apportionments and do not have agency and schedule data attached to
-        them as there source is a PDF and not structured data from a spreadsheet.
-      </p>
-
-      {#each filesWithoutTafs as file}
-        <FileListingHighlightable {file} />
-      {/each}
-    </section>
-  {/if}
-
   <section class="page-section">
-    <h2>Recently approved files</h2>
+    <h2>Recent Apportionments</h2>
 
-    <div class="recently-approved-files">
-      {#each recentlyApproved as file}
-        <FileListingHighlightable {file} />
-      {/each}
-    </div>
+    <TabbedFileListing files={recentApportionments} />
   </section>
 </div>
 

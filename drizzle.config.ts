@@ -1,13 +1,13 @@
 // Dependencies
 import type { Config } from 'drizzle-kit';
-import { environmentVariables } from './server/utilities';
+import { environmentVariables } from './src/lib/server/utilities';
 
 // Constants
 const env = environmentVariables();
 
 export default {
-  schema: './db/schema/*.ts',
-  out: './db/migrations',
+  schema: './src/lib/server/db/schema/*.ts',
+  out: './src/lib/server/db/migrations',
   dialect: 'postgresql',
   dbCredentials: {
     url: env.dbUri
