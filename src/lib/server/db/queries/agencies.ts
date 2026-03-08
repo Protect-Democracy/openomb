@@ -6,6 +6,41 @@ import { tafs } from '$schema/tafs';
 import { memoizeDataAsync } from '$server/cache';
 import { reduceByFileType } from '$server/query-utilities';
 
+export const agency = async function (budgetAgencyTitleId: string) {
+  // Try tafs first
+  const tafResult = await db
+    .select({
+      budgetAgencyTitle: tafs.budgetAgencyTitle,
+      budgetAgencyTitleId: tafs.budgetAgencyTitleId
+    })
+    .from(tafs)
+    .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId))
+    .limit(1);
+
+  if (tafResult && tafResult.length > 0) {
+    return tafResult[0];
+  }
+
+  // If no tafs, try files
+  const fileResult = await db
+    .select({
+      budgetAgencyTitle: files.budgetAgencyTitle,
+      budgetAgencyTitleId: files.budgetAgencyTitleId
+    })
+    .from(files)
+    .where(
+      and(eq(files.budgetAgencyTitleId, budgetAgencyTitleId), isNotNull(files.budgetAgencyTitle))
+    )
+    .limit(1);
+
+  if (fileResult && fileResult.length > 0) {
+    return fileResult[0];
+  }
+
+  // Not found
+  return null;
+};
+
 /**
  * Distinct agencies with file counts
  *
@@ -415,6 +450,7 @@ export type BureauDetailsResult = Awaited<ReturnType<typeof bureauDetails>>;
 
 // Memoized
 export const mAgenciesWithChildren = memoizeDataAsync(agenciesWithChildren);
+export const mAgency = memoizeDataAsync(agency);
 export const mAgencies = memoizeDataAsync(agencies);
 export const mBureaus = memoizeDataAsync(bureaus);
 export const mAgencyDetails = memoizeDataAsync(agencyDetails);
