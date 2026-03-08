@@ -1,22 +1,22 @@
-# Migrates database schema when files change in the db/migrations folder
-# Runs after a deployment has successfully completed, but only if files in the db/migrations folder have changed
+# Migrates database schema when files change in the migrations folder
+# Runs after a deployment has successfully completed, but only if files in the migrations folder have changed
 # See `changes` job below for details
 
 name: Migrate database
 
 on:
   workflow_run:
-    workflows: ['Deploy to AWS']
+    workflows: ["Deploy to AWS"]
     types: [completed]
     branches: [main]
   workflow_dispatch:
 
 env:
-  AWS_REGION: 'us-west-2'
+  AWS_REGION: "us-west-2"
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_ROLE_TO_ASSUME: 'db-migration'
-  TOFU_TASK_DEFINITION_OUTPUT: 'migrate_task_definition_arn'
-  tf_actions_working_dir: 'tofu'
+  AWS_ROLE_TO_ASSUME: "db-migration"
+  TOFU_TASK_DEFINITION_OUTPUT: "migrate_task_definition_arn"
+  tf_actions_working_dir: "tofu"
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
@@ -35,7 +35,7 @@ jobs:
         with:
           filters: |
             db:
-              - 'db/migrations/**'
+              - 'src/lib/server/db/migrations/**'
   migrate:
     # Run if database files have changed or if workflow is triggered manually
     needs: changes
