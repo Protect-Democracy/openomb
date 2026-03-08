@@ -140,27 +140,29 @@
   <section class="page-footnotes">
     <h2 class="sr-only">Notes about this page</h2>
 
-    <ul>
-      <li id="page-footnote-funds">
-        &dagger; Links to public laws are automatically generated and are not guaranteed to be
-        accurate.
-      </li>
-
-      {#if letterApportionment}
-        <li id="page-footnote-file-id">
-          &Dagger; For letter apportionments, the file identifier is an internally assigned
-          identifier and not assigned by the Office of Management and Budget.
+    <div class="text-container">
+      <ul>
+        <li id="page-footnote-funds">
+          &dagger; Links to public laws are automatically generated and are not guaranteed to be
+          accurate.
         </li>
-      {/if}
 
-      {#if noApprovalTimestamp}
-        <li id="page-footnote-first-seen">
-          &sect; This file does not have an approval date, so the "First seen" date is shown
-          instead. This is the date that OpenOMB first observed this file, which may be different
-          from the date that the file was created or published.
-        </li>
-      {/if}
-    </ul>
+        {#if letterApportionment}
+          <li id="page-footnote-file-id">
+            &Dagger; For certain apportionments, the file identifier is an internally assigned
+            identifier and not assigned by the Office of Management and Budget.
+          </li>
+        {/if}
+
+        {#if noApprovalTimestamp}
+          <li id="page-footnote-first-seen">
+            &sect; Some apportionments do not have an approval date, so the "First seen" date is
+            shown instead. This is the date that OpenOMB first observed this file, which may be
+            different from the date that the file was created or published.
+          </li>
+        {/if}
+      </ul>
+    </div>
   </section>
 
   <ScrollToTop />

@@ -1,11 +1,12 @@
 <script lang="ts">
   import { formatFileTitle, formatDate } from '$lib/formatters';
+  import type { filesSelect } from '$schema/files';
 
-  export let files = [];
+  export let files: filesSelect[] = [];
 </script>
 
 <ul>
-  {#each files as file}
+  {#each files as file (file.fileId)}
     <li>
       <span class="approval-file">
         <span class="folder">{file.folder}</span>
@@ -13,7 +14,13 @@
         <a href="/file/{file.fileId}">{formatFileTitle(file)}</a>
       </span>
 
-      <span class="approval-date">Approved {formatDate(file.approvalTimestamp, 'long')}</span>
+      <span class="approval-date">
+        {#if file.approvalTimestamp}
+          Approved {formatDate(file.approvalTimestamp, 'long')}
+        {:else if file.createdAt}
+          First seen {formatDate(file.createdAt, 'long')}
+        {/if}
+      </span>
     </li>
   {/each}
 </ul>

@@ -363,31 +363,32 @@ export async function searchSetup(
 
   // File order parameters.  Since we are grouping, we need to  order
   // by aggregate values.  Default is just to order by approval.
-  let order = [desc(files.approvalTimestamp)];
-  // TODO: Unsure why this throws the type issue
+  const defaultOrder = sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`;
+  let order = [defaultOrder];
   if ('sort' in searchParams && searchParams.sort === 'approved_asc') {
-    order = [asc(files.approvalTimestamp)];
+    order = [sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) ASC NULLS LAST`];
   }
+  // TODO: The Agency and Bureau sorts below do not account for spend plans
   if ('sort' in searchParams && searchParams?.sort === 'account_asc') {
     const aggField = sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`;
-    order = [asc(aggField), desc(files.approvalTimestamp)];
+    order = [asc(aggField), defaultOrder];
   } else if ('sort' in searchParams && searchParams?.sort === 'bureau_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetBureauTitle}, ',' ORDER BY ${tafs.budgetBureauTitle})`;
-    order = [asc(aggField), desc(files.approvalTimestamp)];
+    order = [asc(aggField), defaultOrder];
   } else if ('sort' in searchParams && searchParams?.sort === 'agency_asc') {
     const aggField = sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`;
-    order = [asc(aggField), desc(files.approvalTimestamp)];
+    order = [asc(aggField), defaultOrder];
   }
 
   // Account ordering
   let accountOrder = [
     sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle})`,
-    sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
+    sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle})`
   ];
   if ('accountSort' in searchParams && searchParams?.accountSort === 'account_desc') {
     accountOrder = [
       sql`STRING_AGG(${tafs.accountTitle}, ',' ORDER BY ${tafs.accountTitle} DESC) DESC`,
-      sql`string_agg(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
+      sql`STRING_AGG(${tafs.budgetAgencyTitle}, ',' ORDER BY ${tafs.budgetAgencyTitle} DESC) DESC`
     ];
   } else if ('accountSort' in searchParams && searchParams?.accountSort === 'file_count_desc') {
     accountOrder = [

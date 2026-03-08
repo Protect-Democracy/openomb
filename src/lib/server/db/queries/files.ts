@@ -6,7 +6,6 @@
 import {
   eq,
   gte,
-  desc,
   asc,
   count,
   countDistinct,
@@ -121,7 +120,7 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
 export const recentlyApproved = async function (limit: number = 20) {
   const recentFiles = await db.query.files.findMany({
     columns: { sourceData: false },
-    orderBy: desc(files.approvalTimestamp),
+    orderBy: sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`,
     limit: limit
   });
 
@@ -141,7 +140,7 @@ export const recentlyApprovedWithTafs = async function (
   }
 
   // This doesn't seem like the best way to do this, i.e. with subqueries and IN, but doesn't seem like
-  // you can limit the top level findMany based on joined (with) where.  We could do a manualy query, but
+  // you can limit the top level findMany based on joined (with) where.  We could do a manual query, but
   // the findMany and with paradigm creates a preferred way and output.
   const findFilesByTafsFiltersQuery = db
     .selectDistinct({ fileId: tafs.fileId })
@@ -157,7 +156,6 @@ export const recentlyApprovedWithTafs = async function (
 
   const tafsFilters = filters?.agencyId || filters?.bureauId;
   const whereClauses = [
-    isNotNull(files.approvalTimestamp),
     tafsFilters ? inArray(files.fileId, findFilesByTafsFiltersQuery) : undefined,
     filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,
     filters?.approverId ? eq(files.approverTitleId, filters?.approverId) : undefined
@@ -177,7 +175,7 @@ export const recentlyApprovedWithTafs = async function (
         orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
       }
     },
-    orderBy: desc(files.approvalTimestamp),
+    orderBy: sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`,
     limit: limit
   });
 
@@ -242,12 +240,7 @@ export const recentlyAddedOrApprovedWithTafs = async function (
         orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)]
       }
     },
-    extras: {
-      addedOrApproved: sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt})`.as(
-        'addedOrApproved'
-      )
-    },
-    orderBy: desc(sql.identifier('addedOrApproved')),
+    orderBy: sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`,
     limit: limit
   });
 
@@ -265,7 +258,7 @@ export const recentlyRemoved = async function (limit: number = 20) {
   const removedFiles = await db.query.files.findMany({
     columns: { sourceData: false },
     where: eq(files.removed, true),
-    orderBy: desc(files.approvalTimestamp),
+    orderBy: sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`,
     limit: limit
   });
 
@@ -367,7 +360,7 @@ export const filesWithoutTafs = async function (folderId: string | undefined = u
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
     .where(where)
-    .orderBy(desc(files.approvalTimestamp));
+    .orderBy(sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`);
 
   return foundFiles ? foundFiles.map((f) => f.files) : null;
 };
@@ -379,7 +372,7 @@ export const allFiles = async function () {
   return await db
     .select({ fileId: files.fileId, createdAt: files.createdAt })
     .from(files)
-    .orderBy(desc(files.approvalTimestamp));
+    .orderBy(sql`COALESCE(${files.approvalTimestamp}, ${files.createdAt}) DESC NULLS LAST`);
 };
 
 /**
@@ -423,6 +416,7 @@ export const fileCountByMonthByYear = async function (filters?: {
         ? and(...whereClauses)
         : undefined;
 
+  // TODO: This doesn't account for files without approval timestamp (i.e. spend plans)
   const counts = await db
     .select({
       year: sql<number>`DATE_PART('year', ${files.approvalTimestamp})`.as('year'),
