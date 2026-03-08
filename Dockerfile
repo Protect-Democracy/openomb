@@ -23,17 +23,9 @@ COPY --from=build /app/package-lock.json /app/package.json /app/
 # Static assets
 COPY --from=build /app/static /app/static
 
-# TODO: This is probably not needed anymore.
-#
-# Email templates are weird and try to read from the filesystem.
-# Ideally we can have the email templates be fully built or handled
-# appropriately in the build step, so that we wouldn't need to copy
-# all of this over.
-COPY --from=build /app/email /app/email
+# For migrations we need the source code
 COPY --from=build /app/src /app/src
 
-#Database migration scripts requires us to copy all of our migration files
-COPY --from=build /app/db /app/db
 
 WORKDIR /app
 EXPOSE 3000

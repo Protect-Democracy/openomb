@@ -1,0 +1,27 @@
+# Note that if/when Integration Tests are enabled, the build
+# will be implicitly tested there and this may be obsolete.
+name: CI - Build Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths-ignore:
+      - "tofu/**"
+      - "docs/**"
+      - "**/*.md"
+
+# Cancel existing executions when new commits are pushed onto the branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build the Docker image
+        run: docker build . --tag openomb-build-test:latest

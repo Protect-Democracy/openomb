@@ -1,15 +1,15 @@
 # Note that this set of tests requires the build to run, so
 # the build is implicity tested here.  (currently disabled)
-name: Integration Tests
+name: CI - Integration Tests
 
 on:
   push:
     branches: [main]
   pull_request:
     paths-ignore:
-      - 'tofu/**'
-      - 'docs/**'
-      - '**/*.md'
+      - "tofu/**"
+      - "docs/**"
+      - "**/*.md"
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install

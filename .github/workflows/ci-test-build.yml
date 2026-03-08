@@ -1,15 +1,13 @@
-# Note that if/when Integration Tests are enabled, the build
-# will be implicitly tested there and this may be obsolete.
-name: Build Tests
+name: CI - Build Code
 
 on:
   push:
     branches: [main]
   pull_request:
     paths-ignore:
-      - 'tofu/**'
-      - 'docs/**'
-      - '**/*.md'
+      - "tofu/**"
+      - "docs/**"
+      - "**/*.md"
 
 # Cancel existing executions when new commits are pushed onto the branch
 concurrency:
@@ -26,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install
