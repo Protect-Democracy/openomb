@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { uniq } from 'lodash-es';
   import { submitting } from './form-store';
 
   // Props
@@ -33,8 +34,8 @@
       {/each}
     </select>
 
-    {#each url.searchParams.keys() as param, pi (`${param}-${pi}`)}
-      {#each url.searchParams.getAll(param) as value}
+    {#each uniq(Array.from(url.searchParams.keys())) as param, pi (`${param}-${pi}`)}
+      {#each url.searchParams.getAll(param) as value, vi (`${param}-${vi}`)}
         {#if param !== 'sort'}
           <input type="hidden" name={param} {value} />
         {/if}
