@@ -71,6 +71,13 @@ describe('approvalDateFromPdfFileName()', () => {
       DateTime.fromISO('2022-07-13T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
     );
 
+    const date7 = approvalDateFromPdfFileName(
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Health%20and%20Human%20Services/PDF/FY2026_Department_of_Health_and_Human_Services_2026-03-04_2.pdf.pdf'
+    );
+    expect(date7).toEqual(
+      DateTime.fromISO('2026-03-04T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
+    );
+
     expect(approvalDateFromPdfFileName('20240501')).toEqual(null);
     expect(approvalDateFromPdfFileName('_20240501')).toEqual(null);
 
