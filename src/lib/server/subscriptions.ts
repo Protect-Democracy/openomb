@@ -9,6 +9,7 @@ import {
   subscriptionsByUser,
   setSubscriptionAsNotified
 } from '$db/queries/subscriptions';
+import { parseCriterion } from '$lib/searches';
 import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '$config/subscriptions';
 import { renderTemplate } from '$email/render';
 import { sendEmail } from '$email/send';
@@ -17,19 +18,20 @@ import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte
 // Types
 import type { subscriptionSelect } from '$schema/subscriptions';
 import type {
-  SubscriptionByUser,
-  SubscriptionDetails,
   SubscriptionSelectDetails,
-  SubscriptionItemDetails
+  CustomSubscriptionItemDetails,
+  SubscriptionDetails
 } from '$db/queries/subscriptions';
-import type { filesSelect } from '$schema/files';
+import type { CombinedSearchCriterion } from '$queries/search';
+import type { filesSelectNoSourceData } from '$schema/files';
+import type { tafsSelect } from '$schema/tafs';
 
-export type SubscriptionWithFiles = subscriptionSelect & {
-  criterion: any;
-  itemDetails: SubscriptionItemDetails;
-  fileCount: number;
-  files: filesSelect[];
-};
+export type SubscriptionWithFiles = subscriptionSelect &
+  SubscriptionDetails & {
+    criterion: CombinedSearchCriterion;
+    fileCount: number;
+    files?: filesSelectNoSourceData[];
+  };
 
 /**
  * Send notifications to users based on their subscriptions.
@@ -41,12 +43,14 @@ export async function sendNotifications() {
   for (const email of Object.keys(userSubscriptions)) {
     // For a user, find any relevant new files, then send the notification
     const currentUserSubs = userSubscriptions[email];
-    const notifySubs: subscriptionSelect[] = [];
+    const notifySubs: SubscriptionWithFiles[] = [];
     for (const sub of currentUserSubs) {
       // Check if our subscription is weekly or daily and, based on that, if it needs to run again
       if (includeDailyNotification(sub) || includeWeeklyNotification(sub)) {
         const notification = await getSubscriptionWithFiles(email, sub);
-        notification && notifySubs.push(notification);
+        if (notification) {
+          notifySubs.push(notification);
+        }
       }
     }
 
@@ -73,7 +77,7 @@ export async function sendNotifications() {
  * @param email Email address to send to.
  * @param notifySubs Array of subscription data.
  */
-export async function sendNotificationEmail(email: string, notifySubs: any[]) {
+export async function sendNotificationEmail(email: string, notifySubs: SubscriptionWithFiles[]) {
   const emailBody = await renderTemplate(FileNotificationEmail, {
     subscriptions: notifySubs
   });
@@ -95,43 +99,64 @@ export async function getSubscriptionWithFiles(
   sub: SubscriptionSelectDetails,
   lastNotified: Date | undefined = undefined
 ): Promise<SubscriptionWithFiles | undefined> {
-  let criterion;
+  let criterion = {} as CombinedSearchCriterion;
+
+  // Make sure we have itemDetails
+  if (!sub.itemDetails) {
+    return;
+  }
 
   if (sub.type === 'search' && 'criterion' in sub.itemDetails) {
-    criterion = sub.itemDetails.criterion;
+    criterion = parseCriterion(sub.itemDetails.criterion || undefined);
   } else if (sub.type === 'agency' || sub.type === 'bureau' || sub.type === 'account') {
+    const details = sub.itemDetails as CustomSubscriptionItemDetails;
     criterion = {
-      agency: sub.itemDetails.agencyId || '',
-      bureau: sub.itemDetails.bureauId || '',
-      account: sub.itemDetails.account || ''
+      agencyBureau: [details.agencyId || '', details.bureauId || ''].filter(Boolean).join(','),
+      accountId: details.accountId || undefined
     };
   } else if (sub.type === 'folder') {
     criterion = { folder: sub.itemId };
   } else if (sub.type === 'tafs') {
     const detailRecord = await userSubscriptionDetails(email, sub.type, sub.itemId);
-    criterion = {
-      tafs: detailRecord?.itemDetails.tafsId,
-      year: `${detailRecord?.itemDetails.fiscalYear}`
-    };
+    if (detailRecord?.itemDetails) {
+      const details = sub.itemDetails as tafsSelect;
+      // Tafs uses the TafsId through the Tafs keyword search, and the specific
+      // fiscal year.
+      criterion = {
+        tafs: details.tafsId,
+        year: [details.fiscalYear]
+      };
+    }
   } else {
     // Unrecognized subscription type, throw error
     throw new Error(`Unrecognized subscription type ${sub.type}`);
   }
 
+  // If criterion is still empty and not a search, then ignore
+  if (Object.keys(criterion).length === 0 && sub.type !== 'search') {
+    return;
+  }
+
   // Use specific last notified if provided which should only be for testing
-  criterion['createdStart'] = lastNotified ? lastNotified : sub.lastNotifiedAt;
+  criterion['createdStart'] = lastNotified
+    ? lastNotified
+    : sub.lastNotifiedAt
+      ? sub.lastNotifiedAt
+      : undefined;
 
   const fileCount = await mFileSearchFullCount(criterion);
   const files = await mFileSearchPaged({
     ...criterion,
     limit: maxFilesPerNotificationEntry
   });
+  const validFiles = files.filter((file) => !!file);
+
   if (files.length) {
     return {
       ...sub,
       criterion,
       fileCount,
-      files
+      files: validFiles
     };
   }
 }
@@ -168,9 +193,10 @@ export async function getSubscriptionsWithFilesByUser(
 /**
  * Should our file be included as a daily notification
  */
-export function includeDailyNotification(sub): boolean {
-  return (
+export function includeDailyNotification(sub: SubscriptionSelectDetails): boolean {
+  return !!(
     sub.frequency === 'daily' &&
+    sub.lastNotifiedAt &&
     Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['hours']).as('hours')) > 18
   );
 }
@@ -178,9 +204,10 @@ export function includeDailyNotification(sub): boolean {
 /**
  * Should our file be included as a weekly notification
  */
-export function includeWeeklyNotification(sub): boolean {
-  return (
+export function includeWeeklyNotification(sub: SubscriptionSelectDetails): boolean {
+  return !!(
     sub.frequency === 'weekly' &&
+    sub.lastNotifiedAt &&
     new Date().getDay() === runWeeklyEmailsOn &&
     Math.abs(DateTime.fromJSDate(sub.lastNotifiedAt).diffNow(['days']).as('days')) > 6.5
   );

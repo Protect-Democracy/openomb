@@ -18,6 +18,7 @@ export const subscriptions = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     // Type refers to entity being subscribed to (account, file, search)
+    // TODO: This should be an enum.
     type: varchar('type').notNull(),
     // ItemId refers to the identifying key for the specific entity
     itemId: varchar('item_id').notNull(),

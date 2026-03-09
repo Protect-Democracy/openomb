@@ -3,20 +3,22 @@
   import { deployedBaseUrl } from '$config/index';
   import { maxFilesPerNotificationEntry } from '$config/subscriptions';
   import { formatFileTitle, formatDate, formatNumber } from '$lib/formatters';
+  import { criterionToUrlSearchParams } from '$lib/searches';
 
   // TODO: This type should be defined somewhere
   import type { SubscriptionWithFiles } from '$server/subscriptions';
-  import type { SubscriptionDetails } from '$db/queries/subscriptions';
 
-  export let subscription: SubscriptionWithFiles & SubscriptionDetails;
+  export let subscription: SubscriptionWithFiles;
 
-  $: searchParams = new URLSearchParams({
-    ...subscription.criterion,
-    agencyBureau: `${subscription.criterion.agency}${subscription.criterion.bureau && ','}${subscription.criterion.bureau}`,
-    createdStart: DateTime.fromJSDate(subscription.criterion.createdStart).toISODate()
+  $: searchParams = criterionToUrlSearchParams({
+    ...subscription.criterion
   });
-  $: searchParams.delete('agency');
-  $: searchParams.delete('bureau');
+  $: searchParams.set(
+    'createdStart',
+    subscription.criterion.createdStart
+      ? DateTime.fromJSDate(subscription.criterion.createdStart).toFormat('yyyy-MM-dd')
+      : ''
+  );
 </script>
 
 <div>
@@ -28,9 +30,13 @@
   </p>
 
   <ul style="padding-left: 1.5rem;">
-    {#each subscription.files as file}
+    {#each subscription.files as file (file.fileId)}
       <li>
-        {formatDate(file.approvalTimestamp, 'medium')}:
+        {#if file.approvalTimestamp}
+          {formatDate(file.approvalTimestamp, 'medium')}:
+        {:else}
+          {formatDate(file.createdAt, 'medium')}:
+        {/if}
         <a href={`${deployedBaseUrl}/file/${file.fileId}`} target="_blank"
           >{formatFileTitle(file)}</a
         >
