@@ -12,6 +12,7 @@
   import { DateTime } from 'luxon';
   import { page } from '$app/stores';
   import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
+  import UserWrapper from '$components/subscriptions/UserWrapper.svelte';
   import { setCookie } from '$lib/utilities';
   import env from '$lib/environment';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
@@ -187,11 +188,19 @@
         <li>
           <a class:active={$url.pathname === '/about'} href="/about">About</a>
         </li>
-        {#if !productionCheck}
-          <li>
-            <a href="/examples">Examples</a>
+        <UserWrapper>
+          <li class="account-link">
+            <a class="button compact small" href="/subscribe">Account</a>
           </li>
-        {/if}
+
+          <li class="account-link" slot="no-user">
+            <a class="button compact small" href="/subscribe">Log in</a>
+          </li>
+
+          <li class="account-link" slot="before-check">
+            <a class="button compact small" href="/subscribe">Log in</a>
+          </li>
+        </UserWrapper>
       </ul>
     </nav>
   </div>
@@ -251,14 +260,6 @@
     border-bottom: var(--border-weight) solid var(--color-black);
   }
 
-  nav {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-content: center;
-    padding: var(--spacing-double) 0;
-  }
-
   .home {
     font-size: 1.25rem;
     padding: 0;
@@ -266,18 +267,28 @@
     color: var(--color-text);
     word-break: normal;
   }
+
   nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-content: center;
     padding: var(--spacing-double) 0;
+    padding: var(--spacing-double) 0;
+
     ul {
       display: flex;
       flex-wrap: wrap;
       list-style: none;
+      align-items: center;
       margin: 0;
       padding: 0;
     }
 
     li {
       margin-left: var(--spacing-double);
+      padding: 0;
+
       @media (max-width: 768px) {
         & {
           margin-left: var(--spacing);
@@ -288,10 +299,21 @@
     a {
       color: var(--color-text);
       font-weight: var(--font-copy-weight-bolder);
+      margin: 0;
     }
 
     a.active {
       text-decoration: underline;
+    }
+
+    a.button {
+      font-size: 1rem;
+      color: var(--color-primary-text);
+      font-weight: var(--font-copy-weight-bold);
+    }
+
+    li :global(button) {
+      margin-top: calc(var(--spacing) / 2);
     }
   }
 

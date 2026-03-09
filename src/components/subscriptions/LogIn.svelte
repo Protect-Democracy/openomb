@@ -12,7 +12,6 @@
 -->
 <script lang="ts">
   // Props
-  export let variant: 'small' | 'full' = 'full';
   export let callbackUrl;
   export let action = 'Send link';
 </script>
@@ -21,30 +20,48 @@
   <input type="hidden" name="csrfToken" />
   <input type="hidden" name="providerId" value="email" />
   <input type="hidden" name="callbackUrl" value={callbackUrl} />
-  <label for="input-email-for-http-email-provider" class="sr-only">Email</label>
 
-  <input
-    id="input-email-for-http-email-provider"
-    class:compact={variant === 'small'}
-    class:small={variant === 'small'}
-    type="email"
-    name="email"
-    placeholder="email@example.com"
-    required
-  />
+  <div class="login-input">
+    <label for="input-email-for-http-email-provider" class="sr-only">Email</label>
 
-  <button
-    class="subscribe compact"
-    class:small={variant === 'small'}
-    id="submitButton"
-    type="submit"
-    tabindex="0">{action}</button
-  >
+    <input
+      id="input-email-for-http-email-provider"
+      type="email"
+      name="email"
+      placeholder="email@example.com"
+      required
+    />
+  </div>
+
+  <button type="submit">{action}</button>
 </form>
 
 <style>
   .login-form {
     display: flex;
-    column-gap: var(--spacing-half);
+    margin-bottom: var(--spacing);
+  }
+
+  .login-input {
+    position: relative;
+    flex: auto 1 0;
+
+    input {
+      width: 100%;
+      font-size: var(--font-size-medium);
+      padding: var(--spacing);
+      border-width: var(--border-weight);
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+
+  button {
+    font-size: var(--font-size-medium);
+    padding: var(--spacing) var(--spacing-double);
+    min-width: auto;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    margin: 0;
   }
 </style>
