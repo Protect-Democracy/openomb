@@ -31,6 +31,7 @@ import { memoizeDataAsync } from '$server/cache';
 import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/files';
 
 // Types
+import type { filesSelectWithTafsFootnotes } from '$schema/files';
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import type { LegacySearchCriterion, SavedSearchCriterion, searchesSelect } from '$schema/searches';
 
@@ -41,7 +42,9 @@ export type ColumnObject = {
 // Search fields
 export type SupplementalSearchCriterion = {
   // Search criterion that is not saved in the search model and may
-  // or may not be in the UI itself.
+  // or may not be in the UI itself.  Specifically used for subscription
+  // handling.
+  accountId?: string;
   folder?: string;
   createdStart?: Date;
   createdEnd?: Date;
@@ -237,6 +240,11 @@ function generalSearchFilters(
       if (bureau) {
         where.push(eq(tafs.budgetBureauTitleId, bureau));
       }
+    }
+
+    // Account Id is specific to agency and bureau
+    if (searchParams.accountId) {
+      where.push(eq(tafs.accountTitleId, searchParams.accountId));
     }
   }
 
@@ -678,7 +686,9 @@ export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
  * @param searchParams
  * @returns
  */
-export async function fileSearchPaged(searchParams: SearchPaginationParams) {
+export async function fileSearchPaged(
+  searchParams: CombinedSearchCriterion | SearchPaginationParams
+): Promise<(filesSelectWithTafsFootnotes | null)[]> {
   debugLogger('File searchParams:', searchParams);
   const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
 
@@ -731,7 +741,7 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     })
   };
 
-  const fileDetails = [];
+  const fileDetails: (filesSelectWithTafsFootnotes | null)[] = [];
   for (const limitedId of limitedIds) {
     const details = await db.query.files.findFirst({
       columns: {
@@ -740,7 +750,7 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
       where: eq(files.fileId, limitedId.fileId),
       with: detailsWith
     });
-    fileDetails.push(details);
+    fileDetails.push(details ?? null);
   }
 
   return fileDetails;

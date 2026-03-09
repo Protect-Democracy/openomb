@@ -4,12 +4,12 @@
   import SubscriptionGroup from '$email/components/SubscriptionGroup.svelte';
   import { subscriptionTypes } from '$config/subscriptions';
 
-  // TODO: This type should be defined somewhere
+  // Types
   import type { SubscriptionWithFiles } from '$server/subscriptions';
-  import type { SubscriptionDetails } from '$db/queries/subscriptions';
 
+  // Props
   export let title: string = 'New Apportionment Approvals';
-  export let subscriptions: (SubscriptionWithFiles & SubscriptionDetails)[] = [];
+  export let subscriptions: SubscriptionWithFiles[] = [];
 
   // Derived
   $: subscriptionGroups = groupBy(
@@ -25,9 +25,8 @@
   </p>
 
   <div>
-    {#each Object.entries(subscriptionGroups) as [type, subscriptionGroup]}
-      <!-- TODO: Ensure this is the correct type-->
-      {/* @ts-expect-error */ null}
+    {#each Object.entries(subscriptionGroups) as [type, subscriptionGroup], index (index)}
+      {/* @ts-expect-error 2322 */ null}
       <SubscriptionGroup {type} {subscriptionGroup} />
     {/each}
   </div>
