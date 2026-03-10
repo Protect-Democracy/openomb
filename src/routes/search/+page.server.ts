@@ -17,7 +17,8 @@ import { mFolders } from '$queries/folders';
 import { userSubscription } from '$queries/subscriptions';
 
 // Types
-import type { SearchPaginationParams, CombinedSearchCriterion } from '$queries/search';
+import type { SavedSearchCriterion } from '$schema/searches';
+import type { SearchPaginationParams } from '$queries/search';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -81,13 +82,13 @@ export const load = async ({ url, cookies, locals }) => {
     const saveableSearchArgs = parseUrlSearchParams(url.searchParams);
 
     // Add supplemental search (not in the UI)
-    const searchArgs: CombinedSearchCriterion = {
+    const searchArgs: SavedSearchCriterion = {
       ...saveableSearchArgs,
 
       // Included for email notification link, not used in form
       folder: u('folder') || '',
-      createdStart: u('createdStart') ? new Date(`${u('createdStart')}T00:00:00`) : undefined,
-      createdEnd: u('createdEnd') ? new Date(`${u('createdEnd')}T23:59:59`) : undefined
+      createdStart: u('createdStart') || '',
+      createdEnd: u('createdEnd') || ''
     };
 
     const pagedSearchArgs: SearchPaginationParams = {

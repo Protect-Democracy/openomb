@@ -30,12 +30,6 @@ export function parseCriterion(
     return {};
   }
 
-  // The URL version could have agencyBureau
-  const agencyBureau =
-    'agencyBureau' in criterion && typeof criterion?.agencyBureau === 'string'
-      ? criterion.agencyBureau?.split(',')
-      : [];
-
   const emptyStringAsUndefined = <T>(value: T | '' | undefined): T | undefined => {
     return value === '' ? undefined : (value as T);
   };
@@ -127,7 +121,11 @@ export function parseCriterion(
     footnoteNum: parseStringArray(criterion?.footnoteNum),
     apportionmentType: apportionmentType,
     approvedStart: parseDate(criterion.approvedStart),
-    approvedEnd: parseDate(criterion.approvedEnd)
+    approvedEnd: parseDate(criterion.approvedEnd),
+    accountId: emptyStringAsUndefined(criterion.accountId),
+    folder: emptyStringAsUndefined(criterion.folder),
+    createdStart: parseDate(criterion.createdStart),
+    createdEnd: parseDate(criterion.createdEnd)
   };
 }
 
@@ -146,7 +144,11 @@ export function parseUrlSearchParams(searchParams: URLSearchParams): SavedSearch
     'footnoteNum',
     'apportionmentType',
     'approvedStart',
-    'approvedEnd'
+    'approvedEnd',
+    'accountId',
+    'folder',
+    'createdStart',
+    'createdEnd'
   ];
 
   const criterionForParsing: SavedSearchCriterionUrl = {};
@@ -205,7 +207,7 @@ export function searchCriterionDescriptions(
     return;
   }
 
-  const plural = (label: string, values: any[], plural: string = '(s)'): string => {
+  const plural = (label: string, values: unknown[], plural: string = '(s)'): string => {
     return Array.isArray(values) && values.length > 1 ? `${label}${plural}` : label;
   };
 
@@ -294,6 +296,10 @@ export function searchCriterionDescriptions(
   if (criterion.approvedEnd) {
     criterionArray.push(`Approved Before: ${formatDate(criterion.approvedEnd, 'short')}`);
   }
+
+  // The other terms are not used in the UI and should not show up in the description
+  // for now
+  // accountId, folder, createdStart, createdEnd
 
   return criterionArray.filter(Boolean);
 }
