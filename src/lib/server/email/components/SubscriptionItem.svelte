@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { DateTime } from 'luxon';
   import { deployedBaseUrl } from '$config/index';
   import { maxFilesPerNotificationEntry } from '$config/subscriptions';
   import { formatFileTitle, formatDate, formatNumber } from '$lib/formatters';
@@ -16,7 +15,7 @@
   $: searchParams.set(
     'createdStart',
     subscription.criterion.createdStart
-      ? DateTime.fromJSDate(subscription.criterion.createdStart).toFormat('yyyy-MM-dd')
+      ? formatDate(subscription.criterion.createdStart, 'iso-date')
       : ''
   );
 </script>
