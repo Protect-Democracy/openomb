@@ -13,7 +13,6 @@ import type { SearchPaginationParams } from '$queries/search';
 export async function GET({ url }) {
   const u = (p: string) => url.searchParams.get(p);
   const h = (p: string) => url.searchParams.has(p);
-  const ga = (p: string) => url.searchParams.getAll(p);
 
   const filePageSize = Math.min(u('limit') ? Number(u('limit')) : 50, 100);
   const filePageIndex = h('page') ? Number(u('page')) : 1;

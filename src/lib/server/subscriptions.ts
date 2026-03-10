@@ -11,6 +11,7 @@ import {
 } from '$db/queries/subscriptions';
 import { parseCriterion } from '$lib/searches';
 import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '$config/subscriptions';
+import { formatDate } from '$lib/formatters';
 import { renderTemplate } from '$email/render';
 import { sendEmail } from '$email/send';
 import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte';
@@ -22,13 +23,13 @@ import type {
   CustomSubscriptionItemDetails,
   SubscriptionDetails
 } from '$db/queries/subscriptions';
-import type { CombinedSearchCriterion } from '$queries/search';
 import type { filesSelectNoSourceData } from '$schema/files';
 import type { tafsSelect } from '$schema/tafs';
+import type { SavedSearchCriterion } from '$schema/searches';
 
 export type SubscriptionWithFiles = subscriptionSelect &
   SubscriptionDetails & {
-    criterion: CombinedSearchCriterion;
+    criterion: SavedSearchCriterion;
     fileCount: number;
     files?: filesSelectNoSourceData[];
   };
@@ -99,7 +100,7 @@ export async function getSubscriptionWithFiles(
   sub: SubscriptionSelectDetails,
   lastNotified: Date | undefined = undefined
 ): Promise<SubscriptionWithFiles | undefined> {
-  let criterion = {} as CombinedSearchCriterion;
+  let criterion = {} as SavedSearchCriterion;
 
   // Make sure we have itemDetails
   if (!sub.itemDetails) {
@@ -139,9 +140,9 @@ export async function getSubscriptionWithFiles(
 
   // Use specific last notified if provided which should only be for testing
   criterion['createdStart'] = lastNotified
-    ? lastNotified
+    ? formatDate(lastNotified, 'iso-date')
     : sub.lastNotifiedAt
-      ? sub.lastNotifiedAt
+      ? formatDate(sub.lastNotifiedAt, 'iso-date')
       : undefined;
 
   const fileCount = await mFileSearchFullCount(criterion);
