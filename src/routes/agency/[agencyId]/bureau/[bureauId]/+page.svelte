@@ -49,7 +49,7 @@
     <h2>Accounts</h2>
 
     <ul>
-      {#each accountsByBureau as account, aIndex (account.accountTitleId)}
+      {#each accountsByBureau as account, aIndex (aIndex)}
         <li>
           <a
             href="/agency/{bureau.agency
