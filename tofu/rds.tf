@@ -73,6 +73,10 @@ resource "aws_rds_cluster_instance" "apportionments" {
   db_subnet_group_name         = aws_db_subnet_group.apportionments.name
   performance_insights_enabled = true
   apply_immediately            = true
+
+  # OS-level metrics (process list, memory breakdown) at 60-second granularity
+  monitoring_interval = 60
+  monitoring_role_arn = aws_iam_role.rds_enhanced_monitoring.arn
 }
 
 # These parameter group settings allow us to configure various options

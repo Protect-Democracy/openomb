@@ -96,6 +96,29 @@ resource "aws_wafv2_web_acl" "cloudfront" {
             inspection_level = "COMMON"
           }
         }
+
+        # Exclude Sentry's uptime monitoring bot from bot control inspection
+        scope_down_statement {
+          not_statement {
+            statement {
+              byte_match_statement {
+                search_string         = "SentryUptimeBot"
+                positional_constraint = "CONTAINS"
+
+                field_to_match {
+                  single_header {
+                    name = "user-agent"
+                  }
+                }
+
+                text_transformation {
+                  priority = 0
+                  type     = "NONE"
+                }
+              }
+            }
+          }
+        }
       }
     }
 
