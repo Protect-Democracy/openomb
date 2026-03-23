@@ -31,7 +31,12 @@
     try {
       const res = await fetch('/api/v1/user');
       if (res.ok) {
-        user = await res.json();
+        const data = await res.json();
+        if (data?.results?.loggedIn && data?.results?.user) {
+          user = data.results.user;
+        } else {
+          user = undefined;
+        }
       } else {
         user = undefined;
       }
