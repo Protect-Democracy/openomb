@@ -11,7 +11,7 @@ export const subscriptionTypeTitles = {
 };
 
 // Feature flag for testing subscriptions
-export const subscribeFeatureEnabled = false;
+export const subscribeFeatureEnabled = true;
 
 // Cookie name for authjs session
 export const sessionCookieName = 'authjs.session-token';
