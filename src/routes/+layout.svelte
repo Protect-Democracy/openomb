@@ -325,11 +325,9 @@
     }
   }
 
-  /* This caused some weird behavior on the About page.
   main {
     min-height: 60vh;
   }
-  */
 
   footer {
     background-color: var(--color-background-inverse);
