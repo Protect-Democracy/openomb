@@ -129,7 +129,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 3: Block non-US traffic above 500 req/5min
+  # Priority 3: Block non-US traffic above 300 req/5min
   rule {
     name     = "non-us-rate-limit-block"
     priority = 3
@@ -140,7 +140,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
     statement {
       rate_based_statement {
-        limit              = 500
+        limit              = 300
         aggregate_key_type = "IP"
 
         scope_down_statement {
@@ -162,7 +162,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 4: CAPTCHA non-US traffic above 100 req/5min
+  # Priority 4: CAPTCHA non-US traffic above 50 req/5min
   rule {
     name     = "non-us-rate-limit-captcha"
     priority = 4
@@ -173,7 +173,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
     statement {
       rate_based_statement {
-        limit              = 100
+        limit              = 50
         aggregate_key_type = "IP"
 
         scope_down_statement {
@@ -195,7 +195,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 5: Block US traffic above 2000 req/5min
+  # Priority 5: Block US traffic above 1000 req/5min
   rule {
     name     = "us-rate-limit-block"
     priority = 5
@@ -206,7 +206,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
     statement {
       rate_based_statement {
-        limit              = 2000
+        limit              = 1000
         aggregate_key_type = "IP"
 
         scope_down_statement {
