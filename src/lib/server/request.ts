@@ -20,6 +20,7 @@ export type RequestOptions = {
   cacheMissOnNot200?: boolean;
   retries?: number;
   waitTime?: number;
+  timeout?: number;
 };
 
 // Request meta type
@@ -77,6 +78,11 @@ async function request(
   // Paths
   const cachePath = `${options.cacheDir}/${key}.data`;
   const cacheMeta = `${options.cacheDir}/${key}.meta`;
+
+  // Change timeout into AbortController signal if provided
+  if (options.timeout) {
+    fetchOptions.signal = AbortSignal.timeout(options.timeout);
+  }
 
   // Check if there is a TTL (0 means don't use cache)
   if (options.ttl) {

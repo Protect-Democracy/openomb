@@ -940,6 +940,7 @@ async function apportionmentListFromHomepage(
     requestOptions.ttl = requestOptions.ttl || 1000 * 60 * 60;
     requestOptions.retries = requestOptions.retries || 10;
     requestOptions.waitTime = requestOptions.waitTime || 1000 * 5;
+    requestOptions.timeout = requestOptions.timeout || 1000 * 60 * 5;
     const homepage = await request(homepageUrl, {}, requestOptions);
 
     // Check response
