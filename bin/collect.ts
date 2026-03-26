@@ -181,19 +181,24 @@ async function cli(): Promise<void> {
     // Keep track of file ids to mark any as removed
     const fileIds: string[] = [];
 
-    // Get list of apportionment URLs
+    // Get list of apportionment URLs.  This can take a while, so to help with debugging,
+    // let's time it
     let apportionmentUrls;
-    if (apportionmentUrl) {
-      apportionmentUrls = [apportionmentUrl];
-    } else {
-      try {
-        apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
-      } catch (error) {
-        throw new Error(
-          `IMPORTANT: Failed getting apportionment list from homepage: ${error?.message || error}`
-        );
+    await createSpan('getApportionmentUrls', async () => {
+      const apportionmentUrlsTimerStart = new Date();
+      if (apportionmentUrl) {
+        apportionmentUrls = [apportionmentUrl];
+      } else {
+        try {
+          apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
+        } catch (error) {
+          const apportionmentUrlsTimerEnd = new Date();
+          console.error(
+            `Failed getting apportionment list from homepage after ${apportionmentUrlsTimerEnd.getTime() - apportionmentUrlsTimerStart.getTime()} ms (including retries): ${error?.message || error}`
+          );
+        }
       }
-    }
+    });
 
     // Load JSON files
     const jsonUrls = apportionmentUrls.filter((url: string) => isApportionmentJsonUrl(url));
