@@ -184,21 +184,19 @@ async function cli(): Promise<void> {
     // Get list of apportionment URLs.  This can take a while, so to help with debugging,
     // let's time it
     let apportionmentUrls;
-    await createSpan('getApportionmentUrls', async () => {
-      const apportionmentUrlsTimerStart = new Date();
-      if (apportionmentUrl) {
-        apportionmentUrls = [apportionmentUrl];
-      } else {
-        try {
-          apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
-        } catch (error) {
-          const apportionmentUrlsTimerEnd = new Date();
-          console.error(
-            `Failed getting apportionment list from homepage after ${apportionmentUrlsTimerEnd.getTime() - apportionmentUrlsTimerStart.getTime()} ms (including retries): ${error?.message || error}`
-          );
-        }
+    const apportionmentUrlsTimerStart = new Date();
+    if (apportionmentUrl) {
+      apportionmentUrls = [apportionmentUrl];
+    } else {
+      try {
+        apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
+      } catch (error) {
+        const apportionmentUrlsTimerEnd = new Date();
+        console.error(
+          `Failed getting apportionment list from homepage after ${apportionmentUrlsTimerEnd.getTime() - apportionmentUrlsTimerStart.getTime()} ms (including retries): ${error?.message || error}`
+        );
       }
-    });
+    }
 
     // Load JSON files
     const jsonUrls = apportionmentUrls.filter((url: string) => isApportionmentJsonUrl(url));
