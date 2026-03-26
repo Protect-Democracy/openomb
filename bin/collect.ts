@@ -192,8 +192,9 @@ async function cli(): Promise<void> {
         apportionmentUrls = await apportionmentListFromHomepage(env.baseUrl);
       } catch (error) {
         const apportionmentUrlsTimerEnd = new Date();
-        console.error(
-          `Failed getting apportionment list from homepage after ${apportionmentUrlsTimerEnd.getTime() - apportionmentUrlsTimerStart.getTime()} ms (including retries): ${error?.message || error}`
+        throw new Error(
+          `Failed getting apportionment list from homepage after ${apportionmentUrlsTimerEnd.getTime() - apportionmentUrlsTimerStart.getTime()} ms (including retries): ${error?.message || error}`,
+          { cause: error }
         );
       }
     }
