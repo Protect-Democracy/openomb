@@ -60,6 +60,14 @@
         <p>Category A, B, and AB apportionments make funds available for the current fiscal year. Another category of apportionment &mdash; known as &ldquo;Category C&rdquo; &mdash; <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=404" target="_blank" rel="noopener noreferrer">reserves funds in &ldquo;multi-year&rdquo; accounts</a> (for instance, an account with money available from 2022-2027) or &ldquo;no-year&rdquo; accounts (in which funds are available for indefinite period) for future fiscal years. Funds found on a Category C line, in other words, are not available for the current fiscal year.</p>
 
         <p>Apportionments are legally binding on an agency under the Antideficiency Act. Officials who fail to follow an apportionment may violate that law and expose themselves to administrative or criminal penalties, which include a fine of up to $5,000 and a prison term of up to two years. 31 U.S.C. § 1519.</p>
+
+        <iframe
+          src="https://www.youtube.com/embed/UyGzVC6cDA4?list=PLZZGlWOJfMoLG7eyzlCkBP0IkuFG-5Y5P"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
       `
     },
     {
@@ -96,7 +104,15 @@
           allowfullscreen
         ></iframe>
 
-        <p>For more information on the line numbers in an apportionment, consult OMB Circular No.  A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the &ldquo;OMB Footnotes&rdquo; column in apportionments, consult the next FAQ </p>
+        <p>For more information on the line numbers in an apportionment, consult OMB Circular No.  A-11, which <a href="https://www.whitehouse.gov/wp-content/uploads/2018/06/a11.pdf#page=856" target="_blank" rel="noopener noreferrer">lists and explains the meaning of all possible line numbers</a>. For information on the &ldquo;OMB Footnotes&rdquo; column in apportionments, consult the next FAQ.</p>
+
+        <iframe
+          src="https://www.youtube.com/embed/-VBsiVWVz7M?list=PLZZGlWOJfMoLG7eyzlCkBP0IkuFG-5Y5P"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
       `
     },
     {
@@ -113,6 +129,14 @@
         <p>If footnotes appear on lines 1920 or 6190, they apply to all the lines in the 1xxx and 6xxx sections, respectively.</p>
 
         <p>For more information on apportionment footnotes, consult this <a href="https://youtu.be/XEDz8Wg2wx0?feature=shared&t=2670" target="_blank" rel="noopener noreferrer">expert training from Oct. 2022</a> (0:44:30-1:00:54).</p>
+
+        <iframe
+          src="https://www.youtube.com/embed/YjjXJYzWpZ4?list=PLZZGlWOJfMoLG7eyzlCkBP0IkuFG-5Y5P"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
       `
     },
     {
@@ -181,6 +205,14 @@
             <li>For more detailed instructions on finding an account name and number, consult <a href="https://protectdemocracy.org/work/using-ombs-apportionment-website-resources-for-congress/#finding-an-apportionment" target="_blank" rel="noopener noreferrer">these instructions</a>.</li>
           </ul>
         </p>
+
+        <iframe
+          src="https://www.youtube.com/embed/AbuwWh0LgaQ?list=PLZZGlWOJfMoLG7eyzlCkBP0IkuFG-5Y5P"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
       `
     },
     {
@@ -335,6 +367,16 @@
   </p>
 
   <div class="text-container">
+    <iframe
+      src="https://www.youtube.com/embed/videoseries?si=utGqWrbjq0c2E2FW&amp;list=PLZZGlWOJfMoLG7eyzlCkBP0IkuFG-5Y5P"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+  </div>
+
+  <div class="text-container">
     <div class="has-js-only-block">
       <dl class="faqs">
         {#each faqs as faq (faq.id)}
@@ -367,7 +409,7 @@
     <noscript>
       <div class="no-js-only-block">
         <dl class="faqs">
-          {#each faqs as faq}
+          {#each faqs as faq, fi (fi)}
             <dt id="faq-{faq.id}">
               <!-- eslint-disable-next-line svelte/no-at-html-tags -->
               {@html faq.question}
@@ -410,7 +452,7 @@
 
   /* NOTE: Cannot do global in nested selector
   /* https://github.com/sveltejs/svelte/issues/10540 */
-  .faqs :global(iframe) {
+  :global(iframe) {
     width: 100%;
     aspect-ratio: 16 / 9;
     margin-bottom: var(--spacing);
