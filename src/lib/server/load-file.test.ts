@@ -78,6 +78,13 @@ describe('approvalDateFromPdfFileName()', () => {
       DateTime.fromISO('2026-03-04T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
     );
 
+    const date8 = approvalDateFromPdfFileName(
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Other%20Independent%20Agencies/PDF/FY2026_SI_2026-23-03.pdf.pdf'
+    );
+    expect(date8).toEqual(
+      DateTime.fromISO('2026-03-23T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
+    );
+
     expect(approvalDateFromPdfFileName('20240501')).toEqual(null);
     expect(approvalDateFromPdfFileName('_20240501')).toEqual(null);
 

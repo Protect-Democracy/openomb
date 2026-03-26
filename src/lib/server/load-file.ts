@@ -856,6 +856,7 @@ export function parseSpendPlanFilename(fileName: string): {
  * https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Agriculture/PDF/FY2025_Department%20of%20Agriculture_12.19.2024.pdf
  * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf
  * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Health%20and%20Human%20Services/PDF/FY2026_Department_of_Health_and_Human_Services_2026-03-04_2.pdf.pdf
+ * https://apportionment-public.max.gov/Fiscal%20Year%202026/Other%20Independent%20Agencies/PDF/FY2026_SI_2026-23-03.pdf.pdf
  *
  * Approvals actually come in at specific times, so we default to noon.
  *
@@ -863,7 +864,7 @@ export function parseSpendPlanFilename(fileName: string): {
  * @returns Approval date or null
  */
 function approvalDateFromPdfFileName(fileName: string): Date | null {
-  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy', 'yyyy-M-d'];
+  const formats = ['yyyy-MM-dd', 'yyyy_MM_dd', 'MM.dd.yyyy', 'yyyy-M-d', 'yyyy-dd-MM'];
   const assumedTime = '--12:00:00';
   const assumedFormat = '--HH:mm:ss';
 
@@ -871,7 +872,15 @@ function approvalDateFromPdfFileName(fileName: string): Date | null {
   fileName = fileName.replace(/(\.pdf)+$/, '');
 
   // Get date part
-  const datePart = fileName.match(/.*[_| ](\d{2,4}[-_.]\d{1,4}[-_.]\d{1,4})(_[0-9]+)?$/);
+  const dateMatches = [
+    // YYYY-MM-DD
+    /.*[_| ](\d{2,4}[-_.]\d{1,2}[-_.]\d{1,2})(_[0-9]+)?$/,
+    // MM-DD-YYYY
+    /.*[_| ](\d{1,2}[-_.]\d{1,2}[-_.]\d{2,4})(_[0-9]+)?$/
+  ]
+    .map((regex) => fileName.match(regex))
+    .filter((match) => !!match && match.length > 1) as RegExpMatchArray[];
+  const datePart = dateMatches.length > 0 ? dateMatches[0] : null;
   if (!datePart || !datePart[1]) {
     return null;
   }
