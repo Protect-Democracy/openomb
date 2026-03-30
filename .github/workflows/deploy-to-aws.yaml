@@ -105,7 +105,7 @@ jobs:
           unset-current-credentials: true
 
       - name: Install OpenTofu
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
 
       - name: OpenTofu init
         id: init
