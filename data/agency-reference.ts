@@ -1932,7 +1932,7 @@ export default {
       parent_id: 342,
       recent_articles_url:
         'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=589&order=newest',
-      short_name: null,
+      short_name: 'NEH',
       slug: 'national-endowment-for-the-humanities',
       url: 'https://www.federalregister.gov/agencies/national-endowment-for-the-humanities',
       json_url: 'https://www.federalregister.gov/api/v1/agencies/589',
@@ -8074,7 +8074,7 @@ export default {
       parent_id: 342,
       recent_articles_url:
         'https://www.federalregister.gov/api/v1/documents?conditions%5Bagency_ids%5D%5B%5D=589&order=newest',
-      short_name: null,
+      short_name: 'NEH',
       slug: 'national-endowment-for-the-humanities',
       url: 'https://www.federalregister.gov/agencies/national-endowment-for-the-humanities',
       json_url: 'https://www.federalregister.gov/api/v1/agencies/589',

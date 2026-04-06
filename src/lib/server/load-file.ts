@@ -585,6 +585,9 @@ async function loadPdfSpendPlan(
   // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20HRSA%20Operating%20Spend%20Plan.pdf
   // https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.pdf
   // https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY2025%20Peace%20Corps%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/DFC%20Operating%20Plan%20-%20FY2025%20-%20Final_508.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20IMLS%20Spend%20Plan.pdf
   const urlPath = decodeURIComponent(pdfUrl)
     .replace(env.baseUrl, '')
     .replace(/(\.pdf)+$/, '');
@@ -772,7 +775,16 @@ export function parseSpendPlanFilename(fileName: string): {
   agency: string | undefined;
   bureau: string | undefined;
 } {
-  const yearParts = fileName.match(/^.Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
+  // Most files seem to start with a fiscal year, but there's been one where the fiscal year is
+  // in the middle of the file name
+  let yearParts = fileName.match(/^.Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
+  if (!yearParts) {
+    // Try to find a year anywhere in the file name just in case
+    const otherYearParts = fileName.match(/Y[_| ]{0,1}([\d]{2,4})/);
+    if (otherYearParts) {
+      yearParts = [fileName, otherYearParts[1], fileName];
+    }
+  }
   const results = {
     fiscalYear: yearParts ? yearParts[1].padStart(4, '20') : undefined,
     agency: <string | undefined>undefined,
@@ -783,7 +795,10 @@ export function parseSpendPlanFilename(fileName: string): {
   // Check for acronyms
   const acronymParts = fileNameRest.match(/[A-Z]{2,6}/g);
   if (acronymParts) {
-    acronymParts.forEach((acronym) => {
+    // Filter out any "FY"
+    const filteredAcronymParts = acronymParts.filter((acronym) => acronym !== 'FY');
+
+    filteredAcronymParts.forEach((acronym) => {
       if (!results['agency']) {
         const agencyResult = agencyMatches.agencies.find((a) =>
           a.short_name?.split('/').some((p) => p === acronym)
@@ -807,7 +822,7 @@ export function parseSpendPlanFilename(fileName: string): {
     //    within it, only spend plans)
     if (!results['agency']) {
       let agencyId: number;
-      acronymParts.forEach((acronym) => {
+      filteredAcronymParts.forEach((acronym) => {
         if (!results['agency']) {
           const agencyResult = agencyMatches.leftoverAgencies.find((a) =>
             a.short_name?.split('/').some((p) => p === acronym)
@@ -857,6 +872,7 @@ export function parseSpendPlanFilename(fileName: string): {
  * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20War/PDF/FY2026_Department%20of%20War_Apportionment_2026-2-3.pdf.pdf.pdf
  * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Health%20and%20Human%20Services/PDF/FY2026_Department_of_Health_and_Human_Services_2026-03-04_2.pdf.pdf
  * https://apportionment-public.max.gov/Fiscal%20Year%202026/Other%20Independent%20Agencies/PDF/FY2026_SI_2026-23-03.pdf.pdf
+ * https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Health%20and%20Human%20Services/PDF/FY2026_HHS_2026-04-01%202.pdf.pdf
  *
  * Approvals actually come in at specific times, so we default to noon.
  *
@@ -874,9 +890,9 @@ function approvalDateFromPdfFileName(fileName: string): Date | null {
   // Get date part
   const dateMatches = [
     // YYYY-MM-DD
-    /.*[_| ](\d{2,4}[-_.]\d{1,2}[-_.]\d{1,2})(_[0-9]+)?$/,
+    /.*[_| ](\d{2,4}[-_.]\d{1,2}[-_.]\d{1,2})([_%\s][0-9]+)?$/,
     // MM-DD-YYYY
-    /.*[_| ](\d{1,2}[-_.]\d{1,2}[-_.]\d{2,4})(_[0-9]+)?$/
+    /.*[_| ](\d{1,2}[-_.]\d{1,2}[-_.]\d{2,4})([_%\s][0-9]+)?$/
   ]
     .map((regex) => fileName.match(regex))
     .filter((match) => !!match && match.length > 1) as RegExpMatchArray[];
