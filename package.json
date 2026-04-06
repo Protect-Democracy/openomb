@@ -138,7 +138,7 @@
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1",
-    "vite": "^7.3.1",
+    "vite": "^7.3.2",
     "vite-imagetools": "^9.0.2",
     "vite-plugin-devtools-json": "^1.0.0",
     "vite-tsconfig-paths": "^6.1.1",
