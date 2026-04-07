@@ -588,6 +588,7 @@ async function loadPdfSpendPlan(
   // https://apportionment-public.max.gov/Spend%20Plans/FY2025%20Peace%20Corps%20Spend%20Plan.pdf
   // https://apportionment-public.max.gov/Spend%20Plans/DFC%20Operating%20Plan%20-%20FY2025%20-%20Final_508.pdf
   // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20IMLS%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY2026%20NEH%20Spend%20Plan.pdf
   const urlPath = decodeURIComponent(pdfUrl)
     .replace(env.baseUrl, '')
     .replace(/(\.pdf)+$/, '');
