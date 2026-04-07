@@ -23,6 +23,7 @@ The following is how you setup your development environment to work on this proj
 - Utilize the correct Node version
   - (suggested) Utilize nvm: `nvm use`
 - Install dependencies: `npm install`
+  - Install scripts are by default, also run: `npm rebuild esbuild @sentry/cli`
 - Configure (see below)
 - Run database setup: `npm run db:migrate`
 
@@ -31,6 +32,7 @@ The following is how you setup your development environment to work on this proj
 When pulling new code, you should do the following:
 
 - Update dependencies: `npm install`
+  - Install scripts are by default, also run: `npm rebuild esbuild @sentry/cli`
 - Run any database migrations: `npm run db:migrate`
 
 ### Configuration
