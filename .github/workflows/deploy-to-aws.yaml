@@ -68,13 +68,15 @@ jobs:
         env:
           VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
           VITE_SENTRY_SCRIPT: ${{ secrets.VITE_SENTRY_SCRIPT }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+            SENTRY_RELEASE=${{ github.sha }}
 
       - name: Deploy to Amazon ECS
         run: aws ecs update-service --cluster ${{ env.AWS_ECS_CLUSTER }} --service ${{ env.AWS_ECS_SERVICE }} --force-new-deployment
