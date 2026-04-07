@@ -60,8 +60,8 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_SENTRY_SVELTE_REPORT_URI` - The CSP header value from Sentry.
 - `PUBLIC_SENTRY_SVELTE_DSN` - Sentry DSN for Sveltekit application
 - `PUBLIC_NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
-- `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
-  - This variable is specific to the build process and is not needed in our actual container environment
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for uploading source maps during the build
+  - Only needed at build time; passed as a Docker BuildKit secret (not a build arg) to avoid leaking in image layers
 - `MAILGUN_DOMAIN` - Domain for our mailgun service to send emails from
 - `MAILGUN_SEND_KEY` - Api key value to authenticate our email send
   - If you wish to test emails without this, see [docs/EMAILS.md](./EMAILS.md)
@@ -69,6 +69,22 @@ The following are environment variables that can be set:
 This project uses [@dotenvx/dotenvx](https://dotenvx.com/docs) to parse our `.env` files.
 
 This means that any additional commands to run the project code must be prefixed with `dotenvx run -- `
+
+### Docker build
+
+The Dockerfile uses a multi-stage build. The build stage:
+
+1. Installs `ca-certificates` so that `sentry-cli` (a standalone binary) can verify SSL certificates when uploading source maps.
+2. Copies `.npmrc` before `npm install` so that `ignore-scripts=true` takes effect. Packages that need postinstall scripts (`esbuild`, `@sentry/cli`) are explicitly rebuilt with `npm rebuild`.
+3. Uses a BuildKit secret mount for `SENTRY_AUTH_TOKEN` rather than a build arg, keeping the token out of image layer history.
+
+To build locally with source map uploads:
+
+```bash
+SENTRY_AUTH_TOKEN=<token> docker build \
+  --secret id=SENTRY_AUTH_TOKEN,env=SENTRY_AUTH_TOKEN \
+  --build-arg SENTRY_RELEASE=test .
+```
 
 ### Deploy
 
@@ -107,8 +123,8 @@ The following are environment variables that can be set:
 - `APPORTIONMENTS_AWS_CONTAINER_METADATA` - (optional) Whether to use container metadata method for AWS credentials.
 - `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
 - `NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
-- `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
-  - This variable is specific to the build process and is not needed in our actual container environment
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for uploading source maps during the build
+  - Only needed at build time; passed as a Docker BuildKit secret (not a build arg) to avoid leaking in image layers
 
 ### Build
 
@@ -148,8 +164,8 @@ The following are environment variables that can be set:
   - If using the non-URI method, you can put the username and password in JSON format as `APPORTIONMENTS_DB_AUTH`. This looks like this if in a `.env` file: `APPORTIONMENTS_DB_AUTH='{"username":"name","password":"pass"}'`
 - `APPORTIONMENTS_SENTRY_NODE_DSN` - Sentry DSN for node process.
 - `NODE_ENV` - Set to `production` for production environment, otherwise defaults to `development`
-- `SENTRY_AUTH_TOKEN` - Sentry auth token for build process to send source code files
-  - This variable is specific to the build process and is not needed in our actual container environment
+- `SENTRY_AUTH_TOKEN` - Sentry auth token for uploading source maps during the build
+  - Only needed at build time; passed as a Docker BuildKit secret (not a build arg) to avoid leaking in image layers
 
 ### Build
 
