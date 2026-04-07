@@ -1,5 +1,7 @@
 # Install dependencies and build
 FROM node:24-bookworm-slim AS build
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_RELEASE
 WORKDIR /app
 COPY package*.json ./
 RUN npm install

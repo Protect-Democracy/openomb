@@ -19,7 +19,8 @@ export default defineConfig({
       sourceMapsUploadOptions: {
         org: 'voteshield',
         project: 'pd-apportionments-browser',
-        authToken: process.env.SENTRY_AUTH_TOKEN
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        release: { name: process.env.SENTRY_RELEASE }
       }
     }),
 

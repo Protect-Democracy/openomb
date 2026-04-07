@@ -59,14 +59,6 @@ Configure using the following environment variables:
 - `PUBLIC_SENTRY_SVELTE_DSN`: Sentry DSN for the Sveltekit application
 - `AUTH_SECRET`: Secret string used for authentication
 
-**TODO**: There are a lot of references to Sentry environment variables in the codebase and in the deployment, but it's unclear on what does what. For instance, these are defined when deploying the web application:
-
-```
-VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-VITE_SENTRY_SCRIPT: ${{ secrets.VITE_SENTRY_SCRIPT }}
-SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-```
-
 ### Notifications
 
 Use the following command to send notification emails to users who have subscribed to updates:
