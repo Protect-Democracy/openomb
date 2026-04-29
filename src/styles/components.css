@@ -32,6 +32,39 @@
   margin-bottom: var(--spacing-double);
 }
 
+/* Page layout for a simple message */
+.page-message-container {
+  background-color: var(--color-subscribe-background);
+  padding-top: var(--spacing-triple);
+  padding-bottom: var(--spacing-triple);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+
+  .message-box {
+    background-color: var(--color-background);
+    max-width: calc(var(--page-width-small) - var(--spacing) * 4);
+    padding: calc(var(--spacing) * 4) calc(var(--spacing) * 8);
+    border: var(--border-weight) solid var(--color-text);
+    border-radius: 0;
+
+    @media (max-width: 900px) {
+      & {
+        padding: calc(var(--spacing) * 3) calc(var(--spacing) * 3);
+      }
+    }
+
+    @media (max-width: 550px) {
+      & {
+        padding: calc(var(--spacing) * 1) calc(var(--spacing) * 1);
+        border: none;
+        background-color: transparent;
+      }
+    }
+  }
+}
+
 /**
  * On most pages, we want space below the nav and above the footer, but
  * no on the landing page.

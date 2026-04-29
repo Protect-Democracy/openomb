@@ -2,7 +2,7 @@
   import type { PageData } from './$types';
   import { filter } from 'lodash-es';
   import LogOut from '$components/subscriptions/LogOut.svelte';
-  import LoginBox from '$components/subscriptions/LoginBox.svelte';
+  import LogIn from '$src/components/subscriptions/LogIn.svelte';
   import SubscriptionGroup from './SubscriptionGroup.svelte';
 
   export let data: PageData;
@@ -101,8 +101,10 @@
         </div>
       </section>
     {:else}
-      <section class="content-container login-section">
-        <LoginBox callbackUrl="/subscribe" />
+      <section class="page-message-container">
+        <div class="message-box">
+          <LogIn callbackUrl="/subscribe" />
+        </div>
       </section>
     {/if}
   </div>
@@ -137,11 +139,6 @@
       flex-direction: column;
       row-gap: var(--spacing-double);
     }
-  }
-
-  .login-section {
-    display: flex;
-    justify-content: center;
   }
 
   .background-container.no-user {

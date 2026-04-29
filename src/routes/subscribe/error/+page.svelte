@@ -1,7 +1,7 @@
 <script lang="ts">
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
-  import LogIn from '$components/subscriptions/LogIn.svelte';
+  import LogIn from '$src/components/subscriptions/LogInForm.svelte';
 
   const url = derived(page, ($page) => $page.url);
 
@@ -34,13 +34,14 @@
     }
   };
 
-  $: error = errors[$url.searchParams.get('error') || 'default'];
+  $: errorName = $url.searchParams.get('error') || 'default';
+  $: error = errorName in errors ? errors[errorName] : errors['default'];
 </script>
 
 <div class="page-container content-container">
   <h1>{error.heading}</h1>
   <div class="message">
-    {#each error.message as line}
+    {#each error.message as line (line)}
       <p>{line}</p>
     {/each}
   </div>

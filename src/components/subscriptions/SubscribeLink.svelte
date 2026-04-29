@@ -20,6 +20,7 @@
   import { onMount } from 'svelte';
   import { afterNavigate } from '$app/navigation';
   import { deserialize } from '$app/forms';
+  import { resolve } from '$app/paths';
   import { subscribeFeatureEnabled } from '$config/subscriptions';
   import {
     clientGetUser,
@@ -28,7 +29,7 @@
   } from '$lib/users';
   import { parseUrlSearchParams } from '$lib/searches';
   import Spinner from '$components/icons/Spinner.svelte';
-  import LogIn from './LogIn.svelte';
+  import LogIn from './LogInForm.svelte';
 
   // Types
   import type { User, Subscription } from '$lib/users';
@@ -252,7 +253,7 @@
 
             <br />
             By logging in or subscribing to updates, you agree to the
-            <a href="/privacy-policy">OpenOMB privacy policy</a>.
+            <a href={resolve('/privacy-policy')}>OpenOMB privacy policy</a>.
           {/if}
         </p>
       {/if}
@@ -282,30 +283,33 @@
                 <a
                   class="button compact subscribe"
                   class:small={variant === 'small'}
-                  href={`/subscribe/search/${hasSubscription.itemId}/remove`}>Unsubscribe</a
+                  href={resolve(`/subscribe/search/${hasSubscription.itemId}/remove`)}
+                  >Unsubscribe</a
                 >
               {:else if url}
                 <a
                   class="button compact subscribe"
                   class:small={variant === 'small'}
-                  href={`/subscribe/search?${url.searchParams.toString()}`}>Subscribe</a
+                  href={resolve(`/subscribe/search?${url.searchParams.toString()}`)}>Subscribe</a
                 >
               {/if}
             {:else if hasSubscription}
               <a
                 class="button compact subscribe"
                 class:small={variant === 'small'}
-                href={`/subscribe/${subType}/${subItemId}/remove`}>Unsubscribe</a
+                href={resolve(`/subscribe/${subType}/${subItemId}/remove`)}>Unsubscribe</a
               >
             {:else}
-              <a class="button compact subscribe" href={`/subscribe/${subType}/${subItemId}`}
-                >Subscribe</a
+              <a
+                class="button compact subscribe"
+                href={resolve(`/subscribe/${subType}/${subItemId}`)}>Subscribe</a
               >
             {/if}
           </div>
 
           <div class="manage-subscriptions">
-            <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
+            <a href={resolve('/subscribe')} class="subscribe font-small">Manage all subscriptions</a
+            >
           </div>
 
           {#if error}
@@ -314,16 +318,11 @@
         </div>
       {:else if searchSubscriptionType && url}
         <LogIn
-          variant={variant || undefined}
-          callbackUrl={`/subscribe/search?${url.searchParams.toString()}`}
+          callbackUrl={resolve(`/subscribe/search?${url.searchParams.toString()}`)}
           action="Subscribe"
         />
       {:else}
-        <LogIn
-          variant={variant || undefined}
-          callbackUrl={`/subscribe/${subType}/${subItemId}`}
-          action="Subscribe"
-        />
+        <LogIn callbackUrl={resolve(`/subscribe/${subType}/${subItemId}`)} action="Subscribe" />
       {/if}
     </div>
   </aside>
