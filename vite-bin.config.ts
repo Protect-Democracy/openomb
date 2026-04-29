@@ -64,8 +64,9 @@ export default defineConfig({
         // Put the Sentry rollup plugin after all other plugins
         sentryRollupPlugin({
           org: 'voteshield',
-          project: 'pd-apportionments-browser',
-          authToken: process.env.SENTRY_AUTH_TOKEN
+          project: 'pd-apportionments-node',
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+          release: { name: process.env.SENTRY_RELEASE }
         })
       ]
     }

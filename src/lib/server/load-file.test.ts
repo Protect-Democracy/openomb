@@ -78,6 +78,20 @@ describe('approvalDateFromPdfFileName()', () => {
       DateTime.fromISO('2026-03-04T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
     );
 
+    const date8 = approvalDateFromPdfFileName(
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Other%20Independent%20Agencies/PDF/FY2026_SI_2026-23-03.pdf.pdf'
+    );
+    expect(date8).toEqual(
+      DateTime.fromISO('2026-03-23T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
+    );
+
+    const date9 = approvalDateFromPdfFileName(
+      'https://apportionment-public.max.gov/Fiscal%20Year%202026/Department%20of%20Health%20and%20Human%20Services/PDF/FY2026_HHS_2026-04-01%202.pdf.pdf'
+    );
+    expect(date9).toEqual(
+      DateTime.fromISO('2026-04-01T12:00:00.000', { zone: 'America/New_York' }).toJSDate()
+    );
+
     expect(approvalDateFromPdfFileName('20240501')).toEqual(null);
     expect(approvalDateFromPdfFileName('_20240501')).toEqual(null);
 
@@ -255,6 +269,24 @@ describe('parseSpendPlanFilename()', () => {
     expect(parseSpendPlanFilename('FY 2026 VA RETF Spend Plan.pdf')).toMatchObject({
       fiscalYear: '2026',
       agency: 'Department of Veterans Affairs'
+    });
+
+    expect(parseSpendPlanFilename('FY2025 Peace Corps Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'International Assistance Programs',
+      bureau: 'Peace Corps'
+    });
+
+    expect(parseSpendPlanFilename('DFC Operating Plan - FY2025 - Final_508.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'International Assistance Programs',
+      bureau: 'United States International Development Finance Corporation'
+    });
+
+    expect(parseSpendPlanFilename('FY 2025 IMLS Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Institute of Museum and Library Services',
+      bureau: 'Institute of Museum and Library Services'
     });
   });
 });

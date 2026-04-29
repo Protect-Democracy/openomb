@@ -1,5 +1,12 @@
 resource "aws_ecs_cluster" "apportionments_app" {
   name = "apportionments-app"
+
+  # Provides pre-built dashboards with CPU, memory, network, and task-level
+  # metrics for ECS services and tasks in the CloudWatch console.
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 resource "aws_ecs_service" "apportionments_app" {

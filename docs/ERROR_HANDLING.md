@@ -11,13 +11,14 @@ The following are relevant environment variables:
 - `APPORTIONMENTS_SENTRY_SVELTE_REQUEST_URI`: The CSP header value from Sentry. (may be optional for development environment)
 - `SENTRY_AUTH_TOKEN`: Authentication token for Sentry. If this is provided to a build process, the source code maps will also be built and provided to Sentry.
 
-**TODO**: There are a lot of references to Sentry environment variables in the codebase and in the deployment, but it's unclear on what does what. For instance, these are defined when deploying the web application:
+## Source maps
 
-```
-VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
-VITE_SENTRY_SCRIPT: ${{ secrets.VITE_SENTRY_SCRIPT }}
-SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-```
+Source maps are uploaded to Sentry during the build process so that error stack traces reference the original source code. There are two Sentry projects that receive source maps:
+
+- `pd-apportionments-browser` -- browser/client bundles (via `sentrySvelteKit` in `vite.config.ts`)
+- `pd-apportionments-node` -- Node.js bin scripts (via `sentryRollupPlugin` in `vite-bin.config.ts`)
+
+Upload is triggered automatically when `SENTRY_AUTH_TOKEN` is available at build time. Without the token, builds succeed but skip the upload.
 
 ## Sentry Integrations
 

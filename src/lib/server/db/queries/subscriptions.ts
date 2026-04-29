@@ -26,18 +26,20 @@ import { memoizeDataAsync } from '$server/cache';
 import type { filesSelect } from '$schema/files';
 import type { tafsSelect } from '$schema/tafs';
 
+export type CustomSubscriptionItemDetails = {
+  agency?: string;
+  agencyId?: string;
+  bureau?: string;
+  bureauId?: string;
+  account?: string;
+  accountId?: string;
+};
+
 export type SubscriptionItemDetails =
+  | CustomSubscriptionItemDetails
   | filesSelect
   | tafsSelect
-  | searchesSelect
-  | {
-      agency?: string;
-      agencyId?: string;
-      bureau?: string;
-      bureauId?: string;
-      account?: string;
-      accountId?: string;
-    };
+  | searchesSelect;
 
 export type SubscriptionDetails = {
   itemDetails: SubscriptionItemDetails;
@@ -212,7 +214,7 @@ export const userSubscriptionDetails = async function (
   email: string,
   type: string,
   itemId: string
-): Promise<(subscriptionSelect & SubscriptionSelectDetails) | undefined> {
+) {
   const subscriptionResults = await userSubscription(email, type, itemId);
 
   if (subscriptionResults) {
@@ -223,6 +225,8 @@ export const userSubscriptionDetails = async function (
     return { ...subscriptionResults, ...subscriptionDetails };
   }
 };
+
+export type UserSubscriptionDetailsReturn = Awaited<ReturnType<typeof userSubscriptionDetails>>;
 
 /**
  * Get all subscriptions associated with the provided email

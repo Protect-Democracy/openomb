@@ -19,6 +19,10 @@ log/
 # Tests
 test-results
 
+# Agents
+.claude/settings.local.json
+.pr-summary*
+
 # From SvelteKit
 ##############
 .DS_Store

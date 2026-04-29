@@ -49,7 +49,8 @@
     <h2>Accounts</h2>
 
     <ul>
-      {#each accountsByBureau as account, aIndex (account.accountTitleId)}
+      {/* Unfortunately there are some duplicate account titles within bureaus, so we have to use the index as a key here instead of accountTitleId */ null}
+      {#each accountsByBureau as account, aIndex (aIndex)}
         <li>
           <a
             href="/agency/{bureau.agency

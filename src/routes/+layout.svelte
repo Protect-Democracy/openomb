@@ -11,8 +11,9 @@
   import { derived } from 'svelte/store';
   import { DateTime } from 'luxon';
   import { page } from '$app/stores';
-  import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
   import UserWrapper from '$components/subscriptions/UserWrapper.svelte';
+  import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
+  import MobileNav from '$components/navigation/MobileNav.svelte';
   import { setCookie } from '$lib/utilities';
   import env from '$lib/environment';
   import { formatJsonLdScript, pageSchema } from '$lib/schema';
@@ -168,10 +169,8 @@
     <nav>
       <a class="h1 home" href="/">{siteName}<span class="sr-only"> Home</span></a>
 
-      <ul>
-        <li>
-          <a class:active={$url.pathname === '/search'} href="/search">Search</a>
-        </li>
+      <ul class="desktop-nav">
+        <li><a class:active={$url.pathname === '/search'} href="/search">Search</a></li>
         <li>
           <DropdownLinks
             title="Explore Agencies"
@@ -188,6 +187,7 @@
         <li>
           <a class:active={$url.pathname === '/about'} href="/about">About</a>
         </li>
+
         <UserWrapper>
           <li class="account-link">
             <a class="button compact small" href="/subscribe">Account</a>
@@ -202,6 +202,10 @@
           </li>
         </UserWrapper>
       </ul>
+
+      <div class="mobile-nav-area">
+        <MobileNav {productionCheck} />
+      </div>
     </nav>
   </div>
 </header>
@@ -272,9 +276,19 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-double) 0;
+
+    /*
+    <<<<<<< HEAD
     align-content: center;
     padding: var(--spacing-double) 0;
     padding: var(--spacing-double) 0;
+=======
+    align-items: center;
+    padding: var(--spacing-double) 0;
+>>>>>>> main
+*/
 
     ul {
       display: flex;
@@ -317,11 +331,25 @@
     }
   }
 
-  /* This caused some weird behavior on the About page.
+  .desktop-nav {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .mobile-nav-area {
+    display: none;
+    align-items: center;
+    gap: var(--spacing-half);
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
+  }
+
   main {
     min-height: 60vh;
   }
-  */
 
   footer {
     background-color: var(--color-background-inverse);

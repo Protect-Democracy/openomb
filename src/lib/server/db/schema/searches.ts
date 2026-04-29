@@ -3,10 +3,8 @@
  */
 
 // Dependencies
-import { isDate } from 'lodash-es';
 import { timestamp, pgTable, text, json, index } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
-import { searchCriterionDescriptions, parseCriterion } from '$lib/searches';
 import { users } from './users';
 
 // This should be the source of truth for search fields.
@@ -33,6 +31,15 @@ export type SavedSearchCriterion = {
   // let's just use ISO date strings
   approvedStart?: string;
   approvedEnd?: string;
+
+  // The ones below here are not in the UI currently
+  accountId?: string;
+  // Folder identifier
+  folder?: string;
+  // Should be a ISO date string
+  createdStart?: string;
+  // Should be a ISO date string
+  createdEnd?: string;
 };
 
 // We have to support this old version of data in the database where things
@@ -50,6 +57,10 @@ export interface LegacySearchCriterion {
   apportionmentType?: string | string[];
   approvedStart?: string | Date;
   approvedEnd?: string | Date;
+  accountId?: string;
+  folder?: string;
+  createdStart?: string | Date;
+  createdEnd?: string | Date;
 }
 
 export type SavedSearchCriterionKeys = keyof SavedSearchCriterion;

@@ -31,23 +31,13 @@ import { memoizeDataAsync } from '$server/cache';
 import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/files';
 
 // Types
+import type { filesSelectWithTafsFootnotes } from '$schema/files';
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import type { LegacySearchCriterion, SavedSearchCriterion, searchesSelect } from '$schema/searches';
 
 export type ColumnObject = {
   [key: string]: PgColumn | SelectedFields | SQL;
 };
-
-// Search fields
-export type SupplementalSearchCriterion = {
-  // Search criterion that is not saved in the search model and may
-  // or may not be in the UI itself.
-  folder?: string;
-  createdStart?: Date;
-  createdEnd?: Date;
-};
-
-export type CombinedSearchCriterion = SavedSearchCriterion & SupplementalSearchCriterion;
 
 // Paging and sorting
 export type PaginationParams = {
@@ -65,7 +55,7 @@ export type AccountPaginationParams = {
 export type CombinedPaginationParams = PaginationParams & AccountPaginationParams;
 
 // Search and paging
-export type SearchPaginationParams = CombinedSearchCriterion & CombinedPaginationParams;
+export type SearchPaginationParams = SavedSearchCriterion & CombinedPaginationParams;
 
 // Debugger
 const debugLogger = debug('apportionments:queries-search');
@@ -214,7 +204,7 @@ function keywordSearch(keywordTerms: string[], mainTable: 'files' | 'tafs' = 'fi
  * @returns
  */
 function generalSearchFilters(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams,
+  searchParams: SavedSearchCriterion | SearchPaginationParams,
   mainTable: 'files' | 'tafs' = 'files'
 ) {
   // Collect filters
@@ -237,6 +227,11 @@ function generalSearchFilters(
       if (bureau) {
         where.push(eq(tafs.budgetBureauTitleId, bureau));
       }
+    }
+
+    // Account Id is specific to agency and bureau
+    if (searchParams.accountId) {
+      where.push(eq(tafs.accountTitleId, searchParams.accountId));
     }
   }
 
@@ -310,9 +305,15 @@ function generalSearchFilters(
       : undefined
   );
   where.push(
-    searchParams.createdStart ? gte(files.createdAt, searchParams.createdStart) : undefined
+    searchParams.createdStart
+      ? gte(files.createdAt, new Date(`${searchParams.createdStart}T00:00:00Z`))
+      : undefined
   );
-  where.push(searchParams.createdEnd ? lte(files.createdAt, searchParams.createdEnd) : undefined);
+  where.push(
+    searchParams.createdEnd
+      ? lte(files.createdAt, new Date(`${searchParams.createdEnd}T23:59:59Z`))
+      : undefined
+  );
 
   // Apportionment type.
   if (searchParams.apportionmentType && searchParams.apportionmentType.length > 0) {
@@ -352,7 +353,7 @@ function generalSearchFilters(
  * @returns
  */
 export async function searchSetup(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams,
+  searchParams: SavedSearchCriterion | SearchPaginationParams,
   mainTable: 'files' | 'tafs' = 'files'
 ) {
   const searchHasLines = !!searchParams.term || !!searchParams.lineNum?.length;
@@ -418,7 +419,7 @@ export const mSearchSetup = memoizeDataAsync(searchSetup);
  * @returns
  */
 export async function tafsSearchFullCountQuery(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
@@ -445,7 +446,7 @@ export const mTafsSearchFullCountQuery = memoizeDataAsync(tafsSearchFullCountQue
  * @returns
  */
 export async function tafsSearchFullCount(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const fullCount = await tafsSearchFullCountQuery(searchParams);
 
@@ -463,7 +464,7 @@ export const mTafsSearchFullCount = memoizeDataAsync(tafsSearchFullCount);
  * @returns
  */
 export async function tafsSearchFullFileCountQuery(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
@@ -490,7 +491,7 @@ export const mTafsSearchFullFileCountQuery = memoizeDataAsync(tafsSearchFullFile
  * @returns
  */
 export async function tafsSearchFullFileCount(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const fullCount = await tafsSearchFullFileCountQuery(searchParams);
 
@@ -548,7 +549,7 @@ export const mTafsSearchPaged = memoizeDataAsync(tafsSearchPaged);
  * @returns
  */
 export async function accountSearchFullCountQuery(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
@@ -577,7 +578,7 @@ export const mAccountSearchFullCountQuery = memoizeDataAsync(accountSearchFullCo
  * @returns
  */
 export async function accountSearchFullCount(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const fullCount = await accountSearchFullCountQuery(searchParams);
 
@@ -635,7 +636,7 @@ export const mAccountSearchPaged = memoizeDataAsync(accountSearchPaged);
  * @returns
  */
 export async function fileSearchFullCountQuery(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const { where } = await searchSetup(searchParams, 'files');
 
@@ -663,7 +664,7 @@ export const mFileSearchFullCountQuery = memoizeDataAsync(fileSearchFullCountQue
  * @returns
  */
 export async function fileSearchFullCount(
-  searchParams: CombinedSearchCriterion | SearchPaginationParams
+  searchParams: SavedSearchCriterion | SearchPaginationParams
 ) {
   const fullCount = await fileSearchFullCountQuery(searchParams);
 
@@ -678,7 +679,9 @@ export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
  * @param searchParams
  * @returns
  */
-export async function fileSearchPaged(searchParams: SearchPaginationParams) {
+export async function fileSearchPaged(
+  searchParams: SavedSearchCriterion | SearchPaginationParams
+): Promise<(filesSelectWithTafsFootnotes | null)[]> {
   debugLogger('File searchParams:', searchParams);
   const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
 
@@ -705,8 +708,8 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     .where(where)
     .groupBy(files.fileId)
     .orderBy(...order)
-    .offset(searchParams.offset)
-    .limit(searchParams.limit);
+    .offset('offset' in searchParams ? searchParams.offset : 0)
+    .limit('limit' in searchParams ? searchParams.limit : 20);
 
   // Details.  Is there a better way to do this
   const detailsWith = {
@@ -731,7 +734,7 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
     })
   };
 
-  const fileDetails = [];
+  const fileDetails: (filesSelectWithTafsFootnotes | null)[] = [];
   for (const limitedId of limitedIds) {
     const details = await db.query.files.findFirst({
       columns: {
@@ -740,7 +743,7 @@ export async function fileSearchPaged(searchParams: SearchPaginationParams) {
       where: eq(files.fileId, limitedId.fileId),
       with: detailsWith
     });
-    fileDetails.push(details);
+    fileDetails.push(details ?? null);
   }
 
   return fileDetails;

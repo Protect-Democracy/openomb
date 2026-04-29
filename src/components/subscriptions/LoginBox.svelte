@@ -6,7 +6,7 @@
 </script>
 
 <div class="login-box">
-  <h2>Log in or create an account</h2>
+  <h2 class="h1">Log in or create an account</h2>
 
   <p>
     Enter your email address to log in or create a new subscription account. You will be sent a
@@ -26,10 +26,24 @@
 <style>
   .login-box {
     background-color: var(--color-background);
-    max-width: var(--copy-width-limit);
-    padding: calc(var(--spacing) * 3) calc(var(--spacing) * 6);
+    max-width: calc(var(--page-width-small) - var(--spacing) * 4);
+    padding: calc(var(--spacing) * 5) calc(var(--spacing) * 7);
     border: var(--border-weight) solid var(--color-text);
     border-radius: 0;
+
+    @media (max-width: 900px) {
+      & {
+        padding: calc(var(--spacing) * 3) calc(var(--spacing) * 3);
+      }
+    }
+
+    @media (max-width: 550px) {
+      & {
+        padding: calc(var(--spacing) * 1) calc(var(--spacing) * 1);
+        border: none;
+        background-color: transparent;
+      }
+    }
   }
 
   h2 {
@@ -46,7 +60,7 @@
   small {
     display: block;
     text-align: center;
-    margin-top: var(--spacing);
+    margin-top: calc(var(--spacing) * 3);
     color: var(--color-text-muted);
   }
 </style>

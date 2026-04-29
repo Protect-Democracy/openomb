@@ -1,10 +1,19 @@
 # Install dependencies and build
 FROM node:24-bookworm-slim AS build
+ARG SENTRY_RELEASE
 WORKDIR /app
-COPY package*.json ./
+
+# sentry-cli needs system CA certs to upload source maps over HTTPS
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+
+COPY package*.json .npmrc ./
 RUN npm install
+# Rebuild packages whose postinstall scripts are blocked by ignore-scripts
+RUN npm rebuild esbuild @sentry/cli
 COPY . .
-RUN npm run build
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+    SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) \
+    npm run build
 
 # Copy build artifacts to a minimal image
 # FROM gcr.io/distroless/nodejs20-debian12

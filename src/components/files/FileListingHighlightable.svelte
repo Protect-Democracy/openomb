@@ -9,20 +9,17 @@
     hasHighlight
   } from '$lib/formatters';
   import { uniqBy, flatMap, filter } from 'lodash-es';
-  import type { filesSelect } from '$schema/files';
-  import type { tafsSelect } from '$schema/tafs';
+  import type { filesSelectWithTafsFootnotes } from '$schema/files';
   import type { SearchPaginationParams } from '$db/queries/search';
   import type { RecentlyAddedOrApprovedWithTafsResult } from '$queries/files';
-
-  // Types
-  interface File extends filesSelect {
-    tafs?: tafsSelect[];
-  }
 
   // Props
   export let headerElement = 'h3';
   export let headerClasses = '';
-  export let file: File | filesSelect | RecentlyAddedOrApprovedWithTafsResult[number];
+  export let file:
+    | File
+    | filesSelectWithTafsFootnotes
+    | RecentlyAddedOrApprovedWithTafsResult[number];
   export let highlightParams: SearchPaginationParams | undefined = undefined;
 
   // Constants
@@ -31,8 +28,9 @@
 
   // Derived
   let hasTafs: boolean;
-  $: hasTafs = file.tafs && file.tafs.length > 0 ? true : false;
-  $: hasFootnotes = file.footnotes && file.footnotes.length > 0 ? true : false;
+  $: hasTafs = 'tafs' in file && file.tafs && file.tafs.length > 0 ? true : false;
+  $: hasFootnotes =
+    'footnotes' in file && file.footnotes && file.footnotes.length > 0 ? true : false;
   $: highlightedApproverTitle = highlight(
     file.approverTitle,
     highlightParams?.approver ? highlightParams?.approver : []

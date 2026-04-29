@@ -19,6 +19,16 @@ These headers are defined in `svelte.config.ts` and SvelteKit handles these on s
 
 Various other security-related headers are defined in `src/config/index.ts`. These should help with browser security but should not likely effect development.
 
+## npm install scripts
+
+The `.npmrc` file sets `ignore-scripts=true` to prevent arbitrary postinstall scripts from running during `npm install`. Packages that need postinstall scripts (like `esbuild` and `@sentry/cli`) must be explicitly rebuilt with `npm rebuild <package>`.
+
+This applies in both local development and Docker builds. The Dockerfile copies `.npmrc` before `npm install` and runs targeted `npm rebuild` commands for allowlisted packages.
+
+## Docker build secrets
+
+Sensitive values like `SENTRY_AUTH_TOKEN` are passed to Docker builds using BuildKit secrets (`--mount=type=secret`) rather than build args. Build args are visible in image layer history; secrets are not.
+
 ## Environment variables
 
 - `APPORTIONMENT_*` variables are accessed at runtime and meant to be only used on the server.

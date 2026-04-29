@@ -14,9 +14,9 @@ import {
   pgEnum
 } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
-import { tafs } from './tafs';
+import { tafs, type tafsDetails } from './tafs';
 import { lines } from './lines';
-import { footnotes } from './footnotes';
+import { footnotes, type footnotesSelect } from './footnotes';
 import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
 
 export const fileTypeEnum = pgEnum('file_type_enum', [
@@ -142,3 +142,8 @@ export const filesRelations = relations(files, ({ many }) => ({
  */
 export type filesSelect = typeof files.$inferSelect;
 export type filesInsert = typeof files.$inferInsert;
+export type filesSelectNoSourceData = Omit<filesSelect, 'sourceData'>;
+export type filesSelectWithTafsFootnotes = filesSelect & {
+  tafs?: tafsDetails[];
+  footnotes?: footnotesSelect[];
+};

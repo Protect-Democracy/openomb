@@ -40,6 +40,12 @@
   .login-form {
     display: flex;
     margin-bottom: var(--spacing);
+
+    @media (max-width: 550px) {
+      & {
+        flex-direction: column;
+      }
+    }
   }
 
   .login-input {
@@ -53,15 +59,33 @@
       border-width: var(--border-weight);
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
+      min-width: 0;
+
+      @media (max-width: 550px) {
+        & {
+          border-bottom-right-radius: var(--border-radius);
+          border-top-right-radius: var(--border-radius);
+          margin-bottom: var(--spacing-half);
+        }
+      }
     }
   }
 
   button {
     font-size: var(--font-size-medium);
     padding: var(--spacing) var(--spacing-double);
-    min-width: auto;
+    width: auto;
+    min-width: calc(var(--spacing) * 10);
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     margin: 0;
+
+    @media (max-width: 550px) {
+      & {
+        border-bottom-left-radius: var(--border-radius);
+        border-top-left-radius: var(--border-radius);
+        width: 100%;
+      }
+    }
   }
 </style>

@@ -1,17 +1,88 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
+# Dependabot configuration
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
 version: 2
+
 updates:
+  # GitHub Actions
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+      semver-patch-days: 7
+      semver-minor-days: 10
+      semver-major-days: 30
+    groups:
+      actions:
+        patterns:
+          - '*'
+
+  # npm dependencies
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'weekly'
-
-  - package-ecosystem: 'github-actions'
-    # Workflow files stored in the default location of `.github/workflows`. (You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.)
-    directory: '/'
-    schedule:
-      interval: 'weekly'
+    open-pull-requests-limit: 10
+    cooldown:
+      default-days: 7
+      semver-patch-days: 7
+      semver-minor-days: 10
+      semver-major-days: 30
+    groups:
+      svelte:
+        patterns:
+          - 'svelte*'
+          - '@sveltejs/*'
+          - '@melt-ui/svelte'
+          - 'svelte-check'
+          - 'svelte-preprocess'
+      build-tools:
+        patterns:
+          - 'vite*'
+          - '@vitejs/*'
+          - '@rollup/*'
+          - 'autoprefixer'
+          - 'postcss-*'
+          - '@csstools/*'
+      sentry:
+        patterns:
+          - '@sentry/*'
+      aws:
+        patterns:
+          - '@aws-sdk/*'
+      auth:
+        patterns:
+          - '@auth/*'
+      database:
+        patterns:
+          - 'drizzle-orm'
+          - 'drizzle-kit'
+          - 'pg'
+      testing:
+        patterns:
+          - 'vitest*'
+          - '@playwright/test'
+          - 'testcontainers'
+          - '@testcontainers/*'
+          - 'mailpit-api'
+      code-quality:
+        patterns:
+          - 'eslint*'
+          - '@eslint/*'
+          - 'prettier*'
+          - 'prettier-plugin-svelte'
+          - 'eslint-plugin-svelte'
+          - '@typescript-eslint/*'
+          - 'typescript-eslint'
+          - 'husky'
+          - 'lint-staged'
+      typescript:
+        patterns:
+          - 'typescript'
+          - 'tslib'
+          - 'tsx'
+      types:
+        patterns:
+          - '@types/*'

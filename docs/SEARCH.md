@@ -32,3 +32,4 @@ When making changes to the search criterion types, you should:
 3. Update the `parseCriterion` method in `$lib/searches.ts` to handle parsing the new criterion types from different formats.
 4. Update the `parseUrlSearchParams`, `parseUrlSearchParams`, `searchCriterionDescriptions`
 5. Update the `generalSearchFilters` function in `$queries/searches.ts` to handle translating the new criterion types into database filters.
+6. May need to update logic in `getSubscriptionWithFiles` which translates subscription criterion into search criterion, and then uses the search filters to get the files for a subscription. This is in `$server/subscriptions.ts`.

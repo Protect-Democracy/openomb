@@ -1,13 +1,8 @@
 // Dependencies
 import { DateTime } from 'luxon';
 import { uniqBy, orderBy, filter, sumBy, isDate } from 'lodash-es';
-import type { filesSelect } from '$schema/files';
+import type { filesSelectWithTafsFootnotes } from '$schema/files';
 import type { tafsSelect } from '$schema/tafs';
-
-// Types
-interface FileWithTafs extends filesSelect {
-  tafs?: tafsSelect[];
-}
 
 /**
  * Format a number
@@ -79,8 +74,11 @@ export function formatDateISO(date?: Date | string | null): string {
 /**
  * Format a file title
  */
-export function formatFileTitle(file: FileWithTafs, highlightTerms?: string[]): string | null {
-  const hasTafs = file?.tafs?.length && file?.tafs?.length > 0;
+export function formatFileTitle(
+  file: filesSelectWithTafsFootnotes,
+  highlightTerms?: string[]
+): string | null {
+  const hasTafs = 'tafs' in file && file?.tafs?.length && file?.tafs?.length > 0;
   let accounts = hasTafs
     ? uniqBy(
         file?.tafs?.map((t) => t.accountTitle),
@@ -193,12 +191,7 @@ export const hasHighlight = function (text?: string): boolean {
 /**
  * Order array of strings by set of search terms
  */
-export const highlightOrder = function (
-  input?: string[] | object[],
-  // TODO:
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  accessor?: string | Function
-): string[] | object[] {
+export const highlightOrder = <T>(input?: T[], accessor?: keyof T | ((item: T) => string)): T[] => {
   // Handle no input
   if (!input) {
     return [];
