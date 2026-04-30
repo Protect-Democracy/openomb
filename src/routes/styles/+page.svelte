@@ -1,5 +1,17 @@
 <script lang="ts">
+  import ArrowDownRight from '$components/icons/ArrowDownRight.svelte';
+  import ArrowLeft from '$components/icons/ArrowLeft.svelte';
+  import Bell from '$components/icons/Bell.svelte';
+  import Check from '$components/icons/Check.svelte';
+  import ChevronDown from '$components/icons/ChevronDown.svelte';
+  import ChevronUp from '$components/icons/ChevronUp.svelte';
+  import Hamburger from '$components/icons/Hamburger.svelte';
+  import MinusSquare from '$components/icons/MinusSquare.svelte';
+  import PlusSquare from '$components/icons/PlusSquare.svelte';
+  import Search from '$components/icons/Search.svelte';
   import Spinner from '$components/icons/Spinner.svelte';
+  import TopRightArrow from '$components/icons/TopRightArrow.svelte';
+  import XSymbol from '$components/icons/XSymbol.svelte';
   import placeholderImage from '$assets/other/placeholder-600.png';
 
   const paletteColors = [
@@ -692,6 +704,41 @@
     </table>
   </div>
 
+  <h2 class="style-section">Links</h2>
+
+  <p>
+    <a href="#!">Default link</a> — color via <code>--color-link</code>, no underline at rest,
+    underline on hover.
+  </p>
+
+  <h3>Modifiers</h3>
+
+  <p>
+    <code>a.like-text</code>: <a class="like-text" href="#!">Looks like body text</a> — overrides the
+    link color to match body text. Use to de-emphasize links in a dense section.
+  </p>
+
+  <p>
+    <code>a.alt</code>: <a class="alt" href="#!">Prominent link</a> — bold with underline at rest, underline
+    removed on hover. Use when links need to stand out at a glance.
+  </p>
+
+  <p>
+    <code>a.subscribe</code> / <code>a.auth</code>:
+    <a class="subscribe" href="#!">Subscription or auth action</a> — applies the blue subscribe color.
+  </p>
+
+  <h3>Link with button spacing</h3>
+
+  <p>
+    <code>a.button.like-link</code> gives a link the padding and display of a button while keeping
+    its link appearance. Useful for consistent spacing when mixing buttons and links in a row. Avoid
+    using <code>a.button</code> alone — links and buttons have different semantic meaning and should look
+    distinct.
+  </p>
+
+  <a class="button like-link" href="#!">a.button.like-link</a>
+
   <h2 class="style-section">Buttons</h2>
 
   <h3>Button elements</h3>
@@ -828,18 +875,6 @@
   <button class="like-link">.like-link</button><br />
   <button class="like-text">.like-text</button><br />
 
-  <h3>Link elements</h3>
-
-  <p>
-    Generally links should not be styled like buttons as button and link have different sematic
-    meaning and should be visually distinct from each other. But using <code
-      >a.button.like-link</code
-    > will look like a link but give spacing like button which can be helpful.
-  </p>
-
-  <a class="button" href="#buttons">a.button</a>
-  <a class="button like-link" href="#buttons">a.button.like-link</a>
-
   <h2 class="style-section">Tags</h2>
 
   <p>
@@ -902,12 +937,6 @@
   <h3>Text modifiers</h3>
 
   <p>
-    <code>a.like-link</code>: <a class="like-text" href="#!">This is text that looks like a link</a>
-    and should be used mostly when there are a lot of links in a section, as links should be consistent
-    and visually distinct from text overall.
-  </p>
-
-  <p>
     <code>.font-small</code>:
     <span class="font-small"
       >It is generally better to use the semantic <code>&lt;small&gt;</code>, but this can be useful
@@ -923,20 +952,133 @@
   <h2 class="style-section">Icons</h2>
 
   <p>
-    Use <code>.inline-icon</code> or <code>.inline-icon-square</code> to place an SVG icon inline
-    with text. Both set <code>width: var(--icon-size-inline)</code> (1.1em) and align vertically to
-    middle. Use <code>.inline-icon-square</code> when the icon also needs an explicit height (e.g. square
-    viewBox icons that don't self-size vertically).
+    Icons are SVG components in <code>src/components/icons/</code>. They render with
+    <code>currentColor</code> and accept any SVG attribute via <code>$$props</code>.
   </p>
 
-  <p>
-    <span class="inline-icon"><Spinner /></span>Text following an <code>.inline-icon</code>
-  </p>
+  <h3>Available icons</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Colors</th>
+        <th>Highlight</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each [{ name: 'ArrowDownRight', component: ArrowDownRight }, { name: 'ArrowLeft', component: ArrowLeft }, { name: 'Bell', component: Bell }, { name: 'Check', component: Check }, { name: 'ChevronDown', component: ChevronDown }, { name: 'ChevronUp', component: ChevronUp }, { name: 'Hamburger', component: Hamburger }, { name: 'MinusSquare', component: MinusSquare }, { name: 'PlusSquare', component: PlusSquare }, { name: 'Search', component: Search }, { name: 'Spinner', component: Spinner }, { name: 'TopRightArrow', component: TopRightArrow }, { name: 'XSymbol', component: XSymbol }] as icon (icon.name)}
+        <tr>
+          <td><code>&lt;{icon.name} /&gt;</code></td>
+          <td>
+            <div class="icon-color-row">
+              <span class="inline-icon-square" style="color: var(--color-text)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-primary)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-subscribe)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-error)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-text-muted)"
+                ><svelte:component this={icon.component} /></span
+              >
+            </div>
+          </td>
+          <td>
+            <div class="icon-color-row">
+              <span class="highlight-icon"><svelte:component this={icon.component} /></span>
+              <span class="highlight-icon primary"><svelte:component this={icon.component} /></span>
+              <span class="highlight-icon subscribe"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="highlight-icon error"><svelte:component this={icon.component} /></span>
+              <span class="highlight-icon alt"><svelte:component this={icon.component} /></span>
+            </div>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+  <h3>Inline use</h3>
 
   <p>
-    <span class="inline-icon-square"><Spinner /></span>Text following an
-    <code>.inline-icon-square</code>
+    Wrap an icon in <code>.inline-icon</code> or <code>.inline-icon-square</code> to place it inline
+    with text at <code>--icon-size-inline</code> (1.1em), vertically centered. Use
+    <code>.inline-icon-square</code> for icons with a square viewBox that need an explicit height to render
+    correctly.
   </p>
+
+  <p><span class="inline-icon"><Spinner /></span>Text with <code>.inline-icon</code></p>
+  <p><span class="inline-icon-square"><Bell /></span>Text with <code>.inline-icon-square</code></p>
+
+  <h3>Highlight icon</h3>
+
+  <p>
+    Use <code>.highlight-icon</code> to display an icon inside a circular badge. The size is
+    controlled by a local <code>--highlight-icon-size</code> variable — the default is
+    <code>--icon-size-inline</code>, and size modifiers reassign it using font-size variables so
+    everything scales proportionally.
+  </p>
+
+  <h4>Colors</h4>
+
+  <p>
+    <span class="highlight-icon"><Bell /></span>
+    <span class="highlight-icon primary"><Bell /></span>
+    <span class="highlight-icon error"><XSymbol /></span>
+    <span class="highlight-icon subscribe"><Bell /></span>
+    <span class="highlight-icon alt"><Check /></span>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Background</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>(default)</td><td><code>--color-green-light</code></td></tr>
+      <tr><td><code>.primary</code></td><td><code>--color-primary</code></td></tr>
+      <tr><td><code>.error</code></td><td><code>--color-error</code></td></tr>
+      <tr><td><code>.subscribe</code></td><td><code>--color-subscribe</code></td></tr>
+      <tr><td><code>.alt</code></td><td><code>--color-alt</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Sizes</h4>
+
+  <p>
+    <span class="highlight-icon small"><Bell /></span>
+    <span class="highlight-icon"><Bell /></span>
+    <span class="highlight-icon medium"><Bell /></span>
+    <span class="highlight-icon large"><Bell /></span>
+    <span class="highlight-icon xlarge"><Bell /></span>
+    <span class="highlight-icon xxlarge"><Bell /></span>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Size variable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>.small</code></td><td><code>--font-size-small</code> (0.8rem)</td></tr>
+      <tr><td>(default)</td><td><code>--icon-size-inline</code> (1.1em)</td></tr>
+      <tr><td><code>.medium</code></td><td><code>--font-size-medium</code> (1.25rem)</td></tr>
+      <tr><td><code>.large</code></td><td><code>--font-size-large</code> (1.5rem)</td></tr>
+      <tr><td><code>.xlarge</code></td><td><code>--font-size-xlarge</code> (2rem)</td></tr>
+      <tr><td><code>.xxlarge</code></td><td><code>--font-size-xxlarge</code> (2.875rem)</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="style-section">Images</h2>
 
@@ -1277,6 +1419,13 @@
   h2.style-section {
     padding-top: 4rem;
     border-bottom: 3px solid var(--color-gray-dark);
+  }
+
+  .icon-color-row {
+    display: flex;
+    gap: var(--spacing-half);
+    align-items: center;
+    flex-wrap: nowrap;
   }
 
   .color-strip {
