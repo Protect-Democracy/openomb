@@ -399,6 +399,19 @@ a.button.small {
   border-radius: var(--border-radius-small);
 }
 
+button.medium,
+input[type='submit'].medium,
+input[type='button'].medium,
+input[type='reset'].medium,
+[role='button'].medium,
+a.button.medium {
+  min-width: calc(11rem);
+
+  &.compact {
+    min-width: auto;
+  }
+}
+
 /* Icon in a button */
 .button-icon {
   display: inline-block;
