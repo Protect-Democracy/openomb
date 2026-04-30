@@ -4,11 +4,14 @@
 
   const paletteColors = [
     'color-white',
+    'color-black',
+    'color-gray-lightest',
     'color-gray-lighter',
     'color-gray-light',
     'color-gray-medium',
     'color-gray-dark',
     'color-gray-darker',
+    'color-off-white',
     'color-green',
     'color-green-light',
     'color-green-dark',
@@ -32,39 +35,97 @@
     'color-blue-darker'
   ];
 
-  const semanticColors = [
-    'color-background',
-    'color-text',
-    'color-text-muted',
-    'color-background-inverse',
-    'color-text-inverse',
-    'color-background-alt',
-    'color-text-alt',
-    'color-primary',
-    'color-primary-text',
-    'color-primary-hover',
-    'color-primary-hover-text',
-    'color-secondary',
-    'color-secondary-text',
-    'color-secondary-border',
-    'color-secondary-hover',
-    'color-secondary-hover-text',
-    'color-secondary-hover-border',
-    'color-alt',
-    'color-alt-text',
-    'color-alt-hover',
-    'color-alt-hover-text',
-    'color-toggle-on',
-    'color-toggle-on-text',
-    'color-toggle-off',
-    'color-toggle-off-text',
-    'color-toggle-hover',
-    'color-toggle-hover-text',
-    'color-highlight',
-    'color-error',
-    'color-disabled',
-    'color-link'
+  const semanticColorGroups = [
+    {
+      name: 'Base',
+      colors: [
+        'color-background',
+        'color-text',
+        'color-text-muted',
+        'color-background-inverse',
+        'color-text-inverse',
+        'color-background-alt',
+        'color-text-alt'
+      ]
+    },
+    {
+      name: 'Primary',
+      colors: [
+        'color-primary',
+        'color-primary-text',
+        'color-primary-hover',
+        'color-primary-hover-text'
+      ]
+    },
+    {
+      name: 'Secondary',
+      colors: [
+        'color-secondary',
+        'color-secondary-text',
+        'color-secondary-border',
+        'color-secondary-hover',
+        'color-secondary-hover-text',
+        'color-secondary-hover-border'
+      ]
+    },
+    {
+      name: 'Previous',
+      colors: [
+        'color-previous',
+        'color-previous-text',
+        'color-previous-hover',
+        'color-previous-hover-text',
+        'color-previous-checked',
+        'color-previous-unchecked'
+      ]
+    },
+    {
+      name: 'Subscribe / Auth',
+      colors: [
+        'color-subscribe-background',
+        'color-subscribe',
+        'color-subscribe-text',
+        'color-subscribe-border',
+        'color-subscribe-hover',
+        'color-subscribe-hover-text',
+        'color-subscribe-hover-border'
+      ]
+    },
+    {
+      name: 'Alt',
+      colors: ['color-alt', 'color-alt-text', 'color-alt-hover', 'color-alt-hover-text']
+    },
+    {
+      name: 'Toggle',
+      colors: [
+        'color-toggle-on',
+        'color-toggle-on-text',
+        'color-toggle-off',
+        'color-toggle-off-text',
+        'color-toggle-hover',
+        'color-toggle-hover-text'
+      ]
+    },
+    {
+      name: 'State',
+      colors: [
+        'color-highlight',
+        'color-error',
+        'color-disabled',
+        'color-link',
+        'color-link-inverse'
+      ]
+    }
   ];
+
+  let toggles = {
+    toggle: true,
+    switchDefault: true,
+    switchAlt: false,
+    switchDefaultSmall: true,
+    switchAltSmall: false,
+    switchPreviousSmall: false
+  };
 </script>
 
 <svelte:head>
@@ -93,35 +154,314 @@
     use the Semantic colors (see below).
   </p>
 
-  {#each paletteColors as colorVariable}
-    <div
-      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
-    >
-      var(--{colorVariable})
-    </div>
-  {/each}
+  <div class="color-strip">
+    {#each paletteColors as colorVariable (colorVariable)}
+      <div class="color-swatch" style="background-color: var(--{colorVariable})">
+        <span class="color-swatch-label">--{colorVariable}</span>
+      </div>
+    {/each}
+  </div>
 
   <h3>Potential palette colors</h3>
 
   <p>Some potential, but unconfirmed palette colors</p>
 
-  {#each potentialColors as colorVariable}
-    <div
-      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
-    >
-      var(--{colorVariable})
-    </div>
-  {/each}
+  <div class="color-strip">
+    {#each potentialColors as colorVariable (colorVariable)}
+      <div class="color-swatch" style="background-color: var(--{colorVariable})">
+        <span class="color-swatch-label">--{colorVariable}</span>
+      </div>
+    {/each}
+  </div>
 
   <h3>Semantic colors</h3>
 
-  {#each semanticColors as colorVariable}
-    <div
-      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
-    >
-      var(--{colorVariable})
+  {#each semanticColorGroups as group (group.name)}
+    <h4>{group.name}</h4>
+    <div class="color-strip">
+      {#each group.colors as colorVariable (colorVariable)}
+        <div class="color-swatch" style="background-color: var(--{colorVariable})">
+          <span class="color-swatch-label">--{colorVariable}</span>
+        </div>
+      {/each}
     </div>
   {/each}
+
+  <h2 class="style-section">Variables</h2>
+
+  <p>
+    Key CSS custom properties defined in <code>src/styles/variables.css</code>. Use these rather
+    than hardcoded values in component styles.
+  </p>
+
+  <h3>Spacing</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Visual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--spacing-tiny</code></td>
+        <td>≈ 0.17rem (spacing / 6)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-tiny);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-thin</code></td>
+        <td>0.125rem (spacing × 2/16; used for borders)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-thin);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-small</code></td>
+        <td>0.25rem (spacing / 4)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-small);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-half</code></td>
+        <td>0.5rem (spacing / 2)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-half);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-smallish</code></td>
+        <td>≈ 0.67rem (spacing × ⅔)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-smallish);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing</code></td>
+        <td>1rem (base unit)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-line-height</code></td>
+        <td>1.5rem (1rem × line-height)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-line-height);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-double</code></td>
+        <td>2rem (spacing × 2)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-double);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-triple</code></td>
+        <td>3rem (spacing × 3)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-triple);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-large</code></td>
+        <td>4rem (2rem on mobile)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-large);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-xlarge</code></td>
+        <td>5rem (3rem on mobile)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-xlarge);"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Font sizes</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--font-size-tiny</code></td>
+        <td>0.5rem</td>
+        <td><span style="font-size: var(--font-size-tiny)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-small</code></td>
+        <td>0.8rem</td>
+        <td><span style="font-size: var(--font-size-small)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-regular</code></td>
+        <td>1rem</td>
+        <td><span style="font-size: var(--font-size-regular)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-slight</code></td>
+        <td>1.15rem</td>
+        <td><span style="font-size: var(--font-size-slight)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-medium</code></td>
+        <td>1.25rem</td>
+        <td><span style="font-size: var(--font-size-medium)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-large</code></td>
+        <td>1.5rem</td>
+        <td><span style="font-size: var(--font-size-large)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-xlarge</code></td>
+        <td>2rem</td>
+        <td><span style="font-size: var(--font-size-xlarge)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-xxlarge</code></td>
+        <td>2.875rem</td>
+        <td><span style="font-size: var(--font-size-xxlarge)">Sample text</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Font weights</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--font-copy-weight-normal</code></td>
+        <td>400</td>
+        <td><span style="font-weight: var(--font-copy-weight-normal)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-copy-weight-bold</code></td>
+        <td>600</td>
+        <td><span style="font-weight: var(--font-copy-weight-bold)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-copy-weight-bolder</code></td>
+        <td>700</td>
+        <td><span style="font-weight: var(--font-copy-weight-bolder)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-heading-weight-normal</code></td>
+        <td>normal</td>
+        <td
+          ><span
+            style="font-weight: var(--font-heading-weight-normal); font-family: var(--font-family-heading)"
+            >Sample heading</span
+          ></td
+        >
+      </tr>
+      <tr>
+        <td><code>--font-heading-weight-bold</code></td>
+        <td>600</td>
+        <td
+          ><span
+            style="font-weight: var(--font-heading-weight-bold); font-family: var(--font-family-heading)"
+            >Sample heading</span
+          ></td
+        >
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Borders &amp; radius</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--border-radius-small</code></td>
+        <td>≈ 0.33rem (spacing × ⅓)</td>
+        <td>
+          <div class="radius-swatch" style="border-radius: var(--border-radius-small);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-radius</code></td>
+        <td>≈ 0.67rem (spacing × ⅔)</td>
+        <td>
+          <div class="radius-swatch" style="border-radius: var(--border-radius);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-radius-full</code></td>
+        <td>9999px (fully rounded)</td>
+        <td>
+          <div class="radius-swatch" style="border-radius: var(--border-radius-full);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-weight-thin</code></td>
+        <td>≈ 0.0625rem (spacing-thin / 2)</td>
+        <td>
+          <div class="border-swatch" style="border-width: var(--border-weight-thin);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-weight</code></td>
+        <td>0.125rem (= spacing-thin)</td>
+        <td>
+          <div class="border-swatch" style="border-width: var(--border-weight);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--drop-shadow</code></td>
+        <td><code>0 6px 12px var(--color-gray-medium)</code></td>
+        <td>
+          <div class="border-swatch" style="box-shadow: var(--drop-shadow); border: none;"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Transitions</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--transition</code></td><td>0.3s</td></tr>
+      <tr><td><code>--transition-fast</code></td><td>0.1s</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Layout</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--line-height</code></td><td>1.5</td></tr>
+      <tr><td><code>--line-height-small</code></td><td>1.2</td></tr>
+      <tr><td><code>--base-font-size</code></td><td>16px (14px on mobile)</td></tr>
+      <tr
+        ><td><code>--copy-width-limit</code></td><td>50em (max-width for paragraph/copy text)</td
+        ></tr
+      >
+      <tr><td><code>--page-width</code></td><td>75rem (standard page container max-width)</td></tr>
+      <tr
+        ><td><code>--page-width-small</code></td><td>62rem (narrower page container max-width)</td
+        ></tr
+      >
+      <tr><td><code>--icon-size-inline</code></td><td>1.1em (used for inline icon sizing)</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="style-section">Containers</h2>
 
@@ -146,6 +486,15 @@
       Use <code>.text-container</code> for a container that constrains the width based on the text size.
     </li>
     <li>Use <code>.center-container</code> to center a container horizontally.</li>
+    <li>
+      Use <code>.full-container</code> for a full-width container with consistent horizontal padding but
+      no max-width constraint.
+    </li>
+    <li>
+      Use <code>.page-message-container</code> for a full-page centered layout with a prominent
+      message box — used for auth flows and confirmation pages. It fills most of the viewport height
+      and centers a <code>.message-box</code> child element.
+    </li>
   </ul>
 
   <h2 class="style-section">Headings</h2>
@@ -227,6 +576,19 @@
     <li>List Item 3</li>
   </ul>
 
+  <h3>No list</h3>
+
+  <p>
+    Inline list with no separator, using <code>ul.no-list</code>. Items are inline-block with no
+    padding, margin, or list styling.
+  </p>
+
+  <ul class="no-list">
+    <li>List Item 1</li>
+    <li>List Item 2</li>
+    <li>List Item 3</li>
+  </ul>
+
   <h2 class="style-section">Horizontal rules</h2>
 
   <p>
@@ -295,6 +657,41 @@
     </tbody>
   </table>
 
+  <h3>Responsive table</h3>
+
+  <p>
+    Wrap a table in <code>.responsive-table</code> to allow horizontal scrolling on small screens.
+  </p>
+
+  <div class="responsive-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+          <th>Column 3</th>
+          <th>Column 4</th>
+          <th>Column 5</th>
+          <th>Column 6</th>
+          <th>Column 7</th>
+          <th>Column 8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cell 1</td>
+          <td>Cell 2</td>
+          <td>Cell 3</td>
+          <td>Cell 4</td>
+          <td>Cell 5</td>
+          <td>Cell 6</td>
+          <td>Cell 7</td>
+          <td>Cell 8</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2 class="style-section">Buttons</h2>
 
   <h3>Button elements</h3>
@@ -305,6 +702,16 @@
   <button disabled>Disabled</button>
   <div role="button">role="button"</div>
 
+  <h3>Contextual styles</h3>
+
+  <p>
+    Use <code>.subscribe</code> and <code>.auth</code> for subscription and authentication actions. They
+    share the same blue visual style.
+  </p>
+
+  <button class="subscribe">Subscribe</button>
+  <button class="auth">Sign in</button>
+
   <h3>Toggles</h3>
 
   <p>
@@ -312,8 +719,9 @@
     <code>aria-pressed="false"</code>.
   </p>
 
-  <button aria-pressed="true">On</button>
-  <button aria-pressed="false">Off</button>
+  <button aria-pressed={toggles.toggle} on:click={() => (toggles.toggle = !toggles.toggle)}>
+    {toggles.toggle ? 'On' : 'Off'}
+  </button>
 
   <h3>Switch</h3>
 
@@ -322,66 +730,56 @@
     <code>aria-checked="false"</code> and <code>role="switch"</code>.
   </p>
 
-  <button class="button-switch" role="switch" aria-checked="true">
+  <button
+    class="button-switch"
+    role="switch"
+    aria-checked={toggles.switchDefault}
+    on:click={() => (toggles.switchDefault = !toggles.switchDefault)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchDefault ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch" role="switch" aria-checked="false">
+  <button
+    class="button-switch alt"
+    role="switch"
+    aria-checked={toggles.switchAlt}
+    on:click={() => (toggles.switchAlt = !toggles.switchAlt)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch alt" role="switch" aria-checked="false">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch alt" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
-  </button>
-
-  <button class="button-switch data" role="switch" aria-checked="false">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch data" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchAlt ? 'On' : 'Off'}</span>
   </button>
 
   <br />
 
-  <button class="button-switch small" role="switch" aria-checked="true">
+  <button
+    class="button-switch small"
+    role="switch"
+    aria-checked={toggles.switchDefaultSmall}
+    on:click={() => (toggles.switchDefaultSmall = !toggles.switchDefaultSmall)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchDefaultSmall ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch small" role="switch" aria-checked="false">
+  <button
+    class="button-switch alt small"
+    role="switch"
+    aria-checked={toggles.switchAltSmall}
+    on:click={() => (toggles.switchAltSmall = !toggles.switchAltSmall)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
+    <span class="sr-only">{toggles.switchAltSmall ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch alt small" role="switch" aria-checked="false">
+  <button
+    class="button-switch previous small"
+    role="switch"
+    aria-checked={toggles.switchPreviousSmall}
+    on:click={() => (toggles.switchPreviousSmall = !toggles.switchPreviousSmall)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch alt small" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
-  </button>
-
-  <button class="button-switch previous small" role="switch" aria-checked="false">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch previous small" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchPreviousSmall ? 'On' : 'Off'}</span>
   </button>
 
   <h3>Icons</h3>
@@ -417,6 +815,7 @@
 
   <button class="compact">.compact</button><br />
   <button class="small">.small</button><br />
+  <button class="medium">.medium</button><br />
   <button class="compact small">.compact.small</button><br />
 
   <h3>Modifiers</h3>
@@ -458,6 +857,12 @@
   <p>
     <strong>Sample output:</strong> <samp>This is sample output from a computer program.</samp>
   </p>
+  <p>
+    <strong>Code alt:</strong> <code class="code-alt">inline code</code> — the
+    <code>.code-alt</code> modifier removes the background and border, using an underline instead. Useful
+    for code references within dense prose where the full code block styling is too heavy.
+  </p>
+
   <h3>Pre-formatted text</h3>
 
   <pre>P R E F O R M A T T E D T E X T
@@ -513,6 +918,24 @@
   <p>
     <code>.muted</code>:
     <span class="muted">muted content</span>.
+  </p>
+
+  <h2 class="style-section">Icons</h2>
+
+  <p>
+    Use <code>.inline-icon</code> or <code>.inline-icon-square</code> to place an SVG icon inline
+    with text. Both set <code>width: var(--icon-size-inline)</code> (1.1em) and align vertically to
+    middle. Use <code>.inline-icon-square</code> when the icon also needs an explicit height (e.g. square
+    viewBox icons that don't self-size vertically).
+  </p>
+
+  <p>
+    <span class="inline-icon"><Spinner /></span>Text following an <code>.inline-icon</code>
+  </p>
+
+  <p>
+    <span class="inline-icon-square"><Spinner /></span>Text following an
+    <code>.inline-icon-square</code>
   </p>
 
   <h2 class="style-section">Images</h2>
@@ -793,6 +1216,60 @@
       <input type="submit" value="Input disabled" disabled />
     </fieldset>
   </form>
+
+  <h2 class="style-section">Utilities</h2>
+
+  <p>Utility classes defined in <code>src/styles/utilities.css</code>.</p>
+
+  <h3>Accessibility</h3>
+
+  <ul>
+    <li>
+      <code>.sr-only</code> — visually hides an element while keeping it accessible to screen
+      readers. Uses <code>position: absolute</code>, so it does not affect page flow.
+    </li>
+    <li>
+      <code>.visually-hidden</code> — similar to <code>.sr-only</code> but the element still participates
+      in normal document flow (collapses to 1×1px).
+    </li>
+    <li>
+      <code>.visually-hidden-focusable</code> — like <code>.visually-hidden</code> but becomes visible
+      when focused. Useful for skip-to-content links.
+    </li>
+  </ul>
+
+  <h3>Font family overrides</h3>
+
+  <p>
+    <code>.font-copy</code>:
+    <span class="font-copy">Forces the copy/body font family (IBM Plex Sans).</span>
+  </p>
+  <p>
+    <code>.font-heading</code>:
+    <span class="font-heading">Forces the heading font family (Domine).</span>
+  </p>
+
+  <h3>Progressive enhancement</h3>
+
+  <p>
+    Classes toggled on <code>&lt;html&gt;</code> by JavaScript to show or hide content depending on
+    JS availability. The parent state is either <code>.has-js</code> or <code>.no-js</code>.
+  </p>
+
+  <ul>
+    <li>
+      <code>.no-js-only-block</code> / <code>.has-js-only-block</code> — toggles
+      <code>display: block</code>
+    </li>
+    <li>
+      <code>.no-js-only-inline</code> / <code>.has-js-only-inline</code> — toggles
+      <code>display: inline-block</code>
+    </li>
+    <li>
+      <code>.no-js-only-table-row</code> / <code>.has-js-only-table-row</code> — toggles
+      <code>display: table-row</code>
+    </li>
+  </ul>
 </div>
 
 <style>
@@ -800,5 +1277,62 @@
   h2.style-section {
     padding-top: 4rem;
     border-bottom: 3px solid var(--color-gray-dark);
+  }
+
+  .color-strip {
+    display: flex;
+    height: 4rem;
+    margin-bottom: var(--spacing);
+  }
+
+  .color-swatch {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    transition: flex var(--transition);
+    cursor: default;
+    min-width: 0;
+  }
+
+  .color-swatch:hover {
+    flex: 5;
+  }
+
+  .color-swatch-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-tiny) var(--spacing-small);
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .color-swatch:hover .color-swatch-label {
+    opacity: 1;
+  }
+
+  .spacing-bar {
+    background-color: var(--color-primary);
+    height: var(--spacing);
+    min-width: 1px;
+  }
+
+  .radius-swatch {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-gray-lighter);
+    border: var(--border-weight) solid var(--color-text);
+  }
+
+  .border-swatch {
+    width: 5rem;
+    height: 2rem;
+    border-style: solid;
+    border-color: var(--color-text);
   }
 </style>
