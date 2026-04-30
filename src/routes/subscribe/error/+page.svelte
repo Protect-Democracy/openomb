@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { derived } from 'svelte/store';
   import { page } from '$app/stores';
-  import LogIn from '$src/components/subscriptions/LogInForm.svelte';
+  import LogInForm from '$src/components/subscriptions/LogInForm.svelte';
+  import XSymbol from '$src/components/icons/XSymbol.svelte';
 
   const url = derived(page, ($page) => $page.url);
 
@@ -38,13 +40,42 @@
   $: error = errorName in errors ? errors[errorName] : errors['default'];
 </script>
 
-<div class="page-container content-container">
-  <h1>{error.heading}</h1>
-  <div class="message">
-    {#each error.message as line (line)}
-      <p>{line}</p>
-    {/each}
+<div class="page-message-container">
+  <div class="message-box">
+    <div class="highlight-icon error"><XSymbol /></div>
+
+    <h1>{error.heading}</h1>
+
+    <p>
+      {#each error.message as line (line)}{line} &nbsp;
+      {/each}
+    </p>
+
+    <p><strong>Try again. Send another email:</strong></p>
+
+    <LogInForm callbackUrl="/subscribe" />
+
+    <small>
+      By logging in and subscribing to email updates you agree to the OpenOMB's <a
+        href={resolve('/privacy-policy')}>privacy policy</a
+      >.
+    </small>
   </div>
-  <h3>Receive a new login email</h3>
-  <LogIn callbackUrl="/subscribe" />
 </div>
+
+<style>
+  .message-box {
+    text-align: center;
+  }
+
+  .highlight-icon {
+    font-size: calc(var(--spacing) * 4);
+    padding: 0.25em;
+  }
+
+  small {
+    display: block;
+    margin-top: calc(var(--spacing) * 3);
+    color: var(--color-text-muted);
+  }
+</style>
