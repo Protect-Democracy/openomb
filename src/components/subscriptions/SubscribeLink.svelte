@@ -341,6 +341,12 @@
     p {
       margin-bottom: 0;
     }
+
+    small {
+      margin-top: var(--spacing);
+      margin-bottom: 0;
+      display: block;
+    }
   }
 
   h3 {
