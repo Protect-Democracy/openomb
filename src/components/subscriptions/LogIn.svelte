@@ -4,9 +4,10 @@
 
   // Props
   export let callbackUrl: string;
+  export let headingClass: string = 'h1';
 </script>
 
-<h2 class="h1">Log in or create an account</h2>
+<h2 class={headingClass}>Log in or create an account</h2>
 
 <p>
   Enter your email address to log in or create a new subscription account. You will be sent a “magic
