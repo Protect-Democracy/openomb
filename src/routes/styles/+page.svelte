@@ -136,7 +136,12 @@
     switchAlt: false,
     switchDefaultSmall: true,
     switchAltSmall: false,
-    switchPreviousSmall: false
+    switchPreviousSmall: false,
+    groupSelected: 0,
+    groupOutlineSelected: 0,
+    outlineToggle: false,
+    outlineSubscribeToggle: false,
+    outlineAltToggle: false
   };
 </script>
 
@@ -759,6 +764,18 @@
   <button class="subscribe">Subscribe</button>
   <button class="auth">Sign in</button>
 
+  <h3>Outline</h3>
+
+  <p>
+    Add <code>.outline</code> to get a transparent background with a colored border and matching text.
+    Hover fills with the solid color. Works with the contextual color classes.
+  </p>
+
+  <button class="outline">Primary outline</button>
+  <button class="subscribe outline">Subscribe outline</button>
+  <button class="auth outline">Auth outline</button>
+  <button class="alt outline">Alt outline</button>
+
   <h3>Toggles</h3>
 
   <p>
@@ -769,6 +786,30 @@
   <button aria-pressed={toggles.toggle} on:click={() => (toggles.toggle = !toggles.toggle)}>
     {toggles.toggle ? 'On' : 'Off'}
   </button>
+
+  <p>
+    Add <code>.outline</code> for a toggle where the off state is outlined and the on state fills in.
+    Works with contextual color classes.
+  </p>
+
+  <button
+    class="outline"
+    aria-pressed={toggles.outlineToggle}
+    on:click={() => (toggles.outlineToggle = !toggles.outlineToggle)}
+    >{toggles.outlineToggle ? 'On' : 'Off'}</button
+  >
+  <button
+    class="subscribe outline"
+    aria-pressed={toggles.outlineSubscribeToggle}
+    on:click={() => (toggles.outlineSubscribeToggle = !toggles.outlineSubscribeToggle)}
+    >{toggles.outlineSubscribeToggle ? 'On' : 'Off'}</button
+  >
+  <button
+    class="alt outline"
+    aria-pressed={toggles.outlineAltToggle}
+    on:click={() => (toggles.outlineAltToggle = !toggles.outlineAltToggle)}
+    >{toggles.outlineAltToggle ? 'On' : 'Off'}</button
+  >
 
   <h3>Switch</h3>
 
@@ -829,6 +870,125 @@
     <span class="sr-only">{toggles.switchPreviousSmall ? 'On' : 'Off'}</span>
   </button>
 
+  <h3>Groups</h3>
+
+  <p>
+    Use <code>[role="group"].button-group</code> to arrange buttons in a connected row. Each group should
+    use a consistent button style; you can mix toggled on/off states and outline variants within a group.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Default</td>
+        <td>
+          <div role="group" aria-label="Default group" class="button-group">
+            <button>First</button>
+            <button>Second</button>
+            <button>Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Outline</td>
+        <td>
+          <div role="group" aria-label="Outline group" class="button-group">
+            <button class="outline">First</button>
+            <button class="outline">Second</button>
+            <button class="outline">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Subscribe outline</td>
+        <td>
+          <div role="group" aria-label="Subscribe outline group" class="button-group">
+            <button class="subscribe outline">First</button>
+            <button class="subscribe outline">Second</button>
+            <button class="subscribe outline">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Alt</td>
+        <td>
+          <div role="group" aria-label="Alt group" class="button-group">
+            <button class="alt">First</button>
+            <button class="alt">Second</button>
+            <button class="alt">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Toggle (single select)</td>
+        <td>
+          <div role="group" aria-label="View options" class="button-group">
+            <button
+              aria-pressed={toggles.groupSelected === 0}
+              on:click={() => (toggles.groupSelected = 0)}>List</button
+            >
+            <button
+              aria-pressed={toggles.groupSelected === 1}
+              on:click={() => (toggles.groupSelected = 1)}>Grid</button
+            >
+            <button
+              aria-pressed={toggles.groupSelected === 2}
+              on:click={() => (toggles.groupSelected = 2)}>Map</button
+            >
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Toggle outline (single select)</td>
+        <td>
+          <div role="group" aria-label="Sort options" class="button-group">
+            <button
+              class="outline"
+              aria-pressed={toggles.groupOutlineSelected === 0}
+              on:click={() => (toggles.groupOutlineSelected = 0)}>Option A</button
+            >
+            <button
+              class="outline"
+              aria-pressed={toggles.groupOutlineSelected === 1}
+              on:click={() => (toggles.groupOutlineSelected = 1)}>Option B</button
+            >
+            <button
+              class="outline"
+              aria-pressed={toggles.groupOutlineSelected === 2}
+              on:click={() => (toggles.groupOutlineSelected = 2)}>Option C</button
+            >
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Small</td>
+        <td>
+          <div role="group" aria-label="Small group" class="button-group">
+            <button class="small">First</button>
+            <button class="small">Second</button>
+            <button class="small">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Compact</td>
+        <td>
+          <div role="group" aria-label="Compact group" class="button-group">
+            <button class="compact">First</button>
+            <button class="compact">Second</button>
+            <button class="compact">Third</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
   <h3>Icons</h3>
 
   <button disabled>
@@ -868,12 +1028,14 @@
   <h3>Modifiers</h3>
 
   <p>
-    Generally, only use these modifiers if they really make sense and are consistent with semantics
-    and the visual system.
+    Generally, only use these modifiers if they make sense semantically. They can be combined with
+    contextual color classes where an explicit compound rule exists.
   </p>
 
   <button class="like-link">.like-link</button><br />
+  <button class="like-link alt">.like-link.alt</button><br />
   <button class="like-text">.like-text</button><br />
+  <button class="alt like-text like-link">.alt.like-text.like-link</button><br />
 
   <h2 class="style-section">Tags</h2>
 

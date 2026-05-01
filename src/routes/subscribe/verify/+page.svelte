@@ -6,7 +6,7 @@
   <div class="message-box">
     <h1>Check your email</h1>
 
-    <p class="callout">A sign-in link has been sent to your email address.</p>
+    <p class="callout-container-large">A sign-in link has been sent to your email address.</p>
 
     <p>Entered the wrong email? <a href={resolve('/subscribe')}>Start over</a></p>
 
@@ -21,11 +21,6 @@
 <style>
   .message-box {
     text-align: center;
-  }
-
-  .callout {
-    background-color: var(--color-off-white);
-    padding: var(--spacing-large);
   }
 
   small {

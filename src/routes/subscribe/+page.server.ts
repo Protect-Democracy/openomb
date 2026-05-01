@@ -10,6 +10,7 @@ import {
   removeUser
 } from '$queries/subscriptions';
 import { subscriptionTypes } from '$config/subscriptions';
+import { parseRequestData } from '$lib/utilities';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
@@ -34,8 +35,8 @@ export const actions = {
     }
 
     // Remove subscription
-    const data = await request.json();
-    if (data.subId) {
+    const data = await parseRequestData(request);
+    if (data?.subId) {
       return await removeSubscriptions(user.email, data.subId);
     }
   },
@@ -47,8 +48,8 @@ export const actions = {
     }
 
     // Update subscription frequency
-    const data = await request.json();
-    if (data.subId && data.frequency) {
+    const data = await parseRequestData(request);
+    if (data?.subId && data?.frequency) {
       return await setSubscriptionFrequency(user.email, data.subId, data.frequency);
     }
   },

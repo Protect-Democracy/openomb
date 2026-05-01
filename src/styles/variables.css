@@ -93,6 +93,7 @@
     'IBM Plex Sans', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji';
   --font-copy-weight-normal: 400;
+  --font-copy-weight-light: 300;
   --font-copy-weight-bold: 600;
   --font-copy-weight-bolder: 700;
 
