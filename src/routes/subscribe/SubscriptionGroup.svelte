@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { capitalize } from 'lodash-es';
+  import { resolve } from '$app/paths';
+  import RemoveAction from '$components/subscriptions/RemoveAction.svelte';
+  import FrequencyAction from '$components/subscriptions/FrequencyAction.svelte';
   import type { subscriptionSelect } from '$schema/subscriptions';
-  import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
 
   export let title: string;
   export let subs: Array<subscriptionSelect>;
@@ -11,36 +12,43 @@
   <tr class="sub-category">
     <th colspan={3}>{title}</th>
   </tr>
-  {#each subs as subscription}
+  {#each subs as subscription (subscription.id)}
     <tr>
       <td class="sub-link">
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        <a href={subscription.itemLink}>{@html subscription.description}</a>
+        <a href={resolve(subscription.itemLink)}>{@html subscription.description}</a>
       </td>
 
       <td class="sub-frequency">
-        <label class="sr-only" for={`frequency-${subscription.id}`}
-          >Set Email Frequency for {subscription.description}</label
+        <div
+          class="button-group"
+          role="group"
+          aria-label={`Update subscription frequency for ${subscription.description}`}
         >
-        <CheckboxButtons
-          id={`frequency-${subscription.id}`}
-          name={`frequency-${subscription.id}`}
-          buttonClass="subscribe"
-          options={['daily', 'weekly']}
-          formatOptionLabel={capitalize}
-          value={subscription.frequency}
-        />
+          <FrequencyAction
+            frequency="daily"
+            enabled={subscription.frequency === 'daily'}
+            subId={subscription.id}
+            title="Daily"
+            subDescription={subscription.description}
+            buttonProps={{ class: 'subscribe outline small' }}
+          />
+          <FrequencyAction
+            frequency="weekly"
+            enabled={subscription.frequency === 'weekly'}
+            subId={subscription.id}
+            title="Weekly"
+            subDescription={subscription.description}
+            buttonProps={{ class: 'subscribe outline small' }}
+          />
+        </div>
       </td>
 
       <td class="sub-remove">
-        <label class="sr-only" for={`remove-${subscription.id}`}
-          >Remove Subscription to {subscription.description}</label
-        >
-        <input
-          type="checkbox"
-          id={`remove-${subscription.id}`}
-          name="remove"
-          value={subscription.id}
+        <RemoveAction
+          subId={subscription.id}
+          subDescription={subscription.description}
+          buttonProps={{ class: 'like-link like-text alt small' }}
         />
       </td>
     </tr>
@@ -48,15 +56,27 @@
 {/if}
 
 <style>
+  td,
+  th {
+    vertical-align: top;
+    padding: var(--spacing);
+  }
+
   .sub-category {
-    font-size: var(--font-size-small);
     font-weight: var(--font-copy-weight-bold);
     background-color: var(--color-gray-lightest);
     color: var(--color-text-alt);
   }
 
-  .sub-remove,
   .sub-frequency {
-    text-align: center;
+    min-width: calc(var(--spacing) * 12);
+  }
+
+  .sub-remove {
+    text-align: right;
+  }
+
+  .button-group {
+    margin-bottom: 0;
   }
 </style>

@@ -146,3 +146,31 @@ export function dateForCacheInvalidation() {
 export function isSpendPlanFile(file: filesSelect): boolean {
   return file.fileType === apportionmentTypeSpendPlan;
 }
+
+/**
+ * Parse request data that could be either JSON or form data.
+ */
+export async function parseRequestData(request: Request): Promise<Record<string, unknown> | null> {
+  const contentType = request.headers.get('content-type') || '';
+
+  // Handle with header or with a starting '{'
+  if (
+    contentType.includes('application/json') ||
+    (await request.clone().text()).trim().startsWith('{')
+  ) {
+    // Returns a JavaScript object
+    return await request.json();
+  }
+
+  if (
+    contentType.includes('multipart/form-data') ||
+    contentType.includes('application/x-www-form-urlencoded')
+  ) {
+    // Returns a FormData object
+    const formData = await request.formData();
+    // Convert to a plain object for easier manipulation
+    return Object.fromEntries(formData.entries());
+  }
+
+  return null;
+}

@@ -1,48 +1,90 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { filter } from 'lodash-es';
-  import LogIn from '$components/subscriptions/LogIn.svelte';
+  import { filter, sortBy } from 'lodash-es';
   import LogOut from '$components/subscriptions/LogOut.svelte';
+  import LogIn from '$src/components/subscriptions/LogIn.svelte';
   import SubscriptionGroup from './SubscriptionGroup.svelte';
 
   export let data: PageData;
   export let form;
   $: ({ userSubscriptions, user } = data);
 
-  $: folderSubs = filter(userSubscriptions, (sub) => sub.type === 'folder');
-  $: tafsSubs = filter(userSubscriptions, (sub) => sub.type === 'tafs');
-  $: agencySubs = filter(userSubscriptions, (sub) => sub.type === 'agency');
-  $: bureauSubs = filter(userSubscriptions, (sub) => sub.type === 'bureau');
-  $: accountSubs = filter(userSubscriptions, (sub) => sub.type === 'account');
-  $: searchSubs = filter(userSubscriptions, (sub) => sub.type === 'search');
+  $: folderSubs = sortBy(
+    filter(userSubscriptions, (sub) => sub.type === 'folder'),
+    'description'
+  );
+  $: tafsSubs = sortBy(
+    filter(userSubscriptions, (sub) => sub.type === 'tafs'),
+    'description'
+  );
+  $: agencySubs = sortBy(
+    filter(userSubscriptions, (sub) => sub.type === 'agency'),
+    'description'
+  );
+  $: bureauSubs = sortBy(
+    filter(userSubscriptions, (sub) => sub.type === 'bureau'),
+    'description'
+  );
+  $: accountSubs = sortBy(
+    filter(userSubscriptions, (sub) => sub.type === 'account'),
+    'description'
+  );
+  $: searchSubs = sortBy(
+    filter(userSubscriptions, (sub) => sub.type === 'search'),
+    'description'
+  );
 </script>
 
-<div class="page-container">
-  {#if user}
-    <section class="content-container">
-      <h1>Subscriptions</h1>
+<div class="background-container" class:no-user={!user}>
+  <div class="page-container">
+    {#if user}
+      <section class="content-container text-container">
+        <h1>Your Account</h1>
 
-      <p>
-        Adjust how frequently you are sent updates about a subscription or unsubscribe from the
-        provided entry entirely. Any adjustments will be saved when the form is submitted.
-      </p>
+        <section class="callout-container account-info">
+          <div class="info">
+            <span>Logged in as:</span>
+            <span>{user.email}</span>
+          </div>
 
-      {#if form?.success}
-        <p class="form-success">Subscriptions saved successfully!</p>
-      {:else if form?.error}
-        <p class="form-error">
-          There was an error saving your subscription data. Please try again or, if problems
-          persist, contact support@openomb.org.
+          <div class="actions">
+            <LogOut
+              callbackUrl="/subscribe"
+              buttonProps={{
+                class: 'like-link like-text alt'
+              }}
+            />
+          </div>
+        </section>
+
+        <p class="account-info-help">
+          <strong>Need help?</strong> Email
+          <a href="mailto:contact@openomb.org">contact@openomb.org</a> for questions, support, or to report
+          issues.
         </p>
-      {/if}
 
-      <form method="POST" action="/subscribe?/manage">
+        <h2 class="h2-alt">Manage Subscriptions</h2>
+
+        <p>
+          Adjust how frequently you are sent email updates about a data feed or remove a data feed
+          from your updates. Your adjustments will be saved automatically during each session.
+        </p>
+
+        {#if form?.success}
+          <p class="form-success">Subscriptions saved successfully!</p>
+        {:else if form?.error}
+          <p class="form-error">
+            There was an error saving your subscription data. Please try again or, if problems
+            persist, contact support@openomb.org.
+          </p>
+        {/if}
+
         <table>
           <thead>
             <tr>
               <td class="sub-link">Subscription</td>
               <td class="sub-frequency">Email Frequency</td>
-              <td class="sub-remove">Remove Subscription?</td>
+              <td class="sub-remove sr-only">Remove Subscription</td>
             </tr>
           </thead>
 
@@ -68,56 +110,67 @@
             </tbody>
           {/if}
         </table>
+      </section>
 
-        <div class="actions">
-          <input class="subscribe" type="submit" value="Modify Subscriptions" />
+      <section class="content-container">
+        <h2>Account management</h2>
+
+        <div class="page-section">
+          <h3>Log out</h3>
+
+          <p>End the current user session tied to this email address.</p>
+          <LogOut callbackUrl="/subscribe" />
         </div>
-      </form>
-    </section>
 
-    <section class="content-container">
-      <h2>Account management</h2>
+        <div class="page-section">
+          <h3>Delete account</h3>
 
-      <div class="page-section">
-        <h3>Log out</h3>
+          <p>
+            <strong>Warning: this action cannot be undone.</strong> Delete this email address and all
+            associated data from the website. This will destroy all subscriptions associated with the
+            current email. You will be able to re-subscribe in the future.
+          </p>
 
-        <p>End the current user session tied to this email address.</p>
-        <LogOut callbackUrl="/subscribe" />
-      </div>
-
-      <div class="page-section">
-        <h3>Delete account</h3>
-
-        <p>
-          <strong>Warning: this action cannot be undone.</strong> Delete this email address and all associated
-          data from the website. This will destroy all subscriptions associated with the current email.
-          You will be able to re-subscribe in the future.
-        </p>
-
-        <form method="POST" action="/subscribe?/deactivate">
-          <button class="auth">Delete Account & Data</button>
-        </form>
-      </div>
-    </section>
-  {:else}
-    <section class="content-container">
-      <h1>Login</h1>
-
-      <p>
-        Log in using your email address; you will be sent a "magic link" that will log you into the
-        site. Once logged in, you can subscribe to different feeds of data. By logging in or
-        subscribing to updates, you agree to the <a href="/privacy-policy">OpenOMB privacy policy</a
-        >.
-      </p>
-
-      <LogIn callbackUrl="/subscribe" />
-    </section>
-  {/if}
+          <form method="POST" action="/subscribe?/deactivate">
+            <button class="auth">Delete Account & Data</button>
+          </form>
+        </div>
+      </section>
+    {:else}
+      <section class="page-message-container">
+        <div class="message-box">
+          <LogIn callbackUrl="/subscribe" />
+        </div>
+      </section>
+    {/if}
+  </div>
 </div>
 
 <style>
   .content-container:has(+ .content-container) {
     margin-bottom: 0;
+  }
+
+  .account-info {
+    display: flex;
+    gap: var(--spacing-double);
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--spacing);
+
+    .info span {
+      display: block;
+    }
+
+    .info span:first-child {
+      font-size: var(--font-size-slight);
+      font-weight: var(--font-copy-weight-bold);
+      margin-bottom: var(--spacing-half);
+    }
+  }
+
+  .account-info-help {
+    margin-bottom: var(--spacing-large);
   }
 
   .form-success {
@@ -134,9 +187,16 @@
     margin-bottom: var(--spacing-double);
   }
 
-  .sub-remove,
-  .sub-frequency {
-    text-align: center;
+  thead {
+    font-size: var(--font-size-small);
+    color: var(--color-text-muted);
+    font-weight: var(--font-copy-weight-light);
+    text-transform: uppercase;
+
+    td {
+      vertical-align: bottom;
+      padding: var(--spacing);
+    }
   }
 
   @media (max-width: 768px) {
@@ -144,5 +204,11 @@
       flex-direction: column;
       row-gap: var(--spacing-double);
     }
+  }
+
+  .background-container.no-user {
+    padding-top: var(--spacing-triple);
+    padding-bottom: var(--spacing-triple);
+    background-color: var(--color-subscribe-background);
   }
 </style>

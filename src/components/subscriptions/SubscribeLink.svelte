@@ -20,7 +20,7 @@
   import { onMount } from 'svelte';
   import { afterNavigate } from '$app/navigation';
   import { deserialize } from '$app/forms';
-  import { subscribeFeatureEnabled } from '$config/subscriptions';
+  import { resolve } from '$app/paths';
   import {
     clientGetUser,
     clientGetSubscriptionById,
@@ -28,7 +28,10 @@
   } from '$lib/users';
   import { parseUrlSearchParams } from '$lib/searches';
   import Spinner from '$components/icons/Spinner.svelte';
+  import Bell from '$components/icons/Bell.svelte';
+  import Check from '$components/icons/Check.svelte';
   import LogIn from './LogIn.svelte';
+  import Dialog from '$components/dialog/Dialog.svelte';
 
   // Types
   import type { User, Subscription } from '$lib/users';
@@ -52,8 +55,6 @@
   export let url: URL | undefined = undefined;
   // Existing subscription as determined by the server on page load
   export let existingSubscription: subscriptionSelect | undefined | null = undefined;
-  export let hideText = false;
-  export let overrideFeatureFlag = false;
 
   // State
   // Subscription for the current search, if it exists.  This could change if the page
@@ -228,120 +229,149 @@
   }
 </script>
 
-{#if overrideFeatureFlag || subscribeFeatureEnabled || user}
-  <aside class:variant-small={variant === 'small'}>
-    <div class="subscribe-action">
-      {#if !hideText}
-        <p class:font-small={variant === 'small'}>
-          {#if hasSubscription}
-            {#if searchSubscriptionType}
-              You are receiving email updates when new files are approved matching this search.
-            {:else}
-              You are subscribed to receive email updates when new files are approved for <em
-                >{subItemFormatted || `this ${subType}`}</em
-              >.
-            {/if}
+<aside class:variant-small={variant === 'small'}>
+  {#if user}
+    <div class="subscribe-description">
+      <h3 class="h3-alt">
+        {#if hasSubscription}
+          <span class="icon icon-check"><Check /></span> You are Subscribed to Updates
+        {:else}
+          <span class="icon"><Bell /></span> Follow Updates
+        {/if}
+      </h3>
+
+      <p>
+        {#if hasSubscription}
+          {#if searchSubscriptionType}
+            You are signed up for email updates when new files match this search.
           {:else}
-            {#if searchSubscriptionType}
-              Receive email updates when new files are approved matching this search.
-            {:else}
-              Receive email updates when new files are approved for <em
-                >{subItemFormatted || `this ${subType}`}</em
-              >.
-            {/if}
-
-            <br />
-            By logging in or subscribing to updates, you agree to the
-            <a href="/privacy-policy">OpenOMB privacy policy</a>.
+            You are signed up for email updates when new files are approved for <strong
+              >{subItemFormatted || `this ${subType}`}</strong
+            >.
           {/if}
-        </p>
-      {/if}
+        {:else if searchSubscriptionType}
+          Receive email updates when new files are approved matching this search.
+        {:else}
+          Receive email updates when new files are approved for <strong
+            >{subItemFormatted || `this ${subType}`}</strong
+          >.
+        {/if}
+      </p>
+    </div>
 
-      {#if user}
-        <div class="user-actions">
-          <div class="has-js-only-block">
-            <button
-              class="button compact subscribe"
-              class:small={variant === 'small'}
-              on:click={hasSubscription ? unsubscribe : subscribe}
-              disabled={loading}
-              title={hasSubscription
-                ? `Unsubscribe from email updates for approved files`
-                : `Subscribe to email updates for approved files`}
-            >
-              {#if loading}
-                <span class="button-icon"><Spinner /></span>
-              {/if}
-              {hasSubscription ? 'Unsubscribe' : 'Subscribe'}
-            </button>
-          </div>
+    <div class="user-actions">
+      <button
+        class="medium subscribe"
+        class:compact={variant === 'small'}
+        on:click={hasSubscription ? unsubscribe : subscribe}
+        disabled={loading}
+        title={hasSubscription
+          ? `Unsubscribe from email updates for approved files`
+          : `Subscribe to email updates for approved files`}
+      >
+        {#if loading}
+          <span class="button-icon"><Spinner /></span>
+        {/if}
+        {hasSubscription ? 'Unsubscribe' : 'Subscribe'}
+      </button>
 
-          <div class="no-js-only-block">
-            {#if searchSubscriptionType}
-              {#if hasSubscription}
-                <a
-                  class="button compact subscribe"
-                  class:small={variant === 'small'}
-                  href={`/subscribe/search/${hasSubscription.itemId}/remove`}>Unsubscribe</a
-                >
-              {:else if url}
-                <a
-                  class="button compact subscribe"
-                  class:small={variant === 'small'}
-                  href={`/subscribe/search?${url.searchParams.toString()}`}>Subscribe</a
-                >
-              {/if}
-            {:else if hasSubscription}
-              <a
-                class="button compact subscribe"
-                class:small={variant === 'small'}
-                href={`/subscribe/${subType}/${subItemId}/remove`}>Unsubscribe</a
-              >
-            {:else}
-              <a class="button compact subscribe" href={`/subscribe/${subType}/${subItemId}`}
-                >Subscribe</a
-              >
-            {/if}
-          </div>
+      <div class="manage-subscriptions">
+        <a href={resolve('/subscribe')} class="subscribe">Manage subscriptions</a>
+      </div>
 
-          <div class="manage-subscriptions">
-            <a href="/subscribe" class="subscribe font-small">Manage all subscriptions</a>
-          </div>
-
-          {#if error}
-            <p class="error color-error font-small">An error occurred. Please try again.</p>
-          {/if}
-        </div>
-      {:else if searchSubscriptionType && url}
-        <LogIn
-          variant={variant || undefined}
-          callbackUrl={`/subscribe/search?${url.searchParams.toString()}`}
-          action="Subscribe"
-        />
-      {:else}
-        <LogIn
-          variant={variant || undefined}
-          callbackUrl={`/subscribe/${subType}/${subItemId}`}
-          action="Subscribe"
-        />
+      {#if error}
+        <p class="error color-error font-small">An error occurred. Please try again.</p>
       {/if}
     </div>
-  </aside>
-{/if}
+  {:else}
+    <div class="subscribe-description">
+      <h3 class="h3-alt"><span class="icon"><Bell /></span> Follow Updates</h3>
+
+      <p>
+        {#if searchSubscriptionType}
+          Receive email updates when new files are approved matching this search.
+        {:else}
+          Receive email updates when new files are approved for <strong
+            >{subItemFormatted || `this ${subType}`}</strong
+          >.
+        {/if}
+      </p>
+
+      <small
+        >By logging in or subscribing to updates, you agree to the
+        <a href={resolve('/privacy-policy')}>OpenOMB privacy policy</a>.</small
+      >
+    </div>
+
+    <div class="user-actions">
+      <Dialog triggerProps={{ class: 'subscribe medium' }}>
+        <span slot="trigger">Log In to Subscribe</span>
+        <div slot="content">
+          <LogIn
+            callbackUrl={searchSubscriptionType && url
+              ? resolve(`/subscribe/search?${url.searchParams.toString()}`)
+              : resolve(`/subscribe/${subType}/${subItemId}`)}
+          />
+        </div>
+      </Dialog>
+    </div>
+  {/if}
+</aside>
 
 <style>
   aside {
     background-color: var(--color-subscribe-background);
-    padding: var(--spacing);
+    padding: calc(var(--spacing) * 2);
     margin-bottom: var(--spacing);
+    max-width: var(--page-width-small);
+    display: flex;
+    gap: calc(var(--spacing) * 3);
+    justify-content: space-between;
+    align-items: center;
+
+    &.variant-small {
+      padding: var(--spacing);
+      gap: calc(var(--spacing) * 2);
+    }
   }
 
-  button {
-    margin: 0;
+  .subscribe-description {
+    max-width: 75%;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    small {
+      margin-top: var(--spacing);
+      margin-bottom: 0;
+      display: block;
+    }
   }
 
-  .manage-subscriptions {
-    margin: 0;
+  h3 {
+    font-size: var(--font-size-medium);
+    margin-top: 0;
+    padding-top: 0;
+    font-weight: var(--font-copy-weight-bold);
+
+    .icon {
+      display: inline-block;
+      vertical-align: middle;
+      width: 1.5em;
+      height: 1.5em;
+      background-color: var(--color-green-light);
+      color: var(--color-white);
+      border-radius: var(--border-radius-full);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: var(--spacing-half);
+    }
+  }
+
+  .icon-check {
+    padding: 0.35em;
   }
 
   .error {
@@ -351,7 +381,27 @@
 
   .user-actions {
     display: flex;
-    column-gap: var(--spacing);
+    gap: var(--spacing-half);
     align-items: center;
+    flex-direction: column;
+
+    .variant-small & {
+      padding-top: 0;
+    }
+  }
+
+  .manage-subscriptions a {
+    font-weight: bold;
+    text-decoration: underline;
+    display: block;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    .variant-small & {
+      font-weight: normal;
+      font-size: var(--font-size-small);
+    }
   }
 </style>

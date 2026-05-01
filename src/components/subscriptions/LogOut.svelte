@@ -11,6 +11,7 @@
   // Props
   export let callbackUrl;
   export let action = 'Log Out';
+  export let buttonProps = {};
 </script>
 
 <!-- Form setup copied from auth.js's sveltekit component -->
@@ -20,5 +21,5 @@
   <input type="hidden" name="csrfToken" />
   <input type="hidden" name="providerId" value="email" />
   <input type="hidden" name="callbackUrl" value={callbackUrl} />
-  <button class="auth" type="submit">{action}</button>
+  <button class="auth" type="submit" {...buttonProps}>{action}</button>
 </form>

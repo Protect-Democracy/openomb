@@ -181,8 +181,12 @@
             ]}
           />
         </li>
-        <li><a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a></li>
-        <li><a class:active={$url.pathname === '/about'} href="/about">About</a></li>
+        <li>
+          <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
+        </li>
+        <li>
+          <a class:active={$url.pathname === '/about'} href="/about">About</a>
+        </li>
 
         <UserWrapper>
           <li class="account-link">
@@ -267,12 +271,24 @@
     color: var(--color-text);
     word-break: normal;
   }
+
   nav {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
     padding: var(--spacing-double) 0;
+
+    /*
+    <<<<<<< HEAD
+    align-content: center;
+    padding: var(--spacing-double) 0;
+    padding: var(--spacing-double) 0;
+=======
+    align-items: center;
+    padding: var(--spacing-double) 0;
+>>>>>>> main
+*/
 
     ul {
       display: flex;
@@ -286,6 +302,12 @@
     li {
       margin-left: var(--spacing-double);
       padding: 0;
+
+      @media (max-width: 768px) {
+        & {
+          margin-left: var(--spacing);
+        }
+      }
     }
 
     a {

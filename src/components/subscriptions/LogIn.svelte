@@ -1,50 +1,46 @@
-<!--
-  Auth.js Login Component
-
-  Note: This was copied from the component within Auth.js's sveltekit library.
-  Their sign-in does not allow for inline functionality
-
-  Params
-    - callbackUrl: Url to redirect the user to once they've signed in
-    - action: Text to use on login button (defaults to Authenticate)
-  Slots
-    None
--->
 <script lang="ts">
+  import LogInForm from './LogInForm.svelte';
+  import { resolve } from '$app/paths';
+
   // Props
-  export let variant: 'small' | 'full' = 'full';
-  export let callbackUrl;
-  export let action = 'Send link';
+  export let callbackUrl: string;
+  export let headingClass: string = 'h1';
 </script>
 
-<form class="login-form" action="/auth/signin/http-email" method="POST">
-  <input type="hidden" name="csrfToken" />
-  <input type="hidden" name="providerId" value="email" />
-  <input type="hidden" name="callbackUrl" value={callbackUrl} />
-  <label for="input-email-for-http-email-provider" class="sr-only">Email</label>
+<h2 class={headingClass}>Log in or create an account</h2>
 
-  <input
-    id="input-email-for-http-email-provider"
-    class:compact={variant === 'small'}
-    class:small={variant === 'small'}
-    type="email"
-    name="email"
-    placeholder="email@example.com"
-    required
-  />
+<p>
+  Enter your email address to log in or create a new subscription account. You will be sent a “magic
+  link” with your account email to log in, enabling you to subscribe to updates for various feeds.
+</p>
 
-  <button
-    class="subscribe compact"
-    class:small={variant === 'small'}
-    id="submitButton"
-    type="submit"
-    tabindex="0">{action}</button
-  >
-</form>
+<LogInForm {callbackUrl} />
+
+<small>
+  By logging in and subscribing to email updates you agree to the OpenOMB's <a
+    href={resolve('/privacy-policy')}>privacy policy</a
+  >.
+</small>
 
 <style>
-  .login-form {
-    display: flex;
-    column-gap: var(--spacing-half);
+  h2 {
+    text-align: center;
+    padding-top: 0;
+    margin-top: 0;
+  }
+
+  p {
+    margin-bottom: var(--spacing-double);
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    max-width: calc(var(--copy-width-limit) - var(--spacing-double));
+  }
+
+  small {
+    display: block;
+    text-align: center;
+    margin-top: calc(var(--spacing) * 3);
+    color: var(--color-text-muted);
   }
 </style>

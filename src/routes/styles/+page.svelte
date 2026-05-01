@@ -1,14 +1,29 @@
 <script lang="ts">
+  import ArrowDownRight from '$components/icons/ArrowDownRight.svelte';
+  import ArrowLeft from '$components/icons/ArrowLeft.svelte';
+  import Bell from '$components/icons/Bell.svelte';
+  import Check from '$components/icons/Check.svelte';
+  import ChevronDown from '$components/icons/ChevronDown.svelte';
+  import ChevronUp from '$components/icons/ChevronUp.svelte';
+  import Hamburger from '$components/icons/Hamburger.svelte';
+  import MinusSquare from '$components/icons/MinusSquare.svelte';
+  import PlusSquare from '$components/icons/PlusSquare.svelte';
+  import Search from '$components/icons/Search.svelte';
   import Spinner from '$components/icons/Spinner.svelte';
+  import TopRightArrow from '$components/icons/TopRightArrow.svelte';
+  import XSymbol from '$components/icons/XSymbol.svelte';
   import placeholderImage from '$assets/other/placeholder-600.png';
 
   const paletteColors = [
     'color-white',
+    'color-black',
+    'color-gray-lightest',
     'color-gray-lighter',
     'color-gray-light',
     'color-gray-medium',
     'color-gray-dark',
     'color-gray-darker',
+    'color-off-white',
     'color-green',
     'color-green-light',
     'color-green-dark',
@@ -32,39 +47,102 @@
     'color-blue-darker'
   ];
 
-  const semanticColors = [
-    'color-background',
-    'color-text',
-    'color-text-muted',
-    'color-background-inverse',
-    'color-text-inverse',
-    'color-background-alt',
-    'color-text-alt',
-    'color-primary',
-    'color-primary-text',
-    'color-primary-hover',
-    'color-primary-hover-text',
-    'color-secondary',
-    'color-secondary-text',
-    'color-secondary-border',
-    'color-secondary-hover',
-    'color-secondary-hover-text',
-    'color-secondary-hover-border',
-    'color-alt',
-    'color-alt-text',
-    'color-alt-hover',
-    'color-alt-hover-text',
-    'color-toggle-on',
-    'color-toggle-on-text',
-    'color-toggle-off',
-    'color-toggle-off-text',
-    'color-toggle-hover',
-    'color-toggle-hover-text',
-    'color-highlight',
-    'color-error',
-    'color-disabled',
-    'color-link'
+  const semanticColorGroups = [
+    {
+      name: 'Base',
+      colors: [
+        'color-background',
+        'color-text',
+        'color-text-muted',
+        'color-background-inverse',
+        'color-text-inverse',
+        'color-background-alt',
+        'color-text-alt'
+      ]
+    },
+    {
+      name: 'Primary',
+      colors: [
+        'color-primary',
+        'color-primary-text',
+        'color-primary-hover',
+        'color-primary-hover-text'
+      ]
+    },
+    {
+      name: 'Secondary',
+      colors: [
+        'color-secondary',
+        'color-secondary-text',
+        'color-secondary-border',
+        'color-secondary-hover',
+        'color-secondary-hover-text',
+        'color-secondary-hover-border'
+      ]
+    },
+    {
+      name: 'Previous',
+      colors: [
+        'color-previous',
+        'color-previous-text',
+        'color-previous-hover',
+        'color-previous-hover-text',
+        'color-previous-checked',
+        'color-previous-unchecked'
+      ]
+    },
+    {
+      name: 'Subscribe / Auth',
+      colors: [
+        'color-subscribe-background',
+        'color-subscribe',
+        'color-subscribe-text',
+        'color-subscribe-border',
+        'color-subscribe-hover',
+        'color-subscribe-hover-text',
+        'color-subscribe-hover-border'
+      ]
+    },
+    {
+      name: 'Alt',
+      colors: ['color-alt', 'color-alt-text', 'color-alt-hover', 'color-alt-hover-text']
+    },
+    {
+      name: 'Toggle',
+      colors: [
+        'color-toggle-on',
+        'color-toggle-on-text',
+        'color-toggle-off',
+        'color-toggle-off-text',
+        'color-toggle-hover',
+        'color-toggle-hover-text'
+      ]
+    },
+    {
+      name: 'State',
+      colors: [
+        'color-highlight',
+        'color-error',
+        'color-disabled',
+        'color-link',
+        'color-link-inverse'
+      ]
+    }
   ];
+
+  let toggles = {
+    toggle: true,
+    switchDefault: true,
+    switchAlt: false,
+    switchDefaultSmall: true,
+    switchAltSmall: false,
+    switchPreviousSmall: false,
+    groupSelected: 0,
+    groupOutlineSelected: 0,
+    outlineToggle: false,
+    outlineSubscribeToggle: false,
+    outlineAltToggle: false
+  };
 </script>
 
 <svelte:head>
@@ -93,35 +171,314 @@
     use the Semantic colors (see below).
   </p>
 
-  {#each paletteColors as colorVariable}
-    <div
-      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
-    >
-      var(--{colorVariable})
-    </div>
-  {/each}
+  <div class="color-strip">
+    {#each paletteColors as colorVariable (colorVariable)}
+      <div class="color-swatch" style="background-color: var(--{colorVariable})">
+        <span class="color-swatch-label">--{colorVariable}</span>
+      </div>
+    {/each}
+  </div>
 
   <h3>Potential palette colors</h3>
 
   <p>Some potential, but unconfirmed palette colors</p>
 
-  {#each potentialColors as colorVariable}
-    <div
-      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
-    >
-      var(--{colorVariable})
-    </div>
-  {/each}
+  <div class="color-strip">
+    {#each potentialColors as colorVariable (colorVariable)}
+      <div class="color-swatch" style="background-color: var(--{colorVariable})">
+        <span class="color-swatch-label">--{colorVariable}</span>
+      </div>
+    {/each}
+  </div>
 
   <h3>Semantic colors</h3>
 
-  {#each semanticColors as colorVariable}
-    <div
-      style="padding: var(--spacing); background-color: var(--{colorVariable}); border: 1px dashed #565656"
-    >
-      var(--{colorVariable})
+  {#each semanticColorGroups as group (group.name)}
+    <h4>{group.name}</h4>
+    <div class="color-strip">
+      {#each group.colors as colorVariable (colorVariable)}
+        <div class="color-swatch" style="background-color: var(--{colorVariable})">
+          <span class="color-swatch-label">--{colorVariable}</span>
+        </div>
+      {/each}
     </div>
   {/each}
+
+  <h2 class="style-section">Variables</h2>
+
+  <p>
+    Key CSS custom properties defined in <code>src/styles/variables.css</code>. Use these rather
+    than hardcoded values in component styles.
+  </p>
+
+  <h3>Spacing</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Visual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--spacing-tiny</code></td>
+        <td>≈ 0.17rem (spacing / 6)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-tiny);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-thin</code></td>
+        <td>0.125rem (spacing × 2/16; used for borders)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-thin);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-small</code></td>
+        <td>0.25rem (spacing / 4)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-small);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-half</code></td>
+        <td>0.5rem (spacing / 2)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-half);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-smallish</code></td>
+        <td>≈ 0.67rem (spacing × ⅔)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-smallish);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing</code></td>
+        <td>1rem (base unit)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-line-height</code></td>
+        <td>1.5rem (1rem × line-height)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-line-height);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-double</code></td>
+        <td>2rem (spacing × 2)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-double);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-triple</code></td>
+        <td>3rem (spacing × 3)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-triple);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-large</code></td>
+        <td>4rem (2rem on mobile)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-large);"></div></td>
+      </tr>
+      <tr>
+        <td><code>--spacing-xlarge</code></td>
+        <td>5rem (3rem on mobile)</td>
+        <td><div class="spacing-bar" style="width: var(--spacing-xlarge);"></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Font sizes</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--font-size-tiny</code></td>
+        <td>0.5rem</td>
+        <td><span style="font-size: var(--font-size-tiny)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-small</code></td>
+        <td>0.8rem</td>
+        <td><span style="font-size: var(--font-size-small)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-regular</code></td>
+        <td>1rem</td>
+        <td><span style="font-size: var(--font-size-regular)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-slight</code></td>
+        <td>1.15rem</td>
+        <td><span style="font-size: var(--font-size-slight)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-medium</code></td>
+        <td>1.25rem</td>
+        <td><span style="font-size: var(--font-size-medium)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-large</code></td>
+        <td>1.5rem</td>
+        <td><span style="font-size: var(--font-size-large)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-xlarge</code></td>
+        <td>2rem</td>
+        <td><span style="font-size: var(--font-size-xlarge)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-size-xxlarge</code></td>
+        <td>2.875rem</td>
+        <td><span style="font-size: var(--font-size-xxlarge)">Sample text</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Font weights</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--font-copy-weight-normal</code></td>
+        <td>400</td>
+        <td><span style="font-weight: var(--font-copy-weight-normal)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-copy-weight-bold</code></td>
+        <td>600</td>
+        <td><span style="font-weight: var(--font-copy-weight-bold)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-copy-weight-bolder</code></td>
+        <td>700</td>
+        <td><span style="font-weight: var(--font-copy-weight-bolder)">Sample text</span></td>
+      </tr>
+      <tr>
+        <td><code>--font-heading-weight-normal</code></td>
+        <td>normal</td>
+        <td
+          ><span
+            style="font-weight: var(--font-heading-weight-normal); font-family: var(--font-family-heading)"
+            >Sample heading</span
+          ></td
+        >
+      </tr>
+      <tr>
+        <td><code>--font-heading-weight-bold</code></td>
+        <td>600</td>
+        <td
+          ><span
+            style="font-weight: var(--font-heading-weight-bold); font-family: var(--font-family-heading)"
+            >Sample heading</span
+          ></td
+        >
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Borders &amp; radius</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--border-radius-small</code></td>
+        <td>≈ 0.33rem (spacing × ⅓)</td>
+        <td>
+          <div class="radius-swatch" style="border-radius: var(--border-radius-small);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-radius</code></td>
+        <td>≈ 0.67rem (spacing × ⅔)</td>
+        <td>
+          <div class="radius-swatch" style="border-radius: var(--border-radius);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-radius-full</code></td>
+        <td>9999px (fully rounded)</td>
+        <td>
+          <div class="radius-swatch" style="border-radius: var(--border-radius-full);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-weight-thin</code></td>
+        <td>≈ 0.0625rem (spacing-thin / 2)</td>
+        <td>
+          <div class="border-swatch" style="border-width: var(--border-weight-thin);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--border-weight</code></td>
+        <td>0.125rem (= spacing-thin)</td>
+        <td>
+          <div class="border-swatch" style="border-width: var(--border-weight);"></div>
+        </td>
+      </tr>
+      <tr>
+        <td><code>--drop-shadow</code></td>
+        <td><code>0 6px 12px var(--color-gray-medium)</code></td>
+        <td>
+          <div class="border-swatch" style="box-shadow: var(--drop-shadow); border: none;"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Transitions</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--transition</code></td><td>0.3s</td></tr>
+      <tr><td><code>--transition-fast</code></td><td>0.1s</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Layout</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--line-height</code></td><td>1.5</td></tr>
+      <tr><td><code>--line-height-small</code></td><td>1.2</td></tr>
+      <tr><td><code>--base-font-size</code></td><td>16px (14px on mobile)</td></tr>
+      <tr
+        ><td><code>--copy-width-limit</code></td><td>50em (max-width for paragraph/copy text)</td
+        ></tr
+      >
+      <tr><td><code>--page-width</code></td><td>75rem (standard page container max-width)</td></tr>
+      <tr
+        ><td><code>--page-width-small</code></td><td>62rem (narrower page container max-width)</td
+        ></tr
+      >
+      <tr><td><code>--icon-size-inline</code></td><td>1.1em (used for inline icon sizing)</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="style-section">Containers</h2>
 
@@ -146,6 +503,15 @@
       Use <code>.text-container</code> for a container that constrains the width based on the text size.
     </li>
     <li>Use <code>.center-container</code> to center a container horizontally.</li>
+    <li>
+      Use <code>.full-container</code> for a full-width container with consistent horizontal padding but
+      no max-width constraint.
+    </li>
+    <li>
+      Use <code>.page-message-container</code> for a full-page centered layout with a prominent
+      message box — used for auth flows and confirmation pages. It fills most of the viewport height
+      and centers a <code>.message-box</code> child element.
+    </li>
   </ul>
 
   <h2 class="style-section">Headings</h2>
@@ -227,6 +593,19 @@
     <li>List Item 3</li>
   </ul>
 
+  <h3>No list</h3>
+
+  <p>
+    Inline list with no separator, using <code>ul.no-list</code>. Items are inline-block with no
+    padding, margin, or list styling.
+  </p>
+
+  <ul class="no-list">
+    <li>List Item 1</li>
+    <li>List Item 2</li>
+    <li>List Item 3</li>
+  </ul>
+
   <h2 class="style-section">Horizontal rules</h2>
 
   <p>
@@ -295,6 +674,76 @@
     </tbody>
   </table>
 
+  <h3>Responsive table</h3>
+
+  <p>
+    Wrap a table in <code>.responsive-table</code> to allow horizontal scrolling on small screens.
+  </p>
+
+  <div class="responsive-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Column 1</th>
+          <th>Column 2</th>
+          <th>Column 3</th>
+          <th>Column 4</th>
+          <th>Column 5</th>
+          <th>Column 6</th>
+          <th>Column 7</th>
+          <th>Column 8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cell 1</td>
+          <td>Cell 2</td>
+          <td>Cell 3</td>
+          <td>Cell 4</td>
+          <td>Cell 5</td>
+          <td>Cell 6</td>
+          <td>Cell 7</td>
+          <td>Cell 8</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="style-section">Links</h2>
+
+  <p>
+    <a href="#!">Default link</a> — color via <code>--color-link</code>, no underline at rest,
+    underline on hover.
+  </p>
+
+  <h3>Modifiers</h3>
+
+  <p>
+    <code>a.like-text</code>: <a class="like-text" href="#!">Looks like body text</a> — overrides the
+    link color to match body text. Use to de-emphasize links in a dense section.
+  </p>
+
+  <p>
+    <code>a.alt</code>: <a class="alt" href="#!">Prominent link</a> — bold with underline at rest, underline
+    removed on hover. Use when links need to stand out at a glance.
+  </p>
+
+  <p>
+    <code>a.subscribe</code> / <code>a.auth</code>:
+    <a class="subscribe" href="#!">Subscription or auth action</a> — applies the blue subscribe color.
+  </p>
+
+  <h3>Link with button spacing</h3>
+
+  <p>
+    <code>a.button.like-link</code> gives a link the padding and display of a button while keeping
+    its link appearance. Useful for consistent spacing when mixing buttons and links in a row. Avoid
+    using <code>a.button</code> alone — links and buttons have different semantic meaning and should look
+    distinct.
+  </p>
+
+  <a class="button like-link" href="#!">a.button.like-link</a>
+
   <h2 class="style-section">Buttons</h2>
 
   <h3>Button elements</h3>
@@ -305,6 +754,28 @@
   <button disabled>Disabled</button>
   <div role="button">role="button"</div>
 
+  <h3>Contextual styles</h3>
+
+  <p>
+    Use <code>.subscribe</code> and <code>.auth</code> for subscription and authentication actions. They
+    share the same blue visual style.
+  </p>
+
+  <button class="subscribe">Subscribe</button>
+  <button class="auth">Sign in</button>
+
+  <h3>Outline</h3>
+
+  <p>
+    Add <code>.outline</code> to get a transparent background with a colored border and matching text.
+    Hover fills with the solid color. Works with the contextual color classes.
+  </p>
+
+  <button class="outline">Primary outline</button>
+  <button class="subscribe outline">Subscribe outline</button>
+  <button class="auth outline">Auth outline</button>
+  <button class="alt outline">Alt outline</button>
+
   <h3>Toggles</h3>
 
   <p>
@@ -312,8 +783,33 @@
     <code>aria-pressed="false"</code>.
   </p>
 
-  <button aria-pressed="true">On</button>
-  <button aria-pressed="false">Off</button>
+  <button aria-pressed={toggles.toggle} on:click={() => (toggles.toggle = !toggles.toggle)}>
+    {toggles.toggle ? 'On' : 'Off'}
+  </button>
+
+  <p>
+    Add <code>.outline</code> for a toggle where the off state is outlined and the on state fills in.
+    Works with contextual color classes.
+  </p>
+
+  <button
+    class="outline"
+    aria-pressed={toggles.outlineToggle}
+    on:click={() => (toggles.outlineToggle = !toggles.outlineToggle)}
+    >{toggles.outlineToggle ? 'On' : 'Off'}</button
+  >
+  <button
+    class="subscribe outline"
+    aria-pressed={toggles.outlineSubscribeToggle}
+    on:click={() => (toggles.outlineSubscribeToggle = !toggles.outlineSubscribeToggle)}
+    >{toggles.outlineSubscribeToggle ? 'On' : 'Off'}</button
+  >
+  <button
+    class="alt outline"
+    aria-pressed={toggles.outlineAltToggle}
+    on:click={() => (toggles.outlineAltToggle = !toggles.outlineAltToggle)}
+    >{toggles.outlineAltToggle ? 'On' : 'Off'}</button
+  >
 
   <h3>Switch</h3>
 
@@ -322,67 +818,176 @@
     <code>aria-checked="false"</code> and <code>role="switch"</code>.
   </p>
 
-  <button class="button-switch" role="switch" aria-checked="true">
+  <button
+    class="button-switch"
+    role="switch"
+    aria-checked={toggles.switchDefault}
+    on:click={() => (toggles.switchDefault = !toggles.switchDefault)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchDefault ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch" role="switch" aria-checked="false">
+  <button
+    class="button-switch alt"
+    role="switch"
+    aria-checked={toggles.switchAlt}
+    on:click={() => (toggles.switchAlt = !toggles.switchAlt)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch alt" role="switch" aria-checked="false">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch alt" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
-  </button>
-
-  <button class="button-switch data" role="switch" aria-checked="false">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
-
-  <button class="button-switch data" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchAlt ? 'On' : 'Off'}</span>
   </button>
 
   <br />
 
-  <button class="button-switch small" role="switch" aria-checked="true">
+  <button
+    class="button-switch small"
+    role="switch"
+    aria-checked={toggles.switchDefaultSmall}
+    on:click={() => (toggles.switchDefaultSmall = !toggles.switchDefaultSmall)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
+    <span class="sr-only">{toggles.switchDefaultSmall ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch small" role="switch" aria-checked="false">
+  <button
+    class="button-switch alt small"
+    role="switch"
+    aria-checked={toggles.switchAltSmall}
+    on:click={() => (toggles.switchAltSmall = !toggles.switchAltSmall)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
+    <span class="sr-only">{toggles.switchAltSmall ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch alt small" role="switch" aria-checked="false">
+  <button
+    class="button-switch previous small"
+    role="switch"
+    aria-checked={toggles.switchPreviousSmall}
+    on:click={() => (toggles.switchPreviousSmall = !toggles.switchPreviousSmall)}
+  >
     <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
+    <span class="sr-only">{toggles.switchPreviousSmall ? 'On' : 'Off'}</span>
   </button>
 
-  <button class="button-switch alt small" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
-  </button>
+  <h3>Groups</h3>
 
-  <button class="button-switch previous small" role="switch" aria-checked="false">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">Off</span>
-  </button>
+  <p>
+    Use <code>[role="group"].button-group</code> to arrange buttons in a connected row. Each group should
+    use a consistent button style; you can mix toggled on/off states and outline variants within a group.
+  </p>
 
-  <button class="button-switch previous small" role="switch" aria-checked="true">
-    <span class="button-switch-slider"></span>
-    <span class="sr-only">On</span>
-  </button>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Default</td>
+        <td>
+          <div role="group" aria-label="Default group" class="button-group">
+            <button>First</button>
+            <button>Second</button>
+            <button>Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Outline</td>
+        <td>
+          <div role="group" aria-label="Outline group" class="button-group">
+            <button class="outline">First</button>
+            <button class="outline">Second</button>
+            <button class="outline">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Subscribe outline</td>
+        <td>
+          <div role="group" aria-label="Subscribe outline group" class="button-group">
+            <button class="subscribe outline">First</button>
+            <button class="subscribe outline">Second</button>
+            <button class="subscribe outline">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Alt</td>
+        <td>
+          <div role="group" aria-label="Alt group" class="button-group">
+            <button class="alt">First</button>
+            <button class="alt">Second</button>
+            <button class="alt">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Toggle (single select)</td>
+        <td>
+          <div role="group" aria-label="View options" class="button-group">
+            <button
+              aria-pressed={toggles.groupSelected === 0}
+              on:click={() => (toggles.groupSelected = 0)}>List</button
+            >
+            <button
+              aria-pressed={toggles.groupSelected === 1}
+              on:click={() => (toggles.groupSelected = 1)}>Grid</button
+            >
+            <button
+              aria-pressed={toggles.groupSelected === 2}
+              on:click={() => (toggles.groupSelected = 2)}>Map</button
+            >
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Toggle outline (single select)</td>
+        <td>
+          <div role="group" aria-label="Sort options" class="button-group">
+            <button
+              class="outline"
+              aria-pressed={toggles.groupOutlineSelected === 0}
+              on:click={() => (toggles.groupOutlineSelected = 0)}>Option A</button
+            >
+            <button
+              class="outline"
+              aria-pressed={toggles.groupOutlineSelected === 1}
+              on:click={() => (toggles.groupOutlineSelected = 1)}>Option B</button
+            >
+            <button
+              class="outline"
+              aria-pressed={toggles.groupOutlineSelected === 2}
+              on:click={() => (toggles.groupOutlineSelected = 2)}>Option C</button
+            >
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Small</td>
+        <td>
+          <div role="group" aria-label="Small group" class="button-group">
+            <button class="small">First</button>
+            <button class="small">Second</button>
+            <button class="small">Third</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>Compact</td>
+        <td>
+          <div role="group" aria-label="Compact group" class="button-group">
+            <button class="compact">First</button>
+            <button class="compact">Second</button>
+            <button class="compact">Third</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <h3>Icons</h3>
 
@@ -417,29 +1022,20 @@
 
   <button class="compact">.compact</button><br />
   <button class="small">.small</button><br />
+  <button class="medium">.medium</button><br />
   <button class="compact small">.compact.small</button><br />
 
   <h3>Modifiers</h3>
 
   <p>
-    Generally, only use these modifiers if they really make sense and are consistent with semantics
-    and the visual system.
+    Generally, only use these modifiers if they make sense semantically. They can be combined with
+    contextual color classes where an explicit compound rule exists.
   </p>
 
   <button class="like-link">.like-link</button><br />
+  <button class="like-link alt">.like-link.alt</button><br />
   <button class="like-text">.like-text</button><br />
-
-  <h3>Link elements</h3>
-
-  <p>
-    Generally links should not be styled like buttons as button and link have different sematic
-    meaning and should be visually distinct from each other. But using <code
-      >a.button.like-link</code
-    > will look like a link but give spacing like button which can be helpful.
-  </p>
-
-  <a class="button" href="#buttons">a.button</a>
-  <a class="button like-link" href="#buttons">a.button.like-link</a>
+  <button class="alt like-text like-link">.alt.like-text.like-link</button><br />
 
   <h2 class="style-section">Tags</h2>
 
@@ -458,6 +1054,12 @@
   <p>
     <strong>Sample output:</strong> <samp>This is sample output from a computer program.</samp>
   </p>
+  <p>
+    <strong>Code alt:</strong> <code class="code-alt">inline code</code> — the
+    <code>.code-alt</code> modifier removes the background and border, using an underline instead. Useful
+    for code references within dense prose where the full code block styling is too heavy.
+  </p>
+
   <h3>Pre-formatted text</h3>
 
   <pre>P R E F O R M A T T E D T E X T
@@ -497,12 +1099,6 @@
   <h3>Text modifiers</h3>
 
   <p>
-    <code>a.like-link</code>: <a class="like-text" href="#!">This is text that looks like a link</a>
-    and should be used mostly when there are a lot of links in a section, as links should be consistent
-    and visually distinct from text overall.
-  </p>
-
-  <p>
     <code>.font-small</code>:
     <span class="font-small"
       >It is generally better to use the semantic <code>&lt;small&gt;</code>, but this can be useful
@@ -514,6 +1110,137 @@
     <code>.muted</code>:
     <span class="muted">muted content</span>.
   </p>
+
+  <h2 class="style-section">Icons</h2>
+
+  <p>
+    Icons are SVG components in <code>src/components/icons/</code>. They render with
+    <code>currentColor</code> and accept any SVG attribute via <code>$$props</code>.
+  </p>
+
+  <h3>Available icons</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Colors</th>
+        <th>Highlight</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each [{ name: 'ArrowDownRight', component: ArrowDownRight }, { name: 'ArrowLeft', component: ArrowLeft }, { name: 'Bell', component: Bell }, { name: 'Check', component: Check }, { name: 'ChevronDown', component: ChevronDown }, { name: 'ChevronUp', component: ChevronUp }, { name: 'Hamburger', component: Hamburger }, { name: 'MinusSquare', component: MinusSquare }, { name: 'PlusSquare', component: PlusSquare }, { name: 'Search', component: Search }, { name: 'Spinner', component: Spinner }, { name: 'TopRightArrow', component: TopRightArrow }, { name: 'XSymbol', component: XSymbol }] as icon (icon.name)}
+        <tr>
+          <td><code>&lt;{icon.name} /&gt;</code></td>
+          <td>
+            <div class="icon-color-row">
+              <span class="inline-icon-square" style="color: var(--color-text)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-primary)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-subscribe)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-error)"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="inline-icon-square" style="color: var(--color-text-muted)"
+                ><svelte:component this={icon.component} /></span
+              >
+            </div>
+          </td>
+          <td>
+            <div class="icon-color-row">
+              <span class="highlight-icon"><svelte:component this={icon.component} /></span>
+              <span class="highlight-icon primary"><svelte:component this={icon.component} /></span>
+              <span class="highlight-icon subscribe"
+                ><svelte:component this={icon.component} /></span
+              >
+              <span class="highlight-icon error"><svelte:component this={icon.component} /></span>
+              <span class="highlight-icon alt"><svelte:component this={icon.component} /></span>
+            </div>
+          </td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+
+  <h3>Inline use</h3>
+
+  <p>
+    Wrap an icon in <code>.inline-icon</code> or <code>.inline-icon-square</code> to place it inline
+    with text at <code>--icon-size-inline</code> (1.1em), vertically centered. Use
+    <code>.inline-icon-square</code> for icons with a square viewBox that need an explicit height to render
+    correctly.
+  </p>
+
+  <p><span class="inline-icon"><Spinner /></span>Text with <code>.inline-icon</code></p>
+  <p><span class="inline-icon-square"><Bell /></span>Text with <code>.inline-icon-square</code></p>
+
+  <h3>Highlight icon</h3>
+
+  <p>
+    Use <code>.highlight-icon</code> to display an icon inside a circular badge. The size is
+    controlled by a local <code>--highlight-icon-size</code> variable — the default is
+    <code>--icon-size-inline</code>, and size modifiers reassign it using font-size variables so
+    everything scales proportionally.
+  </p>
+
+  <h4>Colors</h4>
+
+  <p>
+    <span class="highlight-icon"><Bell /></span>
+    <span class="highlight-icon primary"><Bell /></span>
+    <span class="highlight-icon error"><XSymbol /></span>
+    <span class="highlight-icon subscribe"><Bell /></span>
+    <span class="highlight-icon alt"><Check /></span>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Background</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>(default)</td><td><code>--color-green-light</code></td></tr>
+      <tr><td><code>.primary</code></td><td><code>--color-primary</code></td></tr>
+      <tr><td><code>.error</code></td><td><code>--color-error</code></td></tr>
+      <tr><td><code>.subscribe</code></td><td><code>--color-subscribe</code></td></tr>
+      <tr><td><code>.alt</code></td><td><code>--color-alt</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>Sizes</h4>
+
+  <p>
+    <span class="highlight-icon small"><Bell /></span>
+    <span class="highlight-icon"><Bell /></span>
+    <span class="highlight-icon medium"><Bell /></span>
+    <span class="highlight-icon large"><Bell /></span>
+    <span class="highlight-icon xlarge"><Bell /></span>
+    <span class="highlight-icon xxlarge"><Bell /></span>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Size variable</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>.small</code></td><td><code>--font-size-small</code> (0.8rem)</td></tr>
+      <tr><td>(default)</td><td><code>--icon-size-inline</code> (1.1em)</td></tr>
+      <tr><td><code>.medium</code></td><td><code>--font-size-medium</code> (1.25rem)</td></tr>
+      <tr><td><code>.large</code></td><td><code>--font-size-large</code> (1.5rem)</td></tr>
+      <tr><td><code>.xlarge</code></td><td><code>--font-size-xlarge</code> (2rem)</td></tr>
+      <tr><td><code>.xxlarge</code></td><td><code>--font-size-xxlarge</code> (2.875rem)</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="style-section">Images</h2>
 
@@ -793,6 +1520,60 @@
       <input type="submit" value="Input disabled" disabled />
     </fieldset>
   </form>
+
+  <h2 class="style-section">Utilities</h2>
+
+  <p>Utility classes defined in <code>src/styles/utilities.css</code>.</p>
+
+  <h3>Accessibility</h3>
+
+  <ul>
+    <li>
+      <code>.sr-only</code> — visually hides an element while keeping it accessible to screen
+      readers. Uses <code>position: absolute</code>, so it does not affect page flow.
+    </li>
+    <li>
+      <code>.visually-hidden</code> — similar to <code>.sr-only</code> but the element still participates
+      in normal document flow (collapses to 1×1px).
+    </li>
+    <li>
+      <code>.visually-hidden-focusable</code> — like <code>.visually-hidden</code> but becomes visible
+      when focused. Useful for skip-to-content links.
+    </li>
+  </ul>
+
+  <h3>Font family overrides</h3>
+
+  <p>
+    <code>.font-copy</code>:
+    <span class="font-copy">Forces the copy/body font family (IBM Plex Sans).</span>
+  </p>
+  <p>
+    <code>.font-heading</code>:
+    <span class="font-heading">Forces the heading font family (Domine).</span>
+  </p>
+
+  <h3>Progressive enhancement</h3>
+
+  <p>
+    Classes toggled on <code>&lt;html&gt;</code> by JavaScript to show or hide content depending on
+    JS availability. The parent state is either <code>.has-js</code> or <code>.no-js</code>.
+  </p>
+
+  <ul>
+    <li>
+      <code>.no-js-only-block</code> / <code>.has-js-only-block</code> — toggles
+      <code>display: block</code>
+    </li>
+    <li>
+      <code>.no-js-only-inline</code> / <code>.has-js-only-inline</code> — toggles
+      <code>display: inline-block</code>
+    </li>
+    <li>
+      <code>.no-js-only-table-row</code> / <code>.has-js-only-table-row</code> — toggles
+      <code>display: table-row</code>
+    </li>
+  </ul>
 </div>
 
 <style>
@@ -800,5 +1581,69 @@
   h2.style-section {
     padding-top: 4rem;
     border-bottom: 3px solid var(--color-gray-dark);
+  }
+
+  .icon-color-row {
+    display: flex;
+    gap: var(--spacing-half);
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .color-strip {
+    display: flex;
+    height: 4rem;
+    margin-bottom: var(--spacing);
+  }
+
+  .color-swatch {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    transition: flex var(--transition);
+    cursor: default;
+    min-width: 0;
+  }
+
+  .color-swatch:hover {
+    flex: 5;
+  }
+
+  .color-swatch-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-tiny) var(--spacing-small);
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .color-swatch:hover .color-swatch-label {
+    opacity: 1;
+  }
+
+  .spacing-bar {
+    background-color: var(--color-primary);
+    height: var(--spacing);
+    min-width: 1px;
+  }
+
+  .radius-swatch {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-gray-lighter);
+    border: var(--border-weight) solid var(--color-text);
+  }
+
+  .border-swatch {
+    width: 5rem;
+    height: 2rem;
+    border-style: solid;
+    border-color: var(--color-text);
   }
 </style>

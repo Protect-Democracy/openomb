@@ -32,6 +32,39 @@
   margin-bottom: var(--spacing-double);
 }
 
+/* Page layout for a simple message */
+.page-message-container {
+  background-color: var(--color-subscribe-background);
+  padding-top: var(--spacing-triple);
+  padding-bottom: var(--spacing-triple);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+
+  .message-box {
+    background-color: var(--color-background);
+    max-width: calc(var(--page-width-small) - var(--spacing) * 4);
+    padding: calc(var(--spacing) * 4) calc(var(--spacing) * 8);
+    border: var(--border-weight) solid var(--color-text);
+    border-radius: 0;
+
+    @media (max-width: 900px) {
+      & {
+        padding: calc(var(--spacing) * 3) calc(var(--spacing) * 3);
+      }
+    }
+
+    @media (max-width: 550px) {
+      & {
+        padding: calc(var(--spacing) * 1) calc(var(--spacing) * 1);
+        border: none;
+        background-color: transparent;
+      }
+    }
+  }
+}
+
 /**
  * On most pages, we want space below the nav and above the footer, but
  * no on the landing page.
@@ -48,6 +81,17 @@
 
 .text-container {
   max-width: var(--copy-width-limit);
+}
+
+/* Visual container */
+.callout-container-large {
+  background-color: var(--color-off-white);
+  padding: var(--spacing-large);
+}
+
+.callout-container {
+  background-color: var(--color-off-white);
+  padding: calc(var(--spacing) * 2);
 }
 
 /* Text */
@@ -67,6 +111,15 @@
 
 a.like-text {
   color: var(--color-text);
+}
+
+a.alt {
+  font-weight: var(--font-copy-weight-bold);
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 a.subscribe,
@@ -197,6 +250,248 @@ a.button.alt:hover {
   color: var(--color-alt-hover-text);
 }
 
+/* Outline variants — transparent background, colored border and text, fills on hover */
+button.outline,
+input[type='submit'].outline,
+input[type='button'].outline,
+input[type='reset'].outline,
+[role='button'].outline,
+a.button.outline {
+  background-color: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+    border-color: transparent;
+  }
+}
+
+button.subscribe.outline,
+input[type='submit'].subscribe.outline,
+input[type='button'].subscribe.outline,
+input[type='reset'].subscribe.outline,
+[role='button'].subscribe.outline,
+a.button.subscribe.outline,
+button.auth.outline,
+input[type='submit'].auth.outline,
+input[type='button'].auth.outline,
+input[type='reset'].auth.outline,
+[role='button'].auth.outline,
+a.button.auth.outline {
+  background-color: transparent;
+  border-color: var(--color-subscribe);
+  color: var(--color-subscribe);
+
+  &:hover {
+    background-color: var(--color-subscribe);
+    color: var(--color-subscribe-text);
+    border-color: transparent;
+  }
+}
+
+button.alt.outline,
+input[type='submit'].alt.outline,
+input[type='button'].alt.outline,
+input[type='reset'].alt.outline,
+[role='button'].alt.outline,
+a.button.alt.outline {
+  background-color: transparent;
+  border-color: var(--color-alt);
+  color: var(--color-alt);
+
+  &:hover {
+    background-color: var(--color-alt);
+    color: var(--color-alt-text);
+    border-color: transparent;
+  }
+}
+
+/* Outline toggles: off = outlined, on = filled */
+button[aria-pressed='false'].outline,
+input[type='submit'][aria-pressed='false'].outline,
+input[type='button'][aria-pressed='false'].outline,
+input[type='reset'][aria-pressed='false'].outline,
+[role='button'][aria-pressed='false'].outline,
+a[aria-pressed='false'].button.outline {
+  background-color: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+    border-color: transparent;
+  }
+}
+
+button[aria-pressed='true'].outline,
+input[type='submit'][aria-pressed='true'].outline,
+input[type='button'][aria-pressed='true'].outline,
+input[type='reset'][aria-pressed='true'].outline,
+[role='button'][aria-pressed='true'].outline,
+a[aria-pressed='true'].button.outline {
+  background-color: var(--color-primary);
+  color: var(--color-primary-text);
+  border-color: transparent;
+}
+
+button[aria-pressed='false'].subscribe.outline,
+input[type='submit'][aria-pressed='false'].subscribe.outline,
+input[type='button'][aria-pressed='false'].subscribe.outline,
+input[type='reset'][aria-pressed='false'].subscribe.outline,
+[role='button'][aria-pressed='false'].subscribe.outline,
+a[aria-pressed='false'].button.subscribe.outline,
+button[aria-pressed='false'].auth.outline,
+input[type='submit'][aria-pressed='false'].auth.outline,
+input[type='button'][aria-pressed='false'].auth.outline,
+input[type='reset'][aria-pressed='false'].auth.outline,
+[role='button'][aria-pressed='false'].auth.outline,
+a[aria-pressed='false'].button.auth.outline {
+  background-color: transparent;
+  border-color: var(--color-subscribe);
+  color: var(--color-subscribe);
+
+  &:hover {
+    background-color: var(--color-subscribe);
+    color: var(--color-subscribe-text);
+    border-color: transparent;
+  }
+}
+
+button[aria-pressed='true'].subscribe.outline,
+input[type='submit'][aria-pressed='true'].subscribe.outline,
+input[type='button'][aria-pressed='true'].subscribe.outline,
+input[type='reset'][aria-pressed='true'].subscribe.outline,
+[role='button'][aria-pressed='true'].subscribe.outline,
+a[aria-pressed='true'].button.subscribe.outline,
+button[aria-pressed='true'].auth.outline,
+input[type='submit'][aria-pressed='true'].auth.outline,
+input[type='button'][aria-pressed='true'].auth.outline,
+input[type='reset'][aria-pressed='true'].auth.outline,
+[role='button'][aria-pressed='true'].auth.outline,
+a[aria-pressed='true'].button.auth.outline {
+  background-color: var(--color-subscribe);
+  color: var(--color-subscribe-text);
+  border-color: transparent;
+}
+
+button[aria-pressed='false'].alt.outline,
+input[type='submit'][aria-pressed='false'].alt.outline,
+input[type='button'][aria-pressed='false'].alt.outline,
+input[type='reset'][aria-pressed='false'].alt.outline,
+[role='button'][aria-pressed='false'].alt.outline,
+a[aria-pressed='false'].button.alt.outline {
+  background-color: transparent;
+  border-color: var(--color-alt);
+  color: var(--color-alt);
+
+  &:hover {
+    background-color: var(--color-alt);
+    color: var(--color-alt-text);
+    border-color: transparent;
+  }
+}
+
+button[aria-pressed='true'].alt.outline,
+input[type='submit'][aria-pressed='true'].alt.outline,
+input[type='button'][aria-pressed='true'].alt.outline,
+input[type='reset'][aria-pressed='true'].alt.outline,
+[role='button'][aria-pressed='true'].alt.outline,
+a[aria-pressed='true'].button.alt.outline {
+  background-color: var(--color-alt);
+  color: var(--color-alt-text);
+  border-color: transparent;
+}
+
+/* Compound modifier: link-styled button in contextual colors */
+button.subscribe.like-link,
+input[type='submit'].subscribe.like-link,
+input[type='button'].subscribe.like-link,
+input[type='reset'].subscribe.like-link,
+[role='button'].subscribe.like-link,
+a.button.subscribe.like-link,
+button.auth.like-link,
+input[type='submit'].auth.like-link,
+input[type='button'].auth.like-link,
+input[type='reset'].auth.like-link,
+[role='button'].auth.like-link,
+a.button.auth.like-link {
+  color: var(--color-subscribe);
+}
+
+button.alt.like-link,
+input[type='submit'].alt.like-link,
+input[type='button'].alt.like-link,
+input[type='reset'].alt.like-link,
+[role='button'].alt.like-link,
+a.button.alt.like-link {
+  color: var(--color-alt);
+}
+
+/* Button group — connected row of same-style buttons */
+[role='group'].button-group {
+  display: inline-flex;
+  gap: 0;
+  margin-bottom: var(--spacing);
+
+  button,
+  input[type='submit'],
+  input[type='button'],
+  input[type='reset'],
+  [role='button'],
+  a.button {
+    border-radius: 0;
+    margin: 0;
+    min-width: 0;
+
+    /* Collapse adjacent borders for outline variants */
+    form:not(:last-child) &,
+    &:not(:last-child) {
+      margin-right: calc(var(--border-weight) * -1);
+    }
+
+    form:last-child &,
+    &:last-child {
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+
+      &.small {
+        border-radius: 0 var(--border-radius-small) var(--border-radius-small) 0;
+      }
+    }
+
+    form:only-child &,
+    &:only-child {
+      border-radius: var(--border-radius);
+
+      &.small {
+        border-radius: var(--border-radius-small);
+      }
+    }
+
+    form:first-child &,
+    &:first-child {
+      border-radius: var(--border-radius) 0 0 var(--border-radius);
+
+      &.small {
+        border-radius: var(--border-radius-small) 0 0 var(--border-radius-small);
+      }
+    }
+
+    /* Bring the active/focused button forward so its border isn't obscured */
+    form &:hover,
+    form &:focus,
+    form &[aria-pressed='true'],
+    &:hover,
+    &:focus,
+    &[aria-pressed='true'] {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
 /* Toggle buttons */
 button[aria-pressed='false'].alt,
 input[type='submit'][aria-pressed='false'].alt,
@@ -310,6 +605,11 @@ a.button.like-text {
   text-align: left;
   line-height: var(--line-height);
   min-width: auto;
+
+  &:hover {
+    text-decoration: underline;
+    background-color: transparent;
+  }
 }
 
 /* Helpful for spacing */
@@ -322,6 +622,22 @@ a.button.like-link {
   display: inline-block;
   background-color: inherit;
   color: var(--color-link);
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  &.alt {
+    color: var(--color-text);
+    font-weight: var(--font-copy-weight-bold);
+    text-decoration: underline;
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: none;
+      background-color: transparent;
+    }
+  }
 }
 
 button.like-link:hover,
@@ -364,6 +680,19 @@ a.button.small {
   font-size: var(--font-size-small);
   padding: calc(var(--spacing-half) - var(--border-weight)) var(--spacing-half);
   border-radius: var(--border-radius-small);
+}
+
+button.medium,
+input[type='submit'].medium,
+input[type='button'].medium,
+input[type='reset'].medium,
+[role='button'].medium,
+a.button.medium {
+  min-width: calc(11rem);
+
+  &.compact {
+    min-width: auto;
+  }
 }
 
 /* Icon in a button */
@@ -552,4 +881,62 @@ fieldset.radios legend {
   height: var(--icon-size-inline);
   margin-right: var(--spacing-half);
   vertical-align: middle;
+}
+
+.highlight-icon {
+  --highlight-icon-size: var(--icon-size-inline);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--highlight-icon-size) * 1.5);
+  height: calc(var(--highlight-icon-size) * 1.5);
+  border-radius: var(--border-radius-full);
+  background-color: var(--color-green-light);
+  color: var(--color-text-inverse);
+
+  svg {
+    width: calc(var(--highlight-icon-size) * 0.85);
+    height: calc(var(--highlight-icon-size) * 0.85);
+  }
+
+  &.small {
+    --highlight-icon-size: var(--font-size-small);
+  }
+
+  &.medium {
+    --highlight-icon-size: var(--font-size-medium);
+  }
+
+  &.large {
+    --highlight-icon-size: var(--font-size-large);
+  }
+
+  &.xlarge {
+    --highlight-icon-size: var(--font-size-xlarge);
+  }
+
+  &.xxlarge {
+    --highlight-icon-size: var(--font-size-xxlarge);
+  }
+
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+  }
+
+  &.error {
+    background-color: var(--color-error);
+    color: var(--color-text-inverse);
+  }
+
+  &.subscribe {
+    background-color: var(--color-subscribe);
+    color: var(--color-subscribe-text);
+  }
+
+  &.alt {
+    background-color: var(--color-alt);
+    color: var(--color-alt-text);
+  }
 }
