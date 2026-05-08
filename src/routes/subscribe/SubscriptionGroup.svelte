@@ -48,7 +48,7 @@
         <RemoveAction
           subId={subscription.id}
           subDescription={subscription.description}
-          buttonProps={{ class: 'like-link like-text alt small' }}
+          buttonProps={{ class: 'like-link like-text alt small', style: 'margin: 0' }}
         />
       </td>
     </tr>

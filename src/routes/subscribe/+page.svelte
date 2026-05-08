@@ -1,14 +1,17 @@
 <script lang="ts">
   import type { PageData } from './$types';
+  import { resolve } from '$app/paths';
   import { filter, sortBy } from 'lodash-es';
   import LogOut from '$components/subscriptions/LogOut.svelte';
   import LogIn from '$src/components/subscriptions/LogIn.svelte';
   import SubscriptionGroup from './SubscriptionGroup.svelte';
+  import ExampleSubscribeImage from '$assets/other/example-subscribe.png';
 
   export let data: PageData;
   export let form;
   $: ({ userSubscriptions, user } = data);
 
+  $: noSubscriptions = !userSubscriptions || userSubscriptions.length === 0;
   $: folderSubs = sortBy(
     filter(userSubscriptions, (sub) => sub.type === 'folder'),
     'description'
@@ -38,7 +41,7 @@
 <div class="background-container" class:no-user={!user}>
   <div class="page-container">
     {#if user}
-      <section class="content-container text-container">
+      <div class="content-container text-container">
         <h1>Your Account</h1>
 
         <section class="callout-container account-info">
@@ -63,67 +66,73 @@
           issues.
         </p>
 
-        <h2 class="h2-alt">Manage Subscriptions</h2>
+        <section class="subscriptions-list">
+          <h2 class="h2-alt">Manage Subscriptions</h2>
 
-        <p>
-          Adjust how frequently you are sent email updates about a data feed or remove a data feed
-          from your updates. Your adjustments will be saved automatically during each session.
-        </p>
-
-        {#if form?.success}
-          <p class="form-success">Subscriptions saved successfully!</p>
-        {:else if form?.error}
-          <p class="form-error">
-            There was an error saving your subscription data. Please try again or, if problems
-            persist, contact support@openomb.org.
+          <p>
+            Adjust how frequently you are sent email updates about a data feed or remove a data feed
+            from your updates. Your adjustments will be saved automatically during each session.
           </p>
-        {/if}
 
-        <table>
-          <thead>
-            <tr>
-              <td class="sub-link">Subscription</td>
-              <td class="sub-frequency">Email Frequency</td>
-              <td class="sub-remove sr-only">Remove Subscription</td>
-            </tr>
-          </thead>
-
-          {#if userSubscriptions.length === 0}
-            <tbody>
-              <tr>
-                <td colspan="3"
-                  ><em
-                    >No subscriptions found. Navigate to an agency, file, search, etc. to subscribe
-                    to different feeds of data.</em
-                  ></td
-                >
-              </tr>
-            </tbody>
-          {:else}
-            <tbody>
-              <SubscriptionGroup title="Searches" subs={searchSubs} />
-              <SubscriptionGroup title="Folders" subs={folderSubs} />
-              <SubscriptionGroup title="Agencies" subs={agencySubs} />
-              <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
-              <SubscriptionGroup title="Accounts" subs={accountSubs} />
-              <SubscriptionGroup title="TAFS" subs={tafsSubs} />
-            </tbody>
+          {#if form?.success}
+            <p class="form-success">Subscriptions saved successfully!</p>
+          {:else if form?.error}
+            <p class="form-error">
+              There was an error saving your subscription data. Please try again or, if problems
+              persist, contact support@openomb.org.
+            </p>
           {/if}
-        </table>
-      </section>
 
-      <section class="content-container">
-        <h2>Account management</h2>
+          <table>
+            <thead>
+              <tr class:sr-only={noSubscriptions}>
+                <td class="sub-link">Subscription</td>
+                <td class="sub-frequency">Frequency</td>
+                <td class="sub-remove sr-only">Remove Subscription</td>
+              </tr>
+            </thead>
 
-        <div class="page-section">
-          <h3>Log out</h3>
+            {#if noSubscriptions}
+              <tbody>
+                <tr>
+                  <td colspan="3">You are not signed up for any subscriptions.</td>
+                </tr>
+              </tbody>
+            {:else}
+              <tbody>
+                <SubscriptionGroup title="Searches" subs={searchSubs} />
+                <SubscriptionGroup title="Folders" subs={folderSubs} />
+                <SubscriptionGroup title="Agencies" subs={agencySubs} />
+                <SubscriptionGroup title="Bureaus" subs={bureauSubs} />
+                <SubscriptionGroup title="Accounts" subs={accountSubs} />
+                <SubscriptionGroup title="TAFS" subs={tafsSubs} />
+              </tbody>
+            {/if}
+          </table>
+        </section>
 
-          <p>End the current user session tied to this email address.</p>
-          <LogOut callbackUrl="/subscribe" />
-        </div>
+        <section class="callout-container-alt">
+          <h2 class="h2-alt">Add Subscriptions</h2>
 
-        <div class="page-section">
-          <h3>Delete account</h3>
+          <p>
+            You can subscribe to receive emails when files are updated on <a
+              href={resolve('/search')}>searches</a
+            >, <a href={resolve('/folders')}>folders</a>,
+            <a href={resolve('/explore')}>agencies</a>, <a href={resolve('/explore')}>bureaus</a>,
+            accounts, or TAF files.
+          </p>
+
+          <p>
+            Set up your search or navigate to a specific page and look for the <strong
+              >Follow Updates</strong
+            > box to add subscriptions.
+          </p>
+
+          <img src={ExampleSubscribeImage} alt="Example of Follow Updates box on agency page" />
+        </section>
+
+        <section class="callout-container delete-account">
+          <h2 class="h2-alt">Delete account</h2>
 
           <p>
             <strong>Warning: this action cannot be undone.</strong> Delete this email address and all
@@ -132,10 +141,10 @@
           </p>
 
           <form method="POST" action="/subscribe?/deactivate">
-            <button class="auth">Delete Account & Data</button>
+            <button class="primary">Delete account and data</button>
           </form>
-        </div>
-      </section>
+        </section>
+      </div>
     {:else}
       <section class="page-message-container">
         <div class="message-box">
@@ -147,10 +156,6 @@
 </div>
 
 <style>
-  .content-container:has(+ .content-container) {
-    margin-bottom: 0;
-  }
-
   .account-info {
     display: flex;
     gap: var(--spacing-double);
@@ -183,8 +188,8 @@
     color: var(--color-error);
   }
 
-  table {
-    margin-bottom: var(--spacing-double);
+  .subscriptions-list {
+    margin-bottom: calc(var(--spacing) * 4);
   }
 
   thead {
@@ -203,6 +208,22 @@
     .actions {
       flex-direction: column;
       row-gap: var(--spacing-double);
+    }
+  }
+
+  .delete-account {
+    h2 {
+      margin-top: 0;
+      padding-top: 0;
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    p {
+      margin-bottom: calc(var(--spacing) * 2);
+    }
+
+    button {
+      margin-bottom: 0;
     }
   }
 

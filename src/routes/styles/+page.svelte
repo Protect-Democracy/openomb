@@ -514,6 +514,31 @@
     </li>
   </ul>
 
+  <h3>Callout containers</h3>
+
+  <p>
+    Use callout containers to visually offset content from the surrounding page. There are two
+    visual treatments — filled (<code>.callout-container</code>) and outlined (<code
+      >.callout-container-alt</code
+    >) — each available in a standard and large padding variant.
+  </p>
+
+  <div class="callout-container">
+    <p><strong>.callout-container</strong> — filled background, standard padding.</p>
+  </div>
+
+  <div class="callout-container-large">
+    <p><strong>.callout-container-large</strong> — filled background, large padding.</p>
+  </div>
+
+  <div class="callout-container-alt">
+    <p><strong>.callout-container-alt</strong> — outlined border, standard padding.</p>
+  </div>
+
+  <div class="callout-container-alt-large">
+    <p><strong>.callout-container-alt-large</strong> — outlined border, large padding.</p>
+  </div>
+
   <h2 class="style-section">Headings</h2>
 
   <h1>Heading 1</h1>

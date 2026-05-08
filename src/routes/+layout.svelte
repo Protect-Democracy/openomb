@@ -277,7 +277,7 @@
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-double) 0;
+    padding: calc(var(--spacing) * 1.5) 0;
 
     /*
     <<<<<<< HEAD
