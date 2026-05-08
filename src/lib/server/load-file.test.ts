@@ -288,6 +288,38 @@ describe('parseSpendPlanFilename()', () => {
       agency: 'Institute of Museum and Library Services',
       bureau: 'Institute of Museum and Library Services'
     });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/FY26%20Qs%201%20and%202%20TANF%20HMRF%20and%20WR%20Spend%20Plan.pdf
+    expect(parseSpendPlanFilename('FY26 Qs 1 and 2 TANF HMRF and WR Spend Plan.pdf')).toMatchObject(
+      {
+        fiscalYear: '2026',
+        agency: 'Department of Health and Human Services',
+        bureau: 'Administration for Children and Families'
+      }
+    );
+
+    // https://apportionment-public.max.gov/Spend%20Plans/ACF%20SOT%20ATIP%2025-25%20Spend%20Plan.pdf
+    expect(parseSpendPlanFilename('ACF SOT ATIP 25-25 Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Administration for Children and Families'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/CN%20Spend%20Plan.pdf
+    expect(parseSpendPlanFilename('CN Spend Plan.pdf')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'Department of Agriculture',
+      bureau: 'Food and Nutrition Service'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/CAP%20FY%2025%20Spend%20Plans%20-%20fmnp.csfp.sfmnp.tefap-admin.pdf
+    expect(
+      parseSpendPlanFilename('CAP FY 25 Spend Plans - fmnp.csfp.sfmnp.tefap-admin.pdf')
+    ).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Agriculture',
+      bureau: 'Food and Nutrition Service'
+    });
   });
 });
 
