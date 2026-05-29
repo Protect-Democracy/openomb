@@ -23,6 +23,9 @@ test-results
 .claude/settings.local.json
 .pr-summary*
 
+# Ngrok
+ngrok-policy.yaml
+
 # From SvelteKit
 ##############
 .DS_Store

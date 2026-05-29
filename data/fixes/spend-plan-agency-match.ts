@@ -50,5 +50,39 @@ export default [
     pattern: /CAP\s+FY\s+25\s+Spend\s+Plans/,
     agency: 'Department of Agriculture',
     bureau: 'Food and Nutrition Service'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20ACF%20CWRTD%20%281%29.pdf
+  {
+    pattern: /ACF /,
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CAPTA.pdf
+  {
+    pattern: /^ACF apportionment information CAPTA$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CETV.pdf
+  {
+    pattern: /^ACF apportionment information CETV$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CBCAP.pdf
+  {
+    pattern: /^ACF apportionment information CBCAP$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CADA%20%281%29.pdf
+  {
+    pattern: /^ACF apportionment information CADA \(1\)$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
   }
 ] as Array<{ pattern: RegExp; agency: string; bureau?: string; fiscalYear?: string }>;
