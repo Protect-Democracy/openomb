@@ -464,8 +464,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td><code>--line-height</code></td><td>1.5</td></tr>
-      <tr><td><code>--line-height-small</code></td><td>1.2</td></tr>
+      <tr><td><code>--line-height</code></td><td>1.7</td></tr>
+      <tr><td><code>--line-height-small</code></td><td>1.35</td></tr>
       <tr><td><code>--base-font-size</code></td><td>16px (14px on mobile)</td></tr>
       <tr
         ><td><code>--copy-width-limit</code></td><td>50em (max-width for paragraph/copy text)</td
