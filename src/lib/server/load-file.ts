@@ -589,6 +589,8 @@ async function loadPdfSpendPlan(
   // https://apportionment-public.max.gov/Spend%20Plans/DFC%20Operating%20Plan%20-%20FY2025%20-%20Final_508.pdf
   // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20IMLS%20Spend%20Plan.pdf
   // https://apportionment-public.max.gov/Spend%20Plans/FY2026%20NEH%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/FY26%20Qs%201%20and%202%20TANF%20HMRF%20and%20WR%20Spend%20Plan.pdf
+  // https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CAPTA.pdf
   const urlPath = decodeURIComponent(pdfUrl)
     .replace(env.baseUrl, '')
     .replace(/(\.pdf)+$/, '');
@@ -597,6 +599,11 @@ async function loadPdfSpendPlan(
 
   // Parse out the file name
   const { fiscalYear, agency, bureau } = parseSpendPlanFilename(fileName);
+
+  // Check for fiscal year
+  if (!fiscalYear) {
+    throw new Error(`Fiscal year not found in file name | URL: ${pdfUrl}`);
+  }
 
   // Throw error if we do not have an approval date in the title or fixes
   const budgetAgencyTitleId = dbId(formatBudgetAgency(agency || ''));
@@ -780,10 +787,18 @@ export function parseSpendPlanFilename(fileName: string): {
   // in the middle of the file name
   let yearParts = fileName.match(/^.Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
   if (!yearParts) {
-    // Try to find a year anywhere in the file name just in case
+    // Try to find a year anywhere in the file name just in case, Y_24 or Y2024 or Y 2024
     const otherYearParts = fileName.match(/Y[_| ]{0,1}([\d]{2,4})/);
     if (otherYearParts) {
       yearParts = [fileName, otherYearParts[1], fileName];
+    }
+
+    // There is one that is 25-25
+    if (!yearParts) {
+      const rangeYearParts = fileName.match(/([\d]{2,4})[-_]{1}([\d]{2,4})/);
+      if (rangeYearParts) {
+        yearParts = [fileName, rangeYearParts[1], fileName];
+      }
     }
   }
   const results = {
@@ -845,11 +860,13 @@ export function parseSpendPlanFilename(fileName: string): {
     }
   }
 
-  // If we didn't find an agency yet, check against filename patterns we know
-  if (!results['agency']) {
+  // Some files don't have fiscal year, and we may not find an agency yet, check
+  // against filename patterns we know
+  if (!results['fiscalYear'] || !results['agency']) {
     // Department of state
     const match = spendPlanAgencyMatchFixes.find((fix) => fix.pattern.test(fileName));
     if (match) {
+      results['fiscalYear'] = results['fiscalYear'] || match.fiscalYear;
       results['agency'] = match.agency;
       results['bureau'] = match.bureau;
     }
