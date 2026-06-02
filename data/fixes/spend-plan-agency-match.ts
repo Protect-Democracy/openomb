@@ -84,5 +84,32 @@ export default [
     fiscalYear: '2025',
     agency: 'Department of Health and Human Services',
     bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20FVPSA%20%20and%20DHL%20spend%20plans%20%281%29.pdf
+  {
+    pattern: /FVPSA /,
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/FVPSA_26_Spend%20Plan%20%281%29.pdf
+  {
+    pattern: /^FVPSA_26_Spend Plan \(1\)$/,
+    fiscalYear: '2026',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/CSBG_26_SpendPlanFinal%20%281%29.pdf
+  {
+    pattern: /^CSBG_26_SpendPlanFinal \(1\)$/,
+    fiscalYear: '2026',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/DHSCM_CarryOver_26_SpendPlanFinal%20%281%29.pdf
+  {
+    pattern: /^DHSCM_CarryOver_26_SpendPlanFinal \(1\)$/,
+    fiscalYear: '2026',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
   }
 ] as Array<{ pattern: RegExp; agency: string; bureau?: string; fiscalYear?: string }>;
