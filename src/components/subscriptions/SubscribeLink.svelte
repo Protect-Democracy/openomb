@@ -305,7 +305,7 @@
 
     <div class="user-actions">
       <Dialog triggerProps={{ class: 'subscribe medium' }}>
-        <span slot="trigger">Log In to Subscribe</span>
+        <span slot="trigger">Log in to Subscribe</span>
         <div slot="content">
           <LogIn
             callbackUrl={searchSubscriptionType && url
