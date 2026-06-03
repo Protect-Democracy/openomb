@@ -279,17 +279,6 @@
     align-items: center;
     padding: calc(var(--spacing) * 1.5) 0;
 
-    /*
-    <<<<<<< HEAD
-    align-content: center;
-    padding: var(--spacing-double) 0;
-    padding: var(--spacing-double) 0;
-=======
-    align-items: center;
-    padding: var(--spacing-double) 0;
->>>>>>> main
-*/
-
     ul {
       display: flex;
       flex-wrap: wrap;
