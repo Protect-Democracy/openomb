@@ -689,6 +689,35 @@ a.button.like-link {
       background-color: transparent;
     }
   }
+
+  &.compact {
+    padding: 0;
+    margin: 0;
+    width: auto;
+    font-weight: bold;
+  }
+}
+
+button.button-link,
+input[type='submit'].button-link,
+input[type='button'].button-link,
+input[type='reset'].button-link,
+[role='button'].button-link,
+a.button.button-link {
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  width: auto;
+  font-weight: bold;
+  display: inline-block;
+  background-color: inherit;
+  color: var(--color-link);
+  text-decoration: underline;
+
+  &:hover {
+    background-color: transparent;
+    text-decoration: none;
+  }
 }
 
 button.like-link:hover,

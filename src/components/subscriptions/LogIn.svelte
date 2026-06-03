@@ -34,7 +34,7 @@
 
     <p>
       Entered the wrong email?
-      <button class="like-link compact" on:click|preventDefault={resetLogin}>Start over</button>
+      <button class="button-link" on:click|preventDefault={resetLogin}>Start over</button>
     </p>
   {:else}
     <h2 class={headingClass}>Log in or create an account</h2>

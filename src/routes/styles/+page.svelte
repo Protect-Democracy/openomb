@@ -1061,6 +1061,7 @@
   <button class="like-link alt">.like-link.alt</button><br />
   <button class="like-text">.like-text</button><br />
   <button class="alt like-text like-link">.alt.like-text.like-link</button><br />
+  <button class="button-link">.button-link</button><br />
 
   <h2 class="style-section">Tags</h2>
 
