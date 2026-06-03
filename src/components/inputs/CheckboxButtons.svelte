@@ -68,7 +68,7 @@
 
 <div class="has-js-only-block">
   <div {...$root} use:root class="toggle-group" aria-label={name}>
-    {#each options as option}
+    {#each options as option (option)}
       <button
         class="compact toggle-item {buttonClass}"
         {...$item(`${formatOptionValue(option)}`)}
@@ -84,7 +84,7 @@
 
 <!-- No-js backup, but also used to track the value of our js form element -->
 <div class="no-js-only-block checkboxes-inline">
-  {#each options as option}
+  {#each options as option (option)}
     <div class="checkbox">
       <input
         type="checkbox"

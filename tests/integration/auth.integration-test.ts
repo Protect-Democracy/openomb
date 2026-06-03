@@ -58,8 +58,8 @@ test('basic email authentication', async ({ page, context, baseURL }) => {
 
   // Go to the link to log in
   await page.goto(authLink);
-  await expect(page.getByRole('heading', { name: 'Subscriptions' })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Modify subscriptions' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your Account' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Delete account' })).toBeVisible();
 
   // Teardown email client
   await emailTeardown();
@@ -125,7 +125,7 @@ test('basic notification test', async ({ page, context, baseURL }) => {
 
   // Notify
   const newEmailWatch = auth.mailClient.waitForEvent('new', 10000);
-  const notifyOutput = await runNotifyCommand();
+  await runNotifyCommand();
 
   // Wait for email and check that it has the new apportionment in it
   const emailData = await newEmailWatch;
