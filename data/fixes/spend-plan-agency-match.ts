@@ -4,9 +4,67 @@
  * Matches agency/bureau on regex title convention instead.  Ideally
  * this would only match the agency, bureau, but some files don't have
  * any year information in the file name.
+ *
+ * IMPORTANT: More specific patterns should be higher up.
  */
 
 export default [
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CAPTA.pdf
+  {
+    pattern: /^ACF apportionment information CAPTA$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CETV.pdf
+  {
+    pattern: /^ACF apportionment information CETV$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CBCAP.pdf
+  {
+    pattern: /^ACF apportionment information CBCAP$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CADA%20%281%29.pdf
+  {
+    pattern: /^ACF apportionment information CADA \(1\)$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/FVPSA_26_Spend%20Plan%20%281%29.pdf
+  {
+    pattern: /^FVPSA_26_Spend Plan \(1\)$/,
+    fiscalYear: '2026',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/CSBG_26_SpendPlanFinal%20%281%29.pdf
+  {
+    pattern: /^CSBG_26_SpendPlanFinal \(1\)$/,
+    fiscalYear: '2026',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/DHSCM_CarryOver_26_SpendPlanFinal%20%281%29.pdf
+  {
+    pattern: /^DHSCM_CarryOver_26_SpendPlanFinal \(1\)$/,
+    fiscalYear: '2026',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
+  // https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20DHSCM_May25%20%281%29.pdf
+  {
+    pattern: /^ACF apportionment information DHSCM_May25 \(1\)$/,
+    fiscalYear: '2025',
+    agency: 'Department of Health and Human Services',
+    bureau: 'Administration for Children and Families'
+  },
   {
     pattern: /State (Diplomatic|Embassy|CIO)/,
     agency: 'Department of State'
@@ -57,58 +115,9 @@ export default [
     agency: 'Department of Health and Human Services',
     bureau: 'Administration for Children and Families'
   },
-  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CAPTA.pdf
-  {
-    pattern: /^ACF apportionment information CAPTA$/,
-    fiscalYear: '2025',
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
-  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CETV.pdf
-  {
-    pattern: /^ACF apportionment information CETV$/,
-    fiscalYear: '2025',
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
-  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CBCAP.pdf
-  {
-    pattern: /^ACF apportionment information CBCAP$/,
-    fiscalYear: '2025',
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
-  // No year: https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CADA%20%281%29.pdf
-  {
-    pattern: /^ACF apportionment information CADA \(1\)$/,
-    fiscalYear: '2025',
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
   // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20FVPSA%20%20and%20DHL%20spend%20plans%20%281%29.pdf
   {
     pattern: /FVPSA /,
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
-  // https://apportionment-public.max.gov/Spend%20Plans/FVPSA_26_Spend%20Plan%20%281%29.pdf
-  {
-    pattern: /^FVPSA_26_Spend Plan \(1\)$/,
-    fiscalYear: '2026',
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
-  // https://apportionment-public.max.gov/Spend%20Plans/CSBG_26_SpendPlanFinal%20%281%29.pdf
-  {
-    pattern: /^CSBG_26_SpendPlanFinal \(1\)$/,
-    fiscalYear: '2026',
-    agency: 'Department of Health and Human Services',
-    bureau: 'Administration for Children and Families'
-  },
-  // https://apportionment-public.max.gov/Spend%20Plans/DHSCM_CarryOver_26_SpendPlanFinal%20%281%29.pdf
-  {
-    pattern: /^DHSCM_CarryOver_26_SpendPlanFinal \(1\)$/,
-    fiscalYear: '2026',
     agency: 'Department of Health and Human Services',
     bureau: 'Administration for Children and Families'
   }

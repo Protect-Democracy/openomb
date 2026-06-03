@@ -793,6 +793,14 @@ export function parseSpendPlanFilename(fileName: string): {
       yearParts = [fileName, otherYearParts[1], fileName];
     }
 
+    // Try to find a four digit year anywhere in the file name just in case, 2024
+    if (!otherYearParts) {
+      const fourDigitYearParts = fileName.match(/\s+([\d]{4})\s+/);
+      if (fourDigitYearParts && fourDigitYearParts[1][0] === '2') {
+        yearParts = [fileName, fourDigitYearParts[1], fileName];
+      }
+    }
+
     // There is one that is 25-25
     if (!yearParts) {
       const rangeYearParts = fileName.match(/([\d]{2,4})[-_]{1}([\d]{2,4})/);

@@ -320,6 +320,12 @@ describe('parseSpendPlanFilename()', () => {
       agency: 'Department of Agriculture',
       bureau: 'Food and Nutrition Service'
     });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/FMCS%20Spend%20Plan%202026%20Carryover%20%281%29.pdf
+    expect(parseSpendPlanFilename('FMCS Spend Plan 2026 Carryover (1).pdf')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'Federal Mediation and Conciliation Service'
+    });
   });
 });
 
