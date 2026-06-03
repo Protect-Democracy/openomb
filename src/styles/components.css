@@ -570,6 +570,7 @@ input[type='button'].button-switch,
 input[type='reset'].button-switch,
 [role='button'].button-switch,
 a.button.button-switch {
+  /* TODO: Use --spacing values */
   --local-padding: calc(1em / 6);
   --local-width: 4rem;
   --local-height: 2rem;
@@ -728,7 +729,7 @@ input[type='reset'].small,
 a.button.small {
   font-weight: var(--font-copy-weight-normal);
   font-size: var(--font-size-small);
-  padding: calc(var(--spacing-half) - var(--border-weight)) var(--spacing-half);
+  padding: calc(var(--spacing-half) - var(--border-weight)) var(--spacing);
   border-radius: var(--border-radius-small);
 }
 
