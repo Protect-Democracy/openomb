@@ -333,10 +333,23 @@
       padding: var(--spacing);
       gap: calc(var(--spacing) * 2);
     }
+
+    /* stack on small screens */
+    @media (max-width: 768px) {
+      & {
+        display: block;
+      }
+    }
   }
 
   .subscribe-description {
-    max-width: 75%;
+    max-width: 65%;
+
+    @media (max-width: 768px) {
+      & {
+        max-width: none;
+      }
+    }
 
     p {
       margin-bottom: 0;
@@ -387,6 +400,16 @@
 
     .variant-small & {
       padding-top: 0;
+    }
+
+    @media (max-width: 768px) {
+      & {
+        padding-top: var(--spacing);
+
+        button {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 
