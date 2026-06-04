@@ -111,4 +111,16 @@ async function sendEmail(to: string, subject: string, html: string, forceClientR
   }
 }
 
+/**
+ * Returns true if the error is a rate-limit response from MailGun (420) or
+ * the standard HTTP rate-limit status (429).
+ */
+export function isRateLimitError(err: unknown): boolean {
+  if (typeof err === 'object' && err !== null && 'status' in err) {
+    const status = (err as { status: unknown }).status;
+    return status === 420 || status === 429;
+  }
+  return false;
+}
+
 export { sendEmail };
