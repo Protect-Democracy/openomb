@@ -10,10 +10,15 @@ import {
   setSubscriptionAsNotified
 } from '$db/queries/subscriptions';
 import { parseCriterion } from '$lib/searches';
-import { maxFilesPerNotificationEntry, runWeeklyEmailsOn } from '$config/subscriptions';
+import {
+  maxFilesPerNotificationEntry,
+  runWeeklyEmailsOn,
+  notificationDelayMs,
+  notificationRetryCount
+} from '$config/subscriptions';
 import { formatDate } from '$lib/formatters';
 import { renderTemplate } from '$email/render';
-import { sendEmail } from '$email/send';
+import { sendEmail, isRateLimitError } from '$email/send';
 import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte';
 
 // Types
@@ -34,19 +39,48 @@ export type SubscriptionWithFiles = subscriptionSelect &
     files?: filesSelectNoSourceData[];
   };
 
+export type NotificationFailure = { email: string; error: unknown };
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 /**
  * Send notifications to users based on their subscriptions.
+ *
+ * Waits between each send to avoid hitting MailGun rate limits. All errors are
+ * retried up to notificationRetryCount times. On a 420/429 the inter-email delay
+ * is permanently doubled each retry so the rest of the run slows down too. Other
+ * errors use a temporary exponential backoff (notificationDelayMs * 2^attempt)
+ * that doesn't affect subsequent sends. One user's exhausted retries don't stop
+ * the rest of the job.
  */
-export async function sendNotifications() {
+export async function sendNotifications(): Promise<{
+  notificationsSent: {
+    email: string;
+    notifySubs: SubscriptionWithFiles[];
+    subscriptionsNotified: number;
+  }[];
+  notificationsFailed: NotificationFailure[];
+}> {
   const userSubscriptions = await subscriptionsByUser();
-  const notificationsSent = [];
+  const notificationsSent: {
+    email: string;
+    notifySubs: SubscriptionWithFiles[];
+    subscriptionsNotified: number;
+  }[] = [];
+  const notificationsFailed: NotificationFailure[] = [];
+  let currentDelay = notificationDelayMs;
+  let first = true;
 
   for (const email of Object.keys(userSubscriptions)) {
-    // For a user, find any relevant new files, then send the notification
+    // Space out sends; skip the pause before the very first one
+    if (!first) {
+      await sleep(currentDelay);
+    }
+    first = false;
+
     const currentUserSubs = userSubscriptions[email];
     const notifySubs: SubscriptionWithFiles[] = [];
     for (const sub of currentUserSubs) {
-      // Check if our subscription is weekly or daily and, based on that, if it needs to run again
       if (includeDailyNotification(sub) || includeWeeklyNotification(sub)) {
         const notification = await getSubscriptionWithFiles(email, sub);
         if (notification) {
@@ -55,21 +89,51 @@ export async function sendNotifications() {
       }
     }
 
-    if (notifySubs.length) {
-      // Send our notification email to the user
-      await sendNotificationEmail(email, notifySubs);
-      // Update our subscriptions to indicate notifications were sent
-      await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
+    if (!notifySubs.length) {
+      continue;
+    }
 
-      notificationsSent.push({
-        email,
-        notifySubs,
-        subscriptionsNotified: notifySubs.length
-      });
+    const doSend = async () => {
+      await sendNotificationEmail(email, notifySubs);
+      await Promise.all(map(notifySubs, (sub) => setSubscriptionAsNotified(email, sub.id)));
+      notificationsSent.push({ email, notifySubs, subscriptionsNotified: notifySubs.length });
+    };
+
+    let attempt = 0;
+    while (true) {
+      try {
+        await doSend();
+        break;
+      } catch (err) {
+        attempt++;
+        if (attempt > notificationRetryCount) {
+          console.error(`Send failed for ${email} after ${notificationRetryCount} retries:`, err);
+          notificationsFailed.push({ email, error: err });
+          break;
+        }
+
+        let retryDelay: number;
+        if (isRateLimitError(err)) {
+          // Permanently double the inter-email delay so the rest of the run slows down too
+          currentDelay = currentDelay * 2;
+          retryDelay = currentDelay;
+          console.warn(
+            `Rate limit hit for ${email}, retry ${attempt}/${notificationRetryCount} after ${retryDelay}ms`
+          );
+        } else {
+          // Temporary exponential backoff for this retry; doesn't affect the base delay
+          retryDelay = notificationDelayMs * Math.pow(2, attempt);
+          console.warn(
+            `Send failed for ${email}, retry ${attempt}/${notificationRetryCount} after ${retryDelay}ms:`,
+            err
+          );
+        }
+        await sleep(retryDelay);
+      }
     }
   }
 
-  return notificationsSent;
+  return { notificationsSent, notificationsFailed };
 }
 
 /**

@@ -4,6 +4,7 @@
 
 // Dependencies
 import { Command } from 'commander';
+import * as Sentry from '@sentry/node';
 import { sendNotifications } from '$server/subscriptions';
 import { setupCustomSentry, createTransaction } from '$server/sentry-custom';
 import packageJson from '../package.json' assert { type: 'json' };
@@ -26,10 +27,17 @@ async function cli(): Promise<void> {
     .parse(process.argv);
 
   console.info(`Started subscription notification - ${new Date()}`);
-  const sent = await sendNotifications();
+  const { notificationsSent, notificationsFailed } = await sendNotifications();
   console.info(`Finished notification - ${new Date()}`);
   console.info(
     'Notifications sent:',
-    sent.reduce((acc, curr) => acc + curr.subscriptionsNotified, 0)
+    notificationsSent.reduce((acc, curr) => acc + curr.subscriptionsNotified, 0)
   );
+
+  if (notificationsFailed.length) {
+    console.error(`Notifications failed: ${notificationsFailed.length}`);
+    for (const { email, error } of notificationsFailed) {
+      Sentry.captureException(error, { extra: { email } });
+    }
+  }
 }

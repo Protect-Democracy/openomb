@@ -69,7 +69,11 @@ test('basic notification test', async ({ page, context, baseURL }) => {
   const email = 'test-notification-test@example.com';
   const auth = await integrationAuthenticate(email, page, context, baseURL);
 
-  // Go to a search page for apportionments that are approved after 3 months agon
+  // Add the apportionment before searching so the search results are non-empty.
+  // Test data is from 2021-2023 and won't appear in a recent-date filter.
+  await createApportionment({ approvalTimestamp: new Date() }, [{ accountTitle: 'Test Account' }]);
+
+  // Go to a search page for apportionments that are approved after 3 months ago
   const threeMonthsAgo = new Date();
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
   const threeMonthsAgoStr = threeMonthsAgo.toISOString().split('T')[0];
@@ -91,9 +95,6 @@ test('basic notification test', async ({ page, context, baseURL }) => {
   // Check that subscription is on subscriptions page.  Look for link with "Approved After: "
   await page.goto('/subscribe');
   await expect(page.getByRole('link', { name: /Approved After: / })).toBeVisible();
-
-  // Add new apportionment
-  await createApportionment({ approvalTimestamp: new Date() }, [{ accountTitle: 'Test Account' }]);
 
   // Notifications won't go out until 18 hours after the subscription was created, so we need to
   // update the subscription to be old enough to trigger a notification.
