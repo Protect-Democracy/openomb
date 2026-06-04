@@ -24,7 +24,7 @@ export const maxFilesPerNotificationEntry = 20;
 export const runWeeklyEmailsOn = 1; //Monday
 
 // Delay between notification emails (ms) to avoid rate limits
-export const notificationDelayMs = 1_000;
+export const notificationDelayMs = 3_000;
 
 // How many times to retry a send after a rate-limit error before giving up
 export const notificationRetryCount = 3;
