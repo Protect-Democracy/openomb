@@ -801,6 +801,15 @@ export function parseSpendPlanFilename(fileName: string): {
       }
     }
 
+    // Try when date is there (though this is not necessarily the fiscal year)
+    // 03.19.2026
+    if (!yearParts) {
+      const dateYearParts = fileName.match(/([\d]{1,2})[._-]([\d]{1,2})[._-]([\d]{4})/);
+      if (dateYearParts && dateYearParts[3][0] === '2') {
+        yearParts = [fileName, dateYearParts[3], fileName];
+      }
+    }
+
     // There is one that is 25-25
     if (!yearParts) {
       const rangeYearParts = fileName.match(/([\d]{2,4})[-_]{1}([\d]{2,4})/);
