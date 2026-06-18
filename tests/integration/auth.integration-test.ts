@@ -14,6 +14,47 @@ import { emailClient } from '$tests/helpers/email';
 //
 // TODO: Move to Playwright projects, which can specify parallel and serial.
 
+const ERROR_MESSAGE = 'Something went wrong. Please try again.';
+
+// These two tests intercept the signIn POST at the network level, so they don't
+// consume the email service and can run independently of Mailpit state.
+
+test('signIn shows error when server returns HTML instead of JSON', async ({ page }) => {
+  // Simulates the production bug where CloudFront stripped X-Auth-Return-Redirect,
+  // causing Auth.js to 302 → /subscribe/verify, which the fetch followed and got HTML.
+  await page.route(/\/auth\/signin\/http-email/, (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<!doctype html><html><body>Not found</body></html>'
+    });
+  });
+
+  await page.goto('/subscribe');
+  await page.getByLabel('Email').fill('test@example.com');
+  await page.getByRole('button', { name: 'Send link' }).click();
+
+  await expect(page.getByText(ERROR_MESSAGE)).toBeVisible();
+});
+
+test('signIn shows error when Auth.js returns an error code', async ({ page, baseURL }) => {
+  // Simulates an Auth.js error (e.g. misconfigured provider) where the response
+  // URL includes ?error=Configuration, which Auth.js client surfaces as result.error.
+  await page.route(/\/auth\/signin\/http-email/, (route) => {
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ url: `${baseURL}/subscribe/error?error=Configuration` })
+    });
+  });
+
+  await page.goto('/subscribe');
+  await page.getByLabel('Email').fill('test@example.com');
+  await page.getByRole('button', { name: 'Send link' }).click();
+
+  await expect(page.getByText(ERROR_MESSAGE)).toBeVisible();
+});
+
 test('basic email authentication', async ({ page, context, baseURL }) => {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
   const newEmailWatch = mailClient.waitForEvent('new');
