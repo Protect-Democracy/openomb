@@ -162,7 +162,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 4: CAPTCHA non-US traffic above 50 req/5min
+  # Priority 4: CAPTCHA non-US traffic above 100 req/5min
   rule {
     name     = "non-us-rate-limit-captcha"
     priority = 4
@@ -173,7 +173,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
     statement {
       rate_based_statement {
-        limit              = 50
+        limit              = 100
         aggregate_key_type = "IP"
 
         scope_down_statement {
