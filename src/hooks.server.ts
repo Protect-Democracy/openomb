@@ -50,10 +50,13 @@ const addHeaders: Handle = async ({ event, resolve }) => {
 
   // We can't set headers again if they have already been set, so we manage
   // here for global handling.
-  const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*)/);
+
+  // Auth related paths that should never be cached.
+  const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*|\/auth*)/);
   const cacheHeaders = noCache
     ? {
         'Cache-Control': 'private, no-store',
+        // TODO: Is the Expires header necessary here?
         Expires: 'Sat, 26 Jul 1997 05:00:00 GMT'
       }
     : {
