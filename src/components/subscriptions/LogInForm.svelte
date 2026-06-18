@@ -18,6 +18,7 @@
 -->
 <script lang="ts">
   import { signIn } from '@auth/sveltekit/client';
+  import { captureException } from '@sentry/svelte';
   import SpinnerIcon from '$components/icons/Spinner.svelte';
 
   // Constatns
@@ -50,31 +51,34 @@
       const result = await signIn('http-email', { email, callbackUrl, redirect: false });
       // If we wanted to redirect, result.url should be in response
 
-      // TODO: Remove later, but adding this because prod and local are acting differently.
-      console.info(result);
-
       if (result?.ok && !result.error) {
         submitted = true;
         if (onLogin) {
           onLogin(email);
         }
-      } else if (result.error) {
-        // Unsure if error message is user friendly.  If a non-email is sent, the error
-        // message is just "Configuration"
+      } else if (result?.error) {
+        // Auth.js returns a string error code (e.g. "Configuration") — not user-friendly
+        captureException(
+          new Error(
+            `auth signIn error: ${result?.error} (code: ${result?.code}, status: ${result?.status})`
+          )
+        );
         errorMessage = defaultErrorMessage;
         if (onLoginError) {
           onLoginError(email);
         }
       } else {
+        // Unexpected: no error code but also not ok
+        captureException(
+          new Error(`auth signIn unexpected result: ok=${result?.ok}, status=${result?.status}`)
+        );
         errorMessage = defaultErrorMessage;
         if (onLoginError) {
           onLoginError(email);
         }
       }
     } catch (e) {
-      // TODO: Remove later, but adding this because prod and local are acting differently.
-      console.error(e);
-
+      captureException(e);
       errorMessage = defaultErrorMessage;
       if (onLoginError) {
         onLoginError(email);
