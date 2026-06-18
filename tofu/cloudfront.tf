@@ -66,10 +66,10 @@ resource "aws_cloudfront_cache_policy" "apportionments" {
     headers_config {
       header_behavior = "whitelist"
       headers {
-        # Sveltekit needs these headers for form actions
+        # Sveltekit and Auth.js needs these headers for form actions
         # https://github.com/sveltejs/kit/issues/12812
         # https://svelte.dev/docs/kit/form-actions#Progressive-enhancement-Custom-event-listener
-        items = ["Accept", "x-sveltekit-action"]
+        items = ["Accept", "x-sveltekit-action", "X-Auth-Return-Redirect"]
       }
     }
     query_strings_config {
