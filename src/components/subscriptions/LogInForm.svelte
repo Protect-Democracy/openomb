@@ -50,6 +50,9 @@
       const result = await signIn('http-email', { email, callbackUrl, redirect: false });
       // If we wanted to redirect, result.url should be in response
 
+      // TODO: Remove later, but adding this because prod and local are acting differently.
+      console.info(result);
+
       if (result?.ok && !result.error) {
         submitted = true;
         if (onLogin) {
