@@ -71,7 +71,10 @@
           onLoginError(email);
         }
       }
-    } catch {
+    } catch (e) {
+      // TODO: Remove later, but adding this because prod and local are acting differently.
+      console.error(e);
+
       errorMessage = defaultErrorMessage;
       if (onLoginError) {
         onLoginError(email);
