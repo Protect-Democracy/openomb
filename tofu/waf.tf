@@ -77,10 +77,33 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 2: Bot control (common level)
+  # Priority 2: Known malicious IP reputation (bot infrastructure, DDoS sources, etc.)
+  rule {
+    name     = "aws-ip-reputation"
+    priority = 2
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesAmazonIpReputationList"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "apportionments-ip-reputation"
+      sampled_requests_enabled   = true
+    }
+  }
+
+  # Priority 3: Bot control (targeted level detects headless browsers and JS-capable bots)
   rule {
     name     = "aws-bot-control"
-    priority = 2
+    priority = 3
 
     override_action {
       none {}
@@ -93,7 +116,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
         managed_rule_group_configs {
           aws_managed_rules_bot_control_rule_set {
-            inspection_level = "COMMON"
+            inspection_level = "TARGETED"
           }
         }
 
@@ -129,10 +152,10 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 3: Block non-US traffic above 300 req/5min
+  # Priority 4: Block non-US traffic above 150 req/5min
   rule {
     name     = "non-us-rate-limit-block"
-    priority = 3
+    priority = 4
 
     action {
       block {}
@@ -140,7 +163,7 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
     statement {
       rate_based_statement {
-        limit              = 300
+        limit              = 150
         aggregate_key_type = "IP"
 
         scope_down_statement {
@@ -162,10 +185,10 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 4: CAPTCHA non-US traffic above 100 req/5min
+  # Priority 5: CAPTCHA non-US traffic above 100 req/5min
   rule {
     name     = "non-us-rate-limit-captcha"
-    priority = 4
+    priority = 5
 
     action {
       captcha {}
@@ -195,10 +218,10 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 5: Block US traffic above 1000 req/5min
+  # Priority 6: Block US traffic above 1000 req/5min
   rule {
     name     = "us-rate-limit-block"
-    priority = 5
+    priority = 6
 
     action {
       block {}
