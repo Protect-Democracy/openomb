@@ -37,7 +37,8 @@ export async function integrationAuthenticate(
   await page.getByRole('button', { name: 'Send link' }).click();
 
   // Wait for the confirmation email (polls until a message arrives)
-  const emailData = await mailClient.waitForMessage({ query: '' });
+  const emailResult = await mailClient.waitForMessages({ count: 1 });
+  const emailData = emailResult.messages[0];
 
   // Get the link from the email
   const emailHtml = await mailClient.renderMessageHTML(emailData.ID);

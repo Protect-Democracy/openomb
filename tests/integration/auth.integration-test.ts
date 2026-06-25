@@ -76,7 +76,8 @@ test('basic email authentication', async ({ page, context, baseURL }) => {
   await page.getByRole('button', { name: 'Send link' }).click();
 
   // Wait for the confirmation email (polls until a message arrives)
-  const email = await mailClient.waitForMessage({ query: '' });
+  const emailResult = await mailClient.waitForMessages({ count: 1 });
+  const email = emailResult.messages[0];
 
   // Check subject
   expect(email.Subject).toContain('Subscribe to OpenOMB');
@@ -164,11 +165,18 @@ test('basic notification test', async ({ page, context, baseURL }) => {
   const sub = currentUserSubs[0];
   expect(sub).toBeDefined();
 
+  // Clear inbox (auth email is still present) so we wait only for the notification
+  await auth.mailClient.deleteMessages();
+
   // Notify
   await runNotifyCommand();
 
   // Wait for email and check that it has the new apportionment in it
-  const emailData = await auth.mailClient.waitForMessage({ query: '' }, { timeout: 10000 });
+  const notificationResult = await auth.mailClient.waitForMessages(
+    { count: 1 },
+    { timeout: 10000 }
+  );
+  const emailData = notificationResult.messages[0];
   expect(emailData.Subject).toContain('Subscriptions');
   const emailHtml = await auth.mailClient.renderMessageHTML(emailData.ID);
   expect(emailHtml).toContain('Test Account');
