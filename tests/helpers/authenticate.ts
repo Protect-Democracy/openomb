@@ -18,7 +18,9 @@ export async function integrationAuthenticate(
   baseURL: string | undefined
 ) {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
-  const newEmailWatch = mailClient.waitForEvent('new');
+
+  // Clear any stale messages so waitForMessages only sees the one we're about to trigger
+  await mailClient.deleteMessages();
 
   // Set a cookie to indicate that the user has JavaScript enabled, which is required for
   // our email verification flow
@@ -37,11 +39,12 @@ export async function integrationAuthenticate(
   await page.getByLabel('Email').fill(email);
   await page.getByRole('button', { name: 'Send link' }).click();
 
-  // Wait for the confirmation email
-  const emailData = await newEmailWatch;
+  // Wait for the confirmation email (polls until a message arrives)
+  const emailResult = await mailClient.waitForMessages({ count: 1 });
+  const emailData = emailResult.messages[0];
 
   // Get the link from the email
-  const emailHtml = await mailClient.renderMessageHTML(emailData.Data.ID);
+  const emailHtml = await mailClient.renderMessageHTML(emailData.ID);
   const linkMatch = emailHtml.match(/"(https?:\/\/[^\s]+auth\/callback[^\s]+)"/im);
   if (!linkMatch) {
     throw new Error('No link found in email');
@@ -61,7 +64,6 @@ export async function integrationAuthenticate(
       await emailTeardown();
 
       // Delete cookies
-      const cookies = await context.cookies();
       await context.clearCookies();
     }
   };

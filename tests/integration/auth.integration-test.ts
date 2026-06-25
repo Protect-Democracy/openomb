@@ -57,7 +57,9 @@ test('signIn shows error when Auth.js returns an error code', async ({ page, bas
 
 test('basic email authentication', async ({ page, context, baseURL }) => {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
-  const newEmailWatch = mailClient.waitForEvent('new');
+
+  // Clear any stale messages so waitForMessages only sees the one we're about to trigger
+  await mailClient.deleteMessages();
 
   // Set a cookie to indicate that the user has JavaScript enabled, which is required for
   // our email verification flow
@@ -76,14 +78,15 @@ test('basic email authentication', async ({ page, context, baseURL }) => {
   await page.getByLabel('Email').fill('test@example.com');
   await page.getByRole('button', { name: 'Send link' }).click();
 
-  // Wait for the confirmation email
-  const email = await newEmailWatch;
+  // Wait for the confirmation email (polls until a message arrives)
+  const emailResult = await mailClient.waitForMessages({ count: 1 });
+  const email = emailResult.messages[0];
 
   // Check subject
-  expect(email.Data.Subject).toContain('Subscribe to OpenOMB');
+  expect(email.Subject).toContain('Subscribe to OpenOMB');
 
   // Get the link from the email
-  const emailHtml = await mailClient.renderMessageHTML(email.Data.ID);
+  const emailHtml = await mailClient.renderMessageHTML(email.ID);
   const linkMatch = emailHtml.match(/"(https?:\/\/[^\s]+auth\/callback[^\s]+)"/im);
   if (!linkMatch) {
     throw new Error('No link found in email');
@@ -165,14 +168,20 @@ test('basic notification test', async ({ page, context, baseURL }) => {
   const sub = currentUserSubs[0];
   expect(sub).toBeDefined();
 
+  // Clear inbox (auth email is still present) so we wait only for the notification
+  await auth.mailClient.deleteMessages();
+
   // Notify
-  const newEmailWatch = auth.mailClient.waitForEvent('new', 10000);
   await runNotifyCommand();
 
   // Wait for email and check that it has the new apportionment in it
-  const emailData = await newEmailWatch;
-  expect(emailData.Data.Subject).toContain('Subscriptions');
-  const emailHtml = await auth.mailClient.renderMessageHTML(emailData.Data.ID);
+  const notificationResult = await auth.mailClient.waitForMessages(
+    { count: 1 },
+    { timeout: 10000 }
+  );
+  const emailData = notificationResult.messages[0];
+  expect(emailData.Subject).toContain('Subscriptions');
+  const emailHtml = await auth.mailClient.renderMessageHTML(emailData.ID);
   expect(emailHtml).toContain('Test Account');
 
   // Teardown

@@ -13,7 +13,6 @@ export async function emailClient() {
     client,
     teardown: async () => {
       await client.deleteMessages();
-      await client.disconnect();
     }
   };
 }

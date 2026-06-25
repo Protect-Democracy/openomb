@@ -31,6 +31,7 @@
   // that this filter version doesn't show up for non-js users,
   // it's not really necessary.
   function removeFilter(filterParam: string, filterValue: string | number | Date) {
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary URLSearchParams for building a URL string, not reactive state
     const newParams = new URLSearchParams(url.searchParams.toString());
 
     // Custom param handling.  Term is an input with comma separated list of values.

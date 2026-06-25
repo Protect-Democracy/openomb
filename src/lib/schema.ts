@@ -1,5 +1,6 @@
 import type {
   Dataset,
+  Graph,
   Organization,
   Thing,
   WebPage,
@@ -15,7 +16,7 @@ import type { tafsSelect } from '$schema/tafs';
 import pdLogo from '$assets/logos/pd-white-words-logo.svg';
 
 // General schema handler
-type Schema = Thing | WithContext<Thing>;
+type Schema = Thing | WithContext<Thing> | Graph;
 
 // Constants
 const ombSchema: GovernmentOrganization = {
@@ -140,11 +141,11 @@ export function formatJsonLdScript(schema: Schema) {
   // Need the @context, and Safari doesn't like top-level arrays.
   if (isArray(schema)) {
     schema = {
-      '@context': 'http://schema.org',
+      '@context': 'https://schema.org',
       '@graph': schema
-    };
+    } satisfies Graph;
   } else {
-    schema['@context'] = 'https://schema.org';
+    (schema as WithContext<Thing>)['@context'] = 'https://schema.org';
   }
 
   return `<script type="application/ld+json">${JSON.stringify(schema)}</script>`;

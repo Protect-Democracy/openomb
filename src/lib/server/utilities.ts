@@ -7,7 +7,8 @@ import { dirname, join as joinPath, basename, resolve as resolvePath } from 'nod
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { createWriteStream, createReadStream, statSync } from 'node:fs';
-import archiver from 'archiver';
+import { ZipArchive } from 'archiver';
+import type { ArchiverError } from 'archiver';
 import { S3Client, PutObjectCommand, ListObjectsCommand } from '@aws-sdk/client-s3';
 import { fromSSO, fromContainerMetadata } from '@aws-sdk/credential-providers';
 import { DateTime } from 'luxon';
@@ -271,17 +272,17 @@ function md5hash(input: string): string {
 async function zipFiles(sources: string[], outputFilename: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const outputStream = createWriteStream(outputFilename);
-    const archive = archiver('zip', { zlib: { level: 9 } });
+    const archive = new ZipArchive({ zlib: { level: 9 } });
 
     outputStream.on('close', () => {
       resolve();
     });
 
-    archive.on('error', (error: archiver.ArchiverError) => {
+    archive.on('error', (error: ArchiverError) => {
       reject(error);
     });
 
-    archive.on('warning', function (error: archiver.ArchiverError) {
+    archive.on('warning', function (error: ArchiverError) {
       if (error.code === 'ENOENT') {
         console.warn(error);
       } else {
@@ -365,7 +366,8 @@ async function listS3BucketObjects(s3Bucket: string | undefined = undefined) {
     // Catch errors because the stack trace for these don't
     // reference back to these lines
     throw new Error(
-      `Unable to list objects on S3 bucket "${s3Bucket || env.archiveS3Bucket}": ${error instanceof Error ? error.message : String(error)}`
+      `Unable to list objects on S3 bucket "${s3Bucket || env.archiveS3Bucket}": ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }
@@ -399,7 +401,8 @@ async function putS3File(
     // Catch errors because the stack trace for these don't
     // reference back to these lines
     throw new Error(
-      `Unable to put object to S3 path "${s3Bucket || env.archiveS3Bucket}/${s3Path}": ${error instanceof Error ? error.message : String(error)}`
+      `Unable to put object to S3 path "${s3Bucket || env.archiveS3Bucket}/${s3Path}": ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error }
     );
   }
 }

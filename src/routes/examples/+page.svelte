@@ -1,14 +1,10 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { derived } from 'svelte/store';
-  import { page } from '$app/stores';
 
   export let data: PageData;
   let emailTemplates = [];
   let emailTemplate = '';
 
-  // Stores
-  const url = derived(page, ($page) => $page.url);
   $: emailTemplates = Object.keys(data.emailExamples);
   $: emailTemplate = emailTemplate || emailTemplates[0];
 </script>
@@ -21,7 +17,7 @@
   <h2>Emails previews</h2>
 
   <div>
-    {#each emailTemplates as template}
+    {#each emailTemplates as template (template)}
       <button
         class="small compact"
         class:secondary={emailTemplate != template}

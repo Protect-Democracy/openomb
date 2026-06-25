@@ -33,7 +33,7 @@
 </button>
 
 <div {...$menu} use:menu class="dropdown-menu">
-  {#each links as link}
+  {#each links as link (link.href)}
     <div
       {...$item}
       use:item

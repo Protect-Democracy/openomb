@@ -28,9 +28,13 @@
   export let name: string;
   export let value: string | string[];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callbacks accept any option type; Svelte 4 props can't use generics
   export let formatOptionLabel: (option: any) => string = (o) => o;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callbacks accept any option type; Svelte 4 props can't use generics
   export let formatOptionValue: (option: any) => string = (o) => o;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callbacks accept any option type; Svelte 4 props can't use generics
   export let formatGroupLabel: ((option: any) => string) | undefined = undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic callbacks accept any option type; Svelte 4 props can't use generics
   export let formatGroupValue: ((option: any) => string) | undefined = undefined;
   // Used to combine the group and option value together separated by comma.  This
   // has been the default, so default to true.  If false, then just the
@@ -253,7 +257,7 @@
     <option value={emptyOption.value} selected={$isSelected(emptyOption.value)}>
       {emptyOption.label}
     </option>
-    {#each Object.keys(filteredGroupOptions) as groupName}
+    {#each Object.keys(filteredGroupOptions) as groupName (groupName)}
       <optgroup label={groupName}>
         {#each filteredGroupOptions[groupName] as opt (formatGroupOptionValue(opt))}
           <option

@@ -17,7 +17,7 @@
   <!-- TODO: Add expand-all and collapse-all buttons -->
 
   <AltDirectoryTree columns={2}>
-    {#each agencies as agency}
+    {#each agencies as agency (agency.budgetAgencyTitleId)}
       <AltDirectoryTreeItem level={1}>
         <svelte:fragment slot="button">
           {agency.budgetAgencyTitle}
@@ -30,7 +30,7 @@
           >
         </small>
 
-        {#each agency.budgetBureaus as bureau}
+        {#each agency.budgetBureaus as bureau, bi (`${agency.budgetAgencyTitleId}-${bi}`)}
           <AltDirectoryTreeItem level={2}>
             <svelte:fragment slot="button">
               {bureau.budgetBureauTitle}
@@ -45,7 +45,7 @@
               </a></small
             >
 
-            {#each bureau.accounts as account}
+            {#each bureau.accounts as account, ai (`${agency.budgetAgencyTitleId}-${bi}-${ai}`)}
               <AltDirectoryTreeItem level={3}>
                 <a
                   slot="title"
