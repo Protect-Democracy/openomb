@@ -197,7 +197,7 @@
             </th>
 
             <td colspan="4">
-              {#each prevIterationLine.footnotes as footnote (footnote.footnoteNumber)}
+              {#each prevIterationLine.footnotes as footnote, i (`${footnote.footnoteNumber}-${i}`)}
                 <p>
                   <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
                 </p>
@@ -218,7 +218,7 @@
                 : ''}{showingPrevious ? ' (Current)' : ''}:
             </th>
             <td colspan={showingPrevious ? 4 : 3}>
-              {#each currentIterationLine.footnotes as footnote (footnote.footnoteNumber)}
+              {#each currentIterationLine.footnotes as footnote, i (`${footnote.footnoteNumber}-${i}`)}
                 <p>
                   <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
                 </p>
@@ -249,7 +249,7 @@
             >
             <td colspan="4">
               <div transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}>
-                {#each prevIterationLine.footnotes as footnote (footnote.footnoteNumber)}
+                {#each prevIterationLine.footnotes as footnote, i (`${footnote.footnoteNumber}-${i}`)}
                   <p>
                     <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
                   </p>
@@ -278,7 +278,7 @@
             >
             <td colspan={showingPrevious ? 4 : 3}>
               <div transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}>
-                {#each currentIterationLine.footnotes as footnote (footnote.footnoteNumber)}
+                {#each currentIterationLine.footnotes as footnote, i (`${footnote.footnoteNumber}-${i}`)}
                   <p>
                     <strong>{footnote.footnoteNumber}</strong>: {footnote.footnoteText}
                   </p>
