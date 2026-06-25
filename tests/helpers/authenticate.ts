@@ -19,6 +19,9 @@ export async function integrationAuthenticate(
 ) {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
 
+  // Clear any stale messages so waitForMessages only sees the one we're about to trigger
+  await mailClient.deleteMessages();
+
   // Set a cookie to indicate that the user has JavaScript enabled, which is required for
   // our email verification flow
   await context.addCookies([

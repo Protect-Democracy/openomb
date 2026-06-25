@@ -58,6 +58,9 @@ test('signIn shows error when Auth.js returns an error code', async ({ page, bas
 test('basic email authentication', async ({ page, context, baseURL }) => {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
 
+  // Clear any stale messages so waitForMessages only sees the one we're about to trigger
+  await mailClient.deleteMessages();
+
   // Set a cookie to indicate that the user has JavaScript enabled, which is required for
   // our email verification flow
   await context.addCookies([
