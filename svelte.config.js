@@ -83,6 +83,12 @@ const config = {
       out: 'build-web'
     }),
 
+    // Poll version.json every 60s so the client detects new deployments and
+    // can do a full reload instead of trying to load stale chunk hashes.
+    version: {
+      pollInterval: 60_000
+    },
+
     alias: {
       $src: 'src',
       $assets: 'src/assets',

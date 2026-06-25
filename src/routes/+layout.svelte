@@ -10,7 +10,8 @@
   import { onMount } from 'svelte';
   import { derived } from 'svelte/store';
   import { DateTime } from 'luxon';
-  import { page } from '$app/stores';
+  import { page, updated } from '$app/stores';
+  import { beforeNavigate } from '$app/navigation';
   import UserWrapper from '$components/subscriptions/UserWrapper.svelte';
   import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
   import MobileNav from '$components/navigation/MobileNav.svelte';
@@ -72,6 +73,14 @@
   // Set cookie that JS is enabled which is useful
   // if the server needs to know if JS is enabled.
   setCookie('jsEnabled', 'true', { expires: DateTime.now().plus({ days: 30 }).toJSDate() });
+
+  // When SvelteKit detects a new deployment via version polling, force a full
+  // page load on the next navigation rather than attempting to load stale chunks.
+  beforeNavigate(({ willUnload, to }) => {
+    if ($updated && !willUnload && to?.url) {
+      location.href = to.url.href;
+    }
+  });
 </script>
 
 <svelte:head>
