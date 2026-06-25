@@ -80,7 +80,7 @@ resource "aws_ecs_task_definition" "apportionments_app" {
         },
         {
           "name" : "AUTH_URL", # Needed for authentication redirects to have correct (non-aws) domain
-          "value" : "https://${var.domain_name}/auth"
+          "value" : "https://${var.domain_name}"
         },
         {
           "name" : "ORIGIN", # Needed for authentication to work correctly
