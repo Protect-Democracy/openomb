@@ -18,7 +18,7 @@
     <h2>Recently approved</h2>
 
     <div class="recently-approved-files">
-      {#each recentlyApproved as file}
+      {#each recentlyApproved as file (file.fileId)}
         <FileListingHighlightable {file} />
       {/each}
     </div>

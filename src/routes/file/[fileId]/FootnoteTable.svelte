@@ -33,7 +33,7 @@
   </thead>
 
   <tbody>
-    {#each sortedFootnotes as footnote}
+    {#each sortedFootnotes as footnote (footnote.footnoteNumber)}
       <tr>
         {#if hasMultipleFiles}
           <td><a href={`/file/${footnote.fileId}`}>{footnote.fileId}</a></td>

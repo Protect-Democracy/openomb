@@ -48,7 +48,7 @@
       return [{ value: 1 }];
     }
 
-    pages = [];
+    const result: { value: number; type?: 'ellipsis' }[] = [];
     for (let i = 1; i <= pagesLength; i++) {
       // Only do:
       // - a certain amount around the current page,
@@ -58,19 +58,19 @@
         i === 1 ||
         i === pagesLength
       ) {
-        pages.push({ value: i });
+        result.push({ value: i });
       }
       // Add later ellipses
       else if (i === currentPage + pageBuffer + 1) {
-        pages.push({ value: i, type: 'ellipsis' });
+        result.push({ value: i, type: 'ellipsis' });
       }
       // Add early ellipses
       else if (i === currentPage - pageBuffer - 1) {
-        pages.push({ value: i, type: 'ellipsis' });
+        result.push({ value: i, type: 'ellipsis' });
       }
     }
 
-    return pages;
+    return result;
   }
 
   // Check if valid page
@@ -80,6 +80,7 @@
 
   // Make url for a specific page
   function getPageUrl(pageNumber: number) {
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity -- temporary URLSearchParams for building a URL string, not reactive state
     const newQuery = new URLSearchParams($url.searchParams.toString());
     newQuery.set(urlPageParam, pageNumber.toString());
     return `${$url.pathname}?${newQuery.toString()}${anchor ? '#' + anchor : ''}`;
