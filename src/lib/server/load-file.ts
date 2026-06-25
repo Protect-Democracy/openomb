@@ -783,47 +783,52 @@ export function parseSpendPlanFilename(fileName: string): {
   agency: string | undefined;
   bureau: string | undefined;
 } {
-  // Most files seem to start with a fiscal year, but there's been one where the fiscal year is
-  // in the middle of the file name
-  let yearParts = fileName.match(/^.Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
-  if (!yearParts) {
-    // Try to find a year anywhere in the file name just in case, Y_24 or Y2024 or Y 2024
-    const otherYearParts = fileName.match(/Y[_| ]{0,1}([\d]{2,4})/);
-    if (otherYearParts) {
-      yearParts = [fileName, otherYearParts[1], fileName];
-    }
+  type YearMatch = { rawYear: string; rest: string };
 
-    // Try to find a four digit year anywhere in the file name just in case, 2024
-    if (!otherYearParts) {
-      const fourDigitYearParts = fileName.match(/\s+([\d]{4})\s+/);
-      if (fourDigitYearParts && fourDigitYearParts[1][0] === '2') {
-        yearParts = [fileName, fourDigitYearParts[1], fileName];
-      }
+  // Ordered strategies for extracting a fiscal year from a spend-plan filename.
+  // The first match wins. `rest` is passed to the acronym scanner — for the FY/PY-prefix
+  // case we strip the prefix so acronym matching starts after the year; for everything
+  // else we hand back the full name.
+  const YEAR_EXTRACTORS: Array<(name: string) => YearMatch | null> = [
+    // FY/PY at start of name: "FY 2025 DHS ...", "PY25 DOL ..."
+    (name) => {
+      const m = name.match(/^[FP]Y[_| ]{0,1}([\d]{2,4})[_| ]{1}(.*)/);
+      return m ? { rawYear: m[1], rest: m[2] } : null;
+    },
+    // FY/PY anywhere in name: "DFC Operating Plan - FY2025 - Final_508.pdf"
+    (name) => {
+      const m = name.match(/[FP]Y[_| ]{0,1}([\d]{2,4})/);
+      return m ? { rawYear: m[1], rest: name } : null;
+    },
+    // Standalone 4-digit year surrounded by spaces: "FMCS Spend Plan 2026 Carryover.pdf"
+    (name) => {
+      const m = name.match(/\s+([\d]{4})\s+/);
+      return m && m[1][0] === '2' ? { rawYear: m[1], rest: name } : null;
+    },
+    // Date in name (year is last segment): "03.19.2026", "4-30-26"
+    (name) => {
+      const m = name.match(/([\d]{1,2})[._-]([\d]{1,2})[._-]([\d]{2,4})/);
+      return m && m[3][0] === '2' ? { rawYear: m[3], rest: name } : null;
+    },
+    // Year range: "25-25" — takes the first value as fiscal year
+    (name) => {
+      const m = name.match(/([\d]{2,4})[-_]([\d]{2,4})/);
+      return m ? { rawYear: m[1], rest: name } : null;
     }
+  ];
 
-    // Try when date is there (though this is not necessarily the fiscal year)
-    // 03.19.2026
-    if (!yearParts) {
-      const dateYearParts = fileName.match(/([\d]{1,2})[._-]([\d]{1,2})[._-]([\d]{4})/);
-      if (dateYearParts && dateYearParts[3][0] === '2') {
-        yearParts = [fileName, dateYearParts[3], fileName];
-      }
-    }
-
-    // There is one that is 25-25
-    if (!yearParts) {
-      const rangeYearParts = fileName.match(/([\d]{2,4})[-_]{1}([\d]{2,4})/);
-      if (rangeYearParts) {
-        yearParts = [fileName, rangeYearParts[1], fileName];
-      }
-    }
+  let yearMatch: YearMatch | null = null;
+  for (const extractor of YEAR_EXTRACTORS) {
+    yearMatch = extractor(fileName);
+    if (yearMatch) break;
   }
+
   const results = {
-    fiscalYear: yearParts ? yearParts[1].padStart(4, '20') : undefined,
+    fiscalYear: yearMatch ? yearMatch.rawYear.padStart(4, '20') : undefined,
     agency: <string | undefined>undefined,
     bureau: <string | undefined>undefined
   };
-  const fileNameRest = yearParts ? yearParts[2] : fileName;
+  const fileNameRest = yearMatch ? yearMatch.rest : fileName;
 
   // Check for acronyms
   const acronymParts = fileNameRest.match(/[A-Z]{2,6}/g);

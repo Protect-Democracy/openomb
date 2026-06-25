@@ -326,6 +326,12 @@ describe('parseSpendPlanFilename()', () => {
       fiscalYear: '2026',
       agency: 'Federal Mediation and Conciliation Service'
     });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/CBP%20PC%26I%20Spend%20Plan%204-30-26%20%281%29.pdf
+    // Date in filename with 2-digit year — was incorrectly parsed as FY 2030
+    expect(parseSpendPlanFilename('CBP PC&I Spend Plan 4-30-26 (1).pdf')).toMatchObject({
+      fiscalYear: '2026'
+    });
   });
 });
 
