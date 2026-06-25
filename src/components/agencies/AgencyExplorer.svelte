@@ -30,7 +30,7 @@
           >
         </small>
 
-        {#each agency.budgetBureaus as bureau (bureau.budgetBureauTitleId)}
+        {#each agency.budgetBureaus as bureau, bi (`${agency.budgetAgencyTitleId}-${bi}`)}
           <AltDirectoryTreeItem level={2}>
             <svelte:fragment slot="button">
               {bureau.budgetBureauTitle}
@@ -45,7 +45,7 @@
               </a></small
             >
 
-            {#each bureau.accounts as account (account.accountTitleId)}
+            {#each bureau.accounts as account, ai (`${agency.budgetAgencyTitleId}-${bi}-${ai}`)}
               <AltDirectoryTreeItem level={3}>
                 <a
                   slot="title"
