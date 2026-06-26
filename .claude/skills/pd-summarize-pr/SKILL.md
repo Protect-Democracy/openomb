@@ -1,6 +1,6 @@
 ---
-name: pr-output
-description: Use when preparing pull request output - filling out PR templates, linking to relevant issues, summarizing changes, noting side effects, flagging open questions, providing testing instructions, and checking off completed items
+name: pd-summarize-pr
+description: Generates a summary of a pull request based on the PR description and the code changes.
 ---
 
 # Pull Request output
@@ -22,7 +22,7 @@ This is important:
 
 ## Output
 
-Output to the Developer for a review, but also write the output to a `.pr-summary-<branch-name>.md` file in the project root for easier copy and paste.
+Output to the Developer for a review, but also write the output to a `.pr_summary_<branch-name>.md` file in the project root for easier copy and paste.
 
 ## Issues
 

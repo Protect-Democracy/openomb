@@ -10,7 +10,7 @@
 
 ## CSS and styling
 
-- Custom CSS (no framework). See `rules/STYLES.md`. Global styles in `src/styles/`, component styles colocated in `src/components/`.
+- Custom CSS (no framework). See `rules/css/CSS_ORGANIZATION.md` for file structure and naming conventions, `rules/css/CSS_BEST_PRACTICES.md` for patterns, and `rules/css/CSS_ACCESSIBILITY.md` for accessibility. Global styles in `src/styles/`, component styles colocated in Svelte component `<style>` blocks.
 
 ## Database & ORM
 
@@ -33,3 +33,12 @@
 
 - Prettier - Multi-file-type formatting
 - ESLint - TS/JS/Svelte linting
+
+## Code versioning
+
+- Git for version control
+- GitHub for code hosting and collaboration
+
+## CI/CD
+
+- Github Actions for continuous integration and deployment

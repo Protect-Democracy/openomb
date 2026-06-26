@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": ["Bash(uv run poe *)", "Bash(uv sync *)"],
+    "ask": ["Bash(git commit:*)", "Bash(npm install *)", "Bash(uv add *)"],
+    "deny": ["Write(.git/**)", "Read(~/.ssh/**)", "Read(.env*)", "Bash(sudo*)"]
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
+    "svelte@svelte": true
+  }
+}

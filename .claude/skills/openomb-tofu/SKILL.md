@@ -13,6 +13,7 @@ Use this skill when doing infrastructure work, specifically the Terraform files 
 
 In order to review a tofu plan, do the following:
 
+1. Go into the tofu directory: `cd tofu`
 1. Review the changes to the tofu files in `tofu/` with `git main...` to see the changes since branching off main.
 1. Ask the Developer for the AWS profile to use for the plan review.
 1. Set env variable for AWS profile with `export AWS_PROFILE=<aws-profile-name>`.
