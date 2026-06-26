@@ -332,6 +332,16 @@ describe('parseSpendPlanFilename()', () => {
     expect(parseSpendPlanFilename('CBP PC&I Spend Plan 4-30-26 (1).pdf')).toMatchObject({
       fiscalYear: '2026'
     });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information_CEDupdated_MAY25%20%282%29.pdf
+    // "MAY25" — month-abbreviation + 2-digit year extractor
+    expect(
+      parseSpendPlanFilename('ACF apportionment information_CEDupdated_MAY25 (2)')
+    ).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Administration for Children and Families'
+    });
   });
 });
 

@@ -805,6 +805,12 @@ export function parseSpendPlanFilename(fileName: string): {
       const m = name.match(/\s+([\d]{4})\s+/);
       return m && m[1][0] === '2' ? { rawYear: m[1], rest: name } : null;
     },
+    // Month abbreviation followed by year: "MAY25", "JAN2026"
+    (name) => {
+      const m = name.match(/(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)([\d]{2,4})/i);
+      // For 4-digit years, guard against implausible matches (e.g. "1999"); 2-digit years are always fine
+      return m && (m[1].length < 4 || m[1][0] === '2') ? { rawYear: m[1], rest: name } : null;
+    },
     // Date in name (year is last segment): "03.19.2026", "4-30-26"
     (name) => {
       const m = name.match(/([\d]{1,2})[._-]([\d]{1,2})[._-]([\d]{2,4})/);
