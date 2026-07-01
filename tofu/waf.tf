@@ -163,7 +163,21 @@ resource "aws_wafv2_web_acl" "cloudfront" {
     }
   }
 
-  # Priority 5: Bot control (targeted level detects headless browsers and JS-capable bots)
+  # Priority 5: Bot control. Using COMMON, not TARGETED, because TARGETED's
+  # extra protections (TGT_* rules) rely on AWS WAF's client-side JS SDK
+  # issuing session tokens to real browsers -- we don't have that SDK
+  # integrated anywhere in this app (no script tag, no CloudFront
+  # Function/Lambda@Edge injecting it, no CSP allowance for its domain).
+  # Without tokens, rules like TGT_VolumetricIpTokenAbsent can't tell real
+  # browsers from bots and end up challenging any moderately active client,
+  # browser or not -- pure downside, no real protection gained.
+  #
+  # To move to TARGETED: integrate the WAF JS SDK (inject its script via a
+  # CloudFront Function/Lambda@Edge response rewrite or a root layout script
+  # tag, allow its domain in CSP), confirm real browsers start acquiring
+  # valid tokens (check the awswaf:managed:token:accepted label in sampled
+  # requests), then re-enable TARGETED and re-evaluate whether the category
+  # overrides below are still needed.
   rule {
     name     = "aws-bot-control"
     priority = 5
@@ -179,7 +193,68 @@ resource "aws_wafv2_web_acl" "cloudfront" {
 
         managed_rule_group_configs {
           aws_managed_rules_bot_control_rule_set {
-            inspection_level = "TARGETED"
+            inspection_level = "COMMON"
+          }
+        }
+
+        # Override to count: this is a public API + transparency site with a
+        # documented, unauthenticated /api/v1/* surface intended for scripts
+        # and programmatic tools (see src/routes/developers/+page.svelte).
+        # Bot Control has no way to verify non-browser clients as "good"
+        # without the WAF JS SDK integration (not present in this app), so
+        # it treats all API/script clients as unverified bots and blocks
+        # them by default.
+        rule_action_override {
+          name = "CategoryHttpLibrary"
+          action_to_use {
+            count {}
+          }
+        }
+
+        # AWS docs note this signal "can include API requests" -- distinct
+        # from CategoryHttpLibrary, catches scripts/tools with a non-library,
+        # non-browser User-Agent string.
+        rule_action_override {
+          name = "SignalNonBrowserUserAgent"
+          action_to_use {
+            count {}
+          }
+        }
+
+        # Link/page-preview bots used by messaging and social platforms to
+        # unfurl shared links (e.g. Slack, Facebook, Twitter).
+        rule_action_override {
+          name = "CategoryPagePreview"
+          action_to_use {
+            count {}
+          }
+        }
+
+        # Distinct category also covering social-platform content-summary
+        # bots; AWS doesn't guarantee consistent classification between this
+        # and CategoryPagePreview, so override both.
+        rule_action_override {
+          name = "CategorySocialMedia"
+          action_to_use {
+            count {}
+          }
+        }
+
+        # Dead-link-checker style bots, plausibly overlapping with unfurl and
+        # feed-reader tooling.
+        rule_action_override {
+          name = "CategoryLinkChecker"
+          action_to_use {
+            count {}
+          }
+        }
+
+        # Bots fetching content (e.g. RSS) or verifying/validating links --
+        # relevant to direct asset fetches made without a full page navigation.
+        rule_action_override {
+          name = "CategoryContentFetcher"
+          action_to_use {
+            count {}
           }
         }
 
