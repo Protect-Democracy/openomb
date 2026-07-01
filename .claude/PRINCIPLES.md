@@ -1,5 +1,7 @@
 # Engineering principles
 
+Engineering principles should guide all coding and data work. They should be considered VERY IMPORTANT and not violated without strong justification. They are meant to be general and timeless, not specific to any one project or technology.
+
 ## Architecture & Design
 
 - Security over ease of use; simplicity over premature optimization.
