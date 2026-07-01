@@ -21,7 +21,7 @@ test-results
 
 # Agents
 .claude/settings.local.json
-.pr-summary*
+.pr_*
 
 # Ngrok
 ngrok-policy.yaml
