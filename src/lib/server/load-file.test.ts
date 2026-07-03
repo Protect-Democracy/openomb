@@ -342,6 +342,43 @@ describe('parseSpendPlanFilename()', () => {
       agency: 'Department of Health and Human Services',
       bureau: 'Administration for Children and Families'
     });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/Estimate%20of%20Funding%20Nees%202025.pdf
+    // Trailing year with nothing after it, and no agency/bureau info anywhere in the name or PDF content
+    expect(parseSpendPlanFilename('Estimate of Funding Nees 2025')).toMatchObject({
+      fiscalYear: '2025',
+      agency: undefined,
+      bureau: undefined
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/DOL%20ILAB%20Spend%20Plan%20016-2025-2026-0165%20%281%29.pdf
+    // TAFS-style code "016-2025-2026-0165" — was incorrectly parsed as FY 2016 by the generic
+    // year-range extractor grabbing the agency code "016"; should take the end year, 2026
+    // (PDF content confirms: "Project plan will be revisited when FY 2026 funding is available")
+    expect(parseSpendPlanFilename('DOL ILAB Spend Plan 016-2025-2026-0165 (1)')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'Department of Labor'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/TANF%20Requested%20Information%20for%20ACF%20Apportionments%20Q4%20update_7-14-25%20%282%29.pdf
+    // Date suffix "7-14-25" — PDF content confirms "The FY 2025 Welfare Research estimate..."
+    expect(
+      parseSpendPlanFilename(
+        'TANF Requested Information for ACF Apportionments Q4 update_7-14-25 (2)'
+      )
+    ).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Administration for Children and Families'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/CBP%20O%26S%20spend%20plan%204-30-26%20%281%29.pdf
+    // Date in filename with 2-digit year, same pattern as the already-fixed "CBP PC&I" case below
+    expect(parseSpendPlanFilename('CBP O&S spend plan 4-30-26 (1)')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'Department of Homeland Security',
+      bureau: 'U.S. Customs and Border Protection'
+    });
   });
 });
 

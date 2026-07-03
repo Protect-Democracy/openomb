@@ -605,14 +605,18 @@ async function loadPdfSpendPlan(
     throw new Error(`Fiscal year not found in file name | URL: ${pdfUrl}`);
   }
 
-  // Throw error if we do not have an approval date in the title or fixes
+  // Some spend plans have no agency/bureau info in the file name or fixes to go on.
+  // Log it, but don't fail the whole collection over it — load with agency/bureau unset.
   const budgetAgencyTitleId = dbId(formatBudgetAgency(agency || ''));
   if (
     (!agency || !budgetAgencyTitleId) &&
     (!(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
       !(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
   ) {
-    throw new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
+    const e = new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
+    e.name = 'ParseSpendPlanAgencyError';
+    console.error(e);
+    captureException(e);
   }
 
   // Determine Folder from agency
@@ -800,9 +804,10 @@ export function parseSpendPlanFilename(fileName: string): {
       const m = name.match(/[FP]Y[_| ]{0,1}([\d]{2,4})/);
       return m ? { rawYear: m[1], rest: name } : null;
     },
-    // Standalone 4-digit year surrounded by spaces: "FMCS Spend Plan 2026 Carryover.pdf"
+    // Standalone 4-digit year surrounded by spaces, or trailing at the end of the name:
+    // "FMCS Spend Plan 2026 Carryover.pdf", "Estimate of Funding Needs 2025"
     (name) => {
-      const m = name.match(/\s+([\d]{4})\s+/);
+      const m = name.match(/\s+([\d]{4})(?:\s+|$)/);
       return m && m[1][0] === '2' ? { rawYear: m[1], rest: name } : null;
     },
     // Month abbreviation followed by year: "MAY25", "JAN2026"
@@ -815,6 +820,14 @@ export function parseSpendPlanFilename(fileName: string): {
     (name) => {
       const m = name.match(/([\d]{1,2})[._-]([\d]{1,2})[._-]([\d]{2,4})/);
       return m && m[3][0] === '2' ? { rawYear: m[3], rest: name } : null;
+    },
+    // TAFS-style code (agency-beginYear-endYear-account): "016-2025-2026-0165" — takes the
+    // end year, matching the convention used elsewhere (e.g. TAFS "096-2025-2026-3126" files
+    // under a "Fiscal Year 2026" folder). Must come before the generic year-range extractor
+    // below, which would otherwise grab the agency code as a bogus 2-digit year.
+    (name) => {
+      const m = name.match(/\d{1,3}-(\d{4})-(\d{4})-\d+/);
+      return m && m[2][0] === '2' ? { rawYear: m[2], rest: name } : null;
     },
     // Year range: "25-25" — takes the first value as fiscal year
     (name) => {
