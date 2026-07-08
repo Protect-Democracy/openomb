@@ -987,8 +987,11 @@ async function readPdfText(url: string): Promise<string> {
   // Download the file
   const data = await fetch(url).then(async (response) => await response.arrayBuffer());
 
-  // Load doc
-  const doc = await pdfjsLib.getDocument({ data }).promise;
+  // Load doc.  Verbosity is set to errors-only to suppress noisy but harmless pdfjs-dist
+  // parsing warnings (missing standard font data, TrueType hinting bytecode issues in some
+  // source PDFs) that don't indicate text extraction actually failed.
+  const doc = await pdfjsLib.getDocument({ data, verbosity: pdfjsLib.VerbosityLevel.ERRORS })
+    .promise;
 
   // Get text from all pages
   const pageTexts = Array.from({ length: doc.numPages }, async (v, i) => {
