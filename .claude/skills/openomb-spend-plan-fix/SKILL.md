@@ -9,6 +9,18 @@ The args will be free-form text containing: a filename or URL for a failing spen
 
 ---
 
+## Step 0: Optionally gather URL issues
+
+If prompted to find any files that are failing to parse.
+
+- Utilize the following command to run all Spend Plan collections. `npm run dev:collect -- --no-archive --apportionment-type spend-plan`
+  - Save the output to a file and search for things like:
+    - `Agency not able to be parsed for spend plan`
+    - `Folder could not be determined from agency for spend plan`
+- Or, for a known URL, you can run the collect for that specific URL with something like: `npm run dev:collect -- --no-archive --apportionment-type spend-plan URL`
+
+---
+
 ## Step 1: Extract the filename
 
 - If the args contain a URL (starts with `http`), decode it with `decodeURIComponent`, take the last path segment after `/`, and strip trailing `.pdf`. That is the **filename**.

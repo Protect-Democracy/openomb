@@ -9,6 +9,18 @@ import { mockFetchResponse } from '$tests/helpers/fetch';
 import { DateTime } from 'luxon';
 import path from 'node:path';
 import fs from 'node:fs';
+import * as Sentry from '@sentry/node';
+
+// `captureException` is an ESM named export and can't be spied on directly (vitest can't
+// redefine module namespace properties) — mock it via the module factory instead, keeping
+// every other real Sentry export (used by sentry-custom.ts's spans/monitors) intact.
+vi.mock('@sentry/node', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@sentry/node')>();
+  return {
+    ...actual,
+    captureException: vi.fn()
+  };
+});
 
 import { fileDetails } from '$db/queries/files';
 import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
@@ -710,10 +722,69 @@ describe('loadPdfSpendPlan()', async () => {
     consoleErrorSpy.mockRestore();
   });
 
-  test('saves as spend plan entry', async () => {
+  describe('with sample data loaded', () => {
+    beforeEach(async () => {
+      // Replace the plain isolated DB from the outer beforeEach with one that has real
+      // agency data, so folder lookup for a resolved agency actually succeeds.
+      await dbSetup.teardown();
+      dbSetup = await createIsolatedDb({ loadDefaultSampleData: true });
+    });
+
+    test('saves as spend plan entry', async () => {
+      const testPdfPath = path.resolve(__dirname, './test-data/spend-plan-pdf-test.pdf');
+      const testBlob = new Blob([fs.readFileSync(testPdfPath)], { type: 'application/pdf' });
+      const testUrl = 'http://example.com/PY 2024 DOL OJC CRA Spend Plan.pdf';
+
+      // Mock response
+      mockFetchResponse(
+        testBlob,
+        {
+          headers: new Headers({ 'Content-Type': 'application/pdf' }),
+          arrayBuffer: () => testBlob.arrayBuffer()
+        },
+        'blob'
+      );
+
+      const result = await loadPdfSpendPlan(testUrl, 0);
+
+      if (!result) {
+        throw new Error('Expected loadPdfSpendPlan to return a result, but got null');
+      }
+
+      // Get the details of the file
+      const spendPlan = await fileDetails(result.fileId);
+
+      if (!spendPlan) {
+        throw new Error('Expected spendPlanDetails to return a spend plan, but got null');
+      }
+
+      // Basic file
+      expect(result).toBeDefined();
+      expect(result).toMatchObject({
+        fileId: expect.stringMatching(/^pdf-.*/),
+        fileName: 'PY 2024 DOL OJC CRA Spend Plan',
+        fileType: apportionmentTypeSpendPlan,
+        fiscalYear: 2024,
+        folder: 'Department of Labor',
+        folderId: 'department-of-labor',
+        budgetAgencyTitle: 'Department of Labor',
+        budgetAgencyTitleId: 'department-of-labor',
+        budgetBureauTitle: null,
+        budgetBureauTitleId: null,
+        excelUrl: null,
+        pdfUrl: testUrl,
+        sourceUrl: testUrl,
+        sourceData: null,
+        sourceText: expect.any(String),
+        removed: false
+      });
+    });
+  });
+
+  test('saves as spend plan entry when agency cannot be parsed', async () => {
     const testPdfPath = path.resolve(__dirname, './test-data/spend-plan-pdf-test.pdf');
     const testBlob = new Blob([fs.readFileSync(testPdfPath)], { type: 'application/pdf' });
-    const testUrl = 'http://example.com/PY 2024 DOL OJC CRA Spend Plan.pdf';
+    const testUrl = 'http://example.com/Estimate of Funding Nees 2025.pdf';
 
     // Mock response
     mockFetchResponse(
@@ -725,39 +796,113 @@ describe('loadPdfSpendPlan()', async () => {
       'blob'
     );
 
+    // Spy on console.warn and Sentry to confirm this is a local-only warning, never captured
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.mocked(Sentry.captureException).mockClear();
+
     const result = await loadPdfSpendPlan(testUrl, 0);
 
     if (!result) {
       throw new Error('Expected loadPdfSpendPlan to return a result, but got null');
     }
 
-    // Get the details of the file
-    const spendPlan = await fileDetails(result.fileId);
+    expect(
+      consoleWarnSpy.mock.calls.some((call) =>
+        JSON.stringify(call).match(/ParseSpendPlanAgencyError/)
+      )
+    ).toBe(true);
+    expect(Sentry.captureException).not.toHaveBeenCalled();
+    consoleWarnSpy.mockRestore();
 
-    if (!spendPlan) {
-      throw new Error('Expected spendPlanDetails to return a spend plan, but got null');
-    }
-
-    // Basic file
-    expect(result).toBeDefined();
     expect(result).toMatchObject({
       fileId: expect.stringMatching(/^pdf-.*/),
-      fileName: 'PY 2024 DOL OJC CRA Spend Plan',
+      fileName: 'Estimate of Funding Nees 2025',
       fileType: apportionmentTypeSpendPlan,
-      fiscalYear: 2024,
+      fiscalYear: 2025,
       folder: 'Unknown Folder',
       folderId: 'unknown-folder',
-      budgetAgencyTitle: 'Department of Labor',
-      budgetAgencyTitleId: 'department-of-labor',
+      budgetAgencyTitle: null,
+      budgetAgencyTitleId: null,
       budgetBureauTitle: null,
       budgetBureauTitleId: null,
-      excelUrl: null,
       pdfUrl: testUrl,
       sourceUrl: testUrl,
-      sourceData: null,
-      sourceText: expect.any(String),
       removed: false
     });
+  });
+
+  test('saves as spend plan entry when fiscal year cannot be parsed', async () => {
+    const testPdfPath = path.resolve(__dirname, './test-data/spend-plan-pdf-test.pdf');
+    const testBlob = new Blob([fs.readFileSync(testPdfPath)], { type: 'application/pdf' });
+    const testUrl = 'http://example.com/Estimate of Funding Nees.pdf';
+
+    // Mock response
+    mockFetchResponse(
+      testBlob,
+      {
+        headers: new Headers({ 'Content-Type': 'application/pdf' }),
+        arrayBuffer: () => testBlob.arrayBuffer()
+      },
+      'blob'
+    );
+
+    // Spy on console.warn and Sentry to confirm these are local-only warnings, never captured
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.mocked(Sentry.captureException).mockClear();
+
+    const result = await loadPdfSpendPlan(testUrl, 0);
+
+    if (!result) {
+      throw new Error('Expected loadPdfSpendPlan to return a result, but got null');
+    }
+
+    expect(
+      consoleWarnSpy.mock.calls.some((call) =>
+        JSON.stringify(call).match(/ParseSpendPlanFiscalYearError/)
+      )
+    ).toBe(true);
+    expect(
+      consoleWarnSpy.mock.calls.some((call) =>
+        JSON.stringify(call).match(/ParseSpendPlanAgencyError/)
+      )
+    ).toBe(true);
+    expect(Sentry.captureException).not.toHaveBeenCalled();
+    consoleWarnSpy.mockRestore();
+
+    expect(result).toMatchObject({
+      fileId: expect.stringMatching(/^pdf-.*/),
+      fileName: 'Estimate of Funding Nees',
+      fileType: apportionmentTypeSpendPlan,
+      fiscalYear: null,
+      folder: 'Unknown Folder',
+      folderId: 'unknown-folder',
+      budgetAgencyTitle: null,
+      budgetAgencyTitleId: null,
+      pdfUrl: testUrl,
+      sourceUrl: testUrl,
+      removed: false
+    });
+  });
+
+  test('throws when agency is resolved but no matching folder exists', async () => {
+    const testPdfPath = path.resolve(__dirname, './test-data/spend-plan-pdf-test.pdf');
+    const testBlob = new Blob([fs.readFileSync(testPdfPath)], { type: 'application/pdf' });
+    const testUrl = 'http://example.com/FY 2025 CNCS Spend Plan.pdf';
+
+    // Mock response
+    mockFetchResponse(
+      testBlob,
+      {
+        headers: new Headers({ 'Content-Type': 'application/pdf' }),
+        arrayBuffer: () => testBlob.arrayBuffer()
+      },
+      'blob'
+    );
+
+    // No sample data loaded in this describe block's default beforeEach, so the agency
+    // ("Corporation for National and Community Service") resolves but no folder data exists
+    // for it yet — this should still be a hard failure, not a warning.
+    await expect(loadPdfSpendPlan(testUrl, 0)).rejects.toThrow(/Folder could not be determined/);
   });
 });
 

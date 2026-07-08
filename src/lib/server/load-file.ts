@@ -576,21 +576,6 @@ async function loadPdfSpendPlan(
   }
 
   // Parse parts from URL
-  //
-  // Examples:
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DHS%20FLETC%20OS%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20Chronic%20Diseases%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20CDC%20PHPR%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20SAMHSA%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20HHS%20HRSA%20Operating%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/PY%202024%20DOL%20OJC%20CRA%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20VA%20RETF%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY2025%20Peace%20Corps%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/DFC%20Operating%20Plan%20-%20FY2025%20-%20Final_508.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20IMLS%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY2026%20NEH%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/FY26%20Qs%201%20and%202%20TANF%20HMRF%20and%20WR%20Spend%20Plan.pdf
-  // https://apportionment-public.max.gov/Spend%20Plans/ACF%20apportionment%20information%20CAPTA.pdf
   const urlPath = decodeURIComponent(pdfUrl)
     .replace(env.baseUrl, '')
     .replace(/(\.pdf)+$/, '');
@@ -600,23 +585,27 @@ async function loadPdfSpendPlan(
   // Parse out the file name
   const { fiscalYear, agency, bureau } = parseSpendPlanFilename(fileName);
 
-  // Check for fiscal year
+  // Check for fiscal year.  Some spend plans have no fiscal year in the file name or fixes to
+  // go on.  Warn locally but don't fail the whole collection over it — load with fiscal year unset.
   if (!fiscalYear) {
-    throw new Error(`Fiscal year not found in file name | URL: ${pdfUrl}`);
+    warnSpendPlanParseIssue(
+      'ParseSpendPlanFiscalYearError',
+      `Fiscal year not found in file name | URL: ${pdfUrl}`
+    );
   }
 
   // Some spend plans have no agency/bureau info in the file name or fixes to go on.
-  // Log it, but don't fail the whole collection over it — load with agency/bureau unset.
+  // Warn, but don't fail the whole collection over it — load with agency/bureau unset.
   const budgetAgencyTitleId = dbId(formatBudgetAgency(agency || ''));
   if (
     (!agency || !budgetAgencyTitleId) &&
     (!(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitle ||
       !(<filesInsert>pdfFixes[pdfUrl])?.budgetAgencyTitleId)
   ) {
-    const e = new Error(`Agency not able to be parsed for spend plan | URL: ${pdfUrl}`);
-    e.name = 'ParseSpendPlanAgencyError';
-    console.error(e);
-    captureException(e);
+    warnSpendPlanParseIssue(
+      'ParseSpendPlanAgencyError',
+      `Agency not able to be parsed for spend plan | URL: ${pdfUrl}`
+    );
   }
 
   // Determine Folder from agency
@@ -626,14 +615,16 @@ async function loadPdfSpendPlan(
   let folder = agencyDetails?.folder?.folder;
   let folderId = agencyDetails?.folder?.folderId;
   if (!agencyDetails || !agencyDetails.folder.folderId) {
-    // Question: Do we want to throw an error if we can't determine the folder?  Or just put in unknown?
-    const e = new Error(
-      `Folder could not be determined from agency for spend plan | URL: ${pdfUrl} | Agency: ${agency} | Budget Agency Title ID: ${budgetAgencyTitleId}`
-    );
-    e.name = 'ParseSpendPlanFolderError';
-    console.error(e);
-    captureException(e);
+    if (agency && budgetAgencyTitleId) {
+      // Agency resolved fine, but no folder data exists for it yet — this means regular
+      // apportionments haven't been loaded for this agency before its spend plans, which is
+      // a real ordering problem worth stopping the batch over.
+      throw new Error(
+        `Folder could not be determined from agency for spend plan | URL: ${pdfUrl} | Agency: ${agency} | Budget Agency Title ID: ${budgetAgencyTitleId}`
+      );
+    }
 
+    // Agency itself was never resolved either — already warned about above; just fall back.
     folder = unknownFolderName;
     folderId = dbId(folder);
   }
@@ -777,6 +768,16 @@ function parseFootnotes(footnoteNumberInput?: string): string[] | null {
     .filter((f) => !!f)
     .map((f) => f.trim().toUpperCase());
   return footnoteNumbers.length > 0 ? footnoteNumbers : null;
+}
+
+/**
+ * Log a spend-plan parsing gap as a local warning only — visible to a developer running
+ * collection locally, but never thrown or sent to Sentry, since these are expected/known
+ * data gaps rather than bugs. Logged as a plain labeled string (not an `Error` instance) so it
+ * reads clearly as a warning rather than looking like a thrown/captured error in the console.
+ */
+function warnSpendPlanParseIssue(name: string, message: string): void {
+  console.warn(`Warning [${name}]: ${message}`);
 }
 
 /**
