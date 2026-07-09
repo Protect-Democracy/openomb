@@ -148,6 +148,16 @@ export default [
     agency: 'Department of Homeland Security',
     bureau: 'U.S. Customs and Border Protection'
   },
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20PC%20Spend%20Plan.pdf
+  // "PC" only matches a bureau short_name (Peace Corps), not an agency short_name directly, but
+  // is too generic a 2-letter acronym for a general pattern — it would also match "PC" inside
+  // "CBP PC&I", misattributing that DHS/CBP file to Peace Corps. Anchored to this exact file.
+  {
+    pattern: /^FY 2025 PC Spend Plan$/,
+    fiscalYear: '2025',
+    agency: 'International Assistance Programs',
+    bureau: 'Peace Corps'
+  },
 
   // General patterns
   {
@@ -163,6 +173,21 @@ export default [
     pattern: /DFC Operating Plan/,
     agency: 'International Assistance Programs',
     bureau: 'United States International Development Finance Corporation'
+  },
+  // "DFC" only matches a bureau short_name in agency-reference.ts, not an agency short_name — the
+  // acronym scanner only checks the agencies list first, so agency never resolves on its own.
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DFC%20Spend%20Plan.pdf
+  {
+    pattern: /(^|[^a-z])DFC([^a-z]|$)/i,
+    agency: 'International Assistance Programs',
+    bureau: 'United States International Development Finance Corporation'
+  },
+  // "NEH" has real apportionment data in the system, but its agency-reference.ts entry has
+  // short_name: null, so acronym matching can't find it.
+  // https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20NEH%20Spend%20Plan.pdf
+  {
+    pattern: /(^|[^a-z])NEH([^a-z]|$)/i,
+    agency: 'National Endowment for the Humanities'
   },
   {
     pattern: /(^|[^a-z])ORR([^a-z]|$)/i,

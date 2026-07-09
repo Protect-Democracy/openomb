@@ -420,6 +420,32 @@ describe('parseSpendPlanFilename()', () => {
       agency: 'Department of Health and Human Services',
       bureau: 'Administration for Children and Families'
     });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20PC%20Spend%20Plan.pdf
+    // "PC" only matches a bureau short_name (Peace Corps), not an agency short_name directly —
+    // the acronym scanner only checks the agencies list first, so agency never resolves on its own.
+    expect(parseSpendPlanFilename('FY 2025 PC Spend Plan')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'International Assistance Programs',
+      bureau: 'Peace Corps'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20DFC%20Spend%20Plan.pdf
+    // "DFC" only matches a bureau short_name (US International Development Finance Corporation),
+    // same gap as "PC" above; existing /DFC Operating Plan/ fixes pattern doesn't match this title.
+    expect(parseSpendPlanFilename('FY 2025 DFC Spend Plan')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'International Assistance Programs',
+      bureau: 'United States International Development Finance Corporation'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/FY%202026%20NEH%20Spend%20Plan.pdf
+    // "NEH" (National Endowment for the Humanities) has real apportionment data in the system,
+    // but its agency-reference.ts entry has short_name: null, so acronym matching can't find it.
+    expect(parseSpendPlanFilename('FY 2026 NEH Spend Plan')).toMatchObject({
+      fiscalYear: '2026',
+      agency: 'National Endowment for the Humanities'
+    });
   });
 });
 
