@@ -45,8 +45,12 @@ export const handleError = Sentry.handleErrorWithSentry();
  */
 const addHeaders: Handle = async ({ event, resolve }) => {
   // If we have a user logged in, do not include caching headers
+  //
+  // Note: auth() can reject (e.g. a malformed callback-url cookie/param from a bot or
+  // scanner triggers Auth.js's internal config validation). That shouldn't take down
+  // pages that have nothing to do with authentication, so treat it as logged out.
   const path = event.url.pathname;
-  const user = (await event.locals.auth())?.user;
+  const user = (await event.locals.auth().catch(() => null))?.user;
 
   // We can't set headers again if they have already been set, so we manage
   // here for global handling.

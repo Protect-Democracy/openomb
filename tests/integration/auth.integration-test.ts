@@ -55,6 +55,30 @@ test('signIn shows error when Auth.js returns an error code', async ({ page, bas
   await expect(page.getByText(ERROR_MESSAGE)).toBeVisible();
 });
 
+test('page still loads when the callback-url cookie is malformed', async ({
+  page,
+  context,
+  baseURL
+}) => {
+  // Reproduces PD-APPORTIONMENTS-BROWSER-F8: a malformed `authjs.callback-url` cookie (e.g. sent
+  // by a bot/scanner) makes Auth.js's assertConfig() reject the request, and its internal
+  // `session` action returns a generic 500 instead of rendering an HTML error page.
+  // hooks.server.ts calls `event.locals.auth()` unconditionally on every request just to check
+  // for a logged-in user, so this used to crash every page instead of just treating the visitor
+  // as logged out.
+  await context.addCookies([
+    {
+      name: 'authjs.callback-url',
+      value: 'not-a-valid-url',
+      url: baseURL
+    }
+  ]);
+
+  const response = await page.goto('/');
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole('banner').getByText('OpenOMB')).toBeVisible();
+});
+
 test('basic email authentication', async ({ page, context, baseURL }) => {
   const { client: mailClient, teardown: emailTeardown } = await emailClient();
 
