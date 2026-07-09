@@ -174,6 +174,12 @@ export default [
     agency: 'Institute of Museum and Library Services',
     bureau: 'Institute of Museum and Library Services'
   },
+  // https://apportionment-public.max.gov/Spend%20Plans/SNPLMA%20-%20FY2025%20and%202026%20Spend%20Plan%20%281%29.pdf
+  {
+    pattern: /(^|[^a-z])SNPLMA([^a-z]|$)/i,
+    agency: 'Department of the Interior',
+    bureau: 'Bureau of Land Management'
+  },
   // https://apportionment-public.max.gov/Spend%20Plans/FY26%20Qs%201%20and%202%20TANF%20HMRF%20and%20WR%20Spend%20Plan.pdf
   {
     pattern: /(^|[^a-z])TANF\s+HMRF([^a-z]|$)/i,

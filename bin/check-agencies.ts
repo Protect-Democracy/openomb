@@ -15,6 +15,7 @@ import { orderBy } from 'lodash-es';
 import fs from 'node:fs';
 import { Command } from 'commander';
 import { agencies as getAgencies, bureaus as getBureaus } from '$db/queries/agencies';
+import { apportionmentTypeStandard } from '$config/files';
 import packageJson from '../package.json' assert { type: 'json' };
 
 const filterWords = ['of', 'and', 'for', 'on', 'the'];
@@ -119,7 +120,10 @@ async function cli(): Promise<void> {
 
   const orphanAgencies: Array<BudgetAgency> = [];
   const agencyMatches: Array<AgencyMatches> = [];
-  (await getAgencies()).forEach((agency) => {
+  // Only compare against agencies backed by a real (non-spend-plan-only) apportionment —
+  // otherwise an agency that only ever appears via a spend plan would look "already in the
+  // system" here and get written into the main `agencies` array instead of `leftoverAgencies`.
+  (await getAgencies('names', { fileTypes: [apportionmentTypeStandard] })).forEach((agency) => {
     const match = agencies.find((a) => {
       return (
         (!a.parent_id && a.slug == agency.budgetAgencyTitleId) || a.name == agency.budgetAgencyTitle
@@ -153,7 +157,7 @@ async function cli(): Promise<void> {
 
   const orphanBureaus: Array<BudgetAgency> = [];
   const bureauMatches: Array<AgencyMatches> = [];
-  (await getBureaus()).forEach((bureau) => {
+  (await getBureaus({ fileTypes: [apportionmentTypeStandard] })).forEach((bureau) => {
     const match = agencies.find((a) => {
       return (
         (!!a.parent_id && a.slug == bureau.budgetBureauTitleId) ||

@@ -5,6 +5,12 @@ import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
 import { memoizeDataAsync } from '$server/cache';
 import { reduceByFileType } from '$server/query-utilities';
+import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
+
+// Which `files.fileType` values a query should draw agency/bureau data from.
+type FileTypeFilter = {
+  fileTypes?: Array<typeof apportionmentTypeStandard | typeof apportionmentTypeSpendPlan>;
+};
 
 export const agency = async function (budgetAgencyTitleId: string) {
   // Try tafs first
@@ -45,9 +51,19 @@ export const agency = async function (budgetAgencyTitleId: string) {
  * Distinct agencies with file counts
  *
  * @param {['approval', 'names']} orderBy - How to order results
+ * @param options.fileTypes - Restrict to agencies backed by these file types (e.g. `['standard']`
+ *   for agencies with a real/regular apportionment, excluding ones that only ever appear via
+ *   spend plans). Defaults to including both.
  */
-export const agencies = async function (orderResultsBy: 'approval' | 'names' = 'names') {
-  const agencyFiles = db
+export const agencies = async function (
+  orderResultsBy: 'approval' | 'names' = 'names',
+  options: FileTypeFilter = {}
+) {
+  const { fileTypes } = options;
+  const includeStandard = !fileTypes || fileTypes.includes(apportionmentTypeStandard);
+  const includeSpendPlan = !fileTypes || fileTypes.includes(apportionmentTypeSpendPlan);
+
+  const standardAgencyFiles = db
     .selectDistinctOn([tafs.budgetAgencyTitle, files.fileId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
@@ -56,20 +72,26 @@ export const agencies = async function (orderResultsBy: 'approval' | 'names' = '
       approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
-    .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .union(
-      db
-        .selectDistinctOn([files.budgetAgencyTitle, files.fileId], {
-          budgetAgencyTitle: files.budgetAgencyTitle,
-          budgetAgencyTitleId: files.budgetAgencyTitleId,
-          fileId: files.fileId,
-          fileType: files.fileType,
-          approvalTimestamp: files.approvalTimestamp
-        })
-        .from(files)
-        .where(isNotNull(files.budgetAgencyTitle))
-    )
-    .as('agencyFiles');
+    .innerJoin(files, eq(tafs.fileId, files.fileId));
+
+  const spendPlanAgencyFiles = db
+    .selectDistinctOn([files.budgetAgencyTitle, files.fileId], {
+      budgetAgencyTitle: files.budgetAgencyTitle,
+      budgetAgencyTitleId: files.budgetAgencyTitleId,
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
+    })
+    .from(files)
+    .where(isNotNull(files.budgetAgencyTitle));
+
+  const agencyFiles = (
+    includeStandard && includeSpendPlan
+      ? standardAgencyFiles.union(spendPlanAgencyFiles)
+      : includeStandard
+        ? standardAgencyFiles
+        : spendPlanAgencyFiles
+  ).as('agencyFiles');
 
   const orderTerms =
     orderResultsBy === 'names'
@@ -272,9 +294,17 @@ export type AgencyDetailsResult = Awaited<ReturnType<typeof agencyDetails>>;
 
 /**
  * Distinct bureaus with file counts (used for search options)
+ *
+ * @param options.fileTypes - Restrict to bureaus backed by these file types (e.g. `['standard']`
+ *   for bureaus with a real/regular apportionment, excluding ones that only ever appear via
+ *   spend plans). Defaults to including both.
  */
-export const bureaus = async function () {
-  const bureauFiles = db
+export const bureaus = async function (options: FileTypeFilter = {}) {
+  const { fileTypes } = options;
+  const includeStandard = !fileTypes || fileTypes.includes(apportionmentTypeStandard);
+  const includeSpendPlan = !fileTypes || fileTypes.includes(apportionmentTypeSpendPlan);
+
+  const standardBureauFiles = db
     .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetBureauTitle, files.fileId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
       budgetAgencyTitleId: tafs.budgetAgencyTitleId,
@@ -285,22 +315,28 @@ export const bureaus = async function () {
       approvalTimestamp: files.approvalTimestamp
     })
     .from(tafs)
-    .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .union(
-      db
-        .selectDistinctOn([files.budgetAgencyTitle, files.budgetBureauTitle, files.fileId], {
-          budgetAgencyTitle: files.budgetAgencyTitle,
-          budgetAgencyTitleId: files.budgetAgencyTitleId,
-          budgetBureauTitle: files.budgetBureauTitle,
-          budgetBureauTitleId: files.budgetBureauTitleId,
-          fileId: files.fileId,
-          fileType: files.fileType,
-          approvalTimestamp: files.approvalTimestamp
-        })
-        .from(files)
-        .where(isNotNull(files.budgetBureauTitle))
-    )
-    .as('bureauFiles');
+    .innerJoin(files, eq(tafs.fileId, files.fileId));
+
+  const spendPlanBureauFiles = db
+    .selectDistinctOn([files.budgetAgencyTitle, files.budgetBureauTitle, files.fileId], {
+      budgetAgencyTitle: files.budgetAgencyTitle,
+      budgetAgencyTitleId: files.budgetAgencyTitleId,
+      budgetBureauTitle: files.budgetBureauTitle,
+      budgetBureauTitleId: files.budgetBureauTitleId,
+      fileId: files.fileId,
+      fileType: files.fileType,
+      approvalTimestamp: files.approvalTimestamp
+    })
+    .from(files)
+    .where(isNotNull(files.budgetBureauTitle));
+
+  const bureauFiles = (
+    includeStandard && includeSpendPlan
+      ? standardBureauFiles.union(spendPlanBureauFiles)
+      : includeStandard
+        ? standardBureauFiles
+        : spendPlanBureauFiles
+  ).as('bureauFiles');
 
   const results = await db
     .select({

@@ -612,9 +612,16 @@ async function loadPdfSpendPlan(
   // IMPORTANT: This depends on data being in the system to query for folder.  So, it is important
   // that regular/spreadsheet apportionments get loaded into the database before spend plans.
   const agencyDetails = await mAgencyDetails(budgetAgencyTitleId || '');
+  // A folder match whose only source is a spend plan (i.e. this file's own prior "Unknown
+  // Folder" record, or another spend plan for the same agency) doesn't count as a real folder —
+  // otherwise, once one spend plan for an agency lands in Unknown Folder, every later run would
+  // find that stale record and treat it as proof a folder exists, never throwing again below.
+  const hasRealFolder =
+    !!agencyDetails?.folder?.folderId &&
+    agencyDetails.folder.fileType !== apportionmentTypeSpendPlan;
   let folder = agencyDetails?.folder?.folder;
   let folderId = agencyDetails?.folder?.folderId;
-  if (!agencyDetails || !agencyDetails.folder.folderId) {
+  if (!hasRealFolder) {
     if (agency && budgetAgencyTitleId) {
       // Agency resolved fine, but no folder data exists for it yet — this means regular
       // apportionments haven't been loaded for this agency before its spend plans, which is
@@ -874,32 +881,6 @@ export function parseSpendPlanFilename(fileName: string): {
         }
       }
     });
-
-    // If we didn't get an agency, check the orphaned ones for results
-    //  (This will add a new agency/bureau that has no apportionments
-    //    within it, only spend plans)
-    if (!results['agency']) {
-      let agencyId: number;
-      filteredAcronymParts.forEach((acronym) => {
-        if (!results['agency']) {
-          const agencyResult = agencyMatches.leftoverAgencies.find((a) =>
-            a.short_name?.split('/').some((p) => p === acronym)
-          );
-          if (agencyResult) {
-            results['agency'] = agencyResult.name;
-            agencyId = agencyResult.id;
-          }
-        } else if (!results['bureau']) {
-          const bureauResult = agencyMatches.leftoverBureaus.find((a) =>
-            a.short_name?.split('/').some((p) => p === acronym)
-          );
-          if (bureauResult && agencyId === bureauResult.parent_id) {
-            // Make sure our hierarchy aligns before we set this
-            results['bureau'] = bureauResult.name;
-          }
-        }
-      });
-    }
   }
 
   // Some files don't have fiscal year, and we may not find an agency yet, check

@@ -23,7 +23,14 @@ vi.mock('@sentry/node', async (importOriginal) => {
 });
 
 import { fileDetails } from '$db/queries/files';
-import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
+import {
+  apportionmentTypeStandard,
+  apportionmentTypeSpendPlan,
+  unknownFolderName
+} from '$config/files';
+import { db } from '$db/connection';
+import { files } from '$schema/files';
+import { dbId } from './utilities';
 
 import {
   approvalDateFromPdfFileName,
@@ -221,9 +228,12 @@ describe('parseSpendPlanFilename()', () => {
         agency: 'Department of State'
       }
     );
+    // IBWC has no real (non-spend-plan) apportionment data in the system — leftover-agency
+    // matching was removed, so this is left unresolved rather than an invented identity.
     expect(parseSpendPlanFilename('FY25 IBWC Spend Plan.pdf')).toMatchObject({
       fiscalYear: '2025',
-      agency: 'International Boundary and Water Commission, United States and Mexico'
+      agency: undefined,
+      bureau: undefined
     });
     expect(parseSpendPlanFilename('FY 2025 HHS GDM TPP Evaluation Spend Plan.pdf')).toMatchObject({
       fiscalYear: '2025',
@@ -390,6 +400,25 @@ describe('parseSpendPlanFilename()', () => {
       fiscalYear: '2026',
       agency: 'Department of Homeland Security',
       bureau: 'U.S. Customs and Border Protection'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/SNPLMA%20-%20FY2025%20and%202026%20Spend%20Plan%20%281%29.pdf
+    // "SNPLMA" acronym doesn't match any agency/bureau short_name directly (PDF content confirms
+    // this is a BLM-administered spend plan for the Southern Nevada Public Land Management Act)
+    expect(parseSpendPlanFilename('SNPLMA - FY2025 and 2026 Spend Plan (1)')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of the Interior',
+      bureau: 'Bureau of Land Management'
+    });
+
+    // https://apportionment-public.max.gov/Spend%20Plans/FY%202025%20ACF%20apportionment%20information%20AO.pdf
+    // "AO" previously matched via leftover-agency scanning to "Administrative Office of United
+    // States Courts", but that was a false positive — this is an HHS/ACF file, correctly caught
+    // by the general ACF pattern in spend-plan-agency-match.ts now that leftover matching is gone.
+    expect(parseSpendPlanFilename('FY 2025 ACF apportionment information AO')).toMatchObject({
+      fiscalYear: '2025',
+      agency: 'Department of Health and Human Services',
+      bureau: 'Administration for Children and Families'
     });
   });
 });
@@ -902,6 +931,43 @@ describe('loadPdfSpendPlan()', async () => {
     // No sample data loaded in this describe block's default beforeEach, so the agency
     // ("Corporation for National and Community Service") resolves but no folder data exists
     // for it yet — this should still be a hard failure, not a warning.
+    await expect(loadPdfSpendPlan(testUrl, 0)).rejects.toThrow(/Folder could not be determined/);
+  });
+
+  test('still throws when a prior spend plan for the same agency already sits in Unknown Folder', async () => {
+    // Seed a spend plan file record that landed in Unknown Folder on an earlier run (e.g. before
+    // this safeguard existed). Without excluding spend-plan-type folders, agencyDetails() would
+    // treat this stale record as proof a real folder exists, and never throw again.
+    await db.insert(files).values({
+      fileId: 'pdf-stale-prior-spend-plan',
+      fileName: 'Prior CNCS Spend Plan',
+      fileType: apportionmentTypeSpendPlan,
+      fiscalYear: 2024,
+      folder: unknownFolderName,
+      folderId: dbId(unknownFolderName),
+      budgetAgencyTitle: 'Corporation for National and Community Service',
+      budgetAgencyTitleId: 'corporation-for-national-and-community-service',
+      sourceUrl: 'http://example.com/Prior CNCS Spend Plan.pdf',
+      pdfUrl: 'http://example.com/Prior CNCS Spend Plan.pdf',
+      createdAt: new Date(),
+      modifiedAt: new Date(),
+      removed: false
+    });
+
+    const testPdfPath = path.resolve(__dirname, './test-data/spend-plan-pdf-test.pdf');
+    const testBlob = new Blob([fs.readFileSync(testPdfPath)], { type: 'application/pdf' });
+    const testUrl = 'http://example.com/FY 2025 CNCS Spend Plan.pdf';
+
+    // Mock response
+    mockFetchResponse(
+      testBlob,
+      {
+        headers: new Headers({ 'Content-Type': 'application/pdf' }),
+        arrayBuffer: () => testBlob.arrayBuffer()
+      },
+      'blob'
+    );
+
     await expect(loadPdfSpendPlan(testUrl, 0)).rejects.toThrow(/Folder could not be determined/);
   });
 });
