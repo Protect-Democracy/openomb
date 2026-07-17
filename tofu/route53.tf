@@ -90,5 +90,5 @@ resource "aws_route53_record" "mailgun_dmarc" {
   name    = "_dmarc.${data.mailgun_domain.domain.name}"
   type    = "TXT"
   ttl     = "600"
-  records = ["v=DMARC1;p=none;pct=0;rua=mailto:openomb@protectdemocracy.org"]
+  records = ["v=DMARC1;p=none;pct=0;fo=1;ri=3600;rua=mailto:cd9d0f66@dmarc.mailgun.org,mailto:a51b7068@inbox.ondmarc.com,mailto:openomb@protectdemocracy.org;ruf=mailto:cd9d0f66@dmarc.mailgun.org,mailto:a51b7068@inbox.ondmarc.com;"]
 }
