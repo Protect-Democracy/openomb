@@ -12,7 +12,7 @@
     >
 
     <ul aria-labelledby="tafs_{tafsGroup.tafsTableId}_iterations_label">
-      {#each tafsGroup.iterations as iteration (iteration.iteration)}
+      {#each tafsGroup.iterations as iteration (iteration.tafsTableId)}
         <li>
           {#if iteration.iteration === tafsGroup.iteration}
             <span
