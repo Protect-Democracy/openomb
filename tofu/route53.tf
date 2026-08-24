@@ -44,8 +44,7 @@ resource "aws_route53_record" "email_mx" {
   ttl     = 3600
 
   records = [
-    "10 mx1.forwardemail.net",
-    "10 mx2.forwardemail.net",
+    "0 openomb-org.mail.protection.outlook.com.",
   ]
 }
 
@@ -56,8 +55,8 @@ resource "aws_route53_record" "email_txt" {
   ttl     = 3600
 
   records = [
-    "forward-email=openomb@protectdemocracy.org",
-    "v=spf1 a include:spf.forwardemail.net include:_spf.google.com ~all"
+    "MS=ms58472058",
+    "v=spf1 include:spf.protection.outlook.com -all"
   ]
 }
 
