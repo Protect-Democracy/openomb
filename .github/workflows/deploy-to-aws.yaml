@@ -56,7 +56,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ github.event.repository.name }}
           # Set a latest for default/main branch, and a tag with the commit sha
