@@ -242,9 +242,28 @@ function generalSearchFilters(
       ? inArray(files.approverTitleId, searchParams.approver)
       : undefined
   );
+  // Joining lines directly (like footnotes below) would force every search
+  // query to join/group over every line row in the matched files, even when
+  // nothing else about the search needs a line-level join. Filter via a
+  // subquery instead, matching the footnoteNum pattern below, so callers of
+  // this filter never need to join `lines`.
   where.push(
     searchParams.lineNum?.length && searchParams.lineNum?.length > 0
-      ? inArray(lines.lineNumber, searchParams.lineNum)
+      ? mainTable === 'tafs'
+        ? inArray(
+            tafs.tafsTableId,
+            db
+              .selectDistinct({ tafsTableId: lines.tafsTableId })
+              .from(lines)
+              .where(inArray(lines.lineNumber, searchParams.lineNum))
+          )
+        : inArray(
+            files.fileId,
+            db
+              .selectDistinct({ fileId: lines.fileId })
+              .from(lines)
+              .where(inArray(lines.lineNumber, searchParams.lineNum))
+          )
       : undefined
   );
 
@@ -423,13 +442,15 @@ export async function tafsSearchFullCountQuery(
 ) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
+  // Not joining lines/footnotes directly and searching via subquery instead
+  // (see generalSearchFilters' lineNum/footnoteNum handling) avoids fanning
+  // this query out over every line/footnote row in the matched files.
   const countSubquery = db
     .selectDistinct({
       tafsTableId: tafs.tafsTableId
     })
     .from(tafs)
     .leftJoin(files, eq(tafs.fileId, files.fileId))
-    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
     .where(where)
     .as('countSubquery');
 
@@ -468,13 +489,15 @@ export async function tafsSearchFullFileCountQuery(
 ) {
   const { where } = await searchSetup(searchParams, 'tafs');
 
+  // Not joining lines/footnotes directly and searching via subquery instead
+  // (see generalSearchFilters' lineNum/footnoteNum handling) avoids fanning
+  // this query out over every line/footnote row in the matched files.
   const countSubquery = db
     .selectDistinct({
       fileId: tafs.fileId
     })
     .from(tafs)
     .leftJoin(files, eq(tafs.fileId, files.fileId))
-    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
     .where(where)
     .as('countSubquery');
 
@@ -567,8 +590,11 @@ export async function accountSearchFullCountQuery(
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
-    // Explicitly not joining footnotes and searching via subquery (see where)
+    // Explicitly not joining lines or footnotes and searching via subquery
+    // instead (see generalSearchFilters' lineNum/footnoteNum handling), since
+    // joining either directly here would fan this query out over every
+    // line/footnote row in the matched files.
+    //.leftJoin(lines, eq(tafs.fileId, lines.fileId))
     //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
     .as('countSubquery');
@@ -623,8 +649,11 @@ export async function accountSearchPaged(searchParams: SearchPaginationParams) {
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
-    .leftJoin(lines, eq(tafs.fileId, lines.fileId))
-    // Explicitly not joining footnotes and searching via subquery (see where)
+    // Explicitly not joining lines or footnotes and searching via subquery
+    // instead (see generalSearchFilters' lineNum/footnoteNum handling), since
+    // joining either directly here would fan this query out over every
+    // line/footnote row in the matched files.
+    //.leftJoin(lines, eq(tafs.fileId, lines.fileId))
     //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
     .groupBy(tafs.budgetAgencyTitleId, tafs.budgetBureauTitleId, tafs.accountTitleId)
@@ -654,8 +683,11 @@ export async function fileSearchFullCountQuery(
     })
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
-    .leftJoin(lines, eq(files.fileId, lines.fileId))
-    // Explicitly not joining footnotes and searching via subquery (see where)
+    // Explicitly not joining lines or footnotes and searching via subquery
+    // instead (see generalSearchFilters' lineNum/footnoteNum handling), since
+    // joining either directly here would fan this query out over every
+    // line/footnote row in the matched files.
+    //.leftJoin(lines, eq(files.fileId, lines.fileId))
     //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
     .as('countSubquery');
@@ -709,9 +741,12 @@ export async function fileSearchPaged(
     })
     .from(files)
     .leftJoin(tafs, eq(files.fileId, tafs.fileId))
-    .leftJoin(lines, eq(files.fileId, lines.fileId))
-    // Explicitly not joining footnotes and searching via subquery (see where),
-    // but if we need to order by or select from footnotes we need to join
+    // Explicitly not joining lines or footnotes and searching via subquery
+    // instead (see generalSearchFilters' lineNum/footnoteNum handling), since
+    // joining either directly here would fan this query out over every
+    // line/footnote row in the matched files. If we ever need to order by or
+    // select from lines/footnotes directly, we'd need to join them.
+    //.leftJoin(lines, eq(files.fileId, lines.fileId))
     //.leftJoin(footnotes, eq(files.fileId, footnotes.fileId))
     .where(where)
     .groupBy(files.fileId)
