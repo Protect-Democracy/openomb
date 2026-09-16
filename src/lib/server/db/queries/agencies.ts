@@ -220,6 +220,11 @@ export type AgenciesByFolderResult = Awaited<ReturnType<typeof agenciesByFolder>
  * Get details for an agency
  */
 export const agencyDetails = async function (budgetAgencyTitleId: string) {
+  // Filtering by budgetAgencyTitleId inside each union branch (rather than on
+  // the union result afterward) means Postgres only has to distinct-process
+  // this one agency's rows instead of every tafs/files row in the dataset,
+  // and it only has to do so once even though the union is referenced by two
+  // separate queries below.
   const agencyFiles = db
     .selectDistinctOn([tafs.budgetAgencyTitle, files.fileId], {
       folderId: files.folderId,
@@ -232,6 +237,7 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .where(eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId))
     .union(
       db
         .selectDistinctOn([files.budgetAgencyTitle, files.fileId], {
@@ -244,7 +250,12 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
           approvalTimestamp: files.approvalTimestamp
         })
         .from(files)
-        .where(isNotNull(files.budgetAgencyTitle))
+        .where(
+          and(
+            isNotNull(files.budgetAgencyTitle),
+            eq(files.budgetAgencyTitleId, budgetAgencyTitleId)
+          )
+        )
     )
     .as('agencyFiles');
 
@@ -255,8 +266,7 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
       fileId: agencyFiles.fileId,
       fileType: agencyFiles.fileType
     })
-    .from(agencyFiles)
-    .where(eq(agencyFiles.budgetAgencyTitleId, budgetAgencyTitleId));
+    .from(agencyFiles);
 
   // If none found
   if (!filesFromAgency || filesFromAgency.length === 0) {
@@ -271,7 +281,6 @@ export const agencyDetails = async function (budgetAgencyTitleId: string) {
       fileType: agencyFiles.fileType
     })
     .from(agencyFiles)
-    .where(eq(agencyFiles.budgetAgencyTitleId, budgetAgencyTitleId))
     // Ensure we get non spend plan folders first
     .orderBy(agencyFiles.fileType, agencyFiles.folder)
     .limit(1);
@@ -416,6 +425,9 @@ export const bureauDetails = async function (
   budgetAgencyTitleId: string,
   budgetBureauTitleId: string
 ) {
+  // Filtering by agency/bureau ID inside each union branch (rather than on
+  // the union result afterward) means Postgres only has to distinct-process
+  // this one bureau's rows instead of every tafs/files row in the dataset.
   const bureauFiles = db
     .selectDistinctOn([tafs.budgetAgencyTitle, tafs.budgetBureauTitle, files.fileId], {
       budgetAgencyTitle: tafs.budgetAgencyTitle,
@@ -428,6 +440,12 @@ export const bureauDetails = async function (
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
+    .where(
+      and(
+        eq(tafs.budgetAgencyTitleId, budgetAgencyTitleId),
+        eq(tafs.budgetBureauTitleId, budgetBureauTitleId)
+      )
+    )
     .union(
       db
         .selectDistinctOn([files.budgetAgencyTitle, files.budgetBureauTitle, files.fileId], {
@@ -440,7 +458,13 @@ export const bureauDetails = async function (
           approvalTimestamp: files.approvalTimestamp
         })
         .from(files)
-        .where(isNotNull(files.budgetBureauTitle))
+        .where(
+          and(
+            isNotNull(files.budgetBureauTitle),
+            eq(files.budgetAgencyTitleId, budgetAgencyTitleId),
+            eq(files.budgetBureauTitleId, budgetBureauTitleId)
+          )
+        )
     )
     .as('bureauFiles');
 
@@ -452,13 +476,7 @@ export const bureauDetails = async function (
       budgetAgencyTitleId: bureauFiles.budgetAgencyTitleId,
       fileId: bureauFiles.fileId
     })
-    .from(bureauFiles)
-    .where(
-      and(
-        eq(bureauFiles.budgetAgencyTitleId, budgetAgencyTitleId),
-        eq(bureauFiles.budgetBureauTitleId, budgetBureauTitleId)
-      )
-    );
+    .from(bureauFiles);
 
   // If none found
   if (!filesFromBureau || filesFromBureau.length === 0) {

@@ -1,12 +1,12 @@
-import { accountDetails, tafsByAccount } from '$queries/tafs';
+import { mAccountDetails, tafsByAccount } from '$queries/tafs';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals }) {
-  const account = await accountDetails(params.agencyId, params.bureauId, params.accountId);
+  const account = await mAccountDetails(params.agencyId, params.bureauId, params.accountId);
   if (!account) {
-    error(404, 'Unable to find bureau');
+    error(404, 'Unable to find account');
   }
 
   const user = (await locals.auth())?.user;

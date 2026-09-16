@@ -134,6 +134,7 @@ export const accountDetails = async function (
     bureau
   };
 };
+export type AccountDetailsResult = Awaited<ReturnType<typeof accountDetails>>;
 
 /**
  * Get TAFS by account title ID.
@@ -173,3 +174,4 @@ export const tafsByAccount = async function (
 // Memoized
 export const mAccounts = memoizeDataAsync(accounts);
 export const mTafsStats = memoizeDataAsync(tafsStats);
+export const mAccountDetails = memoizeDataAsync(accountDetails);

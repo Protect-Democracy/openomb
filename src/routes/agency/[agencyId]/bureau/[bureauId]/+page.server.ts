@@ -1,12 +1,12 @@
 import { mRecentlyAddedOrApprovedWithTafs, mFileCountByMonthByYear } from '$queries/files';
-import { bureauDetails } from '$queries/agencies';
+import { mBureauDetails } from '$queries/agencies';
 import { accountsByBureau } from '$queries/tafs';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals }) {
-  const bureau = await bureauDetails(params.agencyId, params.bureauId);
+  const bureau = await mBureauDetails(params.agencyId, params.bureauId);
   if (!bureau) {
     error(404, 'Unable to find bureau');
   }
