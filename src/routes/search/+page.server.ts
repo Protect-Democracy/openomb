@@ -12,6 +12,7 @@ import {
   userSearch
 } from '$queries/search';
 import { parseUrlSearchParams } from '$lib/searches';
+import { parsePageIndex } from '$lib/utilities';
 import { mBureaus } from '$queries/agencies';
 import { mFolders } from '$queries/folders';
 import { userSubscription } from '$queries/subscriptions';
@@ -55,14 +56,13 @@ export const actions = {
 export const load = async ({ url, cookies, locals }) => {
   // Shortcuts
   const u = (p: string) => url.searchParams.get(p);
-  const h = (p: string) => url.searchParams.has(p);
   const jsEnabled = !!cookies.get('jsEnabled');
 
   // Paging values
   const filePageSize = 50;
-  const filePageIndex = h('page') ? Number(u('page')) : 1;
+  const filePageIndex = parsePageIndex(u('page'));
   const accountPageSize = 10;
-  const accountPageIndex = h('accountPage') ? Number(u('accountPage')) : 1;
+  const accountPageIndex = parsePageIndex(u('accountPage'));
 
   // Values we will only get when a search is done
   let combinedSearchParams, fileCount, fileResults, accountCount, accountResults;

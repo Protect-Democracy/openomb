@@ -2,6 +2,7 @@
 import { json } from '@sveltejs/kit';
 import { mFileSearchFullCount, mFileSearchPaged } from '$queries/search';
 import { parseUrlSearchParams } from '$lib/searches';
+import { parsePageIndex, parsePageSize } from '$lib/utilities';
 
 // Types
 import type { SearchPaginationParams } from '$queries/search';
@@ -12,10 +13,9 @@ import type { SearchPaginationParams } from '$queries/search';
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url }) {
   const u = (p: string) => url.searchParams.get(p);
-  const h = (p: string) => url.searchParams.has(p);
 
-  const filePageSize = Math.min(u('limit') ? Number(u('limit')) : 50, 100);
-  const filePageIndex = h('page') ? Number(u('page')) : 1;
+  const filePageSize = parsePageSize(u('limit'), 50, 100);
+  const filePageIndex = parsePageIndex(u('page'));
 
   const searchArgs = parseUrlSearchParams(url.searchParams);
   const pagedSearchArgs: SearchPaginationParams = {
