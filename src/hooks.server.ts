@@ -17,6 +17,17 @@ if (env.sentrySvelteDsn) {
   });
 }
 
+// ensure we are filtering the spam warnings from our authentication library
+//  (we are waiting on this fix
+//  https://github.com/nextauthjs/next-auth/issues/12795)
+const originalWarn = console.warn;
+console.warn = (...data) => {
+  if (data.some((message) => message.includes('env-url-basepath-redundant'))) {
+    return;
+  }
+  return originalWarn(...data);
+};
+
 /**
  * Now we can set up our server hooks
  */
