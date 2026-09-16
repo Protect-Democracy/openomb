@@ -523,18 +523,26 @@ export async function tafsSearchPaged(searchParams: SearchPaginationParams) {
     .offset(searchParams.offset)
     .limit(searchParams.limit);
 
-  // Details.
-  const tafsDetails = [];
-  for (const pagedResult of pagedResults) {
-    const details = await db.query.tafs.findFirst({
-      where: eq(tafs.tafsTableId, pagedResult.tafsTableId?.toString() || ''),
-      with: {
-        file: true
-      }
-    });
-
-    tafsDetails.push(details);
-  }
+  // Fetch all TAFS details in a single batched query (rather than one query per
+  // row, which was an N+1 pattern), then reorder to match pagedResults' order
+  // since findMany doesn't preserve it.
+  const tafsTableIds = pagedResults
+    .map((pagedResult) => pagedResult.tafsTableId?.toString())
+    .filter((tafsTableId): tafsTableId is string => Boolean(tafsTableId));
+  const unorderedTafsDetails = tafsTableIds.length
+    ? await db.query.tafs.findMany({
+        where: inArray(tafs.tafsTableId, tafsTableIds),
+        with: {
+          file: true
+        }
+      })
+    : [];
+  const tafsDetailsById = new Map(
+    unorderedTafsDetails.map((tafsDetail) => [tafsDetail.tafsTableId, tafsDetail])
+  );
+  const tafsDetails = pagedResults.map((pagedResult) =>
+    tafsDetailsById.get(pagedResult.tafsTableId?.toString() ?? '')
+  );
 
   return tafsDetails;
 }
@@ -734,17 +742,26 @@ export async function fileSearchPaged(
     })
   };
 
-  const fileDetails: (filesSelectWithTafsFootnotes | null)[] = [];
-  for (const limitedId of limitedIds) {
-    const details = await db.query.files.findFirst({
-      columns: {
-        sourceData: false
-      },
-      where: eq(files.fileId, limitedId.fileId),
-      with: detailsWith
-    });
-    fileDetails.push(details ?? null);
-  }
+  // Fetch all file details in a single batched query (rather than one query per
+  // file id, which was an N+1 pattern responsible for the majority of DB load
+  // on this endpoint), then reorder to match limitedIds' order since findMany
+  // doesn't preserve it.
+  const orderedFileIds = limitedIds.map((limitedId) => limitedId.fileId);
+  const unorderedFileDetails = orderedFileIds.length
+    ? await db.query.files.findMany({
+        columns: {
+          sourceData: false
+        },
+        where: inArray(files.fileId, orderedFileIds),
+        with: detailsWith
+      })
+    : [];
+  const fileDetailsById = new Map(
+    unorderedFileDetails.map((fileDetail) => [fileDetail.fileId, fileDetail])
+  );
+  const fileDetails: (filesSelectWithTafsFootnotes | null)[] = orderedFileIds.map(
+    (fileId) => fileDetailsById.get(fileId) ?? null
+  );
 
   return fileDetails;
 }
