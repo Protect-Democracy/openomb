@@ -42,7 +42,7 @@ export const secondsToZonedTime = function (
   const currentSeconds = currentHour * 60 * 60 + currentMinute * 60;
   const targetSeconds = hour * 60 * 60 + minute * 60;
 
-  let diffSeconds = 0;
+  let diffSeconds;
   if (currentSeconds > targetSeconds) {
     diffSeconds = 24 * 60 * 60 - currentSeconds + targetSeconds;
   } else {
@@ -145,6 +145,24 @@ export function dateForCacheInvalidation() {
  */
 export function isSpendPlanFile(file: filesSelect): boolean {
   return file.fileType === apportionmentTypeSpendPlan;
+}
+
+/**
+ * Parse a 1-indexed page number from a URL search param, clamping invalid,
+ * missing, non-integer, or non-positive values to page 1.
+ */
+export function parsePageIndex(value: string | null): number {
+  const parsed = value ? Number(value) : NaN;
+  return Number.isInteger(parsed) && parsed >= 1 ? parsed : 1;
+}
+
+/**
+ * Parse a page size from a URL search param, clamping to [1, maxSize] and
+ * falling back to defaultSize for invalid, missing, or non-positive values.
+ */
+export function parsePageSize(value: string | null, defaultSize: number, maxSize: number): number {
+  const parsed = value ? Number(value) : NaN;
+  return Number.isInteger(parsed) && parsed >= 1 ? Math.min(parsed, maxSize) : defaultSize;
 }
 
 /**

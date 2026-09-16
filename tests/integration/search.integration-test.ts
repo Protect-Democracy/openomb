@@ -50,3 +50,20 @@ test('linked to search pages have some items', async ({ page }) => {
     expect(totalResults).toBeGreaterThan(0);
   }
 });
+
+test('files search API handles invalid page params without erroring', async ({ request }) => {
+  // page=0 previously computed a negative OFFSET (e.g. offset=-100 for limit=100),
+  // which Postgres rejects with "OFFSET must not be negative", 500ing the endpoint
+  // (see PD-APPORTIONMENTS-BROWSER-HD). Negative and non-numeric page values should
+  // behave the same way.
+  for (const page of ['0', '-1', 'abc']) {
+    const response = await request.get(`/api/v1/files/search?page=${page}&limit=100`);
+    expect(response.status(), `page=${page} should not error`).toBeLessThan(500);
+
+    const body = await response.json();
+    expect(
+      body.paging.offset,
+      `page=${page} should not produce a negative offset`
+    ).toBeGreaterThanOrEqual(0);
+  }
+});
