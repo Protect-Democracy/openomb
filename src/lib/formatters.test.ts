@@ -18,6 +18,18 @@ describe('highlight()', () => {
     );
   });
 
+  test('escapes regex special characters in terms', () => {
+    // A term containing an unmatched '[' previously threw
+    // `SyntaxError: Invalid regular expression ... Unterminated character class`
+    // when passed straight into `new RegExp()` (see PD-APPORTIONMENTS-BROWSER-H9/-HA).
+    expect(() => highlight('please review [rationale needed]', ['[rationale'])).not.toThrow();
+    expect(highlight('please review [rationale needed]', ['[rationale'])).toEqual(
+      'please review <mark>[rationale</mark> needed]'
+    );
+    expect(() => highlight('a (b) c', ['(b)'])).not.toThrow();
+    expect(highlight('a (b) c', ['(b)'])).toEqual('a <mark>(b)</mark> c');
+  });
+
   test('trim', () => {
     expect(highlight('hello world world', ['hello'], 5)).toEqual('<mark>hello</mark> world...');
     expect(highlight('hello world world world world world', ['hello'], 5)).toEqual(
@@ -39,5 +51,11 @@ describe('highlight()', () => {
     expect(highlight('hello worldworldworldworldworldworld', ['hello'], 5)).toEqual(
       '<mark>hello</mark> worldworldworldworldworldworld...'
     );
+  });
+
+  test('escapes regex special characters in terms with trim', () => {
+    expect(() =>
+      highlight('please review [rationale needed] for context', ['[rationale'], 10)
+    ).not.toThrow();
   });
 });

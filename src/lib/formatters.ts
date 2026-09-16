@@ -151,6 +151,11 @@ export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
 };
 
 /**
+ * Escape regex metacharacters so a raw string can be safely embedded in a `RegExp` pattern.
+ */
+const escapeRegExp = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/**
  * Highlight part of a string based on a set of search terms
  */
 export const highlight = function (text?: string | null, terms?: string[], trim?: number): string {
@@ -161,8 +166,13 @@ export const highlight = function (text?: string | null, terms?: string[], trim?
     return text || '';
   }
 
+  // Terms are user-supplied search input, which may contain unescaped regex
+  // metacharacters (e.g. an unmatched '['); escape before building a RegExp
+  // so search input never throws a SyntaxError.
+  const escapedTerms = terms.map(escapeRegExp);
+
   if (!trim) {
-    const regex = new RegExp(terms.join('|'), 'gi');
+    const regex = new RegExp(escapedTerms.join('|'), 'gi');
     return text.replace(regex, '<mark>$&</mark>');
   } else {
     // This is pretty hacky.  Ideally we could make this kind of like Google results and have multiple
@@ -170,7 +180,7 @@ export const highlight = function (text?: string | null, terms?: string[], trim?
     const wordLength = Math.round(sumBy(terms, (t) => t.length) / terms.length);
     const padding = Math.round(trim - wordLength / 2);
     const regex = new RegExp(
-      `(\\S*.{0,${padding}})?(${terms.join('|')})(.{0,${padding}}\\S*)?`,
+      `(\\S*.{0,${padding}})?(${escapedTerms.join('|')})(.{0,${padding}}\\S*)?`,
       'i'
     );
     const parts = text.match(regex);
