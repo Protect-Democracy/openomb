@@ -133,6 +133,42 @@ test('basic email authentication', async ({ page, context, baseURL }) => {
   await emailTeardown();
 });
 
+test('authenticated non-admin gets a 404 for /admin', async ({ page, context, baseURL }) => {
+  // The admin allowlist for the test server process is set in playwright.setup.ts
+  // via APPORTIONMENTS_ADMIN_EMAILS, which this email is deliberately not in.
+  const auth = await integrationAuthenticate('not-an-admin@example.com', page, context, baseURL);
+
+  const response = await page.goto('/admin');
+  expect(response?.status()).toBe(404);
+
+  await auth.teardown();
+});
+
+test('authenticated admin sees the user list and can view a user detail page', async ({
+  page,
+  context,
+  baseURL
+}) => {
+  // Matches APPORTIONMENTS_ADMIN_EMAILS set in playwright.setup.ts.
+  const ADMIN_EMAIL = 'admin-test@example.com';
+  const auth = await integrationAuthenticate(ADMIN_EMAIL, page, context, baseURL);
+
+  const response = await page.goto('/admin');
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole('heading', { name: 'Admin: Users' })).toBeVisible();
+
+  // The admin's own account (created by the login flow above) should be in the list.
+  const adminRowLink = page.getByRole('link', { name: ADMIN_EMAIL });
+  await expect(adminRowLink).toBeVisible();
+
+  await adminRowLink.click();
+  await expect(page.getByRole('heading', { name: ADMIN_EMAIL })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Subscriptions' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Saved Searches' })).toBeVisible();
+
+  await auth.teardown();
+});
+
 test('basic notification test', async ({ page, context, baseURL }) => {
   const email = 'test-notification-test@example.com';
   const auth = await integrationAuthenticate(email, page, context, baseURL);

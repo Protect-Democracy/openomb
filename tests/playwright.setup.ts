@@ -8,6 +8,15 @@ import { resetEnv } from './helpers/reset-env';
 import { createIsolatedDb } from './helpers/db';
 import { spawn, execSync } from 'node:child_process';
 
+// Types
+import type { ChildProcess, ExecException } from 'node:child_process';
+
+declare global {
+  var __SERVER_PROCESS__: ChildProcess | undefined;
+}
+
+type GlobalSetupConfig = { buildCommand: string; previewCommand: string; port: number };
+
 const execAsync = util.promisify(exec);
 
 async function globalSetup(config: FullConfig) {
@@ -15,7 +24,9 @@ async function globalSetup(config: FullConfig) {
   resetEnv();
 
   // Get custom config
-  const { buildCommand, previewCommand, port } = config.projects[0].use.globalSetupConfig as any;
+  const { buildCommand, previewCommand, port } = (
+    config.projects[0].use as { globalSetupConfig: GlobalSetupConfig }
+  ).globalSetupConfig;
 
   // Make sure port is open
   await forceKillPort(port);
@@ -42,14 +53,11 @@ async function globalSetup(config: FullConfig) {
   process.env.APPORTIONMENTS_EMAIL_SMTP_PORT = process.env.TEST_MAILPIT_SMTP_PORT;
   process.env.APPORTIONMENTS_EMAIL_SMTP_USER = 'test';
   process.env.APPORTIONMENTS_EMAIL_SMTP_PASSWORD = 'test';
+  process.env.APPORTIONMENTS_ADMIN_EMAILS = 'admin-test@example.com';
 
   // Build the application
-  try {
-    console.log('Building Web Server...');
-    execSync(buildCommand);
-  } catch (e) {
-    throw e;
-  }
+  console.log('Building Web Server...');
+  execSync(buildCommand);
 
   // Start the web server as a spawned child process
   console.log('Running Web Server...');
@@ -65,7 +73,7 @@ async function globalSetup(config: FullConfig) {
   server.stderr?.on('data', (data) => console.error(`[Server Error]: ${data}`));
 
   // Store the server process in globalThis so teardown can find it
-  (globalThis as any).__SERVER_PROCESS__ = server;
+  globalThis.__SERVER_PROCESS__ = server;
 
   // TODO: Ideally wait until the server is ready before processing
   await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -105,10 +113,14 @@ export async function forceKillPort(port: number) {
         }
       }
     }
-  } catch (e: any) {
+  } catch (e) {
     // Ignore errors where no process was found (exit code 1)
-    if (e.code !== 1 && !e.message.includes('No such process')) {
-      console.warn(`[Process Utils] Warning: Failed to kill process on port ${port}`, e.message);
+    const error = e as ExecException;
+    if (error.code !== 1 && !error.message.includes('No such process')) {
+      console.warn(
+        `[Process Utils] Warning: Failed to kill process on port ${port}`,
+        error.message
+      );
     }
   }
 }

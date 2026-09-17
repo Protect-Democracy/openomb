@@ -65,6 +65,7 @@ The following are environment variables that can be set:
 - `MAILGUN_DOMAIN` - Domain for our mailgun service to send emails from
 - `MAILGUN_SEND_KEY` - Api key value to authenticate our email send
   - If you wish to test emails without this, see [docs/EMAILS.md](./EMAILS.md)
+- `APPORTIONMENTS_ADMIN_EMAILS` - Comma-separated list of email addresses granted access to `/admin`
 
 This project uses [@dotenvx/dotenvx](https://dotenvx.com/docs) to parse our `.env` files.
 

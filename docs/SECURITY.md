@@ -33,3 +33,7 @@ Sensitive values like `SENTRY_AUTH_TOKEN` are passed to Docker builds using Buil
 
 - `APPORTIONMENT_*` variables are accessed at runtime and meant to be only used on the server.
 - `VITE_*` variables are embedded in the build and are meant for the client and thus can be accessed by looking at the source code of the site.
+
+## Admin access
+
+Access to `/admin` is controlled by an email allowlist in the `APPORTIONMENTS_ADMIN_EMAILS` environment variable (comma-separated). There is no roles/permissions managed in the auth system at the moment.
