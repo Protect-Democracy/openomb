@@ -36,6 +36,12 @@ export const usersRelations = relations(users, ({ many }) => ({
   subscriptions: many(subscriptions)
 }));
 
+/**
+ * Export some types
+ */
+export type usersSelect = typeof users.$inferSelect;
+export type usersInsert = typeof users.$inferInsert;
+
 // Additional tables
 export const accounts = pgTable(
   'accounts',

@@ -12,14 +12,10 @@ import { searches, type searchesSelect } from '$schema/searches';
 import { subscriptions, type subscriptionSelect } from '$schema/subscriptions';
 import { users } from '$schema/users';
 import { formatTafsFormattedId } from '$lib/formatters';
-import {
-  criterionToUrlSearchParams,
-  parseCriterion,
-  searchCriterionDescriptions
-} from '$lib/searches';
+import { criterionToUrlSearchParams, parseCriterion } from '$lib/searches';
 import { agency as agencyLookup } from '$queries/agencies';
-import { mApproverTitleOptions, type ApproverTitleOptionsResult } from '$queries/search';
-import { mBureaus, type BureausResult } from '$queries/agencies';
+import { mApproverTitleOptions, searchCriterionDescription } from '$queries/search';
+import { mBureaus } from '$queries/agencies';
 import { memoizeDataAsync } from '$server/cache';
 
 // Types
@@ -393,27 +389,7 @@ export const removeUser = async function (email: string) {
 };
 
 /**
- * Compute parsed description value.
- *
- * Describes the criterion in text
- *
+ * Re-exported for backward compatibility - the search-criterion description logic
+ * lives in `search.ts` alongside the rest of the searches domain.
  */
-export function searchCriterionDescription(
-  searchesRecord: searchesSelect | undefined,
-  options?: {
-    agencyBureauOptions?: BureausResult;
-    approverTitleOptions?: ApproverTitleOptionsResult;
-  }
-): string {
-  const noFiltersDescription = '(no filters)';
-
-  if (!searchesRecord?.criterion) {
-    return noFiltersDescription;
-  }
-
-  const descriptions = searchCriterionDescriptions(
-    parseCriterion(searchesRecord.criterion),
-    options
-  );
-  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
-}
+export { searchCriterionDescription };

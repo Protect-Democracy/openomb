@@ -23,17 +23,23 @@ import { tafs } from '$schema/tafs';
 import { lines } from '$schema/lines';
 import { footnotes } from '$schema/footnotes';
 import { searches } from '$schema/searches';
-import { parseCriterion } from '$lib/searches';
+import {
+  parseCriterion,
+  searchCriterionDescriptions,
+  criterionToUrlSearchParams
+} from '$lib/searches';
 import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
 import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/files';
+import { mBureaus } from '$queries/agencies';
 
 // Types
 import type { filesSelectWithTafsFootnotes } from '$schema/files';
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import type { LegacySearchCriterion, SavedSearchCriterion, searchesSelect } from '$schema/searches';
+import type { BureausResult } from '$queries/agencies';
 
 export type ColumnObject = {
   [key: string]: PgColumn | SelectedFields | SQL;
@@ -905,4 +911,65 @@ export async function userSearch(
   });
 
   return matchingSearch;
+}
+
+/**
+ * Compute parsed description value.
+ *
+ * Describes the criterion in text
+ */
+export function searchCriterionDescription(
+  searchesRecord: searchesSelect | undefined,
+  options?: {
+    agencyBureauOptions?: BureausResult;
+    approverTitleOptions?: ApproverTitleOptionsResult;
+  }
+): string {
+  const noFiltersDescription = '(no filters)';
+
+  if (!searchesRecord?.criterion) {
+    return noFiltersDescription;
+  }
+
+  const descriptions = searchCriterionDescriptions(
+    parseCriterion(searchesRecord.criterion),
+    options
+  );
+  return descriptions && descriptions.length > 0 ? descriptions.join('; ') : noFiltersDescription;
+}
+
+/**
+ * Get all of a user's saved searches, for the admin detail page.
+ */
+export async function userSearchList(email: string): Promise<Array<searchesSelect>> {
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  if (!userResults?.[0]) {
+    return [];
+  }
+  return await db.select().from(searches).where(eq(searches.userId, userResults[0].id));
+}
+
+export type UserSearchListDetails = searchesSelect & { description: string; itemLink: string };
+
+/**
+ * Get all of a user's saved searches, with the human-readable description and
+ * results link used elsewhere for saved searches, for the admin detail page.
+ */
+export async function userSearchListDetails(email: string): Promise<UserSearchListDetails[]> {
+  const results = await userSearchList(email);
+  const [agencyBureauOptions, approverTitleOptions] = await Promise.all([
+    mBureaus(),
+    mApproverTitleOptions()
+  ]);
+  return results.map((result) => {
+    const searchParams = criterionToUrlSearchParams(parseCriterion(result.criterion || undefined));
+    return {
+      ...result,
+      description: searchCriterionDescription(result, {
+        agencyBureauOptions,
+        approverTitleOptions
+      }),
+      itemLink: `/search?${searchParams.toString()}`
+    };
+  });
 }
