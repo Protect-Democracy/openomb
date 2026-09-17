@@ -3,7 +3,7 @@
  */
 
 // Dependencies
-import { map } from 'lodash-es';
+import { map, uniq } from 'lodash-es';
 import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
@@ -204,6 +204,42 @@ export const userSubscription = async function (
     );
 
   return subscriptionResults?.[0];
+};
+
+/**
+ * Get a user's subscriptions of a given type for a set of item ids in a
+ * single query, instead of one userSubscription() call per item id.
+ *
+ * @returns Map of itemId to subscription, containing only items that have an existing subscription
+ */
+export const userSubscriptionsByItemIds = async function (
+  email: string,
+  type: string,
+  itemIds: string[]
+): Promise<Map<string, subscriptionSelect>> {
+  const uniqueItemIds = uniq(itemIds);
+  if (!uniqueItemIds.length) {
+    return new Map();
+  }
+
+  const userResults = await db.select().from(users).where(eq(users.email, email));
+  // If we have no user, exit early
+  if (!userResults?.[0]) {
+    return new Map();
+  }
+
+  const subscriptionResults = await db
+    .select()
+    .from(subscriptions)
+    .where(
+      and(
+        eq(subscriptions.userId, userResults[0].id),
+        eq(subscriptions.type, type),
+        inArray(subscriptions.itemId, uniqueItemIds)
+      )
+    );
+
+  return new Map(subscriptionResults.map((sub) => [sub.itemId, sub]));
 };
 
 /**
