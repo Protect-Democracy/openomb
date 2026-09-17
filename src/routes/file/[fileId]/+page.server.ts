@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es';
-import { fileDetails } from '$queries/files';
-import { userSubscription } from '$queries/subscriptions';
+import { fileDetails, fileTafsFootnotesByIds } from '$queries/files';
+import { userSubscriptionsByItemIds } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
 import { formatFileTitle } from '$lib/formatters';
 import { fileSchema } from '$lib/schema';
@@ -9,32 +9,55 @@ import { fileSchema } from '$lib/schema';
 export async function load({ params, locals }) {
   const file = await fileDetails(params.fileId);
 
+  if (!file) {
+    error(404, 'Unable to find file');
+  }
+
   const user = (await locals.auth())?.user;
 
-  const prevIterationFiles = {};
-  const tafsSubscriptions = {};
-  if (file?.tafs) {
-    for (const taf of file.tafs) {
-      const sorted = sortBy(taf.iterations, ['iteration']);
-      const currentIndex = sorted.findIndex((iter) => iter.iteration === taf.iteration);
-      if (currentIndex > 0) {
-        const prev = sorted.at(currentIndex - 1);
-        if (prev) {
-          prevIterationFiles[taf.tafsTableId] = await fileDetails(prev.fileId);
-        }
-      }
-      if (user && taf) {
-        tafsSubscriptions[taf.tafsTableId] = await userSubscription(
-          user.email,
-          'tafs',
-          taf.tafsTableId
-        );
+  // Figure out which previous-iteration file each tafs row needs, from data
+  // already present on file.tafs[].iterations (no DB access).
+  const prevFileIdByTafsTableId: Record<string, string> = {};
+  for (const taf of file.tafs || []) {
+    if (!taf.tafsTableId) {
+      continue;
+    }
+    const sorted = sortBy(taf.iterations, ['iteration']);
+    const currentIndex = sorted.findIndex((iter) => iter.iteration === taf.iteration);
+    if (currentIndex > 0) {
+      const prev = sorted.at(currentIndex - 1);
+      if (prev?.fileId) {
+        prevFileIdByTafsTableId[taf.tafsTableId] = prev.fileId;
       }
     }
   }
 
-  if (!file) {
-    error(404, 'Unable to find file');
+  // Batched fetches, one call each, instead of one fileDetails()/
+  // userSubscription() call per tafs row.
+  const [prevFileDetailsById, subscriptionsByTafsTableId] = await Promise.all([
+    fileTafsFootnotesByIds(Object.values(prevFileIdByTafsTableId)),
+    user
+      ? userSubscriptionsByItemIds(
+          user.email,
+          'tafs',
+          (file.tafs || []).flatMap((taf) => (taf.tafsTableId ? [taf.tafsTableId] : []))
+        )
+      : new Map()
+  ]);
+
+  const prevIterationFiles: Record<string, unknown> = {};
+  const tafsSubscriptions: Record<string, unknown> = {};
+  for (const taf of file.tafs || []) {
+    if (!taf.tafsTableId) {
+      continue;
+    }
+    const prevFile = prevFileDetailsById.get(prevFileIdByTafsTableId[taf.tafsTableId]);
+    if (prevFile) {
+      prevIterationFiles[taf.tafsTableId] = prevFile;
+    }
+    if (user) {
+      tafsSubscriptions[taf.tafsTableId] = subscriptionsByTafsTableId.get(taf.tafsTableId);
+    }
   }
 
   return {

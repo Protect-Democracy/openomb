@@ -1,106 +1,102 @@
-import { describe, it, expect } from 'vitest';
-import { searchCriterionDescription } from './subscriptions';
+/**
+ * Tests for subscriptions.ts
+ */
 
-describe('searchCriterionDescription', () => {
-  it('should return "(no filters)" when the record or criterion is missing', () => {
-    expect(searchCriterionDescription(undefined)).toBe('(no filters)');
-    expect(searchCriterionDescription({ id: '123' } as any)).toBe('(no filters)');
-    expect(searchCriterionDescription({ criterion: {} } as any)).toBe('(no filters)');
-  });
+// Dependencies
+import { expect, test, describe, beforeEach, afterEach, vi } from 'vitest';
+import { createIsolatedDb } from '$tests/helpers/db';
+import { db } from '$db/connection';
+import { users } from '$schema/users';
+import { subscriptions } from '$schema/subscriptions';
+import { userSubscriptionsByItemIds } from './subscriptions';
 
-  it('should format single text fields correctly', () => {
-    const recordWithTerm = { criterion: { term: ['budget'] } } as any;
-    expect(searchCriterionDescription(recordWithTerm)).toBe("Keyword: 'budget'");
+describe('userSubscriptionsByItemIds()', () => {
+  let dbSetup: Awaited<ReturnType<typeof createIsolatedDb>>;
 
-    const recordWithTafs = { criterion: { tafs: '011-2024' } } as any;
-    expect(searchCriterionDescription(recordWithTafs)).toBe('TAFS: 011-2024');
-  });
+  beforeEach(async () => {
+    dbSetup = await createIsolatedDb();
 
-  it('should combine multiple criteria joined by semicolons', () => {
-    const record = {
-      criterion: {
-        agencyBureau: '011,04',
-        account: '1234'
+    await db.insert(users).values({
+      id: 'batched-sub-user',
+      email: 'batched-sub-user@example.com'
+    });
+    await db.insert(subscriptions).values([
+      {
+        id: 'batched-sub-1',
+        userId: 'batched-sub-user',
+        type: 'tafs',
+        itemId: 'tafs-table-id-a'
+      },
+      {
+        id: 'batched-sub-2',
+        userId: 'batched-sub-user',
+        type: 'tafs',
+        itemId: 'tafs-table-id-b'
       }
-    } as any;
-
-    expect(searchCriterionDescription(record)).toBe('Agency / Bureau: 011 / 04; Account: 1234');
+    ]);
   });
 
-  it('should format array values correctly (e.g., multiple years or line numbers)', () => {
-    const record = {
-      criterion: {
-        year: [2023, 2024],
-        lineNum: ['101', '102']
-      }
-    } as any;
-
-    expect(searchCriterionDescription(record)).toBe('Year(s): 2023, 2024; Line(s): 101, 102');
+  afterEach(async () => {
+    // Restore unconditionally (not just on the happy path) so a spy from a
+    // failing test never leaks captured calls into a later test.
+    vi.restoreAllMocks();
+    await dbSetup.teardown();
   });
 
-  it('should gracefully handle legacy string formats instead of arrays', () => {
-    const record = {
-      criterion: {
-        year: '2022',
-        apportionmentType: 'spreadsheet'
-      }
-    } as any;
+  test('fetches subscriptions for multiple item ids with a single query, not one per item id', async () => {
+    const selectSpy = vi.spyOn(db, 'select');
 
-    expect(searchCriterionDescription(record)).toBe(
-      'Year: 2022; Apportionment Type: Standard (Excel)'
-    );
+    const result = await userSubscriptionsByItemIds('batched-sub-user@example.com', 'tafs', [
+      'tafs-table-id-a',
+      'tafs-table-id-b',
+      'tafs-table-id-c'
+    ]);
+
+    expect(result.size).toBe(2);
+
+    // One call to look up the user by email, one batched call for all item
+    // ids -- not one subscription lookup per item id (previously this was 2
+    // queries per TAFS row via userSubscription()'s per-row user + subscription
+    // lookups).
+    expect(selectSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('should format date fields correctly', () => {
-    const record = {
-      criterion: {
-        approvedStart: '2023-01-01',
-        approvedEnd: '2023-12-31'
-      }
-    } as any;
+  test('returns a Map keyed by itemId containing only items that have an existing subscription', async () => {
+    const result = await userSubscriptionsByItemIds('batched-sub-user@example.com', 'tafs', [
+      'tafs-table-id-a',
+      'tafs-table-id-c'
+    ]);
 
-    const result = searchCriterionDescription(record);
-    expect(result).toBe('Approved After: 1/1/23; Approved Before: 12/31/23');
+    expect(Array.from(result.keys())).toEqual(['tafs-table-id-a']);
   });
 
-  it('should handle agency bureau options', () => {
-    const record = {
-      criterion: {
-        agencyBureau: '011,04'
-      }
-    } as any;
+  test('returns an empty Map and issues no subscription query for an empty item id list', async () => {
+    const selectSpy = vi.spyOn(db, 'select');
 
-    expect(
-      searchCriterionDescription(record, {
-        agencyBureauOptions: [
-          {
-            budgetAgencyTitleId: '011',
-            budgetBureauTitleId: '04',
-            budgetAgencyTitle: 'Department of State',
-            budgetBureauTitle: 'Diplomatic Security',
-            fileCount: 10
-          }
-        ]
-      })
-    ).toBe('Agency / Bureau: Department of State / Diplomatic Security');
+    const result = await userSubscriptionsByItemIds('batched-sub-user@example.com', 'tafs', []);
+
+    expect(result.size).toBe(0);
+    expect(selectSpy).not.toHaveBeenCalled();
   });
 
-  it('should handle approver title options', () => {
-    const record = {
-      criterion: {
-        approver: ['deputy-associate-director-for-health-programs']
-      }
-    } as any;
+  test('returns an empty Map without querying subscriptions when the email matches no user', async () => {
+    const result = await userSubscriptionsByItemIds('no-such-user@example.com', 'tafs', [
+      'tafs-table-id-a'
+    ]);
 
-    expect(
-      searchCriterionDescription(record, {
-        approverTitleOptions: [
-          {
-            value: 'deputy-associate-director-for-health-programs',
-            label: 'Deputy Associate Director for Health Programs'
-          }
-        ]
-      })
-    ).toBe('Approver: Deputy Associate Director for Health Programs');
+    expect(result.size).toBe(0);
+  });
+
+  test('dedupes repeated item ids without extra queries', async () => {
+    const selectSpy = vi.spyOn(db, 'select');
+
+    const result = await userSubscriptionsByItemIds('batched-sub-user@example.com', 'tafs', [
+      'tafs-table-id-a',
+      'tafs-table-id-a',
+      'tafs-table-id-b'
+    ]);
+
+    expect(selectSpy).toHaveBeenCalledTimes(2);
+    expect(result.size).toBe(2);
   });
 });

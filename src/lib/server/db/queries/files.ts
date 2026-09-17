@@ -19,10 +19,25 @@ import {
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
-import { uniqBy, flatten, orderBy, omit } from 'lodash-es';
+import { uniqBy, uniq, flatten, orderBy, omit } from 'lodash-es';
 import { DateTime } from 'luxon';
 import { memoizeDataAsync } from '$server/cache';
 import { apportionmentTypeStandard } from '$config/files';
+
+/**
+ * Pull a unique, ordered footnotes array out of a file's nested tafs/lines.
+ */
+function computeUniqFootnotes(file: {
+  tafs: Array<{ lines: Array<{ footnotes: Record<string, unknown>[] }> }>;
+}) {
+  return orderBy(
+    uniqBy(
+      flatten(flatten(file.tafs.map((t) => t.lines)).map((l) => l.footnotes)),
+      'footnoteNumber'
+    ).map((f) => omit(f, 'lineIndex')),
+    'footnoteNumber'
+  );
+}
 
 /**
  * Get simple file record given file id
@@ -72,46 +87,93 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
     return null;
   }
 
-  // Get tafs with iterations concurrently
-  const tafsWithIterations = await Promise.all(
-    (file.tafs || []).map(async (t) => {
-      const iterations = await db
-        .select({
-          fileId: tafs.fileId,
-          tafsId: tafs.tafsId,
-          fiscalYear: tafs.fiscalYear,
-          iteration: tafs.iteration,
-          tafsTableId: tafs.tafsTableId,
-          approvalTimestamp: files.approvalTimestamp
-        })
-        .from(tafs)
-        .leftJoin(files, eq(tafs.fileId, files.fileId))
-        .where(and(eq(tafs.tafsId, t.tafsId), eq(tafs.fiscalYear, t.fiscalYear)))
-        .orderBy(asc(tafs.iteration));
+  // Get iteration history for every tafs row on this file in a single batched
+  // query, rather than one query per tafs row. Scoping by fiscalYear (shared
+  // by every tafs row on this file, per the tafs row's own value -- taken
+  // from the first row since it's guaranteed identical across all of them,
+  // see src/lib/server/load-file.ts) is safe and reproduces the original
+  // per-row eq(tafsId)+eq(fiscalYear) filter without a query per row.
+  const uniqueTafsIds = uniq((file.tafs || []).map((t) => t.tafsId));
+  const fiscalYear = file.tafs?.[0]?.fiscalYear;
+  const allIterations =
+    uniqueTafsIds.length && fiscalYear !== undefined
+      ? await db
+          .select({
+            fileId: tafs.fileId,
+            tafsId: tafs.tafsId,
+            fiscalYear: tafs.fiscalYear,
+            iteration: tafs.iteration,
+            tafsTableId: tafs.tafsTableId,
+            approvalTimestamp: files.approvalTimestamp
+          })
+          .from(tafs)
+          .leftJoin(files, eq(tafs.fileId, files.fileId))
+          .where(and(inArray(tafs.tafsId, uniqueTafsIds), eq(tafs.fiscalYear, fiscalYear)))
+          .orderBy(asc(tafs.tafsId), asc(tafs.iteration))
+      : [];
 
-      // Return the original TAFS data, plus the newly attached iterations array
-      return {
-        ...t,
-        iterations
-      };
-    })
-  );
+  const iterationsByTafsId = new Map<string, typeof allIterations>();
+  for (const iter of allIterations) {
+    if (!iterationsByTafsId.has(iter.tafsId)) {
+      iterationsByTafsId.set(iter.tafsId, []);
+    }
+    iterationsByTafsId.get(iter.tafsId)?.push(iter);
+  }
 
-  // Pull out footnotes
-  const uniqFootnotes = orderBy(
-    uniqBy(
-      flatten(flatten(file.tafs.map((t) => t.lines)).map((l) => l.footnotes)),
-      'footnoteNumber'
-    ).map((f) => omit(f, 'lineIndex')),
-    'footnoteNumber'
-  );
+  const tafsWithIterations = (file.tafs || []).map((t) => ({
+    ...t,
+    iterations: iterationsByTafsId.get(t.tafsId) ?? []
+  }));
 
   // Attach footnotes as a top level property
   return {
     ...file,
     tafs: tafsWithIterations,
-    footnotes: uniqFootnotes
+    footnotes: computeUniqFootnotes(file)
   };
+};
+
+/**
+ * Batched fetch of tafs/lines/footnotes for a set of file ids. Used where a
+ * caller needs several files' schedule data at once (e.g. "previous
+ * iteration" lookups) and doesn't need the per-tafs `iterations` history that
+ * fileDetails() attaches -- that history isn't consumed when rendering a
+ * previous iteration's TAFS row or footnotes.
+ *
+ * @param fileIds Ids of the files to fetch
+ * @param includeSourceData Include source data with response
+ * @returns Map of fileId to file details, containing only ids that were found
+ */
+export const fileTafsFootnotesByIds = async function (
+  fileIds: string[],
+  includeSourceData: boolean = false
+) {
+  const uniqueFileIds = uniq(fileIds);
+  if (!uniqueFileIds.length) {
+    return new Map();
+  }
+
+  const rows = await db.query.files.findMany({
+    columns: includeSourceData ? undefined : { sourceData: false },
+    where: inArray(files.fileId, uniqueFileIds),
+    with: {
+      tafs: {
+        orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)],
+        with: {
+          lines: {
+            orderBy: (lines, { asc }) => [asc(lines.lineNumber)],
+            with: {
+              footnotes: {
+                orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
+              }
+            }
+          }
+        }
+      }
+    }
+  });
+
+  return new Map(rows.map((row) => [row.fileId, { ...row, footnotes: computeUniqFootnotes(row) }]));
 };
 
 /**
