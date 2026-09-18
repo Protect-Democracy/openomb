@@ -84,7 +84,7 @@
     "mailgun.js": "^13.2.0",
     "modern-normalize": "^3.0.1",
     "multi-progress-bars": "^5.0.3",
-    "node-html-parser": "^7.1.0",
+    "node-html-parser": "^9.0.4",
     "pdfjs-dist": "^6.3.289",
     "pg": "^8.23.0",
     "reduce-css-calc": "^2.1.8",
