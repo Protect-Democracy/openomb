@@ -143,7 +143,7 @@
     "vite-imagetools": "^9.0.2",
     "vite-plugin-devtools-json": "^1.1.0",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.1.9"
+    "vitest": "^5.0.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"
