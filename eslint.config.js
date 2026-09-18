@@ -26,6 +26,9 @@ export default defineConfig([
         ...globals.es2017,
         ...globals.node
       }
+    },
+    rules: {
+      curly: ['error', 'all']
     }
   },
   {
@@ -61,7 +64,7 @@ export default defineConfig([
       '**/.env',
       '**/.env.*',
       '**/!.env.example',
-      '.cache/*',
+      '**/.cache/**',
       'notifications/*',
       // large files
       'test-data/*',

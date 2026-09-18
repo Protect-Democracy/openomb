@@ -36,10 +36,7 @@ export type CustomSubscriptionItemDetails = {
 };
 
 export type SubscriptionItemDetails =
-  | CustomSubscriptionItemDetails
-  | filesSelect
-  | tafsSelect
-  | searchesSelect;
+  CustomSubscriptionItemDetails | filesSelect | tafsSelect | searchesSelect;
 
 export type SubscriptionDetails = {
   itemDetails: SubscriptionItemDetails;

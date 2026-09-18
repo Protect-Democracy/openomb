@@ -11,7 +11,7 @@
    *   <p slot="before-check">Content while checking for user</p>
    * </UserWrapper>
    */
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import type { User } from '$lib/users';
 
   // Props; allows the user to come from server if needed.
@@ -19,6 +19,10 @@
 
   // State
   let checked = false;
+  // Guards against mutating state after this instance has been torn down,
+  // since fetchUser's async continuation can resolve post-destroy.
+  let destroyed = false;
+  const controller = new AbortController();
 
   // Lifecycle
   onMount(() => {
@@ -26,12 +30,24 @@
     checked = true;
   });
 
+  onDestroy(() => {
+    destroyed = true;
+    controller.abort();
+  });
+
   // Methods
   async function fetchUser() {
     try {
-      const res = await fetch('/api/v1/user');
+      const res = await fetch('/api/v1/user', { signal: controller.signal });
+      if (destroyed) {
+        return;
+      }
+
       if (res.ok) {
         const data = await res.json();
+        if (destroyed) {
+          return;
+        }
         if (data?.results?.loggedIn && data?.results?.user) {
           user = data.results.user;
         } else {
@@ -41,6 +57,9 @@
         user = undefined;
       }
     } catch (error) {
+      if (destroyed || (error instanceof Error && error.name === 'AbortError')) {
+        return;
+      }
       console.error('Error fetching user:', error);
       user = undefined;
     }

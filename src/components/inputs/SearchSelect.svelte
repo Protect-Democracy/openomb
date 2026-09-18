@@ -147,7 +147,9 @@
   //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
   function fixFormReset(el: HTMLInputElement) {
     const form = el.form;
-    if (!form) return;
+    if (!form) {
+      return;
+    }
     const handleReset = () => {
       // Set timeout is needed since `el.value` is only updated on the next frame
       setTimeout(() => selected.set(multi ? [] : emptyOption));

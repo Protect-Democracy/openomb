@@ -847,7 +847,9 @@ export function parseSpendPlanFilename(fileName: string): {
   let yearMatch: YearMatch | null = null;
   for (const extractor of YEAR_EXTRACTORS) {
     yearMatch = extractor(fileName);
-    if (yearMatch) break;
+    if (yearMatch) {
+      break;
+    }
   }
 
   const results = {

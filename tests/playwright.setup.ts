@@ -82,7 +82,9 @@ export async function forceKillPort(port: number) {
     if (isWin) {
       // Windows: Find PID and kill it
       const { stdout } = await execAsync(`netstat -ano | findstr :${port}`);
-      if (!stdout) return; // No process found
+      if (!stdout) {
+        return; // No process found
+      }
 
       // Parse the PID from the last column of the output
       const lines = stdout.trim().split('\n');
@@ -101,7 +103,9 @@ export async function forceKillPort(port: number) {
       if (stdout) {
         const pids = stdout.trim().split('\n');
         for (const pid of pids) {
-          if (pid) await execAsync(`kill -9 ${pid}`);
+          if (pid) {
+            await execAsync(`kill -9 ${pid}`);
+          }
         }
       }
     }
