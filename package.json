@@ -60,8 +60,8 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",
     "@auth/sveltekit": "^1.11.3",
-    "@aws-sdk/client-s3": "^3.1071.0",
-    "@aws-sdk/credential-providers": "^3.1071.0",
+    "@aws-sdk/client-s3": "^3.1130.0",
+    "@aws-sdk/credential-providers": "^3.1130.0",
     "@dotenvx/dotenvx": "^1.73.1",
     "@fontsource/domine": "^5.2.8",
     "@fontsource/ibm-plex-sans": "^5.2.8",
