@@ -42,14 +42,7 @@
   export let subscriptionType: 'entity' | 'search' = 'entity';
   export let variant: 'small' | 'full' | undefined = 'full';
   export let subType:
-    | 'folder'
-    | 'account'
-    | 'agency'
-    | 'bureau'
-    | 'search'
-    | 'file'
-    | 'tafs'
-    | undefined = undefined;
+    'folder' | 'account' | 'agency' | 'bureau' | 'search' | 'file' | 'tafs' | undefined = undefined;
   export let subItemId: string | undefined = undefined;
   export let subItemFormatted: string | undefined = undefined;
   export let url: URL | undefined = undefined;
