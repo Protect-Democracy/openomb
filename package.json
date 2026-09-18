@@ -62,7 +62,7 @@
     "@auth/sveltekit": "^1.11.3",
     "@aws-sdk/client-s3": "^3.1130.0",
     "@aws-sdk/credential-providers": "^3.1130.0",
-    "@dotenvx/dotenvx": "^1.73.1",
+    "@dotenvx/dotenvx": "^2.24.0",
     "@fontsource/domine": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@sentry/browser": "^10.74.0",
