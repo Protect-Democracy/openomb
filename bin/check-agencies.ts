@@ -42,9 +42,7 @@ type ComparisonResult = {
   rank: number;
   parent: AgencyApiResult['name'] | undefined;
   comparingParent:
-    | BudgetAgency['budgetAgencyTitle']
-    | BudgetAgency['budgetBureauTitle']
-    | undefined;
+    BudgetAgency['budgetAgencyTitle'] | BudgetAgency['budgetBureauTitle'] | undefined;
 };
 
 type AgencyMatches = AgencyApiResult &

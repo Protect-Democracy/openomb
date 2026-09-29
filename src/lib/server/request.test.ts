@@ -16,10 +16,11 @@ const _dirname = dirname(fileURLToPath(import.meta.url));
 // TODO: Use temp directory
 const testCacheDir = join(_dirname, '.cache-test');
 
-// Clear cache before/after each
+// Clear cache and fetch mock call history before/after each
 beforeEach(() => {
   removeSync(testCacheDir);
   ensureDirSync(testCacheDir);
+  (fetch as Mock).mockClear();
 });
 afterEach(() => {
   removeSync(testCacheDir);
@@ -69,7 +70,7 @@ describe('request()', async () => {
     const data = '<not parsable json>';
     mockFetchResponse(data);
 
-    expect(async () => {
+    await expect(async () => {
       await request(url, {}, { cacheDir: testCacheDir, expectedType: 'json' });
     }).rejects.toThrowError(/.*not a function.*/);
   });
@@ -105,7 +106,8 @@ describe('request()', async () => {
       }
     );
 
-    expect(fetch).toHaveBeenCalledWith(url, {});
+    // A cache hit resolves entirely from disk without calling fetch
+    expect(fetch).not.toHaveBeenCalled();
     expect(scrape.data).toEqual(cacheContents);
     expect(scrape.meta.cacheHit).toEqual(true);
     expect(scrape.meta.response.ok).toEqual(true);
@@ -177,25 +179,27 @@ describe('fetchWithRetries()', () => {
     mockFetchResponse(jsonData1, responseBad);
     const response1 = await fetchWithRetries(url, {}, 0);
     const responseData1 = await response1.json();
-    expect(fetch).toHaveBeenCalledWith(url);
+    expect(fetch).toHaveBeenCalledWith(url, {});
     expect(responseData1).toEqual(jsonData1);
 
     // With retry
+    (fetch as Mock).mockClear();
     mockFetchResponse(jsonData1, responseBad);
     mockFetchResponse(jsonData2, responseGood);
     const response2 = await fetchWithRetries(url, {}, 3, 10);
     const responseData2 = await response2.json();
-    expect(fetch).toHaveBeenCalledWith(url);
+    expect(fetch).toHaveBeenCalledWith(url, {});
     expect(responseData2).toEqual(jsonData2);
 
     // With not enough retries
+    (fetch as Mock).mockClear();
     mockFetchResponse(jsonData1, responseBad);
     mockFetchResponse(jsonData1, responseBad);
     mockFetchResponse(jsonData1, responseBad);
     mockFetchResponse(jsonData1, responseBad);
     const response3 = await fetchWithRetries(url, {}, 3, 10);
     const responseData3 = await response3.json();
-    expect(fetch).toHaveBeenCalledWith(url);
+    expect(fetch).toHaveBeenCalledWith(url, {});
     expect(responseData3).toEqual(jsonData1);
     (fetch as Mock).mockClear();
   });

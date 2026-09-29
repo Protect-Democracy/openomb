@@ -22,7 +22,7 @@ describe('renderTemplate()', () => {
   it('should inject global styles', () => {
     const output = renderTemplate(TestTemplateGlobalStyles, {});
     // The global styles should be injected and then removed after processing with juice
-    expect(output).toMatch(/<body style="-moz-box-sizing: border-box;/);
+    expect(output).toMatch(/<body style="box-sizing: border-box;/);
     expect(output).not.toMatch(/<style id="global-styles">/);
   });
 

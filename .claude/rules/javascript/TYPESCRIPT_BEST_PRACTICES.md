@@ -318,8 +318,7 @@ try {
 
 ```typescript
 type Result<TData, TError = Error> =
-  | { success: true; data: TData }
-  | { success: false; error: TError };
+  { success: true; data: TData } | { success: false; error: TError };
 
 function parseConfig(raw: string): Result<Config> {
   try {
