@@ -541,6 +541,7 @@ describe('loadJsonFile()', async () => {
       beginPoa: 2025,
       endPoa: 2029,
       accountId: '097-0100',
+      tafsFormattedId: '097-0100 2025/2029',
       budgetAgencyTitle: 'Department of Defense (Military Programs)',
       budgetBureauTitle: 'Operation and Maintenance',
       accountTitle: 'Operation and Maintenance, Defense-wide',

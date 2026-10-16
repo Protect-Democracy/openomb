@@ -37,8 +37,7 @@
     submitting.set(true);
 
     if (drawerContext) {
-      // TODO: Need to type the drawer context
-      // @ts-expect-error
+      // @ts-expect-error TODO: Need to type the drawer context
       drawerContext.close();
     }
   }
@@ -76,7 +75,18 @@
 
     <div class="field">
       <label for="tafs">Account number (Treasury Account Symbol)</label>
-      <input type="text" id="tafs" name="tafs" value={parsedSearchParams.tafs} />
+      <input
+        type="text"
+        id="tafs"
+        name="tafs"
+        value={parsedSearchParams.tafs}
+        aria-describedby="tafs-hint"
+      />
+      <small id="tafs-hint"
+        >Search all or part of the account number, e.g. <i>070-0613 2025/2029</i>,
+        <i>2025/2029</i>, or <i>/2029</i>. Add a leading space (e.g. <i>&nbsp;/2029</i>) to match
+        only single-year accounts.</small
+      >
     </div>
 
     <div class="field">

@@ -231,6 +231,14 @@ describe('parseUrlSearchParams', () => {
     expect(result.year).toEqual([2022, 2023]);
     expect(result.term).toEqual(['apple', 'banana']);
   });
+
+  it('should preserve leading whitespace in tafs, which narrows to single-year accounts', () => {
+    // Form submission encodes " /2029" as "+%2F2029"
+    const params = new URLSearchParams('tafs=+%2F2029');
+    const result = parseUrlSearchParams(params);
+
+    expect(result.tafs).toBe(' /2029');
+  });
 });
 
 describe('criterionToUrlSearchParams', () => {

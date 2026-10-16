@@ -16,6 +16,7 @@ import { mLineTypeFromLineNumber } from './db/queries/line-types';
 import { footnotes } from './db/schema/footnotes';
 import { mAgencyDetails } from '$queries/agencies';
 import { tafs, computeTafsId, computeTafsTableId, computeAccountId } from '$schema/tafs';
+import { formatTafsFormattedId } from '$lib/formatters';
 import {
   parseIntegerFromString,
   parseTimestampFromString,
@@ -214,7 +215,8 @@ async function loadJsonFile(
       lineTypeId: undefined as string | undefined,
       tafsId: undefined as string | undefined,
       tafsTableId: undefined as string | undefined,
-      accountId: undefined as string | undefined
+      accountId: undefined as string | undefined,
+      tafsFormattedId: undefined as string | undefined
     };
     line.lineTypeId =
       (await mLineTypeFromLineNumber(cleanString(d.LineNumber)))?.lineTypeId || 'other';
@@ -222,6 +224,7 @@ async function loadJsonFile(
     line.tafsId = computeTafsId(line);
     line.tafsTableId = computeTafsTableId(line);
     line.accountId = computeAccountId(line);
+    line.tafsFormattedId = formatTafsFormattedId(line);
     scheduleRecords.push(line);
   }
 
@@ -249,6 +252,7 @@ async function loadJsonFile(
       beginPoa: schedulesData[0].beginPoa,
       endPoa: schedulesData[0].endPoa,
       accountId: schedulesData[0].accountId,
+      tafsFormattedId: schedulesData[0].tafsFormattedId,
       budgetAgencyTitle: schedulesData[0].budgetAgencyTitle,
       budgetBureauTitle: schedulesData[0].budgetBureauTitle,
       accountTitle: schedulesData[0].accountTitle,

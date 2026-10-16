@@ -28,6 +28,7 @@ import { users } from '$schema/users';
 import { lineTypes } from '$schema/line-types';
 import { lineDescriptions } from '$schema/line-descriptions';
 import { memoizeDataAsync } from '$server/cache';
+import { escapeLike } from '$server/query-utilities';
 import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/files';
 
 // Types
@@ -196,6 +197,24 @@ function keywordSearch(keywordTerms: string[], mainTable: 'files' | 'tafs' = 'fi
 }
 
 /**
+ * Match a Treasury Account Symbol search against both the display format
+ * (e.g. "070-0613 2025/2029") and the hyphenated TAFS ID
+ * (e.g. "070-0613-2025-2029"), which subscription links and older URLs use.
+ *
+ * The input is intentionally not trimmed: the display format puts a space
+ * before the slash only for single-year and no-year accounts (e.g.
+ * "069-0130 /2029"), so " /2029" narrows to those while "/2029" also matches
+ * multi-year periods like "2025/2029".
+ *
+ * @param input Raw TAS search input
+ * @returns SQL condition
+ */
+function tafsSearch(input: string): SQL | undefined {
+  const pattern = `%${escapeLike(input)}%`;
+  return or(ilike(tafs.tafsId, pattern), ilike(tafs.tafsFormattedId, pattern));
+}
+
+/**
  * Create the set of WHERE clauses to use for searching.  Adjusts slightly
  * depending on the primary table that is being searched.
  *
@@ -214,7 +233,7 @@ function generalSearchFilters(
   where.push(searchParams.term?.length ? keywordSearch(searchParams.term, mainTable) : undefined);
 
   // Other search terms
-  where.push(searchParams.tafs ? ilike(tafs.tafsId, `%${searchParams.tafs}%`) : undefined);
+  where.push(searchParams.tafs?.trim() ? tafsSearch(searchParams.tafs) : undefined);
   where.push(
     searchParams.account ? ilike(tafs.accountTitle, `%${searchParams.account}%`) : undefined
   );

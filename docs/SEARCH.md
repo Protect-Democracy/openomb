@@ -23,6 +23,19 @@ The search queries are defined in `$queries/searches.ts`. These are used to quer
 
 - `generalSearchFilters`: This is the main function that translates the `SavedSearchCriterion` into a set of filters that can be used in the database queries.
 
+### Account number (TAS) search
+
+The `tafs` criterion is a case-insensitive substring match against two `tafs` columns:
+
+- `tafs_formatted_id`: the display format, e.g. `070-0613 2025/2029`, `069-0130 /2029`, `080-1200 /X`. This is a computed column to help with more natural searching.
+- `tafs_id`: the hyphenated ID, e.g. `070-0613-2025-2029`. Kept because subscription links (`$server/subscriptions.ts`) and older URLs search with it.
+
+Notes:
+
+- The input is **not trimmed**. The display format has a space before the slash only for single-year and no-year accounts, so ` /2029` (leading space) matches only single-year accounts, while `/2029` also matches multi-year periods like `2025/2029`.
+- `%`, `_`, and `\` in the input are matched literally (see `escapeLike()` in `$server/query-utilities.ts`).
+- If you change `formatTafsFormattedId()`, existing `tafs_formatted_id` values will not update on their own; add a migration to recompute them.
+
 ## Making changes
 
 When making changes to the search criterion types, you should:

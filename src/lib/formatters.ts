@@ -127,6 +127,9 @@ export function formatFileTitle(
  *    - 080-X-1200
  *    - 60-60-002-8051 /X
  *
+ * IMPORTANT: This output is stored in `tafs.tafs_formatted_id` at load time
+ * (for search), so changes here need a migration to recompute existing rows.
+ *
  * @param tafsRecord
  * @returns Formatted TAFS ID
  */
