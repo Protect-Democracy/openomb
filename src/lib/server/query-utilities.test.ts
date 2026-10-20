@@ -5,7 +5,7 @@
 // Dependencies
 import { expect, test, describe } from 'vitest';
 import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
-import { reduceByFileType } from './query-utilities';
+import { reduceByFileType, escapeLike } from './query-utilities';
 
 describe('reduceByFileType()', () => {
   test('Works for folders', () => {
@@ -238,5 +238,18 @@ describe('reduceByFileType()', () => {
         fileCount: 282
       }
     ]);
+  });
+});
+
+describe('escapeLike()', () => {
+  test('Escapes LIKE metacharacters', () => {
+    expect(escapeLike('100%')).toBe('100\\%');
+    expect(escapeLike('a_b')).toBe('a\\_b');
+    expect(escapeLike('a\\b')).toBe('a\\\\b');
+  });
+
+  test('Leaves other characters, including slashes and whitespace, untouched', () => {
+    expect(escapeLike(' /2029')).toBe(' /2029');
+    expect(escapeLike('070-0613 2025/2029')).toBe('070-0613 2025/2029');
   });
 });

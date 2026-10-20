@@ -266,3 +266,110 @@ describe('search queries avoid unnecessary lines/footnotes joins', () => {
     expect(nonMatchingResults).toHaveLength(0);
   });
 });
+
+describe('account number (tafs) search', () => {
+  let dbSetup: Awaited<ReturnType<typeof createIsolatedDb>>;
+
+  // One file per TAFS so matches can be asserted by file ID.
+  const tafsRows = [
+    {
+      key: 'multi-year',
+      tafsId: '070-0613-2025-2029',
+      tafsFormattedId: '070-0613 2025/2029'
+    },
+    {
+      key: 'single-year',
+      tafsId: '069-0130-2029-2029',
+      tafsFormattedId: '069-0130 /2029'
+    },
+    { key: 'no-year', tafsId: '080-1200', tafsFormattedId: '080-1200 /X' },
+    // Simulates a row loaded before tafs_formatted_id existed and not backfilled.
+    { key: 'legacy-null', tafsId: '012-3510-2020-2021', tafsFormattedId: null }
+  ];
+
+  /**
+   * Run a search on the TAS field, scoped to this test's folder, and return
+   * the matching file keys sorted.
+   */
+  async function searchTafs(input: string): Promise<string[]> {
+    const results = await fileSearchPaged({
+      folder: 'tafs-search-agency',
+      tafs: input,
+      offset: 0,
+      limit: 20
+    } as SearchPaginationParams);
+    return results.map((result) => `${result?.fileId}`.replace('tafs-search-', '')).toSorted();
+  }
+
+  beforeEach(async () => {
+    dbSetup = await createIsolatedDb();
+
+    for (const row of tafsRows) {
+      const fileId = `tafs-search-${row.key}`;
+      await db.insert(files).values({
+        fileId,
+        fileType: apportionmentTypeStandard,
+        folder: 'TAFS Search Agency',
+        folderId: 'tafs-search-agency',
+        sourceUrl: `http://example.com/${fileId}.json`
+      });
+      await db.insert(tafs).values({
+        fileId,
+        tafsId: row.tafsId,
+        tafsFormattedId: row.tafsFormattedId,
+        iteration: 1,
+        fiscalYear: 2025,
+        cgacAgency: row.tafsId.split('-')[0],
+        cgacAcct: row.tafsId.split('-')[1],
+        accountId: row.tafsId.split('-').slice(0, 2).join('-')
+      });
+    }
+  });
+
+  afterEach(async () => {
+    await dbSetup.teardown();
+  });
+
+  test('matches the full displayed format', async () => {
+    expect(await searchTafs('070-0613 2025/2029')).toEqual(['multi-year']);
+  });
+
+  test('matches a period of availability with a slash', async () => {
+    expect(await searchTafs('2025/2029')).toEqual(['multi-year']);
+  });
+
+  test('"/2029" matches both multi-year and single-year periods ending in 2029', async () => {
+    expect(await searchTafs('/2029')).toEqual(['multi-year', 'single-year']);
+  });
+
+  test('" /2029" with a leading space matches only single-year accounts', async () => {
+    expect(await searchTafs(' /2029')).toEqual(['single-year']);
+  });
+
+  test('matches account plus start of period', async () => {
+    expect(await searchTafs('070-0613 2025')).toEqual(['multi-year']);
+  });
+
+  test('matches no-year accounts with "/X"', async () => {
+    expect(await searchTafs('/X')).toEqual(['no-year']);
+  });
+
+  test('still matches the hyphenated TAFS ID used by subscriptions and older URLs', async () => {
+    expect(await searchTafs('070-0613-2025-2029')).toEqual(['multi-year']);
+    expect(await searchTafs('012-3510-2020')).toEqual(['legacy-null']);
+  });
+
+  test('treats LIKE wildcards literally', async () => {
+    expect(await searchTafs('%')).toEqual([]);
+    expect(await searchTafs('_')).toEqual([]);
+  });
+
+  test('ignores whitespace-only input', async () => {
+    expect(await searchTafs('   ')).toEqual([
+      'legacy-null',
+      'multi-year',
+      'no-year',
+      'single-year'
+    ]);
+  });
+});

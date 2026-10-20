@@ -119,6 +119,12 @@ export const tafs = pgTable(
     // Computed account identifier (cgacAgency, cgacAcct, allocationAgencyCode, allocationSubacct)
     accountId: varchar('account_id').notNull(),
 
+    // Display-format TAS (e.g. "070-0613 2025/2029") from formatTafsFormattedId(),
+    // stored so users can search by the same string they see.  Nullable so that
+    // older app containers (during a rolling deploy) and SQL test fixtures that
+    // predate this column can still insert rows.
+    tafsFormattedId: varchar('tafs_formatted_id'),
+
     // Descriptive fields
     budgetAgencyTitle: varchar('budget_agency_title'),
     budgetBureauTitle: varchar('budget_bureau_title'),
