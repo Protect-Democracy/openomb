@@ -17,9 +17,7 @@
   export let headerElement = 'h3';
   export let headerClasses = '';
   export let file:
-    | File
-    | filesSelectWithTafsFootnotes
-    | RecentlyAddedOrApprovedWithTafsResult[number];
+    File | filesSelectWithTafsFootnotes | RecentlyAddedOrApprovedWithTafsResult[number];
   export let highlightParams: SearchPaginationParams | undefined = undefined;
 
   // Constants

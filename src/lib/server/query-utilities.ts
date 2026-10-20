@@ -43,3 +43,17 @@ export function reduceByFileType(
     [] as ReturnType<typeof reduceByFileType>
   );
 }
+
+/**
+ * Escape LIKE/ILIKE pattern metacharacters so user input is matched literally.
+ * Postgres uses backslash as the default LIKE escape character.
+ *
+ * @param value - Raw user input to embed in a LIKE pattern.
+ * @returns The input with `\`, `%`, and `_` escaped.
+ *
+ * @example
+ * ilike(column, `%${escapeLike('100%')}%`); // matches "100%" literally
+ */
+export function escapeLike(value: string): string {
+  return value.replace(/[\\%_]/g, '\\$&');
+}

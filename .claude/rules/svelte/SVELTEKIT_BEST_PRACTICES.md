@@ -505,9 +505,7 @@ export default {
     paths: {
       base: '/app' // For non-root deployments
     },
-    csp: {
-      /* ... */
-    }
+    csp: {/* ... */}
   },
   compilerOptions: {
     runes: true // Enforce runes mode
