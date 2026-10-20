@@ -4,6 +4,15 @@
 
   export let data: PageData;
   $: ({ viewedUser, subscriptions, searches } = data);
+
+  // lastNotifiedAt defaults to the insert time, so a value equal to createdAt
+  // means no notification has actually been sent for this subscription yet.
+  function hasBeenNotified(subscription: { lastNotifiedAt: Date | null; createdAt: Date | null }) {
+    if (!subscription.lastNotifiedAt) {
+      return false;
+    }
+    return subscription.lastNotifiedAt.getTime() !== subscription.createdAt?.getTime();
+  }
 </script>
 
 <div class="page-container content-container">
@@ -30,6 +39,8 @@
           <tr>
             <td>Subscription</td>
             <td>Frequency</td>
+            <td>Created</td>
+            <td>Last Notified</td>
           </tr>
         </thead>
         <tbody>
@@ -40,6 +51,12 @@
                 <a href={subscription.itemLink}>{@html subscription.description}</a>
               </td>
               <td>{subscription.frequency}</td>
+              <td>{formatDate(subscription.createdAt, 'medium')}</td>
+              <td>
+                {hasBeenNotified(subscription)
+                  ? formatDate(subscription.lastNotifiedAt, 'medium')
+                  : 'Never'}
+              </td>
             </tr>
           {/each}
         </tbody>
