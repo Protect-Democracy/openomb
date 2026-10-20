@@ -74,6 +74,9 @@ type ApportionmentEnvironment = {
   emailSmtpSecure: boolean;
   mailgunDomain: string;
   mailgunSendKey: string;
+
+  // Admin section access
+  adminEmails: string[];
 };
 
 // Export package.json
@@ -159,7 +162,14 @@ function environmentVariables(): ApportionmentEnvironment {
       process.env['APPORTIONMENTS_EMAIL_SMTP_SECURE'].toLocaleLowerCase() !== 'false',
     // TODO: This should be prefixed with APPORTIONMENTS_
     mailgunDomain: process.env['MAILGUN_DOMAIN'] || 'mg.openomb.org',
-    mailgunSendKey: process.env['MAILGUN_SEND_KEY'] || ''
+    mailgunSendKey: process.env['MAILGUN_SEND_KEY'] || '',
+
+    // Admin section access.  Never exposed to the client - read directly here
+    // rather than via $lib/environment.ts, which is for PUBLIC_* client-exposed vars.
+    adminEmails: (process.env['APPORTIONMENTS_ADMIN_EMAILS'] || '')
+      .split(',')
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean)
   };
 }
 

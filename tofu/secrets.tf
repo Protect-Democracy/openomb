@@ -21,3 +21,12 @@ data "aws_secretsmanager_secret" "auth_secret" {
 data "aws_secretsmanager_secret_version" "auth_secret" {
   secret_id = data.aws_secretsmanager_secret.auth_secret.id
 }
+
+# For APPORTIONMENTS_ADMIN_EMAILS environment variable used to control access to the /admin route
+data "aws_secretsmanager_secret" "admin_config" {
+  arn = "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:admin_config"
+}
+
+data "aws_secretsmanager_secret_version" "admin_config" {
+  secret_id = data.aws_secretsmanager_secret.admin_config.id
+}

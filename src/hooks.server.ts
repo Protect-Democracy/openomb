@@ -66,8 +66,8 @@ const addHeaders: Handle = async ({ event, resolve }) => {
   // We can't set headers again if they have already been set, so we manage
   // here for global handling.
 
-  // Auth related paths that should never be cached.
-  const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*|\/auth*)/);
+  // Auth and admin related paths that should never be cached.
+  const noCache = !!user || path.match(/(\/subscribe*|\/api\/v1\/user*|\/auth*|\/admin*)/);
   const cacheHeaders = noCache
     ? {
         'Cache-Control': 'private, no-store',
