@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import AgencyExplorer from '$components/agencies/AgencyExplorer.svelte';
   import ScrollToTop from '$components/navigation/ScrollToTop.svelte';
@@ -10,8 +11,8 @@
   <h1>Explore Apportionments by Agency</h1>
 
   <p>
-    Also try <a href="/search">searching for apportionments</a> or
-    <a href="/folders">perusing our abbreviated list of agencies</a>.
+    Also try <a href={resolve('/search')}>searching for apportionments</a> or
+    <a href={resolve('/folders')}>perusing our abbreviated list of agencies</a>.
   </p>
 
   <AgencyExplorer agencies={data.agencies} />

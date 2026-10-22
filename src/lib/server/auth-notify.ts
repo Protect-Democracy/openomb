@@ -22,7 +22,7 @@ export async function sendVerificationRequest(params: {
 
   // Render the email.
   // TODO: Unsure how to type the template correctly
-  // @ts-expect-error
+  // @ts-expect-error The two email templates have different props, so the union does not match Component<Props>
   const htmlRender = renderTemplate(template, {
     authUrl: url,
     subscriptionsUrl: manageSubscriptionsUrl

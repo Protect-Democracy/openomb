@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { formatDate } from '$lib/formatters';
 
   // Props
@@ -19,13 +20,17 @@
               >{iteration.iteration}: {formatDate(iteration.approvalTimestamp, 'short')}
               (this iteration)</span
             >
-          {:else}
+          {:else if iteration.fileId}
             <a
-              href="/file/{iteration.fileId}#tafs_{iteration.tafsTableId}"
+              href={resolve(`/file/[fileId]#tafs_${iteration.tafsTableId}`, {
+                fileId: iteration.fileId
+              })}
               title="Go to file wih this iteration"
             >
               {iteration.iteration}: {formatDate(iteration.approvalTimestamp, 'short')}</a
             >
+          {:else}
+            <span>{iteration.iteration}: {formatDate(iteration.approvalTimestamp, 'short')}</span>
           {/if}
         </li>
       {/each}
@@ -45,20 +50,35 @@
   <div class="grid-value">
     <strong>Bureau<span class="sr-only">:</span></strong>
     <span>
-      <a
-        href="/agency/{tafsGroup.budgetAgencyTitleId}/bureau/{tafsGroup.budgetBureauTitleId}"
-        title="Go to bureau">{tafsGroup.budgetBureauTitle}</a
-      >
+      {#if tafsGroup.budgetAgencyTitleId && tafsGroup.budgetBureauTitleId}
+        <a
+          href={resolve('/agency/[agencyId]/bureau/[bureauId]', {
+            agencyId: tafsGroup.budgetAgencyTitleId,
+            bureauId: tafsGroup.budgetBureauTitleId
+          })}
+          title="Go to bureau">{tafsGroup.budgetBureauTitle}</a
+        >
+      {:else}
+        {tafsGroup.budgetBureauTitle}
+      {/if}
     </span>
   </div>
 
   <div class="grid-value">
     <strong>Account<span class="sr-only">:</span></strong>
     <span>
-      <a
-        href="/agency/{tafsGroup.budgetAgencyTitleId}/bureau/{tafsGroup.budgetBureauTitleId}/account/{tafsGroup.accountTitleId}"
-        title="Go to bureau">{tafsGroup.accountTitle}</a
-      >
+      {#if tafsGroup.budgetAgencyTitleId && tafsGroup.budgetBureauTitleId && tafsGroup.accountTitleId}
+        <a
+          href={resolve('/agency/[agencyId]/bureau/[bureauId]/account/[accountId]', {
+            agencyId: tafsGroup.budgetAgencyTitleId,
+            bureauId: tafsGroup.budgetBureauTitleId,
+            accountId: tafsGroup.accountTitleId
+          })}
+          title="Go to bureau">{tafsGroup.accountTitle}</a
+        >
+      {:else}
+        {tafsGroup.accountTitle}
+      {/if}
     </span>
   </div>
 </div>

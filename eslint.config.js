@@ -48,9 +48,16 @@ export default defineConfig([
       }
     },
     rules: {
-      // These seem to be overly noisy
-      'svelte/no-navigation-without-resolve': 'warn',
+      // This seems to be overly noisy
       'svelte/valid-compile': 'warn'
+    }
+  },
+  {
+    // Email templates render absolute URLs into emails, outside of SvelteKit routing,
+    // so resolve() does not apply.
+    files: ['src/lib/server/email/**/*.svelte'],
+    rules: {
+      'svelte/no-navigation-without-resolve': 'off'
     }
   },
   {

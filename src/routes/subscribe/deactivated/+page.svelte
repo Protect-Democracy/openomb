@@ -1,3 +1,7 @@
+<script lang="ts">
+  import { resolve } from '$app/paths';
+</script>
+
 <div class="page-container content-container">
   <h2>All data associated with your email has been successfully deleted.</h2>
 
@@ -6,5 +10,5 @@
     point, please contact <a href="mailto:support@openomb.org">support@openomb.org</a>.
   </p>
 
-  <p><a href="/">Go back to homepage</a></p>
+  <p><a href={resolve('/')}>Go back to homepage</a></p>
 </div>

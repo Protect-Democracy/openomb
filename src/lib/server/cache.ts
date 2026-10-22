@@ -29,7 +29,6 @@ const cacheOptions = {
   maxSize: 1000000 * 200,
   // Convert items to bytes
   sizeCalculation: (value: unknown) => {
-    let stringified;
     try {
       return Buffer.byteLength(JSON.stringify(value));
     } catch {
@@ -40,7 +39,7 @@ const cacheOptions = {
   // At most check time every second
   ttlResolution: 1000
 };
-export const cache = new LRUCache<string, any>(cacheOptions);
+export const cache = new LRUCache<string, NonNullable<unknown>>(cacheOptions);
 
 /**
  * Default TTL for anything
@@ -70,7 +69,11 @@ export function cacheGet<T>(key: string): T | undefined {
 /**
  * Wrapper around cache set
  */
-export function cacheSet<T>(key: string, value: T, options: SetCacheOptions = {}) {
+export function cacheSet<T extends NonNullable<unknown>>(
+  key: string,
+  value: T,
+  options: SetCacheOptions = {}
+) {
   options.ttl = options.ttl || defaultTtl();
   return cache.set(key, value, options);
 }
@@ -89,7 +92,8 @@ export function cacheId(identifiers: unknown) {
     return JSON.stringify(identifiers);
   } catch (e: Error | unknown) {
     throw new Error(
-      `Could not stringify identifiers to make cache Id: ${e instanceof Error ? e.message : String(e)}`
+      `Could not stringify identifiers to make cache Id: ${e instanceof Error ? e.message : String(e)}`,
+      { cause: e }
     );
   }
 }
@@ -99,7 +103,7 @@ export function cacheId(identifiers: unknown) {
  *
  * Make sure any function that is memoized
  */
-export function memoizeAsync<Args extends any[], Return>(
+export function memoizeAsync<Args extends unknown[], Return>(
   fn: (...args: Args) => Promise<Return> | Return,
   options: SetCacheOptions = {}
 ) {
@@ -113,7 +117,10 @@ export function memoizeAsync<Args extends any[], Return>(
     } else {
       debugLogger(`Cache miss for ${id}, options: ${JSON.stringify(options)}`);
       const result = await fn(...args);
-      cacheSet(id, result, options);
+      // Nullish values can't be stored in the LRU cache and would be treated as a miss anyway
+      if (result !== null && result !== undefined) {
+        cacheSet(id, result, options);
+      }
       return result;
     }
   };
@@ -124,7 +131,7 @@ export function memoizeAsync<Args extends any[], Return>(
  *
  * Defaults TTL to our daily time.
  */
-export function memoizeDataAsync<Args extends any[], Return>(
+export function memoizeDataAsync<Args extends unknown[], Return>(
   fn: (...args: Args) => Promise<Return> | Return,
   options: SetCacheOptions = {}
 ) {

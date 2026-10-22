@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
@@ -14,10 +15,17 @@
 <div class="page-container">
   <Breadcrumbs>
     <BreadcrumbItem>
-      <a href="/folders">Folders</a>
+      <a href={resolve('/folders')}>Folders</a>
     </BreadcrumbItem>
     <BreadcrumbItem>
-      Folder: <a href="/folder/{agency.folder.folderId}">{agency.folder.folder}</a>
+      Folder:
+      {#if agency.folder.folderId}
+        <a href={resolve('/folder/[folderId]', { folderId: agency.folder.folderId })}
+          >{agency.folder.folder}</a
+        >
+      {:else}
+        {agency.folder.folder}
+      {/if}
     </BreadcrumbItem>
     <BreadcrumbItem>
       Agency: {agency.budgetAgencyTitle}
@@ -46,9 +54,16 @@
     <ul>
       {#each bureausByAgency as bureau, bIndex (bureau.budgetBureauTitleId)}
         <li>
-          <a href="/agency/{agency.budgetAgencyTitleId}/bureau/{bureau.budgetBureauTitleId}"
-            >{bureau.budgetBureauTitle}</a
-          >
+          {#if bureau.budgetBureauTitleId}
+            <a
+              href={resolve('/agency/[agencyId]/bureau/[bureauId]', {
+                agencyId: agency.budgetAgencyTitleId,
+                bureauId: bureau.budgetBureauTitleId
+              })}>{bureau.budgetBureauTitle}</a
+            >
+          {:else}
+            {bureau.budgetBureauTitle}
+          {/if}
           ({formatNumber(bureau.fileCount)}{bIndex === 0 ? ' files' : ''})
         </li>
       {/each}

@@ -113,14 +113,14 @@ async function cli(): Promise<void> {
       await listS3BucketObjects();
       console.info('Success listing S3 bucket.');
     } catch (error) {
-      throw new Error(`Failed listing S3 bucket: ${error?.message || error}`);
+      throw new Error(`Failed listing S3 bucket: ${error?.message || error}`, { cause: error });
     }
 
     try {
       await putS3File(testFileStream, `test/test-file-${+new Date()}.txt`);
       console.info('Success testing put to S3.');
     } catch (error) {
-      throw new Error(`Failed testing put to S3: ${error?.message || error}`);
+      throw new Error(`Failed testing put to S3: ${error?.message || error}`, { cause: error });
     }
   }
 
@@ -226,7 +226,8 @@ async function cli(): Promise<void> {
               // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
               // but everything else will.
               throw new Error(
-                `IMPORTANT: Failed loading JSON file from URL "${jsonUrls[urlIndex]}": ${error?.message || error}`
+                `IMPORTANT: Failed loading JSON file from URL "${jsonUrls[urlIndex]}": ${error?.message || error}`,
+                { cause: error }
               );
             }
           }
@@ -275,7 +276,8 @@ async function cli(): Promise<void> {
               // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
               // but everything else will.
               throw new Error(
-                `IMPORTANT: Failed loading JSON spend plan from URL "${jsonSpendPlanUrls[urlIndex]}": ${error?.message || error}`
+                `IMPORTANT: Failed loading JSON spend plan from URL "${jsonSpendPlanUrls[urlIndex]}": ${error?.message || error}`,
+                { cause: error }
               );
             }
           }
@@ -326,7 +328,8 @@ async function cli(): Promise<void> {
               // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
               // but everything else will.
               throw new Error(
-                `IMPORTANT: Failed loading PDF file from URL "${pdfApportionmentUrls[urlIndex]}": ${error?.message || error}`
+                `IMPORTANT: Failed loading PDF file from URL "${pdfApportionmentUrls[urlIndex]}": ${error?.message || error}`,
+                { cause: error }
               );
             }
           }
@@ -372,7 +375,8 @@ async function cli(): Promise<void> {
               // Note that a HTTP error will be caught and sent to Sentry but will not bubble up,
               // but everything else will.
               throw new Error(
-                `IMPORTANT: Failed loading PDF spend plan from URL "${pdfSpendPlanUrls[urlIndex]}": ${error?.message || error}`
+                `IMPORTANT: Failed loading PDF spend plan from URL "${pdfSpendPlanUrls[urlIndex]}": ${error?.message || error}`,
+                { cause: error }
               );
             }
           }

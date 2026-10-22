@@ -16,7 +16,8 @@
       let response = await fetch(`/api/v1/url-checker?url=${encodeURIComponent(url)}`);
       let parsed = await response.json();
       reachable = parsed && parsed.results.reachable;
-    } catch (error) {
+    } catch {
+      // Treat any network or parse failure as unreachable
       reachable = false;
     }
   }
@@ -27,7 +28,7 @@
 </script>
 
 {#if reachable}
-  <a class={linkClass} href={url} target="_blank" rel="noopener noreferrer">
+  <a class={linkClass} href={url} target="_blank" rel="external noopener noreferrer">
     <slot />
   </a>
 {:else}

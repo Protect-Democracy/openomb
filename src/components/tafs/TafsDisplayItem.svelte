@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { tafsDetails } from '$schema/tafs';
   import { formatTafsFormattedId, formatDateISO, formatDate } from '$lib/formatters';
 
@@ -14,9 +15,13 @@
 
 <article class="tafs-display-item">
   <svelte:element this={headingElement} class="heading">
-    <a href={`/file/${fileId}/#tafs_${tafs.tafsTableId}`}>
+    {#if fileId}
+      <a href={resolve(`/file/[fileId]#tafs_${tafs.tafsTableId}`, { fileId })}>
+        {tafs.accountTitle}
+      </a>
+    {:else}
       {tafs.accountTitle}
-    </a>
+    {/if}
   </svelte:element>
 
   <div>
@@ -45,23 +50,34 @@
 
   <ul class="inline-list heirarchy">
     <li>
-      <a
-        class="like-text"
-        title="Go to agency: {tafs.budgetAgencyTitle}"
-        href="/agency/{tafs.budgetAgencyTitleId}"
-      >
+      {#if tafs.budgetAgencyTitleId}
+        <a
+          class="like-text"
+          title="Go to agency: {tafs.budgetAgencyTitle}"
+          href={resolve('/agency/[agencyId]', { agencyId: tafs.budgetAgencyTitleId })}
+        >
+          {tafs.budgetAgencyTitle}
+        </a>
+      {:else}
         {tafs.budgetAgencyTitle}
-      </a>
+      {/if}
     </li>
 
     <li>
-      <a
-        class="like-text"
-        title="Go to bureau: {tafs.budgetBureauTitle}"
-        href="/agency/{tafs.budgetAgencyTitleId}/bureau/{tafs.budgetBureauTitleId}"
-      >
+      {#if tafs.budgetAgencyTitleId && tafs.budgetBureauTitleId}
+        <a
+          class="like-text"
+          title="Go to bureau: {tafs.budgetBureauTitle}"
+          href={resolve('/agency/[agencyId]/bureau/[bureauId]', {
+            agencyId: tafs.budgetAgencyTitleId,
+            bureauId: tafs.budgetBureauTitleId
+          })}
+        >
+          {tafs.budgetBureauTitle}
+        </a>
+      {:else}
         {tafs.budgetBureauTitle}
-      </a>
+      {/if}
     </li>
   </ul>
 </article>

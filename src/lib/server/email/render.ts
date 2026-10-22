@@ -5,8 +5,7 @@
 import debug from 'debug';
 import { render as svelteRender } from 'svelte/server';
 import juice from 'juice';
-// Types not provided
-// @ts-ignore
+// @ts-expect-error reduce-css-calc does not ship type definitions
 import reduceCssCalc from 'reduce-css-calc';
 import globalEmailStyles from '$src/styles/index-email.css?inline';
 
@@ -30,7 +29,7 @@ const htmlTemplate = `
 /**
  * Render a component and handle any finessing.
  */
-export function renderTemplate<Props extends Record<string, any>>(
+export function renderTemplate<Props extends Record<string, unknown>>(
   component: Component<Props>,
   props: Props
 ) {

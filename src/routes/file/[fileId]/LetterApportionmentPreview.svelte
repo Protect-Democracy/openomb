@@ -8,7 +8,9 @@
 <div class="letter-apportionment-preview">
   <p>
     The following is a preview of the apportionment letter. For a local copy, download the original
-    from the <a href={file.pdfUrl} target="_blank" rel="noopener noreferrer">primary source</a>.
+    from the <a href={file.pdfUrl} target="_blank" rel="external noopener noreferrer"
+      >primary source</a
+    >.
   </p>
 
   <div class="scroll-space-wrapper">

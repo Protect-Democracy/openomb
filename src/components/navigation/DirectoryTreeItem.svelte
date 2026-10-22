@@ -24,7 +24,6 @@
   const itemId = (Math.random() + 1).toString(36).substring(7);
   const hasChildren = !!$$slots.children;
 
-  let iconDisplayProps = {};
   $: iconDisplayProps = $isSelected(itemId)
     ? {
         ['stroke-width']: 3

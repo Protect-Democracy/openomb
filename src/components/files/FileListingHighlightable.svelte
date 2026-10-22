@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import {
     formatFileTitle,
     formatDate,
@@ -99,7 +100,7 @@
 <article class="file-listing-small">
   <div class="heading">
     <svelte:element this={headerElement} class="main-heading {headerClasses}">
-      <a href="/file/{file.fileId}">
+      <a href={resolve('/file/[fileId]', { fileId: file.fileId })}>
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html formatFileTitle(file, [...(searchTerms || []), highlightParams?.account || ''])}</a
       >
@@ -168,31 +169,50 @@
     <ul class="inline-list heirarchy">
       {#if !hasTafs}
         <li>
-          <a class="like-text" title="Go to folder: {file.folder}" href="/folder/{file.folderId}"
-            >{file.folder}</a
-          >
+          {#if file.folderId}
+            <a
+              class="like-text"
+              title="Go to folder: {file.folder}"
+              href={resolve('/folder/[folderId]', { folderId: file.folderId })}>{file.folder}</a
+            >
+          {:else}
+            {file.folder}
+          {/if}
         </li>
       {:else}
         <li>
-          <a
-            class="like-text"
-            title="Go to agency: {agencies[0].title}"
-            href="/agency/{agencies[0].id}"
-          >
+          {#if agencies[0].id}
+            <a
+              class="like-text"
+              title="Go to agency: {agencies[0].title}"
+              href={resolve('/agency/[agencyId]', { agencyId: agencies[0].id })}
+            >
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html agencies[0].highlightedTitle || agencies[0].title}</a
+            >
+          {:else}
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html agencies[0].highlightedTitle || agencies[0].title}</a
-          >{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
+            {@html agencies[0].highlightedTitle || agencies[0].title}
+          {/if}{agencies.length > 1 ? ` + ${agencies.length - 1}` : ''}
         </li>
 
         <li>
-          <a
-            class="like-text"
-            title="Go to bureau: {bureaus[0].title}"
-            href="/agency/{agencies[0].id}/bureau/{bureaus[0].id}"
-          >
+          {#if agencies[0].id && bureaus[0].id}
+            <a
+              class="like-text"
+              title="Go to bureau: {bureaus[0].title}"
+              href={resolve('/agency/[agencyId]/bureau/[bureauId]', {
+                agencyId: agencies[0].id,
+                bureauId: bureaus[0].id
+              })}
+            >
+              <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+              {@html bureaus[0].highlightedTitle || bureaus[0].title}</a
+            >
+          {:else}
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html bureaus[0].highlightedTitle || bureaus[0].title}</a
-          >{bureaus.length > 1 ? ` + ${bureaus.length - 1}` : ''}
+            {@html bureaus[0].highlightedTitle || bureaus[0].title}
+          {/if}{bureaus.length > 1 ? ` + ${bureaus.length - 1}` : ''}
         </li>
       {/if}
     </ul>

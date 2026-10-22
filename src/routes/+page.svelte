@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { siteName } from '$config';
   import { formatNumber } from '$lib/formatters';
@@ -51,7 +52,7 @@
         enacted programs, making oversight of apportionments vital.
       </p>
 
-      <a href="/faq"
+      <a href={resolve('/faq')}
         >More apportionment <acronym title="Frequently Asked Questions">FAQs</acronym></a
       >
     </div>
@@ -115,7 +116,7 @@
   <RecentFiles files={data.recentFiles} />
 
   <div class="explore">
-    <a class="button" href="/explore">Explore apportionments by agency</a>
+    <a class="button" href={resolve('/explore')}>Explore apportionments by agency</a>
   </div>
 </section>
 
@@ -137,25 +138,25 @@
 
     <ul class="learn-items">
       <li>
-        <a href="/faq#faq-what-is-apportionment"
+        <a href={resolve('/faq#faq-what-is-apportionment')}
           ><span class="faq-icon"><TopRightArrow /></span> What is an apportionment?</a
         >
       </li>
 
       <li>
-        <a href="/faq#faq-how-have-presidents-abused-this-authority"
+        <a href={resolve('/faq#faq-how-have-presidents-abused-this-authority')}
           ><span class="faq-icon"><TopRightArrow /></span> How have presidents abused this authority?</a
         >
       </li>
 
       <li>
-        <a href="/faq#faq-read-an-apportionment"
+        <a href={resolve('/faq#faq-read-an-apportionment')}
           ><span class="faq-icon"><TopRightArrow /></span> How do I read an apportionment?</a
         >
       </li>
 
       <li>
-        <a href="/faq">
+        <a href={resolve('/faq')}>
           <span class="faq-icon"><TopRightArrow /></span>
           <span>
             Explore all apportionment
