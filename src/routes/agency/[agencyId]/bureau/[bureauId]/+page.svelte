@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
   import Breadcrumbs from '$components/navigation/Breadcrumbs.svelte';
@@ -14,13 +15,21 @@
 <div class="page-container">
   <Breadcrumbs>
     <BreadcrumbItem>
-      <a href="/folders">Folders</a>
+      <a href={resolve('/folders')}>Folders</a>
     </BreadcrumbItem>
     <BreadcrumbItem>
-      Folder: <a href="/folder/{bureau.agency.folder.folderId}">{bureau.agency.folder.folder}</a>
+      Folder:
+      {#if bureau.agency.folder.folderId}
+        <a href={resolve('/folder/[folderId]', { folderId: bureau.agency.folder.folderId })}
+          >{bureau.agency.folder.folder}</a
+        >
+      {:else}
+        {bureau.agency.folder.folder}
+      {/if}
     </BreadcrumbItem>
     <BreadcrumbItem>
-      Agency: <a href="/agency/{bureau.agency.budgetAgencyTitleId}"
+      Agency: <a
+        href={resolve('/agency/[agencyId]', { agencyId: bureau.agency.budgetAgencyTitleId })}
         >{bureau.agency.budgetAgencyTitle}</a
       >
     </BreadcrumbItem>
@@ -52,11 +61,17 @@
       {/* Unfortunately there are some duplicate account titles within bureaus, so we have to use the index as a key here instead of accountTitleId */ null}
       {#each accountsByBureau as account, aIndex (aIndex)}
         <li>
-          <a
-            href="/agency/{bureau.agency
-              .budgetAgencyTitleId}/bureau/{bureau.budgetBureauTitleId}/account/{account.accountTitleId}"
-            >{account.accountTitle}</a
-          >
+          {#if bureau.budgetBureauTitleId && account.accountTitleId}
+            <a
+              href={resolve('/agency/[agencyId]/bureau/[bureauId]/account/[accountId]', {
+                agencyId: bureau.agency.budgetAgencyTitleId,
+                bureauId: bureau.budgetBureauTitleId,
+                accountId: account.accountTitleId
+              })}>{account.accountTitle}</a
+            >
+          {:else}
+            {account.accountTitle}
+          {/if}
           ({formatNumber(account.fileCount)}{aIndex === 0 ? ' files' : ''})
         </li>
       {/each}

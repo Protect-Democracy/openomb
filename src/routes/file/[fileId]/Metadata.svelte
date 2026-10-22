@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { uniqBy, isString } from 'lodash-es';
   import { formatDate, deconstructLaws } from '$lib/formatters';
   import { isSpendPlanFile } from '$lib/utilities';
@@ -58,14 +59,24 @@
     <li class="grid-value">
       <strong>Approved by<span class="sr-only">:</span></strong>
       <span>
-        <a href="/approver/{file.approverTitleId}">{file.approverTitle}</a>
+        {#if file.approverTitleId}
+          <a href={resolve('/approver/[approverId]', { approverId: file.approverTitleId })}
+            >{file.approverTitle}</a
+          >
+        {:else}
+          {file.approverTitle}
+        {/if}
       </span>
     </li>
 
     <li class="grid-value">
       <strong>Folder<span class="sr-only">:</span></strong>
       <span>
-        <a href="/folder/{file.folderId}">{file.folder}</a>
+        {#if file.folderId}
+          <a href={resolve('/folder/[folderId]', { folderId: file.folderId })}>{file.folder}</a>
+        {:else}
+          {file.folder}
+        {/if}
       </span>
     </li>
 
@@ -73,7 +84,13 @@
       <li class="grid-value">
         <strong>Agency<span class="sr-only">:</span></strong>
         <span>
-          <a href="/agency/{file.budgetAgencyTitleId}">{file.budgetAgencyTitle}</a>
+          {#if file.budgetAgencyTitleId}
+            <a href={resolve('/agency/[agencyId]', { agencyId: file.budgetAgencyTitleId })}
+              >{file.budgetAgencyTitle}</a
+            >
+          {:else}
+            {file.budgetAgencyTitle}
+          {/if}
         </span>
       </li>
     {:else}
@@ -83,9 +100,9 @@
         >
         <span>
           {#each uniqueAgencies as agency, li (agency.id)}
-            <a href="/agency/{agency.id}">{agency.title}</a>{li > 0 && li < uniqueAgencies.length
-              ? ', '
-              : ''}
+            {#if agency.id}<a href={resolve('/agency/[agencyId]', { agencyId: agency.id })}
+                >{agency.title}</a
+              >{:else}{agency.title}{/if}{li > 0 && li < uniqueAgencies.length ? ', ' : ''}
           {/each}
         </span>
       </li>
@@ -114,14 +131,14 @@
     <ul>
       {#if file.pdfUrl}
         <li>
-          <a class="button" href={file.pdfUrl} target="_blank" rel="noopener noreferrer"
+          <a class="button" href={file.pdfUrl} target="_blank" rel="external noopener noreferrer"
             >Download primary source as PDF <br /> <small>{new URL(file.pdfUrl).hostname}</small></a
           >
         </li>
       {/if}
       {#if file.excelUrl}
         <li>
-          <a class="button" href={file.excelUrl} target="_blank" rel="noopener noreferrer"
+          <a class="button" href={file.excelUrl} target="_blank" rel="external noopener noreferrer"
             >Download primary source as Excel <br />
             <small>{new URL(file.excelUrl).hostname}</small></a
           >
@@ -129,7 +146,7 @@
       {/if}
       {#if file.sourceUrl && !file.pdfUrl}
         <li>
-          <a class="button" href={file.sourceUrl} target="_blank" rel="noopener noreferrer"
+          <a class="button" href={file.sourceUrl} target="_blank" rel="external noopener noreferrer"
             >Download primary source as JSON <br />
             <small>{new URL(file.sourceUrl).hostname}</small></a
           >

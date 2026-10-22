@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
   import TabbedFileListing from '$components/files/TabbedFileListing.svelte';
@@ -16,7 +17,7 @@
 <div class="page-container">
   <Breadcrumbs>
     <BreadcrumbItem>
-      <a href="/folders">Folders</a>
+      <a href={resolve('/folders')}>Folders</a>
     </BreadcrumbItem>
     <BreadcrumbItem>
       Folder: {folder.folder}
@@ -46,7 +47,13 @@
       <ul>
         {#each agenciesByFolder as agency, aIndex (agency.budgetAgencyTitleId)}
           <li>
-            <a href="/agency/{agency.budgetAgencyTitleId}">{agency.budgetAgencyTitle}</a>
+            {#if agency.budgetAgencyTitleId}
+              <a href={resolve('/agency/[agencyId]', { agencyId: agency.budgetAgencyTitleId })}
+                >{agency.budgetAgencyTitle}</a
+              >
+            {:else}
+              {agency.budgetAgencyTitle}
+            {/if}
             ({formatNumber(agency.fileCount)}{aIndex === 0 ? ' files' : ''})
           </li>
         {/each}

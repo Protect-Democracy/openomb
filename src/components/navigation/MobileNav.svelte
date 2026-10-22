@@ -9,6 +9,7 @@
 -->
 
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/stores';
   import { afterNavigate } from '$app/navigation';
   import { derived } from 'svelte/store';
@@ -48,37 +49,39 @@
 
     <ul>
       <li>
-        <a class:active={$url.pathname === '/search'} href="/search">Search</a>
+        <a class:active={$url.pathname === '/search'} href={resolve('/search')}>Search</a>
       </li>
       <li>
-        <a class:active={$url.pathname === '/explore'} href="/explore">All Agencies</a>
+        <a class:active={$url.pathname === '/explore'} href={resolve('/explore')}>All Agencies</a>
       </li>
       <li>
-        <a class:active={$url.pathname === '/folders'} href="/folders">CFO/CIO Act Agencies</a>
+        <a class:active={$url.pathname === '/folders'} href={resolve('/folders')}
+          >CFO/CIO Act Agencies</a
+        >
       </li>
       <li>
-        <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
+        <a class:active={$url.pathname === '/faq'} href={resolve('/faq')}>FAQ</a>
       </li>
       <li>
-        <a class:active={$url.pathname === '/about'} href="/about">About</a>
+        <a class:active={$url.pathname === '/about'} href={resolve('/about')}>About</a>
       </li>
 
       {#if !productionCheck}
         <li>
-          <a href="/examples">Examples</a>
+          <a href={resolve('/examples')}>Examples</a>
         </li>
       {/if}
 
       <li>
         <UserWrapper>
-          <a class="button compact" href="/subscribe">Account</a>
+          <a class="button compact" href={resolve('/subscribe')}>Account</a>
 
           <span slot="no-user">
-            <a class="button compact" href="/subscribe">Log in</a>
+            <a class="button compact" href={resolve('/subscribe')}>Log in</a>
           </span>
 
           <span slot="before-check">
-            <a class="button compact" href="/subscribe">Log in</a>
+            <a class="button compact" href={resolve('/subscribe')}>Log in</a>
           </span>
         </UserWrapper>
       </li>

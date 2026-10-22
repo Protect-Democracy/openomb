@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { uniqBy, orderBy } from 'lodash-es';
 
   // Props
@@ -36,7 +37,11 @@
     {#each sortedFootnotes as footnote, i (`${footnote.footnoteNumber}-${i}`)}
       <tr>
         {#if hasMultipleFiles}
-          <td><a href={`/file/${footnote.fileId}`}>{footnote.fileId}</a></td>
+          <td>
+            {#if footnote.fileId}
+              <a href={resolve('/file/[fileId]', { fileId: footnote.fileId })}>{footnote.fileId}</a>
+            {/if}
+          </td>
         {/if}
 
         <td id="{idPrefix}__{footnote.footnoteNumber}">

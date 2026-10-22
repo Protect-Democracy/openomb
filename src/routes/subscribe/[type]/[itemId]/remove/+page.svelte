@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
 
   export let data: PageData;
@@ -11,9 +12,11 @@
     <p>
       You will no longer receive email updates when new files are approved for this {type}. You can
       view, and modify, remaining notifications on the
-      <a data-sveltekit-reload href="/subscribe">subscription page.</a>
+      <a data-sveltekit-reload href={resolve('/subscribe')}>subscription page.</a>
     </p>
     <p>
+      <!-- itemLink is built server-side by shared queries that also run outside SvelteKit -->
+      <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
       <a href={subscription.itemLink}>Go back to {subscription.description}</a>
     </p>
   {:else}

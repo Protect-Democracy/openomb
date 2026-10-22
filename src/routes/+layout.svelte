@@ -12,6 +12,7 @@
   import { DateTime } from 'luxon';
   import { page, updated } from '$app/stores';
   import { beforeNavigate } from '$app/navigation';
+  import { resolve } from '$app/paths';
   import UserWrapper from '$components/subscriptions/UserWrapper.svelte';
   import DropdownLinks from '$components/navigation/DropdownLinks.svelte';
   import MobileNav from '$components/navigation/MobileNav.svelte';
@@ -166,9 +167,9 @@
 {#if data.isSourceDown}
   <div class="downtime">
     <p>
-      The <a href={sourceDataUrl} target="_blank" rel="noopener noreferrer">OMB website</a> that provides
-      the underlying data used by OpenOMB is offline. There will be no new apportionments posted on OpenOMB
-      until that site is back online.
+      The <a href={sourceDataUrl} target="_blank" rel="external noopener noreferrer">OMB website</a> that
+      provides the underlying data used by OpenOMB is offline. There will be no new apportionments posted
+      on OpenOMB until that site is back online.
     </p>
   </div>
 {/if}
@@ -176,38 +177,38 @@
 <header>
   <div class="page-container">
     <nav>
-      <a class="h1 home" href="/">{siteName}<span class="sr-only"> Home</span></a>
+      <a class="h1 home" href={resolve('/')}>{siteName}<span class="sr-only"> Home</span></a>
 
       <ul class="desktop-nav">
-        <li><a class:active={$url.pathname === '/search'} href="/search">Search</a></li>
+        <li><a class:active={$url.pathname === '/search'} href={resolve('/search')}>Search</a></li>
         <li>
           <DropdownLinks
             title="Explore Agencies"
-            fallbackHref="/explore"
+            fallbackHref={resolve('/explore')}
             links={[
-              { title: 'All Agencies', href: '/explore' },
-              { title: 'CFO/CIO Act Agencies', href: '/folders' }
+              { title: 'All Agencies', href: resolve('/explore') },
+              { title: 'CFO/CIO Act Agencies', href: resolve('/folders') }
             ]}
           />
         </li>
         <li>
-          <a class:active={$url.pathname === '/faq'} href="/faq">FAQ</a>
+          <a class:active={$url.pathname === '/faq'} href={resolve('/faq')}>FAQ</a>
         </li>
         <li>
-          <a class:active={$url.pathname === '/about'} href="/about">About</a>
+          <a class:active={$url.pathname === '/about'} href={resolve('/about')}>About</a>
         </li>
 
         <UserWrapper>
           <li class="account-link">
-            <a class="button compact small" href="/subscribe">Account</a>
+            <a class="button compact small" href={resolve('/subscribe')}>Account</a>
           </li>
 
           <li class="account-link" slot="no-user">
-            <a class="button compact small" href="/subscribe">Log in</a>
+            <a class="button compact small" href={resolve('/subscribe')}>Log in</a>
           </li>
 
           <li class="account-link" slot="before-check">
-            <a class="button compact small" href="/subscribe">Log in</a>
+            <a class="button compact small" href={resolve('/subscribe')}>Log in</a>
           </li>
         </UserWrapper>
       </ul>
@@ -227,13 +228,13 @@
   <div class="links">
     <div class="page-container">
       <ul>
-        <li><a href="/about">About</a></li>
-        <li><a href="/developers">For developers</a></li>
+        <li><a href={resolve('/about')}>About</a></li>
+        <li><a href={resolve('/developers')}>For developers</a></li>
         <li><a href="mailto:{contactEmail}">Contact</a></li>
-        <li><a href="/terms">Terms of use</a></li>
-        <li><a href="/privacy-policy">Privacy policy</a></li>
+        <li><a href={resolve('/terms')}>Terms of use</a></li>
+        <li><a href={resolve('/privacy-policy')}>Privacy policy</a></li>
         {#if subscribeFeatureEnabled}
-          <li><a href="/subscribe">Subscriptions</a></li>
+          <li><a href={resolve('/subscribe')}>Subscriptions</a></li>
         {/if}
       </ul>
     </div>
@@ -248,19 +249,19 @@
         href="https://protectdemocracyproject.org/"
         class="like-text"
         target="_blank"
-        rel="noopener noreferrer">Protect Democracy Project</a
+        rel="external noopener noreferrer">Protect Democracy Project</a
       >, a registered 501(c)(3) charitable organization and part of the
       <a
         href="https://protectdemocracy.org/"
         class="like-text"
         target="_blank"
-        rel="noopener noreferrer">Protect Democracy group</a
+        rel="external noopener noreferrer">Protect Democracy group</a
       >.
     </p>
 
     <ul>
       <li>
-        <a href="https://protectdemocracy.org/" target="_blank" rel="noopener noreferrer"
+        <a href="https://protectdemocracy.org/" target="_blank" rel="external noopener noreferrer"
           ><img src={pdLogo} alt="Protect Democracy logo" /></a
         >
       </li>

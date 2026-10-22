@@ -30,7 +30,6 @@
   const hasChildren = !!$$slots.default;
 
   // Derived
-  let iconDisplayProps = {};
   $: iconDisplayProps = {
     ['stroke-width']: $isSelected(itemId) ? 3 : 2
   };

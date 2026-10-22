@@ -82,15 +82,22 @@ async function cli(): Promise<void> {
 
   // Double check from the user if they want to send an email from mailgun
   if (env.emailServiceType === 'mailgun') {
-    const confirm = await new Promise((resolve) => {
+    const confirm = await new Promise<boolean>((resolve) => {
       process.stdout.write(
         `You are about to send an email through Mailgun to "${options.address}" using the "${options.template}" template. Are you sure? (y/n): `
       );
       process.stdin.setEncoding('utf-8');
-      process.stdin.on('data', (data) => {
+      process.stdin.once('data', (data) => {
+        // Release stdin so the process can exit once the email is sent
+        process.stdin.pause();
         resolve(data.toString().trim().toLowerCase() === 'y');
       });
     });
+
+    if (!confirm) {
+      console.info('Aborted, no email sent.');
+      return;
+    }
   }
 
   // Send email

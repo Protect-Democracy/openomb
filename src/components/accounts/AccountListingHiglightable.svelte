@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { highlight } from '$lib/formatters';
   import type { SearchPaginationParams } from '$db/queries/search';
 
@@ -25,38 +26,62 @@
 
 <article class="account-listing">
   <svelte:element this={headerElement} class="main-heading {headerClasses}">
-    <a
-      href="/agency/{highlightedAccount.budgetAgencyTitleId}/bureau/{highlightedAccount.budgetBureauTitleId}/account/{highlightedAccount.accountTitleId}"
-      class="account-link"
-    >
+    {#if highlightedAccount.budgetAgencyTitleId && highlightedAccount.budgetBureauTitleId && highlightedAccount.accountTitleId}
+      <a
+        href={resolve('/agency/[agencyId]/bureau/[bureauId]/account/[accountId]', {
+          agencyId: highlightedAccount.budgetAgencyTitleId,
+          bureauId: highlightedAccount.budgetBureauTitleId,
+          accountId: highlightedAccount.accountTitleId
+        })}
+        class="account-link"
+      >
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+        {@html highlightedAccount.highlightedAccountTitle}
+      </a>
+    {:else}
       <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html highlightedAccount.highlightedAccountTitle}
-    </a>
+    {/if}
   </svelte:element>
 
   <ul class="inline-list font-small">
     <li>
-      <a
-        class="like-text"
-        title="Go to agency: {highlightedAccount.budgetAgencyTitle}"
-        href="/agency/{highlightedAccount.budgetAgencyTitleId}"
-      >
+      {#if highlightedAccount.budgetAgencyTitleId}
+        <a
+          class="like-text"
+          title="Go to agency: {highlightedAccount.budgetAgencyTitle}"
+          href={resolve('/agency/[agencyId]', { agencyId: highlightedAccount.budgetAgencyTitleId })}
+        >
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+          {@html highlightedAccount.highlightedBudgetAgencyTitle ||
+            highlightedAccount.budgetAgencyTitle}</a
+        >
+      {:else}
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html highlightedAccount.highlightedBudgetAgencyTitle ||
-          highlightedAccount.budgetAgencyTitle}</a
-      >
+          highlightedAccount.budgetAgencyTitle}
+      {/if}
     </li>
 
     <li>
-      <a
-        class="like-text"
-        title="Go to bureau: {highlightedAccount.budgetBureauTitle}"
-        href="/agency/{highlightedAccount.budgetAgencyTitleId}/bureau/{highlightedAccount.budgetBureauTitleId}"
-      >
+      {#if highlightedAccount.budgetAgencyTitleId && highlightedAccount.budgetBureauTitleId}
+        <a
+          class="like-text"
+          title="Go to bureau: {highlightedAccount.budgetBureauTitle}"
+          href={resolve('/agency/[agencyId]/bureau/[bureauId]', {
+            agencyId: highlightedAccount.budgetAgencyTitleId,
+            bureauId: highlightedAccount.budgetBureauTitleId
+          })}
+        >
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+          {@html highlightedAccount.highlightedBudgetBureauTitle ||
+            highlightedAccount.budgetAgencyTitle}</a
+        >
+      {:else}
         <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html highlightedAccount.highlightedBudgetBureauTitle ||
-          highlightedAccount.budgetAgencyTitle}</a
-      >
+          highlightedAccount.budgetAgencyTitle}
+      {/if}
     </li>
   </ul>
 </article>

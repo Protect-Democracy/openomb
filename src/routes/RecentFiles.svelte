@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { formatFileTitle, formatDate } from '$lib/formatters';
   import type { filesSelect } from '$schema/files';
 
@@ -11,7 +12,7 @@
       <span class="approval-file">
         <span class="folder">{file.folder}</span>
 
-        <a href="/file/{file.fileId}">{formatFileTitle(file)}</a>
+        <a href={resolve('/file/[fileId]', { fileId: file.fileId })}>{formatFileTitle(file)}</a>
       </span>
 
       <span class="approval-date">

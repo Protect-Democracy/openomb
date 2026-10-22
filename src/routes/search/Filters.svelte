@@ -51,6 +51,7 @@
       newParams.delete(filterParam, filterValue.toString());
     }
 
+    // eslint-disable-next-line svelte/no-navigation-without-resolve -- current pathname is already resolved; only the query changes
     goto(`${url.pathname}?${newParams.toString()}`, { noScroll: true });
   }
 

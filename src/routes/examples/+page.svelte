@@ -2,7 +2,6 @@
   import type { PageData } from './$types';
 
   export let data: PageData;
-  let emailTemplates = [];
   let emailTemplate = '';
 
   $: emailTemplates = Object.keys(data.emailExamples);
