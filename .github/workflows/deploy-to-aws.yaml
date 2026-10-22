@@ -69,6 +69,8 @@ jobs:
         with:
           context: .
           push: true
+          # Always pull the base image so Node security patches are picked up
+          pull: true
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |

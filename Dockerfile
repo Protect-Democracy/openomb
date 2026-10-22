@@ -1,5 +1,7 @@
 # Install dependencies and build
-FROM node:24-bookworm-slim AS build
+# Both stages must use the same Node tag; the npm install below enforces the
+# minimum (security-patched) Node version via "engines" + engine-strict.
+FROM node:26-bookworm-slim AS build
 ARG SENTRY_RELEASE
 WORKDIR /app
 
@@ -17,7 +19,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
 
 # Copy build artifacts to a minimal image
 # FROM gcr.io/distroless/nodejs20-debian12
-FROM node:24-bookworm-slim
+FROM node:26-bookworm-slim
 
 # Builds
 COPY --from=build /app/build-collect /app/build-collect
