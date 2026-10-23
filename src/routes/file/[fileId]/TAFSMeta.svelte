@@ -1,9 +1,10 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { formatDate } from '$lib/formatters';
+  import type { FileDetailsTafs } from '$queries/files';
 
   // Props
-  export let tafsGroup;
+  export let tafsGroup: FileDetailsTafs;
 </script>
 
 <div class="tafs-meta grid-values">

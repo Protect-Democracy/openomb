@@ -10,13 +10,14 @@
 
 <script lang="ts">
   import { getContext, onMount } from 'svelte';
+  import type { TabsContext } from './context';
 
   // Props
   export let label = '';
   export let id = '';
 
   // Get tabs context
-  const { tabs, content } = getContext('tabs');
+  const { tabs, content } = getContext<TabsContext>('tabs');
 
   // Add tab data to context
   onMount(() => {

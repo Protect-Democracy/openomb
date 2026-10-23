@@ -1,16 +1,15 @@
-import { redirect, error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
+import { requireSessionUser } from '$server/auth-user';
 import { userSubscriptionDetails } from '$queries/subscriptions';
-import { subscriptionTypes } from '$config/subscriptions';
+import { isSubscriptionType } from '$config/subscriptions';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals, fetch }) => {
   // Get user session
-  const user = (await locals.auth())?.user;
-  if (!user) {
-    // If we don't have a user, we cannot unsubscribe
-    error(401, 'Must be authenticated to access this page');
-  }
+  // We cannot unsubscribe without a user
+  const user = await requireSessionUser(locals);
 
-  if (!subscriptionTypes.includes(params.type)) {
+  if (!isSubscriptionType(params.type)) {
     // Ensure type parameter is valid or redirect
     redirect(303, '/');
   }

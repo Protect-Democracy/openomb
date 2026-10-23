@@ -1,4 +1,5 @@
 import { folderDetails } from '$queries/folders';
+import { getSessionUser } from '$server/auth-user';
 import { agenciesByFolder } from '$queries/agencies';
 import {
   mFilesWithoutTafs,
@@ -16,7 +17,7 @@ export async function load({ params, locals }) {
     error(404, 'Unable to find folder');
   }
 
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
   const existingSubscription = user
     ? await userSubscription(user.email || '', 'folder', params.folderId)
     : null;

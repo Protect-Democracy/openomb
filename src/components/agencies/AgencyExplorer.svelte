@@ -2,7 +2,9 @@
   import { resolve } from '$app/paths';
   import AltDirectoryTree from '$components/navigation/AltDirectoryTree.svelte';
   import AltDirectoryTreeItem from '$components/navigation/AltDirectoryTreeItem.svelte';
-  export let agencies = [];
+  import type { AgenciesWithChildrenResult } from '$queries/agencies';
+
+  export let agencies: AgenciesWithChildrenResult = [];
 </script>
 
 <noscript>

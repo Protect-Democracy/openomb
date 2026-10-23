@@ -11,14 +11,16 @@
   } from '$lib/formatters';
   import { uniqBy, flatMap, filter } from 'lodash-es';
   import type { filesSelectWithTafsFootnotes } from '$schema/files';
-  import type { SearchPaginationParams } from '$db/queries/search';
+  import type { SearchPaginationParams, FileSearchPagedResult } from '$db/queries/search';
   import type { RecentlyAddedOrApprovedWithTafsResult } from '$queries/files';
 
   // Props
   export let headerElement = 'h3';
   export let headerClasses = '';
   export let file:
-    File | filesSelectWithTafsFootnotes | RecentlyAddedOrApprovedWithTafsResult[number];
+    | filesSelectWithTafsFootnotes
+    | FileSearchPagedResult[number]
+    | RecentlyAddedOrApprovedWithTafsResult[number];
   export let highlightParams: SearchPaginationParams | undefined = undefined;
 
   // Constants
@@ -84,7 +86,7 @@
   $: hasHighlightedLines = allLines.some((l) => l.hasHighlight);
   $: footnotes = highlightOrder(
     uniqBy(
-      file?.footnotes?.map((f) => ({
+      ('footnotes' in file ? file.footnotes : undefined)?.map((f) => ({
         id: f.footnoteNumber,
         text: f.footnoteText,
         highlightedText: highlight(f.footnoteText, searchTerms, 100),

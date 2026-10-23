@@ -36,8 +36,7 @@ import { apportionmentTypeSpendPlan, unknownFolderName } from '$config/files';
 
 // Types
 import type { filesSelect, filesInsert } from '$schema/files';
-import type { linesInsert } from '$schema/lines';
-import type { tafsInsert } from '$schema/tafs';
+import type { footnotesInsert } from '$schema/footnotes';
 import type { RequestOptions } from './request';
 
 // Apportionment schedule data from API
@@ -87,12 +86,70 @@ export type SpendPlanJson = {
   FiscalYear: string;
 };
 
-// Intermediate schedule record type used for processing data before inserting into DB
-type ScheduleRecord = linesInsert | tafsInsert;
+// Intermediate schedule record used for processing data before inserting into DB
+type ParsedScheduleRow = Awaited<ReturnType<typeof parseScheduleRow>>;
 
 // Constants
 const env = environmentVariables();
 const collectionTimezone = 'America/New_York';
+
+/**
+ * Parse a schedule data row from the source JSON into the fields used to build
+ * TAFS, line, and footnote records.
+ *
+ * @param d - Schedule data row from the source JSON.
+ * @param lineIndex - Position of the row in the schedule data.
+ * @param fileId - File the row belongs to.
+ * @param fiscalYear - Fiscal year of the file.
+ */
+async function parseScheduleRow(
+  d: ApportionmentScheduleApi,
+  lineIndex: number,
+  fileId: string | null,
+  fiscalYear: number | null | undefined
+) {
+  const row = {
+    fileId,
+    fiscalYear,
+    lineIndex,
+    budgetAgencyTitle: formatBudgetAgency(d.BudgetAgencyTitle),
+    budgetBureauTitle: formatBudgetBureau(d.BudgetBureauTitle),
+    accountTitle: cleanString(d.AccountTitle),
+    budgetAgencyTitleId: dbId(formatBudgetAgency(d.BudgetAgencyTitle)),
+    budgetBureauTitleId: dbId(formatBudgetBureau(d.BudgetBureauTitle)),
+    accountTitleId: dbId(d.AccountTitle),
+    allocationAgencyCode: cleanString(d.AllocationAgencyCode),
+    cgacAgency: cleanString(d.CgacAgency),
+    beginPoa: parseIntegerFromString(d.BeginPoa),
+    endPoa: parseIntegerFromString(d.EndPoa),
+    availabilityTypeCode: parseBoolean(d.AvailabilityTypeCode),
+    cgacAcct: cleanString(d.CgacAcct),
+    allocationSubacct: cleanString(d.AllocationSubacct),
+    iteration: parseIntegerFromString(d.Iteration),
+    tafsIterationId: formatTafsIterationId(d.TafsIterationId),
+    lineNumber: cleanString(d.LineNumber),
+    lineSplit: cleanString(d.LineSplit),
+    lineDescription: cleanString(d.LineDescription),
+    approvedAmount: d.ApprovedAmount || null,
+    footnoteNumbers: parseFootnotes(d.FootnoteNumber),
+    createdAt: new Date(),
+    modifiedAt: new Date()
+  };
+
+  // Rows without a line number can't be matched to a line type range
+  const lineType = row.lineNumber ? await mLineTypeFromLineNumber(row.lineNumber) : null;
+
+  // TafsId is needed for Table ID
+  const tafsId = computeTafsId(row);
+  return {
+    ...row,
+    lineTypeId: lineType?.lineTypeId || 'other',
+    tafsId,
+    tafsTableId: computeTafsTableId({ ...row, tafsId }),
+    accountId: computeAccountId(row),
+    tafsFormattedId: formatTafsFormattedId(row)
+  };
+}
 
 /**
  * Load an apportionment file into the database.
@@ -183,49 +240,16 @@ async function loadJsonFile(
   await db.delete(tafs).where(eq(tafs.fileId, fileRecord.fileId));
 
   // Go through the schedule data
-  const scheduleRecords: ScheduleRecord[] = [];
+  const scheduleRecords: ParsedScheduleRow[] = [];
   for (const [di, d] of sourceData.ScheduleData.entries()) {
-    const line = {
-      fileId: cleanString(sourceData.FileId.toString()),
-      fiscalYear: fileRecord.fiscalYear,
-      lineIndex: di,
-      budgetAgencyTitle: formatBudgetAgency(d.BudgetAgencyTitle),
-      budgetBureauTitle: formatBudgetBureau(d.BudgetBureauTitle),
-      accountTitle: cleanString(d.AccountTitle),
-      budgetAgencyTitleId: dbId(formatBudgetAgency(d.BudgetAgencyTitle)),
-      budgetBureauTitleId: dbId(formatBudgetBureau(d.BudgetBureauTitle)),
-      accountTitleId: dbId(d.AccountTitle),
-      allocationAgencyCode: cleanString(d.AllocationAgencyCode),
-      cgacAgency: cleanString(d.CgacAgency),
-      beginPoa: parseIntegerFromString(d.BeginPoa),
-      endPoa: parseIntegerFromString(d.EndPoa),
-      availabilityTypeCode: parseBoolean(d.AvailabilityTypeCode),
-      cgacAcct: cleanString(d.CgacAcct),
-      allocationSubacct: cleanString(d.AllocationSubacct),
-      iteration: parseIntegerFromString(d.Iteration),
-      tafsIterationId: formatTafsIterationId(d.TafsIterationId),
-      lineNumber: cleanString(d.LineNumber),
-      lineSplit: cleanString(d.LineSplit),
-      lineDescription: cleanString(d.LineDescription),
-      approvedAmount: d.ApprovedAmount || null,
-      footnoteNumbers: parseFootnotes(d.FootnoteNumber),
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-      // Add these properties to match downstream usage
-      lineTypeId: undefined as string | undefined,
-      tafsId: undefined as string | undefined,
-      tafsTableId: undefined as string | undefined,
-      accountId: undefined as string | undefined,
-      tafsFormattedId: undefined as string | undefined
-    };
-    line.lineTypeId =
-      (await mLineTypeFromLineNumber(cleanString(d.LineNumber)))?.lineTypeId || 'other';
-    // TafsId is needed for Table ID
-    line.tafsId = computeTafsId(line);
-    line.tafsTableId = computeTafsTableId(line);
-    line.accountId = computeAccountId(line);
-    line.tafsFormattedId = formatTafsFormattedId(line);
-    scheduleRecords.push(line);
+    scheduleRecords.push(
+      await parseScheduleRow(
+        d,
+        di,
+        cleanString(sourceData.FileId.toString()),
+        fileRecord.fiscalYear
+      )
+    );
   }
 
   // Group by TAFS id
@@ -234,19 +258,27 @@ async function loadJsonFile(
     const schedulesData = tafsGroups[tafsId];
 
     // Get the rows for TAFS data
-    const rptCatLine = schedulesData.find((d) => d.lineNumber === 'RptCat') || {};
-    const adjAutLine = schedulesData.find((d) => d.lineNumber === 'AdjAut') || {};
-    const iterLine = schedulesData.find((d) => d.lineNumber === 'IterNo') || {};
+    const rptCatLine = schedulesData.find((d) => d.lineNumber === 'RptCat');
+    const adjAutLine = schedulesData.find((d) => d.lineNumber === 'AdjAut');
+    const iterLine = schedulesData.find((d) => d.lineNumber === 'IterNo');
+
+    // These are required in the tafs table, so fail with a clear message rather than a DB error
+    const { iteration, fiscalYear, cgacAgency, cgacAcct } = schedulesData[0];
+    if (iteration == null || fiscalYear == null || !cgacAgency || !cgacAcct) {
+      throw new Error(
+        `TAFS "${tafsId}" is missing iteration, fiscal year, or CGAC codes | URL: ${jsonUrl}`
+      );
+    }
 
     // Make TAFS record
     const tafsRecord = {
       fileId: fileRecord.fileId,
       tafsId: schedulesData[0].tafsId,
-      iteration: schedulesData[0].iteration,
-      fiscalYear: schedulesData[0].fiscalYear,
+      iteration,
+      fiscalYear,
       tafsTableId: schedulesData[0].tafsTableId,
-      cgacAgency: schedulesData[0].cgacAgency,
-      cgacAcct: schedulesData[0].cgacAcct,
+      cgacAgency,
+      cgacAcct,
       allocationAgencyCode: schedulesData[0].allocationAgencyCode,
       allocationSubacct: schedulesData[0].allocationSubacct,
       beginPoa: schedulesData[0].beginPoa,
@@ -260,9 +292,9 @@ async function loadJsonFile(
       budgetBureauTitleId: schedulesData[0].budgetBureauTitleId,
       accountTitleId: schedulesData[0].accountTitleId,
       availabilityTypeCode: schedulesData[0].availabilityTypeCode,
-      rptCat: parseBoolean(rptCatLine.lineSplit),
-      adjAut: parseBoolean(adjAutLine.lineSplit),
-      iterationDescription: iterLine.lineDescription,
+      rptCat: parseBoolean(rptCatLine?.lineSplit),
+      adjAut: parseBoolean(adjAutLine?.lineSplit),
+      iterationDescription: iterLine?.lineDescription,
       tafsIterationId: schedulesData[0].tafsIterationId,
       createdAt: new Date(),
       modifiedAt: new Date()
@@ -296,7 +328,7 @@ async function loadJsonFile(
     await db.insert(lines).values(lineRecords);
 
     // Go through and look for footnotes
-    const footnoteRecords = [];
+    const footnoteRecords: footnotesInsert[] = [];
     for (const scheduleData of schedulesData) {
       for (const footnoteNumber of scheduleData.footnoteNumbers || []) {
         // Find the footnote data from the source data
@@ -309,12 +341,18 @@ async function loadJsonFile(
           throw new Error(`Footnote ${footnoteNumber} not found in source data | URL: ${jsonUrl}`);
         }
 
+        // Footnote text is required in the footnotes table
+        const footnoteText = cleanString(footnoteData.FootnoteText);
+        if (!footnoteText) {
+          throw new Error(`Footnote ${footnoteNumber} has no text | URL: ${jsonUrl}`);
+        }
+
         // Make record and save
         footnoteRecords.push({
           fileId: cleanString(fileRecord.fileId?.toString()),
           lineIndex: scheduleData.lineIndex,
           footnoteNumber: footnoteNumber,
-          footnoteText: cleanString(footnoteData.FootnoteText),
+          footnoteText,
           createdAt: new Date(),
           modifiedAt: new Date()
         });
@@ -356,7 +394,7 @@ async function loadPdfFile(
     fileResponse = await request(pdfUrl, {}, { expectedType: 'blob', retries });
   } catch (error) {
     const e = new Error(
-      `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error?.message || error}`
+      `PDF File could not be loaded from URL "${pdfUrl}" with error: ${error instanceof Error ? error.message : error}`
     );
     e.name = 'LoadPdfFileError';
     console.error(e);

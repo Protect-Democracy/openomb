@@ -1,16 +1,20 @@
 // Dependencies
 import { DateTime } from 'luxon';
 import { uniqBy, orderBy, filter, sumBy, isDate } from 'lodash-es';
-import type { filesSelectWithTafsFootnotes } from '$schema/files';
-import type { tafsSelect } from '$schema/tafs';
+import type { filesSelect } from '$schema/files';
+import type { TafsIdFields } from '$schema/tafs';
 
 /**
  * Format a number
  * @param {number} value
  * @returns {string}
  */
-export function formatNumber(value: number, options?: Intl.NumberFormatOptions): string {
-  return new Intl.NumberFormat('en-US', options).format(value);
+export function formatNumber(
+  value: number | null | undefined,
+  options?: Intl.NumberFormatOptions
+): string {
+  // Missing values display as 0 rather than NaN
+  return new Intl.NumberFormat('en-US', options).format(value ?? 0);
 }
 
 /**
@@ -18,13 +22,14 @@ export function formatNumber(value: number, options?: Intl.NumberFormatOptions):
  * @param {number} value
  * @returns {string}
  */
-export function formatCurrency(value: number): string {
+export function formatCurrency(value: number | null): string {
+  // Missing amounts display as $0
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 0,
     minimumFractionDigits: 0
-  }).format(value);
+  }).format(value ?? 0);
 }
 
 /**
@@ -72,12 +77,17 @@ export function formatDateISO(date?: Date | string | null): string {
 }
 
 /**
+ * The fields used to build a file title. Kept minimal so any file shape with these fields works.
+ */
+export type FileTitleFields = Pick<
+  filesSelect,
+  'fileId' | 'fileName' | 'folder' | 'pdfUrl' | 'approvalTimestamp'
+> & { tafs?: { accountTitle: string | null }[] };
+
+/**
  * Format a file title
  */
-export function formatFileTitle(
-  file: filesSelectWithTafsFootnotes,
-  highlightTerms?: string[]
-): string | null {
+export function formatFileTitle(file: FileTitleFields, highlightTerms?: string[]): string | null {
   const hasTafs = 'tafs' in file && file?.tafs?.length && file?.tafs?.length > 0;
   let accounts = hasTafs
     ? uniqBy(
@@ -133,7 +143,7 @@ export function formatFileTitle(
  * @param tafsRecord
  * @returns Formatted TAFS ID
  */
-export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
+export const formatTafsFormattedId = (tafsRecord: TafsIdFields): string => {
   const account = [
     tafsRecord.cgacAgency,
     tafsRecord.cgacAcct,
@@ -238,12 +248,22 @@ export const linkLaws = function (text?: string): string {
 };
 
 /**
+ * A public law reference found in text, with a link to its PDF on congress.gov.
+ */
+export type LawLink = {
+  url: string;
+  text: string;
+  pre: string;
+  post: string;
+};
+
+/**
  * Deconstruct text and link laws.
  *
  * Turn into an array of strings or objects so that we can use in
  * the client and utilize logic.
  */
-export const deconstructLaws = function (text?: string): Array<string | object> {
+export const deconstructLaws = function (text?: string | null): Array<string | LawLink> {
   if (!text) {
     return [];
   }

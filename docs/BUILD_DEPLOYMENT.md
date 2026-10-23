@@ -10,6 +10,13 @@ Infrastructure management is handled with OpenTofu and all AWS infrastructure is
 
 Testing, building, and deploying is handled through CI/CD managed with GitHub Actions workflows. See the [workflows files](https://github.com/Protect-Democracy/apportionments/tree/main/.github/workflows) for more details on how they work.
 
+Pull requests must pass formatting, linting, and type checks, so run these locally before pushing:
+
+```bash
+npm run lint
+npm run check
+```
+
 Additional configuration is stored in GitHub secrets and AWS Secrets Manager secrets, including the following:
 
 - AWS Account ID (GitHub Secrets)

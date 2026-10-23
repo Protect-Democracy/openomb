@@ -1,6 +1,22 @@
 // Valid types of items to subscribe to.  Order matters here as this
 // is used for soting.
-export const subscriptionTypes = ['folder', 'agency', 'bureau', 'account', 'tafs', 'search'];
+export const subscriptionTypes = [
+  'folder',
+  'agency',
+  'bureau',
+  'account',
+  'tafs',
+  'search'
+] as const;
+export type SubscriptionType = (typeof subscriptionTypes)[number];
+
+/**
+ * Check that a value (e.g. a route param or request body field) is a valid subscription type.
+ */
+export function isSubscriptionType(value: unknown): value is SubscriptionType {
+  return typeof value === 'string' && (subscriptionTypes as readonly string[]).includes(value);
+}
+
 export const subscriptionTypeTitles = {
   folder: 'Folders',
   agency: 'Agencies',

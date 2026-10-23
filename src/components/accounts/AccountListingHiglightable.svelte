@@ -1,27 +1,25 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { highlight } from '$lib/formatters';
-  import type { SearchPaginationParams } from '$db/queries/search';
+  import type { SearchPaginationParams, AccountSearchPagedResult } from '$db/queries/search';
 
   // Props
   export let headerElement = 'h3';
   export let headerClasses = '';
-  export let account: object;
-  export let highlightParams: SearchPaginationParams;
+  export let account: AccountSearchPagedResult[number];
+  export let highlightParams: SearchPaginationParams | undefined = undefined;
 
   // Derived
   $: searchTerms = highlightParams?.term;
-  $: highlightedAccount = account
-    ? {
-        ...account,
-        highlightedAccountTitle: highlight(account.accountTitle, [
-          ...(searchTerms || []),
-          highlightParams.account || ''
-        ]),
-        highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, searchTerms),
-        highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, searchTerms)
-      }
-    : {};
+  $: highlightedAccount = {
+    ...account,
+    highlightedAccountTitle: highlight(account.accountTitle, [
+      ...(searchTerms || []),
+      highlightParams?.account || ''
+    ]),
+    highlightedBudgetAgencyTitle: highlight(account.budgetAgencyTitle, searchTerms),
+    highlightedBudgetBureauTitle: highlight(account.budgetBureauTitle, searchTerms)
+  };
 </script>
 
 <article class="account-listing">

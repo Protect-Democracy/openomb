@@ -4,32 +4,13 @@
 
 // Dependencies
 import { expect, test, describe, beforeEach, afterEach, vi } from 'vitest';
-import pg from 'pg';
+import { spyOnExecutedSql } from '$tests/helpers/sql-spy';
 import { createIsolatedDb } from '$tests/helpers/db';
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
 import { apportionmentTypeStandard, apportionmentTypeSpendPlan } from '$config/files';
 import { agencies, bureaus, agencyDetails, bureauDetails, mAgencyDetails } from './agencies';
-
-/**
- * Spy on the underlying pg Pool so we can inspect the raw SQL text Drizzle
- * sends to Postgres, since these functions execute queries directly rather
- * than returning a builder we could call `.toSQL()` on. Mirrors the helper in
- * search.test.ts.
- */
-function spyOnExecutedSql() {
-  const querySpy = vi.spyOn(pg.Pool.prototype, 'query');
-  return {
-    querySpy,
-    executedSql: (): string[] =>
-      querySpy.mock.calls
-        .map(([queryArg]: [unknown]) =>
-          typeof queryArg === 'string' ? queryArg : ((queryArg as { text?: string })?.text ?? '')
-        )
-        .filter(Boolean)
-  };
-}
 
 describe('agencies() / bureaus() fileTypes filtering', () => {
   let dbSetup: Awaited<ReturnType<typeof createIsolatedDb>>;

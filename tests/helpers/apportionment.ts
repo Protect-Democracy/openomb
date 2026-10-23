@@ -37,22 +37,28 @@ export async function createApportionment(
     .returning();
   const file = result[0];
 
+  // TAFS rows require a fiscal year, which only comes from the file
+  const fiscalYear = file.fiscalYear;
+  if (fiscalYear == null) {
+    throw new Error('Test apportionment file must have a fiscal year to create TAFS rows.');
+  }
+
   // Determine number of tafs
   const numTafs = tafsData.length || Math.floor(Math.random() * 3) + 1;
   const savedTafs = [];
   for (let i = 0; i < numTafs; i++) {
     const tafsRecord = {
       fileId: file.fileId,
-      tafsId: `123-1234-1-${file.fiscalYear}-${i}-${fileId}`,
+      tafsId: `123-1234-1-${fiscalYear}-${i}-${fileId}`,
       iteration: 1,
-      fiscalYear: file.fiscalYear,
-      tafsTableId: `123-1234-1-${file.fiscalYear}-${i}-${fileId}-1`,
+      fiscalYear: fiscalYear,
+      tafsTableId: `123-1234-1-${fiscalYear}-${i}-${fileId}-1`,
       cgacAgency: `123`,
       cgacAcct: `1234`,
       allocationAgencyCode: `1`,
       allocationSubacct: ``,
-      beginPoa: file.fiscalYear,
-      endPoa: file.fiscalYear,
+      beginPoa: fiscalYear,
+      endPoa: fiscalYear,
       accountId: `123-1234-1`,
       budgetAgencyTitle: `Test Budget Agency Title`,
       budgetBureauTitle: `Test Budget Bureau Title`,

@@ -12,6 +12,7 @@
   import { createTabs } from '@melt-ui/svelte';
   import { writable } from 'svelte/store';
   import { setContext } from 'svelte';
+  import type { TabItem, TabsContext } from './context';
 
   // TODO: Ideally we could keep the default tab in the URL,
   // but there are two issues to figure out:
@@ -33,8 +34,8 @@
   });
 
   // Setup tab context to keep track of tabs and content
-  let tabs = writable([]);
-  let tabContext = { tabs, content };
+  let tabs = writable<TabItem[]>([]);
+  let tabContext: TabsContext = { tabs, content };
   setContext('tabs', tabContext);
 </script>
 

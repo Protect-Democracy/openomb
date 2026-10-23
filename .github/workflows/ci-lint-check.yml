@@ -1,0 +1,57 @@
+# Check formatting, linting, and types on any push or pull request merge to main branch
+# Excludes several files that do not affect the code
+
+name: CI - Lint and Type Check
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'tofu/**'
+      - 'docs/**'
+      - '**/*.md'
+
+  pull_request:
+    paths-ignore:
+      - 'tofu/**'
+      - 'docs/**'
+      - '**/*.md'
+
+# Revoke default permissions; the job grants only what it needs
+permissions: {}
+
+# Cancel existing executions when new commits are pushed onto the branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-check:
+    name: Lint and Type Check
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Prettier and ESLint
+      - name: Lint
+        run: npm run lint
+
+      # svelte-check for TypeScript and Svelte type errors
+      - name: Type check
+        run: npm run check
