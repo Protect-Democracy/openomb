@@ -35,6 +35,9 @@ import {
 import { subscriptionsByUser, setSubscriptionAsNotified } from '$db/queries/subscriptions';
 import { sendEmail } from '$email/send';
 
+// Types
+import type { SubscriptionSelectDetails } from '$db/queries/subscriptions';
+
 // Use mock timers to allow date control
 beforeEach(() => {
   vi.useFakeTimers();
@@ -53,7 +56,7 @@ test('includeDailyNotification', () => {
   expect(
     includeDailyNotification({
       frequency: 'daily',
-      lastNotifiedAt: DateTime.fromJSDate(date)
+      lastNotifiedAt: DateTime.fromJSDate(date).toJSDate()
     })
   ).toBe(false);
 
@@ -166,13 +169,20 @@ describe('sendNotifications', () => {
 
   // Minimal subscription that satisfies includeDailyNotification (20 hours since last notify).
   // itemDetails must be truthy — getSubscriptionWithFiles returns early if it's null/undefined.
-  const makeSub = (overrides = {}) => ({
+  const makeSub = (
+    overrides: Partial<SubscriptionSelectDetails> = {}
+  ): SubscriptionSelectDetails => ({
     id: 'sub-1',
+    userId: 'user-1',
     type: 'folder',
     itemId: 'folder-1',
     frequency: 'daily',
     lastNotifiedAt: new Date(Date.now() - 20 * 60 * 60 * 1000),
+    createdAt: new Date(),
+    modifiedAt: new Date(),
     itemDetails: {},
+    description: 'Test folder',
+    itemLink: '/folder/folder-1',
     ...overrides
   });
 

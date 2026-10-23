@@ -258,7 +258,9 @@ export async function getSubscriptionsWithFilesByUser(
 /**
  * Should our file be included as a daily notification
  */
-export function includeDailyNotification(sub: SubscriptionSelectDetails): boolean {
+export function includeDailyNotification(
+  sub: Pick<subscriptionSelect, 'frequency' | 'lastNotifiedAt'>
+): boolean {
   return !!(
     sub.frequency === 'daily' &&
     sub.lastNotifiedAt &&
@@ -269,7 +271,9 @@ export function includeDailyNotification(sub: SubscriptionSelectDetails): boolea
 /**
  * Should our file be included as a weekly notification
  */
-export function includeWeeklyNotification(sub: SubscriptionSelectDetails): boolean {
+export function includeWeeklyNotification(
+  sub: Pick<subscriptionSelect, 'frequency' | 'lastNotifiedAt'>
+): boolean {
   return !!(
     sub.frequency === 'weekly' &&
     sub.lastNotifiedAt &&
