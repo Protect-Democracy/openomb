@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { getSessionUser, requireSessionUser } from '$server/auth-user';
 import {
   mYearOptions,
   mLineNumberOptions,
@@ -25,10 +25,7 @@ import type { SearchPaginationParams } from '$queries/search';
 export const actions = {
   // Add a saved search
   add: async ({ locals, request }) => {
-    const user = (await locals.auth())?.user;
-    if (!user || !user.email) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     const data = await request.json();
     // Add subscription
@@ -39,10 +36,7 @@ export const actions = {
 
   // Remove a saved search
   remove: async ({ locals, request }) => {
-    const user = (await locals.auth())?.user;
-    if (!user || !user.email) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     const data = await request.json();
     // Remove subscription
@@ -72,7 +66,7 @@ export const load = async ({ url, cookies, locals }) => {
   const searchString = url.searchParams.toString();
 
   // User & subscription values
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
   let existingSubscription;
 
   // Only do the search if we have search parameters, and not just an empty term, which happens

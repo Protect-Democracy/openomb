@@ -278,17 +278,17 @@ export const recentlyAddedOrApprovedWithTafs = async function (
         : eq(tafs.budgetAgencyTitleId, filters?.agencyId || '')
     );
 
-  const tafsFilters = filters?.agencyId || filters?.bureauId;
+  // A bureau filter always comes with an agency filter (checked above), so the agency
+  // ID alone tells us whether to filter by agency/bureau.
+  const agencyId = filters?.agencyId;
+  const bureauId = filters?.bureauId;
   const whereClauses = [
-    tafsFilters
+    agencyId
       ? or(
           inArray(files.fileId, findFilesByTafsFiltersQuery),
-          filters?.bureauId
-            ? and(
-                eq(files.budgetAgencyTitleId, filters?.agencyId),
-                eq(files.budgetBureauTitleId, filters?.bureauId)
-              )
-            : eq(files.budgetAgencyTitleId, filters?.agencyId)
+          bureauId
+            ? and(eq(files.budgetAgencyTitleId, agencyId), eq(files.budgetBureauTitleId, bureauId))
+            : eq(files.budgetAgencyTitleId, agencyId)
         )
       : undefined,
     filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,

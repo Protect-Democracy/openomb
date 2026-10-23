@@ -218,7 +218,7 @@ function parseTimestampFromString(timestamp?: string, utc: boolean = true): Date
 /**
  * Parse boolean from a string
  */
-function parseBoolean(input?: string): boolean | null {
+function parseBoolean(input?: string | null): boolean | null {
   if (!input) {
     return null;
   }

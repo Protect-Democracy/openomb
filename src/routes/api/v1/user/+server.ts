@@ -1,5 +1,6 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
+import { getSessionUser } from '$server/auth-user';
 
 /**
  * User info endpoint
@@ -9,7 +10,7 @@ import { json } from '@sveltejs/kit';
  */
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ locals }) {
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
 
   return json({
     query: {},

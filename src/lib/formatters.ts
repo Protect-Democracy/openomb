@@ -2,7 +2,7 @@
 import { DateTime } from 'luxon';
 import { uniqBy, orderBy, filter, sumBy, isDate } from 'lodash-es';
 import type { filesSelect } from '$schema/files';
-import type { tafsSelect } from '$schema/tafs';
+import type { TafsIdFields } from '$schema/tafs';
 
 /**
  * Format a number
@@ -143,7 +143,7 @@ export function formatFileTitle(file: FileTitleFields, highlightTerms?: string[]
  * @param tafsRecord
  * @returns Formatted TAFS ID
  */
-export const formatTafsFormattedId = (tafsRecord: tafsSelect): string => {
+export const formatTafsFormattedId = (tafsRecord: TafsIdFields): string => {
   const account = [
     tafsRecord.cgacAgency,
     tafsRecord.cgacAcct,

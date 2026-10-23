@@ -1,4 +1,5 @@
 import { mRecentlyAddedOrApprovedWithTafs, mFileCountByMonthByYear } from '$queries/files';
+import { getSessionUser } from '$server/auth-user';
 import { mBureauDetails } from '$queries/agencies';
 import { accountsByBureau } from '$queries/tafs';
 import { userSubscription } from '$queries/subscriptions';
@@ -11,7 +12,7 @@ export async function load({ params, locals }) {
     error(404, 'Unable to find bureau');
   }
 
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
   const existingSubscription = user
     ? await userSubscription(user.email, 'bureau', `${params.agencyId},${params.bureauId}`)
     : null;
