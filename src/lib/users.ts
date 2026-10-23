@@ -2,10 +2,11 @@
  * Methods for user and auth.
  */
 
+// Matches the Auth.js session user, where only email is guaranteed
 export type User = {
   email: string;
-  name: string;
-  image: string;
+  name?: string | null;
+  image?: string | null;
 };
 
 export type Subscription = {
