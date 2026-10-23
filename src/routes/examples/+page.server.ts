@@ -1,4 +1,5 @@
 import { userSubscriptionListDetails } from '$queries/subscriptions';
+import { getSessionUser } from '$server/auth-user';
 import { renderTemplate } from '$email/render';
 import SubscriptionEmail from '$email/templates/SubscriptionEmail.svelte';
 import FileNotificationEmail from '$email/templates/FileNotificationEmail.svelte';
@@ -7,7 +8,7 @@ import previewData from './file-notification-preview-data.json';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ locals }) {
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
 
   const existingSubscriptions = user ? await userSubscriptionListDetails(user.email) : [];
 

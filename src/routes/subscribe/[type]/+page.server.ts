@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+import { getSessionUser } from '$server/auth-user';
 // We have to use the devalue library directly
 // since deserialize is only available within .svelte files
 import { parse } from 'devalue';
@@ -7,7 +8,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
   // Get user session
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
   if (!user) {
     // If we don't have a user, it will show the login form again
     return {

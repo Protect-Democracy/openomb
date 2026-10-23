@@ -1,6 +1,7 @@
-import { error, redirect, isRedirect } from '@sveltejs/kit';
+import { redirect, isRedirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { signOut } from '$server/auth';
+import { getSessionUser, requireSessionUser } from '$server/auth-user';
 import {
   addSubscription,
   removeSubscriptions,
@@ -9,72 +10,68 @@ import {
   userSubscriptionListDetails,
   removeUser
 } from '$queries/subscriptions';
-import { subscriptionTypes } from '$config/subscriptions';
+import { isSubscriptionType } from '$config/subscriptions';
 import { parseRequestData } from '$lib/utilities';
 
 /** @satisfies {import('./$types').Actions} */
 export const actions = {
   add: async ({ locals, request }) => {
     // Check login
-    const user = (await locals.auth())?.user;
-    if (!user) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     // Add subscription
     const data = await request.json();
-    if (subscriptionTypes.includes(data.type) && data.itemId) {
+    if (isSubscriptionType(data.type) && data.itemId) {
       return await addSubscription(user.email, data.type, data.itemId);
     }
   },
   remove: async ({ locals, request }) => {
     // Check login
-    const user = (await locals.auth())?.user;
-    if (!user) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     // Remove subscription
     const data = await parseRequestData(request);
-    if (data?.subId) {
-      return await removeSubscriptions(user.email, data.subId);
+    const subId = data?.subId;
+    if (
+      (typeof subId === 'string' && subId) ||
+      (Array.isArray(subId) && subId.every((id): id is string => typeof id === 'string'))
+    ) {
+      return await removeSubscriptions(user.email, subId);
     }
   },
   update: async ({ locals, request }) => {
     // Check login
-    const user = (await locals.auth())?.user;
-    if (!user) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     // Update subscription frequency
     const data = await parseRequestData(request);
-    if (data?.subId && data?.frequency) {
-      return await setSubscriptionFrequency(user.email, data.subId, data.frequency);
+    const subId = data?.subId;
+    const frequency = data?.frequency;
+    if (typeof subId === 'string' && subId && typeof frequency === 'string' && frequency) {
+      return await setSubscriptionFrequency(user.email, subId, frequency);
     }
   },
   manage: async ({ locals, request }) => {
     // Check login
-    const user = (await locals.auth())?.user;
-    if (!user) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     const data = await request.formData();
     const userSubscriptions = await userSubscriptionList(user.email);
 
     // Collect our requests so that our updates run async
-    const updates = [];
+    const updates: Promise<unknown>[] = [];
     userSubscriptions.forEach((sub) => {
-      if (data.get(`frequency-${sub.id}`)) {
+      const frequency = data.get(`frequency-${sub.id}`);
+      if (typeof frequency === 'string' && frequency) {
         // Update the frequency in the table
-        updates.push(setSubscriptionFrequency(user.email, sub.id, data.get(`frequency-${sub.id}`)));
+        updates.push(setSubscriptionFrequency(user.email, sub.id, frequency));
       }
     });
 
     // Delete subscriptions marked for removal
-    if (data.getAll('remove') && data.getAll('remove').length > 0) {
-      updates.push(removeSubscriptions(user.email, data.getAll('remove')));
+    const removeIds = data.getAll('remove').filter((id): id is string => typeof id === 'string');
+    if (removeIds.length > 0) {
+      updates.push(removeSubscriptions(user.email, removeIds));
     }
 
     // Await all updates
@@ -84,10 +81,7 @@ export const actions = {
   deactivate: async (params) => {
     const { locals } = params;
     // Check login
-    const user = (await locals.auth())?.user;
-    if (!user) {
-      error(401, 'Must be authenticated to access this page');
-    }
+    const user = await requireSessionUser(locals);
 
     await removeUser(user.email);
     // Prevent signout redirect
@@ -107,7 +101,7 @@ export const actions = {
 
 export const load: PageServerLoad = async ({ locals }) => {
   // Get user session
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
 
   // If logged in, get subscription details
   let userSubscriptions;

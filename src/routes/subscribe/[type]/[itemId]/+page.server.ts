@@ -1,23 +1,25 @@
 import { redirect } from '@sveltejs/kit';
+import { getSessionUser } from '$server/auth-user';
 import { userSubscriptionDetails } from '$queries/subscriptions';
-import { subscriptionTypes } from '$config/subscriptions';
+import { isSubscriptionType } from '$config/subscriptions';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals, fetch }) => {
+  // Ensure type parameter is valid or redirect
+  const type = params.type;
+  if (!isSubscriptionType(type)) {
+    redirect(303, '/');
+  }
+
   // Get user session
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
   if (!user) {
     // If we don't have a user, it will show the login form again
     return {
       user,
-      type: params.type,
+      type,
       itemId: params.itemId
     };
-  }
-
-  if (!subscriptionTypes.includes(params.type)) {
-    // Ensure type parameter is valid or redirect
-    redirect(303, '/');
   }
 
   let subscription;
@@ -36,12 +38,12 @@ export const load: PageServerLoad = async ({ params, locals, fetch }) => {
   }
   return {
     user,
-    type: params.type,
+    type,
     itemId: params.itemId,
     subscription,
 
     pageMeta: {
-      title: `Subscribed to ${params.type}`
+      title: `Subscribed to ${type}`
     }
   };
 };

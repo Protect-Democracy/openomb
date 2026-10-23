@@ -1,5 +1,6 @@
 // Dependencies
 import { json } from '@sveltejs/kit';
+import { getSessionUser } from '$server/auth-user';
 import { filter } from 'lodash-es';
 import { userSubscriptionDetails, userSubscriptionListDetails } from '$queries/subscriptions';
 import { userSearch } from '$queries/search';
@@ -13,7 +14,7 @@ import { parseUrlSearchParams } from '$lib/searches';
  */
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ locals, params, url }) {
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
 
   if (params.type !== 'search' || !url.searchParams.has('term')) {
     // If we aren't searching for a specific subscription based on search terms, return all with the given type
@@ -28,10 +29,10 @@ export async function GET({ locals, params, url }) {
 
   // If we have search terms, return a subscription that matches
   const criterion = parseUrlSearchParams(url.searchParams);
-  const userSearchResult = user ? await userSearch(user.email || undefined, criterion) : undefined;
+  const userSearchResult = user ? await userSearch(user.email, criterion) : undefined;
   const subscription =
     user && userSearchResult
-      ? await userSubscriptionDetails(user.email || '', 'search', userSearchResult.id)
+      ? await userSubscriptionDetails(user.email, 'search', userSearchResult.id)
       : undefined;
 
   return json({

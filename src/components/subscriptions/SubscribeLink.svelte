@@ -38,7 +38,7 @@
   import type { subscriptionSelect } from '$schema/subscriptions';
 
   // Props
-  export let user: User;
+  export let user: User | null | undefined = undefined;
   export let subscriptionType: 'entity' | 'search' = 'entity';
   export let variant: 'small' | 'full' | undefined = 'full';
   export let subType:
