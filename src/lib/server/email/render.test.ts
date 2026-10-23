@@ -13,9 +13,12 @@ import TestTemplateBasic from './test-data/TestTemplateBasic.svelte';
 import TestTemplateGlobalStyles from './test-data/TestTemplateGlobalStyles.svelte';
 import TestTemplateInline from './test-data/TestTemplateInline.svelte';
 
+// Types
+import type { SubscriptionWithFiles } from '$server/subscriptions';
+
 describe('renderTemplate()', () => {
   it('should render a simple component', () => {
-    const output = renderTemplate(TestTemplateBasic, { name: 'Test' });
+    const output = renderTemplate(TestTemplateBasic, {});
     expect(output).toMatch(/TEST EMAIL TEMPLATE/);
   });
 
@@ -51,7 +54,7 @@ describe('renderTemplate()', () => {
 
   it('should render the template: FileNotificationEmail', () => {
     // TODO: Get some fake subscription data
-    const subscriptions = [];
+    const subscriptions: SubscriptionWithFiles[] = [];
     const output = renderTemplate(FileNotificationEmail, { subscriptions });
     expect(output).toContain('New apportionment files');
   });
