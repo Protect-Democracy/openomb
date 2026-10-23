@@ -7,8 +7,11 @@
 // Dependencies
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
-import type { MonitorConfig, StartSpanOptions } from '@sentry/types';
 import { environmentVariables } from './utilities';
+
+// Derived from @sentry/node so we don't depend on the deprecated @sentry/types package
+type StartSpanOptions = Parameters<typeof Sentry.startSpan>[0];
+type MonitorConfig = NonNullable<Parameters<typeof Sentry.withMonitor>[2]>;
 
 // Environment variables
 const env = environmentVariables();

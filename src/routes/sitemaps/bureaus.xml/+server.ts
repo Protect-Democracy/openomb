@@ -2,7 +2,7 @@ import { deployedBaseUrl } from '$config';
 import { mBureaus } from '$queries/agencies';
 
 export async function GET() {
-  const bureauRecords = (await mBureaus('approval')) || [];
+  const bureauRecords = (await mBureaus()) || [];
 
   const urls = bureauRecords.map((b) => {
     return `

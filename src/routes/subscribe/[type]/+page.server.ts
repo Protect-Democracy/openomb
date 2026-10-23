@@ -3,6 +3,7 @@ import { redirect } from '@sveltejs/kit';
 // since deserialize is only available within .svelte files
 import { parse } from 'devalue';
 import { parseUrlSearchParams } from '$lib/searches';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, url, locals, fetch }) => {
   // Get user session
