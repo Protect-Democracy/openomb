@@ -1,6 +1,7 @@
 import { redirect, error } from '@sveltejs/kit';
 import { userSubscriptionDetails } from '$queries/subscriptions';
 import { subscriptionTypes } from '$config/subscriptions';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals, fetch }) => {
   // Get user session

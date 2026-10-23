@@ -10,7 +10,8 @@
 
 <script lang="ts">
   import { createTreeView } from '@melt-ui/svelte';
-  import { setContext, type Action } from 'svelte';
+  import { setContext } from 'svelte';
+  import type { Action } from 'svelte/action';
 
   // Props
   export let columns = 1;
@@ -31,7 +32,7 @@
   // adding <div>s around <li>s to force a break.  Floats, flexbox, grid
   // won't do what we want here.
   const preventColumnShift: Action<HTMLUListElement> = (node) => {
-    const children = node.querySelectorAll(':scope > li');
+    const children = node.querySelectorAll<HTMLLIElement>(':scope > li');
     let lastTop = 0;
     [...children].forEach((item) => {
       if (item.offsetTop < lastTop) {

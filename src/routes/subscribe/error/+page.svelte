@@ -36,8 +36,13 @@
     }
   };
 
+  // Own-property check so inherited names like "toString" fall back to the default
+  function isKnownError(name: string): name is keyof typeof errors {
+    return Object.hasOwn(errors, name);
+  }
+
   $: errorName = $url.searchParams.get('error') || 'default';
-  $: error = errorName in errors ? errors[errorName] : errors['default'];
+  $: error = isKnownError(errorName) ? errors[errorName] : errors['default'];
 </script>
 
 <div class="page-message-container">

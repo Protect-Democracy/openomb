@@ -2,7 +2,7 @@ import { deployedBaseUrl } from '$config';
 import { mAccounts } from '$queries/tafs';
 
 export async function GET() {
-  const accountRecords = (await mAccounts('approval')) || [];
+  const accountRecords = (await mAccounts()) || [];
 
   const urls = accountRecords.map((a) => {
     return `
