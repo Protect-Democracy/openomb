@@ -281,12 +281,15 @@ export const userSubscriptionListDetails = async function (
   email: string
 ): Promise<Array<SubscriptionSelectDetails>> {
   const subscriptionResults = await userSubscriptionList(email);
-  return await Promise.all(
+  const subscriptionsWithDetails = await Promise.all(
     map(subscriptionResults, async (result) => {
       const details = await getSubscriptionDetails(result.type, result.itemId);
-      return { ...result, ...details };
+      return details ? { ...result, ...details } : undefined;
     })
   );
+
+  // Skip subscriptions without details (invalid type or item), matching getSubscriptionsByUser
+  return subscriptionsWithDetails.filter((subscription) => subscription !== undefined);
 };
 
 /**

@@ -70,7 +70,7 @@
     elements: { menu, input, option, group, groupLabel },
     states: { open, inputValue, touchedInput, selected },
     helpers: { isSelected, isHighlighted }
-  } = createCombobox({
+  } = createCombobox<string, boolean>({
     forceVisible: true,
     multiple: multi,
     defaultSelected: getDefaultSelection(),
@@ -91,6 +91,8 @@
   // For some reason the store, $open, causes issues with sveltekit rendering,
   // specifically it claims the $open store is undefined.
   $: openProxy = typeof $open !== 'undefined' ? $open : false;
+  // Selected option(s) as an array, whether single or multi select
+  $: selectedList = !$selected ? [] : Array.isArray($selected) ? $selected : [$selected];
   $: groupedOptions = formatGroupLabel
     ? groupBy(uniqBy(options, formatGroupOptionValue), formatGroupLabel)
     : {
@@ -145,7 +147,7 @@
   // Our selected values do not properly clear on reset, so we need to
   //  add an event to our form input(s)
   //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
-  function fixFormReset(el: HTMLInputElement) {
+  function fixFormReset(el: HTMLSelectElement) {
     const form = el.form;
     if (!form) {
       return;
@@ -167,7 +169,7 @@
   <div
     class="search-select"
     class:is-open={openProxy}
-    class:has-selected={$selected && $selected.value}
+    class:has-selected={!!$selected && !Array.isArray($selected) && !!$selected.value}
   >
     <div class="input-wrapper">
       <!-- TODO: Having the value as the placeholder doesn't seem right. -->
@@ -192,10 +194,10 @@
         <!-- This still gives an eslint issue -->
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <div tabindex="0">
-          {#if multi && $selected && $selected.length}
+          {#if multi && selectedList.length}
             <div class="group" {...$group('selected')} use:group>
               <div class="group-label" {...$groupLabel('selected')} use:groupLabel>Selected</div>
-              {#each $selected as selectedValue}
+              {#each selectedList as selectedValue (selectedValue.value)}
                 <li
                   class:selected
                   class:highlighted={$isHighlighted(formatGroupOptionValue(selectedValue.value))}

@@ -89,8 +89,6 @@
         <div class="search-filters">
           <Filters
             url={$url}
-            {user}
-            folders={data.folders}
             agencyBureauOptions={data.agencyBureauOptions}
             yearOptions={data.yearOptions}
             lineOptions={data.lineOptions}

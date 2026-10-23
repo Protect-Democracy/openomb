@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { ActionData, PageData } from './$types';
   import { resolve } from '$app/paths';
   import { filter, sortBy } from 'lodash-es';
   import LogOut from '$components/subscriptions/LogOut.svelte';
@@ -8,7 +8,7 @@
   import ExampleSubscribeImage from '$assets/other/example-subscribe.png';
 
   export let data: PageData;
-  export let form;
+  export let form: ActionData;
   $: ({ userSubscriptions, user } = data);
 
   $: noSubscriptions = !userSubscriptions || userSubscriptions.length === 0;
@@ -76,7 +76,7 @@
 
           {#if form?.success}
             <p class="form-success">Subscriptions saved successfully!</p>
-          {:else if form?.error}
+          {:else if form && 'error' in form && form.error}
             <p class="form-error">
               There was an error saving your subscription data. Please try again or, if problems
               persist, contact support@openomb.org.

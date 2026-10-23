@@ -1,9 +1,10 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { uniqBy, orderBy } from 'lodash-es';
+  import type { FileDetailsFootnote } from '$queries/files';
 
   // Props
-  export let footnotes;
+  export let footnotes: FileDetailsFootnote[];
   export let idPrefix: string = 'footnote';
 
   // Derived
@@ -11,7 +12,7 @@
   $: hasMultipleFiles = footnotes && footnotes.length > 1 && uniqBy(footnotes, 'fileId').length > 1;
 
   // Methods
-  function sortFootnotes(footnotes) {
+  function sortFootnotes(footnotes: FileDetailsFootnote[]) {
     // Footnote numbers are like A1, B12, etc, though some are very different.
     // There may be multiple files include in footnote list.
     return orderBy(footnotes, [

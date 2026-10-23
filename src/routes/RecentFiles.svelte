@@ -1,9 +1,9 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
   import { formatFileTitle, formatDate } from '$lib/formatters';
-  import type { filesSelect } from '$schema/files';
+  import type { RecentlyAddedOrApprovedWithTafsResult } from '$queries/files';
 
-  export let files: filesSelect[] = [];
+  export let files: RecentlyAddedOrApprovedWithTafsResult = [];
 </script>
 
 <ul>
