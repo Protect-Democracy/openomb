@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { resolve } from '$app/paths';
   import RemoveAction from '$components/subscriptions/RemoveAction.svelte';
   import FrequencyAction from '$components/subscriptions/FrequencyAction.svelte';
-  import type { subscriptionSelect } from '$schema/subscriptions';
+  import type { SubscriptionSelectDetails } from '$queries/subscriptions';
 
   export let title: string;
-  export let subs: Array<subscriptionSelect>;
+  export let subs: Array<SubscriptionSelectDetails>;
 </script>
 
 {#if subs && subs.length}
@@ -15,8 +14,9 @@
   {#each subs as subscription (subscription.id)}
     <tr>
       <td class="sub-link">
-        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        <a href={resolve(subscription.itemLink)}>{@html subscription.description}</a>
+        <!-- itemLink is built server-side by shared queries that also run outside SvelteKit -->
+        <!-- eslint-disable-next-line svelte/no-at-html-tags, svelte/no-navigation-without-resolve -->
+        <a href={subscription.itemLink}>{@html subscription.description}</a>
       </td>
 
       <td class="sub-frequency">

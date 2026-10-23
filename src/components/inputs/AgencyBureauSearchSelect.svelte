@@ -23,7 +23,14 @@
   import ChevronDown from '$components/icons/ChevronDown.svelte';
 
   // Types
-  import type { BureausResult } from '$queries/tafs';
+  import type { BureausResult } from '$queries/agencies';
+
+  type BureauOption = {
+    label: string;
+    value: string;
+    // Parent agency title, set for bureau options only
+    agency?: string | null;
+  };
 
   export let bureaus: BureausResult;
   export let id: string;
@@ -33,15 +40,15 @@
   // Constants
   const emptyOption = { value: '', label: 'None' };
 
-  function createOptions(bureauArray) {
+  function createOptions(bureauArray: BureausResult): BureauOption[] {
     const agencies = groupBy(bureauArray, 'budgetAgencyTitleId');
-    const options = Object.keys(agencies).reduce((opts, key) => {
+    const options = Object.keys(agencies).reduce<BureauOption[]>((opts, key) => {
       if (agencies[key].length < 2) {
         return [
           ...opts,
           {
-            label: agencies[key][0].budgetAgencyTitle,
-            value: agencies[key][0].budgetAgencyTitleId,
+            label: agencies[key][0].budgetAgencyTitle ?? '',
+            value: agencies[key][0].budgetAgencyTitleId ?? '',
             agency: null
           }
         ];
@@ -50,12 +57,12 @@
       return [
         ...opts,
         {
-          label: agencies[key][0].budgetAgencyTitle,
-          value: agencies[key][0].budgetAgencyTitleId,
+          label: agencies[key][0].budgetAgencyTitle ?? '',
+          value: agencies[key][0].budgetAgencyTitleId ?? '',
           agency: null
         },
         ...agencies[key].map((bureau) => ({
-          label: bureau.budgetBureauTitle,
+          label: bureau.budgetBureauTitle ?? '',
           value: bureau.budgetAgencyTitleId + ',' + bureau.budgetBureauTitleId,
           agency: bureau.budgetAgencyTitle
         }))
@@ -68,7 +75,7 @@
   $: options = createOptions(bureaus);
 
   // Get our option(s) that correspond to the provided value
-  function getDefaultSelection() {
+  function getDefaultSelection(): BureauOption {
     if (!value) {
       return emptyOption;
     }
@@ -82,11 +89,11 @@
       ? {
           label:
             value == selectedBureau.budgetAgencyTitleId
-              ? selectedBureau.budgetAgencyTitle
-              : selectedBureau.budgetBureauTitle,
+              ? (selectedBureau.budgetAgencyTitle ?? '')
+              : (selectedBureau.budgetBureauTitle ?? ''),
           value:
             value == selectedBureau.budgetAgencyTitleId
-              ? selectedBureau.budgetAgencyTitleId
+              ? value
               : selectedBureau.budgetAgencyTitleId + ',' + selectedBureau.budgetBureauTitleId,
           agency:
             value == selectedBureau.budgetAgencyTitleId
@@ -102,7 +109,7 @@
     elements: { menu, input, option },
     states: { open, inputValue, touchedInput, selected },
     helpers: { isSelected, isHighlighted }
-  } = createCombobox({
+  } = createCombobox<string>({
     forceVisible: true,
     defaultSelected: getDefaultSelection(),
     ids: { label: id },
@@ -133,7 +140,7 @@
       })
     : options;
 
-  function placeholderText(selectedOptions) {
+  function placeholderText(selectedOptions: { value: string; label?: string } | undefined) {
     // Option is empty
     if (!selectedOptions || !selectedOptions.value) {
       return 'Type here to filter options';
@@ -144,7 +151,7 @@
   // Our selected values do not properly clear on reset, so we need to
   //  add an event to our form input(s)
   //  https://github.com/sveltejs/svelte/issues/2659#issuecomment-877758546
-  function fixFormReset(el) {
+  function fixFormReset(el: HTMLSelectElement) {
     const form = el.form;
     if (!form) {
       return;

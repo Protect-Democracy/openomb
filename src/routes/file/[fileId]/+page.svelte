@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { uniqBy, reduce } from 'lodash-es';
+  import { uniqBy } from 'lodash-es';
   import { writable } from 'svelte/store';
   import { formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
   import { isSpendPlanFile } from '$lib/utilities';
@@ -25,13 +25,7 @@
   $: ({ file, prevIterationFiles, tafsSubscriptions, user } = data);
   $: hasPreviousFiles = prevIterationFiles && !!Object.keys(prevIterationFiles).length;
   $: prevIterationFootnotes = uniqBy(
-    reduce(
-      Object.values(prevIterationFiles),
-      (accum, iterFile) => {
-        return [...accum, ...(iterFile.footnotes || [])];
-      },
-      []
-    ),
+    Object.values(prevIterationFiles).flatMap((iterFile) => iterFile.footnotes || []),
     (f) => `${f.fileId}-${f.footnoteNumber}`
   );
   $: ({ tafs, footnotes } = file);
@@ -67,8 +61,10 @@
     {#if tafs?.length}
       <h2 class="sr-only">Schedules</h2>
 
+      <!-- Records are keyed by TAFS table ID; rows without one have no previous iteration or subscription -->
       {#each tafs as tafsGroup (tafsGroup.tafsTableId)}
-        {@const prevIterationTafs = prevIterationFiles[tafsGroup.tafsTableId]?.tafs?.find(
+        {@const tafsKey = tafsGroup.tafsTableId ?? ''}
+        {@const prevIterationTafs = prevIterationFiles[tafsKey]?.tafs?.find(
           (taf) => taf.tafsId === tafsGroup.tafsId
         )}
 
@@ -89,9 +85,9 @@
             <SubscribeLink
               {user}
               subType="tafs"
-              subItemId={tafsGroup.tafsTableId}
+              subItemId={tafsGroup.tafsTableId ?? undefined}
               subItemFormatted={`TAFS ${formatTafsFormattedId(tafsGroup)} - FY ${file.fiscalYear}`}
-              existingSubscription={tafsSubscriptions[tafsGroup.tafsTableId]}
+              existingSubscription={tafsSubscriptions[tafsKey]}
             />
           </div>
         </section>

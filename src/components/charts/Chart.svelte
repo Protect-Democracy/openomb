@@ -1,11 +1,11 @@
 <script lang="ts">
   // Component that wraps around chart js and handles updates.
   import { onMount } from 'svelte';
-  import { Chart, registerables, type ChartConfiguration } from 'chart.js';
+  import { Chart, registerables, type ChartConfiguration, type Plugin } from 'chart.js';
 
   // Plugin to draw vertical line on hover.  Unsure if there is a better way to do this,
   // or maybe a better place for this.
-  const verticalHoverLinePlugin = {
+  const verticalHoverLinePlugin: Plugin = {
     id: 'verticalHoverLine',
     beforeDatasetDraw(chart) {
       const {
@@ -21,7 +21,7 @@
           if (point.active) {
             ctx.beginPath();
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.strokeWidth = 2;
+            ctx.lineWidth = 2;
             ctx.moveTo(point.x, top);
             ctx.lineTo(point.x, bottom);
             ctx.stroke();
@@ -40,9 +40,13 @@
   // Define props.  Using a height here is not ideal, but given the nesting of <Chart> components, it's necessary.
   let {
     options,
-    align,
+    align = 'center',
     height = '15rem'
-  }: { options: ChartConfiguration; align: 'left' | 'center' | 'right'; height: string } = $props();
+  }: {
+    options: ChartConfiguration;
+    align?: 'left' | 'center' | 'right';
+    height?: string;
+  } = $props();
 
   // Add types for the canvas element and chart instance
   let canvasElement: HTMLCanvasElement | undefined;

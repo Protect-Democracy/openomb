@@ -37,7 +37,6 @@ import { apportionmentTypeSpendPlan, apportionmentTypeStandard } from '$config/f
 import { mBureaus } from '$queries/agencies';
 
 // Types
-import type { filesSelectWithTafsFootnotes } from '$schema/files';
 import { type PgColumn, type SelectedFields } from 'drizzle-orm/pg-core';
 import type { LegacySearchCriterion, SavedSearchCriterion, searchesSelect } from '$schema/searches';
 import type { BureausResult } from '$queries/agencies';
@@ -668,9 +667,15 @@ export async function accountSearchPaged(searchParams: SearchPaginationParams) {
       // There is at least one account that has the same ID
       // but different title (mismatching case); this should be
       // fixed in the data, but just to make sure
-      budgetAgencyTitle: sql`(array_agg(${tafs.budgetAgencyTitle} ORDER BY ${tafs.budgetAgencyTitle}))[1]`,
-      budgetBureauTitle: sql`(array_agg(${tafs.budgetBureauTitle} ORDER BY ${tafs.budgetBureauTitle}))[1]`,
-      accountTitle: sql`(array_agg(${tafs.accountTitle} ORDER BY ${tafs.accountTitle}))[1]`
+      budgetAgencyTitle: sql<
+        string | null
+      >`(array_agg(${tafs.budgetAgencyTitle} ORDER BY ${tafs.budgetAgencyTitle}))[1]`,
+      budgetBureauTitle: sql<
+        string | null
+      >`(array_agg(${tafs.budgetBureauTitle} ORDER BY ${tafs.budgetBureauTitle}))[1]`,
+      accountTitle: sql<
+        string | null
+      >`(array_agg(${tafs.accountTitle} ORDER BY ${tafs.accountTitle}))[1]`
     })
     .from(tafs)
     .innerJoin(files, eq(tafs.fileId, files.fileId))
@@ -689,6 +694,7 @@ export async function accountSearchPaged(searchParams: SearchPaginationParams) {
   return allAccounts;
 }
 
+export type AccountSearchPagedResult = Awaited<ReturnType<typeof accountSearchPaged>>;
 export const mAccountSearchPaged = memoizeDataAsync(accountSearchPaged);
 
 /**
@@ -744,9 +750,7 @@ export const mFileSearchFullCount = memoizeDataAsync(fileSearchFullCount);
  * @param searchParams
  * @returns
  */
-export async function fileSearchPaged(
-  searchParams: SavedSearchCriterion | SearchPaginationParams
-): Promise<(filesSelectWithTafsFootnotes | null)[]> {
+export async function fileSearchPaged(searchParams: SavedSearchCriterion | SearchPaginationParams) {
   debugLogger('File searchParams:', searchParams);
   const { where, hasLines, hasFootnotes, order } = await searchSetup(searchParams, 'files');
 
@@ -819,13 +823,16 @@ export async function fileSearchPaged(
   const fileDetailsById = new Map(
     unorderedFileDetails.map((fileDetail) => [fileDetail.fileId, fileDetail])
   );
-  const fileDetails: (filesSelectWithTafsFootnotes | null)[] = orderedFileIds.map(
-    (fileId) => fileDetailsById.get(fileId) ?? null
-  );
+  // Skip any ids whose file no longer exists between the two queries
+  const fileDetails = orderedFileIds.flatMap((fileId) => {
+    const fileDetail = fileDetailsById.get(fileId);
+    return fileDetail ? [fileDetail] : [];
+  });
 
   return fileDetails;
 }
 
+export type FileSearchPagedResult = Awaited<ReturnType<typeof fileSearchPaged>>;
 export const mFileSearchPaged = memoizeDataAsync(fileSearchPaged);
 
 /**
