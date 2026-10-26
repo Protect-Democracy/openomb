@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { formatDate } from '$lib/formatters';
   import type { PageData } from './$types';
   import { siteName, supportEmail, sourceDataUrl } from '$config';
@@ -23,7 +24,7 @@
   <p>
     If you would like direct access to the source data, it is available at <a
       href={sourceDataUrl}
-      rel="noopener noreferrer">{new URL(sourceDataUrl).hostname}</a
+      rel="external noopener noreferrer">{new URL(sourceDataUrl).hostname}</a
     >.
   </p>
 
@@ -41,7 +42,7 @@
     When the original data is scraped from the <a
       href={sourceDataUrl}
       target="_blank"
-      rel="noopener noreferrer">OMB site</a
+      rel="external noopener noreferrer">OMB site</a
     > we bundle up the raw responses.
   </p>
 
@@ -63,12 +64,12 @@
     It is important to note that we try to avoid altering the original data, but we do some basic
     cleanup and re-structuring of the data for better usability and functionality. For more details
     about how our application works and how our data is processed, please see our <a
-      rel="noopener noreferrer"
+      rel="external noopener noreferrer"
       href="https://github.com/Protect-Democracy/apportionments/">codebase on Github</a
     >
     and specifically our
     <a
-      rel="noopener noreferrer"
+      rel="external noopener noreferrer"
       href="https://github.com/Protect-Democracy/apportionments/tree/main/db/schema"
       >database schema files</a
     >.
@@ -136,7 +137,7 @@
         <td> <code>/api/v1/files/search</code></td>
         <td
           >Search for files using various parameters. Can copy the URL query parameters from the <a
-            href="/search">search page</a
+            href={resolve('/search')}>search page</a
           >.</td
         >
         <td>

@@ -14,7 +14,7 @@ export async function GET() {
     await recentlyApproved(1);
     database = true;
   } catch {
-    database = false;
+    // Leave as false; the health check reports the database as unavailable
   }
 
   return json({

@@ -1,13 +1,9 @@
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
-import { lines } from '$schema/lines';
-import { footnotes } from '$schema/footnotes';
 import { db } from '$db/connection';
 
 import type { filesInsert } from '$schema/files';
 import type { tafsInsert } from '$schema/tafs';
-import type { linesInsert } from '$schema/lines';
-import type { footnotesInsert } from '$schema/footnotes';
 
 /**
  * Create an apportionment in the database with fake data for testing.
@@ -15,8 +11,6 @@ import type { footnotesInsert } from '$schema/footnotes';
 export async function createApportionment(
   fileData: Partial<filesInsert> = {},
   tafsData: Partial<tafsInsert>[] = [],
-  linesData: Partial<linesInsert>[] = [],
-  footnotesData: Partial<footnotesInsert>[] = [],
   dbInstance = db
 ) {
   dbInstance = dbInstance || db;

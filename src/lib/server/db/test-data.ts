@@ -90,7 +90,7 @@ async function writeInsertStatement<T extends Table>(
   await fs.appendFile(outputPath, '\n\n');
 }
 
-function drizzleQueryToSQLString<T>(query: TypedQueryBuilder<T, any>): string {
+function drizzleQueryToSQLString<T>(query: TypedQueryBuilder<T>): string {
   const pgDialect = new PgDialect();
   const sql = query.getSQL().inlineParams(); // inlineParams() is key
   return pgDialect.sqlToQuery(sql).sql;

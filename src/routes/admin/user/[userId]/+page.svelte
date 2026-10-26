@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { formatDate } from '$lib/formatters';
 
@@ -16,7 +17,7 @@
 </script>
 
 <div class="page-container content-container">
-  <p><a href="/admin">&laquo; Back to users</a></p>
+  <p><a href={resolve('/admin')}>&laquo; Back to users</a></p>
 
   <h1>{viewedUser.email}</h1>
 
@@ -47,7 +48,8 @@
           {#each subscriptions as subscription (subscription.id)}
             <tr>
               <td>
-                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                <!-- itemLink is built server-side by shared queries that also run outside SvelteKit -->
+                <!-- eslint-disable-next-line svelte/no-at-html-tags, svelte/no-navigation-without-resolve -->
                 <a href={subscription.itemLink}>{@html subscription.description}</a>
               </td>
               <td>{subscription.frequency}</td>
@@ -80,6 +82,8 @@
         <tbody>
           {#each searches as search (search.id)}
             <tr>
+              <!-- itemLink is built server-side by shared queries that also run outside SvelteKit -->
+              <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
               <td><a href={search.itemLink}>{search.description}</a></td>
               <td>{formatDate(search.createdAt, 'medium')}</td>
             </tr>

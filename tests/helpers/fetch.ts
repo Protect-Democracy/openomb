@@ -4,7 +4,7 @@ type mockResponse = {
   ok?: boolean;
   status?: number;
   statusText?: string;
-  json?: () => Promise<any>;
+  json?: () => Promise<unknown>;
   text?: () => Promise<string>;
   blob?: () => Promise<Blob>;
   arrayBuffer?: () => Promise<ArrayBuffer>;
@@ -19,7 +19,7 @@ type mockResponse = {
  * @returns A Promise that resolves to a mock fetch response object.
  */
 export function mockFetchResponse(
-  data: any,
+  data: unknown,
   response: mockResponse | undefined = undefined,
   dataType: string | undefined = undefined
 ) {

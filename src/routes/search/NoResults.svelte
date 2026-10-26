@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   // Helpful display that appears when no results are found
 
   // Props
@@ -31,7 +32,7 @@
     </li>
 
     <li>
-      Read our <a target="_blank" href="/faq#faq-how-to-find-apportionments"
+      Read our <a target="_blank" href={resolve('/faq#faq-how-to-find-apportionments')}
         >FAQ section on searching apportionments</a
       > for further guidance.
     </li>

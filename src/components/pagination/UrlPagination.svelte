@@ -110,6 +110,8 @@
         {#if availablePage.type === 'ellipsis'}
           <span class="ellipsis">...</span>
         {:else if availablePage.value !== 0}
+          <!-- Page URLs are built from the current, already-resolved pathname plus query params -->
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
           <a
             href={getPageUrl(availablePage.value)}
             class="page-link-like"
@@ -121,6 +123,7 @@
           >
             {formatNumber(availablePage.value)}
           </a>
+          <!-- eslint-enable svelte/no-navigation-without-resolve -->
         {/if}
       {/each}
       <svelte:element

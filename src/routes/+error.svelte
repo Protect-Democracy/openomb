@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { page } from '$app/stores';
 </script>
 
@@ -6,6 +7,6 @@
   <!-- eslint-disable svelte/valid-compile -->
   <h1>Error: {$page.status}</h1>
 
-  <p>{$page.error?.message || 'Unknown error'}. <a href="/">Go back to home page</a>.</p>
+  <p>{$page.error?.message || 'Unknown error'}. <a href={resolve('/')}>Go back to home page</a>.</p>
   <!-- eslint-enable svelte/valid-compile -->
 </div>

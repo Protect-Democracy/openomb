@@ -14,6 +14,7 @@
 -->
 
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { groupBy, orderBy } from 'lodash-es';
   import { formatDate, formatFileTitle, formatTafsFormattedId } from '$lib/formatters';
 
@@ -59,9 +60,16 @@
                 <dh>FY {fiscalYear} Iterations</dh>
                 {#each orderBy(tafsByYear[fiscalYear], 'iteration', 'asc') as tafIteration (tafIteration.tafsTableId)}
                   <dd>
-                    <a href={`/file/${tafIteration.fileId}#tafs_${tafIteration.tafsTableId}`}
-                      >{tafIteration.iteration}: {formatDate(tafIteration.approvalTimestamp)}</a
-                    >
+                    {#if tafIteration.fileId}
+                      <a
+                        href={resolve(`/file/[fileId]#tafs_${tafIteration.tafsTableId}`, {
+                          fileId: tafIteration.fileId
+                        })}
+                        >{tafIteration.iteration}: {formatDate(tafIteration.approvalTimestamp)}</a
+                      >
+                    {:else}
+                      {tafIteration.iteration}: {formatDate(tafIteration.approvalTimestamp)}
+                    {/if}
                   </dd>
                 {/each}
               </dl>
@@ -77,7 +85,7 @@
       <div class:tafs-group={!hideFileHeader}>
         {#if !hideFileHeader}
           <svelte:element this={headerElement} class="tafs-title">
-            <a href={`/file/${fileId}`}>
+            <a href={resolve('/file/[fileId]', { fileId: fileId })}>
               {tafsByFile[fileId][0].file ? formatFileTitle(tafsByFile[fileId][0].file) : fileId}
             </a>
           </svelte:element>
@@ -89,9 +97,15 @@
               this={hideFileHeader ? headerElement : subheaderElement}
               class="tafs-title"
             >
-              <a href={`/file/${tafsEntry.fileId}#tafs_${tafsEntry.tafsTableId}`}
-                >{tafsEntry.accountTitle}</a
-              >
+              {#if tafsEntry.fileId}
+                <a
+                  href={resolve(`/file/[fileId]#tafs_${tafsEntry.tafsTableId}`, {
+                    fileId: tafsEntry.fileId
+                  })}>{tafsEntry.accountTitle}</a
+                >
+              {:else}
+                {tafsEntry.accountTitle}
+              {/if}
             </svelte:element>
             <svelte:element this={hideFileHeader ? subheaderElement : 'div'} class="tafs-subtitle">
               TAFS {formatTafsFormattedId(tafsEntry)}
@@ -111,9 +125,13 @@
             {#if hideFileHeader}
               <div class="apportionment">
                 Apportionment:
-                <a href={`/file/${tafsEntry.fileId}`}
-                  >{tafsEntry.file ? formatFileTitle(tafsEntry.file) : tafsEntry.fileId}</a
-                >
+                {#if tafsEntry.fileId}
+                  <a href={resolve('/file/[fileId]', { fileId: tafsEntry.fileId })}
+                    >{tafsEntry.file ? formatFileTitle(tafsEntry.file) : tafsEntry.fileId}</a
+                  >
+                {:else if tafsEntry.file}
+                  {formatFileTitle(tafsEntry.file)}
+                {/if}
               </div>
             {/if}
           </div>
@@ -125,9 +143,15 @@
       <article class="tafs-entry">
         <!-- If we aren't grouping by account, display full details -->
         <svelte:element this={headerElement} class="tafs-title">
-          <a href={`/file/${tafsEntry.fileId}#tafs_${tafsEntry.tafsTableId}`}
-            >{tafsEntry.accountTitle}</a
-          >
+          {#if tafsEntry.fileId}
+            <a
+              href={resolve(`/file/[fileId]#tafs_${tafsEntry.tafsTableId}`, {
+                fileId: tafsEntry.fileId
+              })}>{tafsEntry.accountTitle}</a
+            >
+          {:else}
+            {tafsEntry.accountTitle}
+          {/if}
         </svelte:element>
         <svelte:element this={subheaderElement} class="tafs-subtitle">
           TAFS {formatTafsFormattedId(tafsEntry)}
@@ -146,9 +170,13 @@
         </div>
         <div class="apportionment">
           Apportionment:
-          <a href={`/file/${tafsEntry.fileId}`}
-            >{tafsEntry.file ? formatFileTitle(tafsEntry.file) : tafsEntry.fileId}</a
-          >
+          {#if tafsEntry.fileId}
+            <a href={resolve('/file/[fileId]', { fileId: tafsEntry.fileId })}
+              >{tafsEntry.file ? formatFileTitle(tafsEntry.file) : tafsEntry.fileId}</a
+            >
+          {:else if tafsEntry.file}
+            {formatFileTitle(tafsEntry.file)}
+          {/if}
         </div>
       </article>
     {/each}

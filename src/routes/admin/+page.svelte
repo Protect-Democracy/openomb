@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { formatDate, formatNumber } from '$lib/formatters';
   import UrlPagination from '$components/pagination/UrlPagination.svelte';
@@ -30,7 +31,7 @@
       <tbody>
         {#each users as user (user.id)}
           <tr>
-            <td><a href="/admin/user/{user.id}">{user.email}</a></td>
+            <td><a href={resolve('/admin/user/[userId]', { userId: user.id })}>{user.email}</a></td>
             <td>{formatDate(user.createdAt, 'medium')}</td>
             <td>{user.emailVerified ? 'Yes' : 'No'}</td>
             <td>{formatNumber(user.subscriptionCount)}</td>

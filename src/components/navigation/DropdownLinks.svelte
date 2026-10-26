@@ -15,11 +15,12 @@
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   import ChevronDown from '$components/icons/ChevronDown.svelte';
+  import type { ResolvedPathname } from '$app/types';
 
   // Props
   export let title = '';
-  export let fallbackHref = '';
-  export let links: { title: string; href: string }[] = [];
+  export let fallbackHref: ResolvedPathname | undefined = undefined;
+  export let links: { title: string; href: ResolvedPathname }[] = [];
 
   const url = derived(page, ($page) => $page.url);
   const {
@@ -33,6 +34,8 @@
 </button>
 
 <div {...$menu} use:menu class="dropdown-menu">
+  <!-- Link hrefs are typed as ResolvedPathname, so callers must pass resolve() values -->
+  <!-- eslint-disable svelte/no-navigation-without-resolve -->
   {#each links as link (link.href)}
     <div
       {...$item}
@@ -44,6 +47,7 @@
       <a class:active={$url.pathname === link.href} href={link.href}>{link.title}</a>
     </div>
   {/each}
+  <!-- eslint-enable svelte/no-navigation-without-resolve -->
   <div {...$arrow} use:arrow></div>
 </div>
 

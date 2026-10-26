@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import Spinner from '$components/icons/Spinner.svelte';
   import SearchIcon from '$components/icons/Search.svelte';
   import TopRightArrowIcon from '$components/icons/TopRightArrow.svelte';
@@ -28,7 +29,7 @@
   </div>
 
   <div class="actions">
-    <a class="button compact like-link" href="/search">
+    <a class="button compact like-link" href={resolve('/search')}>
       <span class="inline-icon"><TopRightArrowIcon /></span> Or try using the advanced search.
     </a>
   </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import type { PageData } from './$types';
   import { formatNumber } from '$lib/formatters';
 
@@ -19,7 +20,11 @@
   <ul>
     {#each folders as folder, fIndex (folder.folderId)}
       <li>
-        <a href="/folder/{folder.folderId}">{folder.folder}</a>
+        {#if folder.folderId}
+          <a href={resolve('/folder/[folderId]', { folderId: folder.folderId })}>{folder.folder}</a>
+        {:else}
+          {folder.folder}
+        {/if}
         ({formatNumber(folder.fileCount || 0)}{fIndex === 0 ? ' files' : ''})
       </li>
     {/each}
