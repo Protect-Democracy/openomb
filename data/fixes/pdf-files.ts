@@ -1,12 +1,11 @@
 import type { filesInsert } from '$schema/files';
-import type { spendPlansInsert } from '$schema/spend-plans';
 
 /**
  * Fixes for PDF files.
  */
 
 // ID should be source URL
-const pdfFixes: Record<string, Partial<filesInsert | spendPlansInsert>> = {
+const pdfFixes: Record<string, Partial<filesInsert>> = {
   'https://apportionment-public.max.gov/Fiscal%20Year%202025/Department%20of%20Health%20and%20Human%20Services/PDF/FY2025_Department%20of%20Health%20and%20Human%20Services_Letter%20Apportionment_2025-09-30.pdf':
     {
       // This file has a typo in the URL where the approval date is set to the wrong year.

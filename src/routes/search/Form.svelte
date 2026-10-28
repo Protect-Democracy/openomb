@@ -11,7 +11,7 @@
   import CheckboxButtons from '$components/inputs/CheckboxButtons.svelte';
 
   // Types
-  import type { BureausResult } from '$queries/tafs';
+  import type { BureausResult } from '$queries/agencies';
   import type {
     YearOptionsResult,
     ApproverTitleOptionsResult,

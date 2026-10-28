@@ -3,18 +3,24 @@
   import { slide } from 'svelte/transition';
   import { formatCurrency } from '$lib/formatters';
   import { prefersReducedMotion } from '$lib/utilities';
+  import type { FileDetailsTafs, FileDetailsLine, FileTafsFootnotes } from '$queries/files';
+
+  // Types
+  type TafsWithLines = Pick<FileDetailsTafs, 'iteration' | 'tafsTableId' | 'lines'>;
+  // Line for each iteration (keyed by iteration number) plus the original sort order
+  type LineIterations = { order: number } & Record<number, FileDetailsLine>;
 
   // Props
-  export let currentTafs: object;
-  export let prevIterationTafs: object;
+  export let currentTafs: FileDetailsTafs;
+  export let prevIterationTafs: FileTafsFootnotes['tafs'][number] | undefined = undefined;
   export let showPrevious: boolean;
 
   // Constants
   const transitionTime = 300;
 
   // Combine lines
-  function combinedTafsLines(tafs) {
-    const lines = {};
+  function combinedTafsLines(tafs: Array<TafsWithLines | undefined>): LineIterations[] {
+    const lines: Record<string, LineIterations> = {};
     forEach(tafs, (taf) => {
       if (taf) {
         forEach(taf.lines, (line, index) => {
@@ -38,7 +44,7 @@
       footnotesExpanded[id] === undefined ? false : footnotesExpanded[id] === false ? false : true;
   });
   $: forEach(prevIterationTafs?.lines, (line) => {
-    const id = `${prevIterationTafs.tafsTableId}-${line.lineIndex}`;
+    const id = `${prevIterationTafs?.tafsTableId}-${line.lineIndex}`;
     footnotesExpanded[id] =
       footnotesExpanded[id] === undefined ? false : footnotesExpanded[id] === false ? false : true;
   });
@@ -48,7 +54,7 @@
   $: isLatestIteration =
     currentTafs &&
     currentTafs.iterations &&
-    currentTafs.iteration === maxBy(currentTafs.iterations, 'iteration').iteration;
+    currentTafs.iteration === maxBy(currentTafs.iterations, 'iteration')?.iteration;
 
   // Reactivity
   $: {
@@ -68,15 +74,15 @@
   }
 
   function toggleOffAllFootnotes() {
-    let updated = {};
+    let updated: Record<string, boolean> = {};
     Object.keys(footnotesExpanded).forEach((key) => {
       updated[key] = false;
     });
     footnotesExpanded = updated;
   }
 
-  function isTotalRow(line: object): boolean {
-    return line.lineNumber.match(/^(1920|6190)$/);
+  function isTotalRow(line: FileDetailsLine): boolean {
+    return /^(1920|6190)$/.test(line.lineNumber ?? '');
   }
 </script>
 
@@ -87,7 +93,7 @@
         <th>Line&nbsp;#</th>
         <th>Split</th>
         <th>Description</th>
-        {#if showingPrevious}
+        {#if showingPrevious && prevIterationTafs}
           <th class="currency-column previous-highlight">
             Iteration {prevIterationTafs.iteration}
             <br />
@@ -109,12 +115,13 @@
     </thead>
 
     <tbody>
-      {#each Object.keys(lineIterationMap) as lineNumber (lineNumber)}
-        {@const currentIterationLine = lineIterationMap[lineNumber][currentTafs.iteration]}
+      {#each lineIterationMap as lineIterations, lineIterationsIndex (lineIterationsIndex)}
+        {@const currentIterationLine = lineIterations[currentTafs.iteration]}
         {@const prevIterationLine = prevIterationTafs
-          ? lineIterationMap[lineNumber][prevIterationTafs.iteration]
+          ? lineIterations[prevIterationTafs.iteration]
           : undefined}
-        {@const lineId = `${(currentIterationLine || prevIterationLine).lineNumber}-${(currentIterationLine || prevIterationLine).lineSplit}`}
+        {@const rowLineNumber = (currentIterationLine || prevIterationLine).lineNumber}
+        {@const lineId = `${rowLineNumber}-${(currentIterationLine || prevIterationLine).lineSplit}`}
         {@const previousAmount = prevIterationLine ? prevIterationLine.approvedAmount || 0 : 0}
         {@const currentAmount = currentIterationLine ? currentIterationLine.approvedAmount || 0 : 0}
         {@const change = currentAmount - previousAmount}
@@ -236,9 +243,9 @@
           >
             <th colspan="2" scope="row">
               <div transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}>
-                {#if lineNumber === '6190'}
+                {#if rowLineNumber === '6190'}
                   Footnotes for all <em>6xxx</em> lines (Previous):
-                {:else if lineNumber === '1920'}
+                {:else if rowLineNumber === '1920'}
                   Footnotes for all <em>1xxx</em> lines (Previous):
                 {:else}
                   Footnotes for line {prevIterationLine.lineNumber}{prevIterationLine.lineSplit
@@ -265,9 +272,9 @@
           <tr class="footnote-row has-js-only-table-row" id="inline-footnotes-{lineId}-current">
             <th colspan="2" scope="row">
               <div transition:slide={{ duration: prefersReducedMotion ? 0 : transitionTime }}>
-                {#if lineNumber === '6190'}
+                {#if rowLineNumber === '6190'}
                   Footnotes for all <em>6xxx</em> lines{showingPrevious ? ' (Current)' : ''}:
-                {:else if lineNumber === '1920'}
+                {:else if rowLineNumber === '1920'}
                   Footnotes for all <em>1xxx</em> lines{showingPrevious ? ' (Current)' : ''}:
                 {:else}
                   Footnotes for line {currentIterationLine.lineNumber}{currentIterationLine.lineSplit

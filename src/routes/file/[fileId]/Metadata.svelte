@@ -4,9 +4,10 @@
   import { formatDate, deconstructLaws } from '$lib/formatters';
   import { isSpendPlanFile } from '$lib/utilities';
   import ExternalLink from '$components/links/ExternalLink.svelte';
+  import type { FileDetailsResult } from '$queries/files';
 
   // Props
-  export let file;
+  export let file: FileDetailsResult;
 
   // Derived
   $: ({ tafs } = file);

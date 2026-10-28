@@ -1,47 +1,61 @@
-import { omit } from 'lodash-es';
 import type { filesSelect } from '$schema/files';
+
+type FileType = filesSelect['fileType'];
+
+/**
+ * A count of files of one type, grouped by folder and/or agency/bureau.
+ */
+type FileTypeCountRecord = Partial<
+  Pick<filesSelect, 'folderId' | 'budgetAgencyTitleId' | 'budgetBureauTitleId'>
+> & {
+  fileType: FileType;
+  fileCount: number;
+};
+
+/**
+ * File counts keyed by file type, e.g. `{ standard: 3, 'spend-plan': 1 }`.
+ */
+export type FileTypeCounts = Partial<Record<FileType, number>>;
+
+/**
+ * A grouped record with its total file count and counts by file type.
+ */
+export type FileTypeCountResult<TRecord extends FileTypeCountRecord> = Omit<
+  TRecord,
+  'fileType' | 'fileCount'
+> &
+  FileTypeCounts & { fileCount: number };
 
 /**
  * Aggregate our records and append our counts by file type
  *
  */
-export function reduceByFileType(
-  records: Array<
-    Partial<filesSelect> & {
-      fileCount: number;
-    }
-  >
-): Array<
-  Record<string, number> &
-    Partial<filesSelect> & {
-      fileCount: number;
-    }
-> {
-  return records.reduce(
-    (accum, record) => {
-      const prevRecord = accum.find(
-        (r) =>
-          r.folderId == record.folderId &&
-          r.budgetAgencyTitleId == record.budgetAgencyTitleId &&
-          r.budgetBureauTitleId == record.budgetBureauTitleId
-      );
-      if (prevRecord) {
-        prevRecord[`${record.fileType}`] = record.fileCount;
-        (prevRecord.fileCount as number) += record.fileCount;
-        return accum;
-      } else {
-        return [
-          ...accum,
-          {
-            ...omit(record, 'fileType'),
-            [`${record.fileType}`]: record.fileCount,
-            fileCount: record.fileCount
-          }
-        ];
-      }
-    },
-    [] as ReturnType<typeof reduceByFileType>
-  );
+export function reduceByFileType<TRecord extends FileTypeCountRecord>(
+  records: TRecord[]
+): FileTypeCountResult<TRecord>[] {
+  // Keep insertion order so results match the order of the incoming records
+  const merged = new Map<string, FileTypeCountResult<TRecord>>();
+
+  for (const record of records) {
+    // Null and undefined are treated the same when grouping
+    const key = JSON.stringify([
+      record.folderId ?? null,
+      record.budgetAgencyTitleId ?? null,
+      record.budgetBureauTitleId ?? null
+    ]);
+    const { fileType, fileCount, ...groupFields } = record;
+    const counts: FileTypeCounts = { [fileType]: fileCount };
+    const prevRecord = merged.get(key);
+
+    merged.set(
+      key,
+      prevRecord
+        ? { ...prevRecord, ...counts, fileCount: prevRecord.fileCount + fileCount }
+        : { ...groupFields, ...counts, fileCount }
+    );
+  }
+
+  return [...merged.values()];
 }
 
 /**

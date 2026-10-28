@@ -4,8 +4,10 @@
   export let data: PageData;
   let emailTemplate = '';
 
-  $: emailTemplates = Object.keys(data.emailExamples);
+  $: emailEntries = Object.entries(data.emailExamples);
+  $: emailTemplates = emailEntries.map(([name]) => name);
   $: emailTemplate = emailTemplate || emailTemplates[0];
+  $: emailHtml = emailEntries.find(([name]) => name === emailTemplate)?.[1];
 </script>
 
 <svelte:head>
@@ -25,8 +27,7 @@
     {/each}
   </div>
 
-  <iframe class="email-example" srcdoc={data.emailExamples[emailTemplate]} title="Email previews"
-  ></iframe>
+  <iframe class="email-example" srcdoc={emailHtml} title="Email previews"></iframe>
 </div>
 
 <style>

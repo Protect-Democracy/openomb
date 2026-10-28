@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import Wrapper from '$email/components/Wrapper.svelte';
   import { contactEmail, deployedBaseUrl, siteName } from '$config';
 
   export let title = 'Login';
-  export let authUrl;
-  export let subscriptionsUrl;
+  export let authUrl: string;
+  export let subscriptionsUrl: string | undefined = undefined;
 </script>
 
 <Wrapper {title} {subscriptionsUrl} unsubscribable={false}>

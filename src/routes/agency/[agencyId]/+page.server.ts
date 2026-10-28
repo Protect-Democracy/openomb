@@ -1,4 +1,5 @@
 import { mRecentlyAddedOrApprovedWithTafs, mFileCountByMonthByYear } from '$queries/files';
+import { getSessionUser } from '$server/auth-user';
 import { mAgencyDetails, mBureausByAgency } from '$queries/agencies';
 import { userSubscription } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
@@ -10,7 +11,7 @@ export async function load({ params, locals }) {
     error(404, 'Unable to find agency');
   }
 
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
   const existingSubscription = user
     ? await userSubscription(user.email || '', 'agency', params.agencyId)
     : null;

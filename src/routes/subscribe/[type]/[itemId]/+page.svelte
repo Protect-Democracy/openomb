@@ -27,7 +27,9 @@
         and manage the frequency of email updates.
       </p>
 
-      <a class="alt subscription-link" href={resolve(subscription.itemLink)}
+      <!-- itemLink is built server-side by shared queries that also run outside SvelteKit -->
+      <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+      <a class="alt subscription-link" href={subscription.itemLink}
         ><span class="inline-icon"><ArrowLeft /></span>&nbsp;Go back to {subscription.description}</a
       >
     {:else}

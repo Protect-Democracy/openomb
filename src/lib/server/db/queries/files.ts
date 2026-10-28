@@ -19,6 +19,7 @@ import {
 import { db } from '$db/connection';
 import { files } from '$schema/files';
 import { tafs } from '$schema/tafs';
+import type { footnotesSelect } from '$schema/footnotes';
 import { uniqBy, uniq, flatten, orderBy, omit } from 'lodash-es';
 import { DateTime } from 'luxon';
 import { memoizeDataAsync } from '$server/cache';
@@ -28,8 +29,8 @@ import { apportionmentTypeStandard } from '$config/files';
  * Pull a unique, ordered footnotes array out of a file's nested tafs/lines.
  */
 function computeUniqFootnotes(file: {
-  tafs: Array<{ lines: Array<{ footnotes: Record<string, unknown>[] }> }>;
-}) {
+  tafs: Array<{ lines: Array<{ footnotes: footnotesSelect[] }> }>;
+}): Omit<footnotesSelect, 'lineIndex'>[] {
   return orderBy(
     uniqBy(
       flatten(flatten(file.tafs.map((t) => t.lines)).map((l) => l.footnotes)),
@@ -132,6 +133,10 @@ export const fileDetails = async function (fileId: string, includeSourceData: bo
     footnotes: computeUniqFootnotes(file)
   };
 };
+export type FileDetailsResult = NonNullable<Awaited<ReturnType<typeof fileDetails>>>;
+export type FileDetailsTafs = FileDetailsResult['tafs'][number];
+export type FileDetailsLine = FileDetailsTafs['lines'][number];
+export type FileDetailsFootnote = FileDetailsResult['footnotes'][number];
 
 /**
  * Batched fetch of tafs/lines/footnotes for a set of file ids. Used where a
@@ -149,32 +154,34 @@ export const fileTafsFootnotesByIds = async function (
   includeSourceData: boolean = false
 ) {
   const uniqueFileIds = uniq(fileIds);
-  if (!uniqueFileIds.length) {
-    return new Map();
-  }
 
-  const rows = await db.query.files.findMany({
-    columns: includeSourceData ? undefined : { sourceData: false },
-    where: inArray(files.fileId, uniqueFileIds),
-    with: {
-      tafs: {
-        orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)],
+  // Skip the query when there is nothing to look up, but keep a single typed return
+  const rows = !uniqueFileIds.length
+    ? []
+    : await db.query.files.findMany({
+        columns: includeSourceData ? undefined : { sourceData: false },
+        where: inArray(files.fileId, uniqueFileIds),
         with: {
-          lines: {
-            orderBy: (lines, { asc }) => [asc(lines.lineNumber)],
+          tafs: {
+            orderBy: (tafs, { asc }) => [asc(tafs.tafsTableId)],
             with: {
-              footnotes: {
-                orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
+              lines: {
+                orderBy: (lines, { asc }) => [asc(lines.lineNumber)],
+                with: {
+                  footnotes: {
+                    orderBy: (footnotes, { asc }) => [asc(footnotes.footnoteNumber)]
+                  }
+                }
               }
             }
           }
         }
-      }
-    }
-  });
+      });
 
   return new Map(rows.map((row) => [row.fileId, { ...row, footnotes: computeUniqFootnotes(row) }]));
 };
+export type FileTafsFootnotesByIdsResult = Awaited<ReturnType<typeof fileTafsFootnotesByIds>>;
+export type FileTafsFootnotes = NonNullable<ReturnType<FileTafsFootnotesByIdsResult['get']>>;
 
 /**
  * Recently approved.
@@ -271,17 +278,17 @@ export const recentlyAddedOrApprovedWithTafs = async function (
         : eq(tafs.budgetAgencyTitleId, filters?.agencyId || '')
     );
 
-  const tafsFilters = filters?.agencyId || filters?.bureauId;
+  // A bureau filter always comes with an agency filter (checked above), so the agency
+  // ID alone tells us whether to filter by agency/bureau.
+  const agencyId = filters?.agencyId;
+  const bureauId = filters?.bureauId;
   const whereClauses = [
-    tafsFilters
+    agencyId
       ? or(
           inArray(files.fileId, findFilesByTafsFiltersQuery),
-          filters?.bureauId
-            ? and(
-                eq(files.budgetAgencyTitleId, filters?.agencyId),
-                eq(files.budgetBureauTitleId, filters?.bureauId)
-              )
-            : eq(files.budgetAgencyTitleId, filters?.agencyId)
+          bureauId
+            ? and(eq(files.budgetAgencyTitleId, agencyId), eq(files.budgetBureauTitleId, bureauId))
+            : eq(files.budgetAgencyTitleId, agencyId)
         )
       : undefined,
     filters?.folderId ? eq(files.folderId, filters?.folderId) : undefined,

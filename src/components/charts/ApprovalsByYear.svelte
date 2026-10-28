@@ -12,11 +12,15 @@
   const currentYear = new Date().getFullYear();
 
   // Props
-  let { data, align, height } = $props<{
+  let {
+    data,
+    align = 'center',
+    height
+  }: {
     data: { year: number; month: number; fileCount: number }[];
-    align: 'left' | 'center' | 'right';
+    align?: 'left' | 'center' | 'right';
     height: string;
-  }>();
+  } = $props();
 
   // Derived
   let years = $derived(sortBy(uniq(data.map((d) => d.year)), 'year').reverse());
@@ -40,7 +44,7 @@
       let color = year == currentYear ? currentYearColor : previousColorScale[yi - 1];
 
       return {
-        label: year,
+        label: String(year),
         data: yearData,
         pointHitRadius: 15,
         pointRadius: 1,
@@ -89,7 +93,7 @@
             ticks: {
               callback: (value) => {
                 // Value is just the index of the ticks
-                return getMonthName(value + 1);
+                return getMonthName(Number(value) + 1);
               }
             }
           },
@@ -118,7 +122,7 @@
             bodyColor: '#222222',
             callbacks: {
               title: function (tooltipItems) {
-                return `${getMonthName(tooltipItems[0].label)}`;
+                return `${getMonthName(Number(tooltipItems[0].label))}`;
               },
               label: function (tooltipItem) {
                 return `  ${tooltipItem.formattedValue} approvals in ${tooltipItem.dataset.label}`;

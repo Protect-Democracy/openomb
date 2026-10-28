@@ -208,6 +208,27 @@ export const tafsRelations = relations(tafs, ({ one, many }) => ({
 }));
 
 /**
+ * Fields used to compute TAFS and account identifiers. Values may be missing
+ * when parsing source data, and missing parts are skipped.
+ */
+export type AccountIdFields = {
+  cgacAgency?: string | null;
+  cgacAcct?: string | null;
+  allocationAgencyCode?: string | null;
+  allocationSubacct?: string | null;
+};
+export type TafsIdFields = AccountIdFields & {
+  beginPoa?: number | null;
+  endPoa?: number | null;
+};
+export type TafsTableIdFields = {
+  fileId?: string | null;
+  tafsId?: string | null;
+  iteration?: number | null;
+  fiscalYear?: number | null;
+};
+
+/**
  * From the values in the TAFS record, compute TAFS ID.
  *
  * IMPORTANT: Note that this is  used to populate the `tafs_id`
@@ -217,7 +238,7 @@ export const tafsRelations = relations(tafs, ({ one, many }) => ({
  * @param tafsRecord
  * @returns The computed TAFS ID
  */
-export const computeTafsId = (tafsRecord: typeof tafs.$inferSelect): string => {
+export const computeTafsId = (tafsRecord: TafsIdFields): string => {
   return [
     tafsRecord.cgacAgency,
     tafsRecord.cgacAcct,
@@ -236,7 +257,7 @@ export const computeTafsId = (tafsRecord: typeof tafs.$inferSelect): string => {
  * @param tafsRecord
  * @returns The computed TAFS Table ID
  */
-export const computeTafsTableId = (tafsRecord: typeof tafs.$inferSelect): string => {
+export const computeTafsTableId = (tafsRecord: TafsTableIdFields): string => {
   return [tafsRecord.fileId, tafsRecord.tafsId, tafsRecord.iteration, tafsRecord.fiscalYear]
     .filter(Boolean)
     .join('--');
@@ -252,7 +273,7 @@ export const computeTafsTableId = (tafsRecord: typeof tafs.$inferSelect): string
  * @param tafsRecord
  * @returns The computed Account ID
  */
-export const computeAccountId = (tafsRecord: typeof tafs.$inferSelect): string => {
+export const computeAccountId = (tafsRecord: AccountIdFields): string => {
   return [
     tafsRecord.cgacAgency,
     tafsRecord.cgacAcct,

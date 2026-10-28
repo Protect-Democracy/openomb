@@ -2,18 +2,21 @@ import { sortBy } from 'lodash-es';
 import { fileDetails, fileTafsFootnotesByIds } from '$queries/files';
 import { userSubscriptionsByItemIds } from '$queries/subscriptions';
 import { error } from '@sveltejs/kit';
+import { getSessionUser } from '$server/auth-user';
 import { formatFileTitle } from '$lib/formatters';
 import { fileSchema } from '$lib/schema';
+import type { PageServerLoad } from './$types';
+import type { FileTafsFootnotes } from '$queries/files';
+import type { subscriptionSelect } from '$schema/subscriptions';
 
-/** @type {import('./$types').PageLoad} */
-export async function load({ params, locals }) {
+export const load: PageServerLoad = async ({ params, locals }) => {
   const file = await fileDetails(params.fileId);
 
   if (!file) {
     error(404, 'Unable to find file');
   }
 
-  const user = (await locals.auth())?.user;
+  const user = await getSessionUser(locals);
 
   // Figure out which previous-iteration file each tafs row needs, from data
   // already present on file.tafs[].iterations (no DB access).
@@ -42,11 +45,11 @@ export async function load({ params, locals }) {
           'tafs',
           (file.tafs || []).flatMap((taf) => (taf.tafsTableId ? [taf.tafsTableId] : []))
         )
-      : new Map()
+      : new Map<string, subscriptionSelect>()
   ]);
 
-  const prevIterationFiles: Record<string, unknown> = {};
-  const tafsSubscriptions: Record<string, unknown> = {};
+  const prevIterationFiles: Record<string, FileTafsFootnotes> = {};
+  const tafsSubscriptions: Record<string, subscriptionSelect | undefined> = {};
   for (const taf of file.tafs || []) {
     if (!taf.tafsTableId) {
       continue;
@@ -74,4 +77,4 @@ export async function load({ params, locals }) {
       schema: fileSchema(file)
     }
   };
-}
+};

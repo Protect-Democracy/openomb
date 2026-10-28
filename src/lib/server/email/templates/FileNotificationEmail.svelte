@@ -13,7 +13,7 @@
 
   // Derived
   $: subscriptionGroups = groupBy(
-    sortBy(subscriptions, (s) => subscriptionTypes.indexOf(s.type)),
+    sortBy(subscriptions, (s) => subscriptionTypes.findIndex((t) => t === s.type)),
     'type'
   );
 </script>
