@@ -1,5 +1,10 @@
-# Builds a new docker image, pushes image to ECR, and deploys new image to ECS
-# Runs when a new release is released
+# Builds a new docker image, pushes image to ECR, runs database migrations, and deploys new
+# image to ECS. Runs when a new release is released.
+#
+# Order matters: migrations run after the image is pushed (the migration task uses `:latest`)
+# but before the web service is updated, so the new app code never runs against an
+# un-migrated schema. The old app briefly runs against the new schema instead, so migrations
+# must be backwards compatible (additive); see `docs/DATABASE_MANAGEMENT.md`.
 
 name: Deploy to AWS
 
@@ -16,15 +21,17 @@ env:
   AWS_ECS_CLUSTER: 'apportionments-app'
   tf_actions_working_dir: 'tofu'
 
-# Cancel existing executions when new commits are pushed onto the branch
+# Queue deploys rather than cancelling them; cancelling mid-deploy (or mid-migration) can
+# leave the service or schema in a broken state.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  deploy:
-    name: Deploy to AWS
+  build:
+    name: Build and push image
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
@@ -77,6 +84,35 @@ jobs:
             SENTRY_RELEASE=${{ github.sha }}
           secrets: |
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+
+  migrate:
+    name: Migrate database
+    needs: build
+    uses: ./.github/workflows/_migrate-db.yaml
+    permissions:
+      id-token: write
+      contents: read
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  deploy:
+    name: Deploy to ECS
+    needs: migrate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-${{ github.repository_owner }}-${{ github.event.repository.name }}
+          aws-region: ${{ env.AWS_REGION }}
+          unset-current-credentials: true
 
       - name: Deploy to Amazon ECS
         run: aws ecs update-service --cluster ${{ env.AWS_ECS_CLUSTER }} --service ${{ env.AWS_ECS_SERVICE }} --force-new-deployment

@@ -1,100 +1,21 @@
-# Migrates database schema when files change in the migrations folder
-# Runs after a deployment has successfully completed, but only if files in the migrations folder have changed
-# See `changes` job below for details
+# Manually runs database migrations.
+#
+# Migrations run automatically as part of `deploy-to-aws.yaml` (before the web service is
+# updated). Use this only to re-run migrations outside of a deploy. See `_migrate-db.yaml`.
 
 name: Migrate database
 
 on:
-  workflow_run:
-    workflows: ['Deploy to AWS']
-    types: [completed]
-    branches: [main]
   workflow_dispatch:
 
-env:
-  AWS_REGION: 'us-west-2'
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  AWS_ROLE_TO_ASSUME: 'db-migration'
-  TOFU_TASK_DEFINITION_OUTPUT: 'migrate_task_definition_arn'
-  tf_actions_working_dir: 'tofu'
-
-# Cancel existing executions when new commits are pushed onto the branch
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+permissions: {}
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      db: ${{ steps.filter.outputs.db }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v3
-        id: filter
-        with:
-          filters: |
-            db:
-              - 'src/lib/server/db/migrations/**'
   migrate:
-    # Run if database files have changed or if workflow is triggered manually
-    needs: changes
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && needs.changes.outputs.db == 'true') || github.event_name == 'workflow_dispatch' }}
     name: Migrate database
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ${{ env.tf_actions_working_dir }}
-
-    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    uses: ./.github/workflows/_migrate-db.yaml
     permissions:
       id-token: write
       contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: opentofu/setup-opentofu@v1
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ env.AWS_REGION }}
-          unset-current-credentials: true
-
-      - name: OpenTofu init
-        id: init
-        run: tofu init
-
-      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
-      # variables. Otherwise GitHub Actions would put the wrong output into the environment
-      # variables if i tried to do it directly.
-      - name: Set task definition ARN
-        id: aws_task_def_arn
-        run: |
-          tofu output --raw ${{ env.TOFU_TASK_DEFINITION_OUTPUT }}
-      - name: Set task definition env
-        run: |
-          echo "AWS_TASK_DEF_ARN=${{ steps.aws_task_def_arn.outputs.stdout }}" >> "$GITHUB_ENV"
-
-      - name: Set cluster ARN
-        id: aws_ecs_cluster_arn
-        run: |
-          tofu output --raw ecs_cluster_arn
-      - name: Set cluster env
-        run: |
-          echo "AWS_ECS_CLUSTER_ARN=${{ steps.aws_ecs_cluster_arn.outputs.stdout }}" >> "$GITHUB_ENV"
-
-      - name: Set network config
-        id: aws_run_task_network_config
-        run: |
-          tofu output --raw run_task_network_configuration_string
-      - name: Set network config env
-        run: |
-          echo "AWS_NETWORK_CONFIG=${{ steps.aws_run_task_network_config.outputs.stdout }}" >> "$GITHUB_ENV"
-
-      - name: Run ECS database migration task
-        shell: bash
-        run: |
-          aws ecs run-task --task-definition "${{ env.AWS_TASK_DEF_ARN }}" --cluster "${{ env.AWS_ECS_CLUSTER_ARN }}" --network-configuration "${{ env.AWS_NETWORK_CONFIG }}" --launch-type FARGATE
+    secrets:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
