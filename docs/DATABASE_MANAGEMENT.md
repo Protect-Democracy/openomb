@@ -17,4 +17,12 @@ The following is the basic flow for making database changes:
 
 For production updates, the above should be preformed locally and all migrations and code changes should be committed and reviewed.
 
-There needs to be coordination with [deployment](./BUILD_DEPLOYMENT.md) and running the migrations likely locally while connected to the production environment.
+Migrations run automatically during [deployment](./BUILD_DEPLOYMENT.md#deploy), after the new image is pushed and **before** the web service is updated. If a migration fails, the deploy stops and the current app keeps running.
+
+Because the old app keeps serving traffic while the migration runs, migrations must be **backwards compatible** with the currently deployed code:
+
+- Additive changes (new tables, new nullable or defaulted columns, new indexes) are safe in a single release.
+- Destructive changes (dropping or renaming columns or tables, adding `NOT NULL` without a default) need two releases:
+  1. Release code that no longer uses the old column or table.
+  2. Release the migration that removes it.
+- Large index builds lock the table while they run. Consider `CREATE INDEX CONCURRENTLY` in a hand-edited migration for big tables.

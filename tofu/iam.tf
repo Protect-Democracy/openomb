@@ -235,6 +235,18 @@ data "aws_iam_policy_document" "db_migration" {
     ]
   }
 
+  # Lets the migration workflow wait for the task to stop and read its exit code, so a
+  # failed migration fails the deploy before the web service is updated.
+  statement {
+    actions   = ["ecs:DescribeTasks"]
+    resources = ["*"]
+    condition {
+      test     = "ArnEquals"
+      variable = "ecs:cluster"
+      values   = [aws_ecs_cluster.apportionments_app.arn]
+    }
+  }
+
   statement {
     actions = ["s3:ListBucket"]
     resources = [
