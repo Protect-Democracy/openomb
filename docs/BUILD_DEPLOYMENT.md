@@ -191,4 +191,13 @@ npx dotenvx run -- npm run build:migrate
 
 ### Deploy
 
-Deployment is handled by GitHub Actions automatically on release after a successful deployment if changes are detected in the `db/migrations` directory. See the [GitHub Actions database migration workflow](https://github.com/Protect-Democracy/apportionments/blob/main/.github/workflows/migrate-db.yaml) for more details.
+Migrations run automatically on every release as part of the [Deploy to AWS workflow](../.github/workflows/deploy-to-aws.yaml):
+
+1. Build and push the Docker image (tagged `latest`).
+1. Run the `apportionments-migrate` ECS task and wait for it to finish ([`_migrate-db.yaml`](../.github/workflows/_migrate-db.yaml)).
+   - The deploy fails here if the task exits non-zero. Logs are in the CloudWatch log group `/ecs/apportionments-migrate`.
+   - Drizzle skips migrations that were already applied, so this is a no-op when nothing changed.
+1. Update the ECS web service and wait for it to stabilize.
+1. Invalidate CloudFront.
+
+To run migrations manually, trigger the [Migrate database workflow](../.github/workflows/migrate-db.yaml) from the GitHub Actions UI. See [Database management](./DATABASE_MANAGEMENT.md#in-production) for writing backwards-compatible migrations.

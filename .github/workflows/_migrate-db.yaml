@@ -1,0 +1,115 @@
+# Reusable workflow: runs the database migration ECS task and waits for it to finish.
+#
+# Called by:
+#   - `deploy-to-aws.yaml`, after the new image is pushed and BEFORE the web service is
+#     updated, so the new app never runs against an un-migrated schema.
+#   - `migrate-db.yaml`, for manual runs.
+#
+# The migration task uses the `:latest` image (see `tofu/ecs.tf`), so the image must be pushed
+# before this runs. Drizzle tracks applied migrations, so running when nothing changed is a no-op.
+
+name: Migrate database (reusable)
+
+on:
+  workflow_call:
+    secrets:
+      AWS_ACCOUNT_ID:
+        required: true
+
+permissions: {}
+
+env:
+  AWS_REGION: 'us-west-2'
+  AWS_ROLE_TO_ASSUME: 'db-migration'
+  TOFU_TASK_DEFINITION_OUTPUT: 'migrate_task_definition_arn'
+  tf_actions_working_dir: 'tofu'
+
+jobs:
+  migrate:
+    name: Migrate database
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # Never run two migrations at once (e.g. a manual run during a deploy), and never cancel one
+    # mid-flight, which could leave the schema half-applied.
+    concurrency:
+      group: db-migration
+      cancel-in-progress: false
+
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    # Needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Install OpenTofu
+        uses: opentofu/setup-opentofu@9d84900f3238fab8cd84ce47d658d25dd008be2f # v1.0.8
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ env.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+          unset-current-credentials: true
+
+      - name: OpenTofu init
+        run: tofu init
+
+      # NOTE: Needed to use the stdout output from the tofu commands to set the environment
+      # variables. Otherwise GitHub Actions would put the wrong output into the environment
+      # variables if tried directly.
+      - name: Get task definition ARN
+        id: aws_task_def_arn
+        run: tofu output --raw ${{ env.TOFU_TASK_DEFINITION_OUTPUT }}
+      - name: Get cluster ARN
+        id: aws_ecs_cluster_arn
+        run: tofu output --raw ecs_cluster_arn
+      - name: Get network config
+        id: aws_run_task_network_config
+        run: tofu output --raw run_task_network_configuration_string
+
+      - name: Run migration task and wait for it to finish
+        shell: bash
+        env:
+          AWS_TASK_DEF_ARN: ${{ steps.aws_task_def_arn.outputs.stdout }}
+          AWS_ECS_CLUSTER_ARN: ${{ steps.aws_ecs_cluster_arn.outputs.stdout }}
+          AWS_NETWORK_CONFIG: ${{ steps.aws_run_task_network_config.outputs.stdout }}
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+
+          run_output=$(aws ecs run-task \
+            --task-definition "$AWS_TASK_DEF_ARN" \
+            --cluster "$AWS_ECS_CLUSTER_ARN" \
+            --network-configuration "$AWS_NETWORK_CONFIG" \
+            --launch-type FARGATE)
+
+          task_arn=$(echo "$run_output" | jq -r '.tasks[0].taskArn // empty')
+          if [ -z "$task_arn" ]; then
+            echo "::error::Migration task failed to start"
+            echo "$run_output" | jq '.failures'
+            exit 1
+          fi
+          echo "Started migration task: $task_arn"
+
+          # Polls every 6 seconds, up to 10 minutes.
+          aws ecs wait tasks-stopped --cluster "$AWS_ECS_CLUSTER_ARN" --tasks "$task_arn"
+
+          task=$(aws ecs describe-tasks --cluster "$AWS_ECS_CLUSTER_ARN" --tasks "$task_arn")
+          exit_code=$(echo "$task" | jq -r '.tasks[0].containers[0].exitCode // "none"')
+          stop_reason=$(echo "$task" | jq -r '.tasks[0].stoppedReason // ""')
+          echo "Migration task stopped. Exit code: $exit_code. Reason: $stop_reason"
+
+          if [ "$exit_code" != "0" ]; then
+            echo "::error::Database migration failed (exit code: $exit_code). See CloudWatch log group /ecs/apportionments-migrate."
+            exit 1
+          fi
