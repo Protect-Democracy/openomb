@@ -12,6 +12,17 @@ test('index page has expected items', async ({ page }) => {
   await expect(page.locator('.recently-approved-files ul li')).toHaveCount(10);
 });
 
+test('robots.txt keeps crawlers out of search results', async ({ request }) => {
+  // Crawlers paging through /search caused heavy slow-query load
+  // (see PD-APPORTIONMENTS-BROWSER-HR, -HP, -HQ).
+  const response = await request.get('/robots.txt');
+  expect(response.ok()).toBeTruthy();
+
+  const body = await response.text();
+  expect(body).toMatch(/^Disallow: \/search$/m);
+  expect(body).toMatch(/^Sitemap: .+\/sitemap\.xml$/m);
+});
+
 test('static pages', async ({ page }) => {
   const pages = [
     { path: '/about', heading: 'About' },
